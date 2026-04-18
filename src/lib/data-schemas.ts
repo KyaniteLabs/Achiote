@@ -194,6 +194,33 @@ function validateDishFamilies(issues: ValidationIssue[], data: BundledDataSet['d
       }
       validateStringArray(issues, `${base}.transliterations.${language}`, forms, { requireNonEmpty: true, unique: true });
     }
+
+    const variants = (family as { variants?: unknown }).variants;
+    if (variants !== undefined) {
+      if (!Array.isArray(variants)) {
+        pushIssue(issues, `${base}.variants`, 'must be an array');
+      } else {
+        variants.forEach((variant, variantIndex) => {
+          const variantPath = `${base}.variants[${variantIndex}]`;
+          const value = variant as {
+            name?: unknown;
+            aliases?: unknown;
+            regions?: unknown;
+            distinguishingElements?: unknown;
+            clarificationPrompt?: unknown;
+          };
+          validateNonEmptyString(issues, `${variantPath}.name`, value.name);
+          validateStringArray(issues, `${variantPath}.aliases`, value.aliases, { requireNonEmpty: true, unique: true });
+          validateStringArray(issues, `${variantPath}.regions`, value.regions, { requireNonEmpty: true, unique: true });
+          validateStringArray(issues, `${variantPath}.distinguishingElements`, value.distinguishingElements, {
+            requireNonEmpty: true,
+            unique: true,
+          });
+          validateNonEmptyString(issues, `${variantPath}.clarificationPrompt`, value.clarificationPrompt);
+        });
+      }
+    }
+
   });
 }
 

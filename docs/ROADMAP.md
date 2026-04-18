@@ -12,8 +12,8 @@
 
 - Add JSON schemas for data files and validate them in tests
 - Add source/provenance fields to food chemistry and cultural datasets
-- Split broad families into canonical dish plus regional variants
-- Return multiple name-resolution candidates with scores and ambiguity flags
+- Expand the first canonical dish plus regional variant model beyond the initial tortilla/egg-dish ambiguity slice
+- Broaden multiple-candidate name resolution with scores and ambiguity flags across more overloaded names
 - Add dietary/allergen/religious constraints to substitutions
 
 ## Later: provider-backed research mode

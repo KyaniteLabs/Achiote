@@ -2,6 +2,21 @@ import { z } from 'zod';
 
 export const confidenceSchema = z.enum(['High', 'Medium', 'Low']);
 
+const dishNameMatchTypeSchema = z.enum(['exact', 'variant', 'transliteration', 'fuzzy', 'ambiguous', 'unknown']);
+
+const dishNameCandidateSchema = z.object({
+  canonicalName: z.string(),
+  dishFamily: z.string(),
+  region: z.string(),
+  confidence: confidenceSchema,
+  score: z.number(),
+  matchType: dishNameMatchTypeSchema,
+  matchedName: z.string(),
+  variantName: z.string().optional(),
+  distinguishingElements: z.array(z.string()).optional(),
+  clarificationPrompt: z.string().optional(),
+});
+
 export const dishNameResolutionSchema = z.object({
   input: z.string(),
   canonicalName: z.string(),
@@ -10,6 +25,11 @@ export const dishNameResolutionSchema = z.object({
   dishFamily: z.string(),
   region: z.string(),
   confidence: confidenceSchema,
+  matchType: dishNameMatchTypeSchema.optional(),
+  score: z.number().optional(),
+  needsClarification: z.boolean().optional(),
+  candidates: z.array(dishNameCandidateSchema).optional(),
+  clarificationPrompt: z.string().optional(),
 });
 
 const cachedResearchSchema = z.object({
