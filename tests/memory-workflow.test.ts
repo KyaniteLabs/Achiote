@@ -66,6 +66,18 @@ describe('research-first food memory workflow', () => {
 });
 
 describe('general research planning', () => {
+
+  it('does not force Portuguese or Brazilian pastel fragments into Puerto Rican hypotheses without context', () => {
+    const memory = collectFoodMemory({ memoryText: 'My Brazilian friend mentioned pastel from a street market.' });
+    const plan = planDishResearch(memory);
+
+    expect(plan.hypotheses.map((hypothesis) => hypothesis.name)).not.toContain('pasteles');
+    expect(plan.hypotheses[0]).toMatchObject({
+      name: 'pastel',
+      researchRequired: true,
+    });
+  });
+
   it('plans useful research for non-Puerto-Rican named fragments', () => {
     const memory = collectFoodMemory({
       memoryText: 'My Nigerian auntie mentioned egusi soup with melon seeds and bitter greens.',

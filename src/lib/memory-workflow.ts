@@ -14,6 +14,7 @@ const RESEARCH_STOPWORDS = new Set([
   'grandma',
   'grandmother',
   'auntie',
+  'friend',
   'said',
   'mentioned',
   'called',
@@ -24,6 +25,7 @@ const RESEARCH_STOPWORDS = new Set([
   'and',
   'the',
   'that',
+  'a',
 ]);
 
 const INGREDIENT_HINTS = [
@@ -122,8 +124,9 @@ export function collectFoodMemory(input: FoodMemoryInput): CollectedFoodMemory {
 
 function puertoRicanHypotheses(memory: CollectedFoodMemory): DishHypothesis[] {
   const text = memory.normalizedMemory.toLowerCase();
-  const likelyPastelSound = includesAny(text, ['pastelay', 'pass-teh-lay', 'pastel']);
-  if (!likelyPastelSound && !memory.extractedClues.culturalOrRegionalHints.includes('Puerto Rican')) return [];
+  const hasPuertoRicanContext = memory.extractedClues.culturalOrRegionalHints.includes('Puerto Rican');
+  const likelyPastelSound = includesAny(text, ['pastelay', 'pass-teh-lay', 'pasteles', 'pastelón', 'pastelon']);
+  if (!hasPuertoRicanContext) return [];
 
   return [
     {
