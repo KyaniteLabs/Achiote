@@ -10,14 +10,20 @@ MCP client / host model
         | stdio MCP
         v
 src/index.ts
-  - registers six tools
-  - returns structuredContent plus JSON text
-  - owns cache lifecycle
+  - public package entrypoint
+  - preserves direct `node dist/index.js` stdio startup
         |
-        +--> src/lib/name-resolver.ts
-        +--> src/lib/substitution-engine.ts
-        +--> src/lib/research-cache.ts
-        +--> src/data/*.json
+        +--> src/cli.ts                  # stdio runner
+        +--> src/server.ts               # MCP server and tool registration
+              |
+              +--> src/schemas/tool-schemas.ts
+              +--> src/tools/results.ts
+              +--> src/lib/cache-path.ts
+              +--> src/lib/regional-matcher.ts
+              +--> src/lib/name-resolver.ts
+              +--> src/lib/substitution-engine.ts
+              +--> src/lib/research-cache.ts
+              +--> src/data/*.json
 ```
 
 ## Tool boundaries
