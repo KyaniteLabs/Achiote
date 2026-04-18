@@ -1,10 +1,13 @@
 import Database from 'better-sqlite3';
+import fs from 'node:fs';
+import path from 'node:path';
 import type { ResearchCacheEntry } from './types.js';
 
 export class ResearchCache {
   private db: Database.Database;
 
   constructor(dbPath: string) {
+    fs.mkdirSync(path.dirname(dbPath), { recursive: true });
     this.db = new Database(dbPath);
     this.db.pragma('journal_mode = WAL');
     this.db.exec(`

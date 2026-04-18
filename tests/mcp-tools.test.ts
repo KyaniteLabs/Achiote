@@ -8,6 +8,7 @@ import regionalData from '../src/data/regional-availability.json' with { type: '
 import dishFamiliesData from '../src/data/dish-families.json' with { type: 'json' };
 import path from 'path';
 import fs from 'fs';
+import os from 'os';
 
 // ---------------------------------------------------------------------------
 // 1. resolve_dish_name integration
@@ -220,7 +221,8 @@ describe('generate_recipe schema integration', () => {
 // ---------------------------------------------------------------------------
 describe('ResearchCache integration with MCP tools pattern', () => {
   it('cache stores and retrieves research for dish families', () => {
-    const dbPath = path.join(process.cwd(), 'data', 'test-mcp-cache.db');
+    const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'member-berries-mcp-cache-'));
+    const dbPath = path.join(tempRoot, 'test-mcp-cache.db');
     const testCache = new ResearchCache(dbPath);
 
     try {
@@ -241,16 +243,13 @@ describe('ResearchCache integration with MCP tools pattern', () => {
       expect(data.dishes).toContain('pierogi');
     } finally {
       testCache.close();
-      fs.unlinkSync(dbPath);
+      fs.rmSync(tempRoot, { recursive: true, force: true });
     }
   });
 
   it('cache miss returns null', () => {
-    const dbPath = path.join(
-      process.cwd(),
-      'data',
-      'test-mcp-cache-miss.db',
-    );
+    const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'member-berries-mcp-cache-miss-'));
+    const dbPath = path.join(tempRoot, 'test-mcp-cache-miss.db');
     const testCache = new ResearchCache(dbPath);
 
     try {
@@ -258,7 +257,7 @@ describe('ResearchCache integration with MCP tools pattern', () => {
       expect(result).toBeNull();
     } finally {
       testCache.close();
-      fs.unlinkSync(dbPath);
+      fs.rmSync(tempRoot, { recursive: true, force: true });
     }
   });
 });

@@ -34,12 +34,12 @@ User describes a food they or their family miss from another place, time, or cul
    - Find all known aliases and transliterations
    - Identify the cultural region
 
-3. RESEARCH → Web Research
+3. RESEARCH → Optional Host Research
    If the dish family is unfamiliar or regional details are sparse:
-   - Use Exa to find authentic recipes from cultural sources
-   - Use Brave to find technique videos and cultural context
-   - Use Firecrawl to extract detailed recipes from trusted sites
-   - Cache results using the research-cache for future users
+   - Use whatever web/search tools the host environment explicitly provides
+   - Prefer authentic cultural sources, technique videos, and cited recipes
+   - Clearly separate bundled Member Berries data from live/host research
+   - Do not claim live sourcing, prices, or availability unless actually checked
 
 4. DECOMPOSE → Sensory Analysis
    Use the `analyze_nostalgic_dish` MCP tool to:
@@ -56,9 +56,9 @@ User describes a food they or their family miss from another place, time, or cul
 
 6. SOURCE → Ingredient Sourcing
    Use the `source_ingredients` MCP tool to:
-   - Find local stores, ethnic markets near the user
-   - Find online sources with pricing
-   - Note seasonal availability
+   - Retrieve bundled regional store/corridor hints when available
+   - Use host research tools for live stores, online sources, pricing, and seasonal availability
+   - Mark static hints vs live-verified facts explicitly
 
 7. DISCOVER → Regional Connections
    Use the `discover_regional_similars` MCP tool to:
@@ -68,7 +68,8 @@ User describes a food they or their family miss from another place, time, or cul
 
 8. GENERATE → Final Recipe
    Use the `generate_recipe` MCP tool to:
-   - Compose the complete adapted recipe
+   - Retrieve the expected recipe schema and bounded generation prompt
+   - Compose the final adapted recipe in the host model
    - Include sensory analysis and confidence levels
    - Note what's different and why
    - Self-critique: does this actually recreate the target?
@@ -132,4 +133,4 @@ User describes a food they or their family miss from another place, time, or cul
 | Skipping the memory interview | The person's memory IS the spec — don't skip it |
 | Ignoring regional variation | "Indian food" is meaningless — which region? which state? |
 | Presenting without self-critique | Always validate before showing to the user |
-| Forgetting sourcing | A perfect recipe with unpurchasable ingredients is useless |
+| Forgetting sourcing provenance | Static regional hints are not live inventory; label what was actually verified |

@@ -1,0 +1,55 @@
+# Architecture
+
+Member Berries is a local TypeScript MCP server for culinary nostalgia workflows. It provides deterministic structured context and bounded prompts that a host model can use to reconstruct recipes from food memories.
+
+## Runtime shape
+
+```text
+MCP client / host model
+        |
+        | stdio MCP
+        v
+src/index.ts
+  - registers six tools
+  - returns structuredContent plus JSON text
+  - owns cache lifecycle
+        |
+        +--> src/lib/name-resolver.ts
+        +--> src/lib/substitution-engine.ts
+        +--> src/lib/research-cache.ts
+        +--> src/data/*.json
+```
+
+## Tool boundaries
+
+The server currently performs local deterministic work only:
+
+- resolves names from bundled dish-family data
+- computes substitution candidates from bundled compound data
+- returns static regional availability hints
+- returns prompts for host-model sensory analysis, sourcing, regional comparison, and recipe generation
+
+It does **not** currently perform live web search, geocoding, inventory lookup, pricing lookup, or deterministic final recipe synthesis.
+
+## Data assets
+
+- `src/data/dish-families.json` maps broad culinary families, aliases, transliterations, regions, divergent elements, and nostalgia triggers.
+- `src/data/ingredients.json` maps ingredients to volatile/flavor compounds and substitution groups.
+- `src/data/regional-availability.json` contains static US metro-area store/corridor hints.
+- `src/data/sensory-profiles.json` defines sensory dimensions and nostalgia-critical criteria.
+
+## Cache
+
+`ResearchCache` stores optional research data in SQLite. By default the CLI uses:
+
+```text
+$MEMBER_BERRIES_CACHE_PATH
+or $XDG_CACHE_HOME/member-berries/culture-cache.db
+or ~/.cache/member-berries/culture-cache.db
+```
+
+Tests use temporary directories. Package installs should not write beside `dist/`.
+
+## Trust boundaries
+
+User memories, locations, ingredients, and generated analysis strings are untrusted text. Tool prompts quote those fields as data and instruct the host model not to treat them as instructions, but host clients should still display tool inputs and enforce their own safety controls.

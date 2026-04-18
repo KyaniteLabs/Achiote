@@ -1,41 +1,45 @@
 # Member Berries
 
-Culinary reverse engineering that recreates the **sensory triggers** of nostalgic dishes using locally available ingredients.
+Member Berries is a local **Model Context Protocol (MCP)** server for culinary nostalgia workflows. It helps a host model reverse-engineer the sensory triggers of remembered dishes using bundled cultural dish-family data, ingredient compound data, and regional sourcing hints.
 
 > "The nostalgia lives in the maillard crust's interaction with the lactic tang — here's how to reproduce that."
 
-## What It Does
+## What It Does Today
 
-You describe a dish you or your family miss from another place or time. Member Berries:
+Member Berries provides six MCP tools:
 
-1. Identifies the specific sensory elements that carry the nostalgic trigger
-2. Reverse-engineers the chemistry of those elements (volatile compounds, textures, flavor balance)
-3. Finds locally available ingredients that reproduce the same sensory experience
-4. Generates a complete recipe you can cook right now, where you are
+| Tool | Implemented behavior |
+|------|----------------------|
+| `resolve_dish_name` | Resolves a dish name to a broad canonical dish family using bundled aliases, fuzzy matching, and transliterations. |
+| `analyze_nostalgic_dish` | Returns sensory-dimension criteria and a bounded prompt for the host model to analyze a food memory. |
+| `find_sensory_substitutes` | Returns compound/group-matched substitutes from bundled ingredient data, plus regional hints when available. |
+| `source_ingredients` | Returns static regional store/corridor hints and a host-model prompt for sourcing. It does not perform live inventory or price lookup. |
+| `discover_regional_similars` | Returns bundled dish-family context and a host-model prompt for neighboring/regional comparisons. |
+| `generate_recipe` | Returns an expected recipe schema and a host-model prompt. It does not deterministically generate final recipe steps by itself. |
 
-## How It Works
+All tools return MCP `structuredContent` plus backwards-compatible JSON text.
 
-Member Berries is an MCP (Model Context Protocol) server that provides 6 tools:
+## What It Does Not Do Yet
 
-| Tool | What It Does |
-|------|-------------|
-| `resolve_dish_name` | Maps any spelling, transliteration, or regional name to the canonical dish |
-| `analyze_nostalgic_dish` | Decomposes a memory into 5 sensory dimensions and identifies nostalgia-critical elements |
-| `find_sensory_substitutes` | Finds chemistry-aware ingredient substitutions by matching volatile compounds |
-| `source_ingredients` | Finds where to buy each ingredient near you |
-| `discover_regional_similars` | Finds related dishes from neighboring cultures |
-| `generate_recipe` | Generates the complete adapted recipe with confidence levels |
+The current implementation is intentionally local and offline. It does **not** perform live web search, geocoding, grocery inventory lookup, price lookup, or external recipe scraping. See [`docs/ROADMAP.md`](docs/ROADMAP.md) for the provider-backed research plan.
+
+## Requirements
+
+- Node.js `>=22.0.0`
+- npm
+
+`better-sqlite3` is a native dependency, so unsupported Node/platform combinations may need a compiler toolchain or a supported prebuild.
 
 ## Installation
 
 ```bash
-npm install
+npm ci
 npm run build
 ```
 
-### Using with Claude Code
+## Using with Claude Code or another MCP client
 
-Add to your Claude Code MCP settings:
+After building, add the stdio server to your MCP settings:
 
 ```json
 {
@@ -48,27 +52,38 @@ Add to your Claude Code MCP settings:
 }
 ```
 
-### Using with the Skill
+If installed as a package, the CLI binary is `member-berries`.
 
-Copy `skill/SKILL.md` to your Claude Code skills directory for the full guided pipeline experience.
+## Cache and privacy
 
-## The Science
+Member Berries is a local stdio MCP server. It does not open an HTTP port. The SQLite research cache path is:
 
-Food-evoked nostalgia is well-documented in psychology and neuroscience:
+1. `$MEMBER_BERRIES_CACHE_PATH`, if set
+2. `$XDG_CACHE_HOME/member-berries/culture-cache.db`, if `XDG_CACHE_HOME` is set
+3. `~/.cache/member-berries/culture-cache.db`
 
-- Smell and taste process directly through the hippocampus and amygdala (memory and emotion centers)
-- Food-evoked nostalgia has a more positive emotional profile than music or photo-triggered nostalgia
-- Reminiscence therapy using food smells outperforms discussion-based therapy for loneliness in older adults
+User memories can be emotionally sensitive. Do not add network-backed providers without documenting what is sent, where it is sent, and how it is cached.
 
 ## Development
 
 ```bash
-npm install          # Install dependencies
-npm run build        # Compile TypeScript
-npm test             # Run tests
-npm run test:watch   # Run tests in watch mode
-npm start            # Start the MCP server
+npm ci                         # Install locked dependencies
+npm run typecheck              # TypeScript no-emit check
+npm run build                  # Compile TypeScript
+npm test                       # Run tests
+npm run check                  # Typecheck + build + tests
+npm audit --audit-level=moderate
+npm pack --dry-run             # Inspect publish contents
+npm start                      # Start the MCP server after build
 ```
+
+## Architecture
+
+See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
+
+## The Science
+
+Food-evoked nostalgia is well documented in psychology and neuroscience, especially through smell/taste memory pathways. This repository should treat science and cultural claims as data that require provenance. The roadmap includes adding citations and source metadata to bundled datasets.
 
 ## License
 

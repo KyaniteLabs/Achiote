@@ -9,7 +9,11 @@
     "dev": "tsc --watch",
     "start": "node dist/index.js",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "check": "npm run typecheck && npm run build && npm test",
+    "pack:check": "npm run check && npm pack --dry-run",
+    "prepack": "npm run build"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.12.0",
@@ -21,5 +25,43 @@
     "@types/node": "^22.13.0",
     "typescript": "^5.7.0",
     "vitest": "^3.0.0"
-  }
+  },
+  "license": "MIT",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "member-berries": "dist/index.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist/",
+    "skill/",
+    "docs/ARCHITECTURE.md",
+    "docs/ROADMAP.md",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pastorsimon1798/member-berries.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Pastorsimon1798/member-berries/issues"
+  },
+  "homepage": "https://github.com/Pastorsimon1798/member-berries#readme",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "culinary",
+    "recipes",
+    "food",
+    "nostalgia"
+  ]
 }
