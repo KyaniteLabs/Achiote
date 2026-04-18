@@ -13,9 +13,13 @@ const repoRoot = path.resolve(__dirname, '..');
 const npmCommand = process.platform === 'win32' ? 'npm.cmd' : 'npm';
 const expectedTools = [
   'analyze_nostalgic_dish',
+  'build_reconstruction_dossier',
+  'collect_food_memory',
   'discover_regional_similars',
   'find_sensory_substitutes',
+  'generate_family_followup_questions',
   'generate_recipe',
+  'plan_dish_research',
   'resolve_dish_name',
   'source_ingredients',
 ];
