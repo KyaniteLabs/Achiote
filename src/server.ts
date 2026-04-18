@@ -60,7 +60,7 @@ export function createMemberBerriesServer(options: MemberBerriesServerOptions = 
     },
     async (input) => {
       try {
-        return structuredJsonResult(collectFoodMemory(input));
+        return structuredJsonResult({ ...collectFoodMemory(input) });
       } catch (error) {
         return toolError(error, 'collect_food_memory_failed');
       }
@@ -81,7 +81,7 @@ export function createMemberBerriesServer(options: MemberBerriesServerOptions = 
     },
     async ({ memory }) => {
       try {
-        return structuredJsonResult(planDishResearch(memory as ReturnType<typeof collectFoodMemory>));
+        return structuredJsonResult({ ...planDishResearch(memory as ReturnType<typeof collectFoodMemory>) });
       } catch (error) {
         return toolError(error, 'plan_dish_research_failed');
       }
@@ -105,14 +105,14 @@ export function createMemberBerriesServer(options: MemberBerriesServerOptions = 
     },
     async ({ memory, researchPlan, researchedFacts, inferredFacts }) => {
       try {
-        return structuredJsonResult(
-          buildReconstructionDossier({
+        return structuredJsonResult({
+          ...buildReconstructionDossier({
             memory: memory as ReturnType<typeof collectFoodMemory>,
             researchPlan: researchPlan as ReturnType<typeof planDishResearch>,
             researchedFacts,
             inferredFacts,
           }),
-        );
+        });
       } catch (error) {
         return toolError(error, 'build_reconstruction_dossier_failed');
       }
@@ -134,12 +134,12 @@ export function createMemberBerriesServer(options: MemberBerriesServerOptions = 
     },
     async ({ memory, researchPlan }) => {
       try {
-        return structuredJsonResult(
-          generateFamilyFollowupQuestions({
+        return structuredJsonResult({
+          ...generateFamilyFollowupQuestions({
             memory: memory as ReturnType<typeof collectFoodMemory>,
             researchPlan: researchPlan as ReturnType<typeof planDishResearch>,
           }),
-        );
+        });
       } catch (error) {
         return toolError(error, 'generate_family_followup_questions_failed');
       }
