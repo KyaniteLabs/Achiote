@@ -24,6 +24,7 @@ describe('Member Berries MCP server', () => {
       ]);
       for (const tool of tools) {
         expect(tool.outputSchema).toBeTruthy();
+        expect(Object.keys(tool.outputSchema?.properties ?? {})).not.toHaveLength(0);
         expect(tool.annotations?.readOnlyHint).toBe(true);
         expect(tool.annotations?.destructiveHint).toBe(false);
         expect(tool.annotations?.idempotentHint).toBe(true);

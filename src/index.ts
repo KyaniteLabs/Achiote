@@ -31,7 +31,82 @@ const dishNameResolutionSchema = z.object({
   confidence: confidenceSchema,
 });
 
-const promptBackedOutputSchema = z.object({}).passthrough();
+const cachedResearchSchema = z.object({
+  researchData: z.string(),
+  createdAt: z.string(),
+  hitCount: z.number(),
+});
+
+const regionalContextSchema = z.object({
+  region: z.string(),
+  ethnicCorridors: z.array(
+    z.object({
+      name: z.string(),
+      city: z.string(),
+      cuisines: z.array(z.string()),
+    }),
+  ),
+  majorStores: z.record(z.string(), z.array(z.string())),
+});
+
+const substitutionResultSchema = z.object({
+  original: z.string(),
+  substitute: z.string(),
+  compoundMatch: z.number(),
+  confidence: confidenceSchema,
+  reasoning: z.string(),
+  availableAt: z.string(),
+});
+
+const analyzeNostalgicDishOutputSchema = z.object({
+  description: z.string(),
+  region: z.string(),
+  sensoryDimensions: z.record(z.string(), z.unknown()),
+  nostalgiaCriticalCriteria: z.string(),
+  cachedResearch: cachedResearchSchema.optional(),
+  promptForAgent: z.string(),
+});
+
+const findSensorySubstitutesOutputSchema = z.object({
+  ingredient: z.string(),
+  location: z.string(),
+  substitutes: z.array(substitutionResultSchema).optional(),
+  mode: z.enum(['compound-matched', 'prompt-only']),
+  note: z.string().optional(),
+  regionalAvailability: regionalContextSchema.optional(),
+  promptForAgent: z.string(),
+});
+
+const sourceIngredientsOutputSchema = z.object({
+  ingredients: z.array(z.string()),
+  location: z.string(),
+  regionalData: regionalContextSchema.optional(),
+  promptForAgent: z.string(),
+});
+
+const familyDataSchema = z.object({
+  sharedElements: z.array(z.string()),
+  divergentElements: z.array(z.string()),
+  nostalgiaTriggers: z.array(z.string()),
+  regions: z.array(z.string()),
+});
+
+const discoverRegionalSimilarsOutputSchema = z.object({
+  dishName: z.string(),
+  region: z.string(),
+  resolvedFamily: z.string(),
+  knownAliases: z.array(z.string()),
+  familyData: familyDataSchema.optional(),
+  cachedResearch: cachedResearchSchema.optional(),
+  promptForAgent: z.string(),
+});
+
+const generateRecipeOutputSchema = z.object({
+  dishDescription: z.string(),
+  location: z.string(),
+  expectedOutputSchema: z.record(z.string(), z.string()),
+  promptForAgent: z.string(),
+});
 
 const readOnlyAnnotations = {
   readOnlyHint: true,
@@ -119,7 +194,7 @@ export function createMemberBerriesServer(options: MemberBerriesServerOptions = 
         description: z.string().min(1).max(6000).describe("The user's memory/description of the dish"),
         region: z.string().min(1).max(200).optional().describe('Cultural/geographic region of the dish'),
       },
-      outputSchema: promptBackedOutputSchema,
+      outputSchema: analyzeNostalgicDishOutputSchema,
       annotations: readOnlyAnnotations,
     },
     async ({ description, region }) => {
@@ -174,7 +249,7 @@ Then identify the TOP 3 nostalgia-critical elements and explain WHY each trigger
         ingredient: z.string().min(1).max(300).describe('The original ingredient to substitute'),
         location: z.string().min(1).max(300).describe("User's location for availability context"),
       },
-      outputSchema: promptBackedOutputSchema,
+      outputSchema: findSensorySubstitutesOutputSchema,
       annotations: readOnlyAnnotations,
     },
     async ({ ingredient, location }) => {
@@ -231,7 +306,7 @@ ${matchedRegion ? `Regional static store data has been provided above for ${matc
         ingredients: z.array(z.string().min(1).max(200)).min(1).max(50).describe('List of ingredients to source'),
         location: z.string().min(1).max(300).describe("User's city/region"),
       },
-      outputSchema: promptBackedOutputSchema,
+      outputSchema: sourceIngredientsOutputSchema,
       annotations: readOnlyAnnotations,
     },
     async ({ ingredients, location }) => {
@@ -282,7 +357,7 @@ Clearly distinguish static bundled data from host-model inference.`;
         dishName: z.string().min(1).max(300).describe('The dish to find similars for'),
         region: z.string().min(1).max(300).describe("The dish's cultural region"),
       },
-      outputSchema: promptBackedOutputSchema,
+      outputSchema: discoverRegionalSimilarsOutputSchema,
       annotations: readOnlyAnnotations,
     },
     async ({ dishName, region }) => {
@@ -353,7 +428,7 @@ For each similar dish:
         substitutions: z.string().min(1).max(12000).describe('Completed substitutions from find_sensory_substitutes'),
         sourcing: z.string().min(1).max(12000).describe('Completed sourcing guide from source_ingredients'),
       },
-      outputSchema: promptBackedOutputSchema,
+      outputSchema: generateRecipeOutputSchema,
       annotations: readOnlyAnnotations,
     },
     async ({ dishDescription, location, sensoryAnalysis, substitutions, sourcing }) => {
