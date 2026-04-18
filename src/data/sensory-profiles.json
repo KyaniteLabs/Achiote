@@ -1,0 +1,34 @@
+{
+  "meta": {
+    "version": "0.1.0",
+    "description": "Sensory dimension definitions and scoring criteria"
+  },
+  "dimensions": {
+    "aroma": {
+      "description": "Volatile compounds detected by olfactory system",
+      "scale": "1 (barely detectable) to 10 (overpowering)",
+      "nostalgiaIndicators": ["triggers specific memory", "recalls childhood kitchen", "evokes place or season"]
+    },
+    "texture": {
+      "description": "Physical mouthfeel and tactile sensation",
+      "categories": ["crispy", "chewy", "creamy", "gelatinous", "flaky", "tender", "stringy", "smooth", "grainy", "crunchy"],
+      "nostalgiaIndicators": ["unique mouthfeel impossible to find commercially", "specific resistance or yield when biting"]
+    },
+    "flavor": {
+      "description": "Taste perception on the tongue",
+      "categories": ["sweet", "salty", "sour", "bitter", "umami"],
+      "nostalgiaIndicators": ["specific balance ratio", "unusual combination", "layered complexity"]
+    },
+    "visual": {
+      "description": "Appearance, color, and presentation",
+      "categories": ["color", "gloss", "uniformity", "portion-shape", "serving-vessel"],
+      "nostalgiaIndicators": ["specific color from local ingredient", "rustic vs refined appearance", "serving context"]
+    },
+    "temperature": {
+      "description": "Serving temperature and thermal mouth dynamics",
+      "categories": ["served-hot", "served-cold", "room-temp", "contrast-hot-cold", "hand-food-warmth"],
+      "nostalgiaIndicators": ["specific serving temperature", "hand-held warmth", "cooling on tongue"]
+    }
+  },
+  "nostalgiaCriticalCriteria": "An element is nostalgia-critical if removing or significantly altering it would make the dish unrecognizable to the person who remembers it. Typically 1-3 elements per dish carry the core nostalgic trigger."
+}

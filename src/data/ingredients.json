@@ -1,0 +1,128 @@
+{
+  "meta": {
+    "version": "0.1.0",
+    "description": "Ingredient to volatile compound mappings for chemistry-aware substitution"
+  },
+  "ingredients": {
+    "cumin-seeds": {
+      "name": "Cumin Seeds",
+      "compounds": ["cuminaldehyde", "p-cymene", "beta-pinene", "gamma-terpinene"],
+      "sensoryContribution": {
+        "aroma": "warm, earthy, nutty, slightly sweet",
+        "flavor": "savory, slightly bitter, warming"
+      },
+      "substitutionGroup": "warm-spice",
+      "commonIn": ["Middle Eastern", "South Asian", "Mexican", "North African"]
+    },
+    "coriander-seeds": {
+      "name": "Coriander Seeds",
+      "compounds": ["linalool", "geranyl-acetate", "camphor"],
+      "sensoryContribution": {
+        "aroma": "citrusy, floral, slightly sweet",
+        "flavor": "citrus, mild, slightly sweet"
+      },
+      "substitutionGroup": "citrus-spice",
+      "commonIn": ["South Asian", "Middle Eastern", "Southeast Asian", "Mexican"]
+    },
+    "smoked-paprika": {
+      "name": "Smoked Paprika",
+      "compounds": ["capsanthin", "smoky-phenols", "beta-carotene"],
+      "sensoryContribution": {
+        "aroma": "smoky, sweet, woody",
+        "flavor": "smoky, sweet, mildly pungent"
+      },
+      "substitutionGroup": "smoke-heat",
+      "commonIn": ["Spanish", "Hungarian", "Mexican"]
+    },
+    "fresh-cilantro": {
+      "name": "Fresh Cilantro",
+      "compounds": ["decanal", "linalool", "E-2-dodecenal"],
+      "sensoryContribution": {
+        "aroma": "fresh, green, citrusy",
+        "flavor": "bright, herbal, citrus-like"
+      },
+      "substitutionGroup": "fresh-herb-citrus",
+      "commonIn": ["Mexican", "South Asian", "Southeast Asian", "Middle Eastern"]
+    },
+    "fish-sauce": {
+      "name": "Fish Sauce",
+      "compounds": ["glutamate", "nucleotides", "volatile-amine-compounds"],
+      "sensoryContribution": {
+        "aroma": "pungent, fermented, oceanic",
+        "flavor": "deeply savory, salty, umami-rich"
+      },
+      "substitutionGroup": "umami-ferment",
+      "commonIn": ["Southeast Asian", "Vietnamese", "Thai", "Filipino", "Korean"]
+    },
+    "soy-sauce": {
+      "name": "Soy Sauce",
+      "compounds": ["glutamate", "melanoidins", "4-ethyl-guaiacol"],
+      "sensoryContribution": {
+        "aroma": "savory, roasted, slightly sweet",
+        "flavor": "salty, umami, slightly sweet, roasted"
+      },
+      "substitutionGroup": "umami-ferment",
+      "commonIn": ["East Asian", "Southeast Asian"]
+    },
+    "ghee": {
+      "name": "Ghee",
+      "compounds": ["butyric-acid", "diacetyl", "lactones", "methyl-ketones"],
+      "sensoryContribution": {
+        "aroma": "rich, nutty, buttery, caramelized",
+        "flavor": "rich, nutty, deep butter"
+      },
+      "substitutionGroup": "cooking-fat-nutty",
+      "commonIn": ["South Asian", "Middle Eastern"]
+    },
+    "tamarind": {
+      "name": "Tamarind",
+      "compounds": ["tartaric-acid", "malic-acid", "citric-acid", "volatile-esters"],
+      "sensoryContribution": {
+        "aroma": "sweet-sour, fruity, slightly fermented",
+        "flavor": "intensely sour, sweet undertone, fruity"
+      },
+      "substitutionGroup": "sour-fruit",
+      "commonIn": ["South Asian", "Southeast Asian", "Mexican", "Middle Eastern"]
+    },
+    "sumac": {
+      "name": "Sumac",
+      "compounds": ["malic-acid", "anthocyanins", "gallic-acid"],
+      "sensoryContribution": {
+        "aroma": "tangy, citrusy, slightly fruity",
+        "flavor": "tangy, sour, astringent, citrus-like"
+      },
+      "substitutionGroup": "citrus-sour",
+      "commonIn": ["Middle Eastern", "Mediterranean"]
+    },
+    "dried-chilies": {
+      "name": "Dried Chilies",
+      "compounds": ["capsaicin", "dihydrocapsaicin", "beta-carotene", "pyrazines"],
+      "sensoryContribution": {
+        "aroma": "smoky, fruity, earthy",
+        "flavor": "heat, fruity, earthy, complex"
+      },
+      "substitutionGroup": "heat-fruit",
+      "commonIn": ["Mexican", "South Asian", "Southeast Asian", "Sichuan", "Korean"]
+    },
+    "turmeric": {
+      "name": "Turmeric",
+      "compounds": ["curcumin", "ar-turmerone", "alpha-turmerone", "beta-turmerone"],
+      "sensoryContribution": {
+        "aroma": "earthy, warm, slightly mustard-like",
+        "flavor": "bitter, earthy, warm, slightly peppery"
+      },
+      "substitutionGroup": "warm-spice",
+      "commonIn": ["South Asian", "Southeast Asian", "Middle Eastern"]
+    },
+    "star-anise": {
+      "name": "Star Anise",
+      "compounds": ["anethole", "estragole", "limonene"],
+      "sensoryContribution": {
+        "aroma": "sweet, licorice-like, warm",
+        "flavor": "sweet, licorice, warm, slightly numbing"
+      },
+      "substitutionGroup": "sweet-aromatic",
+      "commonIn": ["Chinese", "Vietnamese", "Southeast Asian"]
+    }
+  }
+}
