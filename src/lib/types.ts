@@ -110,3 +110,64 @@ export interface ResearchCacheEntry {
   createdAt: string;
   hitCount: number;
 }
+
+
+export interface FoodMemoryInput {
+  memoryText: string;
+  knownRegion?: string;
+  knownLanguage?: string;
+  userLocation?: string;
+}
+
+export interface CollectedFoodMemory {
+  rawMemory: string;
+  normalizedMemory: string;
+  userLocation?: string;
+  extractedClues: {
+    possibleDishNames: string[];
+    culturalOrRegionalHints: string[];
+    rememberedIngredients: string[];
+    sensoryClues: string[];
+    occasions: string[];
+  };
+  missingInformation: string[];
+  nextQuestions: string[];
+  reassurance: string;
+}
+
+export interface DishHypothesis {
+  name: string;
+  whyPossible: string[];
+  whatWouldConfirm: string[];
+  confidence: Confidence;
+  researchRequired: boolean;
+}
+
+export interface DishResearchPlan {
+  researchRequired: boolean;
+  hypotheses: DishHypothesis[];
+  searchQueries: string[];
+  preferredSourceTypes: string[];
+  factsToVerify: string[];
+  questionsForUser: string[];
+}
+
+export interface ReconstructionDossier {
+  title: string;
+  evidenceLedger: {
+    userSaid: string[];
+    researched: string[];
+    inferred: string[];
+    unknown: string[];
+  };
+  hypotheses: DishHypothesis[];
+  nostalgiaCriticalElements: string[];
+  recreationStrategy: string[];
+  whatToAskFamily: string[];
+  confidence: Confidence;
+}
+
+export interface FamilyFollowupQuestions {
+  questions: string[];
+  toneGuidance: string;
+}

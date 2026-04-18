@@ -109,6 +109,61 @@ export const generateRecipeOutputSchema = z.object({
   promptForAgent: z.string(),
 });
 
+
+export const collectedFoodMemorySchema = z.object({
+  rawMemory: z.string(),
+  normalizedMemory: z.string(),
+  userLocation: z.string().optional(),
+  extractedClues: z.object({
+    possibleDishNames: z.array(z.string()),
+    culturalOrRegionalHints: z.array(z.string()),
+    rememberedIngredients: z.array(z.string()),
+    sensoryClues: z.array(z.string()),
+    occasions: z.array(z.string()),
+  }),
+  missingInformation: z.array(z.string()),
+  nextQuestions: z.array(z.string()),
+  reassurance: z.string(),
+});
+
+const dishHypothesisSchema = z.object({
+  name: z.string(),
+  whyPossible: z.array(z.string()),
+  whatWouldConfirm: z.array(z.string()),
+  confidence: confidenceSchema,
+  researchRequired: z.boolean(),
+});
+
+export const dishResearchPlanSchema = z.object({
+  researchRequired: z.boolean(),
+  hypotheses: z.array(dishHypothesisSchema),
+  searchQueries: z.array(z.string()),
+  preferredSourceTypes: z.array(z.string()),
+  factsToVerify: z.array(z.string()),
+  questionsForUser: z.array(z.string()),
+});
+
+export const collectFoodMemoryOutputSchema = collectedFoodMemorySchema;
+export const planDishResearchOutputSchema = dishResearchPlanSchema;
+export const buildReconstructionDossierOutputSchema = z.object({
+  title: z.string(),
+  evidenceLedger: z.object({
+    userSaid: z.array(z.string()),
+    researched: z.array(z.string()),
+    inferred: z.array(z.string()),
+    unknown: z.array(z.string()),
+  }),
+  hypotheses: z.array(dishHypothesisSchema),
+  nostalgiaCriticalElements: z.array(z.string()),
+  recreationStrategy: z.array(z.string()),
+  whatToAskFamily: z.array(z.string()),
+  confidence: confidenceSchema,
+});
+export const generateFamilyFollowupQuestionsOutputSchema = z.object({
+  questions: z.array(z.string()),
+  toneGuidance: z.string(),
+});
+
 export const readOnlyAnnotations = {
   readOnlyHint: true,
   destructiveHint: false,

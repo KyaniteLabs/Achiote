@@ -16,9 +16,13 @@ describe('Member Berries MCP server', () => {
       const { tools } = await client.listTools();
       expect(tools.map((tool) => tool.name).sort()).toEqual([
         'analyze_nostalgic_dish',
+        'build_reconstruction_dossier',
+        'collect_food_memory',
         'discover_regional_similars',
         'find_sensory_substitutes',
+        'generate_family_followup_questions',
         'generate_recipe',
+        'plan_dish_research',
         'resolve_dish_name',
         'source_ingredients',
       ]);
