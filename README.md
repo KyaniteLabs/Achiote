@@ -73,9 +73,13 @@ npm run build                  # Compile TypeScript
 npm test                       # Run tests
 npm run check                  # Typecheck + build + tests
 npm audit --audit-level=moderate
+npm run package:smoke          # Pack, install in temp project, and verify packaged MCP CLI
+npm run pack:check             # Full local release gate
 npm pack --dry-run             # Inspect publish contents
 npm start                      # Start the MCP server after build
 ```
+
+For a local self-hosted GitHub Actions runner and queued-job troubleshooting, see [`docs/SELF_HOSTED_RUNNER.md`](docs/SELF_HOSTED_RUNNER.md).
 
 ## Architecture
 

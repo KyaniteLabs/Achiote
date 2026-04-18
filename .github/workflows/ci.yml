@@ -41,5 +41,8 @@ jobs:
       - name: Audit production dependency vulnerabilities
         run: npm audit --audit-level=moderate
 
+      - name: Smoke packaged CLI
+        run: npm run package:smoke
+
       - name: Verify package contents
         run: npm pack --dry-run
