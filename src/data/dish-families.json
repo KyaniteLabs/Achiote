@@ -6,88 +6,439 @@
   "families": [
     {
       "canonicalName": "stuffed-vegetables",
-      "aliases": ["dolma", "dolmades", "sarma", "tolma", "mahi-yebra", "yaprak-sarma", "warak-enab", "cabbage-roll", "golabki", "halupki", "sarmale", "japrak"],
+      "aliases": [
+        "dolma",
+        "dolmades",
+        "sarma",
+        "tolma",
+        "mahi-yebra",
+        "yaprak-sarma",
+        "warak-enab",
+        "cabbage-roll",
+        "golabki",
+        "halupki",
+        "sarmale",
+        "japrak"
+      ],
       "transliterations": {
-        "Arabic": ["دولما", "محشي"],
-        "Turkish": ["dolma", "sarma"],
-        "Greek": ["ντολμάδες", "γεμιστά"],
-        "Armenian": ["տոլմա"],
-        "Polish": ["gołabki"],
-        "Romanian": ["sarmale"],
-        "Russian": ["голубцы"]
+        "Arabic": [
+          "دولما",
+          "محشي"
+        ],
+        "Turkish": [
+          "dolma",
+          "sarma"
+        ],
+        "Greek": [
+          "ντολμάδες",
+          "γεμιστά"
+        ],
+        "Armenian": [
+          "տոլմա"
+        ],
+        "Polish": [
+          "gołabki"
+        ],
+        "Romanian": [
+          "sarmale"
+        ],
+        "Russian": [
+          "голубцы"
+        ]
       },
-      "regions": ["Balkans", "Mediterranean", "Eastern Europe", "Middle East", "Central Asia"],
-      "sharedElements": ["vegetable wrapper", "rice or grain filling", "herb-forward seasoning", "slow-cooked in liquid"],
-      "divergentElements": ["wrapper type (grape leaf vs cabbage vs pepper)", "meat inclusion", "sauce (tomato vs egg-lemon vs yogurt)", "served hot or cold"],
-      "nostalgiaTriggers": ["herb combination from specific region", "wrapper texture", "sauce flavor"]
+      "regions": [
+        "Balkans",
+        "Mediterranean",
+        "Eastern Europe",
+        "Middle East",
+        "Central Asia"
+      ],
+      "sharedElements": [
+        "vegetable wrapper",
+        "rice or grain filling",
+        "herb-forward seasoning",
+        "slow-cooked in liquid"
+      ],
+      "divergentElements": [
+        "wrapper type (grape leaf vs cabbage vs pepper)",
+        "meat inclusion",
+        "sauce (tomato vs egg-lemon vs yogurt)",
+        "served hot or cold"
+      ],
+      "nostalgiaTriggers": [
+        "herb combination from specific region",
+        "wrapper texture",
+        "sauce flavor"
+      ]
     },
     {
       "canonicalName": "dumpling",
-      "aliases": ["pierogi", "varenyky", "pyrohy", "uszka", "pelmeni", "mandu", "jiaozi", "potsticker", "gyoza", "momo", "empanada", "pastel", "ravioli", "tortellini", "khinkali", "manti", "buuz", "wonton", "samosa"],
+      "aliases": [
+        "pierogi",
+        "varenyky",
+        "pyrohy",
+        "uszka",
+        "pelmeni",
+        "mandu",
+        "jiaozi",
+        "potsticker",
+        "gyoza",
+        "momo",
+        "empanada",
+        "pastel",
+        "ravioli",
+        "tortellini",
+        "khinkali",
+        "manti",
+        "buuz",
+        "wonton",
+        "samosa"
+      ],
       "transliterations": {
-        "Korean": ["만두"],
-        "Chinese": ["饺子", "锅贴"],
-        "Japanese": ["餃子"],
-        "Tibetan": ["མོག་མོག"],
-        "Ukrainian": ["вареники"],
-        "Russian": ["пельмени"],
-        "Mongolian": ["бууз"],
-        "Georgian": ["ხინკალი"],
-        "Hindi": ["समोसा"]
+        "Korean": [
+          "만두"
+        ],
+        "Chinese": [
+          "饺子",
+          "锅贴"
+        ],
+        "Japanese": [
+          "餃子"
+        ],
+        "Tibetan": [
+          "མོག་མོག"
+        ],
+        "Ukrainian": [
+          "вареники"
+        ],
+        "Russian": [
+          "пельмени"
+        ],
+        "Mongolian": [
+          "бууз"
+        ],
+        "Georgian": [
+          "ხინკალი"
+        ],
+        "Hindi": [
+          "समोसा"
+        ]
       },
-      "regions": ["East Asia", "Eastern Europe", "Central Asia", "South Asia", "Latin America", "Mediterranean"],
-      "sharedElements": ["dough wrapper", "filled with savory mixture", "cooked by boiling, steaming, or frying"],
-      "divergentElements": ["dough type (wheat, rice, potato)", "filling (meat, cheese, vegetable)", "cooking method", "dipping sauce"],
-      "nostalgiaTriggers": ["dough texture", "filling seasoning", "cooking method aroma", "shape and size"]
+      "regions": [
+        "East Asia",
+        "Eastern Europe",
+        "Central Asia",
+        "South Asia",
+        "Latin America",
+        "Mediterranean"
+      ],
+      "sharedElements": [
+        "dough wrapper",
+        "filled with savory mixture",
+        "cooked by boiling, steaming, or frying"
+      ],
+      "divergentElements": [
+        "dough type (wheat, rice, potato)",
+        "filling (meat, cheese, vegetable)",
+        "cooking method",
+        "dipping sauce"
+      ],
+      "nostalgiaTriggers": [
+        "dough texture",
+        "filling seasoning",
+        "cooking method aroma",
+        "shape and size"
+      ]
     },
     {
       "canonicalName": "flatbread",
-      "aliases": ["tortilla", "chapati", "roti", "naan", "pita", "lavash", "arepa", "injera", "paratha", "focaccia", "nan", "laffa", "sangak", "barbari"],
+      "aliases": [
+        "tortilla",
+        "chapati",
+        "roti",
+        "naan",
+        "pita",
+        "lavash",
+        "arepa",
+        "injera",
+        "paratha",
+        "focaccia",
+        "nan",
+        "laffa",
+        "sangak",
+        "barbari"
+      ],
       "transliterations": {
-        "Arabic": ["خبز"],
-        "Hindi": ["रोटी", "पराठा"],
-        "Turkish": ["lavash"],
-        "Persian": ["نان سنگک", "بربری"],
-        "Amharic": ["እንጀራ"],
-        "Spanish": ["tortilla", "arepa"]
+        "Arabic": [
+          "خبز"
+        ],
+        "Hindi": [
+          "रोटी",
+          "पराठा"
+        ],
+        "Turkish": [
+          "lavash"
+        ],
+        "Persian": [
+          "نان سنگک",
+          "بربری"
+        ],
+        "Amharic": [
+          "እንጀራ"
+        ],
+        "Spanish": [
+          "tortilla",
+          "arepa"
+        ]
       },
-      "regions": ["South Asia", "Middle East", "Mediterranean", "Latin America", "East Africa"],
-      "sharedElements": ["simple dough (flour + water + salt)", "cooked on flat surface", "serves as utensil or scoop"],
-      "divergentElements": ["flour type (wheat, corn, teff)", "leavened vs unleavened", "cooking surface (griddle, tandoor, comal)", "thickness"],
-      "nostalgiaTriggers": ["char marks from specific cooking surface", "chew vs crisp ratio", "specific flour aroma"]
+      "regions": [
+        "South Asia",
+        "Middle East",
+        "Mediterranean",
+        "Latin America",
+        "East Africa"
+      ],
+      "sharedElements": [
+        "simple dough (flour + water + salt)",
+        "cooked on flat surface",
+        "serves as utensil or scoop"
+      ],
+      "divergentElements": [
+        "flour type (wheat, corn, teff)",
+        "leavened vs unleavened",
+        "cooking surface (griddle, tandoor, comal)",
+        "thickness"
+      ],
+      "nostalgiaTriggers": [
+        "char marks from specific cooking surface",
+        "chew vs crisp ratio",
+        "specific flour aroma"
+      ],
+      "variants": [
+        {
+          "name": "corn-tortilla",
+          "aliases": [
+            "tortilla",
+            "corn tortilla",
+            "tortilla de maiz",
+            "tortilla de maíz"
+          ],
+          "regions": [
+            "Mexico",
+            "Central America"
+          ],
+          "distinguishingElements": [
+            "nixtamalized corn aroma",
+            "thin griddled masa disk",
+            "used as staple flatbread"
+          ],
+          "clarificationPrompt": "Do you mean the Mexican/Central American corn or flour flatbread?"
+        },
+        {
+          "name": "flour-tortilla",
+          "aliases": [
+            "flour tortilla",
+            "tortilla de harina"
+          ],
+          "regions": [
+            "Northern Mexico",
+            "US Southwest"
+          ],
+          "distinguishingElements": [
+            "wheat flour chew",
+            "fat-enriched soft flatbread",
+            "griddle browning"
+          ],
+          "clarificationPrompt": "Do you mean the wheat flour flatbread common in Northern Mexico and the US Southwest?"
+        }
+      ]
     },
     {
       "canonicalName": "rice-dish",
-      "aliases": ["biryani", "pilaf", "pulao", "paella", "risotto", "jollof", "fried-rice", "nasi-goreng", "arroz-con-pollo", "bibimbap", "tahdig", "mandi", "kabsa", "arroz-rojo"],
+      "aliases": [
+        "biryani",
+        "pilaf",
+        "pulao",
+        "paella",
+        "risotto",
+        "jollof",
+        "fried-rice",
+        "nasi-goreng",
+        "arroz-con-pollo",
+        "bibimbap",
+        "tahdig",
+        "mandi",
+        "kabsa",
+        "arroz-rojo"
+      ],
       "transliterations": {
-        "Hindi": ["बिरयानी", "पुलाव"],
-        "Arabic": ["كبسة", "مندي"],
-        "Persian": ["ته‌دیگ", "پلو"],
-        "Korean": ["비빔밥"],
-        "Spanish": ["arroz con pollo"],
-        "Indonesian": ["nasi goreng"]
+        "Hindi": [
+          "बिरयानी",
+          "पुलाव"
+        ],
+        "Arabic": [
+          "كبسة",
+          "مندي"
+        ],
+        "Persian": [
+          "ته‌دیگ",
+          "پلو"
+        ],
+        "Korean": [
+          "비빔밥"
+        ],
+        "Spanish": [
+          "arroz con pollo"
+        ],
+        "Indonesian": [
+          "nasi goreng"
+        ]
       },
-      "regions": ["South Asia", "Middle East", "Mediterranean", "West Africa", "East Asia", "Southeast Asia", "Latin America"],
-      "sharedElements": ["rice as base", "cooked with aromatics", "often served at gatherings"],
-      "divergentElements": ["rice type (basmati, arborio, jasmine, bomba)", "cooking technique (absorption, stirring, steaming)", "spice blend", "protein inclusion"],
-      "nostalgiaTriggers": ["rice grain texture (separate vs sticky vs creamy)", "bottom crust (tahdig, socarrat)", "specific spice aroma during cooking"]
+      "regions": [
+        "South Asia",
+        "Middle East",
+        "Mediterranean",
+        "West Africa",
+        "East Asia",
+        "Southeast Asia",
+        "Latin America"
+      ],
+      "sharedElements": [
+        "rice as base",
+        "cooked with aromatics",
+        "often served at gatherings"
+      ],
+      "divergentElements": [
+        "rice type (basmati, arborio, jasmine, bomba)",
+        "cooking technique (absorption, stirring, steaming)",
+        "spice blend",
+        "protein inclusion"
+      ],
+      "nostalgiaTriggers": [
+        "rice grain texture (separate vs sticky vs creamy)",
+        "bottom crust (tahdig, socarrat)",
+        "specific spice aroma during cooking"
+      ]
     },
     {
       "canonicalName": "stew-braise",
-      "aliases": ["tagine", "curry", "goulash", "pot-au-feu", "ossobuco", "cozido", "puchero", "caldo-de-res", "pho-bo", "bo-kho", "adobo", "rendang", "hotpot"],
+      "aliases": [
+        "tagine",
+        "curry",
+        "goulash",
+        "pot-au-feu",
+        "ossobuco",
+        "cozido",
+        "puchero",
+        "caldo-de-res",
+        "pho-bo",
+        "bo-kho",
+        "adobo",
+        "rendang",
+        "hotpot"
+      ],
       "transliterations": {
-        "Hindi": ["करी"],
-        "Arabic": ["طاجين"],
-        "Japanese": ["ちゃんこ鍋"],
-        "Vietnamese": ["phở bò", "bò kho"],
-        "Filipino": ["adobo"],
-        "Indonesian": ["rendang"],
-        "Hungarian": ["gulyás"]
+        "Hindi": [
+          "करी"
+        ],
+        "Arabic": [
+          "طاجين"
+        ],
+        "Japanese": [
+          "ちゃんこ鍋"
+        ],
+        "Vietnamese": [
+          "phở bò",
+          "bò kho"
+        ],
+        "Filipino": [
+          "adobo"
+        ],
+        "Indonesian": [
+          "rendang"
+        ],
+        "Hungarian": [
+          "gulyás"
+        ]
       },
-      "regions": ["Global"],
-      "sharedElements": ["slow-cooked protein", "liquid-based", "tender texture from long cooking", "aromatics and spices"],
-      "divergentElements": ["liquid (broth, coconut milk, tomato, wine)", "protein type", "spice level", "served over starch or with bread"],
-      "nostalgiaTriggers": ["specific aroma that fills the house during cooking", "protein tenderness level", "gravy/sauce consistency"]
+      "regions": [
+        "Global"
+      ],
+      "sharedElements": [
+        "slow-cooked protein",
+        "liquid-based",
+        "tender texture from long cooking",
+        "aromatics and spices"
+      ],
+      "divergentElements": [
+        "liquid (broth, coconut milk, tomato, wine)",
+        "protein type",
+        "spice level",
+        "served over starch or with bread"
+      ],
+      "nostalgiaTriggers": [
+        "specific aroma that fills the house during cooking",
+        "protein tenderness level",
+        "gravy/sauce consistency"
+      ]
+    },
+    {
+      "canonicalName": "egg-dish",
+      "aliases": [
+        "omelette",
+        "omelet",
+        "frittata",
+        "tortilla-espanola",
+        "tortilla española",
+        "spanish tortilla",
+        "tortilla de patatas"
+      ],
+      "transliterations": {
+        "Spanish": [
+          "tortilla española",
+          "tortilla de patatas"
+        ]
+      },
+      "regions": [
+        "Spain",
+        "Mediterranean"
+      ],
+      "sharedElements": [
+        "eggs as binder",
+        "set custardy interior",
+        "served warm or room temperature"
+      ],
+      "divergentElements": [
+        "potato inclusion",
+        "pan thickness",
+        "browned exterior",
+        "onion inclusion"
+      ],
+      "nostalgiaTriggers": [
+        "egg-potato aroma",
+        "custardy center texture",
+        "olive oil richness"
+      ],
+      "variants": [
+        {
+          "name": "tortilla-espanola",
+          "aliases": [
+            "tortilla española",
+            "spanish tortilla",
+            "tortilla de patatas",
+            "tortilla"
+          ],
+          "regions": [
+            "Spain"
+          ],
+          "distinguishingElements": [
+            "egg and potato cake",
+            "olive-oil poached potatoes",
+            "thick round pan-set form"
+          ],
+          "clarificationPrompt": "Do you mean the Spanish egg-and-potato tortilla rather than the Mexican flatbread?"
+        }
+      ]
     }
   ]
 }

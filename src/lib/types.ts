@@ -73,6 +73,21 @@ export interface RegionalSimilar {
   nostalgiaOverlap: Confidence;
 }
 
+export type DishNameMatchType = 'exact' | 'variant' | 'transliteration' | 'fuzzy' | 'ambiguous' | 'unknown';
+
+export interface DishNameCandidate {
+  canonicalName: string;
+  dishFamily: string;
+  region: string;
+  confidence: Confidence;
+  score: number;
+  matchType: DishNameMatchType;
+  matchedName: string;
+  variantName?: string;
+  distinguishingElements?: string[];
+  clarificationPrompt?: string;
+}
+
 export interface DishNameResolution {
   input: string;
   canonicalName: string;
@@ -81,6 +96,11 @@ export interface DishNameResolution {
   dishFamily: string;
   region: string;
   confidence: Confidence;
+  matchType?: DishNameMatchType;
+  score?: number;
+  needsClarification?: boolean;
+  candidates?: DishNameCandidate[];
+  clarificationPrompt?: string;
 }
 
 export interface ResearchCacheEntry {

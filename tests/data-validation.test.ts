@@ -46,7 +46,29 @@ describe('bundled data validation', () => {
     expectIssue(issues, 'dishFamilies.meta.description', 'non-empty string');
     expectIssue(issues, 'dishFamilies.families[0].aliases[12]', 'duplicate');
     expectIssue(issues, 'dishFamilies.families[0].aliases[13]', 'non-empty string');
-    expectIssue(issues, 'dishFamilies.families[5].canonicalName', 'duplicate');
+    expectIssue(issues, 'dishFamilies.families[6].canonicalName', 'duplicate');
+  });
+
+
+  it('rejects malformed dish variant metadata', () => {
+    const data = cloneBundledData();
+    data.dishFamilies.families[0].variants = [
+      {
+        name: '',
+        aliases: ['dolma', 'dolma'],
+        regions: [],
+        distinguishingElements: ['wrapper', 'wrapper'],
+        clarificationPrompt: '',
+      },
+    ];
+
+    const issues = validateBundledData(data);
+
+    expectIssue(issues, 'dishFamilies.families[0].variants[0].name', 'non-empty string');
+    expectIssue(issues, 'dishFamilies.families[0].variants[0].aliases[1]', 'duplicate');
+    expectIssue(issues, 'dishFamilies.families[0].variants[0].regions', 'non-empty array');
+    expectIssue(issues, 'dishFamilies.families[0].variants[0].distinguishingElements[1]', 'duplicate');
+    expectIssue(issues, 'dishFamilies.families[0].variants[0].clarificationPrompt', 'non-empty string');
   });
 
   it('rejects ingredients with duplicate names, empty compounds, and incomplete sensory metadata', () => {

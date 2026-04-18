@@ -54,6 +54,8 @@ describe('Member Berries MCP server', () => {
         input: 'perogi',
         canonicalName: 'dumpling',
         confidence: 'Medium',
+        matchType: 'fuzzy',
+        needsClarification: false,
       });
       expect(JSON.parse(result.content[0].type === 'text' ? result.content[0].text : '{}')).toMatchObject(
         result.structuredContent,
@@ -63,6 +65,32 @@ describe('Member Berries MCP server', () => {
       await server.close();
     }
   });
+
+  it('surfaces ambiguity candidates through resolve_dish_name structuredContent', async () => {
+    const server = createMemberBerriesServer({ enableCache: false });
+    const client = new Client({ name: 'member-berries-test', version: '0.0.0' });
+    const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
+
+    await server.connect(serverTransport);
+    await client.connect(clientTransport);
+
+    try {
+      const result = await client.callTool({
+        name: 'resolve_dish_name',
+        arguments: { input: 'tortilla' },
+      });
+
+      expect(result.structuredContent).toMatchObject({
+        needsClarification: true,
+        matchType: 'ambiguous',
+      });
+      expect((result.structuredContent?.candidates as unknown[]).length).toBeGreaterThanOrEqual(2);
+    } finally {
+      await client.close();
+      await server.close();
+    }
+  });
+
   it('quotes adversarial user-provided fields inside every prompt-backed tool', async () => {
     const server = createMemberBerriesServer({ enableCache: false });
     const client = new Client({ name: 'member-berries-test', version: '0.0.0' });

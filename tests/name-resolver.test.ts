@@ -43,3 +43,39 @@ describe('resolveDishName', () => {
     expect(result.canonicalName).toBe('stuffed-vegetables');
   });
 });
+
+describe('resolveDishName ambiguity-aware candidates', () => {
+  it('flags overloaded names and returns ranked candidates', () => {
+    const result = resolveDishName('tortilla');
+
+    expect(result.needsClarification).toBe(true);
+    expect(result.matchType).toBe('ambiguous');
+    expect(result.candidates?.length).toBeGreaterThanOrEqual(2);
+    expect(result.candidates?.map(candidate => candidate.canonicalName)).toContain('flatbread');
+    expect(result.candidates?.map(candidate => candidate.variantName)).toContain('tortilla-espanola');
+  });
+
+
+  it('flags fuzzy misspellings of overloaded names as ambiguous', () => {
+    const result = resolveDishName('tortila');
+
+    expect(result.needsClarification).toBe(true);
+    expect(result.matchType).toBe('ambiguous');
+    expect(result.candidates?.map(candidate => candidate.canonicalName)).toEqual(
+      expect.arrayContaining(['flatbread', 'egg-dish']),
+    );
+  });
+
+  it('resolves specific regional variants without clarification', () => {
+    const result = resolveDishName('tortilla española');
+
+    expect(result.needsClarification).toBe(false);
+    expect(result.matchType).toBe('variant');
+    expect(result.canonicalName).toBe('egg-dish');
+    expect(result.candidates?.[0]).toMatchObject({
+      canonicalName: 'egg-dish',
+      variantName: 'tortilla-espanola',
+      confidence: 'High',
+    });
+  });
+});
