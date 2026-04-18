@@ -18,80 +18,66 @@ User describes a food they or their family miss from another place, time, or cul
 - "I miss the taste of [childhood food]"
 - "Help me find ingredients for [heritage recipe]"
 
-## The Pipeline
+## The Conversation Flow
 
-```
-1. COLLECT → Memory Interview
-   Ask the user to describe the dish from memory:
-   - What do they remember most vividly (smell, taste, texture)?
-   - When/where did they eat it? Who made it?
-   - What made it special? What happened when they ate it?
-   - Can they describe the aroma? The texture? The aftertaste?
+Member Berries is a food-memory reconstruction skill. The recipe is not the starting point; the user's fragment is the starting point.
 
-2. RESOLVE → Name Resolution
-   Use the `resolve_dish_name` MCP tool to:
-   - Map the name to its canonical dish family
-   - Find all known aliases and transliterations
-   - Identify the cultural region
+```text
+1. WELCOME → Normalize uncertainty
+   Tell the user they do not need the correct spelling, original language, or complete recipe.
+   Good: "Write it the way it sounded. Tiny clues are enough to start."
 
-3. RESEARCH → Optional Host Research
-   If the dish family is unfamiliar or regional details are sparse:
-   - Use whatever web/search tools the host environment explicitly provides
-   - Prefer authentic cultural sources, technique videos, and cited recipes
-   - Clearly separate bundled Member Berries data from live/host research
-   - Do not claim live sourcing, prices, or availability unless actually checked
+2. COLLECT → Food memory intake
+   Use `collect_food_memory` to structure:
+   - possible names or sound-alikes
+   - family/cultural/region clues
+   - remembered ingredients
+   - smell, taste, texture, visual, occasion clues
+   - missing information and gentle next questions
 
-4. DECOMPOSE → Sensory Analysis
-   Use the `analyze_nostalgic_dish` MCP tool to:
-   - Break the dish into 5 sensory dimensions
-   - Score each dimension 1-10
-   - Identify the 1-3 nostalgia-critical elements
-   - These are the TARGET — everything else is secondary
+3. HYPOTHESIZE → Research plan, not certainty
+   Use `plan_dish_research` to produce:
+   - likely dish hypotheses
+   - why each might fit
+   - what would confirm or reject each
+   - search queries and source types
+   - facts to verify
 
-5. SUBSTITUTE → Chemistry-Aware Substitution
-   Use the `find_sensory_substitutes` MCP tool to:
-   - Match ingredients by volatile compounds, not just names
-   - Rank substitutes by compound overlap + sensory match
-   - Prioritize substitutes that preserve nostalgia-critical elements
+4. CLARIFY → Ask 1-3 high-yield questions
+   Ask only the questions most likely to separate hypotheses.
+   Do not interrogate the user. Offer to continue with uncertainty if they do not know.
 
-6. SOURCE → Ingredient Sourcing
-   Use the `source_ingredients` MCP tool to:
-   - Retrieve bundled regional store/corridor hints when available
-   - Use host research tools for live stores, online sources, pricing, and seasonal availability
-   - Mark static hints vs live-verified facts explicitly
+5. RESEARCH → Host research when available
+   Use available host web/search tools to investigate names, regional variants, ingredients, techniques, and sensory cues.
+   Treat sources as evidence, not gospel. Prefer community, regional, bilingual, recipe-with-context, and technique sources.
 
-7. DISCOVER → Regional Connections
-   Use the `discover_regional_similars` MCP tool to:
-   - Find related dishes from neighboring cultures
-   - Identify shared and divergent elements
-   - Surface substitution opportunities from related cuisines
+6. LEDGER → Separate evidence types
+   Track every claim as one of:
+   - User said
+   - Researched
+   - Inferred
+   - Unknown / needs family confirmation
 
-8. GENERATE → Final Recipe
-   Use the `generate_recipe` MCP tool to:
-   - Retrieve the expected recipe schema and bounded generation prompt
-   - Compose the final adapted recipe in the host model
-   - Include sensory analysis and confidence levels
-   - Note what's different and why
-   - Self-critique: does this actually recreate the target?
+7. DOSSIER → Reconstruction artifact
+   Use `build_reconstruction_dossier` to produce a food memory dossier with hypotheses, evidence, sensory priorities, and adaptation strategy.
 
-9. VALIDATE → Present to User
-   Present the recipe with:
-   - Full ingredients and steps
-   - "The nostalgia trigger is [X]" — clear explanation
-   - Confidence per element
-   - Where to buy everything
-   - Regional connections discovered
-   - Ask: "Does this feel right? What would you adjust?"
+8. FAMILY LOOP → Connection questions
+   Use `generate_family_followup_questions` to give the user gentle questions to ask relatives.
+
+9. RECREATE → Recipe only after enough grounding
+   If the likely dish and critical sensory triggers are clear, use the existing sensory/substitution/sourcing/recipe tools to create an adapted recipe.
+   If not clear, present a best-effort path and say exactly what is uncertain.
 ```
 
 ## Key Principles
 
-1. **Nostalgia-critical elements are sacred.** If a substitution kills a nostalgia trigger, it fails. Try harder.
-2. **Start with the person, not the recipe.** The memory is the input. The recipe is the output.
-3. **Chemistry over names.** "Cumin" and "caraway" are different. "Cumin" and "something with cuminaldehyde" is the right framing.
-4. **Regional context matters.** A dish from Oaxaca is different from the same-named dish from Mexico City.
-5. **Name resolution is critical.** The user will spell it wrong, use a colonial name, or describe it vaguely. Handle all of these gracefully.
-6. **Self-critique before presenting.** Ask yourself: "If I served this to the person who remembers the original, would they recognize it?" If not, iterate.
+1. **Uncertainty is sacred.** Do not pretend a fragment is resolved when research or family clarification is needed.
+2. **Nostalgia-critical elements are sacred.** If a substitution kills a nostalgia trigger, it fails. Try harder.
+3. **Start with the person, not the recipe.** The memory is the input. The recipe is the output.
+4. **Chemistry over names.** "Cumin" and "caraway" are different. "Cumin" and "something with cuminaldehyde" is the right framing.
+5. **Regional context matters.** A dish from Oaxaca is different from the same-named dish from Mexico City.
+6. **Name resolution is critical.** The user will spell it wrong, use a colonial name, or describe it vaguely. Handle all of these gracefully.
+7. **Self-critique before presenting.** Ask yourself: "If I served this to the person who remembers the original, would they recognize it?" If not, iterate.
 
 ## Output Format
 
