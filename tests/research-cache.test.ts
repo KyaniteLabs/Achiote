@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { ResearchCache } from '../src/lib/research-cache.js';
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -17,6 +18,21 @@ describe('ResearchCache', () => {
   afterEach(() => {
     cache.close();
     if (fs.existsSync(TEST_DB)) fs.unlinkSync(TEST_DB);
+  });
+
+  it('creates parent directories for new database paths', () => {
+    const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'member-berries-cache-parent-'));
+    const nestedDb = path.join(tempRoot, 'nested', 'cache.db');
+    const nestedCache = new ResearchCache(nestedDb);
+
+    try {
+      nestedCache.store('dumpling', 'Poland', '{"ok":true}');
+      expect(fs.existsSync(nestedDb)).toBe(true);
+      expect(nestedCache.get('dumpling', 'Poland')!.researchData).toBe('{"ok":true}');
+    } finally {
+      nestedCache.close();
+      fs.rmSync(tempRoot, { recursive: true, force: true });
+    }
   });
 
   it('stores and retrieves research data', () => {
