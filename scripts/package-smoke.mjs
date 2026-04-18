@@ -120,7 +120,9 @@ async function assertPackagedCliListsTools(installDir, tempRoot) {
 }
 
 async function main() {
-  const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'member-berries-package-smoke-'));
+  const smokeRoot = path.join(os.tmpdir(), 'member-berries-package-smoke');
+  fs.mkdirSync(smokeRoot, { recursive: true });
+  const tempRoot = fs.mkdtempSync(path.join(smokeRoot, 'run-'));
   const installDir = path.join(tempRoot, 'install');
 
   try {

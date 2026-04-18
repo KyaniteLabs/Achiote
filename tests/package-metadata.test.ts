@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import fs from 'node:fs';
 import pkg from '../package.json' with { type: 'json' };
 
 describe('package distribution metadata', () => {
@@ -42,4 +43,15 @@ describe('package distribution metadata', () => {
     expect(pkg.scripts['pack:check']).toBe('npm run check && npm run package:smoke && npm pack --dry-run');
     expect(pkg.scripts['package:smoke']).toBe('node scripts/package-smoke.mjs');
   });
+
+  it('uses a portable package-smoke temp directory prefix', () => {
+    const smokeScript = fs.readFileSync('scripts/package-smoke.mjs', 'utf8');
+
+    expect(smokeScript).toContain("const smokeRoot = path.join(os.tmpdir(), 'member-berries-package-smoke');");
+    expect(smokeScript).toContain("fs.mkdirSync(smokeRoot, { recursive: true });");
+    expect(smokeScript).toContain("fs.mkdtempSync(path.join(smokeRoot, 'run-'))");
+    expect(smokeScript).not.toContain("fs.mkdtempSync(path.join(os.tmpdir(), 'member-berries-package-smoke-'))");
+    expect(smokeScript).not.toContain("member-berries-package-smoke-XXXXXX");
+  });
+
 });
