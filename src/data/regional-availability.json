@@ -1,0 +1,98 @@
+{
+  "meta": {
+    "version": "0.1.0",
+    "description": "US regional ingredient availability — where to find ethnic/specialty ingredients by region"
+  },
+  "regions": {
+    "southern-california": {
+      "cities": ["Los Angeles", "San Diego", "Orange County", "Inland Empire"],
+      "majorEthnicCorridors": [
+        { "name": "Koreatown", "city": "Los Angeles", "cuisines": ["Korean", "Japanese"] },
+        { "name": "San Gabriel Valley", "city": "Los Angeles", "cuisines": ["Chinese", "Vietnamese"] },
+        { "name": "Thai Town", "city": "Los Angeles", "cuisines": ["Thai", "Southeast Asian"] },
+        { "name": "Little Ethiopia", "city": "Los Angeles", "cuisines": ["Ethiopian", "Eritrean"] },
+        { "name": "Glendale", "city": "Los Angeles", "cuisines": ["Armenian", "Middle Eastern"] },
+        { "name": "Westminster", "city": "Orange County", "cuisines": ["Vietnamese"] },
+        { "name": "National City", "city": "San Diego", "cuisines": ["Filipino"] },
+        { "name": "East LA / Boyle Heights", "city": "Los Angeles", "cuisines": ["Mexican", "Central American"] }
+      ],
+      "majorStores": {
+        "asian": ["H Mart", "99 Ranch Market", "Mitsuwa", "Tokyo Central"],
+        "latin": ["Northgate Gonzalez", "Vallarta Supermarket", "Cardenas"],
+        "middleEastern": ["Jons Marketplace", "Super King"],
+        "indian": ["India Sweets & Spices", "Apna Bazar"],
+        "mainstream": ["Whole Foods", "Bristol Farms", "Sprouts", "Trader Joe's", "Ralphs", "Vons"]
+      }
+    },
+    "bay-area": {
+      "cities": ["San Francisco", "San Jose", "Oakland", "Berkeley"],
+      "majorEthnicCorridors": [
+        { "name": "Chinatown", "city": "San Francisco", "cuisines": ["Chinese", "Southeast Asian"] },
+        { "name": "Mission District", "city": "San Francisco", "cuisines": ["Mexican", "Central American"] },
+        { "name": "Japantown", "city": "San Jose", "cuisines": ["Japanese", "Korean"] },
+        { "name": "Fremont", "city": "East Bay", "cuisines": ["Indian", "Afghan", "Middle Eastern"] },
+        { "name": "Oakland Chinatown", "city": "Oakland", "cuisines": ["Chinese", "Vietnamese", "Korean"] }
+      ],
+      "majorStores": {
+        "asian": ["99 Ranch Market", "Marina Food", "Mitsuwa"],
+        "latin": ["Mi Pueblo", "Lucky"],
+        "middleEastern": ["Sahara Market"],
+        "indian": ["New India Bazar", "Milan Grocery"],
+        "mainstream": ["Whole Foods", "Berkeley Bowl", "Rainbow Grocery", "Trader Joe's", "Safeway"]
+      }
+    },
+    "new-york-metro": {
+      "cities": ["New York City", "Jersey City", "Yonkers", "Newark"],
+      "majorEthnicCorridors": [
+        { "name": "Flushing", "city": "Queens", "cuisines": ["Chinese", "Korean"] },
+        { "name": "Jackson Heights", "city": "Queens", "cuisines": ["Indian", "South Asian", "Latin American"] },
+        { "name": "Astoria", "city": "Queens", "cuisines": ["Greek", "Middle Eastern", "Eastern European"] },
+        { "name": "Washington Heights", "city": "Manhattan", "cuisines": ["Dominican", "Caribbean"] },
+        { "name": "Sunset Park", "city": "Brooklyn", "cuisines": ["Chinese", "Mexican"] },
+        { "name": "Koreatown", "city": "Manhattan", "cuisines": ["Korean", "Japanese"] },
+        { "name": "Arthur Avenue", "city": "Bronx", "cuisines": ["Italian"] }
+      ],
+      "majorStores": {
+        "asian": ["H Mart", "SkyFoods", "Great Wall Supermarket"],
+        "latin": ["Associated Supermarket", "Compare Foods"],
+        "middleEastern": ["Kalustyan's", "Sahadi's"],
+        "indian": ["Patel Brothers", "Apna Bazar"],
+        "mainstream": ["Whole Foods", "Trader Joe's", "Fairway", "Zabar's"]
+      }
+    },
+    "chicago-metro": {
+      "cities": ["Chicago", "Evanston", "Naperville", "Schaumburg"],
+      "majorEthnicCorridors": [
+        { "name": "Chinatown", "city": "Chicago", "cuisines": ["Chinese", "Pan-Asian"] },
+        { "name": "Devon Avenue", "city": "Chicago", "cuisines": ["Indian", "Pakistani", "Middle Eastern"] },
+        { "name": "Pilsen", "city": "Chicago", "cuisines": ["Mexican", "Central American"] },
+        { "name": "Little Village", "city": "Chicago", "cuisines": ["Mexican"] },
+        { "name": "Albany Park", "city": "Chicago", "cuisines": ["Korean", "Middle Eastern", "Latin American"] }
+      ],
+      "majorStores": {
+        "asian": ["H Mart", "Assi Plaza", "Mitsuwa"],
+        "latin": ["Carnicerias Jimenez", "El Guero"],
+        "middleEastern": ["Z&H Market", "Kedzie Plaza"],
+        "indian": ["Patel Brothers", "Apna Bazar India"],
+        "mainstream": ["Whole Foods", "Trader Joe's", "Mariano's", "Jewel-Osco"]
+      }
+    },
+    "texas-metro": {
+      "cities": ["Houston", "Dallas", "Austin", "San Antonio"],
+      "majorEthnicCorridors": [
+        { "name": "Bellaire Chinatown", "city": "Houston", "cuisines": ["Chinese", "Vietnamese", "Korean"] },
+        { "name": "Hillcroft", "city": "Houston", "cuisines": ["Indian", "Pakistani", "Middle Eastern"] },
+        { "name": "Koreatown", "city": "Dallas", "cuisines": ["Korean"] },
+        { "name": "Richardson", "city": "Dallas", "cuisines": ["Chinese", "Indian", "Middle Eastern"] },
+        { "name": "East Austin", "city": "Austin", "cuisines": ["Mexican", "Central American"] }
+      ],
+      "majorStores": {
+        "asian": ["H Mart", "99 Ranch Market", "Hong Kong Market"],
+        "latin": ["Mi Tienda", "Fiesta Mart", "El Rancho"],
+        "middleEastern": ["Phoenicia Specialty Foods", "Sahara"],
+        "indian": ["India Grocers", "Taj Grocery"],
+        "mainstream": ["Whole Foods", "Trader Joe's", "HEB", "Central Market", "Sprouts"]
+      }
+    }
+  }
+}
