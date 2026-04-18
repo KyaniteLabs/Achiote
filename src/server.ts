@@ -15,12 +15,14 @@ import dishFamiliesData from './data/dish-families.json' with { type: 'json' };
 import {
   analyzeNostalgicDishOutputSchema,
   buildReconstructionDossierOutputSchema,
+  collectedFoodMemorySchema,
   collectFoodMemoryOutputSchema,
   discoverRegionalSimilarsOutputSchema,
   dishNameResolutionSchema,
   findSensorySubstitutesOutputSchema,
   generateFamilyFollowupQuestionsOutputSchema,
   generateRecipeOutputSchema,
+  dishResearchPlanSchema,
   planDishResearchOutputSchema,
   readOnlyAnnotations,
   sourceIngredientsOutputSchema,
@@ -74,14 +76,14 @@ export function createMemberBerriesServer(options: MemberBerriesServerOptions = 
       description:
         'Turn collected memory clues into hypotheses, search queries, source preferences, and facts to verify. This plans research rather than pretending sparse fragments are resolved.',
       inputSchema: {
-        memory: z.unknown().describe('Structured output from collect_food_memory'),
+        memory: collectedFoodMemorySchema.describe('Structured output from collect_food_memory'),
       },
       outputSchema: planDishResearchOutputSchema,
       annotations: readOnlyAnnotations,
     },
     async ({ memory }) => {
       try {
-        return structuredJsonResult({ ...planDishResearch(memory as ReturnType<typeof collectFoodMemory>) });
+        return structuredJsonResult({ ...planDishResearch(memory) });
       } catch (error) {
         return toolError(error, 'plan_dish_research_failed');
       }
@@ -95,8 +97,8 @@ export function createMemberBerriesServer(options: MemberBerriesServerOptions = 
       description:
         'Build an evidence-separated food memory dossier from user memory, research plan, and optional researched/inferred facts.',
       inputSchema: {
-        memory: z.unknown().describe('Structured output from collect_food_memory'),
-        researchPlan: z.unknown().describe('Structured output from plan_dish_research'),
+        memory: collectedFoodMemorySchema.describe('Structured output from collect_food_memory'),
+        researchPlan: dishResearchPlanSchema.describe('Structured output from plan_dish_research'),
         researchedFacts: z.array(z.string()).optional().describe('Source-backed facts gathered by the host AI or research tools'),
         inferredFacts: z.array(z.string()).optional().describe('Explicit inferences that are not direct source facts'),
       },
@@ -107,8 +109,8 @@ export function createMemberBerriesServer(options: MemberBerriesServerOptions = 
       try {
         return structuredJsonResult({
           ...buildReconstructionDossier({
-            memory: memory as ReturnType<typeof collectFoodMemory>,
-            researchPlan: researchPlan as ReturnType<typeof planDishResearch>,
+            memory,
+            researchPlan,
             researchedFacts,
             inferredFacts,
           }),
@@ -126,8 +128,8 @@ export function createMemberBerriesServer(options: MemberBerriesServerOptions = 
       description:
         'Generate gentle family follow-up questions that deepen connection and clarify food-memory hypotheses without shaming the user.',
       inputSchema: {
-        memory: z.unknown().describe('Structured output from collect_food_memory'),
-        researchPlan: z.unknown().describe('Structured output from plan_dish_research'),
+        memory: collectedFoodMemorySchema.describe('Structured output from collect_food_memory'),
+        researchPlan: dishResearchPlanSchema.describe('Structured output from plan_dish_research'),
       },
       outputSchema: generateFamilyFollowupQuestionsOutputSchema,
       annotations: readOnlyAnnotations,
@@ -136,8 +138,8 @@ export function createMemberBerriesServer(options: MemberBerriesServerOptions = 
       try {
         return structuredJsonResult({
           ...generateFamilyFollowupQuestions({
-            memory: memory as ReturnType<typeof collectFoodMemory>,
-            researchPlan: researchPlan as ReturnType<typeof planDishResearch>,
+            memory,
+            researchPlan,
           }),
         });
       } catch (error) {

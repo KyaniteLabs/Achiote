@@ -110,7 +110,7 @@ export const generateRecipeOutputSchema = z.object({
 });
 
 
-const collectedFoodMemorySchema = z.object({
+export const collectedFoodMemorySchema = z.object({
   rawMemory: z.string(),
   normalizedMemory: z.string(),
   userLocation: z.string().optional(),
@@ -134,7 +134,7 @@ const dishHypothesisSchema = z.object({
   researchRequired: z.boolean(),
 });
 
-const dishResearchPlanSchema = z.object({
+export const dishResearchPlanSchema = z.object({
   researchRequired: z.boolean(),
   hypotheses: z.array(dishHypothesisSchema),
   searchQueries: z.array(z.string()),

@@ -64,3 +64,31 @@ describe('research-first food memory workflow', () => {
     expect(questions.toneGuidance).toContain('No one needs to know the perfect spelling');
   });
 });
+
+describe('general research planning', () => {
+  it('plans useful research for non-Puerto-Rican named fragments', () => {
+    const memory = collectFoodMemory({
+      memoryText: 'My Nigerian auntie mentioned egusi soup with melon seeds and bitter greens.',
+      knownRegion: 'Nigeria',
+    });
+    const plan = planDishResearch(memory);
+
+    expect(plan.hypotheses[0]).toMatchObject({
+      name: 'egusi soup',
+      confidence: 'Medium',
+      researchRequired: true,
+    });
+    expect(plan.hypotheses[0].whyPossible.join(' ')).toContain('user supplied a possible dish name');
+    expect(plan.searchQueries.join(' ')).toContain('egusi soup');
+    expect(plan.searchQueries.join(' ')).toContain('Nigeria');
+  });
+
+  it('extracts quoted multi-word dish fragments without a closed demo list', () => {
+    const memory = collectFoodMemory({ memoryText: 'She called it "momo achar" and said it was from Nepal.' });
+    const plan = planDishResearch(memory);
+
+    expect(memory.extractedClues.possibleDishNames).toContain('momo achar');
+    expect(plan.hypotheses[0].name).toBe('momo achar');
+    expect(plan.searchQueries.join(' ')).toContain('momo achar');
+  });
+});

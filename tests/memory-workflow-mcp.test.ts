@@ -76,4 +76,16 @@ describe('memory workflow MCP tools', () => {
       });
     });
   });
+
+  it('rejects malformed dependent tool inputs instead of casting unknown objects', async () => {
+    await withClient(async (client) => {
+      const result = await client.callTool({
+        name: 'plan_dish_research',
+        arguments: { memory: { rawMemory: 'missing required collected-memory fields' } },
+      });
+
+      expect(result.isError).toBe(true);
+      expect(result.content[0].type === 'text' ? result.content[0].text : '').toContain('Input validation error');
+    });
+  });
 });

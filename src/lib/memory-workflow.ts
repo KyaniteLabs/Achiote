@@ -8,11 +8,32 @@ import type {
   ReconstructionDossier,
 } from './types.js';
 
+const RESEARCH_STOPWORDS = new Set([
+  'my',
+  'mom',
+  'grandma',
+  'grandmother',
+  'auntie',
+  'said',
+  'mentioned',
+  'called',
+  'something',
+  'like',
+  'with',
+  'from',
+  'and',
+  'the',
+  'that',
+]);
+
 const INGREDIENT_HINTS = [
   'plantains',
   'pork',
   'dill',
   'lamb',
+  'melon seeds',
+  'bitter greens',
+  'greens',
   'banana leaves',
   'masa',
   'sofrito',
@@ -30,14 +51,29 @@ function includesAny(text: string, needles: string[]): boolean {
   return needles.some((needle) => text.includes(needle));
 }
 
+function likelyDishPhrases(text: string): string[] {
+  const lower = text.toLowerCase();
+  const patterns = [
+    /(?:mentioned|called|named|made)\s+([a-zA-Zñáéíóúü-]+(?:\s+[a-zA-Zñáéíóúü-]+){0,2})/gi,
+    /(?:sounded like|something like)\s+([a-zA-Zñáéíóúü-]+(?:\s+[a-zA-Zñáéíóúü-]+){0,2})/gi,
+  ];
+  const phrases = patterns.flatMap((pattern) => [...lower.matchAll(pattern)].map((match) => match[1].trim()));
+
+  return phrases
+    .map((phrase) =>
+      phrase
+        .split(/\s+/)
+        .filter((word) => !RESEARCH_STOPWORDS.has(word))
+        .join(' ')
+        .trim(),
+    )
+    .filter((phrase) => phrase.length > 2);
+}
+
 function extractPossibleNames(text: string): string[] {
   const quoted = [...text.matchAll(/[“\"]([^”\"]+)[”\"]/g)].map((match) => match[1]);
-  const soundLike = [...text.matchAll(/(?:sounded like|something like|called|named)\s+([a-zA-Zñáéíóúü\-]+)/gi)].map(
-    (match) => match[1],
-  );
-  const knownFragments = ['pass-teh-lay', 'pastelay', 'pasteles', 'pastelón', 'pastelon', 'piononos', 'tortilla'];
-  const fragments = knownFragments.filter((fragment) => text.toLowerCase().includes(fragment));
-  return unique([...quoted, ...soundLike, ...fragments]);
+  const phoneticFragments = [...text.matchAll(/\b[a-zA-Zñáéíóúü]+(?:-[a-zA-Zñáéíóúü]+){1,}\b/g)].map((match) => match[0]);
+  return unique([...quoted, ...likelyDishPhrases(text), ...phoneticFragments]);
 }
 
 export function collectFoodMemory(input: FoodMemoryInput): CollectedFoodMemory {
@@ -115,11 +151,22 @@ function puertoRicanHypotheses(memory: CollectedFoodMemory): DishHypothesis[] {
 }
 
 function genericHypotheses(memory: CollectedFoodMemory): DishHypothesis[] {
-  if (memory.extractedClues.possibleDishNames.length > 0 || memory.extractedClues.culturalOrRegionalHints.length > 0) {
+  const names = memory.extractedClues.possibleDishNames;
+  if (names.length > 0) {
+    return names.slice(0, 3).map((name) => ({
+      name,
+      whyPossible: ['user supplied a possible dish name or sound-alike fragment that should be researched before recipe generation'],
+      whatWouldConfirm: ['original language spelling', 'region/town', 'ingredients', 'cooking method', 'occasion'],
+      confidence: memory.extractedClues.culturalOrRegionalHints.length > 0 ? 'Medium' : 'Low',
+      researchRequired: true,
+    }));
+  }
+
+  if (memory.extractedClues.culturalOrRegionalHints.length > 0 || memory.extractedClues.rememberedIngredients.length > 0) {
     return [
       {
-        name: memory.extractedClues.possibleDishNames[0] ?? 'unknown regional dish',
-        whyPossible: ['user supplied a name or cultural clue, but not enough evidence to resolve safely'],
+        name: 'unknown regional dish',
+        whyPossible: ['user supplied cultural, regional, ingredient, or sensory clues but not enough evidence to resolve safely'],
         whatWouldConfirm: ['original language spelling', 'region/town', 'ingredients', 'cooking method', 'occasion'],
         confidence: 'Low',
         researchRequired: true,
