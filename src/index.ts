@@ -453,13 +453,13 @@ Original dish memory: ${JSON.stringify(dishDescription)}
 Location: ${JSON.stringify(location)}
 
 Sensory analysis:
-${sensoryAnalysis}
+${JSON.stringify(sensoryAnalysis)}
 
 Ingredient substitutions:
-${substitutions}
+${JSON.stringify(substitutions)}
 
 Sourcing guide:
-${sourcing}
+${JSON.stringify(sourcing)}
 
 Generate a recipe with:
 1. Title (e.g., "Recreated [Dish Name]")
@@ -518,7 +518,7 @@ function findMatchingRegion(location: string): {
   return null;
 }
 
-async function main() {
+export async function runMemberBerriesStdioServer() {
   const server = createMemberBerriesServer();
   const transport = new StdioServerTransport();
 
@@ -532,7 +532,7 @@ async function main() {
 const isCliEntrypoint = process.argv[1] ? path.resolve(process.argv[1]) === fileURLToPath(import.meta.url) : false;
 
 if (isCliEntrypoint) {
-  main().catch((error) => {
+  runMemberBerriesStdioServer().catch((error) => {
     console.error(error instanceof Error ? error.message : String(error));
     process.exit(1);
   });

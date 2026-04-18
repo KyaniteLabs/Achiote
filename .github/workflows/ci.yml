@@ -24,7 +24,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
-          cache: npm
 
       - name: Install locked dependencies
         run: npm ci
@@ -40,6 +39,9 @@ jobs:
 
       - name: Audit production dependency vulnerabilities
         run: npm audit --audit-level=moderate
+
+      - name: Smoke packaged CLI
+        run: npm run package:smoke
 
       - name: Verify package contents
         run: npm pack --dry-run

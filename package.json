@@ -12,7 +12,8 @@
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
     "check": "npm run typecheck && npm run build && npm test",
-    "pack:check": "npm run check && npm pack --dry-run",
+    "pack:check": "npm run check && npm run package:smoke && npm pack --dry-run",
+    "package:smoke": "node scripts/package-smoke.mjs",
     "prepack": "npm run build"
   },
   "dependencies": {
@@ -29,7 +30,7 @@
   "license": "MIT",
   "types": "dist/index.d.ts",
   "bin": {
-    "member-berries": "dist/index.js"
+    "member-berries": "bin/member-berries.mjs"
   },
   "exports": {
     ".": {
@@ -38,10 +39,12 @@
     }
   },
   "files": [
+    "bin/",
     "dist/",
     "skill/",
     "docs/ARCHITECTURE.md",
     "docs/ROADMAP.md",
+    "docs/SELF_HOSTED_RUNNER.md",
     "README.md",
     "LICENSE"
   ],
