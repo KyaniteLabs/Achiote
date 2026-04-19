@@ -122,7 +122,7 @@ async function assertPackagedCliListsTools(installDir, tempRoot) {
     const suffix = stderr ? `\n\nCLI stderr:\n${stderr}` : '';
     throw new Error(`${error instanceof Error ? error.message : String(error)}${suffix}`);
   } finally {
-    await client.close();
+    await withTimeout(client.close(), 5_000, 'MCP client close');
   }
 }
 
