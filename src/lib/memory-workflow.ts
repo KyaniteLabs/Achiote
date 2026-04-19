@@ -78,6 +78,15 @@ function includesAny(text: string, needles: string[]): boolean {
   return needles.some((needle) => text.includes(needle));
 }
 
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function matchesWordOrPhrase(text: string, hint: string): boolean {
+  const pattern = escapeRegExp(hint).replace(/\s+/g, '\\s+');
+  return new RegExp(`(?:^|\\b)${pattern}(?:$|\\b)`, 'i').test(text);
+}
+
 function likelyDishPhrases(text: string): string[] {
   const lower = text.toLowerCase();
   const patterns = [
@@ -105,7 +114,7 @@ function extractPossibleNames(text: string): string[] {
 
 function extractCookingMethodHints(text: string): string[] {
   return COOKING_METHOD_HINTS.filter((hint) => (
-    hint === 'curry/curried' ? /\bcurr(?:y|ied)\b/.test(text) : text.includes(hint)
+    hint === 'curry/curried' ? /\bcurr(?:y|ied)\b/.test(text) : matchesWordOrPhrase(text, hint)
   ));
 }
 
@@ -202,7 +211,7 @@ export function collectFoodMemory(input: FoodMemoryInput): CollectedFoodMemory {
     lower.includes('caribbean') ? 'Caribbean' : '',
     lower.includes('central american') ? 'Central American' : '',
   ].filter((value): value is string => Boolean(value)));
-  const rememberedIngredients = INGREDIENT_HINTS.filter((ingredient) => lower.includes(ingredient));
+  const rememberedIngredients = INGREDIENT_HINTS.filter((ingredient) => matchesWordOrPhrase(lower, ingredient));
   const cookingMethodHints = extractCookingMethodHints(lower);
   const sensoryClues = unique([
     includesAny(lower, ['sour', 'tangy']) ? 'sour/tangy' : '',

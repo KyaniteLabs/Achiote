@@ -87,6 +87,15 @@ describe('research-first food memory workflow', () => {
     expect(curryMemory.missingInformation).not.toContain('cooking method or serving format');
     expect(curriedMemory.missingInformation).not.toContain('cooking method or serving format');
   });
+
+  it('does not extract generic hints from unrelated substrings', () => {
+    const selfishMemory = collectFoodMemory({ memoryText: 'This is a selfish memory about a beach trip.' });
+    const breadfruitMemory = collectFoodMemory({ memoryText: 'I remember breadfruit from the islands.' });
+
+    expect(selfishMemory.extractedClues.rememberedIngredients).not.toContain('fish');
+    expect(selfishMemory.missingInformation).toContain('core ingredients');
+    expect(breadfruitMemory.missingInformation).toContain('cooking method or serving format');
+  });
 });
 
 describe('general research planning', () => {
