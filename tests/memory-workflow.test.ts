@@ -78,6 +78,17 @@ describe('general research planning', () => {
     });
   });
 
+
+  it('does not turn connector words into dish names', () => {
+    const memory = collectFoodMemory({
+      memoryText: "My mom said my Puerto Rican grandma made something that sounded like pass-teh-lay.",
+    });
+
+    expect(memory.extractedClues.possibleDishNames).toContain('pass-teh-lay');
+    expect(memory.extractedClues.possibleDishNames).not.toContain('sounded');
+    expect(memory.extractedClues.possibleDishNames).not.toContain('something sounded');
+  });
+
   it('plans useful research for non-Puerto-Rican named fragments', () => {
     const memory = collectFoodMemory({
       memoryText: 'My Nigerian auntie mentioned egusi soup with melon seeds and bitter greens.',
