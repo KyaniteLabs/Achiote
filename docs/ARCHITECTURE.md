@@ -1,7 +1,5 @@
 # Architecture
 
-“Member Berries” is the repository codename. The public product name is intentionally undecided.
-
 Member Berries is a TypeScript MCP server for research-first food-memory reconstruction. It provides deterministic structured context, typed provenance contracts, cache helpers, and bounded prompts that a host model can use to reconstruct recipes from food memories.
 
 ## Runtime shape

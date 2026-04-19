@@ -5,8 +5,6 @@ description: Reverse engineer nostalgic dishes using ingredients available where
 
 # Member Berries
 
-Working codename: “Member Berries” is not the final public product name.
-
 Culinary reverse engineering that recreates the **sensory triggers** of nostalgic dishes using ingredients available where the user is.
 
 ## When to Use
