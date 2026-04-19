@@ -1,6 +1,6 @@
 # Member Berries
 
-Member Berries is a **Model Context Protocol (MCP)** server for research-first food-memory reconstruction. It helps a host AI turn incomplete family food memories into structured clues, research plans, cited/provenance-ready findings, sensory analysis, sourcing/substitution strategy, and a recipe-generation handoff.
+Member Berries is a **Model Context Protocol (MCP)** server for research-first food-memory reconstruction. It helps a host AI turn incomplete family food memories into structured clues, research plans, cited/provenance-ready findings, sensory analysis, sourcing/substitution strategy, and a minimum viable nostalgia cue before any fuller recipe handoff.
 
 > "The nostalgia lives in the maillard crust's interaction with the lactic tang — here's how to reproduce that."
 
@@ -38,11 +38,11 @@ Use the member-berries skill.
 My mom said my Puerto Rican grandma made something that sounded like pass-teh-lay. I don't speak Spanish. Maybe plantains or pork?
 ```
 
-Expected behavior: the host AI should use the MCP tools to collect the memory, plan research, build a dossier, ask family follow-up questions, and offer a minimum viable nostalgia cue before any full recipe handoff.
+Expected behavior: the host AI should use the MCP tools to collect the memory, plan research, build a dossier, and present a minimum viable nostalgia cue first. Only after that should it ask whether the user wants something more complex, such as sourcing help or a full recipe handoff.
 
 ## What It Does Today
 
-Member Berries is a research-first food-memory reconstruction server. It provides 13 MCP tools that let a host AI chat client run the whole workflow from a fragment to a recipe-generation handoff:
+Member Berries is a research-first food-memory reconstruction server. It provides 14 MCP tools that let a host AI chat client run the workflow from a fragment to a minimum viable nostalgia cue, with optional sourcing/substitution and recipe handoff if the user wants more:
 
 | Stage | Tool | Implemented behavior |
 |------|------|----------------------|
@@ -57,7 +57,7 @@ Member Berries is a research-first food-memory reconstruction server. It provide
 | Sourcing | `source_ingredients` | Returns static regional store/corridor hints and a host-model prompt for sourcing. It does not perform live inventory or price lookup. |
 | Regional comparison | `discover_regional_similars` | Returns bundled dish-family context and a host-model prompt for neighboring/regional comparisons. |
 | Minimum viable nostalgia cue | `generate_minimum_viable_nostalgia` | Produces the smallest practical aroma, bite, sip, condiment, or ritual to test the likely memory trigger before attempting a full recipe. |
-| Recipe handoff | `generate_recipe` | Returns an expected recipe schema and a bounded host-model prompt for recipe generation and self-critique. It does not deterministically generate final recipe steps by itself. |
+| Optional recipe handoff | `generate_recipe` | Returns an expected recipe schema and a bounded host-model prompt for recipe generation and self-critique. Use only after the minimum viable cue has been presented and the user wants something more complex. |
 
 All tools return MCP `structuredContent` plus backwards-compatible JSON text.
 
@@ -69,20 +69,14 @@ food memory fragment
   -> plan_dish_research
   -> optional host research / family clarification
   -> build_research_record / validate_research_record / extract_research_findings
-  -> generate_family_followup_questions
   -> build_reconstruction_dossier
-  -> analyze_nostalgic_dish
-  -> find_sensory_substitutes
-  -> source_ingredients
-  -> generate_minimum_viable_nostalgia
-  -> generate_recipe
+  -> generate_family_followup_questions
+  -> generate_minimum_viable_nostalgia   # first concrete food output
+  -> optional analyze_nostalgic_dish / find_sensory_substitutes / source_ingredients
+  -> optional generate_recipe            # only if the user wants more
 ```
 
-This executes through the full MCP workflow and is covered by `tests/reconstruction-flow-e2e.test.ts`. The MCP server reaches a recipe-generation **handoff** with analysis, sourcing/substitution context, evidence boundaries, and an expected recipe schema. The host AI writes the final recipe text because live research, family confirmation, and adaptation judgment should not be faked by static bundled data.
-
-## What It Does Not Do Yet
-
-The current implementation is offline by default. It does **not** perform live web search, geocoding, grocery inventory lookup, price lookup, or external recipe scraping. It **does** provide typed provenance tools so a host AI can pass source-backed facts into the workflow after using its own browsing/search tools. See [`docs/ROADMAP.md`](docs/ROADMAP.md) for the provider-backed research plan.
+This executes through the full MCP workflow and is covered by `tests/reconstruction-flow-e2e.test.ts`. The preferred stopping point is the **minimum viable nostalgia cue**: the smallest aroma, bite, sip, condiment, or ritual that tests whether the memory is on the right track. If the user asks for more, the MCP server can then provide sourcing/substitution context and a recipe-generation **handoff**. The host AI writes final recipe prose because live research, family confirmation, and adaptation judgment should not be faked by bundled data.
 
 ## Requirements
 
@@ -123,7 +117,7 @@ Member Berries is a stdio MCP server. It does not open an HTTP port. The SQLite 
 2. `$XDG_CACHE_HOME/member-berries/culture-cache.db`, if `XDG_CACHE_HOME` is set
 3. `~/.cache/member-berries/culture-cache.db`
 
-User memories can be emotionally sensitive. Do not add network-backed providers without documenting what is sent, where it is sent, and how it is cached.
+User memories can be emotionally sensitive. Do not add optional food-data provider integrations without documenting what is sent, where it is sent, and how it is cached.
 
 ## Development
 
@@ -148,7 +142,7 @@ See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 
 ## The Science
 
-Food-evoked nostalgia is well documented in psychology and neuroscience, especially through smell/taste memory pathways. This repository should treat science and cultural claims as data that require provenance. The roadmap includes adding citations and source metadata to bundled datasets.
+Food-evoked nostalgia should be handled as a sensory-memory workflow, not as a medical claim. The server preserves evidence boundaries: user memory, host-researched facts, model inference, and unknowns stay separate so the host can cite real sources and avoid pretending bundled data is research.
 
 ## License
 

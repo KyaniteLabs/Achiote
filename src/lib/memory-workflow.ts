@@ -292,6 +292,40 @@ export function generateMinimumViableNostalgiaCue(input: MinimumViableNostalgiaI
   const maxEffort = Math.max(1, input.maxEffortMinutes ?? 20);
   const confidence = input.researchFindings?.confidence ?? input.dossier.confidence;
 
+  if (/(carimañola|carimanola|carimanolas|carimañolas|fried yuca|fried cassava|yuca roll|cassava roll|picadillo)/.test(signals)) {
+    return {
+      title: 'Minimum viable carimañola memory cue',
+      goal: 'Test the two strongest carimañola triggers first: picadillo aroma and a crispy-chewy yuca bite, without stuffing, shaping, or deep-frying a full batch.',
+      effortMinutes: Math.min(maxEffort, 20),
+      format: 'bite',
+      ingredients: [
+        { item: 'ground beef or a meatless crumble', amount: '2-4 tablespoons', purpose: 'tiny picadillo aroma/filling cue' },
+        { item: 'garlic and onion, minced', amount: '1 teaspoon each', purpose: 'first kitchen-smell trigger' },
+        { item: 'cumin plus achiote or paprika', amount: 'small pinch of each', purpose: 'Panamanian picadillo seasoning signal' },
+        { item: 'tomato paste or tomato sauce', amount: '1 teaspoon', purpose: 'savory red picadillo base', optional: true },
+        { item: 'frozen or cooked yuca/cassava', amount: '1-2 small pieces', purpose: 'crispy-chewy starch bite' },
+        { item: 'aji chombo or habanero-style hot sauce', amount: 'a few drops', purpose: 'serving-table cue', optional: true },
+      ],
+      steps: [
+        'Warm a little oil, then cook the garlic and onion for about 30 seconds until fragrant.',
+        'Add the tiny amount of beef or meatless crumble with cumin, achiote or paprika, salt, and tomato paste; cook only until the aroma blooms.',
+        'Separately pan-crisp the cooked yuca pieces until the outside is golden and the inside stays chewy.',
+        'Taste one yuca bite with a spoonful of picadillo on top; do not shape or stuff anything yet.',
+        'Ask: did the frying-yuca texture, picadillo smell, or hot-sauce finish feel like the memory? Only then decide whether a full carimañola batch is worth the work.',
+      ],
+      preserves: ['picadillo aroma', 'cumin/achiote/garlic seasoning signal', 'crispy-chewy yuca texture', 'small hot-sauce serving ritual'],
+      doesNotPreserve: ['torpedo shape', 'sealed stuffed filling', 'deep-fried batch texture', 'your family-specific filling ratio'],
+      whyThisIsMinimum: 'Carimañolas are labor-intensive because the full dish requires boiling, mashing, stuffing, sealing, and frying; this isolates the smell and bite that can confirm the memory before doing all that work.',
+      confidence,
+      safetyNotes: ['Use fully cooked yuca; remove any tough woody core.', 'Keep the oil shallow and hot enough to crisp, not smoke.', 'Avoid hot sauce if the user cannot tolerate chile heat.'],
+      followUpIfItWorks: [
+        'Ask whether the family filling was beef, chicken, cheese, or something else.',
+        'Ask whether the yuca dough was smooth, chunky, buttery, or plain.',
+        'If this cue hits, offer the user a fuller carimañola workflow as the next step.',
+      ],
+    };
+  }
+
   if (/(banana leaves?|pasteles|sofrito|plantain|green banana|banana masa|plantain masa)/.test(signals)) {
     const effortMinutes = Math.min(maxEffort, 15);
     return {
@@ -326,7 +360,7 @@ export function generateMinimumViableNostalgiaCue(input: MinimumViableNostalgiaI
     };
   }
 
-  if (/soup|stew|broth|sour|dill|lamb|greens|melon seeds|egusi/.test(signals)) {
+  if (/\b(soup|stew|broth|dill|lamb|greens|egusi)\b|\bmelon seeds\b|\bsour\b/.test(signals)) {
     return {
       title: 'Minimum viable soup/stew memory cue',
       goal: 'Create a small aroma/sip test around the remembered sour-herbal or savory stew profile before attempting a full pot.',

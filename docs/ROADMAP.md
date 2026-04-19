@@ -13,14 +13,13 @@ This roadmap is scoped to the MCP server and skill behavior only.
 - Typed research provenance records and cache helpers
 - End-to-end MCP regression from memory fragment to recipe-generation handoff
 
-## Next: provider-backed research mode
+## Next: optional food-data provider lookups
 
-Provider-backed research should be opt-in and privacy-documented. A strong implementation would include:
+Open-ended web research should remain a host AI responsibility. Optional provider integrations should be narrow, opt-in, and privacy-documented structured lookups, such as ingredient-label or nutrition databases. A strong implementation would include:
 
-- provider interface for web/search/extraction adapters
+- provider interface for structured food-data adapters
 - source citations and fetched-at timestamps
 - cache writes with TTL and source metadata
-- explicit offline mode
 - tests with recorded fixtures, not live network flakiness
 - copyright-safe extraction rules: store facts and citations, not copied recipe prose
 
@@ -32,8 +31,9 @@ Provider-backed research should be opt-in and privacy-documented. A strong imple
 - Move broad ingredient/research hint vocabulary into configurable data rather than code constants
 - Add dietary/allergen/religious constraints to substitutions
 
-## Later: recipe generation quality loop
+## Later: minimum-cue and recipe quality loop
 
+- Expand dish/process-specific minimum viable nostalgia cue profiles beyond the initial regression set
 - Add schema-validated final recipe output after host-model synthesis, plus tests that a host-provided recipe object satisfies the schema
 - Add self-critique rubric around nostalgia-critical elements
 - Add user feedback loop to update target sensory profile

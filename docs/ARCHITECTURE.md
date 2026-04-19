@@ -41,9 +41,10 @@ The server currently performs a research-first workflow:
 - resolves names from bundled dish-family data and ambiguity candidates
 - computes substitution candidates from bundled compound data
 - returns static regional availability hints
-- returns bounded prompts for host-model sensory analysis, sourcing, regional comparison, and recipe generation
+- generates the minimum viable nostalgia cue as the default first food output
+- returns bounded prompts for host-model sensory analysis, sourcing, regional comparison, and optional recipe generation
 
-It does **not** currently perform live web search, geocoding, inventory lookup, pricing lookup, or deterministic final recipe prose synthesis. It can structure and validate source facts that a host AI or future provider adapter supplies, and it can produce the structured context for a recipe. The actual external fetching/extraction and final natural-language recipe writing remain host-model/provider-backed steps.
+The server does not browse the web itself. It can structure and validate source facts that a host AI supplies after using its own search/browsing tools, and future optional food-data providers can add structured lookups. Final natural-language recipe writing remains a host-model step and should happen only after the minimum viable nostalgia cue unless the user explicitly asks otherwise.
 
 ## Data assets
 
