@@ -439,6 +439,191 @@
           "clarificationPrompt": "Do you mean the Spanish egg-and-potato tortilla rather than the Mexican flatbread?"
         }
       ]
+    },
+    {
+      "canonicalName": "wrapped-masa",
+      "aliases": [
+        "pasteles",
+        "pastel",
+        "tamale",
+        "tamales",
+        "hallaca",
+        "hayaca",
+        "humita",
+        "humitas",
+        "guanime",
+        "guanimes",
+        "montuca",
+        "montucas",
+        "chimole",
+        "pamonha",
+        "bibingka",
+        "suman",
+        "zongzi",
+        "achiote",
+        "masa"
+      ],
+      "transliterations": {
+        "Spanish": [
+          "pasteles",
+          "tamales",
+          "hallacas",
+          "humitas"
+        ],
+        "Chinese": [
+          "粽子"
+        ],
+        "Tagalog": [
+          "suman"
+        ],
+        "Portuguese": [
+          "pamonha"
+        ]
+      },
+      "regions": [
+        "Caribbean",
+        "Latin America",
+        "Southeast Asia",
+        "East Asia"
+      ],
+      "sharedElements": [
+        "starchy masa base",
+        "wrapped in leaves or husks",
+        "steamed or boiled in wrapper",
+        "savory filling",
+        "holiday or festive occasion"
+      ],
+      "divergentElements": [
+        "masa base (corn, green banana, yautía, rice)",
+        "wrapper type (banana leaf, corn husk, bamboo leaf)",
+        "filling (pork, chicken, vegetables, cheese)",
+        "sauce or accompaniment (ketchup, arroz con gandules, atole)"
+      ],
+      "nostalgiaTriggers": [
+        "specific masa aroma from family kitchen",
+        "unwrapping the leaf or husk",
+        "texture of freshly steamed masa",
+        "holiday gathering association"
+      ],
+      "variants": [
+        {
+          "name": "pasteles-puertorriquenos",
+          "aliases": [
+            "pasteles",
+            "pastelay",
+            "pass-teh-lay",
+            "pastel de masa"
+          ],
+          "regions": [
+            "Puerto Rico",
+            "Caribbean"
+          ],
+          "distinguishingElements": [
+            "green banana and yautía masa",
+            "banana leaf wrapper",
+            "pork or chicken filling with sofrito",
+            "Christmas tradition"
+          ],
+          "clarificationPrompt": "Do you mean the Puerto Rican wrapped masa dish (pasteles) rather than Mexican tamales?"
+        },
+        {
+          "name": "pastelon",
+          "aliases": [
+            "pastelón",
+            "pastelon",
+            "pastelon de platano"
+          ],
+          "regions": [
+            "Puerto Rico",
+            "Caribbean"
+          ],
+          "distinguishingElements": [
+            "layered casserole with sweet plantains",
+            "ground meat filling",
+            "not wrapped",
+            "baked in a dish"
+          ],
+          "clarificationPrompt": "Do you mean the Puerto Rican plantain lasagna (pastelón) rather than the wrapped pasteles?"
+        },
+        {
+          "name": "piononos",
+          "aliases": [
+            "piononos",
+            "pionono"
+          ],
+          "regions": [
+            "Puerto Rico",
+            "Caribbean"
+          ],
+          "distinguishingElements": [
+            "fried sweet plantain",
+            "rolled or cup-shaped form",
+            "picadillo-like filling"
+          ],
+          "clarificationPrompt": "Do you mean the Puerto Rican fried plantain roll (piononos)?"
+        }
+      ]
+    },
+    {
+      "canonicalName": "fritter",
+      "aliases": [
+        "alcapurria",
+        "alcapurrias",
+        "bacalaito",
+        "bacalaíto",
+        "empanadilla",
+        "croqueta",
+        "croquetas",
+        "croquette",
+        "falafel",
+        "pakora",
+        "tempura",
+        "beignet",
+        "fritter",
+        "medu vada",
+        "acarajé",
+        "arepa",
+        "hushpuppy"
+      ],
+      "transliterations": {
+        "Spanish": [
+          "alcapurrias",
+          "bacalaítos",
+          "empanadillas"
+        ],
+        "Hindi": [
+          "पकौड़ा"
+        ],
+        "Portuguese": [
+          "acarajé"
+        ]
+      },
+      "regions": [
+        "Caribbean",
+        "Latin America",
+        "South Asia",
+        "Mediterranean",
+        "West Africa",
+        "East Asia",
+        "Southeast Asia"
+      ],
+      "sharedElements": [
+        "deep-fried or pan-fried",
+        "crispy exterior",
+        "savory filling or seasoned batter",
+        "hand-held"
+      ],
+      "divergentElements": [
+        "batter base (flour, chickpea, cornmeal, cassava)",
+        "filling or mixed-in ingredients",
+        "dipping sauce",
+        "shape"
+      ],
+      "nostalgiaTriggers": [
+        "crispy first bite sound",
+        "street or market aroma",
+        "specific dipping sauce"
+      ]
     }
   ]
 }

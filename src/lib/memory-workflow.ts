@@ -1,3 +1,4 @@
+import dishFamiliesData from '../data/dish-families.json' with { type: 'json' };
 import type {
   CollectedFoodMemory,
   Confidence,
@@ -403,35 +404,135 @@ export function collectFoodMemory(input: FoodMemoryInput): CollectedFoodMemory {
   };
 }
 
-function puertoRicanHypotheses(memory: CollectedFoodMemory): DishHypothesis[] {
-  const text = memory.normalizedMemory.toLowerCase();
-  const hasPuertoRicanContext = memory.extractedClues.culturalOrRegionalHints.includes('Puerto Rican');
-  const likelyPastelSound = includesAny(text, ['pastelay', 'pass-teh-lay', 'pasteles', 'pastelón', 'pastelon']);
-  if (!hasPuertoRicanContext) return [];
+const REGION_TO_FAMILY_MAP: Record<string, string[]> = {
+  'Puerto Rican': ['Caribbean', 'Latin America'],
+  'Trinidad and Tobago': ['Caribbean'],
+  'Caribbean': ['Caribbean'],
+  'Cuban': ['Caribbean', 'Latin America'],
+  'Dominican': ['Caribbean', 'Latin America'],
+  'Haitian': ['Caribbean'],
+  'Jamaican': ['Caribbean'],
+  'Mexican': ['Latin America'],
+  'Colombian': ['Latin America'],
+  'Peruvian': ['Latin America'],
+  'Brazilian': ['Latin America'],
+  'Argentine': ['Latin America'],
+  'Central American': ['Latin America'],
+  'South American': ['Latin America'],
+  'Latin American': ['Latin America'],
+  'Indian': ['South Asia'],
+  'Pakistani': ['South Asia'],
+  'Bangladeshi': ['South Asia'],
+  'Sri Lankan': ['South Asia'],
+  'Nepali': ['South Asia'],
+  'Punjabi': ['South Asia'],
+  'Gujarati': ['South Asia'],
+  'Bengali': ['South Asia'],
+  'Tamil': ['South Asia'],
+  'Keralite': ['South Asia'],
+  'Chinese': ['East Asia'],
+  'Japanese': ['East Asia'],
+  'Korean': ['East Asia'],
+  'Taiwanese': ['East Asia'],
+  'Cantonese': ['East Asia'],
+  'Sichuan': ['East Asia'],
+  'Thai': ['Southeast Asia'],
+  'Vietnamese': ['Southeast Asia'],
+  'Filipino': ['Southeast Asia'],
+  'Indonesian': ['Southeast Asia'],
+  'Malaysian': ['Southeast Asia'],
+  'Singaporean': ['Southeast Asia'],
+  'Burmese': ['Southeast Asia'],
+  'Cambodian': ['Southeast Asia'],
+  'Lao': ['Southeast Asia'],
+  'Lebanese': ['Middle East'],
+  'Syrian': ['Middle East'],
+  'Palestinian': ['Middle East'],
+  'Jordanian': ['Middle East'],
+  'Iraqi': ['Middle East'],
+  'Iranian': ['Middle East'],
+  'Afghan': ['Middle East'],
+  'Turkish': ['Mediterranean', 'Middle East'],
+  'Greek': ['Mediterranean'],
+  'Italian': ['Mediterranean'],
+  'Spanish': ['Mediterranean'],
+  'Portuguese': ['Mediterranean'],
+  'French': ['Mediterranean'],
+  'Moroccan': ['North Africa', 'Mediterranean'],
+  'Tunisian': ['North Africa'],
+  'Algerian': ['North Africa'],
+  'Egyptian': ['North Africa'],
+  'Ethiopian': ['East Africa'],
+  'Eritrean': ['East Africa'],
+  'Nigerian': ['West Africa'],
+  'Ghanaian': ['West Africa'],
+  'Senegalese': ['West Africa'],
+  'Polish': ['Eastern Europe'],
+  'Russian': ['Eastern Europe'],
+  'Ukrainian': ['Eastern Europe'],
+  'Hungarian': ['Eastern Europe'],
+  'Romanian': ['Eastern Europe'],
+  'Southern US': ['Southern US'],
+  'Appalachian': ['Southern US'],
+  'Mediterranean': ['Mediterranean'],
+  'Middle Eastern': ['Middle East'],
+  'Balkan': ['Balkans'],
+  'West African': ['West Africa'],
+  'East African': ['East Africa'],
+  'North African': ['North Africa'],
+  'South African': ['South Africa'],
+};
 
-  return [
-    {
-      name: 'pasteles',
-      whyPossible: ['phonetic overlap with the remembered fragment', 'Puerto Rican family context', 'often family/holiday associated'],
-      whatWouldConfirm: ['wrapped in banana leaves', 'steamed packet', 'masa made from green banana/yautía', 'savory pork or sofrito filling'],
-      confidence: likelyPastelSound ? 'Medium' : 'Low',
-      researchRequired: true,
-    },
-    {
-      name: 'pastelón',
-      whyPossible: ['similar name family', 'Puerto Rican/Caribbean plantain association', 'may be remembered as a home casserole'],
-      whatWouldConfirm: ['layered casserole', 'sweet plantains', 'ground meat', 'sliced from a baking dish'],
-      confidence: memory.extractedClues.rememberedIngredients.includes('plantains') ? 'Medium' : 'Low',
-      researchRequired: true,
-    },
-    {
-      name: 'piononos',
-      whyPossible: ['Puerto Rican plantain-and-meat overlap', 'could be confused if only ingredients are remembered'],
-      whatWouldConfirm: ['fried sweet plantain', 'rolled or cup-shaped form', 'picadillo-like filling'],
-      confidence: 'Low',
-      researchRequired: true,
-    },
-  ];
+function familyRegionsForDetected(detectedRegions: string[]): string[] {
+  return unique(detectedRegions.flatMap((r) => REGION_TO_FAMILY_MAP[r] ?? []));
+}
+
+function dataDrivenHypotheses(memory: CollectedFoodMemory): DishHypothesis[] {
+  const { possibleDishNames, culturalOrRegionalHints } = memory.extractedClues;
+  const targetRegions = familyRegionsForDetected(culturalOrRegionalHints);
+  if (possibleDishNames.length === 0 || targetRegions.length === 0) return [];
+
+  for (const family of dishFamiliesData.families) {
+    const matchedVariants = (family.variants ?? []).filter((variant) => {
+      const nameMatch = possibleDishNames.some((name) =>
+        variant.aliases.some((alias) => alias.toLowerCase() === name.toLowerCase()),
+      );
+      if (!nameMatch) return false;
+      return variant.regions.some((r) => culturalOrRegionalHints.some((hint) => {
+        const mapped = REGION_TO_FAMILY_MAP[hint] ?? [];
+        return mapped.some((mr) => r === mr) || r === hint;
+      }));
+    });
+
+    if (matchedVariants.length === 0) continue;
+
+    const hypotheses: DishHypothesis[] = [];
+    const allVariants = family.variants ?? [];
+
+    for (const variant of allVariants) {
+      const isDirectMatch = matchedVariants.includes(variant);
+      const whyPossible: string[] = [];
+      if (isDirectMatch) {
+        whyPossible.push('phonetic overlap with the remembered fragment');
+      } else {
+        whyPossible.push('similar dish from the same family');
+      }
+      if (culturalOrRegionalHints.length > 0) whyPossible.push(`${culturalOrRegionalHints[0]} family context`);
+      if (memory.extractedClues.occasions.length > 0) whyPossible.push('often family/holiday associated');
+
+      hypotheses.push({
+        name: variant.name,
+        whyPossible,
+        whatWouldConfirm: variant.distinguishingElements,
+        confidence: isDirectMatch ? 'Medium' : 'Low',
+        researchRequired: true,
+      });
+    }
+
+    return hypotheses.slice(0, 5);
+  }
+
+  return [];
 }
 
 function genericHypotheses(memory: CollectedFoodMemory): DishHypothesis[] {
@@ -470,7 +571,7 @@ function genericHypotheses(memory: CollectedFoodMemory): DishHypothesis[] {
 }
 
 export function planDishResearch(memory: CollectedFoodMemory): DishResearchPlan {
-  const hypotheses = puertoRicanHypotheses(memory);
+  const hypotheses = dataDrivenHypotheses(memory);
   const finalHypotheses = hypotheses.length > 0 ? hypotheses : genericHypotheses(memory);
   const nameQueries = finalHypotheses.flatMap((hypothesis) => [
     `"${hypothesis.name}" traditional dish ingredients technique`,
