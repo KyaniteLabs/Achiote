@@ -15,7 +15,7 @@ mkdir -p ~/.codex/skills/member-berries
 cp skill/SKILL.md ~/.codex/skills/member-berries/SKILL.md
 ```
 
-Add the MCP server to your host config. Use an absolute path to this repo's built `dist/index.js`:
+Claude Code can use the checked-in `.mcp.json` after the build step. For Codex, add the MCP server to `~/.codex/config.toml` with an absolute path to this repo's built `dist/index.js`:
 
 ```bash
 pwd
