@@ -41,8 +41,28 @@ function carimanolaDossier() {
   });
 }
 
+function spicedSausageMashDossier() {
+  const memory = collectFoodMemory({
+    memoryText: 'South African place in Savannah served mashed potatoes and a long coiled grey speckled sausage with creamy gravy and a second orange sauce.',
+  });
+  const researchPlan = planDishResearch(memory);
+  return buildReconstructionDossier({
+    memory,
+    researchPlan,
+    researchedFacts: [
+      'Boerewors is a coiled South African sausage commonly seasoned with coriander, black pepper, clove, nutmeg, and vinegar.',
+      'The remembered plate had mashed potatoes, creamy gravy, and an orange sauce or relish similar to chakalaka.',
+      'Chakalaka is commonly tomato/pepper/onion-based with curry-like spice, sweetness, heat, and acidity.',
+    ],
+    inferredFacts: [
+      'The minimum cue should not require buying boerewors; it should test the spice profile on a cheap protein carrier.',
+      'The orange sauce can be tested with a grocery-store tomato relish or salsa adjusted with curry/paprika, acid, and sugar.',
+    ],
+  });
+}
+
 describe('minimum viable nostalgia cue', () => {
-  it('creates a small sensory cue instead of a full recipe for the pasteles path', () => {
+  it('creates a small food-science cue instead of a full recipe for a named path', () => {
     const cue = generateMinimumViableNostalgiaCue({
       dossier: puertoRicanDossier(),
       researchFindings: {
@@ -57,14 +77,13 @@ describe('minimum viable nostalgia cue', () => {
 
     expect(cue.title).toContain('Minimum viable');
     expect(cue.effortMinutes).toBeLessThanOrEqual(20);
-    expect(cue.format).toBe('aroma-cue');
-    expect(cue.ingredients.map((ingredient) => ingredient.item)).toEqual(expect.arrayContaining(['banana leaf, fresh or frozen']));
-    expect(cue.steps.join(' ')).toContain('Smell');
-    expect(cue.doesNotPreserve.join(' ')).toContain('full wrapped-packet technique');
-    expect(cue.whyThisIsMinimum).toContain('multi-hour');
+    expect(['bite', 'aroma-cue']).toContain(cue.format);
+    expect(cue.accessibilityPrinciples.join(' ')).toContain('grocery-store');
+    expect(cue.substituteLogic.join(' ')).toContain('fat-soluble aromatics');
+    expect(cue.doesNotPreserve.join(' ')).toContain('exact specialty ingredient');
   });
 
-  it('starts a researched fried yuca memory with a filling and starch cue, not a generic soup cue', () => {
+  it('starts a researched fried starch memory with a composed bite, not a dish-specific cue', () => {
     const cue = generateMinimumViableNostalgiaCue({
       dossier: carimanolaDossier(),
       researchFindings: {
@@ -83,14 +102,41 @@ describe('minimum viable nostalgia cue', () => {
       maxEffortMinutes: 20,
     });
 
-    expect(cue.title).toContain('fried-starch');
+    expect(cue.title).toContain('composed-bite');
     expect(cue.title).not.toContain('soup');
     expect(cue.title).not.toContain('carimañola');
+    expect(cue.title).not.toContain('yuca');
     expect(cue.format).toBe('bite');
     expect(cue.effortMinutes).toBeLessThanOrEqual(20);
-    expect(cue.ingredients.map((ingredient) => ingredient.item).join(' ')).toMatch(/yuca|cassava/);
-    expect(cue.steps.join(' ')).toContain('do not shape, stuff, or seal anything yet');
-    expect(cue.whyThisIsMinimum).toContain('Fried stuffed starch dishes are labor-intensive');
+    expect(cue.ingredients.map((ingredient) => ingredient.item).join(' ')).toContain('remembered base');
+    expect(cue.substituteLogic.join(' ')).toContain('Proteins and fats');
+    expect(cue.whyThisIsMinimum).toContain('food-science mechanisms');
+  });
+
+  it('uses accessible food-science proxy logic for protein, starch, gravy, and sauce memories', () => {
+    const cue = generateMinimumViableNostalgiaCue({
+      dossier: spicedSausageMashDossier(),
+      researchFindings: {
+        researchedFacts: [
+          'Boerewors is often seasoned with coriander, clove, nutmeg, black pepper, and vinegar.',
+          'Chakalaka-like orange relish can include tomato, pepper, onion, curry spice, sweetness, acidity, and heat.',
+        ],
+        inferredFacts: ['The first test should use grocery-store protein and pantry spices rather than exact imported sausage.'],
+        unknowns: ['exact restaurant sauce recipe'],
+        sourceCount: 2,
+        confidence: 'Medium',
+      },
+      maxEffortMinutes: 20,
+    });
+
+    expect(cue.title).toContain('composed-bite');
+    expect(cue.effortMinutes).toBeLessThanOrEqual(15);
+    expect(cue.ingredients.map((ingredient) => ingredient.item).join(' ')).toContain('accessible protein');
+    expect(cue.whyThisIsMinimum).toContain('food-science mechanisms');
+    expect(cue.accessibilityPrinciples.join(' ')).toContain('grocery-store carriers');
+    expect(cue.substituteLogic.join(' ')).toContain('fat-soluble aromatics');
+    expect(cue.title).not.toContain('boerewors');
+    expect(cue.title).not.toContain('sausage');
   });
 
   it('uses the soup cue for unresolved sour soup memories', () => {
@@ -99,8 +145,8 @@ describe('minimum viable nostalgia cue', () => {
     const cue = generateMinimumViableNostalgiaCue({ dossier, maxEffortMinutes: 8 });
 
     expect(cue.effortMinutes).toBeLessThanOrEqual(8);
-    expect(cue.title).toContain('soup/stew');
-    expect(cue.steps.join(' ')).toContain('one spoonful');
+    expect(cue.title).toContain('aroma-balance');
+    expect(cue.steps.join(' ')).toContain('single strongest sensory clue');
     expect(cue.confidence).toBe('Low');
   });
 

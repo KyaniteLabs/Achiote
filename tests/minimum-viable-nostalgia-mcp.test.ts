@@ -35,15 +35,15 @@ describe('minimum viable nostalgia MCP tool', () => {
 
       expect(cue.isError).not.toBe(true);
       expect(cue.structuredContent).toMatchObject({
-        format: 'aroma-cue',
+        format: 'bite',
         effortMinutes: expect.any(Number),
         ingredients: expect.any(Array),
-        whyThisIsMinimum: expect.stringContaining('multi-hour'),
+        whyThisIsMinimum: expect.stringContaining('food-science mechanisms'),
       });
     });
   });
 
-  it('does not return a generic soup cue for researched fried yuca dossiers', async () => {
+  it('returns a generic composed bite for researched fried starch dossiers', async () => {
     await withClient(async (client) => {
       const memory = await client.callTool({
         name: 'collect_food_memory',
@@ -81,12 +81,49 @@ describe('minimum viable nostalgia MCP tool', () => {
 
       expect(cue.isError).not.toBe(true);
       expect(cue.structuredContent).toMatchObject({
-        title: expect.stringContaining('fried-starch'),
+        title: expect.stringContaining('composed-bite'),
         format: 'bite',
-        whyThisIsMinimum: expect.stringContaining('Fried stuffed starch dishes are labor-intensive'),
+        whyThisIsMinimum: expect.stringContaining('food-science mechanisms'),
       });
       expect(JSON.stringify(cue.structuredContent)).not.toContain('soup/stew');
       expect(JSON.stringify(cue.structuredContent)).not.toContain('carimañola');
+    });
+  });
+
+
+  it('returns accessibility and substitute logic for protein, starch, gravy, and sauce memories', async () => {
+    await withClient(async (client) => {
+      const memory = await client.callTool({
+        name: 'collect_food_memory',
+        arguments: {
+          memoryText: 'Long coiled grey speckled sausage with mashed potatoes, creamy gravy, and a second orange sauce at a South African place.',
+        },
+      });
+      const researchPlan = await client.callTool({ name: 'plan_dish_research', arguments: { memory: memory.structuredContent } });
+      const dossier = await client.callTool({
+        name: 'build_reconstruction_dossier',
+        arguments: {
+          memory: memory.structuredContent,
+          researchPlan: researchPlan.structuredContent,
+          researchedFacts: [
+            'Boerewors is a coiled South African sausage seasoned with coriander, pepper, clove, nutmeg, and vinegar.',
+            'The plate included mashed potatoes, creamy gravy, and orange chakalaka-like tomato relish.',
+          ],
+          inferredFacts: ['Use grocery-store protein and pantry spices before sourcing exact sausage.'],
+        },
+      });
+      const cue = await client.callTool({
+        name: 'generate_minimum_viable_nostalgia',
+        arguments: { dossier: dossier.structuredContent, maxEffortMinutes: 20 },
+      });
+
+      expect(cue.isError).not.toBe(true);
+      expect(cue.structuredContent).toMatchObject({
+        title: expect.stringContaining('composed-bite'),
+        accessibilityPrinciples: expect.arrayContaining([expect.stringContaining('grocery-store carriers')]),
+        substituteLogic: expect.arrayContaining([expect.stringContaining('fat-soluble aromatics')]),
+      });
+      expect(String(cue.structuredContent?.title ?? '')).not.toMatch(/boerewors|sausage|South African/i);
     });
   });
 

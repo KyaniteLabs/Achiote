@@ -71,6 +71,8 @@ Member Berries is a food-memory reconstruction skill. The recipe is not the star
 
 10. MINIMUM VIABLE NOSTALGIA → Smallest sensory unit first
    This is the first concrete food output after the dossier. Use `generate_minimum_viable_nostalgia` before offering a full recipe.
+   The cue must be cheap, accessible, and easy to find. Do not start by telling the user to buy the exact specialty item.
+   Analyze the sensory chemistry/process: what is the sausage, starch, sauce, spice, acid, texture, or aroma doing, and what grocery-store proxy can test that cheaply?
    Present the smallest aroma, bite, sip, condiment, or ritual that can test the likely memory trigger.
    Then ask whether the user wants something more complex, such as sourcing help, a family follow-up plan, or a full recipe handoff.
 
@@ -166,4 +168,5 @@ When enough evidence exists and the user wants more than the minimum viable cue,
 | Ignoring regional variation | "Indian food" is meaningless — which region? which state? |
 | Presenting without self-critique | Always validate before showing to the user |
 | Jumping straight to a full recipe | Start with the minimum viable nostalgia cue, then ask if the user wants something more complex |
+| Buying the exact specialty ingredient first | Break down what it is made of and test cheap grocery-store proxies first |
 | Forgetting sourcing provenance | Static regional hints are not live inventory; label what was actually verified |
