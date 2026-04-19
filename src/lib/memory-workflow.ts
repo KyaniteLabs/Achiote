@@ -489,13 +489,14 @@ function familyRegionsForDetected(detectedRegions: string[]): string[] {
 
 function dataDrivenHypotheses(memory: CollectedFoodMemory): DishHypothesis[] {
   const { possibleDishNames, culturalOrRegionalHints } = memory.extractedClues;
-  const targetRegions = familyRegionsForDetected(culturalOrRegionalHints);
-  if (possibleDishNames.length === 0 || targetRegions.length === 0) return [];
+  if (possibleDishNames.length === 0) return [];
 
   for (const family of dishFamiliesData.families) {
     const matchedVariants = (family.variants ?? []).filter((variant) => {
       const nameMatch = possibleDishNames.some((name) =>
         variant.aliases.some((alias) => alias.toLowerCase() === name.toLowerCase()),
+      ) || variant.aliases.some((alias) =>
+        memory.normalizedMemory.toLowerCase().includes(alias.toLowerCase()),
       );
       if (!nameMatch) return false;
       return variant.regions.some((r) => culturalOrRegionalHints.some((hint) => {
@@ -630,6 +631,7 @@ export function buildReconstructionDossier(input: {
       'Do not finalize a recipe until the top hypothesis is confirmed or explicitly marked as a best-effort reconstruction.',
       'Preserve the strongest sensory cues before optimizing for exact ingredient names.',
       'Offer substitutions only with a clear note about what changes and what is preserved.',
+      'After the minimum viable nostalgia cue, help the user find ingredients near where they live now using the source_ingredients and find_sensory_substitutes tools.',
     ],
     whatToAskFamily: generateFamilyFollowupQuestions({ memory: input.memory, researchPlan: input.researchPlan }).questions,
     confidence,
@@ -728,7 +730,7 @@ function foodScienceCueProfile(signals: string): FoodScienceCueProfile {
       ],
       whyThisIsMinimum: 'A one-cup sip tests the chemistry of aroma release, body, acid, salt, and fat before wasting ingredients on a full pot.',
       safetyNotes: ['Use only known edible ingredients.', 'Keep tasting amounts small while adjusting salt, acid, or heat.'],
-      followUpIfItWorks: ['Ask what gave the liquid body.', 'Ask whether the brightness came from citrus, vinegar, dairy, fermentation, or tomato.', 'Ask what texture or garnish is missing.'],
+      followUpIfItWorks: ['Ask what gave the liquid body.', 'Ask whether the brightness came from citrus, vinegar, dairy, fermentation, or tomato.', 'Ask what texture or garnish is missing.', 'Use source_ingredients to help find key items near the user.'],
     };
   }
 
@@ -760,7 +762,7 @@ function foodScienceCueProfile(signals: string): FoodScienceCueProfile {
       ],
       whyThisIsMinimum: 'A composed bite tests the reusable food-science mechanisms—aroma, fat, browning, starch texture, and balance—before committing to specialty shopping or a full recipe.',
       safetyNotes: ['Cook proteins safely.', 'Avoid allergens and unknown ingredients.', 'Use high heat carefully if crisping or browning.'],
-      followUpIfItWorks: ['Ask which part hit first: smell, texture, sauce, fat, spice, or sweetness/acidity.', 'Ask what still feels missing.', 'Then decide whether specialty sourcing is worth it.'],
+      followUpIfItWorks: ['Ask which part hit first: smell, texture, sauce, fat, spice, or sweetness/acidity.', 'Ask what still feels missing.', 'Use find_sensory_substitutes and source_ingredients to help the user find items near where they live now.'],
     };
   }
 
@@ -792,7 +794,7 @@ function foodScienceCueProfile(signals: string): FoodScienceCueProfile {
       ],
       whyThisIsMinimum: 'A tablespoon of sauce on a neutral carrier tests the contrast and balance that often carries the nostalgic bite.',
       safetyNotes: ['Check condiment allergens and chile heat.', 'Do not mix unknown fermented or wild ingredients.'],
-      followUpIfItWorks: ['Ask whether the sauce was smooth or chunky.', 'Ask whether it leaned fatty, acidic, sweet, spicy, or savory.', 'Ask what carrier it was served on.'],
+      followUpIfItWorks: ['Ask whether the sauce was smooth or chunky.', 'Ask whether it leaned fatty, acidic, sweet, spicy, or savory.', 'Ask what carrier it was served on.', 'Use source_ingredients to help the user find sauce components near where they live.'],
     };
   }
 
@@ -820,7 +822,7 @@ function foodScienceCueProfile(signals: string): FoodScienceCueProfile {
       ],
       whyThisIsMinimum: 'One sensory variable is the cheapest way to learn whether the reconstruction is moving toward or away from the memory.',
       safetyNotes: ['Use only safe edible ingredients.', 'Do not taste unidentified wild plants or unknown powders.'],
-      followUpIfItWorks: ['Ask what dish format carried that aroma or balance.', 'Ask what texture or sauce belonged with it.'],
+      followUpIfItWorks: ['Ask what dish format carried that aroma or balance.', 'Ask what texture or sauce belonged with it.', 'Use find_sensory_substitutes to find accessible alternatives near the user.'],
     };
   }
 
@@ -847,7 +849,7 @@ function foodScienceCueProfile(signals: string): FoodScienceCueProfile {
     ],
     whyThisIsMinimum: 'The cheapest correct move is not a recipe; it is one more sensory clue that determines what kind of cue to test.',
     safetyNotes: ['Do not taste unknown ingredients.', 'Avoid allergens.'],
-    followUpIfItWorks: ['Use the new sensory clue to build a focused bite, sip, sauce, or aroma cue.'],
+    followUpIfItWorks: ['Use the new sensory clue to build a focused bite, sip, sauce, or aroma cue.', 'Once a cue works, use source_ingredients to help the user find items near where they live.'],
   };
 }
 
