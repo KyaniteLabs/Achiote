@@ -36,6 +36,9 @@ const INGREDIENT_HINTS = [
   'pork',
   'dill',
   'lamb',
+  'shark',
+  'fish',
+  'seafood',
   'melon seeds',
   'bitter greens',
   'greens',
@@ -46,6 +49,26 @@ const INGREDIENT_HINTS = [
   'beans',
   'yuca',
   'cassava',
+  'cheese',
+  'coconut',
+];
+
+const COOKING_METHOD_HINTS = [
+  'fried',
+  'grilled',
+  'roasted',
+  'baked',
+  'boiled',
+  'steamed',
+  'stewed',
+  'curried',
+  'curry',
+  'sandwich',
+  'bread',
+  'broth',
+  'soup',
+  'wrapped',
+  'layered',
 ];
 
 function unique(values: string[]): string[] {
@@ -81,45 +104,150 @@ function extractPossibleNames(text: string): string[] {
   return unique([...quoted, ...likelyDishPhrases(text), ...phoneticFragments]);
 }
 
+function extractCookingMethodHints(text: string): string[] {
+  return COOKING_METHOD_HINTS.filter((hint) => text.includes(hint));
+}
+
+function buildMissingInformation(input: {
+  possibleNames: string[];
+  culturalOrRegionalHints: string[];
+  rememberedIngredients: string[];
+  cookingMethodHints: string[];
+  sensoryClues: string[];
+  occasions: string[];
+}): string[] {
+  return unique([
+    input.possibleNames.length === 0 ? 'dish name or local nickname' : '',
+    input.culturalOrRegionalHints.length === 0 ? 'country, island, region, town, or community' : '',
+    input.cookingMethodHints.length === 0 ? 'cooking method or serving format' : '',
+    input.rememberedIngredients.length === 0 ? 'core ingredients' : '',
+    input.sensoryClues.length === 0 ? 'taste, texture, aroma, sauce, or heat level' : '',
+    input.occasions.length === 0 ? 'where/when they ate it or who made it' : '',
+  ]);
+}
+
+function buildNextQuestions(input: {
+  possibleNames: string[];
+  culturalOrRegionalHints: string[];
+  rememberedIngredients: string[];
+  cookingMethodHints: string[];
+  sensoryClues: string[];
+  occasions: string[];
+}): string[] {
+  const ingredient = input.rememberedIngredients[0];
+  const region = input.culturalOrRegionalHints[0];
+  const questions: string[] = [];
+
+  if (input.possibleNames.length === 0) {
+    questions.push(region
+      ? `Do you remember what people in ${region} called it, even roughly or phonetically?`
+      : 'Do you remember anything about the name, even a rough sound-alike?');
+  }
+
+  if (ingredient && input.cookingMethodHints.length === 0) {
+    questions.push(`How was the ${ingredient} served: fried/crispy, in bread, in broth or curry, grilled, or with a sauce?`);
+  } else if (input.cookingMethodHints.length === 0) {
+    questions.push('Was it fried/crispy, wrapped, layered, served in broth, eaten with bread/rice, or served with a sauce?');
+  }
+
+  if (input.sensoryClues.length === 0) {
+    questions.push('What do you remember first: texture, smell, spice/heat, sourness, sweetness, sauce, or the way it was served?');
+  }
+
+  if (input.occasions.length === 0) {
+    questions.push('Was this street food, restaurant food, home cooking, a holiday food, or tied to a specific person/place?');
+  }
+
+  return unique(questions).slice(0, 3);
+}
+
+export function formatCollectedFoodMemory(memory: CollectedFoodMemory): string {
+  const names = memory.extractedClues.possibleDishNames.length > 0
+    ? memory.extractedClues.possibleDishNames.join(', ')
+    : 'not yet known';
+  const regions = memory.extractedClues.culturalOrRegionalHints.length > 0
+    ? memory.extractedClues.culturalOrRegionalHints.join(', ')
+    : 'not yet known';
+  const ingredients = memory.extractedClues.rememberedIngredients.length > 0
+    ? memory.extractedClues.rememberedIngredients.join(', ')
+    : 'not yet known';
+  const sensory = memory.extractedClues.sensoryClues.length > 0
+    ? memory.extractedClues.sensoryClues.join(', ')
+    : 'not yet known';
+
+  return [
+    'Food memory captured.',
+    '',
+    `- Possible name: ${names}`,
+    `- Region/culture clue: ${regions}`,
+    `- Ingredient clue: ${ingredients}`,
+    `- Sensory clue: ${sensory}`,
+    '',
+    'Ask next:',
+    ...memory.nextQuestions.map((question, index) => `${index + 1}. ${question}`),
+    '',
+    memory.reassurance,
+  ].join('\n');
+}
+
 export function collectFoodMemory(input: FoodMemoryInput): CollectedFoodMemory {
   const normalized = input.memoryText.trim();
   const lower = normalized.toLowerCase();
+  const possibleDishNames = extractPossibleNames(normalized);
   const culturalOrRegionalHints = unique([
     input.knownRegion,
     lower.includes('puerto rican') || lower.includes('puerto rico') ? 'Puerto Rican' : '',
+    lower.includes('trinidad') || lower.includes('tobago') ? 'Trinidad and Tobago' : '',
     lower.includes('caribbean') ? 'Caribbean' : '',
     lower.includes('central american') ? 'Central American' : '',
   ].filter((value): value is string => Boolean(value)));
   const rememberedIngredients = INGREDIENT_HINTS.filter((ingredient) => lower.includes(ingredient));
+  const cookingMethodHints = extractCookingMethodHints(lower);
   const sensoryClues = unique([
     includesAny(lower, ['sour', 'tangy']) ? 'sour/tangy' : '',
     includesAny(lower, ['sweet']) ? 'sweet' : '',
+    includesAny(lower, ['spicy', 'hot', 'pepper']) ? 'spicy/peppery' : '',
+    includesAny(lower, ['crispy', 'crunchy', 'fried']) ? 'crispy/fried texture' : '',
     includesAny(lower, ['soft', 'mushy']) ? 'soft texture' : '',
+    includesAny(lower, ['chewy']) ? 'chewy texture' : '',
     includesAny(lower, ['smell', 'aroma']) ? 'remembered aroma' : '',
+    includesAny(lower, ['sauce', 'gravy']) ? 'sauce/gravy' : '',
   ]);
   const occasions = unique([
     includesAny(lower, ['christmas', 'holiday', 'navidad']) ? 'holiday/Christmas' : '',
     includesAny(lower, ['grandma', 'abuela', 'grandmother']) ? 'grandmother/family context' : '',
+    includesAny(lower, ['mom', 'mother', 'mama']) ? 'mother/family context' : '',
+    includesAny(lower, ['street', 'vendor', 'market', 'beach']) ? 'street/vendor/place context' : '',
   ]);
 
-  const nextQuestions = [
-    'Was it wrapped in leaves, layered like a casserole, fried, or served in a bowl?',
-    'Do you remember the main texture: soft masa, sweet plantain, crispy edges, broth, or something else?',
-    'Was it tied to a holiday, a specific relative, or a place your family came from?',
-  ];
+  const nextQuestions = buildNextQuestions({
+    possibleNames: possibleDishNames,
+    culturalOrRegionalHints,
+    rememberedIngredients,
+    cookingMethodHints,
+    sensoryClues,
+    occasions,
+  });
 
   return {
     rawMemory: input.memoryText,
     normalizedMemory: normalized,
     userLocation: input.userLocation,
     extractedClues: {
-      possibleDishNames: extractPossibleNames(normalized),
+      possibleDishNames,
       culturalOrRegionalHints,
       rememberedIngredients,
       sensoryClues,
       occasions,
     },
-    missingInformation: ['exact spelling', 'region or town', 'cooking method', 'core ingredients', 'serving occasion'],
+    missingInformation: buildMissingInformation({
+      possibleNames: possibleDishNames,
+      culturalOrRegionalHints,
+      rememberedIngredients,
+      cookingMethodHints,
+      sensoryClues,
+      occasions,
+    }),
     nextQuestions,
     reassurance: "You don't need to spell it correctly or know the original language; sound-alikes and tiny clues are enough to start.",
   };

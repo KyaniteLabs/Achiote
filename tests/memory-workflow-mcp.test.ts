@@ -88,4 +88,30 @@ describe('memory workflow MCP tools', () => {
       expect(result.content[0].type === 'text' ? result.content[0].text : '').toContain('Input validation error');
     });
   });
+
+  it('displays a concise intake summary while preserving structured content', async () => {
+    await withClient(async (client) => {
+      const collected = await client.callTool({
+        name: 'collect_food_memory',
+        arguments: {
+          memoryText: 'I ate a shark one time in Trinidad and Tobago',
+          knownRegion: 'Trinidad and Tobago',
+          userLocation: 'Long Beach, California',
+        },
+      });
+
+      const displayText = collected.content[0].type === 'text' ? collected.content[0].text : '';
+      expect(displayText).toContain('Food memory captured.');
+      expect(displayText).toContain('Ingredient clue: shark');
+      expect(displayText).toContain('How was the shark served');
+      expect(() => JSON.parse(displayText)).toThrow();
+      expect(collected.structuredContent).toMatchObject({
+        extractedClues: {
+          culturalOrRegionalHints: expect.arrayContaining(['Trinidad and Tobago']),
+          rememberedIngredients: expect.arrayContaining(['shark']),
+        },
+      });
+    });
+  });
+
 });

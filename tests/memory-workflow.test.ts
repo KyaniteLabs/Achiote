@@ -63,6 +63,22 @@ describe('research-first food memory workflow', () => {
     expect(questions.questions.join(' ')).toContain('wrapped');
     expect(questions.toneGuidance).toContain('No one needs to know the perfect spelling');
   });
+
+
+  it('asks clue-aware questions for sparse regional ingredient memories', () => {
+    const memory = collectFoodMemory({
+      memoryText: 'I ate a shark one time in Trinidad and Tobago',
+      knownRegion: 'Trinidad and Tobago',
+      userLocation: 'Long Beach, California',
+    });
+
+    expect(memory.extractedClues.culturalOrRegionalHints).toContain('Trinidad and Tobago');
+    expect(memory.extractedClues.rememberedIngredients).toContain('shark');
+    expect(memory.missingInformation).not.toContain('core ingredients');
+    expect(memory.missingInformation).not.toContain('country, island, region, town, or community');
+    expect(memory.nextQuestions.join(' ')).toContain('How was the shark served');
+    expect(memory.nextQuestions.join(' ')).not.toContain('wrapped in leaves');
+  });
 });
 
 describe('general research planning', () => {
