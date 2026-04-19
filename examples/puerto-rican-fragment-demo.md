@@ -23,7 +23,7 @@ This is a runnable conversation example for the skill/MCP flow. It is not a hard
 
 ## What the example proves
 
-- The product can start from a misspelled/sound-alike family memory.
+- The MCP/skill flow can start from a misspelled or sound-alike family memory.
 - It does not shame the user for not speaking the language.
 - It does not pretend certainty.
 - It generates research paths and family questions before recipe generation.

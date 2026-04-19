@@ -10,7 +10,7 @@
 
 ## Design summary
 
-The initial product line remains: a stdio MCP server that helps a host model reverse-engineer nostalgic dishes. This pass intentionally does not add external research providers or new dependencies. Instead, it upgrades the project from prototype scaffolding to a trustworthy base:
+The initial MCP direction remains: a stdio MCP server that helps a host model reverse-engineer nostalgic dishes. This pass intentionally does not add external research providers or new dependencies. Instead, it upgrades the project from prototype scaffolding to a trustworthy base:
 
 - MCP tools expose typed structured results while retaining JSON text for compatibility.
 - Tool descriptions and server instructions clearly separate deterministic bundled analysis from host-model follow-up prompts.
@@ -69,7 +69,7 @@ The initial product line remains: a stdio MCP server that helps a host model rev
 5. Add Dependabot and basic repo governance docs.
 6. Run `npm pack --dry-run --json` and verify runtime state is excluded.
 
-## Task 4: Documentation truth and product roadmap
+## Task 4: Documentation truth and technical roadmap
 
 **Files:**
 - Modify: `README.md`

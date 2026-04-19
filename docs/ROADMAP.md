@@ -1,8 +1,8 @@
-# Roadmap
+# Technical Roadmap
+
+This roadmap is scoped to the MCP server and skill behavior only.
 
 ## Completed foundation
-
-The current repository is a working MCP/skill core, not yet the finished consumer product. “Member Berries” remains a codename.
 
 - Structured MCP outputs and output schemas
 - Clean-checkout tests
@@ -38,10 +38,3 @@ Provider-backed research should be opt-in and privacy-documented. A strong imple
 - Add self-critique rubric around nostalgia-critical elements
 - Add user feedback loop to update target sensory profile
 - Add confidence decomposition per sensory element
-
-## Later: business/product surfaces
-
-- Hosted SaaS around the MCP core
-- Family food-memory archive export
-- Premium researched dish dossier
-- Shelf-stable ingredient/snack kit experiments after source/provenance and safety policies are mature
