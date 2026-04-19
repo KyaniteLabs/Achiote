@@ -246,6 +246,15 @@ export interface MinimumViableNostalgiaInput {
   maxEffortMinutes?: number;
 }
 
+export interface CueComponent {
+  role: string;
+  criticalElement: string;
+  flavorProfile: string;
+  localTestWith: string;
+  substitutionReason: string;
+  confidence: Confidence;
+}
+
 export interface MinimumViableNostalgiaCue {
   title: string;
   goal: string;
@@ -261,4 +270,5 @@ export interface MinimumViableNostalgiaCue {
   confidence: Confidence;
   safetyNotes: string[];
   followUpIfItWorks: string[];
+  components: CueComponent[];
 }

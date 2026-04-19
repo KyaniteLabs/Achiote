@@ -91,6 +91,16 @@ describe('food memory reconstruction e2e flow', () => {
         ingredients: expect.any(Array),
         steps: expect.any(Array),
         doesNotPreserve: expect.any(Array),
+        components: expect.arrayContaining([
+          expect.objectContaining({
+            role: expect.any(String),
+            criticalElement: expect.any(String),
+            flavorProfile: expect.any(String),
+            localTestWith: expect.any(String),
+            substitutionReason: expect.any(String),
+            confidence: expect.stringMatching(/^(High|Medium|Low)$/),
+          }),
+        ]),
       });
 
       const sensory = await client.callTool({

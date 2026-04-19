@@ -81,6 +81,12 @@ describe('minimum viable nostalgia cue', () => {
     expect(cue.accessibilityPrinciples.join(' ')).toContain('grocery-store');
     expect(cue.substituteLogic.join(' ')).toContain('fat-soluble aromatics');
     expect(cue.doesNotPreserve.join(' ')).toContain('exact specialty ingredient');
+
+    expect(cue.components.length).toBeGreaterThanOrEqual(1);
+    expect(cue.components.every((c) => c.criticalElement.length > 0)).toBe(true);
+    expect(cue.components.every((c) => c.substitutionReason.length > 0)).toBe(true);
+    expect(cue.components.some((c) => c.role === 'starch')).toBe(true);
+    expect(cue.components.some((c) => c.role === 'protein')).toBe(true);
   });
 
   it('starts a researched fried starch memory with a composed bite, not a dish-specific cue', () => {
@@ -111,6 +117,13 @@ describe('minimum viable nostalgia cue', () => {
     expect(cue.ingredients.map((ingredient) => ingredient.item).join(' ')).toContain('remembered base');
     expect(cue.substituteLogic.join(' ')).toContain('Proteins and fats');
     expect(cue.whyThisIsMinimum).toContain('food-science mechanisms');
+
+    expect(cue.components.length).toBeGreaterThanOrEqual(1);
+    expect(cue.components.some((c) => c.role === 'starch')).toBe(true);
+    expect(cue.components.some((c) => c.role === 'protein')).toBe(true);
+    const starch = cue.components.find((c) => c.role === 'starch')!;
+    expect(starch.criticalElement).toContain('gelatinized');
+    expect(starch.localTestWith).toContain('Long Beach');
   });
 
   it('uses accessible food-science proxy logic for protein, starch, gravy, and sauce memories', () => {
@@ -137,6 +150,16 @@ describe('minimum viable nostalgia cue', () => {
     expect(cue.substituteLogic.join(' ')).toContain('fat-soluble aromatics');
     expect(cue.title).not.toContain('boerewors');
     expect(cue.title).not.toContain('sausage');
+
+    expect(cue.components.length).toBeGreaterThanOrEqual(2);
+    expect(cue.components.some((c) => c.role === 'starch')).toBe(true);
+    expect(cue.components.some((c) => c.role === 'protein')).toBe(true);
+    expect(cue.components.some((c) => c.role === 'sauce')).toBe(true);
+    for (const comp of cue.components) {
+      expect(comp.criticalElement.length).toBeGreaterThan(0);
+      expect(comp.flavorProfile.length).toBeGreaterThan(0);
+      expect(comp.substitutionReason.length).toBeGreaterThan(0);
+    }
   });
 
   it('uses the soup cue for unresolved sour soup memories', () => {
@@ -148,6 +171,9 @@ describe('minimum viable nostalgia cue', () => {
     expect(cue.title).toContain('aroma-balance');
     expect(cue.steps.join(' ')).toContain('single strongest sensory clue');
     expect(cue.confidence).toBe('Low');
+
+    expect(cue.components.length).toBeGreaterThanOrEqual(1);
+    expect(cue.components.every((c) => c.criticalElement.length > 0)).toBe(true);
   });
 
   it('does not route generic pork soup signals to the pasteles cue', () => {
@@ -161,6 +187,8 @@ describe('minimum viable nostalgia cue', () => {
 
     expect(cue.title).not.toContain('pasteles');
     expect(cue.format).toBe('sip');
+
+    expect(cue.components.length).toBeGreaterThanOrEqual(1);
   });
 
   it('clamps max effort to a positive number', () => {

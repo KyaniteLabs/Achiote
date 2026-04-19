@@ -231,6 +231,15 @@ const minimumViableNostalgiaIngredientSchema = z.object({
   optional: z.boolean().optional(),
 });
 
+const cueComponentSchema = z.object({
+  role: z.string(),
+  criticalElement: z.string(),
+  flavorProfile: z.string(),
+  localTestWith: z.string(),
+  substitutionReason: z.string(),
+  confidence: confidenceSchema,
+});
+
 export const minimumViableNostalgiaInputSchema = z.object({
   dossier: buildReconstructionDossierOutputSchema,
   researchFindings: researchFindingsOutputSchema.optional(),
@@ -254,6 +263,7 @@ export const minimumViableNostalgiaOutputSchema = z.object({
   confidence: confidenceSchema,
   safetyNotes: z.array(z.string()),
   followUpIfItWorks: z.array(z.string()),
+  components: z.array(cueComponentSchema),
 });
 
 export const readOnlyAnnotations = {

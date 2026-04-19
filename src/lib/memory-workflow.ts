@@ -9,6 +9,7 @@ import type {
   ReconstructionDossier,
   MinimumViableNostalgiaInput,
   MinimumViableNostalgiaCue,
+  CueComponent,
 } from './types.js';
 
 const RESEARCH_STOPWORDS = new Set([
@@ -682,7 +683,83 @@ type FoodScienceCueProfile = {
   whyThisIsMinimum: string;
   safetyNotes: string[];
   followUpIfItWorks: string[];
+  components: CueComponent[];
 };
+
+const COMPONENT_ROLES = {
+  starch: {
+    keywords: 'rice|potato|potatoes|mash|masa|dough|bread|yuca|cassava|plantain|dumpling|noodle|bean|beans|starch|tortilla|cake',
+    criticalElement: 'gelatinized texture and sauce absorption',
+    flavorProfile: 'neutral to slightly sweet, soft or chewy mouthfeel',
+    localTestWith: 'any grocery-store starch: potato, rice, bread, or flour tortilla',
+    substitutionReason: 'Starch gelatinization produces similar texture and sauce-carrying capacity regardless of the specific source',
+  },
+  protein: {
+    keywords: 'meat|sausage|fish|shark|beef|pork|chicken|lamb|cheese|protein|filling|ground',
+    criticalElement: 'fat-rendered Maillard crust and spice-carrying fat',
+    flavorProfile: 'savory umami, browned fat, salt, and any spice bloom carried in rendered fat',
+    localTestWith: 'any accessible protein: ground pork, chicken thigh, or firm tofu pan-seared in oil',
+    substitutionReason: 'Proteins that render fat carry Maillard compounds and fat-soluble aromatics the same way regardless of cut or species',
+  },
+  sauce: {
+    keywords: 'sauce|gravy|relish|chutney|salsa|condiment|dip|orange|creamy',
+    criticalElement: 'acid-fat-salt balance and aromatic contrast against richness',
+    flavorProfile: 'variable — may be tomato-based, dairy-based, oil-herb, or vinegar-forward',
+    localTestWith: 'grocery-store salsa, tomato paste with vinegar and sugar, or yogurt with herbs',
+    substitutionReason: 'Sauces are balance systems of fat, acid, sugar, salt, and aromatics; matching the balance preserves the contrast even with different base ingredients',
+  },
+  vegetable: {
+    keywords: 'vegetable|pepper|onion|greens|cabbage|lettuce|tomato|carrot|corn',
+    criticalElement: 'crunch, sweetness, or char that breaks up richness',
+    flavorProfile: 'fresh or cooked sweetness, slight bitterness, or charred smokiness',
+    localTestWith: 'any grocery-store vegetable that can be charred, sauteed, or served raw',
+    substitutionReason: 'Vegetable nostalgia is usually about texture contrast and char sweetness, not the specific variety',
+  },
+  broth: {
+    keywords: 'soup|stew|broth|stock|porridge|consomme',
+    criticalElement: 'volatile aroma release in a warm liquid carrier',
+    flavorProfile: 'layered body from dissolved proteins, salt, fat, and long-cooked aromatics',
+    localTestWith: 'any warm broth or stock with a pinch of the remembered spice',
+    substitutionReason: 'Warm liquid releases volatile aromatics the same way regardless of the stock base; the nostalgia is in the aroma chemistry',
+  },
+} as const;
+
+type ComponentRole = keyof typeof COMPONENT_ROLES;
+
+const ROLE_ORDER: ComponentRole[] = ['starch', 'protein', 'sauce', 'vegetable', 'broth'];
+
+function decomposeIntoComponents(signals: string, userLocation?: string): CueComponent[] {
+  const locationPhrase = userLocation ? `near ${userLocation}` : 'at any grocery store';
+  const components: CueComponent[] = [];
+
+  for (const role of ROLE_ORDER) {
+    const def = COMPONENT_ROLES[role];
+    if (!hasAnySignal(signals, [wordSignal(def.keywords)])) continue;
+
+    const hasResearchDetail = signals.length > 100;
+    components.push({
+      role,
+      criticalElement: def.criticalElement,
+      flavorProfile: def.flavorProfile,
+      localTestWith: `${def.localTestWith} ${locationPhrase}`,
+      substitutionReason: def.substitutionReason,
+      confidence: hasResearchDetail ? 'Medium' : 'Low',
+    });
+  }
+
+  if (components.length === 0) {
+    components.push({
+      role: 'overall',
+      criticalElement: 'the dominant sensory mechanism — aroma, texture, sauce, fat, acid, or contrast',
+      flavorProfile: 'unknown until one variable is isolated and tested',
+      localTestWith: `one safe pantry ingredient ${locationPhrase}`,
+      substitutionReason: 'Without a known mechanism, any substitution is guesswork; isolate one sensory variable first',
+      confidence: 'Low',
+    });
+  }
+
+  return components;
+}
 
 function hasAnySignal(text: string, patterns: RegExp[]): boolean {
   return patterns.some((pattern) => pattern.test(text));
@@ -692,7 +769,7 @@ function wordSignal(words: string): RegExp {
   return new RegExp(`\\b(${words})\\b`);
 }
 
-function foodScienceCueProfile(signals: string): FoodScienceCueProfile {
+function foodScienceCueProfile(signals: string, userLocation?: string): FoodScienceCueProfile {
   const hasProteinOrFat = hasAnySignal(signals, [wordSignal('meat|sausage|fish|shark|beef|pork|chicken|lamb|cheese|fat|butter|oil|fried')]);
   const hasStarchOrBase = hasAnySignal(signals, [wordSignal('starch|rice|potato|potatoes|mash|masa|dough|bread|yuca|cassava|plantain|dumpling|noodle|bean|beans')]);
   const hasSauceOrCondiment = hasAnySignal(signals, [wordSignal('sauce|gravy|relish|chutney|salsa|condiment|dip|orange|creamy')]);
@@ -731,6 +808,7 @@ function foodScienceCueProfile(signals: string): FoodScienceCueProfile {
       whyThisIsMinimum: 'A one-cup sip tests the chemistry of aroma release, body, acid, salt, and fat before wasting ingredients on a full pot.',
       safetyNotes: ['Use only known edible ingredients.', 'Keep tasting amounts small while adjusting salt, acid, or heat.'],
       followUpIfItWorks: ['Ask what gave the liquid body.', 'Ask whether the brightness came from citrus, vinegar, dairy, fermentation, or tomato.', 'Ask what texture or garnish is missing.', 'Use source_ingredients to help find key items near the user.'],
+      components: decomposeIntoComponents(signals, userLocation),
     };
   }
 
@@ -763,6 +841,7 @@ function foodScienceCueProfile(signals: string): FoodScienceCueProfile {
       whyThisIsMinimum: 'A composed bite tests the reusable food-science mechanisms—aroma, fat, browning, starch texture, and balance—before committing to specialty shopping or a full recipe.',
       safetyNotes: ['Cook proteins safely.', 'Avoid allergens and unknown ingredients.', 'Use high heat carefully if crisping or browning.'],
       followUpIfItWorks: ['Ask which part hit first: smell, texture, sauce, fat, spice, or sweetness/acidity.', 'Ask what still feels missing.', 'Use find_sensory_substitutes and source_ingredients to help the user find items near where they live now.'],
+      components: decomposeIntoComponents(signals, userLocation),
     };
   }
 
@@ -795,6 +874,7 @@ function foodScienceCueProfile(signals: string): FoodScienceCueProfile {
       whyThisIsMinimum: 'A tablespoon of sauce on a neutral carrier tests the contrast and balance that often carries the nostalgic bite.',
       safetyNotes: ['Check condiment allergens and chile heat.', 'Do not mix unknown fermented or wild ingredients.'],
       followUpIfItWorks: ['Ask whether the sauce was smooth or chunky.', 'Ask whether it leaned fatty, acidic, sweet, spicy, or savory.', 'Ask what carrier it was served on.', 'Use source_ingredients to help the user find sauce components near where they live.'],
+      components: decomposeIntoComponents(signals, userLocation),
     };
   }
 
@@ -823,6 +903,7 @@ function foodScienceCueProfile(signals: string): FoodScienceCueProfile {
       whyThisIsMinimum: 'One sensory variable is the cheapest way to learn whether the reconstruction is moving toward or away from the memory.',
       safetyNotes: ['Use only safe edible ingredients.', 'Do not taste unidentified wild plants or unknown powders.'],
       followUpIfItWorks: ['Ask what dish format carried that aroma or balance.', 'Ask what texture or sauce belonged with it.', 'Use find_sensory_substitutes to find accessible alternatives near the user.'],
+      components: decomposeIntoComponents(signals, userLocation),
     };
   }
 
@@ -850,6 +931,7 @@ function foodScienceCueProfile(signals: string): FoodScienceCueProfile {
     whyThisIsMinimum: 'The cheapest correct move is not a recipe; it is one more sensory clue that determines what kind of cue to test.',
     safetyNotes: ['Do not taste unknown ingredients.', 'Avoid allergens.'],
     followUpIfItWorks: ['Use the new sensory clue to build a focused bite, sip, sauce, or aroma cue.', 'Once a cue works, use source_ingredients to help the user find items near where they live.'],
+    components: decomposeIntoComponents(signals, userLocation),
   };
 }
 
@@ -857,7 +939,7 @@ export function generateMinimumViableNostalgiaCue(input: MinimumViableNostalgiaI
   const signals = textSignals(input);
   const maxEffort = Math.max(1, input.maxEffortMinutes ?? 20);
   const confidence = input.researchFindings?.confidence ?? input.dossier.confidence;
-  const profile = foodScienceCueProfile(signals);
+  const profile = foodScienceCueProfile(signals, input.userLocation);
 
   return {
     ...profile,
