@@ -30,15 +30,15 @@ food memory fragment
   -> collect_food_memory
   -> plan_dish_research
   -> optional host research / family clarification
-  -> build_reconstruction_dossier
   -> generate_family_followup_questions
+  -> build_reconstruction_dossier
   -> analyze_nostalgic_dish
   -> find_sensory_substitutes
   -> source_ingredients
   -> generate_recipe
 ```
 
-This does execute through the full local workflow. The final recipe remains a host-model synthesis step because live research, family confirmation, and adaptation judgment should not be faked by static local data.
+This executes through the full local workflow. The final recipe remains a host-model synthesis step because live research, family confirmation, and adaptation judgment should not be faked by static local data.
 
 ## What It Does Not Do Yet
 
