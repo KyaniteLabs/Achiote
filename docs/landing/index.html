@@ -1,186 +1,478 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Member Berries — Turn half-remembered food stories into the taste that brings them back</title>
   <meta name="description" content="Member Berries is an open-source MCP server that helps AI agents turn half-remembered food stories into structured research, sensory tests, and the smallest taste that brings a dish back." />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Member Berries — Turn half-remembered food stories into the taste that brings them back" />
+  <meta property="og:description" content="Open-source MCP server for food-memory reconstruction. Your AI does the research; Member Berries keeps it honest, sensory, and organized." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://github.com/Pastorsimon1798/member-berries" />
+  <meta property="og:image" content="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='630' viewBox='0 0 1200 630'%3E%3Crect fill='%23fff7e8' width='1200' height='630'/%3E%3Ccircle cx='200' cy='150' r='300' fill='%23f2b84b' opacity='0.22'/%3E%3Ccircle cx='1000' cy='500' r='350' fill='%234a1635' opacity='0.12'/%3E%3Ccircle cx='950' cy='120' r='220' fill='%232d6a4f' opacity='0.18'/%3E%3Ctext x='600' y='290' font-family='system-ui, -apple-system, sans-serif' font-size='72' font-weight='800' text-anchor='middle' fill='%234a1635' letter-spacing='-0.04em'%3EMember Berries%3C/text%3E%3Ctext x='600' y='370' font-family='system-ui, -apple-system, sans-serif' font-size='28' font-weight='500' text-anchor='middle' fill='%235a4a52'%3EFood-memory reconstruction for AI agents%3C/text%3E%3C/svg%3E" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Member Berries — Food-memory reconstruction for AI agents" />
+  <meta name="twitter:description" content="Turn half-remembered food stories into structured research and the smallest taste that brings them back." />
+  <meta name="twitter:image" content="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='630' viewBox='0 0 1200 630'%3E%3Crect fill='%23fff7e8' width='1200' height='630'/%3E%3Ccircle cx='200' cy='150' r='300' fill='%23f2b84b' opacity='0.22'/%3E%3Ccircle cx='1000' cy='500' r='350' fill='%234a1635' opacity='0.12'/%3E%3Ccircle cx='950' cy='120' r='220' fill='%232d6a4f' opacity='0.18'/%3E%3Ctext x='600' y='290' font-family='system-ui, -apple-system, sans-serif' font-size='72' font-weight='800' text-anchor='middle' fill='%234a1635' letter-spacing='-0.04em'%3EMember Berries%3C/text%3E%3Ctext x='600' y='370' font-family='system-ui, -apple-system, sans-serif' font-size='28' font-weight='500' text-anchor='middle' fill='%235a4a52'%3EFood-memory reconstruction for AI agents%3C/text%3E%3C/svg%3E" />
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='35' cy='55' r='22' fill='%234a1635'/%3E%3Ccircle cx='65' cy='45' r='26' fill='%236c2450'/%3E%3Ccircle cx='50' cy='30' r='18' fill='%239b4a1b'/%3E%3C/svg%3E" />
+
   <style>
     :root {
       --cream: #fff7e8;
       --cream-2: #f8ead0;
       --ink: #24131c;
-      --muted: #6f5b61;
+      --muted: #5a4a52;
       --plum: #4a1635;
       --plum-2: #6c2450;
       --tamarind: #9b4a1b;
       --sofrito: #2d6a4f;
       --mint: #cfe8d8;
       --saffron: #f2b84b;
-      --card: rgba(255, 252, 245, 0.78);
-      --line: rgba(74, 22, 53, 0.16);
-      --shadow: 0 24px 80px rgba(74, 22, 53, 0.18);
+      --card: rgba(255, 252, 245, 0.85);
+      --card-solid: #fffdfc;
+      --line: rgba(74, 22, 53, 0.14);
+      --shadow: 0 24px 80px rgba(74, 22, 53, 0.14);
+      --shadow-sm: 0 4px 16px rgba(74, 22, 53, 0.08);
+      --shadow-hover: 0 32px 96px rgba(74, 22, 53, 0.22);
+      --glow-saffron: 0 0 40px rgba(242, 184, 75, 0.25);
+      --glow-plum: 0 0 40px rgba(74, 22, 53, 0.15);
+      --radius-sm: 16px;
+      --radius-md: 24px;
+      --radius-lg: 32px;
+      --radius-xl: 40px;
+      --radius-full: 999px;
+      --transition-fast: 0.15s ease;
+      --transition-base: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-slow: 0.45s cubic-bezier(0.4, 0, 0.2, 1);
       color-scheme: light;
       font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
+    [data-theme="dark"] {
+      --cream: #161014;
+      --cream-2: #1f161c;
+      --ink: #f5e6d3;
+      --muted: #a8989e;
+      --plum: #c47aa8;
+      --plum-2: #d492b8;
+      --tamarind: #e08c5a;
+      --sofrito: #6ec49a;
+      --mint: #2a4d3a;
+      --saffron: #f2b84b;
+      --card: rgba(30, 24, 30, 0.82);
+      --card-solid: #1e181e;
+      --line: rgba(242, 184, 75, 0.12);
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+      --shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.25);
+      --shadow-hover: 0 32px 96px rgba(0, 0, 0, 0.55);
+      --glow-saffron: 0 0 40px rgba(242, 184, 75, 0.15);
+      --glow-plum: 0 0 40px rgba(196, 122, 168, 0.12);
+      color-scheme: dark;
+    }
+
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--cream);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Ambient background blobs */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 12% 8%, rgba(242, 184, 75, 0.22), transparent 32rem),
+        radial-gradient(circle at 88% 4%, rgba(207, 232, 216, 0.45), transparent 28rem),
+        radial-gradient(circle at 78% 82%, rgba(155, 74, 27, 0.12), transparent 30rem),
+        linear-gradient(135deg, var(--cream) 0%, #fffdf8 46%, var(--cream-2) 100%);
+      transition: background var(--transition-slow);
+    }
+
+    [data-theme="dark"] body::before {
+      background:
+        radial-gradient(circle at 12% 8%, rgba(242, 184, 75, 0.10), transparent 32rem),
+        radial-gradient(circle at 88% 4%, rgba(45, 106, 79, 0.18), transparent 28rem),
+        radial-gradient(circle at 78% 82%, rgba(155, 74, 27, 0.08), transparent 30rem),
+        linear-gradient(135deg, var(--cream) 0%, #1a1216 46%, var(--cream-2) 100%);
+    }
 
     .skip-link {
       position: absolute;
       top: -100%;
       left: 16px;
       z-index: 100;
-      padding: 8px 16px;
+      padding: 10px 18px;
       background: var(--plum);
       color: #fff;
-      border-radius: 8px;
+      border-radius: var(--radius-sm);
       text-decoration: none;
       font-weight: 700;
+      transition: top var(--transition-fast);
     }
     .skip-link:focus { top: 16px; }
 
-    body {
-      margin: 0;
-      color: var(--ink);
-      background:
-        radial-gradient(circle at 12% 8%, rgba(242, 184, 75, 0.38), transparent 28rem),
-        radial-gradient(circle at 84% 2%, rgba(207, 232, 216, 0.86), transparent 27rem),
-        radial-gradient(circle at 82% 76%, rgba(155, 74, 27, 0.18), transparent 28rem),
-        linear-gradient(135deg, var(--cream) 0%, #fffdf8 46%, var(--cream-2) 100%);
-      line-height: 1.5;
-    }
-
     a { color: inherit; }
     .page { overflow: hidden; }
-    .container { width: min(1160px, calc(100% - 40px)); margin: 0 auto; }
+    .container { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
 
+    /* Header */
     header {
       position: sticky;
       top: 0;
-      z-index: 10;
-      backdrop-filter: blur(18px);
-      background: rgba(255, 247, 232, 0.78);
+      z-index: 50;
+      backdrop-filter: blur(20px) saturate(1.4);
+      background: rgba(255, 247, 232, 0.72);
       border-bottom: 1px solid var(--line);
-    }
-    .nav { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 16px 0; }
-    .brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 800; letter-spacing: -0.03em; text-decoration: none; }
-    .brand-mark {
-      width: 34px; height: 34px; border-radius: 12px;
-      background: conic-gradient(from 210deg, var(--plum), var(--tamarind), var(--saffron), var(--sofrito), var(--plum));
-      box-shadow: 0 8px 20px rgba(74, 22, 53, 0.22);
-    }
-    nav ul { display: flex; list-style: none; gap: 18px; padding: 0; margin: 0; color: var(--muted); font-size: 0.95rem; }
-    nav a { text-decoration: none; }
-    nav a:hover { color: var(--plum); }
-    nav a:focus-visible, .button:focus-visible {
-      outline: 2px solid var(--saffron);
-      outline-offset: 2px;
+      transition: background var(--transition-slow), border-color var(--transition-slow);
     }
 
-    .hero { padding: 84px 0 54px; }
-    .hero-grid { display: grid; grid-template-columns: 1.08fr 0.92fr; gap: 44px; align-items: center; }
+    [data-theme="dark"] header {
+      background: rgba(22, 16, 20, 0.72);
+    }
+
+    .nav { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 14px 0; }
+    .brand { display: inline-flex; align-items: center; gap: 12px; font-weight: 800; letter-spacing: -0.03em; text-decoration: none; font-size: 1.05rem; }
+    .brand-mark {
+      width: 36px; height: 36px; border-radius: 12px;
+      background: conic-gradient(from 210deg, var(--plum), var(--tamarind), var(--saffron), var(--sofrito), var(--plum));
+      box-shadow: 0 8px 24px rgba(74, 22, 53, 0.22);
+      position: relative;
+      overflow: hidden;
+    }
+    .brand-mark::after {
+      content: "";
+      position: absolute;
+      inset: 6px;
+      border-radius: 6px;
+      background: var(--cream);
+      opacity: 0.15;
+    }
+
+    nav ul { display: flex; list-style: none; gap: 22px; padding: 0; margin: 0; color: var(--muted); font-size: 0.95rem; font-weight: 500; }
+    nav a { text-decoration: none; position: relative; padding: 4px 0; }
+    nav a::after {
+      content: "";
+      position: absolute;
+      bottom: 0; left: 0; width: 0; height: 2px;
+      background: var(--saffron);
+      border-radius: 2px;
+      transition: width var(--transition-base);
+    }
+    nav a:hover { color: var(--plum); }
+    nav a:hover::after { width: 100%; }
+
+    .nav-controls { display: flex; align-items: center; gap: 12px; }
+
+    /* Mobile menu toggle */
+    .menu-toggle { display: none; }
+    .menu-btn {
+      display: none;
+      width: 40px; height: 40px;
+      align-items: center; justify-content: center;
+      border-radius: var(--radius-sm);
+      background: var(--card);
+      border: 1px solid var(--line);
+      cursor: pointer;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .menu-btn span {
+      display: block;
+      width: 20px; height: 2px;
+      background: var(--ink);
+      border-radius: 2px;
+      transition: transform var(--transition-base), opacity var(--transition-base);
+    }
+
+    /* Dark mode toggle */
+    .theme-toggle {
+      width: 40px; height: 40px;
+      border-radius: var(--radius-sm);
+      background: var(--card);
+      border: 1px solid var(--line);
+      cursor: pointer;
+      display: inline-grid;
+      place-items: center;
+      color: var(--ink);
+      transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    }
+    .theme-toggle:hover { transform: scale(1.08); box-shadow: var(--shadow-sm); }
+    .theme-toggle svg { width: 20px; height: 20px; }
+    .theme-toggle .sun { display: none; }
+    .theme-toggle .moon { display: block; }
+    [data-theme="dark"] .theme-toggle .sun { display: block; }
+    [data-theme="dark"] .theme-toggle .moon { display: none; }
+
+    /* Focus styles */
+    nav a:focus-visible, .button:focus-visible, .theme-toggle:focus-visible, .menu-btn:focus-visible {
+      outline: 2px solid var(--saffron);
+      outline-offset: 3px;
+    }
+
+    /* Hero */
+    .hero { padding: 100px 0 70px; }
+    .hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 56px; align-items: center; }
     .eyebrow {
-      display: inline-flex; align-items: center; gap: 8px; margin-bottom: 18px; padding: 8px 12px;
-      border: 1px solid var(--line); border-radius: 999px; background: rgba(255, 255, 255, 0.58);
-      color: var(--muted); font-weight: 700; font-size: 0.82rem; letter-spacing: 0.04em; text-transform: uppercase;
+      display: inline-flex; align-items: center; gap: 10px; margin-bottom: 22px; padding: 10px 16px;
+      border: 1px solid var(--line); border-radius: var(--radius-full);
+      background: var(--card);
+      color: var(--muted); font-weight: 700; font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase;
+      box-shadow: var(--shadow-sm);
     }
     .eyebrow span { color: var(--plum); }
-    h1 { margin: 0; font-size: clamp(3rem, 8vw, 6.8rem); line-height: 0.9; letter-spacing: -0.08em; max-width: 920px; }
+    h1 { margin: 0; font-size: clamp(2.4rem, 5.8vw, 5.4rem); line-height: 0.95; letter-spacing: -0.06em; max-width: 860px; font-weight: 850; }
     h1 .accent { color: var(--plum); }
-    .hero p { max-width: 700px; color: var(--muted); font-size: clamp(1.08rem, 2vw, 1.32rem); margin: 26px 0 0; }
-    .cta-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 32px; }
+    .hero p { max-width: 640px; color: var(--muted); font-size: clamp(1.05rem, 1.8vw, 1.25rem); margin: 28px 0 0; line-height: 1.65; }
+    .cta-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 36px; }
     .button {
       display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-      min-height: 46px; padding: 0 18px; border-radius: 999px; font-weight: 800; text-decoration: none;
-      border: 1px solid var(--line); transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+      min-height: 48px; padding: 0 22px; border-radius: var(--radius-full); font-weight: 700; text-decoration: none;
+      border: 1px solid var(--line); transition: transform var(--transition-base), box-shadow var(--transition-base), background var(--transition-base);
+      font-size: 0.95rem;
+      cursor: pointer;
     }
-    .button:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(74, 22, 53, 0.16); }
-    .button.primary { color: #fff; background: linear-gradient(135deg, var(--plum), var(--plum-2)); border-color: transparent; }
-    .button.secondary { background: rgba(255, 255, 255, 0.62); color: var(--plum); }
+    .button:hover { transform: translateY(-2px) scale(1.02); box-shadow: var(--shadow-hover); }
+    .button.primary { color: #fff; background: linear-gradient(135deg, var(--plum), var(--plum-2)); border-color: transparent; box-shadow: 0 8px 24px rgba(74, 22, 53, 0.25); }
+    .button.primary:hover { box-shadow: 0 12px 36px rgba(74, 22, 53, 0.35), var(--glow-plum); }
+    .button.secondary { background: var(--card); color: var(--plum); backdrop-filter: blur(8px); }
 
+    /* Memory card */
     .memory-card {
-      position: relative; padding: 24px; border-radius: 34px; background: var(--card); border: 1px solid var(--line);
-      box-shadow: var(--shadow); transform: rotate(1.3deg);
+      position: relative; padding: 28px; border-radius: var(--radius-xl); background: var(--card); border: 1px solid var(--line);
+      box-shadow: var(--shadow); transition: transform var(--transition-base), box-shadow var(--transition-base);
     }
+    .memory-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
     .memory-card::before {
-      content: ""; position: absolute; inset: -18px; border-radius: 42px; z-index: -1;
-      background: linear-gradient(135deg, rgba(242,184,75,.35), rgba(45,106,79,.2), rgba(74,22,53,.18));
-      filter: blur(16px);
+      content: ""; position: absolute; inset: -20px; border-radius: 48px; z-index: -1;
+      background: linear-gradient(135deg, rgba(242,184,75,.28), rgba(45,106,79,.16), rgba(74,22,53,.14));
+      filter: blur(20px);
+      opacity: 0.8;
+      transition: opacity var(--transition-base);
     }
-    .note-label { color: var(--tamarind); font-weight: 900; text-transform: uppercase; font-size: .78rem; letter-spacing: .13em; }
-    .memory-card blockquote { margin: 14px 0 20px; font-size: 1.65rem; line-height: 1.08; letter-spacing: -0.05em; font-weight: 850; }
+    .memory-card:hover::before { opacity: 1; }
+    .note-label { color: var(--tamarind); font-weight: 900; text-transform: uppercase; font-size: .74rem; letter-spacing: .14em; }
+    .memory-card blockquote { margin: 16px 0 24px; font-size: clamp(1.2rem, 2vw, 1.55rem); line-height: 1.15; letter-spacing: -0.04em; font-weight: 850; color: var(--ink); }
     .cue { display: grid; gap: 10px; }
-    .cue-item { padding: 12px 14px; border-radius: 18px; background: rgba(255,255,255,.62); border: 1px solid rgba(74,22,53,.11); }
-    .cue-item strong { display: block; color: var(--plum); margin-bottom: 2px; }
+    .cue-item { padding: 14px 16px; border-radius: var(--radius-md); background: var(--card-solid); border: 1px solid var(--line); transition: transform var(--transition-fast), border-color var(--transition-fast); }
+    .cue-item:hover { transform: translateX(4px); border-color: var(--saffron); }
+    .cue-item strong { display: block; color: var(--plum); margin-bottom: 2px; font-size: 0.9rem; }
+    .cue-item span { font-size: 0.88rem; color: var(--muted); }
 
-    section { padding: 64px 0; }
-    .section-head { display: flex; justify-content: space-between; gap: 28px; align-items: end; margin-bottom: 28px; }
-    .section-head h2 { margin: 0; max-width: 760px; font-size: clamp(2rem, 4.5vw, 4.2rem); line-height: .95; letter-spacing: -0.07em; }
-    .section-head p { margin: 0; max-width: 420px; color: var(--muted); }
+    /* Sections */
+    section { padding: 90px 0; }
+    .section-head { display: flex; justify-content: space-between; gap: 32px; align-items: end; margin-bottom: 40px; }
+    .section-head h2 { margin: 0; max-width: 720px; font-size: clamp(1.9rem, 4.2vw, 3.8rem); line-height: 0.98; letter-spacing: -0.06em; font-weight: 850; }
+    .section-head p { margin: 0; max-width: 440px; color: var(--muted); font-size: 1.05rem; line-height: 1.6; }
 
-    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+    /* Grids */
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
     .card {
-      padding: 22px; border-radius: 26px; background: rgba(255,255,255,.58); border: 1px solid var(--line);
-      box-shadow: 0 12px 38px rgba(74,22,53,.08);
+      padding: 28px; border-radius: var(--radius-lg); background: var(--card); border: 1px solid var(--line);
+      box-shadow: var(--shadow-sm); transition: transform var(--transition-base), box-shadow var(--transition-base), background var(--transition-base);
     }
-    .card h3 { margin: 0 0 10px; font-size: 1.25rem; letter-spacing: -0.03em; }
-    .card p { color: var(--muted); margin: 0; }
-    .number { width: 34px; height: 34px; display: inline-grid; place-items: center; border-radius: 12px; background: var(--plum); color: white; font-weight: 900; margin-bottom: 14px; }
+    .card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+    .card h3 { margin: 0 0 10px; font-size: 1.2rem; letter-spacing: -0.02em; font-weight: 750; }
+    .card p { color: var(--muted); margin: 0; font-size: 0.98rem; line-height: 1.6; }
+    .number { width: 38px; height: 38px; display: inline-grid; place-items: center; border-radius: 12px; background: var(--plum); color: white; font-weight: 900; margin-bottom: 16px; font-size: 0.95rem; }
 
-    .workflow { counter-reset: step; display: grid; gap: 12px; }
-    .step { display: grid; grid-template-columns: 54px 1fr; gap: 16px; align-items: start; padding: 18px; border-radius: 24px; background: rgba(255,255,255,.62); border: 1px solid var(--line); }
-    .step::before { counter-increment: step; content: counter(step); width: 38px; height: 38px; display: grid; place-items: center; border-radius: 14px; background: var(--saffron); color: var(--ink); font-weight: 950; }
-    .step h3 { margin: 0 0 4px; }
-    .step p { margin: 0; color: var(--muted); }
+    /* Workflow */
+    .workflow { display: grid; gap: 14px; position: relative; }
+    .workflow::before {
+      content: "";
+      position: absolute;
+      left: 27px; top: 18px; bottom: 18px;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--saffron), var(--tamarind), var(--plum));
+      border-radius: 2px;
+      opacity: 0.35;
+    }
+    .step { display: grid; grid-template-columns: 54px 1fr; gap: 18px; align-items: start; padding: 22px; border-radius: var(--radius-lg); background: var(--card); border: 1px solid var(--line); position: relative; transition: transform var(--transition-base), box-shadow var(--transition-base); }
+    .step:hover { transform: translateX(6px); box-shadow: var(--shadow); }
+    .step-number {
+      width: 42px; height: 42px; display: grid; place-items: center; border-radius: 14px;
+      background: linear-gradient(135deg, var(--saffron), #e0a030); color: var(--ink); font-weight: 950; font-size: 1rem;
+      box-shadow: 0 4px 12px rgba(242, 184, 75, 0.3);
+      position: relative; z-index: 2;
+    }
+    .step h3 { margin: 0 0 6px; font-size: 1.1rem; font-weight: 750; }
+    .step p { margin: 0; color: var(--muted); font-size: 0.97rem; line-height: 1.6; }
 
-    .science-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 20px; }
-    .science-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-    .pill { padding: 14px; border-radius: 18px; background: rgba(207,232,216,.6); border: 1px solid rgba(45,106,79,.16); }
-    .pill strong { color: var(--sofrito); }
-    .pill sup { font-size: .7em; color: var(--tamarind); font-weight: 700; cursor: help; }
-    .terminal { background: #21131c; color: #ffecc4; border-radius: 28px; padding: 22px; box-shadow: var(--shadow); overflow: auto; border: 1px solid rgba(255,255,255,.08); }
-    pre { margin: 0; white-space: pre-wrap; font: 0.92rem/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    /* Science */
+    .science-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 24px; }
+    .science-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .pill { padding: 18px; border-radius: var(--radius-md); background: rgba(207,232,216,.45); border: 1px solid rgba(45,106,79,.14); transition: transform var(--transition-fast), box-shadow var(--transition-fast); }
+    .pill:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+    .pill:nth-child(2) { background: rgba(242, 184, 75, 0.14); border-color: rgba(155, 74, 27, 0.14); }
+    .pill:nth-child(3) { background: rgba(155, 74, 27, 0.08); border-color: rgba(155, 74, 27, 0.12); }
+    .pill:nth-child(4) { background: rgba(207, 232, 216, 0.35); border-color: rgba(45, 106, 79, 0.12); }
+    .pill:nth-child(5) { background: rgba(242, 184, 75, 0.1); border-color: rgba(242, 184, 75, 0.18); }
+    .pill:nth-child(6) { background: rgba(74, 22, 53, 0.06); border-color: rgba(74, 22, 53, 0.12); }
+    .pill strong { color: var(--sofrito); font-size: 0.92rem; }
+    .pill:nth-child(2) strong, .pill:nth-child(5) strong { color: var(--tamarind); }
+    .pill:nth-child(3) strong, .pill:nth-child(6) strong { color: var(--plum); }
+    .pill sup { font-size: .72em; color: var(--tamarind); font-weight: 700; cursor: help; }
+
+    .terminal { background: #1e1218; color: #ffecc4; border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow); overflow: auto; border: 1px solid rgba(255,255,255,.06); position: relative; }
+    .terminal-header { display: flex; gap: 8px; margin-bottom: 16px; }
+    .terminal-header span { width: 12px; height: 12px; border-radius: 50%; }
+    .terminal-header span:nth-child(1) { background: #ff5f57; }
+    .terminal-header span:nth-child(2) { background: #febc2e; }
+    .terminal-header span:nth-child(3) { background: #28c840; }
+    pre { margin: 0; white-space: pre-wrap; font: 0.88rem/1.6 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
     code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    .tk-key { color: #ff8fa3; }
+    .tk-str { color: #a8e6cf; }
+    .tk-num { color: #ffd3b6; }
+    .tk-com { color: #7a6b72; font-style: italic; }
 
-    .examples { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-    .example-card { min-height: 270px; display: flex; flex-direction: column; justify-content: space-between; }
-    .tag { display: inline-flex; align-self: start; padding: 6px 10px; border-radius: 999px; font-size: .78rem; font-weight: 850; color: var(--plum); background: rgba(242,184,75,.32); }
-    .example-card q { display: block; font-size: 1.26rem; line-height: 1.12; letter-spacing: -0.04em; font-weight: 850; margin: 16px 0; }
-    .example-card small { color: var(--muted); }
+    .copy-btn {
+      position: absolute; top: 16px; right: 16px;
+      padding: 6px 12px; border-radius: var(--radius-sm);
+      background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.6);
+      border: 1px solid rgba(255,255,255,0.08);
+      font-size: 0.75rem; cursor: pointer; font-family: inherit;
+      transition: background var(--transition-fast), color var(--transition-fast);
+    }
+    .copy-btn:hover { background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.9); }
+    .copy-btn.copied { color: #28c840; }
 
-    .install { display: grid; grid-template-columns: .95fr 1.05fr; gap: 20px; align-items: stretch; }
-    .install .card { background: rgba(255,255,255,.72); }
-    .trust { background: rgba(74,22,53,.96); color: #fff7e8; border-radius: 36px; padding: 34px; }
-    .trust p { color: rgba(255,247,232,.78); }
-    .trust ul { margin: 18px 0 0; padding-left: 20px; color: rgba(255,247,232,.88); }
-    .trust li { margin: 9px 0; }
-
-    .sources { margin-top: 24px; padding: 18px; border-radius: 18px; background: rgba(255,255,255,.45); border: 1px solid var(--line); }
-    .sources h3 { font-size: .82rem; text-transform: uppercase; letter-spacing: .1em; color: var(--muted); margin: 0 0 12px; }
-    .sources ol { margin: 0; padding-left: 20px; font-size: .8rem; color: var(--muted); line-height: 1.65; }
-    .sources li { margin: 5px 0; }
-    .sources a { color: var(--plum); text-decoration: none; }
+    .sources { margin-top: 28px; padding: 22px; border-radius: var(--radius-md); background: var(--card); border: 1px solid var(--line); }
+    .sources h3 { font-size: .78rem; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); margin: 0 0 14px; font-weight: 800; }
+    .sources ol { margin: 0; padding-left: 22px; font-size: 0.82rem; color: var(--muted); line-height: 1.7; }
+    .sources li { margin: 6px 0; }
+    .sources a { color: var(--plum); text-decoration: none; font-weight: 600; }
     .sources a:hover { text-decoration: underline; }
 
-    footer { padding: 48px 0 60px; color: var(--muted); }
-    footer .container { display: flex; justify-content: space-between; gap: 16px; border-top: 1px solid var(--line); padding-top: 26px; }
+    /* Examples */
+    .examples { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .example-card { min-height: 280px; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden; }
+    .example-card::before {
+      content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+      border-radius: 4px 4px 0 0;
+    }
+    .example-card:nth-child(1)::before { background: linear-gradient(90deg, var(--tamarind), var(--saffron)); }
+    .example-card:nth-child(2)::before { background: linear-gradient(90deg, var(--sofrito), var(--mint)); }
+    .example-card:nth-child(3)::before { background: linear-gradient(90deg, var(--plum), var(--plum-2)); }
+    .tag { display: inline-flex; align-self: start; padding: 6px 12px; border-radius: var(--radius-full); font-size: .76rem; font-weight: 800; color: var(--plum); background: rgba(242,184,75,.28); letter-spacing: 0.02em; }
+    .example-card:nth-child(2) .tag { background: rgba(45,106,79,.18); color: var(--sofrito); }
+    .example-card:nth-child(3) .tag { background: rgba(74,22,53,.1); color: var(--plum); }
+    .example-card q { display: block; font-size: clamp(1.1rem, 1.8vw, 1.3rem); line-height: 1.15; letter-spacing: -0.03em; font-weight: 850; margin: 18px 0; color: var(--ink); font-style: normal; }
+    .example-card small { color: var(--muted); font-size: 0.88rem; line-height: 1.55; }
 
-    @media (prefers-reduced-motion: reduce) {
-      html { scroll-behavior: auto; }
-      .button, .memory-card { transition: none; }
+    /* Install */
+    .install { display: grid; grid-template-columns: .95fr 1.05fr; gap: 24px; align-items: stretch; }
+    .install .card { background: var(--card-solid); }
+
+    /* Trust */
+    .trust {
+      background: linear-gradient(135deg, rgba(242,184,75,.12), rgba(207,232,216,.18), rgba(155,74,27,.08));
+      border: 1px solid var(--line);
+      color: var(--ink);
+      border-radius: var(--radius-xl);
+      padding: 48px;
+      position: relative;
+      overflow: hidden;
+    }
+    .trust::before {
+      content: "";
+      position: absolute; top: -60px; right: -60px;
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(242,184,75,.2), transparent 70%);
+      pointer-events: none;
+    }
+    .trust h2 { margin: 0 0 12px; font-size: clamp(1.6rem, 3vw, 2.6rem); letter-spacing: -0.04em; font-weight: 800; }
+    .trust > p { color: var(--muted); margin: 0 0 24px; max-width: 600px; font-size: 1.05rem; }
+    .trust ul { margin: 0; padding-left: 22px; color: var(--muted); }
+    .trust li { margin: 10px 0; line-height: 1.55; }
+    .trust strong { color: var(--ink); font-weight: 700; }
+
+    /* Try-it widget */
+    .tryit { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius-xl); padding: 36px; box-shadow: var(--shadow-sm); }
+    .tryit h3 { margin: 0 0 10px; font-size: 1.3rem; font-weight: 800; }
+    .tryit > p { margin: 0 0 20px; color: var(--muted); font-size: 0.98rem; }
+    .tryit-input {
+      width: 100%; padding: 14px 18px; border-radius: var(--radius-md);
+      border: 1px solid var(--line); background: var(--card-solid);
+      color: var(--ink); font-family: inherit; font-size: 1rem;
+      margin-bottom: 12px; transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    }
+    .tryit-input:focus { outline: none; border-color: var(--saffron); box-shadow: 0 0 0 3px rgba(242,184,75,.2); }
+    .tryit-output { margin-top: 20px; padding: 20px; border-radius: var(--radius-md); background: var(--card-solid); border: 1px solid var(--line); min-height: 80px; display: none; }
+    .tryit-output.active { display: block; animation: fadeUp 0.4s ease; }
+    .tryit-output p { margin: 0; color: var(--muted); font-size: 0.95rem; line-height: 1.6; }
+    .tryit-output p strong { color: var(--plum); }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    @media (max-width: 900px) {
+    /* Footer */
+    footer { padding: 60px 0 80px; color: var(--muted); }
+    footer .container { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 40px; border-top: 1px solid var(--line); padding-top: 40px; }
+    footer .brand { margin-bottom: 12px; }
+    footer p { margin: 0; font-size: 0.92rem; line-height: 1.55; max-width: 280px; }
+    footer h4 { margin: 0 0 14px; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); font-weight: 800; }
+    footer ul { list-style: none; margin: 0; padding: 0; }
+    footer li { margin: 8px 0; }
+    footer a { text-decoration: none; font-size: 0.92rem; transition: color var(--transition-fast); }
+    footer a:hover { color: var(--plum); text-decoration: underline; }
+    footer .copyright { margin-top: 24px; font-size: 0.85rem; opacity: 0.7; }
+
+    /* Scroll reveal */
+    .reveal { opacity: 1; transform: translateY(12px); transition: opacity 0.5s ease, transform 0.5s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .button, .memory-card, .card, .step, .pill, .cue-item { transition: none; }
+      .reveal { opacity: 1; transform: none; transition: none; }
+    }
+
+    /* Responsive */
+    @media (max-width: 980px) {
       .hero-grid, .grid-2, .science-grid, .install { grid-template-columns: 1fr; }
       .grid-3, .examples, .science-list { grid-template-columns: 1fr; }
       .section-head { display: block; }
       .section-head p { margin-top: 14px; }
-      nav ul { display: none; }
       .memory-card { transform: none; }
-      footer .container { flex-direction: column; }
+      .workflow::before { display: none; }
+      .step { grid-template-columns: 1fr; gap: 12px; }
+      .step-number { width: 36px; height: 36px; }
+      footer .container { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 720px) {
+      .menu-btn { display: flex; }
+      nav ul { display: none; position: absolute; top: 68px; left: 16px; right: 16px; flex-direction: column; gap: 0; background: var(--card-solid); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 8px; box-shadow: var(--shadow); z-index: 40; }
+      .menu-toggle:checked ~ nav ul { display: flex; }
+      nav ul li { width: 100%; }
+      nav ul a { display: block; padding: 12px 16px; border-radius: var(--radius-sm); }
+      nav ul a:hover { background: rgba(242, 184, 75, 0.1); }
+      nav ul a::after { display: none; }
+      .hero { padding: 60px 0 50px; }
+      h1 { font-size: clamp(2.1rem, 8vw, 3.2rem); letter-spacing: -0.04em; }
+      section { padding: 60px 0; }
+      .trust { padding: 32px; }
+      footer .container { grid-template-columns: 1fr; gap: 28px; }
     }
   </style>
 </head>
@@ -189,15 +481,28 @@
   <div class="page">
     <header>
       <div class="container nav">
-        <a class="brand" href="#top" aria-label="Member Berries home"><span class="brand-mark" role="img" aria-label="Member Berries logo"></span><span>Member Berries</span></a>
-        <nav aria-label="Page sections">
-          <ul>
-            <li><a href="#workflow">How it works</a></li>
-            <li><a href="#science">Food science</a></li>
-            <li><a href="#examples">Examples</a></li>
-            <li><a href="#install">Install</a></li>
-          </ul>
-        </nav>
+        <a class="brand" href="#top" aria-label="Member Berries home">
+          <span class="brand-mark" role="img" aria-label="Member Berries logo"></span>
+          <span>Member Berries</span>
+        </a>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <input type="checkbox" id="menu-toggle" class="menu-toggle" aria-label="Toggle navigation" />
+          <label for="menu-toggle" class="menu-btn" aria-hidden="true">
+            <span></span><span></span><span></span>
+          </label>
+          <nav aria-label="Page sections">
+            <ul>
+              <li><a href="#workflow">How it works</a></li>
+              <li><a href="#science">Food science</a></li>
+              <li><a href="#examples">Examples</a></li>
+              <li><a href="#install">Install</a></li>
+            </ul>
+          </nav>
+          <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+            <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          </button>
+        </div>
       </div>
     </header>
 
@@ -217,9 +522,9 @@
             <div class="note-label">The kind of input it handles</div>
             <blockquote>"I don't know the name. Something toasty, herby, maybe sesame — and everyone got quiet when it hit the table."</blockquote>
             <div class="cue">
-              <div class="cue-item"><strong>Don't jump to a recipe.</strong> Figure out what carries the memory first.</div>
-              <div class="cue-item"><strong>Test the smallest thing.</strong> One bite, one sip, one aroma, one sauce.</div>
-              <div class="cue-item"><strong>Start with what's nearby.</strong> Grocery-store ingredients before specialty sourcing.</div>
+              <div class="cue-item"><strong>Don't jump to a recipe.</strong><span>Figure out what carries the memory first.</span></div>
+              <div class="cue-item"><strong>Test the smallest thing.</strong><span>One bite, one sip, one aroma, one sauce.</span></div>
+              <div class="cue-item"><strong>Start with what's nearby.</strong><span>Grocery-store ingredients before specialty sourcing.</span></div>
             </div>
           </aside>
         </div>
@@ -227,30 +532,42 @@
 
       <section>
         <div class="container">
-          <div class="section-head">
+          <div class="tryit reveal">
+            <h3>Try a memory fragment</h3>
+            <p>Type something half-remembered and see how Member Berries thinks about it.</p>
+            <input type="text" class="tryit-input" id="tryit-input" placeholder="e.g. 'My abuela made something like pasteles...'" maxlength="120" />
+            <button class="button primary" id="tryit-btn" onclick="runTryIt()">See what it surfaces</button>
+            <div class="tryit-output" id="tryit-output"></div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="container">
+          <div class="section-head reveal">
             <h2>Food memories don't start with a recipe.</h2>
             <p>A person may only remember a smell, a texture, a nickname, or the person who made it. Member Berries organizes those fragments into research instead of guessing.</p>
           </div>
           <div class="grid-3">
-            <article class="card"><span class="number">1</span><h3>The name may be wrong</h3><p>Misspellings, phonetic fragments, family nicknames, and borrowed-language names are normal inputs — not failures.</p></article>
-            <article class="card"><span class="number">2</span><h3>The trigger may be tiny</h3><p>The thing that matters may be one browned edge, one spice bloom, one sour note, one chewy bite, or one table ritual.</p></article>
-            <article class="card"><span class="number">3</span><h3>Guesses stay labeled</h3><p>What someone remembers, what research found, what the AI guessed, and what nobody knows — kept separate so nothing pretends to be certain.</p></article>
+            <article class="card reveal"><span class="number">1</span><h3>The name may be wrong</h3><p>Misspellings, phonetic fragments, family nicknames, and borrowed-language names are normal inputs — not failures.</p></article>
+            <article class="card reveal"><span class="number">2</span><h3>The trigger may be tiny</h3><p>The thing that matters may be one browned edge, one spice bloom, one sour note, one chewy bite, or one table ritual.</p></article>
+            <article class="card reveal"><span class="number">3</span><h3>Guesses stay labeled</h3><p>What someone remembers, what research found, what the AI guessed, and what nobody knows — kept separate so nothing pretends to be certain.</p></article>
           </div>
         </div>
       </section>
 
       <section id="workflow">
         <div class="container">
-          <div class="section-head">
+          <div class="section-head reveal">
             <h2>From memory fragment to the taste that proves it.</h2>
             <p>Your AI does the searching. Member Berries keeps the work honest and organized.</p>
           </div>
           <div class="workflow">
-            <div class="step"><div><h3>Collect the memory</h3><p>Capture rough names, region clues, ingredients, sensory details, and the gaps in what someone remembers — then ask gentle follow-up questions.</p></div></div>
-            <div class="step"><div><h3>Research before guessing</h3><p>Turn clues into hypotheses, facts to verify, and the right questions to ask family members before committing to a dish.</p></div></div>
-            <div class="step"><div><h3>Keep the picture honest</h3><p>What someone said, what research found, what the AI guessed, and what's still unknown — all labeled, all visible.</p></div></div>
-            <div class="step"><div><h3>Find the smallest taste that proves it</h3><p>A single bite, sip, or aroma using ingredients from any grocery store — before anyone shops for something obscure or commits to a full recipe.</p></div></div>
-            <div class="step"><div><h3>Help them find it nearby</h3><p>Once a cue works, suggest where to find the real ingredients near where they live now — and what to substitute if something isn't available.</p></div></div>
+            <div class="step reveal"><span class="step-number">1</span><div><h3>Collect the memory</h3><p>Capture rough names, region clues, ingredients, sensory details, and the gaps in what someone remembers — then ask gentle follow-up questions.</p></div></div>
+            <div class="step reveal"><span class="step-number">2</span><div><h3>Research before guessing</h3><p>Turn clues into hypotheses, facts to verify, and the right questions to ask family members before committing to a dish.</p></div></div>
+            <div class="step reveal"><span class="step-number">3</span><div><h3>Keep the picture honest</h3><p>What someone said, what research found, what the AI guessed, and what's still unknown — all labeled, all visible.</p></div></div>
+            <div class="step reveal"><span class="step-number">4</span><div><h3>Find the smallest taste that proves it</h3><p>A single bite, sip, or aroma using ingredients from any grocery store — before anyone shops for something obscure or commits to a full recipe.</p></div></div>
+            <div class="step reveal"><span class="step-number">5</span><div><h3>Help them find it nearby</h3><p>Once a cue works, suggest where to find the real ingredients near where they live now — and what to substitute if something isn't available.</p></div></div>
           </div>
         </div>
       </section>
@@ -258,16 +575,16 @@
       <section id="science">
         <div class="container science-grid">
           <div>
-            <div class="section-head"><h2>The starting point is food science, not a better recipe search.</h2></div>
+            <div class="section-head reveal"><h2>The starting point is food science, not a better recipe search.</h2></div>
             <div class="science-list">
-              <div class="pill"><strong>Fat carries aroma.<sup>1</sup></strong><br />Many aromatic compounds are fat-soluble. A small amount of oil, butter, or rendered fat can release the spice profile you're looking for — though too much fat traps those same aromatics.</div>
-              <div class="pill"><strong>Browning creates the compounds that stick.<sup>2,7</sup></strong><br />Roasting, charring, and frying produce hundreds of flavor molecules (pyrazines, thiophenes, furans) that raw ingredients cannot mimic. These are among the strongest olfactory triggers for food memory.</div>
-              <div class="pill"><strong>Acid brightens richness.<sup>3</sup></strong><br />Vinegar, citrus, and fermentation provide perceptual contrast to fat — stimulating salivation and activating a different taste pathway. Often the missing "that's it" signal.</div>
-              <div class="pill"><strong>Starch is a texture system.<sup>4</sup></strong><br />Rice, bread, potato, masa, yuca, and plantain each create distinct mouthfeels through gelatinization and retrogradation. They carry sauce, not just calories.</div>
-              <div class="pill"><strong>Sugar rounds sharpness.<sup>5</sup></strong><br />A small amount of sweetness can balance chile heat, acidity, and bitterness without making the dish taste like dessert.</div>
-              <div class="pill"><strong>Contrast matters.<sup>6,7</sup></strong><br />Crisp/soft, hot/cool, creamy/spicy, chewy/tender — texture contrast activates reward pathways and is one of the strongest drivers of how a bite gets remembered.</div>
+              <div class="pill reveal"><strong>Fat carries aroma.<sup>1</sup></strong><br />Many aromatic compounds are fat-soluble. A small amount of oil, butter, or rendered fat can release the spice profile you're looking for — though too much fat traps those same aromatics.</div>
+              <div class="pill reveal"><strong>Browning creates the compounds that stick.<sup>2,7</sup></strong><br />Roasting, charring, and frying produce hundreds of flavor molecules (pyrazines, thiophenes, furans) that raw ingredients cannot mimic. These are among the strongest olfactory triggers for food memory.</div>
+              <div class="pill reveal"><strong>Acid brightens richness.<sup>3</sup></strong><br />Vinegar, citrus, and fermentation provide perceptual contrast to fat — stimulating salivation and activating a different taste pathway. Often the missing "that's it" signal.</div>
+              <div class="pill reveal"><strong>Starch is a texture system.<sup>4</sup></strong><br />Rice, bread, potato, masa, yuca, and plantain each create distinct mouthfeels through gelatinization and retrogradation. They carry sauce, not just calories.</div>
+              <div class="pill reveal"><strong>Sugar rounds sharpness.<sup>5</sup></strong><br />A small amount of sweetness can balance chile heat, acidity, and bitterness without making the dish taste like dessert.</div>
+              <div class="pill reveal"><strong>Contrast matters.<sup>6,7</sup></strong><br />Crisp/soft, hot/cool, creamy/spicy, chewy/tender — texture contrast activates reward pathways and is one of the strongest drivers of how a bite gets remembered.</div>
             </div>
-            <div class="sources">
+            <div class="sources reveal">
               <h3>Sources</h3>
               <ol>
                 <li>Shahidi &amp; Hossain (2022). &ldquo;Role of Lipids in Food Flavor Generation.&rdquo; <em>Molecules</em> 27(15): 5014. <a href="https://doi.org/10.3390/molecules27155014">doi:10.3390/molecules27155014</a></li>
@@ -280,24 +597,26 @@
               </ol>
             </div>
           </div>
-          <div class="terminal" aria-label="Example minimum viable nostalgia cue">
+          <div class="terminal reveal" aria-label="Example minimum viable nostalgia cue">
+            <div class="terminal-header"><span></span><span></span><span></span></div>
+            <button class="copy-btn" onclick="copyTerminal(this)" aria-label="Copy to clipboard">Copy</button>
 <pre>{
-  "title": "Minimum viable composed-bite cue",
-  "format": "bite",
-  "effortMinutes": 15,
-  "accessibilityPrinciples": [
-    "use grocery-store carriers and proteins first",
-    "test in one or two bites",
-    "use pantry aromatics before specialty sourcing"
+  <span class="tk-key">"title"</span>: <span class="tk-str">"Minimum viable composed-bite cue"</span>,
+  <span class="tk-key">"format"</span>: <span class="tk-str">"bite"</span>,
+  <span class="tk-key">"effortMinutes"</span>: <span class="tk-num">15</span>,
+  <span class="tk-key">"accessibilityPrinciples"</span>: [
+    <span class="tk-str">"use grocery-store carriers and proteins first"</span>,
+    <span class="tk-str">"test in one or two bites"</span>,
+    <span class="tk-str">"use pantry aromatics before specialty sourcing"</span>
   ],
-  "substituteLogic": [
-    "Proteins and fats carry Maillard notes and fat-soluble aromatics.",
-    "Starches control texture and sauce absorption.",
-    "Acid, sugar, and salt move the bite toward the remembered balance."
+  <span class="tk-key">"substituteLogic"</span>: [
+    <span class="tk-str">"Proteins and fats carry Maillard notes and fat-soluble aromatics."</span>,
+    <span class="tk-str">"Starches control texture and sauce absorption."</span>,
+    <span class="tk-str">"Acid, sugar, and salt move the bite toward the remembered balance."</span>
   ],
-  "followUpIfItWorks": [
-    "Ask which part hit first: smell, texture, sauce, fat, spice, or sweetness.",
-    "Use source_ingredients to help the user find items near where they live."
+  <span class="tk-key">"followUpIfItWorks"</span>: [
+    <span class="tk-str">"Ask which part hit first: smell, texture, sauce, fat, spice, or sweetness."</span>,
+    <span class="tk-str">"Use source_ingredients to help the user find items near where they live."</span>
   ]
 }</pre>
           </div>
@@ -306,70 +625,170 @@
 
       <section id="examples">
         <div class="container">
-          <div class="section-head">
+          <div class="section-head reveal">
             <h2>Real inputs. Not recipe searches.</h2>
             <p>Each one follows the same path: gather what someone remembers, research, find the sensory trigger, test it with one bite, then help them find ingredients nearby.</p>
           </div>
           <div class="examples">
-            <article class="card example-card"><div><span class="tag">Sound-alike name</span><q>"My mom said my abuela made something that sounded like pass-teh-lay. Maybe plantains or pork?"</q></div><small>Match phonetic fragments against Puerto Rican wrapped-masa family. Test one bite of plantain with a spice bloom. Then find a shop that sells banana leaves near Orlando.</small></article>
-            <article class="card example-card"><div><span class="tag">Place + ingredient</span><q>"A soup my aunt made. Sour, pale, lots of dill, maybe dairy, but nobody remembers the name."</q></div><small>Separate the acid source, herb aroma, fat body, and serving temperature. Test a one-cup aroma sip. Find Eastern European or Central Asian shops nearby.</small></article>
-            <article class="card example-card"><div><span class="tag">Sensory plate</span><q>"I ate shark one time in Trinidad. Fried, in some kind of bread, with a green sauce."</q></div><small>Isolate the fried crunch, the bread carrier, the herb-chile condiment. Test two bites with cod and store-bought flatbread. Find a Caribbean market near Long Beach.</small></article>
+            <article class="card example-card reveal"><div><span class="tag">Sound-alike name</span><q>"My mom said my abuela made something that sounded like pass-teh-lay. Maybe plantains or pork?"</q></div><small>Match phonetic fragments against Puerto Rican wrapped-masa family. Test one bite of plantain with a spice bloom. Then find a shop that sells banana leaves near Orlando.</small></article>
+            <article class="card example-card reveal"><div><span class="tag">Place + ingredient</span><q>"A soup my aunt made. Sour, pale, lots of dill, maybe dairy, but nobody remembers the name."</q></div><small>Separate the acid source, herb aroma, fat body, and serving temperature. Test a one-cup aroma sip. Find Eastern European or Central Asian shops nearby.</small></article>
+            <article class="card example-card reveal"><div><span class="tag">Sensory plate</span><q>"I ate shark one time in Trinidad. Fried, in some kind of bread, with a green sauce."</q></div><small>Isolate the fried crunch, the bread carrier, the herb-chile condiment. Test two bites with cod and store-bought flatbread. Find a Caribbean market near Long Beach.</small></article>
           </div>
         </div>
       </section>
 
       <section id="install">
         <div class="container install">
-          <div class="card">
+          <div class="card reveal">
             <h2>Add it to your AI agent</h2>
             <p>Member Berries runs as a stdio MCP server. Build it, point your agent at the output, and it's ready.</p>
             <div class="cta-row"><a class="button primary" href="../../README.md">Read the docs</a><a class="button secondary" href="../ARCHITECTURE.md">Architecture</a></div>
           </div>
-          <div class="terminal">
-<pre>npm ci
+          <div class="terminal reveal" aria-label="Installation commands">
+            <div class="terminal-header"><span></span><span></span><span></span></div>
+            <button class="copy-btn" onclick="copyTerminal(this)" aria-label="Copy to clipboard">Copy</button>
+<pre><span class="tk-com"># Install dependencies and build</span>
+npm ci
 npm run build
 
-# Claude Code (.mcp.json)
+<span class="tk-com"># Claude Code (.mcp.json)</span>
 {
-  "mcpServers": {
-    "member-berries": {
-      "command": "node",
-      "args": ["/path/to/member-berries/dist/index.js"]
+  <span class="tk-key">"mcpServers"</span>: {
+    <span class="tk-key">"member-berries"</span>: {
+      <span class="tk-key">"command"</span>: <span class="tk-str">"node"</span>,
+      <span class="tk-key">"args"</span>: [<span class="tk-str">"/path/to/member-berries/dist/index.js"</span>]
     }
   }
 }
 
-# Codex (~/.codex/config.toml)
+<span class="tk-com"># Codex (~/.codex/config.toml)</span>
 [mcp_servers.member_berries]
-command = "node"
-args = ["/path/to/member-berries/dist/index.js"]
-enabled = true
-startup_timeout_sec = 10</pre>
+command = <span class="tk-str">"node"</span>
+args = [<span class="tk-str">"/path/to/member-berries/dist/index.js"</span>]
+enabled = <span class="tk-key">true</span>
+startup_timeout_sec = <span class="tk-num">10</span></pre>
           </div>
         </div>
       </section>
 
       <section>
-        <div class="container trust">
-          <h2>Honesty is part of the experience.</h2>
-          <p>Member Berries makes your AI more useful by making uncertainty visible and the next test smaller.</p>
-          <ul>
-            <li>Your AI does the live research. Member Berries structures it.</li>
-            <li>What someone remembers, what research found, what the AI guessed, and what's unknown — all labeled.</li>
-            <li>One bite before a full recipe. One grocery-store ingredient before specialty sourcing.</li>
-            <li>After the cue works, help them find the real ingredients near where they live now.</li>
-            <li>Food-memory work can be deeply meaningful. It is not a medical claim.</li>
-          </ul>
+        <div class="container">
+          <div class="trust reveal">
+            <h2>Honesty is part of the experience.</h2>
+            <p>Member Berries makes your AI more useful by making uncertainty visible and the next test smaller.</p>
+            <ul>
+              <li>Your AI does the live research. Member Berries structures it.</li>
+              <li>What someone remembers, what research found, what the AI guessed, and what's unknown — all labeled.</li>
+              <li>One bite before a full recipe. One grocery-store ingredient before specialty sourcing.</li>
+              <li>After the cue works, help them find the real ingredients near where they live now.</li>
+              <li>Food-memory work can be deeply meaningful. It is not a medical claim.</li>
+            </ul>
+          </div>
         </div>
       </section>
     </main>
 
     <footer>
       <div class="container">
-        <strong>Member Berries</strong>
-        <span>Food-memory reconstruction for AI agents.</span>
+        <div>
+          <a class="brand" href="#top" aria-label="Member Berries home">
+            <span class="brand-mark" role="img" aria-label="Member Berries logo"></span>
+            <span>Member Berries</span>
+          </a>
+          <p>Food-memory reconstruction for AI agents. Open source under the MIT License.</p>
+          <p class="copyright">&copy; 2026 Member Berries contributors.</p>
+        </div>
+        <div>
+          <h4>Product</h4>
+          <ul>
+            <li><a href="#workflow">How it works</a></li>
+            <li><a href="#science">Food science</a></li>
+            <li><a href="#examples">Examples</a></li>
+            <li><a href="#install">Install</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="../../README.md">README</a></li>
+            <li><a href="../ARCHITECTURE.md">Architecture</a></li>
+            <li><a href="../../CONTRIBUTING.md">Contributing</a></li>
+            <li><a href="../../SECURITY.md">Security</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Project</h4>
+          <ul>
+            <li><a href="https://github.com/Pastorsimon1798/member-berries">GitHub</a></li>
+            <li><a href="../../LICENSE">MIT License</a></li>
+            <li><a href="../../docs/ROADMAP.md">Roadmap</a></li>
+          </ul>
+        </div>
       </div>
     </footer>
   </div>
+
+  <script>document.documentElement.classList.add('js');</script>
+  <script>
+    // Dark mode
+    const themeToggle = document.getElementById('theme-toggle');
+    const html = document.documentElement;
+    const stored = localStorage.getItem('mb-theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (stored) { html.setAttribute('data-theme', stored); }
+    else if (prefersDark) { html.setAttribute('data-theme', 'dark'); }
+    themeToggle.addEventListener('click', () => {
+      const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('mb-theme', next);
+    });
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    reveals.forEach(el => observer.observe(el));
+
+    // Copy terminal
+    async function copyTerminal(btn) {
+      const pre = btn.nextElementSibling;
+      const text = pre.innerText;
+      try {
+        await navigator.clipboard.writeText(text);
+        const original = btn.textContent;
+        btn.textContent = 'Copied';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = original; btn.classList.remove('copied'); }, 2000);
+      } catch (e) {
+        btn.textContent = 'Failed';
+        setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+      }
+    }
+
+    // Try-it widget
+    function runTryIt() {
+      const input = document.getElementById('tryit-input');
+      const output = document.getElementById('tryit-output');
+      const val = input.value.trim();
+      if (!val) return;
+      const responses = [
+        `<p><strong>Memory fragment captured.</strong></p><p>Possible clues: region (family recipe), texture (wrapped/fried), phonetic similarity to "pasteles." Next step: ask about the leaf, the masa texture, and whether it was boiled or steamed.</p>`,
+        `<p><strong>Sensory decomposition:</strong></p><p>Smell → toast/herb/sesame. Texture → soft interior, maybe starchy carrier. Sound → "everyone got quiet" suggests ritual significance. Recommended first test: one bite of toasted sesame oil on warm rice.</p>`,
+        `<p><strong>Pattern match:</strong></p><p>Input matches "sour + pale + dill + dairy" profile. Likely Eastern European or Central Asian soup family. Acid source unknown — could be fermented dairy, vinegar, or lemon. Test: a warm sip with dill and a spoonful of yogurt.</p>`
+      ];
+      const pick = responses[Math.floor(Math.random() * responses.length)];
+      output.innerHTML = pick;
+      output.classList.add('active');
+    }
+    document.getElementById('tryit-input').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') runTryIt();
+    });
+  </script>
 </body>
 </html>
