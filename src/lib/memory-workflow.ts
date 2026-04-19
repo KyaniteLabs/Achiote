@@ -728,22 +728,27 @@ type ComponentRole = keyof typeof COMPONENT_ROLES;
 
 const ROLE_ORDER: ComponentRole[] = ['starch', 'protein', 'sauce', 'vegetable', 'broth'];
 
-function decomposeIntoComponents(signals: string, userLocation?: string): CueComponent[] {
-  const locationPhrase = userLocation ? `near ${userLocation}` : 'at any grocery store';
+function sanitizeLocation(raw?: string): string {
+  if (!raw) return 'at any grocery store';
+  const trimmed = raw.trim().slice(0, 80);
+  return `near ${trimmed}`;
+}
+
+function decomposeIntoComponents(signals: string, userLocation?: string, overallConfidence?: Confidence): CueComponent[] {
+  const locationPhrase = sanitizeLocation(userLocation);
   const components: CueComponent[] = [];
 
   for (const role of ROLE_ORDER) {
     const def = COMPONENT_ROLES[role];
     if (!hasAnySignal(signals, [wordSignal(def.keywords)])) continue;
 
-    const hasResearchDetail = signals.length > 100;
     components.push({
       role,
       criticalElement: def.criticalElement,
       flavorProfile: def.flavorProfile,
       localTestWith: `${def.localTestWith} ${locationPhrase}`,
       substitutionReason: def.substitutionReason,
-      confidence: hasResearchDetail ? 'Medium' : 'Low',
+      confidence: overallConfidence ?? 'Low',
     });
   }
 
@@ -769,7 +774,7 @@ function wordSignal(words: string): RegExp {
   return new RegExp(`\\b(${words})\\b`);
 }
 
-function foodScienceCueProfile(signals: string, userLocation?: string): FoodScienceCueProfile {
+function foodScienceCueProfile(signals: string, userLocation?: string, overallConfidence?: Confidence): FoodScienceCueProfile {
   const hasProteinOrFat = hasAnySignal(signals, [wordSignal('meat|sausage|fish|shark|beef|pork|chicken|lamb|cheese|fat|butter|oil|fried')]);
   const hasStarchOrBase = hasAnySignal(signals, [wordSignal('starch|rice|potato|potatoes|mash|masa|dough|bread|yuca|cassava|plantain|dumpling|noodle|bean|beans')]);
   const hasSauceOrCondiment = hasAnySignal(signals, [wordSignal('sauce|gravy|relish|chutney|salsa|condiment|dip|orange|creamy')]);
@@ -808,7 +813,7 @@ function foodScienceCueProfile(signals: string, userLocation?: string): FoodScie
       whyThisIsMinimum: 'A one-cup sip tests the chemistry of aroma release, body, acid, salt, and fat before wasting ingredients on a full pot.',
       safetyNotes: ['Use only known edible ingredients.', 'Keep tasting amounts small while adjusting salt, acid, or heat.'],
       followUpIfItWorks: ['Ask what gave the liquid body.', 'Ask whether the brightness came from citrus, vinegar, dairy, fermentation, or tomato.', 'Ask what texture or garnish is missing.', 'Use source_ingredients to help find key items near the user.'],
-      components: decomposeIntoComponents(signals, userLocation),
+      components: decomposeIntoComponents(signals, userLocation, overallConfidence),
     };
   }
 
@@ -841,7 +846,7 @@ function foodScienceCueProfile(signals: string, userLocation?: string): FoodScie
       whyThisIsMinimum: 'A composed bite tests the reusable food-science mechanisms—aroma, fat, browning, starch texture, and balance—before committing to specialty shopping or a full recipe.',
       safetyNotes: ['Cook proteins safely.', 'Avoid allergens and unknown ingredients.', 'Use high heat carefully if crisping or browning.'],
       followUpIfItWorks: ['Ask which part hit first: smell, texture, sauce, fat, spice, or sweetness/acidity.', 'Ask what still feels missing.', 'Use find_sensory_substitutes and source_ingredients to help the user find items near where they live now.'],
-      components: decomposeIntoComponents(signals, userLocation),
+      components: decomposeIntoComponents(signals, userLocation, overallConfidence),
     };
   }
 
@@ -874,7 +879,7 @@ function foodScienceCueProfile(signals: string, userLocation?: string): FoodScie
       whyThisIsMinimum: 'A tablespoon of sauce on a neutral carrier tests the contrast and balance that often carries the nostalgic bite.',
       safetyNotes: ['Check condiment allergens and chile heat.', 'Do not mix unknown fermented or wild ingredients.'],
       followUpIfItWorks: ['Ask whether the sauce was smooth or chunky.', 'Ask whether it leaned fatty, acidic, sweet, spicy, or savory.', 'Ask what carrier it was served on.', 'Use source_ingredients to help the user find sauce components near where they live.'],
-      components: decomposeIntoComponents(signals, userLocation),
+      components: decomposeIntoComponents(signals, userLocation, overallConfidence),
     };
   }
 
@@ -903,7 +908,7 @@ function foodScienceCueProfile(signals: string, userLocation?: string): FoodScie
       whyThisIsMinimum: 'One sensory variable is the cheapest way to learn whether the reconstruction is moving toward or away from the memory.',
       safetyNotes: ['Use only safe edible ingredients.', 'Do not taste unidentified wild plants or unknown powders.'],
       followUpIfItWorks: ['Ask what dish format carried that aroma or balance.', 'Ask what texture or sauce belonged with it.', 'Use find_sensory_substitutes to find accessible alternatives near the user.'],
-      components: decomposeIntoComponents(signals, userLocation),
+      components: decomposeIntoComponents(signals, userLocation, overallConfidence),
     };
   }
 
@@ -931,7 +936,7 @@ function foodScienceCueProfile(signals: string, userLocation?: string): FoodScie
     whyThisIsMinimum: 'The cheapest correct move is not a recipe; it is one more sensory clue that determines what kind of cue to test.',
     safetyNotes: ['Do not taste unknown ingredients.', 'Avoid allergens.'],
     followUpIfItWorks: ['Use the new sensory clue to build a focused bite, sip, sauce, or aroma cue.', 'Once a cue works, use source_ingredients to help the user find items near where they live.'],
-    components: decomposeIntoComponents(signals, userLocation),
+    components: decomposeIntoComponents(signals, userLocation, overallConfidence),
   };
 }
 
@@ -939,7 +944,7 @@ export function generateMinimumViableNostalgiaCue(input: MinimumViableNostalgiaI
   const signals = textSignals(input);
   const maxEffort = Math.max(1, input.maxEffortMinutes ?? 20);
   const confidence = input.researchFindings?.confidence ?? input.dossier.confidence;
-  const profile = foodScienceCueProfile(signals, input.userLocation);
+  const profile = foodScienceCueProfile(signals, input.userLocation, confidence);
 
   return {
     ...profile,

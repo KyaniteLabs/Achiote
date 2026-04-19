@@ -124,6 +124,7 @@ describe('minimum viable nostalgia cue', () => {
     const starch = cue.components.find((c) => c.role === 'starch')!;
     expect(starch.criticalElement).toContain('gelatinized');
     expect(starch.localTestWith).toContain('Long Beach');
+    expect(starch.confidence).toBe('High');
   });
 
   it('uses accessible food-science proxy logic for protein, starch, gravy, and sauce memories', () => {
