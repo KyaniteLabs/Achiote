@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Member Berries — Reconstruct food memories with your AI agent</title>
-  <meta name="description" content="Member Berries is an MCP server that helps AI agents turn half-remembered food stories into structured research, sensory tests, and the smallest taste that brings a dish back." />
+  <title>Member Berries — Turn half-remembered food stories into the taste that brings them back</title>
+  <meta name="description" content="Member Berries is an open-source MCP server that helps AI agents turn half-remembered food stories into structured research, sensory tests, and the smallest taste that brings a dish back." />
   <style>
     :root {
       --cream: #fff7e8;
@@ -26,6 +26,21 @@
 
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
+
+    .skip-link {
+      position: absolute;
+      top: -100%;
+      left: 16px;
+      z-index: 100;
+      padding: 8px 16px;
+      background: var(--plum);
+      color: #fff;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 700;
+    }
+    .skip-link:focus { top: 16px; }
+
     body {
       margin: 0;
       color: var(--ink);
@@ -59,14 +74,19 @@
     nav ul { display: flex; list-style: none; gap: 18px; padding: 0; margin: 0; color: var(--muted); font-size: 0.95rem; }
     nav a { text-decoration: none; }
     nav a:hover { color: var(--plum); }
+    nav a:focus-visible, .button:focus-visible {
+      outline: 2px solid var(--saffron);
+      outline-offset: 2px;
+    }
 
     .hero { padding: 84px 0 54px; }
     .hero-grid { display: grid; grid-template-columns: 1.08fr 0.92fr; gap: 44px; align-items: center; }
     .eyebrow {
       display: inline-flex; align-items: center; gap: 8px; margin-bottom: 18px; padding: 8px 12px;
       border: 1px solid var(--line); border-radius: 999px; background: rgba(255, 255, 255, 0.58);
-      color: var(--plum); font-weight: 700; font-size: 0.88rem;
+      color: var(--muted); font-weight: 700; font-size: 0.82rem; letter-spacing: 0.04em; text-transform: uppercase;
     }
+    .eyebrow span { color: var(--plum); }
     h1 { margin: 0; font-size: clamp(3rem, 8vw, 6.8rem); line-height: 0.9; letter-spacing: -0.08em; max-width: 920px; }
     h1 .accent { color: var(--plum); }
     .hero p { max-width: 700px; color: var(--muted); font-size: clamp(1.08rem, 2vw, 1.32rem); margin: 26px 0 0; }
@@ -148,6 +168,11 @@
     footer { padding: 48px 0 60px; color: var(--muted); }
     footer .container { display: flex; justify-content: space-between; gap: 16px; border-top: 1px solid var(--line); padding-top: 26px; }
 
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .button, .memory-card { transition: none; }
+    }
+
     @media (max-width: 900px) {
       .hero-grid, .grid-2, .science-grid, .install { grid-template-columns: 1fr; }
       .grid-3, .examples, .science-list { grid-template-columns: 1fr; }
@@ -160,10 +185,11 @@
   </style>
 </head>
 <body>
+  <a class="skip-link" href="#main">Skip to content</a>
   <div class="page">
     <header>
       <div class="container nav">
-        <a class="brand" href="#top" aria-label="Member Berries home"><span class="brand-mark"></span><span>Member Berries</span></a>
+        <a class="brand" href="#top" aria-label="Member Berries home"><span class="brand-mark" role="img" aria-label="Member Berries logo"></span><span>Member Berries</span></a>
         <nav aria-label="Page sections">
           <ul>
             <li><a href="#workflow">How it works</a></li>
@@ -175,23 +201,23 @@
       </div>
     </header>
 
-    <main id="top">
-      <section class="hero">
+    <main id="main">
+      <section class="hero" id="top">
         <div class="container hero-grid">
           <div>
-            <div class="eyebrow">MCP server for food memories</div>
+            <div class="eyebrow">Open-source <span>MCP server</span></div>
             <h1>Find the <span class="accent">smallest taste</span> that brings it back.</h1>
-            <p>Someone describes a dish they haven't eaten in years. A smell, a nickname, a texture — not a recipe. Member Berries helps your AI agent turn those fragments into research, sensory tests, and the one bite that proves you found it.</p>
+            <p>Someone remembers a dish they haven't eaten in years. A smell, a nickname, a texture — not a recipe. Member Berries turns those fragments into the one bite that proves you found it.</p>
             <div class="cta-row">
               <a class="button primary" href="#install">Install Member Berries</a>
               <a class="button secondary" href="#workflow">See how it works</a>
             </div>
           </div>
           <aside class="memory-card" aria-label="Example food memory card">
-            <div class="note-label">A real kind of input</div>
-            <blockquote>”I don’t know the name. I remember something toasty, herby, maybe sesame — and the way everyone got quiet when it hit the table.”</blockquote>
+            <div class="note-label">The kind of input it handles</div>
+            <blockquote>"I don't know the name. Something toasty, herby, maybe sesame — and everyone got quiet when it hit the table."</blockquote>
             <div class="cue">
-              <div class="cue-item"><strong>Don't jump to a recipe.</strong> First identify what carries the memory.</div>
+              <div class="cue-item"><strong>Don't jump to a recipe.</strong> Figure out what carries the memory first.</div>
               <div class="cue-item"><strong>Test the smallest thing.</strong> One bite, one sip, one aroma, one sauce.</div>
               <div class="cue-item"><strong>Start with what's nearby.</strong> Grocery-store ingredients before specialty sourcing.</div>
             </div>
@@ -202,13 +228,13 @@
       <section>
         <div class="container">
           <div class="section-head">
-            <h2>Most food memories start before the recipe exists.</h2>
-            <p>A person may only remember a smell, a texture, a nickname, a grocery aisle, or the person who made it. Member Berries organizes those fragments into research — instead of guessing a recipe and hoping.</p>
+            <h2>Food memories don't start with a recipe.</h2>
+            <p>A person may only remember a smell, a texture, a nickname, or the person who made it. Member Berries organizes those fragments into research instead of guessing.</p>
           </div>
           <div class="grid-3">
-            <article class="card"><span class="number">1</span><h3>The name may be wrong</h3><p>Misspellings, phonetic fragments, family nicknames, and borrowed-language names are normal inputs, not failures.</p></article>
+            <article class="card"><span class="number">1</span><h3>The name may be wrong</h3><p>Misspellings, phonetic fragments, family nicknames, and borrowed-language names are normal inputs — not failures.</p></article>
             <article class="card"><span class="number">2</span><h3>The trigger may be tiny</h3><p>The thing that matters may be one browned edge, one spice bloom, one sour note, one chewy bite, or one table ritual.</p></article>
-            <article class="card"><span class="number">3</span><h3>Guesses don't become facts</h3><p>What the person remembers, what research found, what your AI guessed, and what nobody knows — all kept separate so nothing pretends to be certain.</p></article>
+            <article class="card"><span class="number">3</span><h3>Guesses stay labeled</h3><p>What someone remembers, what research found, what the AI guessed, and what nobody knows — kept separate so nothing pretends to be certain.</p></article>
           </div>
         </div>
       </section>
@@ -217,14 +243,14 @@
         <div class="container">
           <div class="section-head">
             <h2>From memory fragment to the taste that proves it.</h2>
-            <p>Your AI does the searching. Member Berries keeps the work organized and honest.</p>
+            <p>Your AI does the searching. Member Berries keeps the work honest and organized.</p>
           </div>
           <div class="workflow">
-            <div class="step"><div><h3>Collect the food memory</h3><p>Capture rough names, region clues, ingredients, sensory details, and the gaps in what someone remembers — then ask gentle follow-up questions.</p></div></div>
-            <div class="step"><div><h3>Research before guessing</h3><p>Turn clues into hypotheses, facts to verify, and the right questions to ask before committing to a dish.</p></div></div>
-            <div class="step"><div><h3>Track where every fact comes from</h3><p>Tag each finding with its source, how reliable it is, and what it tells you about the dish.</p></div></div>
-            <div class="step"><div><h3>Keep the picture honest</h3><p>What the person said, what research found, what your AI guessed, and what's still unknown — all separate, all visible.</p></div></div>
+            <div class="step"><div><h3>Collect the memory</h3><p>Capture rough names, region clues, ingredients, sensory details, and the gaps in what someone remembers — then ask gentle follow-up questions.</p></div></div>
+            <div class="step"><div><h3>Research before guessing</h3><p>Turn clues into hypotheses, facts to verify, and the right questions to ask family members before committing to a dish.</p></div></div>
+            <div class="step"><div><h3>Keep the picture honest</h3><p>What someone said, what research found, what the AI guessed, and what's still unknown — all labeled, all visible.</p></div></div>
             <div class="step"><div><h3>Find the smallest taste that proves it</h3><p>A single bite, sip, or aroma using ingredients from any grocery store — before anyone shops for something obscure or commits to a full recipe.</p></div></div>
+            <div class="step"><div><h3>Help them find it nearby</h3><p>Once a cue works, suggest where to find the real ingredients near where they live now — and what to substitute if something isn't available.</p></div></div>
           </div>
         </div>
       </section>
@@ -232,32 +258,33 @@
       <section id="science">
         <div class="container science-grid">
           <div>
-            <div class=”section-head”><h2>The starting point is food science, not a better recipe search.</h2></div>
-            <div class=”science-list”>
-              <div class=”pill”><strong>Fat carries aroma.<sup>1</sup></strong><br />Many aromatic compounds are fat-soluble. A small amount of oil, butter, or rendered fat can release the spice profile you’re looking for — though too much fat traps those same aromatics.</div>
-              <div class=”pill”><strong>Browning creates the compounds that stick.<sup>2,7</sup></strong><br />Roasting, charring, and frying produce hundreds of flavor molecules (pyrazines, thiophenes, furans) that raw ingredients cannot mimic. These are among the strongest olfactory triggers for food memory.</div>
-              <div class=”pill”><strong>Acid brightens richness.<sup>3</sup></strong><br />Vinegar, citrus, and fermentation provide perceptual contrast to fat — stimulating salivation and activating a different taste pathway. Often the missing “that’s it” signal.</div>
-              <div class=”pill”><strong>Starch is a texture system.<sup>4</sup></strong><br />Rice, bread, potato, masa, yuca, and plantain each create distinct mouthfeels through gelatinization and retrogradation. They carry sauce, not just calories.</div>
-              <div class=”pill”><strong>Sugar rounds sharpness.<sup>5</sup></strong><br />A small amount of sweetness can balance chile heat, acidity, and bitterness without making the dish taste like dessert.</div>
-              <div class=”pill”><strong>Contrast matters.<sup>6,7</sup></strong><br />Crisp/soft, hot/cool, creamy/spicy, chewy/tender — texture contrast activates reward pathways and is one of the strongest drivers of how a bite gets remembered.</div>
+            <div class="section-head"><h2>The starting point is food science, not a better recipe search.</h2></div>
+            <div class="science-list">
+              <div class="pill"><strong>Fat carries aroma.<sup>1</sup></strong><br />Many aromatic compounds are fat-soluble. A small amount of oil, butter, or rendered fat can release the spice profile you're looking for — though too much fat traps those same aromatics.</div>
+              <div class="pill"><strong>Browning creates the compounds that stick.<sup>2,7</sup></strong><br />Roasting, charring, and frying produce hundreds of flavor molecules (pyrazines, thiophenes, furans) that raw ingredients cannot mimic. These are among the strongest olfactory triggers for food memory.</div>
+              <div class="pill"><strong>Acid brightens richness.<sup>3</sup></strong><br />Vinegar, citrus, and fermentation provide perceptual contrast to fat — stimulating salivation and activating a different taste pathway. Often the missing "that's it" signal.</div>
+              <div class="pill"><strong>Starch is a texture system.<sup>4</sup></strong><br />Rice, bread, potato, masa, yuca, and plantain each create distinct mouthfeels through gelatinization and retrogradation. They carry sauce, not just calories.</div>
+              <div class="pill"><strong>Sugar rounds sharpness.<sup>5</sup></strong><br />A small amount of sweetness can balance chile heat, acidity, and bitterness without making the dish taste like dessert.</div>
+              <div class="pill"><strong>Contrast matters.<sup>6,7</sup></strong><br />Crisp/soft, hot/cool, creamy/spicy, chewy/tender — texture contrast activates reward pathways and is one of the strongest drivers of how a bite gets remembered.</div>
             </div>
-            <div class=”sources”>
+            <div class="sources">
               <h3>Sources</h3>
               <ol>
-                <li>Shahidi &amp; Hossain (2022). &ldquo;Role of Lipids in Food Flavor Generation.&rdquo; <em>Molecules</em> 27(15): 5014. <a href=”https://doi.org/10.3390/molecules27155014”>doi:10.3390/molecules27155014</a></li>
-                <li>Liu et al. (2022). &ldquo;Insights into flavor and key influencing factors of Maillard reaction products.&rdquo; <em>Frontiers in Nutrition</em> 9: 973677. <a href=”https://doi.org/10.3389/fnut.2022.973677”>doi:10.3389/fnut.2022.973677</a></li>
-                <li>Dubreuil &amp; Breslin (2012). &ldquo;Opponency of astringent and fat sensations.&rdquo; <em>Current Biology</em> 22(19): R829&ndash;R830. <a href=”https://doi.org/10.1016/j.cub.2012.08.017”>doi:10.1016/j.cub.2012.08.017</a></li>
-                <li>Wang et al. (2020). &ldquo;Physicochemical properties of native starches and their applications.&rdquo; <em>Foods</em> 9(8): 1073. <a href=”https://doi.org/10.3390/foods9081073”>doi:10.3390/foods9081073</a></li>
-                <li>Mao et al. (2025). &ldquo;Dynamic interaction of sweet and sour taste perceptions based on sucrose and citric acid.&rdquo; <em>npj Science of Food</em> 9: 152. <a href=”https://doi.org/10.1038/s41538-025-00507-7”>doi:10.1038/s41538-025-00507-7</a></li>
-                <li>Yamamoto et al. (2025). &ldquo;Pleasantness emotions and neural activity induced by the multimodal crispiness of monaka ice cream.&rdquo; <em>Frontiers in Nutrition</em> 12. <a href=”https://doi.org/10.3389/fnut.2025.1681999”>doi:10.3389/fnut.2025.1681999</a></li>
-                <li>Reid et al. (2023). &ldquo;Food-evoked nostalgia.&rdquo; <em>Cognition and Emotion</em> 37(1): 34&ndash;48. <a href=”https://doi.org/10.1080/02699931.2022.2142525”>doi:10.1080/02699931.2022.2142525</a></li>
+                <li>Shahidi &amp; Hossain (2022). &ldquo;Role of Lipids in Food Flavor Generation.&rdquo; <em>Molecules</em> 27(15): 5014. <a href="https://doi.org/10.3390/molecules27155014">doi:10.3390/molecules27155014</a></li>
+                <li>Liu et al. (2022). &ldquo;Insights into flavor and key influencing factors of Maillard reaction products.&rdquo; <em>Frontiers in Nutrition</em> 9: 973677. <a href="https://doi.org/10.3389/fnut.2022.973677">doi:10.3389/fnut.2022.973677</a></li>
+                <li>Dubreuil &amp; Breslin (2012). &ldquo;Opponency of astringent and fat sensations.&rdquo; <em>Current Biology</em> 22(19): R829&ndash;R830. <a href="https://doi.org/10.1016/j.cub.2012.08.017">doi:10.1016/j.cub.2012.08.017</a></li>
+                <li>Wang et al. (2020). &ldquo;Physicochemical properties of native starches and their applications.&rdquo; <em>Foods</em> 9(8): 1073. <a href="https://doi.org/10.3390/foods9081073">doi:10.3390/foods9081073</a></li>
+                <li>Mao et al. (2025). &ldquo;Dynamic interaction of sweet and sour taste perceptions based on sucrose and citric acid.&rdquo; <em>npj Science of Food</em> 9: 152. <a href="https://doi.org/10.1038/s41538-025-00507-7">doi:10.1038/s41538-025-00507-7</a></li>
+                <li>Yamamoto et al. (2025). &ldquo;Pleasantness emotions and neural activity induced by the multimodal crispiness of monaka ice cream.&rdquo; <em>Frontiers in Nutrition</em> 12. <a href="https://doi.org/10.3389/fnut.2025.1681999">doi:10.3389/fnut.2025.1681999</a></li>
+                <li>Reid et al. (2023). &ldquo;Food-evoked nostalgia.&rdquo; <em>Cognition and Emotion</em> 37(1): 34&ndash;48. <a href="https://doi.org/10.1080/02699931.2022.2142525">doi:10.1080/02699931.2022.2142525</a></li>
               </ol>
             </div>
           </div>
-          <div class="terminal" aria-label="Example structured output">
+          <div class="terminal" aria-label="Example minimum viable nostalgia cue">
 <pre>{
   "title": "Minimum viable composed-bite cue",
   "format": "bite",
+  "effortMinutes": 15,
   "accessibilityPrinciples": [
     "use grocery-store carriers and proteins first",
     "test in one or two bites",
@@ -266,7 +293,11 @@
   "substituteLogic": [
     "Proteins and fats carry Maillard notes and fat-soluble aromatics.",
     "Starches control texture and sauce absorption.",
-    "Acid, sugar, and salt move the bite toward remembered balance."
+    "Acid, sugar, and salt move the bite toward the remembered balance."
+  ],
+  "followUpIfItWorks": [
+    "Ask which part hit first: smell, texture, sauce, fat, spice, or sweetness.",
+    "Use source_ingredients to help the user find items near where they live."
   ]
 }</pre>
           </div>
@@ -276,13 +307,13 @@
       <section id="examples">
         <div class="container">
           <div class="section-head">
-            <h2>Examples that don't start with a recipe.</h2>
-            <p>Each one follows the same path: gather what someone remembers, research, find the sensory trigger, test it with one bite.</p>
+            <h2>Real inputs. Not recipe searches.</h2>
+            <p>Each one follows the same path: gather what someone remembers, research, find the sensory trigger, test it with one bite, then help them find ingredients nearby.</p>
           </div>
           <div class="examples">
-            <article class="card example-card"><div><span class="tag">Name fragment</span><q>A crispy street snack in a paper cone. Chickpea-ish, hot, with green sauce and something dark-sweet.</q></div><small>Research candidate snack families. Isolate the fried crunch, the herb sauce, the sweet-acid contrast. Test one bite.</small></article>
-            <article class="card example-card"><div><span class="tag">Place + ingredient</span><q>A soup an aunt made once. Sour, pale, lots of dill, maybe dairy, but no one remembers the name.</q></div><small>Separate the acid source, herb aroma, fat body, and serving temperature. Test a one-cup aroma sip.</small></article>
-            <article class="card example-card"><div><span class="tag">Sensory plate</span><q>A chewy lunchbox rice cake with sesame-oil smell, browned edges, and a sweet-salty glaze.</q></div><small>Identify the starch texture, toasted fat aroma, browned edge, and sugar-salt balance. Test two bites.</small></article>
+            <article class="card example-card"><div><span class="tag">Sound-alike name</span><q>"My mom said my abuela made something that sounded like pass-teh-lay. Maybe plantains or pork?"</q></div><small>Match phonetic fragments against Puerto Rican wrapped-masa family. Test one bite of plantain with a spice bloom. Then find a shop that sells banana leaves near Orlando.</small></article>
+            <article class="card example-card"><div><span class="tag">Place + ingredient</span><q>"A soup my aunt made. Sour, pale, lots of dill, maybe dairy, but nobody remembers the name."</q></div><small>Separate the acid source, herb aroma, fat body, and serving temperature. Test a one-cup aroma sip. Find Eastern European or Central Asian shops nearby.</small></article>
+            <article class="card example-card"><div><span class="tag">Sensory plate</span><q>"I ate shark one time in Trinidad. Fried, in some kind of bread, with a green sauce."</q></div><small>Isolate the fried crunch, the bread carrier, the herb-chile condiment. Test two bites with cod and store-bought flatbread. Find a Caribbean market near Long Beach.</small></article>
           </div>
         </div>
       </section>
@@ -290,18 +321,28 @@
       <section id="install">
         <div class="container install">
           <div class="card">
-            <h2>Install in your AI agent</h2>
-            <p>Member Berries runs as a stdio MCP server. Point your agent at the built output and it's ready.</p>
-            <div class="cta-row"><a class="button primary" href="../../README.md">Read the README</a><a class="button secondary" href="../ARCHITECTURE.md">Architecture</a></div>
+            <h2>Add it to your AI agent</h2>
+            <p>Member Berries runs as a stdio MCP server. Build it, point your agent at the output, and it's ready.</p>
+            <div class="cta-row"><a class="button primary" href="../../README.md">Read the docs</a><a class="button secondary" href="../ARCHITECTURE.md">Architecture</a></div>
           </div>
           <div class="terminal">
 <pre>npm ci
 npm run build
 
-# Codex config example
+# Claude Code (.mcp.json)
+{
+  "mcpServers": {
+    "member-berries": {
+      "command": "node",
+      "args": ["/path/to/member-berries/dist/index.js"]
+    }
+  }
+}
+
+# Codex (~/.codex/config.toml)
 [mcp_servers.member_berries]
 command = "node"
-args = ["/absolute/path/to/member-berries/dist/index.js"]
+args = ["/path/to/member-berries/dist/index.js"]
 enabled = true
 startup_timeout_sec = 10</pre>
           </div>
@@ -313,10 +354,10 @@ startup_timeout_sec = 10</pre>
           <h2>Honesty is part of the experience.</h2>
           <p>Member Berries makes your AI more useful by making uncertainty visible and the next test smaller.</p>
           <ul>
-            <li>Your AI does the live research. Member Berries keeps it organized.</li>
-            <li>What someone remembers, what research found, what your AI guessed, and what's unknown — all labeled.</li>
-            <li>One bite comes before a full recipe. One grocery-store ingredient before specialty sourcing.</li>
-            <li>Store facts, citations, and sources — not copied recipe prose.</li>
+            <li>Your AI does the live research. Member Berries structures it.</li>
+            <li>What someone remembers, what research found, what the AI guessed, and what's unknown — all labeled.</li>
+            <li>One bite before a full recipe. One grocery-store ingredient before specialty sourcing.</li>
+            <li>After the cue works, help them find the real ingredients near where they live now.</li>
             <li>Food-memory work can be deeply meaningful. It is not a medical claim.</li>
           </ul>
         </div>
