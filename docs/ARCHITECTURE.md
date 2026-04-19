@@ -41,7 +41,7 @@ The server currently performs a research-first workflow:
 - resolves names from bundled dish-family data and ambiguity candidates
 - computes substitution candidates from bundled compound data
 - returns static regional availability hints
-- generates the minimum viable nostalgia cue as the default first food output
+- generates the minimum viable nostalgia cue as the default first food output, prioritizing easy/cheap/findable proxy ingredients and explicit substitute logic
 - returns bounded prompts for host-model sensory analysis, sourcing, regional comparison, and optional recipe generation
 
 The server does not browse the web itself. It can structure and validate source facts that a host AI supplies after using its own search/browsing tools, and future optional food-data providers can add structured lookups. Final natural-language recipe writing remains a host-model step and should happen only after the minimum viable nostalgia cue unless the user explicitly asks otherwise.

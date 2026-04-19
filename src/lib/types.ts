@@ -255,6 +255,8 @@ export interface MinimumViableNostalgiaCue {
   steps: string[];
   preserves: string[];
   doesNotPreserve: string[];
+  accessibilityPrinciples: string[];
+  substituteLogic: string[];
   whyThisIsMinimum: string;
   confidence: Confidence;
   safetyNotes: string[];

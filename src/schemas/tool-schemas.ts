@@ -248,6 +248,8 @@ export const minimumViableNostalgiaOutputSchema = z.object({
   steps: z.array(z.string()),
   preserves: z.array(z.string()),
   doesNotPreserve: z.array(z.string()),
+  accessibilityPrinciples: z.array(z.string()),
+  substituteLogic: z.array(z.string()),
   whyThisIsMinimum: z.string(),
   confidence: confidenceSchema,
   safetyNotes: z.array(z.string()),

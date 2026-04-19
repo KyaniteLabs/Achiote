@@ -425,130 +425,200 @@ function textSignals(input: MinimumViableNostalgiaInput): string {
   ].join(' ').toLowerCase();
 }
 
-export function generateMinimumViableNostalgiaCue(input: MinimumViableNostalgiaInput): MinimumViableNostalgiaCue {
-  const signals = textSignals(input);
-  const maxEffort = Math.max(1, input.maxEffortMinutes ?? 20);
-  const confidence = input.researchFindings?.confidence ?? input.dossier.confidence;
+type FoodScienceCueProfile = {
+  format: MinimumViableNostalgiaCue['format'];
+  title: string;
+  goal: string;
+  effortMinutes: number;
+  ingredients: MinimumViableNostalgiaCue['ingredients'];
+  steps: string[];
+  preserves: string[];
+  doesNotPreserve: string[];
+  accessibilityPrinciples: string[];
+  substituteLogic: string[];
+  whyThisIsMinimum: string;
+  safetyNotes: string[];
+  followUpIfItWorks: string[];
+};
 
-  const hasFriedStarchSignal = /\b(fried|fritter|golden|crispy|crisp)\b/.test(signals)
-    && /\b(yuca|cassava|manioc|masa|dough|starch|root vegetable)\b/.test(signals);
-  const hasStuffedOrFillingSignal = /\b(stuffed|filled|filling|picadillo|ground beef|seasoned beef|cheese)\b/.test(signals);
-  if (hasFriedStarchSignal && hasStuffedOrFillingSignal) {
-    return {
-      title: 'Minimum viable fried-starch memory cue',
-      goal: 'Test the strongest triggers of a fried stuffed starch: savory filling aroma plus a crispy-chewy starch bite, without shaping, stuffing, sealing, or frying a full batch.',
-      effortMinutes: Math.min(maxEffort, 20),
-      format: 'bite',
-      ingredients: [
-        { item: 'tiny amount of the likely filling protein, cheese, or vegetable substitute', amount: '2-4 tablespoons', purpose: 'filling aroma cue' },
-        { item: 'garlic/onion or the researched aromatic base', amount: '1 teaspoon each', purpose: 'first kitchen-smell trigger' },
-        { item: 'the researched signature spice or color seasoning', amount: 'small pinch', purpose: 'regional seasoning signal' },
-        { item: 'tomato paste, sauce, or another researched binder', amount: '1 teaspoon', purpose: 'savory filling base', optional: true },
-        { item: 'cooked yuca/cassava, masa, or the researched starch base', amount: '1-2 small pieces', purpose: 'crispy-chewy starch bite' },
-        { item: 'the researched table sauce or condiment', amount: 'a few drops', purpose: 'serving ritual cue', optional: true },
-      ],
-      steps: [
-        'Warm a little oil, then cook the aromatic base for about 30 seconds until fragrant.',
-        'Add the tiny amount of filling with the signature seasoning; cook only until the aroma blooms.',
-        'Separately pan-crisp the cooked starch pieces until the outside is golden and the inside stays tender or chewy.',
-        'Taste one starch bite with a spoonful of filling on top; do not shape, stuff, or seal anything yet.',
-        'Ask: did the fried-starch texture, filling aroma, or condiment finish feel like the memory? Only then decide whether the full labor-intensive version is worth making.',
-      ],
-      preserves: ['savory filling aroma', 'signature seasoning signal', 'crispy-chewy starch texture', 'small serving ritual'],
-      doesNotPreserve: ['final shape', 'sealed stuffed structure', 'deep-fried batch texture', 'family-specific filling ratio'],
-      whyThisIsMinimum: 'Fried stuffed starch dishes are labor-intensive because the full dish usually requires preparing the starch, making filling, shaping, sealing, and frying; this isolates the smell and bite that can confirm the memory before doing all that work.',
-      confidence,
-      safetyNotes: ['Use fully cooked root starches before crisping.', 'Keep the oil shallow and hot enough to crisp, not smoke.', 'Avoid condiments or fillings the user cannot safely eat.'],
-      followUpIfItWorks: [
-        'Ask whether the family filling was meat, cheese, beans, vegetables, or something else.',
-        'Ask whether the starch texture was smooth, chunky, buttery, dense, or stretchy.',
-        'If this cue hits, offer the user a fuller workflow for the researched dish as the next step.',
-      ],
-    };
-  }
+function hasAnySignal(text: string, patterns: RegExp[]): boolean {
+  return patterns.some((pattern) => pattern.test(text));
+}
 
-  if (/(banana leaves?|pasteles|sofrito|plantain|green banana|banana masa|plantain masa)/.test(signals)) {
-    const effortMinutes = Math.min(maxEffort, 15);
-    return {
-      title: 'Minimum viable pasteles memory cue',
-      goal: 'Create the fastest safe aroma/bite cue for the likely Puerto Rican pasteles memory without pretending to recreate the whole dish.',
-      effortMinutes,
-      format: 'aroma-cue',
-      ingredients: [
-        { item: 'banana leaf, fresh or frozen', amount: '1 small piece', purpose: 'steam aroma / family-holiday cue' },
-        { item: 'olive oil or neutral oil', amount: '1 teaspoon', purpose: 'carry aromatics' },
-        { item: 'sofrito or minced garlic, onion, cilantro/culantro if available', amount: '1 tablespoon', purpose: 'Puerto Rican seasoning signal' },
-        { item: 'cooked pork, chicken, beans, or mushrooms', amount: '2 tablespoons', purpose: 'savory filling cue', optional: true },
-        { item: 'ripe or green plantain chip / small boiled plantain piece', amount: '1-2 bites', purpose: 'plantain texture/flavor bridge', optional: true },
-      ],
-      steps: [
-        'Warm the banana leaf in a dry pan for 20-30 seconds until fragrant; do not burn it.',
-        'In the same pan, warm oil with sofrito or the closest aromatics for 1-2 minutes.',
-        'Add the small savory bite if using one and warm it through.',
-        'Smell the banana leaf and sofrito together before tasting the bite; that aroma cue is the point.',
-        'Stop here and ask whether the smell/seasoning feels familiar before attempting a full dish.',
-      ],
-      preserves: ['banana-leaf aroma', 'sofrito/savory seasoning signal', 'small plantain or masa-adjacent bite', 'family/holiday cooking cue'],
-      doesNotPreserve: ['full wrapped-packet technique', 'true masa texture', 'family-specific filling proportions', 'holiday batch-cooking ritual'],
-      whyThisIsMinimum: 'The likely strongest trigger is aroma plus seasoning, so this avoids a multi-hour wrapped pasteles process and tests the memory cue first.',
-      confidence,
-      safetyNotes: ['Use a food-safe banana leaf and wash it before warming.', 'Avoid any ingredient the user cannot eat or safely identify.'],
-      followUpIfItWorks: [
-        'Ask family whether the original was wrapped in leaves or layered in a dish.',
-        'Ask whether the filling was pork, chicken, beans, or something else.',
-        'If the aroma feels right, then consider a fuller pasteles or pastelón reconstruction.',
-      ],
-    };
-  }
+function wordSignal(words: string): RegExp {
+  return new RegExp(`\\b(${words})\\b`);
+}
 
-  if (/\b(soup|stew|broth|dill|lamb|greens|egusi)\b|\bmelon seeds\b|\bsour\b/.test(signals)) {
+function foodScienceCueProfile(signals: string): FoodScienceCueProfile {
+  const hasProteinOrFat = hasAnySignal(signals, [wordSignal('meat|sausage|fish|shark|beef|pork|chicken|lamb|cheese|fat|butter|oil|fried')]);
+  const hasStarchOrBase = hasAnySignal(signals, [wordSignal('starch|rice|potato|potatoes|mash|masa|dough|bread|yuca|cassava|plantain|dumpling|noodle|bean|beans')]);
+  const hasSauceOrCondiment = hasAnySignal(signals, [wordSignal('sauce|gravy|relish|chutney|salsa|condiment|dip|orange|creamy')]);
+  const hasLiquid = hasAnySignal(signals, [wordSignal('soup|stew|broth|sip|drink|porridge')]);
+  const hasAroma = hasAnySignal(signals, [wordSignal('aroma|smell|spice|spiced|seasoned|garlic|onion|herb|pepper|cumin|coriander|clove|nutmeg|cinnamon')]);
+  const hasTextureContrast = hasAnySignal(signals, [wordSignal('crispy|crunchy|chewy|creamy|soft|tender|stretchy|crisp|fried|grilled|charred|brown|golden')]);
+  const hasAcidOrSweet = hasAnySignal(signals, [wordSignal('sour|tangy|acid|vinegar|citrus|lime|lemon|fermented|sweet|syrup|molasses|sugar')]);
+
+  if (hasLiquid) {
     return {
-      title: 'Minimum viable soup/stew memory cue',
-      goal: 'Create a small aroma/sip test around the remembered sour-herbal or savory stew profile before attempting a full pot.',
-      effortMinutes: Math.min(maxEffort, 12),
+      title: 'Minimum viable aroma-sip cue',
+      goal: 'Test the memory through a one-cup liquid carrier that can isolate aroma, salt, fat, acid, and body before making a full pot.',
+      effortMinutes: 12,
       format: 'sip',
       ingredients: [
-        { item: 'small amount of broth or water', amount: '1 cup', purpose: 'carrier for aroma and taste' },
-        { item: 'remembered herb or spice', amount: 'pinch to 1 teaspoon', purpose: 'primary memory cue' },
-        { item: 'acid source such as lemon, vinegar, yogurt, or fermented ingredient', amount: 'a few drops to 1 teaspoon', purpose: 'sour/tangy cue', optional: true },
-        { item: 'tiny portion of remembered protein/vegetable if available', amount: '1-2 tablespoons', purpose: 'body and context', optional: true },
+        { item: 'water, broth, milk, or another cheap neutral liquid carrier', amount: '1 cup', purpose: 'volatile aroma and taste carrier' },
+        { item: 'small amount of the researched dominant aromatic or spice family', amount: 'pinch to 1 teaspoon', purpose: 'primary smell/taste trigger' },
+        { item: 'tiny fat source such as oil, butter, rendered fat, or coconut milk if relevant', amount: '1/4 to 1 teaspoon', purpose: 'carries fat-soluble aroma compounds', optional: true },
+        { item: 'acid/sweet/salt adjustment from pantry ingredients', amount: 'drops or pinches', purpose: 'balance sourness, sweetness, salinity, and brightness', optional: true },
       ],
       steps: [
-        'Warm the broth gently with the remembered herb or spice for 3-5 minutes.',
-        'Add the acid source a few drops at a time until the aroma/taste feels close, not necessarily delicious yet.',
-        'Taste one spoonful and note what memory appears: place, person, texture, or missing ingredient.',
-        'Use that reaction to decide what to research or ask family next.',
+        'Warm the liquid carrier gently; do not build a full dish.',
+        'Bloom the aromatic or spice cue briefly so volatile compounds reach the nose.',
+        'Add fat only if the memory needs richness or lingering aroma; fat carries many aroma compounds.',
+        'Adjust acid, sweetness, and salt one drop or pinch at a time, then sip once and stop.',
+        'Record whether aroma, body, acidity, or seasoning carried the memory before escalating.',
       ],
-      preserves: ['warm aroma cue', 'sour/tangy direction if remembered', 'herb/spice signal', 'small tasting ritual'],
-      doesNotPreserve: ['full stew body', 'long-cooked texture', 'regional ingredient specificity', 'complete recipe balance'],
-      whyThisIsMinimum: 'A single cup can test whether the remembered aroma and sourness are the right path before committing to a full dish.',
-      confidence,
-      safetyNotes: ['Do not use unknown wild herbs or unidentified ingredients.', 'Keep tasting amounts small while testing acid/salt balance.'],
-      followUpIfItWorks: ['Ask what the soup was served with.', 'Ask whether the sourness came from dairy, citrus, vinegar, or fermentation.'],
+      preserves: ['volatile aroma release', 'salt/acid/fat balance', 'warm sip ritual', 'body direction'],
+      doesNotPreserve: ['long-cooked body', 'complete ingredient list', 'full texture', 'regional specificity'],
+      accessibilityPrinciples: ['test in one cup', 'use pantry acid/salt/fat first', 'use the cheapest safe liquid carrier', 'avoid buying rare ingredients until the balance is directionally right'],
+      substituteLogic: [
+        'A liquid cue can test whether aroma, fat, acid, salt, and body are the real memory carriers.',
+        'Fat-soluble aromas need a little fat; water alone may taste flat even if the spice is correct.',
+        'Acid and salt change perception quickly, so they should be adjusted in drops/pinches rather than full-recipe amounts.',
+      ],
+      whyThisIsMinimum: 'A one-cup sip tests the chemistry of aroma release, body, acid, salt, and fat before wasting ingredients on a full pot.',
+      safetyNotes: ['Use only known edible ingredients.', 'Keep tasting amounts small while adjusting salt, acid, or heat.'],
+      followUpIfItWorks: ['Ask what gave the liquid body.', 'Ask whether the brightness came from citrus, vinegar, dairy, fermentation, or tomato.', 'Ask what texture or garnish is missing.'],
+    };
+  }
+
+  if (hasProteinOrFat || hasStarchOrBase || hasTextureContrast) {
+    return {
+      title: 'Minimum viable composed-bite cue',
+      goal: 'Test a tiny composed bite that isolates carrier, aroma/fat, texture, and balance without requiring exact specialty ingredients.',
+      effortMinutes: 15,
+      format: 'bite',
+      ingredients: [
+        { item: 'cheap grocery-store carrier matching the remembered base: starch, bread, potato, rice, bean, noodle, or cooked vegetable', amount: '1-2 bites', purpose: 'texture and sauce carrier' },
+        { item: 'small amount of accessible protein, fat, dairy, mushroom, bean, or plant-based substitute if relevant', amount: '1-2 tablespoons', purpose: 'fat/protein/umami carrier' },
+        { item: 'researched aromatic or spice direction using pantry spices/aromatics', amount: 'pinch to 1 teaspoon', purpose: 'volatile memory trigger', optional: true },
+        { item: 'acid/sweet/salt/fat adjustment', amount: 'drops or pinches', purpose: 'balance and mouthfeel control', optional: true },
+      ],
+      steps: [
+        'Prepare only the carrier and one small aroma/fat/protein element.',
+        'Use browning, toasting, frying, warming, or chilling only if that process is part of the remembered texture/aroma.',
+        'Add the researched spice/aromatic direction to the fat or protein so aroma compounds bloom.',
+        'Taste one composed bite and ask which mechanism hits: aroma, Maillard browning, fat richness, starch texture, acid/sweet balance, or contrast.',
+      ],
+      preserves: ['carrier texture', 'fat/aroma delivery', 'one-bite ritual', 'core balance signal'],
+      doesNotPreserve: ['exact specialty ingredient', 'full plating', 'full recipe process', 'family-specific proportions'],
+      accessibilityPrinciples: ['use grocery-store carriers and proteins first', 'test in one or two bites', 'use pantry aromatics before specialty sourcing', 'buy exact items only after the mechanism works'],
+      substituteLogic: [
+        'Proteins and fats are carriers for Maillard notes and fat-soluble aromatics; a cheap carrier can test the same chemistry before sourcing the exact item.',
+        'Starches and breads mainly control texture and sauce absorption, so a common starch can test whether the mouthfeel is central.',
+        'Acid, sugar, and salt can move a bite toward the remembered balance without changing the whole dish.',
+      ],
+      whyThisIsMinimum: 'A composed bite tests the reusable food-science mechanisms—aroma, fat, browning, starch texture, and balance—before committing to specialty shopping or a full recipe.',
+      safetyNotes: ['Cook proteins safely.', 'Avoid allergens and unknown ingredients.', 'Use high heat carefully if crisping or browning.'],
+      followUpIfItWorks: ['Ask which part hit first: smell, texture, sauce, fat, spice, or sweetness/acidity.', 'Ask what still feels missing.', 'Then decide whether specialty sourcing is worth it.'],
+    };
+  }
+
+  if (hasSauceOrCondiment) {
+    return {
+      title: 'Minimum viable sauce-and-carrier cue',
+      goal: 'Test whether the sauce/condiment contrast is carrying the memory using a tiny pantry sauce and a neutral carrier.',
+      effortMinutes: 10,
+      format: 'condiment',
+      ingredients: [
+        { item: 'neutral carrier such as bread, rice, potato, cracker, tortilla, or cooked starch', amount: '1-2 bites', purpose: 'bland base for judging sauce and texture' },
+        { item: 'pantry sauce base matching the researched direction: tomato, dairy, oil, vinegar, fruit, chile, or stock', amount: '1 tablespoon', purpose: 'cheap proxy for the sauce family' },
+        { item: 'aromatic/spice cue from researched facts', amount: 'pinch', purpose: 'volatile aroma trigger', optional: true },
+        { item: 'acid, sugar, salt, or fat adjustment', amount: 'drops or pinches', purpose: 'balance and mouthfeel tuning', optional: true },
+      ],
+      steps: [
+        'Make only one tablespoon of sauce proxy, not a batch.',
+        'Tune it by food-science dimensions: fat for body, acid for brightness, sugar for roundness, salt for intensity, spice/aromatics for memory.',
+        'Taste it on the neutral carrier so texture and sauce can be judged together.',
+        'Change one variable at a time and note what suddenly feels familiar or wrong.',
+      ],
+      preserves: ['sauce contrast', 'carrier-plus-condiment ritual', 'fat/acid/sweet/salt balance', 'aroma impact'],
+      doesNotPreserve: ['exact brand or restaurant sauce', 'complete dish structure', 'full garnish set'],
+      accessibilityPrinciples: ['start from pantry sauce bases', 'test one tablespoon', 'use a neutral grocery-store carrier', 'adjust balance before sourcing specialty condiments'],
+      substituteLogic: [
+        'Sauces are often families of fat, water, acid, sugar, salt, heat, and aromatics; matching that balance can matter more than matching the name.',
+        'A bland carrier exposes whether the sauce is the memory trigger or merely background.',
+        'One-variable adjustments prevent a generic sauce from becoming a confused full recipe.',
+      ],
+      whyThisIsMinimum: 'A tablespoon of sauce on a neutral carrier tests the contrast and balance that often carries the nostalgic bite.',
+      safetyNotes: ['Check condiment allergens and chile heat.', 'Do not mix unknown fermented or wild ingredients.'],
+      followUpIfItWorks: ['Ask whether the sauce was smooth or chunky.', 'Ask whether it leaned fatty, acidic, sweet, spicy, or savory.', 'Ask what carrier it was served on.'],
+    };
+  }
+
+  if (hasAroma || hasAcidOrSweet) {
+    return {
+      title: 'Minimum viable aroma-balance cue',
+      goal: 'Test the likely memory through smell and taste balance before picking a full dish format.',
+      effortMinutes: 8,
+      format: 'aroma-cue',
+      ingredients: [
+        { item: 'safe pantry aromatic, spice, herb, fat, acid, or sweetener matching the researched clue', amount: 'pinch, drop, or tiny piece', purpose: 'single sensory variable' },
+        { item: 'neutral carrier such as oil, water, bread, rice, or potato', amount: 'small amount', purpose: 'makes the cue smellable or tasteable', optional: true },
+      ],
+      steps: [
+        'Warm, dilute, or taste only the single strongest sensory clue.',
+        'Smell first, then taste a tiny amount on a neutral carrier if safe.',
+        'Do not add a second variable until the first one is judged familiar or wrong.',
+      ],
+      preserves: ['single aroma or balance cue', 'low-cost sensory testing', 'user reaction as evidence'],
+      doesNotPreserve: ['dish identity', 'full texture', 'complete recipe'],
+      accessibilityPrinciples: ['test one pantry variable', 'spend almost nothing', 'avoid specialty shopping until a cue works'],
+      substituteLogic: [
+        'When identity is uncertain, isolating one aroma or balance dimension gives cleaner evidence than cooking a full dish.',
+        'Neutral carriers prevent strong ingredients from being mistaken for complete recipes.',
+      ],
+      whyThisIsMinimum: 'One sensory variable is the cheapest way to learn whether the reconstruction is moving toward or away from the memory.',
+      safetyNotes: ['Use only safe edible ingredients.', 'Do not taste unidentified wild plants or unknown powders.'],
+      followUpIfItWorks: ['Ask what dish format carried that aroma or balance.', 'Ask what texture or sauce belonged with it.'],
     };
   }
 
   return {
-    title: 'Minimum viable food-memory cue',
-    goal: 'Test the strongest available sensory clue with the least effort before attempting a full reconstruction.',
-    effortMinutes: Math.min(maxEffort, 10),
+    title: 'Minimum viable memory-probe cue',
+    goal: 'Gather one more sensory datapoint before pretending to reconstruct a dish.',
+    effortMinutes: 5,
     format: 'ritual',
     ingredients: [
-      { item: 'one remembered ingredient or closest safe substitute', amount: 'small tasting amount', purpose: 'primary cue' },
-      { item: 'one remembered aroma component', amount: 'pinch or small piece', purpose: 'smell cue', optional: true },
-      { item: 'neutral carrier such as bread, rice, broth, or oil', amount: 'small amount', purpose: 'make the cue tasteable', optional: true },
+      { item: 'no specialty ingredient yet', amount: 'none', purpose: 'avoid false certainty and wasted shopping' },
+      { item: 'one safe remembered ingredient only if the user already has it', amount: 'tiny amount', purpose: 'optional sensory probe', optional: true },
     ],
     steps: [
-      'Prepare only the remembered smell or bite, not the whole dish.',
-      'Smell first, then taste a small amount.',
-      'Write down what feels familiar and what feels wrong.',
-      'Use the reaction to guide the next research or family question.',
+      'Ask the user for one concrete sensory detail: smell, texture, sauce, temperature, spice/heat, acid/sweetness, or serving format.',
+      'If they have a safe remembered ingredient already, smell or taste a tiny amount on a neutral carrier.',
+      'Use that reaction to choose a bite, sip, sauce, or aroma cue next.',
     ],
-    preserves: input.dossier.nostalgiaCriticalElements.slice(0, 3),
-    doesNotPreserve: ['full recipe', 'full texture', 'family-specific method'],
-    whyThisIsMinimum: 'The memory is still uncertain, so the lowest-risk move is a tiny sensory probe rather than a full dish.',
-    confidence: 'Low',
-    safetyNotes: ['Use only safe, known ingredients.', 'Avoid allergens and unknown substitutions.'],
-    followUpIfItWorks: input.dossier.whatToAskFamily.slice(0, 3),
+    preserves: ['uncertainty', 'user memory as evidence', 'low-cost next step'],
+    doesNotPreserve: ['dish identity', 'recipe structure', 'source specificity'],
+    accessibilityPrinciples: ['buy nothing yet', 'ask for the highest-value missing sensory detail', 'only test safe ingredients already available'],
+    substituteLogic: [
+      'Without a sensory mechanism, any ingredient purchase is guesswork.',
+      'The next useful proxy depends on whether the memory is carried by aroma, texture, sauce, fat, acid, sweetness, or ritual.',
+    ],
+    whyThisIsMinimum: 'The cheapest correct move is not a recipe; it is one more sensory clue that determines what kind of cue to test.',
+    safetyNotes: ['Do not taste unknown ingredients.', 'Avoid allergens.'],
+    followUpIfItWorks: ['Use the new sensory clue to build a focused bite, sip, sauce, or aroma cue.'],
+  };
+}
+
+export function generateMinimumViableNostalgiaCue(input: MinimumViableNostalgiaInput): MinimumViableNostalgiaCue {
+  const signals = textSignals(input);
+  const maxEffort = Math.max(1, input.maxEffortMinutes ?? 20);
+  const confidence = input.researchFindings?.confidence ?? input.dossier.confidence;
+  const profile = foodScienceCueProfile(signals);
+
+  return {
+    ...profile,
+    effortMinutes: Math.min(maxEffort, profile.effortMinutes),
+    confidence: profile.title === 'Minimum viable memory-probe cue' ? 'Low' : confidence,
   };
 }

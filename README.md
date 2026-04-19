@@ -56,7 +56,7 @@ Member Berries is a research-first food-memory reconstruction server. It provide
 | Substitution | `find_sensory_substitutes` | Returns compound/group-matched substitutes from bundled ingredient data, plus regional hints when available. |
 | Sourcing | `source_ingredients` | Returns static regional store/corridor hints and a host-model prompt for sourcing. It does not perform live inventory or price lookup. |
 | Regional comparison | `discover_regional_similars` | Returns bundled dish-family context and a host-model prompt for neighboring/regional comparisons. |
-| Minimum viable nostalgia cue | `generate_minimum_viable_nostalgia` | Produces the smallest practical aroma, bite, sip, condiment, or ritual to test the likely memory trigger before attempting a full recipe. |
+| Minimum viable nostalgia cue | `generate_minimum_viable_nostalgia` | Produces the smallest practical aroma, bite, sip, condiment, or ritual to test the likely memory trigger before attempting a full recipe. It prioritizes cheap, accessible, easy-to-find proxies and explains the substitute logic instead of defaulting to exact specialty ingredients. |
 | Optional recipe handoff | `generate_recipe` | Returns an expected recipe schema and a bounded host-model prompt for recipe generation and self-critique. Use only after the minimum viable cue has been presented and the user wants something more complex. |
 
 All tools return MCP `structuredContent`. Most tools also display JSON text; intake tools may display a short human-readable summary so Claude Code output stays readable while structured data remains available to the host.
@@ -76,7 +76,7 @@ food memory fragment
   -> optional generate_recipe            # only if the user wants more
 ```
 
-This executes through the full MCP workflow and is covered by `tests/reconstruction-flow-e2e.test.ts`. The preferred stopping point is the **minimum viable nostalgia cue**: the smallest aroma, bite, sip, condiment, or ritual that tests whether the memory is on the right track. If the user asks for more, the MCP server can then provide sourcing/substitution context and a recipe-generation **handoff**. The host AI writes final recipe prose because live research, family confirmation, and adaptation judgment should not be faked by bundled data.
+This executes through the full MCP workflow and is covered by `tests/reconstruction-flow-e2e.test.ts`. The preferred stopping point is the **minimum viable nostalgia cue**: the smallest, most accessible, easiest-to-find aroma, bite, sip, condiment, or ritual that tests whether the memory is on the right track. If the user asks for more, the MCP server can then provide sourcing/substitution context and a recipe-generation **handoff**. The host AI writes final recipe prose because live research, family confirmation, and adaptation judgment should not be faked by bundled data.
 
 ## Requirements
 
