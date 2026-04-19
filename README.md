@@ -4,6 +4,37 @@ Member Berries is a **Model Context Protocol (MCP)** server for research-first f
 
 > "The nostalgia lives in the maillard crust's interaction with the lactic tang — here's how to reproduce that."
 
+## Super Quick Start
+
+From this repo:
+
+```bash
+npm ci
+npm run build
+mkdir -p ~/.codex/skills/member-berries
+cp skill/SKILL.md ~/.codex/skills/member-berries/SKILL.md
+```
+
+Add the MCP server to your host config:
+
+```toml
+[mcp_servers.member_berries]
+command = "node"
+args = ["/Users/simongonzalezdecruz/workspaces/member-berries/dist/index.js"]
+enabled = true
+startup_timeout_sec = 10
+```
+
+Restart the host AI session, then test with:
+
+```text
+Use the member-berries skill.
+
+My mom said my Puerto Rican grandma made something that sounded like pass-teh-lay. I don't speak Spanish. Maybe plantains or pork?
+```
+
+Expected behavior: the host AI should use the MCP tools to collect the memory, plan research, build a dossier, ask family follow-up questions, and offer a minimum viable nostalgia cue before any full recipe handoff.
+
 ## What It Does Today
 
 Member Berries is a research-first food-memory reconstruction server. It provides 13 MCP tools that let a host AI chat client run the whole workflow from a fragment to a recipe-generation handoff:

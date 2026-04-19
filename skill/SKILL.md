@@ -1,6 +1,6 @@
 ---
 name: member-berries
-description: Reverse engineer nostalgic dishes using ingredients available where the user is. Triggers on: food memory, nostalgic recipe, recreate dish, miss eating, home cooking, traditional food, heritage food.
+description: "Reverse engineer nostalgic dishes using ingredients available where the user is. Triggers on: food memory, nostalgic recipe, recreate dish, miss eating, home cooking, traditional food, heritage food."
 ---
 
 # Member Berries
