@@ -71,6 +71,17 @@ describe('agent guardrails', () => {
     expect(cue.substituteLogic.length).toBeGreaterThanOrEqual(2);
     expect(cue.accessibilityPrinciples.join(' ')).toMatch(/grocery|pantry|cheap|accessible|specialty/i);
     expect(cue.substituteLogic.join(' ')).toMatch(/fat|aroma|starch|acid|salt|sugar|maillard|texture/i);
+
+    expect(cue.components.length).toBeGreaterThanOrEqual(1);
+    for (const comp of cue.components) {
+      expect(comp.criticalElement.length, 'component criticalElement must not be empty').toBeGreaterThan(0);
+      expect(comp.substitutionReason.length, 'component substitutionReason must not be empty').toBeGreaterThan(0);
+    }
+    const allComponentText = cue.components.map((c) => `${c.criticalElement} ${c.substitutionReason}`).join(' ');
+    const dishSpecific = ['boerewors', 'chakalaka', 'carimañola', 'pasteles', 'sofrito'];
+    for (const forbidden of dishSpecific) {
+      expect(allComponentText, `component text must not contain ${forbidden}`).not.toContain(forbidden);
+    }
   });
 
   it('keeps README scoped to MCP and skill usage, not business planning', () => {
