@@ -81,6 +81,18 @@ describe('food memory reconstruction e2e flow', () => {
         ]),
       });
 
+      const minimumCue = await client.callTool({
+        name: 'generate_minimum_viable_nostalgia',
+        arguments: { dossier: dossier.structuredContent, maxEffortMinutes: 15 },
+      });
+      expect(minimumCue.isError).not.toBe(true);
+      expect(minimumCue.structuredContent).toMatchObject({
+        title: expect.stringContaining('Minimum viable'),
+        ingredients: expect.any(Array),
+        steps: expect.any(Array),
+        doesNotPreserve: expect.any(Array),
+      });
+
       const sensory = await client.callTool({
         name: 'analyze_nostalgic_dish',
         arguments: {

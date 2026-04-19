@@ -8,6 +8,7 @@ import {
   buildReconstructionDossier,
   collectFoodMemory,
   generateFamilyFollowupQuestions,
+  generateMinimumViableNostalgiaCue,
   planDishResearch,
 } from './lib/memory-workflow.js';
 import { buildResearchRecord, extractResearchFindings, validateResearchRecord } from './lib/research-provenance.js';
@@ -23,6 +24,8 @@ import {
   findSensorySubstitutesOutputSchema,
   generateFamilyFollowupQuestionsOutputSchema,
   generateRecipeOutputSchema,
+  minimumViableNostalgiaInputSchema,
+  minimumViableNostalgiaOutputSchema,
   dishResearchPlanSchema,
   planDishResearchOutputSchema,
   researchFindingsOutputSchema,
@@ -461,6 +464,26 @@ For each similar dish:
         return structuredJsonResult(result);
       } catch (error) {
         return toolError(error, 'discover_regional_similars_failed');
+      }
+    },
+  );
+
+
+  server.registerTool(
+    'generate_minimum_viable_nostalgia',
+    {
+      title: 'Generate Minimum Viable Nostalgia Cue',
+      description:
+        'Create the smallest practical aroma, bite, sip, condiment, or ritual that tests the likely memory trigger without attempting a full recipe recreation.',
+      inputSchema: minimumViableNostalgiaInputSchema.shape,
+      outputSchema: minimumViableNostalgiaOutputSchema,
+      annotations: readOnlyAnnotations,
+    },
+    async (input) => {
+      try {
+        return structuredJsonResult({ ...generateMinimumViableNostalgiaCue(input) });
+      } catch (error) {
+        return toolError(error, 'generate_minimum_viable_nostalgia_failed');
       }
     },
   );

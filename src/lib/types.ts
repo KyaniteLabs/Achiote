@@ -236,3 +236,27 @@ export interface ResearchFindingsForDossier {
   sourceCount: number;
   confidence: Confidence;
 }
+
+
+export interface MinimumViableNostalgiaInput {
+  dossier: ReconstructionDossier;
+  researchFindings?: ResearchFindingsForDossier;
+  userLocation?: string;
+  constraints?: string[];
+  maxEffortMinutes?: number;
+}
+
+export interface MinimumViableNostalgiaCue {
+  title: string;
+  goal: string;
+  effortMinutes: number;
+  format: 'aroma-cue' | 'bite' | 'sip' | 'condiment' | 'ritual' | 'shopping-shortcut';
+  ingredients: Array<{ item: string; amount: string; purpose: string; optional?: boolean }>;
+  steps: string[];
+  preserves: string[];
+  doesNotPreserve: string[];
+  whyThisIsMinimum: string;
+  confidence: Confidence;
+  safetyNotes: string[];
+  followUpIfItWorks: string[];
+}

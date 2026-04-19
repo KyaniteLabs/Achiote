@@ -23,6 +23,7 @@ describe('Member Berries MCP server', () => {
         'extract_research_findings',
         'find_sensory_substitutes',
         'generate_family_followup_questions',
+        'generate_minimum_viable_nostalgia',
         'generate_recipe',
         'plan_dish_research',
         'resolve_dish_name',
