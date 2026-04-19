@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for improving Member Berries.
+Thanks for improving Member Berries, the current repository codename for a research-first food-memory reconstruction MCP/skill core.
 
 ## Development setup
 

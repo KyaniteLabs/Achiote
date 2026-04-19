@@ -2,6 +2,8 @@
 
 ## Completed foundation
 
+The current repository is a working MCP/skill core, not yet the finished consumer product. “Member Berries” remains a codename.
+
 - Structured MCP outputs and output schemas
 - Clean-checkout tests
 - Package hygiene and CI
@@ -32,7 +34,7 @@ Provider-backed research should be opt-in and privacy-documented. A strong imple
 
 ## Later: recipe generation quality loop
 
-- Add schema-validated final recipe output after host-model synthesis
+- Add schema-validated final recipe output after host-model synthesis, plus tests that a host-provided recipe object satisfies the schema
 - Add self-critique rubric around nostalgia-critical elements
 - Add user feedback loop to update target sensory profile
 - Add confidence decomposition per sensory element
