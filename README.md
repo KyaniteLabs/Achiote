@@ -148,6 +148,23 @@ See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
 
 Food-evoked nostalgia should be handled as a sensory-memory workflow, not as a medical claim. The server preserves evidence boundaries: user memory, host-researched facts, model inference, and unknowns stay separate so the host can cite real sources and avoid pretending bundled data is research.
 
+The bundled food-science references in `src/data/food-science-references.json` organize peer-reviewed research by mechanism area. Each entry includes a DOI for verification. The 12 mechanism areas are:
+
+| Mechanism | What it means for reconstruction | Key source |
+|-----------|----------------------------------|------------|
+| Fat-soluble aromatics | Cooking fat is the primary carrier of aroma compounds; changing the fat changes the flavor | Shahidi & Hossain (2022). doi:10.3390/molecules27155014 |
+| Maillard browning | The specific browning profile is a chemical signature matching amino acids, sugars, temperature, and time | Liu et al. (2022). doi:10.3389/fnut.2022.973677 |
+| Astringency-fat opponency | Fat and astringency are perceptual opponents; the balance between them is nostalgia-critical | Dubreuil & Breslin (2012). doi:10.1016/j.cub.2012.08.017 |
+| Starch texture | Amylose/amylopectin ratio determines texture; different starch sources produce measurably different outcomes | Wang et al. (2020). doi:10.3390/foods9081073 |
+| Sweet-sour balance | Sweet and sour suppress each other at certain ratios; the balance point is culturally conditioned | Mao et al. (2025). doi:10.1038/s41538-025-00507-7 |
+| Crispiness and nostalgia | Crispy textures activate auditory and somatosensory regions simultaneously, making them particularly memorable | Yamamoto et al. (2025). doi:10.3389/fnut.2025.1681999 |
+| Food-evoked nostalgia | Food memories engage hippocampus, amygdala, and olfactory cortex simultaneously, producing vivid involuntary recall | Reid et al. (2023). doi:10.1080/02699931.2022.2142525 |
+| Umami synergy | IMP and GMP amplify glutamate sensitivity by up to 15x; traditional cuisines pair glutamate and nucleotide sources | Zhang et al. (2008). doi:10.1073/pnas.0810174106 |
+| Salt taste complexity | Salt perception involves multiple receptor pathways; salt also functions as a flavor amplifier beyond its own taste | Taruno & Gordon (2023). doi:10.1146/annurev-physiol-031522-075853 |
+| Temperature-taste interaction | TRPM5 (sweet/bitter/umami transduction) is heat-activated; warm foods taste sweeter and more flavorful | Talavera et al. (2007). doi:10.1007/s00018-006-6384-0 |
+| Fermentation flavor | Lactic acid bacteria produce volatiles not present in raw ingredients; the fermentation profile is the nostalgia trigger | Liu et al. (2019). doi:10.3389/fmicb.2019.02183 |
+| Cross-cultural texture | Texture preferences vary by dietary experience, not physiology; nostalgia-driven texture expectations are learned | Ahne et al. (2022). doi:10.1016/j.foodres.2020.109890 |
+
 ## License
 
 MIT

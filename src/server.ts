@@ -15,6 +15,7 @@ import {
 import { buildResearchRecord, extractResearchFindings, validateResearchRecord } from './lib/research-provenance.js';
 import sensoryProfilesData from './data/sensory-profiles.json' with { type: 'json' };
 import dishFamiliesData from './data/dish-families.json' with { type: 'json' };
+import foodScienceRefs from './data/food-science-references.json' with { type: 'json' };
 import {
   analyzeNostalgicDishOutputSchema,
   buildReconstructionDossierOutputSchema,

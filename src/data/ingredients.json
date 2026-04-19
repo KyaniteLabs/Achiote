@@ -1,7 +1,13 @@
 {
   "meta": {
-    "version": "0.1.0",
-    "description": "Ingredient to volatile compound mappings for chemistry-aware substitution"
+    "version": "0.2.0",
+    "description": "Ingredient to volatile compound mappings for chemistry-aware substitution",
+    "compoundDataSources": [
+      "Shahidi, F. & Hossain, Md. A. (2022). Role of Lipids in Food Flavor Generation. Molecules, 27(15), 5014. doi:10.3390/molecules27155014",
+      "Liu, S. et al. (2022). Insights into flavor and key influencing factors of Maillard reaction products. Frontiers in Nutrition, 9, 973677. doi:10.3389/fnut.2022.973677",
+      "Zhang, F. et al. (2008). Molecular mechanism for the umami taste synergism. PNAS, 105(52), 20930–20934. doi:10.1073/pnas.0810174106",
+      "Yamamoto, T. & Inui-Yamamoto, C. (2023). The flavor-enhancing action of glutamate. npj Science of Food, 7, 3. doi:10.1038/s41538-023-00178-2"
+    ]
   },
   "ingredients": {
     "cumin-seeds": {
