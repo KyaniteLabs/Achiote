@@ -22,7 +22,7 @@
     "visual": {
       "description": "Appearance, color, and presentation",
       "categories": ["color", "gloss", "uniformity", "portion-shape", "serving-vessel"],
-      "nostalgiaIndicators": ["specific color from local ingredient", "rustic vs refined appearance", "serving context"]
+      "nostalgiaIndicators": ["specific color from region-specific ingredient", "rustic vs refined appearance", "serving context"]
     },
     "temperature": {
       "description": "Serving temperature and thermal mouth dynamics",

@@ -33,7 +33,7 @@ export function findSubstitutes(ingredientKey: string): SubstitutionResult[] {
         compoundMatch: Math.round(finalScore * 100) / 100,
         confidence,
         reasoning: `Shared compounds: ${overlap.join(', ') || 'none directly'}. Both in ${sameGroup ? 'same' : 'different'} flavor group (${target.substitutionGroup} vs ${candidate.substitutionGroup}). Aroma comparison: "${target.sensoryContribution.aroma}" vs "${candidate.sensoryContribution.aroma}".`,
-        availableAt: 'Use source_ingredients tool for specific local availability',
+        availableAt: 'Use source_ingredients tool for availability where the user is',
       });
     }
   }

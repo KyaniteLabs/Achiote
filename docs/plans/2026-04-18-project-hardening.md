@@ -10,13 +10,13 @@
 
 ## Design summary
 
-The initial product line remains: a local MCP server that helps a host model reverse-engineer nostalgic dishes. This pass intentionally does not add external research providers or new dependencies. Instead, it upgrades the project from prototype scaffolding to a trustworthy base:
+The initial product line remains: a stdio MCP server that helps a host model reverse-engineer nostalgic dishes. This pass intentionally does not add external research providers or new dependencies. Instead, it upgrades the project from prototype scaffolding to a trustworthy base:
 
 - MCP tools expose typed structured results while retaining JSON text for compatibility.
-- Tool descriptions and server instructions clearly separate deterministic local analysis from host-model follow-up prompts.
+- Tool descriptions and server instructions clearly separate deterministic bundled analysis from host-model follow-up prompts.
 - Runtime cache creation is safe in clean clones and configurable through environment variables.
 - Tests run in clean checkouts and cover the actual MCP server registration path.
-- Package metadata prevents accidental publication of local runtime state.
+- Package metadata prevents accidental publication of runtime state.
 - Remote best-practice files establish CI, Dependabot, security policy, and contribution paths.
 - README and skill docs stop overclaiming live web/search behavior until provider adapters exist.
 
@@ -31,7 +31,7 @@ The initial product line remains: a local MCP server that helps a host model rev
 1. Run `npm test` in a fresh worktree and capture the expected failure: cache tests fail when `data/` does not exist.
 2. Add a focused ResearchCache test proving constructor creates parent directories.
 3. Implement minimal parent-directory creation before `new Database(dbPath)`.
-4. Move MCP cache integration tests to temp directories so they no longer depend on repo-local untracked `data/`.
+4. Move MCP cache integration tests to temp directories so they no longer depend on untracked `data/`.
 5. Run `npm test`.
 
 ## Task 2: Modern MCP structured output contracts
@@ -67,7 +67,7 @@ The initial product line remains: a local MCP server that helps a host model rev
 3. Add ignore rules for `.omx/`, `.omc/`, `.worktrees/`, runtime DB sidecars, coverage, and temp logs.
 4. Add CI with `npm ci`, build, tests, audit, and pack dry-run.
 5. Add Dependabot and basic repo governance docs.
-6. Run `npm pack --dry-run --json` and verify local state is excluded.
+6. Run `npm pack --dry-run --json` and verify runtime state is excluded.
 
 ## Task 4: Documentation truth and product roadmap
 
@@ -78,7 +78,7 @@ The initial product line remains: a local MCP server that helps a host model rev
 - Create: `docs/ROADMAP.md`
 
 **Steps:**
-1. Update README to describe current deterministic local capabilities honestly.
+1. Update README to describe current deterministic bundled capabilities honestly.
 2. Document MCP setup, privacy/cache behavior, Node support, clean install, and limitations.
 3. Update skill guidance so external web research providers are optional host capabilities, not bundled implementation.
 4. Add architecture and roadmap docs with clear next steps for real provider-backed research.

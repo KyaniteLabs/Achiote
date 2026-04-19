@@ -1,13 +1,13 @@
 ---
 name: member-berries
-description: Reverse engineer nostalgic dishes using locally available ingredients. Triggers on: food memory, nostalgic recipe, recreate dish, miss eating, home cooking, traditional food, heritage food.
+description: Reverse engineer nostalgic dishes using ingredients available where the user is. Triggers on: food memory, nostalgic recipe, recreate dish, miss eating, home cooking, traditional food, heritage food.
 ---
 
 # Member Berries
 
 Working codename: “Member Berries” is not the final public product name.
 
-Culinary reverse engineering that recreates the **sensory triggers** of nostalgic dishes using locally available ingredients.
+Culinary reverse engineering that recreates the **sensory triggers** of nostalgic dishes using ingredients available where the user is.
 
 ## When to Use
 
