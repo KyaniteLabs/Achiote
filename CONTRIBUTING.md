@@ -22,7 +22,8 @@ npm run typecheck
 npm run build
 npm test
 npm audit --audit-level=moderate
-npm pack --dry-run
+npm run package:smoke
+npm run pack:check
 ```
 
 ## Design principles

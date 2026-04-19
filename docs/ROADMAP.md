@@ -1,22 +1,17 @@
 # Roadmap
 
-## Now: trustworthy local MCP base
+## Completed foundation
 
 - Structured MCP outputs and output schemas
-- Clean checkout tests
+- Clean-checkout tests
 - Package hygiene and CI
-- Honest docs about current local/static behavior
+- Self-hosted CI runner documentation and branch protection
 - Configurable private local cache path
+- Research-first memory workflow tools (`collect_food_memory`, `plan_dish_research`, dossier/family-question tools)
+- Typed research provenance records and cache helpers
+- End-to-end MCP regression from memory fragment to recipe-generation handoff
 
-## Next: data quality and cultural specificity
-
-- Add JSON schemas for data files and validate them in tests
-- Add source/provenance fields to food chemistry and cultural datasets
-- Expand the first canonical dish plus regional variant model beyond the initial tortilla/egg-dish ambiguity slice
-- Broaden multiple-candidate name resolution with scores and ambiguity flags across more overloaded names
-- Add dietary/allergen/religious constraints to substitutions
-
-## Later: provider-backed research mode
+## Next: provider-backed research mode
 
 Provider-backed research should be opt-in and privacy-documented. A strong implementation would include:
 
@@ -25,10 +20,26 @@ Provider-backed research should be opt-in and privacy-documented. A strong imple
 - cache writes with TTL and source metadata
 - explicit offline mode
 - tests with recorded fixtures, not live network flakiness
+- copyright-safe extraction rules: store facts and citations, not copied recipe prose
+
+## Next: data quality and cultural specificity
+
+- Expand provenance/source fields in bundled food chemistry and cultural datasets
+- Expand the first canonical dish plus regional variant model beyond the initial tortilla/egg-dish ambiguity slice
+- Broaden multiple-candidate name resolution with scores and ambiguity flags across more overloaded names
+- Move broad ingredient/research hint vocabulary into configurable data rather than code constants
+- Add dietary/allergen/religious constraints to substitutions
 
 ## Later: recipe generation quality loop
 
-- Add schema-validated final recipe output
+- Add schema-validated final recipe output after host-model synthesis
 - Add self-critique rubric around nostalgia-critical elements
 - Add user feedback loop to update target sensory profile
 - Add confidence decomposition per sensory element
+
+## Later: business/product surfaces
+
+- Hosted SaaS around the MCP core
+- Family food-memory archive export
+- Premium researched dish dossier
+- Shelf-stable ingredient/snack kit experiments after source/provenance and safety policies are mature

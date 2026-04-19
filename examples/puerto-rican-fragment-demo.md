@@ -1,6 +1,6 @@
-# Demo: Puerto Rican food-memory fragment
+# Example: Puerto Rican food-memory fragment
 
-This is a runnable conversation fixture for the skill/MCP flow. It is not a hardcoded source of culinary truth; it demonstrates how the agent should behave when the user has a fragment.
+This is a runnable conversation example for the skill/MCP flow. It is not a hardcoded source of culinary truth; it demonstrates how the agent should behave when the user has a fragment.
 
 ## User starts
 
@@ -21,7 +21,7 @@ This is a runnable conversation fixture for the skill/MCP flow. It is not a hard
    - Was it tied to Christmas/holidays or a particular relative?
 6. If the user answers, continue research/adaptation. If not, build a best-effort `build_reconstruction_dossier` and label unknowns.
 
-## What the demo proves
+## What the example proves
 
 - The product can start from a misspelled/sound-alike family memory.
 - It does not shame the user for not speaking the language.

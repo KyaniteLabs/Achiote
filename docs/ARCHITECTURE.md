@@ -1,6 +1,6 @@
 # Architecture
 
-Member Berries is a local TypeScript MCP server for culinary nostalgia workflows. It provides deterministic structured context and bounded prompts that a host model can use to reconstruct recipes from food memories.
+Member Berries is a local TypeScript MCP server for research-first food-memory reconstruction. It provides deterministic structured context, typed provenance contracts, cache helpers, and bounded prompts that a host model can use to reconstruct recipes from food memories.
 
 ## Runtime shape
 
@@ -24,6 +24,7 @@ src/index.ts
               +--> src/lib/name-resolver.ts
               +--> src/lib/substitution-engine.ts
               +--> src/lib/research-cache.ts
+              +--> src/lib/research-provenance.ts
               +--> src/data/*.json
 ```
 
@@ -33,6 +34,8 @@ The server currently performs a local, research-first workflow:
 
 - structures food-memory fragments into clues and next questions
 - plans dish research with hypotheses, source preferences, and facts to verify
+- converts host-researched source facts into typed research provenance records
+- validates and summarizes research records for dossier handoff
 - builds an evidence-separated reconstruction dossier
 - generates family follow-up questions
 - resolves names from bundled dish-family data and ambiguity candidates
@@ -40,7 +43,7 @@ The server currently performs a local, research-first workflow:
 - returns static regional availability hints
 - returns bounded prompts for host-model sensory analysis, sourcing, regional comparison, and recipe generation
 
-It does **not** currently perform live web search, geocoding, inventory lookup, pricing lookup, source extraction, or deterministic final recipe synthesis. Those remain host-model/provider-backed steps.
+It does **not** currently perform live web search, geocoding, inventory lookup, pricing lookup, or deterministic final recipe synthesis. It can structure and validate source facts that a host AI or future provider adapter supplies, but the fetching/extraction from external sites remains a host-model/provider-backed step.
 
 ## Data assets
 
@@ -51,7 +54,7 @@ It does **not** currently perform live web search, geocoding, inventory lookup, 
 
 ## Cache
 
-`ResearchCache` stores optional research data in SQLite. By default the CLI uses:
+`ResearchCache` stores optional research data in SQLite and can store/retrieve typed `ResearchRecord` JSON. By default the CLI uses:
 
 ```text
 $MEMBER_BERRIES_CACHE_PATH

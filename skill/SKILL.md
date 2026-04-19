@@ -51,20 +51,25 @@ Member Berries is a food-memory reconstruction skill. The recipe is not the star
    Use available host web/search tools to investigate names, regional variants, ingredients, techniques, and sensory cues.
    Treat sources as evidence, not gospel. Prefer community, regional, bilingual, recipe-with-context, and technique sources.
 
-6. LEDGER → Separate evidence types
+6. PROVENANCE → Convert sources into typed records
+   Use `build_research_record` for host-researched source facts.
+   Use `validate_research_record` before trusting the record downstream.
+   Use `extract_research_findings` to pass researched facts, inferred signals, and unknowns into the dossier.
+
+7. LEDGER → Separate evidence types
    Track every claim as one of:
    - User said
    - Researched
    - Inferred
    - Unknown / needs family confirmation
 
-7. DOSSIER → Reconstruction artifact
+8. DOSSIER → Reconstruction artifact
    Use `build_reconstruction_dossier` to produce a food memory dossier with hypotheses, evidence, sensory priorities, and adaptation strategy.
 
-8. FAMILY LOOP → Connection questions
+9. FAMILY LOOP → Connection questions
    Use `generate_family_followup_questions` to give the user gentle questions to ask relatives.
 
-9. RECREATE → Recipe only after enough grounding
+10. RECREATE → Recipe only after enough grounding
    If the likely dish and critical sensory triggers are clear, use the existing sensory/substitution/sourcing/recipe tools to create an adapted recipe.
    If not clear, present a best-effort path and say exactly what is uncertain.
 ```
