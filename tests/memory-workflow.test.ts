@@ -79,6 +79,14 @@ describe('research-first food memory workflow', () => {
     expect(memory.nextQuestions.join(' ')).toContain('How was the shark served');
     expect(memory.nextQuestions.join(' ')).not.toContain('wrapped in leaves');
   });
+
+  it('normalizes curry and curried cooking-method clues without duplicate hints', () => {
+    const curryMemory = collectFoodMemory({ memoryText: 'I remember fish curry from Trinidad.' });
+    const curriedMemory = collectFoodMemory({ memoryText: 'I remember curried fish from Trinidad.' });
+
+    expect(curryMemory.missingInformation).not.toContain('cooking method or serving format');
+    expect(curriedMemory.missingInformation).not.toContain('cooking method or serving format');
+  });
 });
 
 describe('general research planning', () => {

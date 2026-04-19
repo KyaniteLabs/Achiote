@@ -61,8 +61,7 @@ const COOKING_METHOD_HINTS = [
   'boiled',
   'steamed',
   'stewed',
-  'curried',
-  'curry',
+  'curry/curried',
   'sandwich',
   'bread',
   'broth',
@@ -105,7 +104,9 @@ function extractPossibleNames(text: string): string[] {
 }
 
 function extractCookingMethodHints(text: string): string[] {
-  return COOKING_METHOD_HINTS.filter((hint) => text.includes(hint));
+  return COOKING_METHOD_HINTS.filter((hint) => (
+    hint === 'curry/curried' ? /\bcurr(?:y|ied)\b/.test(text) : text.includes(hint)
+  ));
 }
 
 function buildMissingInformation(input: {
