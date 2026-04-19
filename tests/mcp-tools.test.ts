@@ -208,7 +208,7 @@ describe('generate_recipe schema integration', () => {
         fillingFlavor: 'Medium' as Confidence,
       },
       whatsDifferent:
-        'Using locally available flour instead of Polish type 450',
+        'Using available flour instead of Polish type 450',
     };
     expect(recipe.title).toBeTruthy();
     expect(recipe.ingredients.length).toBeGreaterThan(0);

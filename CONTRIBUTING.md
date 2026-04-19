@@ -28,11 +28,11 @@ npm run pack:check
 
 ## Design principles
 
-- Be honest about deterministic local data versus host-model inference.
+- Be honest about deterministic bundled data versus host-model inference.
 - Preserve cultural specificity: prefer regional variants and uncertainty over broad flattening.
 - Keep user memories private; do not add network providers without explicit privacy documentation.
 - Add tests before changing behavior.
-- Keep package contents intentional; never publish local `.omx/`, `.omc/`, cache DBs, or transcripts.
+- Keep package contents intentional; never publish `.omx/`, `.omc/`, cache DBs, or transcripts.
 
 ## Commit messages
 

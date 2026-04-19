@@ -61,7 +61,7 @@ export interface RecipeOutput {
 
 export interface SourcingResult {
   ingredient: string;
-  localStores: { name: string; address?: string; notes?: string }[];
+  storesWhereUserIs: { name: string; address?: string; notes?: string }[];
   onlineSources: { retailer: string; url?: string; price?: string }[];
 }
 

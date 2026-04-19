@@ -1,7 +1,7 @@
 {
   "name": "member-berries",
   "version": "0.1.0",
-  "description": "Culinary reverse engineering MCP server — recreates nostalgic dishes using locally available ingredients",
+  "description": "Culinary reverse engineering MCP server — recreates nostalgic dishes using ingredients available where the user is",
   "main": "dist/index.js",
   "type": "module",
   "scripts": {

@@ -8,7 +8,7 @@ The current repository is a working MCP/skill core, not yet the finished consume
 - Clean-checkout tests
 - Package hygiene and CI
 - Self-hosted CI runner documentation and branch protection
-- Configurable private local cache path
+- Configurable private cache path
 - Research-first memory workflow tools (`collect_food_memory`, `plan_dish_research`, dossier/family-question tools)
 - Typed research provenance records and cache helpers
 - End-to-end MCP regression from memory fragment to recipe-generation handoff
