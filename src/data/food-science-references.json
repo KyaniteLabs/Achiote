@@ -1,0 +1,256 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "description": "Citation-backed food-science mechanisms for nostalgic dish reconstruction",
+    "lastUpdated": "2026-04-19",
+    "scope": "Peer-reviewed research supporting the sensory chemistry, taste perception, and food-evoked memory mechanisms referenced by MCP tools and the skill definition. Citations are organized by mechanism area. Each entry includes a DOI for verification."
+  },
+  "mechanisms": {
+    "fat-soluble-aromatics": {
+      "summary": "Many aroma compounds in spices and herbs are lipophilic (fat-soluble), not water-soluble. Fat carries and releases these volatiles during cooking and on the palate, which is why blooming spices in oil and finishing dishes with fat are effective techniques for aroma delivery.",
+      "practicalImplication": "When reconstructing a nostalgic dish, the cooking fat is not just a medium — it is the primary carrier of aroma compounds. Substituting the fat changes which volatiles reach the olfactory system.",
+      "sources": [
+        {
+          "id": "shahidi-hossain-2022",
+          "citation": "Shahidi, F. & Hossain, Md. A. (2022). Role of Lipids in Food Flavor Generation. Molecules, 27(15), 5014.",
+          "doi": "10.3390/molecules27155014",
+          "keyFindings": [
+            "Lipids act as solvents for volatile aroma compounds, controlling their release during cooking and mastication",
+            "Lipid-derived volatiles (aldehydes, ketones, alcohols, esters, furans) are generated through oxidation and thermal reactions",
+            "The type of lipid influences which aroma compounds are available for perception"
+          ]
+        }
+      ]
+    },
+    "maillard-browning": {
+      "summary": "The Maillard reaction between amino acids and reducing sugars produces hundreds of flavor compounds responsible for the characteristic tastes of browned, roasted, and toasted foods. It is temperature-dependent and accelerates above 140°C.",
+      "practicalImplication": "The specific browning profile of a nostalgic dish — the crust on bread, the sear on meat, the toast on spices — is a Maillard signature. Reproducing it requires matching the amino-acid/sugar substrate and the temperature/time profile, not just the visual color.",
+      "sources": [
+        {
+          "id": "liu-maillard-2022",
+          "citation": "Liu, S. et al. (2022). Insights into flavor and key influencing factors of Maillard reaction products. Frontiers in Nutrition, 9, 973677.",
+          "doi": "10.3389/fnut.2022.973677",
+          "keyFindings": [
+            "Maillard reaction generates pyrazines, furans, thiazoles, and other heterocyclic compounds responsible for roasted, nutty, and caramel aromas",
+            "Reaction pathway and product profile depend on temperature, time, pH, water activity, and the specific amino acids and sugars present",
+            "Different amino acids produce distinct flavor profiles (e.g., cysteine yields meaty sulfur notes; proline yields bready notes)"
+          ]
+        }
+      ]
+    },
+    "astringency-fat-opponency": {
+      "summary": "Astringency (from tannins, tea, unripe fruit) and fat sensation act as perceptual opponents. Fat reduces the perception of astringency, and vice versa. This is why many traditional dishes pair astringent elements with rich, fatty ones.",
+      "practicalImplication": "When a nostalgic dish includes both an astringent component (tea, pomegranate, certain greens) and a fatty one, the balance between them is a nostalgia-critical element. Removing or replacing the fat without accounting for this interaction will change the mouthfeel.",
+      "sources": [
+        {
+          "id": "dubreuil-breslin-2012",
+          "citation": "Dubreuil, L. & Breslin, P. A. S. (2012). Opponency of astringent and fat sensations. Current Biology, 22(19), R829–R830.",
+          "doi": "10.1016/j.cub.2012.08.017",
+          "keyFindings": [
+            "Astringency and fattiness are perceptual opponents — each reduces the perceived intensity of the other",
+            "This opponency likely evolved to signal the nutritional state of foods (ripe/fatty vs unripe/astringent)",
+            "The interaction occurs at the perceptual level, not just at the chemical level"
+          ]
+        }
+      ]
+    },
+    "starch-texture": {
+      "summary": "Starch gelatinization, retrogradation, and amylose/amylopectin ratios create distinct textures in cooked grains, noodles, and doughs. Different starch sources (rice, wheat, potato, corn, tapioca) produce measurably different textural outcomes.",
+      "practicalImplication": "The chew, stretch, or crumb of a nostalgic starch-based food is determined by its starch composition. Substituting one starch source for another (e.g., wheat flour for rice flour) changes the texture in predictable, measurable ways.",
+      "sources": [
+        {
+          "id": "wang-starch-2020",
+          "citation": "Wang, K. et al. (2020). Physicochemical properties of native starches and their applications. Foods, 9(8), 1073.",
+          "doi": "10.3390/foods9081073",
+          "keyFindings": [
+            "Amylose-to-amylopectin ratio is the primary determinant of starch texture after cooking",
+            "Gelatinization temperature ranges differ significantly across starch sources: rice 68–78°C, wheat 52–62°C, potato 56–68°C, corn 62–72°C",
+            "Retrogradation behavior (staling/setting) varies by starch source and affects texture over time"
+          ]
+        }
+      ]
+    },
+    "sweet-sour-balance": {
+      "summary": "Sweet and sour tastes interact dynamically, not additively. At certain ratios, each suppresses the perceived intensity of the other. The balance point is culturally conditioned and dish-specific.",
+      "practicalImplication": "A nostalgic dish's sweet-sour profile is not just about how much sugar or acid is added. The ratio and the order of perception matter. Small changes to the acid source (vinegar vs citrus vs tamarind) shift the balance.",
+      "sources": [
+        {
+          "id": "mao-sweet-sour-2025",
+          "citation": "Mao, X. et al. (2025). Dynamic interaction of sweet and sour taste perceptions based on sucrose and citric acid. npj Science of Food, 9, 152.",
+          "doi": "10.1038/s41538-025-00507-7",
+          "keyFindings": [
+            "Sweet and sour tastes exhibit mutual suppression at certain concentration ratios",
+            "The temporal perception curve differs: sweetness peaks faster while sourness persists longer",
+            "Cultural exposure influences the preferred sweet-sour balance point"
+          ]
+        }
+      ]
+    },
+    "crispiness-and-nostalgia": {
+      "summary": "Crispy textures produce distinct auditory and somatosensory signals that the brain associates with freshness and pleasure. The multimodal nature of crispiness (sound + feel + fracture pattern) makes it particularly memorable and nostalgia-evoking.",
+      "practicalImplication": "If a nostalgic food was crispy, the sound and fracture pattern are part of the memory. A substitution that changes the crispy element (e.g., baking instead of frying) may preserve flavor but lose the nostalgia trigger.",
+      "sources": [
+        {
+          "id": "yamamoto-crispy-2025",
+          "citation": "Yamamoto, C. et al. (2025). Pleasantness emotions and neural activity induced by the multimodal crispiness of monaka ice cream. Frontiers in Nutrition, 12.",
+          "doi": "10.3389/fnut.2025.1681999",
+          "keyFindings": [
+            "Crispiness activates both auditory cortex and somatosensory regions simultaneously",
+            "The combination of crispy texture with soft interior (as in ice cream monaka) produces heightened pleasantness ratings compared to either texture alone",
+            "Multimodal texture contrast is a stronger driver of positive emotional response than unimodal texture"
+          ]
+        }
+      ]
+    },
+    "food-evoked-nostalgia": {
+      "summary": "Food is a particularly potent trigger for nostalgic emotions because flavor memories engage the hippocampus (memory), amygdala (emotion), and olfactory cortex simultaneously. This triple engagement makes food-evoked nostalgia more vivid and involuntary than other types of nostalgia.",
+      "practicalImplication": "The goal of dish reconstruction is not culinary accuracy — it is sensory-memory reactivation. Identifying which 1-3 sensory elements carry the emotional charge is more important than reproducing every ingredient.",
+      "sources": [
+        {
+          "id": "reid-nostalgia-2023",
+          "citation": "Reid, C. A. et al. (2023). Food-evoked nostalgia. Cognition and Emotion, 37(1), 34–48.",
+          "doi": "10.1080/02699931.2022.2142525",
+          "keyFindings": [
+            "Food-evoked nostalgia activates memory, emotion, and reward neural circuits simultaneously",
+            "Nostalgic food memories are more vivid and involuntary than other nostalgic memories",
+            "The emotional intensity is linked to the social context of the original eating occasion, not just the food itself"
+          ]
+        }
+      ]
+    },
+    "umami-synergy": {
+      "summary": "Umami taste from glutamate is synergistically amplified by 5'-ribonucleotides (IMP, GMP). IMP alone may not taste like anything at typical concentrations, but it can increase sensitivity to glutamate by up to 15-fold. This synergy is the principle behind many traditional ingredient pairings (tomato + parmesan, dashi + bonito, mushroom + soy sauce).",
+      "practicalImplication": "When reconstructing a savory nostalgic dish, pairing a glutamate source with a nucleotide source reproduces the synergistic umami depth. Missing this pairing is a common reason a reconstruction tastes 'flat' compared to the memory.",
+      "sources": [
+        {
+          "id": "zhang-umami-2008",
+          "citation": "Zhang, F. et al. (2008). Molecular mechanism for the umami taste synergism. Proceedings of the National Academy of Sciences, 105(52), 20930–20934.",
+          "doi": "10.1073/pnas.0810174106",
+          "keyFindings": [
+            "L-glutamate binds near the hinge region of the T1R1 Venus flytrap domain, while 5'-ribonucleotides bind at an adjacent site that stabilizes the closed conformation",
+            "IMP at 200 μM can increase glutamate taste sensitivity by 15-fold without producing umami taste on its own",
+            "The cooperative binding model explains why traditional cuisines worldwide combine glutamate-rich and nucleotide-rich ingredients"
+          ]
+        },
+        {
+          "id": "yamamoto-kokumi-2023",
+          "citation": "Yamamoto, T. & Inui-Yamamoto, C. (2023). The flavor-enhancing action of glutamate and its mechanism involving the notion of kokumi. npj Science of Food, 7, 3.",
+          "doi": "10.1038/s41538-023-00178-2",
+          "keyFindings": [
+            "MSG has two distinct effects: inducing umami taste and enhancing overall palatability through kokumi (mouthfulness, continuity, thickness)",
+            "Kokumi substances enhance the intensity of umami, sweet, salty, and fatty tastes",
+            "Palatable cuisines worldwide contain high amounts of glutamate, inosinate, and guanylate regardless of cultural or regional differences"
+          ]
+        }
+      ]
+    },
+    "salt-taste-complexity": {
+      "summary": "Salt taste is mediated by multiple receptor pathways: ENaC (epithelial sodium channel) for low-concentration pleasant saltiness, and aversive pathways for high concentrations. Both sodium and chloride ions contribute to salt perception. Salt also functions as a flavor amplifier beyond its own taste.",
+      "practicalImplication": "Reducing salt in a nostalgic dish reduces more than just saltiness — it suppresses overall flavor perception. If substituting for health reasons, the replacement needs to address both the direct salt taste and the flavor-amplification function.",
+      "sources": [
+        {
+          "id": "taruno-salt-2023",
+          "citation": "Taruno, A. & Gordon, M. D. (2023). Molecular and Cellular Mechanisms of Salt Taste. Annual Review of Physiology, 85, 25–45.",
+          "doi": "10.1146/annurev-physiol-031522-075853",
+          "keyFindings": [
+            "Salt taste uses multiple opposing pathways: ENaC-mediated attraction at low concentrations and aversive pathways at high concentrations",
+            "Chloride ions contribute to salt perception independently of sodium, through both T1r receptors and TMC4 channels",
+            "The concentration-valence relationship (pleasant at low, aversive at high) is conserved across terrestrial animals"
+          ]
+        },
+        {
+          "id": "kasahara-tmc4-2024",
+          "citation": "Kasahara, M. et al. (2024). The complexities of salt taste reception: insights into the role of TMC4 in chloride taste detection. Frontiers in Molecular Neuroscience.",
+          "doi": "10.3389/fnmol.2024.1468438",
+          "keyFindings": [
+            "TMC4 is the first identified molecule that mediates chloride taste detection in taste buds",
+            "TMC4 functions as a voltage-dependent chloride channel",
+            "NaCl saltiness depends on both sodium and chloride — the anion effect is real and measurable"
+          ]
+        }
+      ]
+    },
+    "temperature-taste-interaction": {
+      "summary": "Temperature significantly modulates taste perception at the receptor level. The TRPM5 channel, critical for sweet, bitter, and umami taste transduction, is heat-activated — which is why warm foods taste sweeter and more flavorful. Cooling suppresses these pathways.",
+      "practicalImplication": "A nostalgic dish served at the wrong temperature will taste fundamentally different even if the ingredients are identical. Serving temperature is a nostalgia-critical variable, especially for sweet, umami, and bitter foods.",
+      "sources": [
+        {
+          "id": "talavera-temperature-2007",
+          "citation": "Talavera, K. et al. (2007). Influence of temperature on taste perception. Cellular and Molecular Life Sciences, 64, 377.",
+          "doi": "10.1007/s00018-006-6384-0",
+          "keyFindings": [
+            "TRPM5, the ion channel essential for sweet, bitter, and umami taste transduction, is strongly activated by warm temperatures",
+            "Heat activation of TRPM5 explains why warm foods taste sweeter and more intensely flavored",
+            "Cold activation of ENaC and heat activation of TRPV1t underlie the temperature dependence of salt responses",
+            "Temperature affects taste at the molecular transduction level, not just at the cognitive level"
+          ]
+        }
+      ]
+    },
+    "fermentation-flavor": {
+      "summary": "Lactic acid bacteria and other microorganisms produce a wide range of volatile flavor compounds during fermentation — including aldehydes, ketones, alcohols, esters, and organic acids. These compounds are not present in the raw ingredients and are the defining sensory characteristics of fermented foods.",
+      "practicalImplication": "The distinctive flavor of a fermented nostalgic food (yogurt, kimchi, sauerkraut, dosa batter, sourdough) cannot be replicated with non-fermented substitutes. The fermentation profile is itself the nostalgia trigger.",
+      "sources": [
+        {
+          "id": "liu-fermentation-2019",
+          "citation": "Liu, W. et al. (2019). Volatile Flavor Compounds Profile and Fermentation Characteristics of Milk Fermented by Lactobacillus delbrueckii subsp. bulgaricus. Frontiers in Microbiology, 10, 2183.",
+          "doi": "10.3389/fmicb.2019.02183",
+          "keyFindings": [
+            "86 distinct volatile flavor compounds were identified in fermented milk, including carboxylic acids, aldehydes, ketones, alcohols, esters, and aromatic hydrocarbons",
+            "Key odorants identified by odor activity value include acetaldehyde (fresh/yogurt), 2,3-butanedione (butter), and various aldehydes (green/nutty)",
+            "Different LAB strains produce measurably different volatile profiles from the same substrate"
+          ]
+        }
+      ]
+    },
+    "cross-cultural-texture": {
+      "summary": "Texture preferences vary across cultures due to differences in dietary experience, not physiological differences. Studies comparing populations find similar detection thresholds but different preference patterns, suggesting that nostalgia-driven texture expectations are learned.",
+      "practicalImplication": "When adapting a nostalgic dish for local ingredients, the texture expectation is culturally specific. A chewy, gelatinous, or stringy texture that is prized in one culture may be unfamiliar in another. The nostalgia trigger may be a texture that is unusual in the user's current location.",
+      "sources": [
+        {
+          "id": "ahne-crosscultural-2022",
+          "citation": "Ahne, G. et al. (2022). Effect of cross-cultural differences on thickness, firmness and sweetness sensitivity. Food Research International, 152, 109890.",
+          "doi": "10.1016/j.foodres.2020.109890",
+          "keyFindings": [
+            "Thickness, firmness, and sweetness detection thresholds do not differ significantly between Dutch and Chinese adults",
+            "Saliva flow rate, fungiform papillae density, and PROP taster status do not explain inter-individual variation in texture sensitivity",
+            "Differences in food preferences across cultures are driven by dietary experience rather than physiological sensitivity"
+          ]
+        }
+      ]
+    }
+  },
+  "landingPageClaims": {
+    "description": "Maps each food-science claim on the landing page to its supporting source",
+    "claims": [
+      {
+        "claim": "Fat carries most aroma compounds because they are lipophilic, not water-soluble",
+        "sourceId": "shahidi-hossain-2022"
+      },
+      {
+        "claim": "The Maillard reaction between amino acids and sugars produces the characteristic flavors of browned, roasted, and toasted food",
+        "sourceId": "liu-maillard-2022"
+      },
+      {
+        "claim": "Fat and astringency are perceptual opponents — each reduces the perceived intensity of the other",
+        "sourceId": "dubreuil-breslin-2012"
+      },
+      {
+        "claim": "Different starches produce measurably different textures after cooking, driven by their amylose-to-amylopectin ratio",
+        "sourceId": "wang-starch-2020"
+      },
+      {
+        "claim": "Sweet and sour tastes interact dynamically, not additively — each can suppress the other at certain ratios",
+        "sourceId": "mao-sweet-sour-2025"
+      },
+      {
+        "claim": "Crispy textures activate auditory and somatosensory regions simultaneously, making them particularly memorable",
+        "sourceId": "yamamoto-crispy-2025"
+      },
+      {
+        "claim": "Food-evoked nostalgia activates memory, emotion, and reward circuits simultaneously, making it more vivid than other nostalgic memories",
+        "sourceId": "reid-nostalgia-2023"
+      }
+    ]
+  }
+}
