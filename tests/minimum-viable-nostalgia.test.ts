@@ -64,7 +64,7 @@ describe('minimum viable nostalgia cue', () => {
     expect(cue.whyThisIsMinimum).toContain('multi-hour');
   });
 
-  it('starts carimañola with a picadillo and yuca cue, not a generic soup cue', () => {
+  it('starts a researched fried yuca memory with a filling and starch cue, not a generic soup cue', () => {
     const cue = generateMinimumViableNostalgiaCue({
       dossier: carimanolaDossier(),
       researchFindings: {
@@ -83,13 +83,14 @@ describe('minimum viable nostalgia cue', () => {
       maxEffortMinutes: 20,
     });
 
-    expect(cue.title).toContain('carimañola');
+    expect(cue.title).toContain('fried-starch');
     expect(cue.title).not.toContain('soup');
+    expect(cue.title).not.toContain('carimañola');
     expect(cue.format).toBe('bite');
     expect(cue.effortMinutes).toBeLessThanOrEqual(20);
     expect(cue.ingredients.map((ingredient) => ingredient.item).join(' ')).toMatch(/yuca|cassava/);
-    expect(cue.steps.join(' ')).toContain('do not shape or stuff anything yet');
-    expect(cue.whyThisIsMinimum).toContain('labor-intensive');
+    expect(cue.steps.join(' ')).toContain('do not shape, stuff, or seal anything yet');
+    expect(cue.whyThisIsMinimum).toContain('Fried stuffed starch dishes are labor-intensive');
   });
 
   it('uses the soup cue for unresolved sour soup memories', () => {

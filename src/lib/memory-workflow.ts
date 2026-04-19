@@ -292,36 +292,39 @@ export function generateMinimumViableNostalgiaCue(input: MinimumViableNostalgiaI
   const maxEffort = Math.max(1, input.maxEffortMinutes ?? 20);
   const confidence = input.researchFindings?.confidence ?? input.dossier.confidence;
 
-  if (/(carimañola|carimanola|carimanolas|carimañolas|fried yuca|fried cassava|yuca roll|cassava roll|picadillo)/.test(signals)) {
+  const hasFriedStarchSignal = /\b(fried|fritter|golden|crispy|crisp)\b/.test(signals)
+    && /\b(yuca|cassava|manioc|masa|dough|starch|root vegetable)\b/.test(signals);
+  const hasStuffedOrFillingSignal = /\b(stuffed|filled|filling|picadillo|ground beef|seasoned beef|cheese)\b/.test(signals);
+  if (hasFriedStarchSignal && hasStuffedOrFillingSignal) {
     return {
-      title: 'Minimum viable carimañola memory cue',
-      goal: 'Test the two strongest carimañola triggers first: picadillo aroma and a crispy-chewy yuca bite, without stuffing, shaping, or deep-frying a full batch.',
+      title: 'Minimum viable fried-starch memory cue',
+      goal: 'Test the strongest triggers of a fried stuffed starch: savory filling aroma plus a crispy-chewy starch bite, without shaping, stuffing, sealing, or frying a full batch.',
       effortMinutes: Math.min(maxEffort, 20),
       format: 'bite',
       ingredients: [
-        { item: 'ground beef or a meatless crumble', amount: '2-4 tablespoons', purpose: 'tiny picadillo aroma/filling cue' },
-        { item: 'garlic and onion, minced', amount: '1 teaspoon each', purpose: 'first kitchen-smell trigger' },
-        { item: 'cumin plus achiote or paprika', amount: 'small pinch of each', purpose: 'Panamanian picadillo seasoning signal' },
-        { item: 'tomato paste or tomato sauce', amount: '1 teaspoon', purpose: 'savory red picadillo base', optional: true },
-        { item: 'frozen or cooked yuca/cassava', amount: '1-2 small pieces', purpose: 'crispy-chewy starch bite' },
-        { item: 'aji chombo or habanero-style hot sauce', amount: 'a few drops', purpose: 'serving-table cue', optional: true },
+        { item: 'tiny amount of the likely filling protein, cheese, or vegetable substitute', amount: '2-4 tablespoons', purpose: 'filling aroma cue' },
+        { item: 'garlic/onion or the researched aromatic base', amount: '1 teaspoon each', purpose: 'first kitchen-smell trigger' },
+        { item: 'the researched signature spice or color seasoning', amount: 'small pinch', purpose: 'regional seasoning signal' },
+        { item: 'tomato paste, sauce, or another researched binder', amount: '1 teaspoon', purpose: 'savory filling base', optional: true },
+        { item: 'cooked yuca/cassava, masa, or the researched starch base', amount: '1-2 small pieces', purpose: 'crispy-chewy starch bite' },
+        { item: 'the researched table sauce or condiment', amount: 'a few drops', purpose: 'serving ritual cue', optional: true },
       ],
       steps: [
-        'Warm a little oil, then cook the garlic and onion for about 30 seconds until fragrant.',
-        'Add the tiny amount of beef or meatless crumble with cumin, achiote or paprika, salt, and tomato paste; cook only until the aroma blooms.',
-        'Separately pan-crisp the cooked yuca pieces until the outside is golden and the inside stays chewy.',
-        'Taste one yuca bite with a spoonful of picadillo on top; do not shape or stuff anything yet.',
-        'Ask: did the frying-yuca texture, picadillo smell, or hot-sauce finish feel like the memory? Only then decide whether a full carimañola batch is worth the work.',
+        'Warm a little oil, then cook the aromatic base for about 30 seconds until fragrant.',
+        'Add the tiny amount of filling with the signature seasoning; cook only until the aroma blooms.',
+        'Separately pan-crisp the cooked starch pieces until the outside is golden and the inside stays tender or chewy.',
+        'Taste one starch bite with a spoonful of filling on top; do not shape, stuff, or seal anything yet.',
+        'Ask: did the fried-starch texture, filling aroma, or condiment finish feel like the memory? Only then decide whether the full labor-intensive version is worth making.',
       ],
-      preserves: ['picadillo aroma', 'cumin/achiote/garlic seasoning signal', 'crispy-chewy yuca texture', 'small hot-sauce serving ritual'],
-      doesNotPreserve: ['torpedo shape', 'sealed stuffed filling', 'deep-fried batch texture', 'your family-specific filling ratio'],
-      whyThisIsMinimum: 'Carimañolas are labor-intensive because the full dish requires boiling, mashing, stuffing, sealing, and frying; this isolates the smell and bite that can confirm the memory before doing all that work.',
+      preserves: ['savory filling aroma', 'signature seasoning signal', 'crispy-chewy starch texture', 'small serving ritual'],
+      doesNotPreserve: ['final shape', 'sealed stuffed structure', 'deep-fried batch texture', 'family-specific filling ratio'],
+      whyThisIsMinimum: 'Fried stuffed starch dishes are labor-intensive because the full dish usually requires preparing the starch, making filling, shaping, sealing, and frying; this isolates the smell and bite that can confirm the memory before doing all that work.',
       confidence,
-      safetyNotes: ['Use fully cooked yuca; remove any tough woody core.', 'Keep the oil shallow and hot enough to crisp, not smoke.', 'Avoid hot sauce if the user cannot tolerate chile heat.'],
+      safetyNotes: ['Use fully cooked root starches before crisping.', 'Keep the oil shallow and hot enough to crisp, not smoke.', 'Avoid condiments or fillings the user cannot safely eat.'],
       followUpIfItWorks: [
-        'Ask whether the family filling was beef, chicken, cheese, or something else.',
-        'Ask whether the yuca dough was smooth, chunky, buttery, or plain.',
-        'If this cue hits, offer the user a fuller carimañola workflow as the next step.',
+        'Ask whether the family filling was meat, cheese, beans, vegetables, or something else.',
+        'Ask whether the starch texture was smooth, chunky, buttery, dense, or stretchy.',
+        'If this cue hits, offer the user a fuller workflow for the researched dish as the next step.',
       ],
     };
   }

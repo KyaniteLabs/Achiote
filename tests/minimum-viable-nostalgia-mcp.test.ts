@@ -43,7 +43,7 @@ describe('minimum viable nostalgia MCP tool', () => {
     });
   });
 
-  it('does not return a generic soup cue for carimañola dossiers', async () => {
+  it('does not return a generic soup cue for researched fried yuca dossiers', async () => {
     await withClient(async (client) => {
       const memory = await client.callTool({
         name: 'collect_food_memory',
@@ -81,11 +81,12 @@ describe('minimum viable nostalgia MCP tool', () => {
 
       expect(cue.isError).not.toBe(true);
       expect(cue.structuredContent).toMatchObject({
-        title: expect.stringContaining('carimañola'),
+        title: expect.stringContaining('fried-starch'),
         format: 'bite',
-        whyThisIsMinimum: expect.stringContaining('labor-intensive'),
+        whyThisIsMinimum: expect.stringContaining('Fried stuffed starch dishes are labor-intensive'),
       });
       expect(JSON.stringify(cue.structuredContent)).not.toContain('soup/stew');
+      expect(JSON.stringify(cue.structuredContent)).not.toContain('carimañola');
     });
   });
 
