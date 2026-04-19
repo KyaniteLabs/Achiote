@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Member Berries — Food-memory reconstruction for AI agents</title>
+  <meta name="description" content="Member Berries is a Model Context Protocol server that helps AI hosts reconstruct nostalgic food memories through research, provenance, sensory analysis, and food-science-backed minimum viable nostalgia cues." />
+  <style>
+    :root {
+      --cream: #fff7e8;
+      --cream-2: #f8ead0;
+      --ink: #24131c;
+      --muted: #6f5b61;
+      --plum: #4a1635;
+      --plum-2: #6c2450;
+      --tamarind: #9b4a1b;
+      --sofrito: #2d6a4f;
+      --mint: #cfe8d8;
+      --saffron: #f2b84b;
+      --card: rgba(255, 252, 245, 0.78);
+      --line: rgba(74, 22, 53, 0.16);
+      --shadow: 0 24px 80px rgba(74, 22, 53, 0.18);
+      color-scheme: light;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 8%, rgba(242, 184, 75, 0.38), transparent 28rem),
+        radial-gradient(circle at 84% 2%, rgba(207, 232, 216, 0.86), transparent 27rem),
+        radial-gradient(circle at 82% 76%, rgba(155, 74, 27, 0.18), transparent 28rem),
+        linear-gradient(135deg, var(--cream) 0%, #fffdf8 46%, var(--cream-2) 100%);
+      line-height: 1.5;
+    }
+
+    a { color: inherit; }
+    .page { overflow: hidden; }
+    .container { width: min(1160px, calc(100% - 40px)); margin: 0 auto; }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(18px);
+      background: rgba(255, 247, 232, 0.78);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 16px 0; }
+    .brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 800; letter-spacing: -0.03em; text-decoration: none; }
+    .brand-mark {
+      width: 34px; height: 34px; border-radius: 12px;
+      background: conic-gradient(from 210deg, var(--plum), var(--tamarind), var(--saffron), var(--sofrito), var(--plum));
+      box-shadow: 0 8px 20px rgba(74, 22, 53, 0.22);
+    }
+    nav ul { display: flex; list-style: none; gap: 18px; padding: 0; margin: 0; color: var(--muted); font-size: 0.95rem; }
+    nav a { text-decoration: none; }
+    nav a:hover { color: var(--plum); }
+
+    .hero { padding: 84px 0 54px; }
+    .hero-grid { display: grid; grid-template-columns: 1.08fr 0.92fr; gap: 44px; align-items: center; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px; margin-bottom: 18px; padding: 8px 12px;
+      border: 1px solid var(--line); border-radius: 999px; background: rgba(255, 255, 255, 0.58);
+      color: var(--plum); font-weight: 700; font-size: 0.88rem;
+    }
+    h1 { margin: 0; font-size: clamp(3rem, 8vw, 6.8rem); line-height: 0.9; letter-spacing: -0.08em; max-width: 920px; }
+    h1 .accent { color: var(--plum); }
+    .hero p { max-width: 700px; color: var(--muted); font-size: clamp(1.08rem, 2vw, 1.32rem); margin: 26px 0 0; }
+    .cta-row { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 32px; }
+    .button {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      min-height: 46px; padding: 0 18px; border-radius: 999px; font-weight: 800; text-decoration: none;
+      border: 1px solid var(--line); transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+    .button:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(74, 22, 53, 0.16); }
+    .button.primary { color: #fff; background: linear-gradient(135deg, var(--plum), var(--plum-2)); border-color: transparent; }
+    .button.secondary { background: rgba(255, 255, 255, 0.62); color: var(--plum); }
+
+    .memory-card {
+      position: relative; padding: 24px; border-radius: 34px; background: var(--card); border: 1px solid var(--line);
+      box-shadow: var(--shadow); transform: rotate(1.3deg);
+    }
+    .memory-card::before {
+      content: ""; position: absolute; inset: -18px; border-radius: 42px; z-index: -1;
+      background: linear-gradient(135deg, rgba(242,184,75,.35), rgba(45,106,79,.2), rgba(74,22,53,.18));
+      filter: blur(16px);
+    }
+    .note-label { color: var(--tamarind); font-weight: 900; text-transform: uppercase; font-size: .78rem; letter-spacing: .13em; }
+    .memory-card blockquote { margin: 14px 0 20px; font-size: 1.65rem; line-height: 1.08; letter-spacing: -0.05em; font-weight: 850; }
+    .cue { display: grid; gap: 10px; }
+    .cue-item { padding: 12px 14px; border-radius: 18px; background: rgba(255,255,255,.62); border: 1px solid rgba(74,22,53,.11); }
+    .cue-item strong { display: block; color: var(--plum); margin-bottom: 2px; }
+
+    section { padding: 64px 0; }
+    .section-head { display: flex; justify-content: space-between; gap: 28px; align-items: end; margin-bottom: 28px; }
+    .section-head h2 { margin: 0; max-width: 760px; font-size: clamp(2rem, 4.5vw, 4.2rem); line-height: .95; letter-spacing: -0.07em; }
+    .section-head p { margin: 0; max-width: 420px; color: var(--muted); }
+
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+    .card {
+      padding: 22px; border-radius: 26px; background: rgba(255,255,255,.58); border: 1px solid var(--line);
+      box-shadow: 0 12px 38px rgba(74,22,53,.08);
+    }
+    .card h3 { margin: 0 0 10px; font-size: 1.25rem; letter-spacing: -0.03em; }
+    .card p { color: var(--muted); margin: 0; }
+    .number { width: 34px; height: 34px; display: inline-grid; place-items: center; border-radius: 12px; background: var(--plum); color: white; font-weight: 900; margin-bottom: 14px; }
+
+    .workflow { counter-reset: step; display: grid; gap: 12px; }
+    .step { display: grid; grid-template-columns: 54px 1fr; gap: 16px; align-items: start; padding: 18px; border-radius: 24px; background: rgba(255,255,255,.62); border: 1px solid var(--line); }
+    .step::before { counter-increment: step; content: counter(step); width: 38px; height: 38px; display: grid; place-items: center; border-radius: 14px; background: var(--saffron); color: var(--ink); font-weight: 950; }
+    .step h3 { margin: 0 0 4px; }
+    .step p { margin: 0; color: var(--muted); }
+
+    .science-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 20px; }
+    .science-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .pill { padding: 14px; border-radius: 18px; background: rgba(207,232,216,.6); border: 1px solid rgba(45,106,79,.16); }
+    .pill strong { color: var(--sofrito); }
+    .terminal { background: #21131c; color: #ffecc4; border-radius: 28px; padding: 22px; box-shadow: var(--shadow); overflow: auto; border: 1px solid rgba(255,255,255,.08); }
+    pre { margin: 0; white-space: pre-wrap; font: 0.92rem/1.55 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+
+    .examples { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .example-card { min-height: 270px; display: flex; flex-direction: column; justify-content: space-between; }
+    .tag { display: inline-flex; align-self: start; padding: 6px 10px; border-radius: 999px; font-size: .78rem; font-weight: 850; color: var(--plum); background: rgba(242,184,75,.32); }
+    .example-card q { display: block; font-size: 1.26rem; line-height: 1.12; letter-spacing: -0.04em; font-weight: 850; margin: 16px 0; }
+    .example-card small { color: var(--muted); }
+
+    .install { display: grid; grid-template-columns: .95fr 1.05fr; gap: 20px; align-items: stretch; }
+    .install .card { background: rgba(255,255,255,.72); }
+    .trust { background: rgba(74,22,53,.96); color: #fff7e8; border-radius: 36px; padding: 34px; }
+    .trust p { color: rgba(255,247,232,.78); }
+    .trust ul { margin: 18px 0 0; padding-left: 20px; color: rgba(255,247,232,.88); }
+    .trust li { margin: 9px 0; }
+
+    footer { padding: 48px 0 60px; color: var(--muted); }
+    footer .container { display: flex; justify-content: space-between; gap: 16px; border-top: 1px solid var(--line); padding-top: 26px; }
+
+    @media (max-width: 900px) {
+      .hero-grid, .grid-2, .science-grid, .install { grid-template-columns: 1fr; }
+      .grid-3, .examples, .science-list { grid-template-columns: 1fr; }
+      .section-head { display: block; }
+      .section-head p { margin-top: 14px; }
+      nav ul { display: none; }
+      .memory-card { transform: none; }
+      footer .container { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="container nav">
+        <a class="brand" href="#top" aria-label="Member Berries home"><span class="brand-mark"></span><span>Member Berries</span></a>
+        <nav aria-label="Page sections">
+          <ul>
+            <li><a href="#workflow">Workflow</a></li>
+            <li><a href="#science">Food science</a></li>
+            <li><a href="#examples">Examples</a></li>
+            <li><a href="#install">Install</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="container hero-grid">
+          <div>
+            <div class="eyebrow">MCP server + Codex/Claude skill</div>
+            <h1>Reconstruct the <span class="accent">food memory</span>, not just the recipe.</h1>
+            <p>Member Berries helps AI hosts turn vague family food fragments into research plans, evidence ledgers, sensory analysis, and cheap food-science-backed minimum viable nostalgia cues.</p>
+            <div class="cta-row">
+              <a class="button primary" href="#install">Install the MCP server</a>
+              <a class="button secondary" href="#workflow">See the workflow</a>
+            </div>
+          </div>
+          <aside class="memory-card" aria-label="Example food memory card">
+            <div class="note-label">A real kind of input</div>
+            <blockquote>“My mom made something from Panama. She said it was too much work. I only remember the smell.”</blockquote>
+            <div class="cue">
+              <div class="cue-item"><strong>Do not jump to recipe.</strong> First identify what carries the memory.</div>
+              <div class="cue-item"><strong>Test the smallest cue.</strong> One bite, one sip, one aroma, one sauce.</div>
+              <div class="cue-item"><strong>Use cheap proxies.</strong> Food science before specialty shopping.</div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section>
+        <div class="container">
+          <div class="section-head">
+            <h2>Recipe search fails when the user only has a fragment.</h2>
+            <p>People remember a place, a relative, a sound-alike name, a texture, a sauce color, or a smell. Member Berries treats those fragments as evidence, not as a solved dish.</p>
+          </div>
+          <div class="grid-3">
+            <article class="card"><span class="number">1</span><h3>Name uncertainty</h3><p>Misspellings, transliterations, family nicknames, and colonial-language drift are expected inputs.</p></article>
+            <article class="card"><span class="number">2</span><h3>Sensory priority</h3><p>The nostalgic trigger may be a browned crust, spice bloom, starch texture, sauce contrast, or serving ritual.</p></article>
+            <article class="card"><span class="number">3</span><h3>Research discipline</h3><p>User-said, researched, inferred, and unknown claims stay separated so the host can reason honestly.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section id="workflow">
+        <div class="container">
+          <div class="section-head">
+            <h2>From memory fragment to minimum viable nostalgia.</h2>
+            <p>The host AI does open-ended browsing/search. Member Berries structures the reconstruction and produces machine-readable outputs.</p>
+          </div>
+          <div class="workflow">
+            <div class="step"><div><h3>Collect the food memory</h3><p>Capture rough names, region clues, ingredients, sensory details, missing information, and gentle follow-up questions.</p></div></div>
+            <div class="step"><div><h3>Plan research instead of pretending certainty</h3><p>Generate hypotheses, facts to verify, source preferences, and clarification questions.</p></div></div>
+            <div class="step"><div><h3>Convert research into provenance</h3><p>Host-researched facts become typed records with source metadata, confidence, and extracted findings.</p></div></div>
+            <div class="step"><div><h3>Build the dossier</h3><p>Separate user-said facts, researched facts, model inferences, and unknowns before reconstruction.</p></div></div>
+            <div class="step"><div><h3>Generate the minimum viable cue</h3><p>Offer the easiest, cheapest, findable sensory test before any full recipe or specialty sourcing.</p></div></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="science">
+        <div class="container science-grid">
+          <div>
+            <div class="section-head"><h2>Food science is the product moat.</h2></div>
+            <div class="science-list">
+              <div class="pill"><strong>Fat carries aroma.</strong><br />A tiny amount of oil, butter, dairy, or rendered fat can reveal whether the spice profile is right.</div>
+              <div class="pill"><strong>Maillard creates memory.</strong><br />Browning, charring, and frying produce roasted/meaty notes that raw ingredients cannot mimic.</div>
+              <div class="pill"><strong>Acid cuts fat.</strong><br />Vinegar, citrus, fermentation, and tomato brightness can be the missing “that’s it” signal.</div>
+              <div class="pill"><strong>Starch carries sauce.</strong><br />Rice, bread, potato, masa, yuca, and plantain are texture systems, not just ingredients.</div>
+              <div class="pill"><strong>Sugar rounds sharpness.</strong><br />Sweetness can balance chile, acid, bitterness, and smoke without making the dish “dessert.”</div>
+              <div class="pill"><strong>Contrast matters.</strong><br />Crisp/soft, hot/cool, creamy/spicy, and chewy/tender can carry the nostalgic bite.</div>
+            </div>
+          </div>
+          <div class="terminal" aria-label="Example structured output">
+<pre>{
+  "title": "Minimum viable composed-bite cue",
+  "format": "bite",
+  "accessibilityPrinciples": [
+    "use grocery-store carriers and proteins first",
+    "test in one or two bites",
+    "use pantry aromatics before specialty sourcing"
+  ],
+  "substituteLogic": [
+    "Proteins and fats carry Maillard notes and fat-soluble aromatics.",
+    "Starches control texture and sauce absorption.",
+    "Acid, sugar, and salt move the bite toward remembered balance."
+  ]
+}</pre>
+          </div>
+        </div>
+      </section>
+
+      <section id="examples">
+        <div class="container">
+          <div class="section-head">
+            <h2>Built for messy, human inputs.</h2>
+            <p>These are not canned recipes. They are examples of the kind of ambiguous memories the workflow can structure.</p>
+          </div>
+          <div class="examples">
+            <article class="card example-card"><div><span class="tag">Name fragment</span><q>Something like “carimanola” from Panama. My mom said it was too much work.</q></div><small>Workflow: identify starch/filling/aroma → test composed bite → escalate only if it hits.</small></article>
+            <article class="card example-card"><div><span class="tag">Place + ingredient</span><q>I ate shark one time in Trinidad and Tobago. It was like nice fish with fried bread and sauces.</q></div><small>Workflow: ask serving-format questions → research bake-and-shark style candidates → test sauce/carrier contrast.</small></article>
+            <article class="card example-card"><div><span class="tag">Sensory plate</span><q>Mashed potatoes, long coiled grey-speckled sausage, creamy gravy, and orange sauce.</q></div><small>Workflow: break into protein/fat, starch, sauce, acid/sweet/salt, and texture contrast.</small></article>
+          </div>
+        </div>
+      </section>
+
+      <section id="install">
+        <div class="container install">
+          <div class="card">
+            <h2>Install in a host AI</h2>
+            <p>Member Berries is a stdio MCP server. Claude Code can use the checked-in <code>.mcp.json</code> after build. Codex can point at the built <code>dist/index.js</code>.</p>
+            <div class="cta-row"><a class="button primary" href="../../README.md">Read the README</a><a class="button secondary" href="../ARCHITECTURE.md">Architecture</a></div>
+          </div>
+          <div class="terminal">
+<pre>npm ci
+npm run build
+
+# Codex config example
+[mcp_servers.member_berries]
+command = "node"
+args = ["/absolute/path/to/member-berries/dist/index.js"]
+enabled = true
+startup_timeout_sec = 10</pre>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="container trust">
+          <h2>Trust boundaries are part of the UX.</h2>
+          <p>Member Berries should make the host AI more honest, not more confident for no reason.</p>
+          <ul>
+            <li>The host AI performs live web/search research; the MCP server structures the work.</li>
+            <li>Evidence is separated into user-said, researched, inferred, and unknown claims.</li>
+            <li>Minimum viable cues come before full recipes or specialty shopping.</li>
+            <li>No proprietary recipe theft: store facts, citations, and source metadata, not copied recipe prose.</li>
+            <li>Food-memory and dementia-adjacent inspiration are not medical claims.</li>
+          </ul>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container">
+        <strong>Member Berries</strong>
+        <span>Research-first food-memory reconstruction for AI agents.</span>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

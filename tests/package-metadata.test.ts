@@ -32,6 +32,7 @@ describe('package distribution metadata', () => {
       'docs/ARCHITECTURE.md',
       'docs/ROADMAP.md',
       'docs/SELF_HOSTED_RUNNER.md',
+      'docs/landing/',
       'README.md',
       'LICENSE',
     ]);
