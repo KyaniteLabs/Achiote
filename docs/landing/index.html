@@ -172,8 +172,8 @@
         <div class="container hero-grid">
           <div>
             <div class="eyebrow">MCP server + Codex/Claude skill</div>
-            <h1>Reconstruct the <span class="accent">food memory</span>, not just the recipe.</h1>
-            <p>Member Berries helps AI hosts turn vague family food fragments into research plans, evidence ledgers, sensory analysis, and cheap food-science-backed minimum viable nostalgia cues.</p>
+            <h1>Find the <span class="accent">smallest taste</span> that brings it back.</h1>
+            <p>Member Berries helps AI hosts turn half-remembered food stories into grounded research, evidence boundaries, sensory hypotheses, and cheap food-science-backed nostalgia tests.</p>
             <div class="cta-row">
               <a class="button primary" href="#install">Install the MCP server</a>
               <a class="button secondary" href="#workflow">See the workflow</a>
@@ -181,7 +181,7 @@
           </div>
           <aside class="memory-card" aria-label="Example food memory card">
             <div class="note-label">A real kind of input</div>
-            <blockquote>“My mom made something from Panama. She said it was too much work. I only remember the smell.”</blockquote>
+            <blockquote>“I don’t know the name. I remember a sour smell, something herby, and the way everyone got quiet when it hit the table.”</blockquote>
             <div class="cue">
               <div class="cue-item"><strong>Do not jump to recipe.</strong> First identify what carries the memory.</div>
               <div class="cue-item"><strong>Test the smallest cue.</strong> One bite, one sip, one aroma, one sauce.</div>
@@ -194,13 +194,13 @@
       <section>
         <div class="container">
           <div class="section-head">
-            <h2>Recipe search fails when the user only has a fragment.</h2>
-            <p>People remember a place, a relative, a sound-alike name, a texture, a sauce color, or a smell. Member Berries treats those fragments as evidence, not as a solved dish.</p>
+            <h2>Most food memories start before the recipe exists.</h2>
+            <p>A person may only remember a smell, a texture, a nickname, a grocery aisle, or the person who made it. Member Berries treats those fragments as evidence to organize, not a recipe to hallucinate.</p>
           </div>
           <div class="grid-3">
-            <article class="card"><span class="number">1</span><h3>Name uncertainty</h3><p>Misspellings, transliterations, family nicknames, and colonial-language drift are expected inputs.</p></article>
-            <article class="card"><span class="number">2</span><h3>Sensory priority</h3><p>The nostalgic trigger may be a browned crust, spice bloom, starch texture, sauce contrast, or serving ritual.</p></article>
-            <article class="card"><span class="number">3</span><h3>Research discipline</h3><p>User-said, researched, inferred, and unknown claims stay separated so the host can reason honestly.</p></article>
+            <article class="card"><span class="number">1</span><h3>The name may be wrong</h3><p>Misspellings, phonetic fragments, family nicknames, and borrowed-language names are normal inputs, not failures.</p></article>
+            <article class="card"><span class="number">2</span><h3>The trigger may be tiny</h3><p>The thing that matters may be one browned edge, one spice bloom, one sour note, one chewy bite, or one table ritual.</p></article>
+            <article class="card"><span class="number">3</span><h3>Evidence stays separated</h3><p>User memory, researched facts, model inference, and unknowns stay separate so the host can say what it knows and what it is guessing.</p></article>
           </div>
         </div>
       </section>
@@ -224,7 +224,7 @@
       <section id="science">
         <div class="container science-grid">
           <div>
-            <div class="section-head"><h2>Food science is the product moat.</h2></div>
+            <div class="section-head"><h2>The useful answer is food science, not a fancier recipe search.</h2></div>
             <div class="science-list">
               <div class="pill"><strong>Fat carries aroma.</strong><br />A tiny amount of oil, butter, dairy, or rendered fat can reveal whether the spice profile is right.</div>
               <div class="pill"><strong>Maillard creates memory.</strong><br />Browning, charring, and frying produce roasted/meaty notes that raw ingredients cannot mimic.</div>
@@ -256,13 +256,13 @@
       <section id="examples">
         <div class="container">
           <div class="section-head">
-            <h2>Built for messy, human inputs.</h2>
-            <p>These are not canned recipes. They are examples of the kind of ambiguous memories the workflow can structure.</p>
+            <h2>Examples that are not solved by a recipe search.</h2>
+            <p>These are intentionally different from the development test cases. The point is the reusable pattern: clues → research → sensory mechanism → minimum viable cue.</p>
           </div>
           <div class="examples">
-            <article class="card example-card"><div><span class="tag">Name fragment</span><q>Something like “carimanola” from Panama. My mom said it was too much work.</q></div><small>Workflow: identify starch/filling/aroma → test composed bite → escalate only if it hits.</small></article>
-            <article class="card example-card"><div><span class="tag">Place + ingredient</span><q>I ate shark one time in Trinidad and Tobago. It was like nice fish with fried bread and sauces.</q></div><small>Workflow: ask serving-format questions → research bake-and-shark style candidates → test sauce/carrier contrast.</small></article>
-            <article class="card example-card"><div><span class="tag">Sensory plate</span><q>Mashed potatoes, long coiled grey-speckled sausage, creamy gravy, and orange sauce.</q></div><small>Workflow: break into protein/fat, starch, sauce, acid/sweet/salt, and texture contrast.</small></article>
+            <article class="card example-card"><div><span class="tag">Name fragment</span><q>A crispy street snack in a paper cone. Chickpea-ish, hot, with green sauce and something dark-sweet.</q></div><small>Workflow: research candidate snack families → isolate fried crunch, herb sauce, sweet-acid contrast → test one bite.</small></article>
+            <article class="card example-card"><div><span class="tag">Place + ingredient</span><q>A soup an aunt made once. Sour, pale, lots of dill, maybe dairy, but no one remembers the name.</q></div><small>Workflow: separate acid source, herb aroma, fat/body, and serving temperature → test a one-cup aroma-sip.</small></article>
+            <article class="card example-card"><div><span class="tag">Sensory plate</span><q>A chewy lunchbox rice cake with sesame-oil smell, browned edges, and a sweet-salty glaze.</q></div><small>Workflow: identify starch gel texture, toasted fat aroma, Maillard edge, and sugar-salt balance → test two bites.</small></article>
           </div>
         </div>
       </section>
@@ -291,7 +291,7 @@ startup_timeout_sec = 10</pre>
       <section>
         <div class="container trust">
           <h2>Trust boundaries are part of the UX.</h2>
-          <p>Member Berries should make the host AI more honest, not more confident for no reason.</p>
+          <p>Member Berries should make the host AI more useful by making uncertainty visible and the next test smaller.</p>
           <ul>
             <li>The host AI performs live web/search research; the MCP server structures the work.</li>
             <li>Evidence is separated into user-said, researched, inferred, and unknown claims.</li>
