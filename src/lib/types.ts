@@ -60,9 +60,14 @@ export interface RecipeOutput {
 }
 
 export interface SourcingResult {
-  ingredient: string;
-  storesWhereUserIs: { name: string; address?: string; notes?: string }[];
-  onlineSources: { retailer: string; url?: string; price?: string }[];
+  ingredients: string[];
+  location: string;
+  regionalData?: {
+    region: string;
+    ethnicCorridors: { name: string; city: string; cuisines: string[] }[];
+    majorStores: Record<string, string[]>;
+  };
+  promptForAgent: string;
 }
 
 export interface RegionalSimilar {
