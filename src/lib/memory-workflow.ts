@@ -16,6 +16,7 @@ const RESEARCH_STOPWORDS = new Set([
   'auntie',
   'friend',
   'said',
+  'sounded',
   'mentioned',
   'called',
   'something',
@@ -56,7 +57,7 @@ function includesAny(text: string, needles: string[]): boolean {
 function likelyDishPhrases(text: string): string[] {
   const lower = text.toLowerCase();
   const patterns = [
-    /(?:mentioned|called|named|made)\s+([a-zA-Zñáéíóúü-]+(?:\s+[a-zA-Zñáéíóúü-]+){0,2})/gi,
+    /(?:mentioned|called|named)\s+([a-zA-Zñáéíóúü-]+(?:\s+[a-zA-Zñáéíóúü-]+){0,2})/gi,
     /(?:sounded like|something like)\s+([a-zA-Zñáéíóúü-]+(?:\s+[a-zA-Zñáéíóúü-]+){0,2})/gi,
   ];
   const phrases = patterns.flatMap((pattern) => [...lower.matchAll(pattern)].map((match) => match[1].trim()));
