@@ -81,8 +81,43 @@ Member Berries is a food-memory reconstruction skill. The recipe is not the star
 
 ## Output Format
 
+For early/uncertain conversations, produce a dossier before a recipe:
+
 ```markdown
-# [Dish Name] — Recreated
+# Food Memory Dossier: [fragment]
+
+## What You Told Me
+- [user-said facts]
+
+## Possible Matches
+| Hypothesis | Why it might fit | What would confirm it | Confidence |
+|-----------|-------------------|-----------------------|------------|
+
+## Questions to Ask Family
+1. [gentle high-yield question]
+
+## Research Plan
+- Search queries: [...]
+- Source types to prefer: [...]
+- Facts to verify: [...]
+
+## Sensory Clues to Protect
+- [aroma/texture/flavor/occasion clue]
+
+## What We Still Don't Know
+- [unknowns]
+```
+
+When enough evidence exists, continue into a recipe handoff:
+
+```markdown
+# [Dish Name] — Best-Effort Recreation
+
+## Confidence and Evidence
+- User said: [...]
+- Researched: [...]
+- Inferred: [...]
+- Unknown: [...]
 
 ## The Nostalgia Trigger
 [1-2 sentences identifying the key sensory element that carries the emotional connection]
@@ -90,7 +125,6 @@ Member Berries is a food-memory reconstruction skill. The recipe is not the star
 ## Ingredients
 | Ingredient | Amount | Notes |
 |-----------|--------|-------|
-| [Item] | [Qty] | [Substitution note if applicable] |
 
 ## Instructions
 1. [Step]
@@ -98,13 +132,9 @@ Member Berries is a food-memory reconstruction skill. The recipe is not the star
 ## Sensory Analysis
 | Element | Target | Achieved | Confidence |
 |---------|--------|----------|------------|
-| [Aroma] | [Target description] | [How achieved] | High/Medium/Low |
 
-## Where to Buy
-- [Ingredient]: [Store name], [Address or URL]
-
-## Regional Connections
-- Similar to [dish] from [region]: [what's shared, what's different]
+## Sourcing / Substitutions
+- [Ingredient]: [static hint, host-researched source, or clearly labeled uncertainty]
 
 ## What's Different
 - [Honest assessment of what won't match and why]

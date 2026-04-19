@@ -6,22 +6,43 @@ Member Berries is a local **Model Context Protocol (MCP)** server for culinary n
 
 ## What It Does Today
 
-Member Berries provides six MCP tools:
+Member Berries is a research-first food-memory reconstruction server. It provides 10 MCP tools that let a host AI chat client run the whole workflow from a fragment to a recipe-generation handoff:
 
-| Tool | Implemented behavior |
-|------|----------------------|
-| `resolve_dish_name` | Resolves a dish name to a broad canonical dish family using bundled aliases, fuzzy matching, and transliterations. |
-| `analyze_nostalgic_dish` | Returns sensory-dimension criteria and a bounded prompt for the host model to analyze a food memory. |
-| `find_sensory_substitutes` | Returns compound/group-matched substitutes from bundled ingredient data, plus regional hints when available. |
-| `source_ingredients` | Returns static regional store/corridor hints and a host-model prompt for sourcing. It does not perform live inventory or price lookup. |
-| `discover_regional_similars` | Returns bundled dish-family context and a host-model prompt for neighboring/regional comparisons. |
-| `generate_recipe` | Returns an expected recipe schema and a host-model prompt. It does not deterministically generate final recipe steps by itself. |
+| Stage | Tool | Implemented behavior |
+|------|------|----------------------|
+| Memory intake | `collect_food_memory` | Structures raw fragments, sound-alikes, family context, remembered ingredients, sensory clues, missing information, and gentle next questions. |
+| Research planning | `plan_dish_research` | Produces hypotheses, search queries, source preferences, facts to verify, and clarification questions. It plans research instead of pretending sparse fragments are solved. |
+| Evidence ledger | `build_reconstruction_dossier` | Builds a dossier that separates user-said, researched, inferred, and unknown claims, plus sensory priorities and adaptation strategy. |
+| Family connection | `generate_family_followup_questions` | Generates gentle questions the user can ask relatives to deepen the memory and resolve uncertainty. |
+| Name resolution | `resolve_dish_name` | Resolves names to broad families and ambiguity-aware candidates using bundled aliases, fuzzy matching, and transliterations. |
+| Sensory analysis | `analyze_nostalgic_dish` | Returns sensory-dimension criteria and a bounded prompt for the host model to analyze nostalgia-critical elements. |
+| Substitution | `find_sensory_substitutes` | Returns compound/group-matched substitutes from bundled ingredient data, plus regional hints when available. |
+| Sourcing | `source_ingredients` | Returns static regional store/corridor hints and a host-model prompt for sourcing. It does not perform live inventory or price lookup. |
+| Regional comparison | `discover_regional_similars` | Returns bundled dish-family context and a host-model prompt for neighboring/regional comparisons. |
+| Recipe handoff | `generate_recipe` | Returns an expected recipe schema and a bounded host-model prompt for recipe generation and self-critique. It does not deterministically generate final recipe steps by itself. |
 
 All tools return MCP `structuredContent` plus backwards-compatible JSON text.
 
+## End-to-end flow
+
+```text
+food memory fragment
+  -> collect_food_memory
+  -> plan_dish_research
+  -> optional host research / family clarification
+  -> generate_family_followup_questions
+  -> build_reconstruction_dossier
+  -> analyze_nostalgic_dish
+  -> find_sensory_substitutes
+  -> source_ingredients
+  -> generate_recipe
+```
+
+This executes through the full local workflow. The final recipe remains a host-model synthesis step because live research, family confirmation, and adaptation judgment should not be faked by static local data.
+
 ## What It Does Not Do Yet
 
-The current implementation is intentionally local and offline. It does **not** perform live web search, geocoding, grocery inventory lookup, price lookup, or external recipe scraping. See [`docs/ROADMAP.md`](docs/ROADMAP.md) for the provider-backed research plan.
+The current implementation is intentionally local and offline. It does **not** perform live web search, geocoding, grocery inventory lookup, price lookup, or external recipe scraping. Host AI clients can use the research plan with their own browsing/search tools, then pass source-backed facts into the dossier and recipe handoff tools. See [`docs/ROADMAP.md`](docs/ROADMAP.md) for the provider-backed research plan.
 
 ## Requirements
 
