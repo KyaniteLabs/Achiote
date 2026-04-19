@@ -40,7 +40,7 @@ describe('package distribution metadata', () => {
 
   it('has reproducible quality and packaging scripts', () => {
     expect(pkg.scripts.typecheck).toBe('tsc --noEmit');
-    expect(pkg.scripts.check).toBe('npm run typecheck && npm run build && npm test');
+    expect(pkg.scripts.check).toBe('npm run typecheck && npm run build && npm run validate:citations && npm test');
     expect(pkg.scripts['pack:check']).toBe('npm run check && npm run package:smoke && npm pack --dry-run');
     expect(pkg.scripts['package:smoke']).toBe('node scripts/package-smoke.mjs');
   });
