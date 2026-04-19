@@ -81,7 +81,7 @@ The initial MCP direction remains: a stdio MCP server that helps a host model re
 1. Update README to describe current deterministic bundled capabilities honestly.
 2. Document MCP setup, privacy/cache behavior, Node support, clean install, and limitations.
 3. Update skill guidance so external web research providers are optional host capabilities, not bundled implementation.
-4. Add architecture and roadmap docs with clear next steps for real provider-backed research.
+4. Add architecture and roadmap docs with clear next steps for optional provider-data lookup support.
 5. Run doc/package checks.
 
 ## Task 5: Final verification and commit

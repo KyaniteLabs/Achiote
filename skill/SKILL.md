@@ -70,11 +70,12 @@ Member Berries is a food-memory reconstruction skill. The recipe is not the star
    Use `generate_family_followup_questions` to give the user gentle questions to ask relatives.
 
 10. MINIMUM VIABLE NOSTALGIA → Smallest sensory unit first
-   Before a full recipe, use `generate_minimum_viable_nostalgia` to offer the smallest aroma, bite, sip, condiment, or ritual that can test the likely memory trigger.
-   This is the preferred user-facing end step when the user wants something easy and emotionally close, not a full recreation.
+   This is the first concrete food output after the dossier. Use `generate_minimum_viable_nostalgia` before offering a full recipe.
+   Present the smallest aroma, bite, sip, condiment, or ritual that can test the likely memory trigger.
+   Then ask whether the user wants something more complex, such as sourcing help, a family follow-up plan, or a full recipe handoff.
 
-11. RECREATE → Recipe only after enough grounding
-   If the user wants a fuller dish and the likely dish/critical sensory triggers are clear, use the existing sensory/substitution/sourcing/recipe tools to prepare the recipe-generation handoff.
+11. RECREATE → Recipe only after the cue and explicit user interest
+   If the user wants a fuller dish after seeing the minimum viable cue, and the likely dish/critical sensory triggers are clear, use the existing sensory/substitution/sourcing/recipe tools to prepare the recipe-generation handoff.
    The host AI writes the final recipe text from the structured context; the MCP server itself returns schemas, prompts, evidence, and constraints.
    If not clear, present a best-effort path and say exactly what is uncertain.
 ```
@@ -118,7 +119,7 @@ For early/uncertain conversations, produce a dossier before a recipe:
 - [unknowns]
 ```
 
-When enough evidence exists, continue into a recipe handoff:
+When enough evidence exists and the user wants more than the minimum viable cue, continue into a recipe handoff:
 
 ```markdown
 # [Dish Name] — Best-Effort Recreation
@@ -164,4 +165,5 @@ When enough evidence exists, continue into a recipe handoff:
 | Skipping the memory interview | The person's memory IS the spec — don't skip it |
 | Ignoring regional variation | "Indian food" is meaningless — which region? which state? |
 | Presenting without self-critique | Always validate before showing to the user |
+| Jumping straight to a full recipe | Start with the minimum viable nostalgia cue, then ask if the user wants something more complex |
 | Forgetting sourcing provenance | Static regional hints are not live inventory; label what was actually verified |

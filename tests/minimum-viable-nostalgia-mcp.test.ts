@@ -42,4 +42,51 @@ describe('minimum viable nostalgia MCP tool', () => {
       });
     });
   });
+
+  it('does not return a generic soup cue for carimañola dossiers', async () => {
+    await withClient(async (client) => {
+      const memory = await client.callTool({
+        name: 'collect_food_memory',
+        arguments: { memoryText: 'carimanola from Panama; my mom made them but said they were too much work' },
+      });
+      const researchPlan = await client.callTool({ name: 'plan_dish_research', arguments: { memory: memory.structuredContent } });
+      const dossier = await client.callTool({
+        name: 'build_reconstruction_dossier',
+        arguments: {
+          memory: memory.structuredContent,
+          researchPlan: researchPlan.structuredContent,
+          researchedFacts: [
+            'Carimañolas are Panamanian fried yuca rolls stuffed with seasoned beef picadillo.',
+            'Picadillo often uses garlic, onion, cumin, achiote, oregano, tomato paste, and culantro.',
+            'The key texture contrast is crispy fried yuca outside and chewy starch inside.',
+          ],
+          inferredFacts: ['The fastest confirmation cue is picadillo aroma plus a separate crispy yuca bite.'],
+        },
+      });
+      const cue = await client.callTool({
+        name: 'generate_minimum_viable_nostalgia',
+        arguments: {
+          dossier: dossier.structuredContent,
+          researchFindings: {
+            researchedFacts: ['Carimañolas are fried yuca rolls with beef picadillo.'],
+            inferredFacts: ['Picadillo aroma is the fastest nostalgia trigger.'],
+            unknowns: ['family-specific filling'],
+            sourceCount: 2,
+            confidence: 'High',
+          },
+          userLocation: 'Long Beach, California',
+          maxEffortMinutes: 20,
+        },
+      });
+
+      expect(cue.isError).not.toBe(true);
+      expect(cue.structuredContent).toMatchObject({
+        title: expect.stringContaining('carimañola'),
+        format: 'bite',
+        whyThisIsMinimum: expect.stringContaining('labor-intensive'),
+      });
+      expect(JSON.stringify(cue.structuredContent)).not.toContain('soup/stew');
+    });
+  });
+
 });
