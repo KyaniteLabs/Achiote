@@ -148,6 +148,10 @@ function buildNextQuestions(input: {
   const region = input.culturalOrRegionalHints[0];
   const questions: string[] = [];
 
+  if (input.culturalOrRegionalHints.length === 0) {
+    questions.push('Where is your family from, or where did you eat this? Even a country, island, city, or "my grandma was from ___" is enough.');
+  }
+
   if (input.possibleNames.length === 0) {
     questions.push(region
       ? `Do you remember what people in ${region} called it, even roughly or phonetically?`
@@ -200,34 +204,170 @@ export function formatCollectedFoodMemory(memory: CollectedFoodMemory): string {
   ].join('\n');
 }
 
+const REGION_PATTERNS: Array<{ pattern: RegExp; label: string }> = [
+  { pattern: /\bpuerto\s+ric(?:an|o)\b/i, label: 'Puerto Rican' },
+  { pattern: /\bpuerto\s+rico\b/i, label: 'Puerto Rican' },
+  { pattern: /\btrinidad(?:\s+(?:and|&)\s+tobago)?\b/i, label: 'Trinidad and Tobago' },
+  { pattern: /\bcaribbean\b/i, label: 'Caribbean' },
+  { pattern: /\bcentral\s+american?\b/i, label: 'Central American' },
+  { pattern: /\bsouth\s+american?\b/i, label: 'South American' },
+  { pattern: /\blatin\s+american?\b/i, label: 'Latin American' },
+  { pattern: /\bmexican?\b/i, label: 'Mexican' },
+  { pattern: /\bm[eé]xico\b/i, label: 'Mexican' },
+  { pattern: /\boaxac(?:a|an|e[ñn]o)\b/i, label: 'Oaxacan' },
+  { pattern: /\byucat[eé]c?[ao]\b/i, label: 'Yucatecan' },
+  { pattern: /\bjalisc(?:o|ense)\b/i, label: 'Jaliscan' },
+  { pattern: /\bcolombian?\b/i, label: 'Colombian' },
+  { pattern: /\bperuvian?\b/i, label: 'Peruvian' },
+  { pattern: /\bbrazil(?:ian)?\b/i, label: 'Brazilian' },
+  { pattern: /\bargent(?:in[ae]|o)\b/i, label: 'Argentine' },
+  { pattern: /\bcuban?\b/i, label: 'Cuban' },
+  { pattern: /\bdominican?\b/i, label: 'Dominican' },
+  { pattern: /\bhaitian?\b/i, label: 'Haitian' },
+  { pattern: /\bjamaican?\b/i, label: 'Jamaican' },
+  { pattern: /\bfilipin?[oa]\b/i, label: 'Filipino' },
+  { pattern: /\bvietnam(?:ese)?\b/i, label: 'Vietnamese' },
+  { pattern: /\bthai(?:land)?\b/i, label: 'Thai' },
+  { pattern: /\bkorean?\b/i, label: 'Korean' },
+  { pattern: /\bjapan(?:ese)?\b/i, label: 'Japanese' },
+  { pattern: /\bchinese?\b/i, label: 'Chinese' },
+  { pattern: /\bszechuan\b|\bsichuan\b/i, label: 'Sichuan' },
+  { pattern: /\bcantonese\b/i, label: 'Cantonese' },
+  { pattern: /\btaiwan(?:ese)?\b/i, label: 'Taiwanese' },
+  { pattern: /\bindian?\b/i, label: 'Indian' },
+  { pattern: /\bsouth\s+(?:asian|indian)\b/i, label: 'South Asian' },
+  { pattern: /\bpunjabi\b/i, label: 'Punjabi' },
+  { pattern: /\bgujarati\b/i, label: 'Gujarati' },
+  { pattern: /\bbengali\b/i, label: 'Bengali' },
+  { pattern: /\bmalayali\b|\bkeral(?:a|ite)\b/i, label: 'Keralite' },
+  { pattern: /\btamil\b/i, label: 'Tamil' },
+  { pattern: /\bsri\s+lank(?:an?)?\b/i, label: 'Sri Lankan' },
+  { pattern: /\bbengal(?:i)?\b/i, label: 'Bengali' },
+  { pattern: /\bpakistan?i?\b/i, label: 'Pakistani' },
+  { pattern: /\bbangladeshi?\b/i, label: 'Bangladeshi' },
+  { pattern: /\bnepal(?:ese|i)?\b/i, label: 'Nepali' },
+  { pattern: /\bsoutheast\s+asian?\b/i, label: 'Southeast Asian' },
+  { pattern: /\bindonesian?\b/i, label: 'Indonesian' },
+  { pattern: /\bmalaysian?\b/i, label: 'Malaysian' },
+  { pattern: /\bsingapor(?:ean|e)\b/i, label: 'Singaporean' },
+  { pattern: /\bburmese\b|\bmyanmar\b/i, label: 'Burmese' },
+  { pattern: /\bcambodian?\b|\bkhmer\b/i, label: 'Cambodian' },
+  { pattern: /\blao(?:tian)?\b/i, label: 'Lao' },
+  { pattern: /\blebanese?\b/i, label: 'Lebanese' },
+  { pattern: /\bsyrian?\b/i, label: 'Syrian' },
+  { pattern: /\bpalestinian?\b/i, label: 'Palestinian' },
+  { pattern: /\bjordanian?\b/i, label: 'Jordanian' },
+  { pattern: /\biraqi?\b/i, label: 'Iraqi' },
+  { pattern: /\biranian?\b|\bpersian\b/i, label: 'Iranian' },
+  { pattern: /\bafghan?\b/i, label: 'Afghan' },
+  { pattern: /\bturkish?\b/i, label: 'Turkish' },
+  { pattern: /\bgreek?\b/i, label: 'Greek' },
+  { pattern: /\bitalian?\b/i, label: 'Italian' },
+  { pattern: /\bsicilian?\b/i, label: 'Sicilian' },
+  { pattern: /\bspanish?\b/i, label: 'Spanish' },
+  { pattern: /\bcatalan?\b/i, label: 'Catalan' },
+  { pattern: /\bportuguese?\b/i, label: 'Portuguese' },
+  { pattern: /\bfrench?\b/i, label: 'French' },
+  { pattern: /\bgerman?\b/i, label: 'German' },
+  { pattern: /\bpolish?\b/i, label: 'Polish' },
+  { pattern: /\brussian?\b/i, label: 'Russian' },
+  { pattern: /\bukrainian?\b/i, label: 'Ukrainian' },
+  { pattern: /\bromanian?\b/i, label: 'Romanian' },
+  { pattern: /\bhungarian?\b/i, label: 'Hungarian' },
+  { pattern: /\bgeorgian?\b/i, label: 'Georgian' },
+  { pattern: /\barmenian?\b/i, label: 'Armenian' },
+  { pattern: /\bazerbaijani?\b/i, label: 'Azerbaijani' },
+  { pattern: /\buzbek?\b/i, label: 'Uzbek' },
+  { pattern: /\bmoroccan?\b/i, label: 'Moroccan' },
+  { pattern: /\btunisian?\b/i, label: 'Tunisian' },
+  { pattern: /\bAlgerian?\b/i, label: 'Algerian' },
+  { pattern: /\bEgypt(?:ian)?\b/i, label: 'Egyptian' },
+  { pattern: /\bethiopian?\b/i, label: 'Ethiopian' },
+  { pattern: /\beritrean?\b/i, label: 'Eritrean' },
+  { pattern: /\bsomali\b/i, label: 'Somali' },
+  { pattern: /\bkenyan?\b/i, label: 'Kenyan' },
+  { pattern: /\bnigerian?\b/i, label: 'Nigerian' },
+  { pattern: /\bghan(?:aian|a)?\b/i, label: 'Ghanaian' },
+  { pattern: /\bsenegalese?\b/i, label: 'Senegalese' },
+  { pattern: /\bwest\s+african?\b/i, label: 'West African' },
+  { pattern: /\beast\s+african?\b/i, label: 'East African' },
+  { pattern: /\bnorth\s+african?\b/i, label: 'North African' },
+  { pattern: /\bsouth\s+african?\b/i, label: 'South African' },
+  { pattern: /\bmiddle\s+east(?:ern)?\b/i, label: 'Middle Eastern' },
+  { pattern: /\bmediterranean\b/i, label: 'Mediterranean' },
+  { pattern: /\bbalkan\b/i, label: 'Balkan' },
+  { pattern: /\bcaucasus\b/i, label: 'Caucasus' },
+  { pattern: /\bcentral\s+asia(?:n)?\b/i, label: 'Central Asian' },
+  { pattern: /\bappalachian\b/i, label: 'Appalachian' },
+  { pattern: /\bsouthern\b.*\b(?:u\.?s\.?|united\s+states|american)\b/i, label: 'Southern US' },
+  { pattern: /\bsoul\s+food\b/i, label: 'Southern US' },
+];
+
+const GEOGRAPHIC_CONTEXT_PATTERNS = [
+  /(?:from|grew\s+up\s+in|born\s+in|family\s+(?:is\s+)?from|lived\s+in|visited|traveled\s+to|my\s+(?:mom|dad|grandma|grandpa|grandmother|grandfather|abuela|abuelo|oma|opa|nonna|nonno|baba|yaya|tata|nana|papa)\s+(?:is|was)\s+from)\s+([a-zA-Z\s]{2,30})/gi,
+  /(?:in|at)\s+([A-Z][a-zA-Z\s]{1,28})\s+(?:and|where|when|that|which|who|every|during|after|before)/g,
+];
+
+function extractRegionHints(lowerText: string, originalText: string): string[] {
+  const hints: string[] = [];
+
+  for (const { pattern, label } of REGION_PATTERNS) {
+    if (pattern.test(lowerText)) {
+      hints.push(label);
+    }
+  }
+
+  for (const pattern of GEOGRAPHIC_CONTEXT_PATTERNS) {
+    const matches = [...originalText.matchAll(pattern)];
+    for (const match of matches) {
+      const place = match[1]?.trim();
+      if (place && place.length > 1 && !/^(the|a|an|my|his|her|our|their|this|that|it|we|they|she|he)\s/i.test(place)) {
+        hints.push(place);
+      }
+    }
+  }
+
+  return unique(hints);
+}
+
 export function collectFoodMemory(input: FoodMemoryInput): CollectedFoodMemory {
   const normalized = input.memoryText.trim();
   const lower = normalized.toLowerCase();
   const possibleDishNames = extractPossibleNames(normalized);
   const culturalOrRegionalHints = unique([
     input.knownRegion,
-    lower.includes('puerto rican') || lower.includes('puerto rico') ? 'Puerto Rican' : '',
-    lower.includes('trinidad') || lower.includes('tobago') ? 'Trinidad and Tobago' : '',
-    lower.includes('caribbean') ? 'Caribbean' : '',
-    lower.includes('central american') ? 'Central American' : '',
+    ...extractRegionHints(lower, normalized),
   ].filter((value): value is string => Boolean(value)));
   const rememberedIngredients = INGREDIENT_HINTS.filter((ingredient) => matchesWordOrPhrase(lower, ingredient));
   const cookingMethodHints = extractCookingMethodHints(lower);
   const sensoryClues = unique([
-    includesAny(lower, ['sour', 'tangy']) ? 'sour/tangy' : '',
-    includesAny(lower, ['sweet']) ? 'sweet' : '',
-    includesAny(lower, ['spicy', 'hot', 'pepper']) ? 'spicy/peppery' : '',
-    includesAny(lower, ['crispy', 'crunchy', 'fried']) ? 'crispy/fried texture' : '',
-    includesAny(lower, ['soft', 'mushy']) ? 'soft texture' : '',
-    includesAny(lower, ['chewy']) ? 'chewy texture' : '',
-    includesAny(lower, ['smell', 'aroma']) ? 'remembered aroma' : '',
-    includesAny(lower, ['sauce', 'gravy']) ? 'sauce/gravy' : '',
+    includesAny(lower, ['sour', 'tangy', 'tart']) ? 'sour/tangy' : '',
+    includesAny(lower, ['sweet', 'sugary', 'syrupy']) ? 'sweet' : '',
+    includesAny(lower, ['spicy', 'hot', 'pepper', 'chile', 'chili', 'piquant']) ? 'spicy/peppery' : '',
+    includesAny(lower, ['crispy', 'crunchy', 'fried', 'crackling', 'crust']) ? 'crispy/fried texture' : '',
+    includesAny(lower, ['soft', 'mushy', 'melt', 'melting', 'tender']) ? 'soft texture' : '',
+    includesAny(lower, ['chewy', 'stretchy', 'elastic', 'bouncy']) ? 'chewy texture' : '',
+    includesAny(lower, ['smell', 'aroma', 'fragrant', 'scent', 'stink']) ? 'remembered aroma' : '',
+    includesAny(lower, ['sauce', 'gravy', 'broth', 'juice', 'wet']) ? 'sauce/gravy' : '',
+    includesAny(lower, ['bitter', 'burnt', 'toasted', 'charred', 'roasted']) ? 'bitter/roasted' : '',
+    includesAny(lower, ['rich', 'creamy', 'buttery', 'heavy', 'fatty', 'greasy']) ? 'rich/creamy' : '',
+    includesAny(lower, ['smoky', 'smoke', 'wood-fired']) ? 'smoky' : '',
+    includesAny(lower, ['fermented', 'funk', 'pungent', 'stinky', 'aged']) ? 'fermented/pungent' : '',
+    includesAny(lower, ['umami', 'savory', 'meaty', 'mushroom']) ? 'umami/savory' : '',
   ]);
   const occasions = unique([
-    includesAny(lower, ['christmas', 'holiday', 'navidad']) ? 'holiday/Christmas' : '',
-    includesAny(lower, ['grandma', 'abuela', 'grandmother']) ? 'grandmother/family context' : '',
-    includesAny(lower, ['mom', 'mother', 'mama']) ? 'mother/family context' : '',
-    includesAny(lower, ['street', 'vendor', 'market', 'beach']) ? 'street/vendor/place context' : '',
+    includesAny(lower, ['christmas', 'holiday', 'navidad', 'eid', 'diwali', 'ramadan', 'passover', 'thanksgiving', 'lunar new year', 'tet', 'new year']) ? 'holiday/festival' : '',
+    includesAny(lower, ['grandma', 'abuela', 'grandmother', 'oma', 'nonna', 'baba', 'yaya', 'tata', 'nana', 'sitti', 'tita', 'amma', 'dadi', 'memo']) ? 'grandmother/family context' : '',
+    includesAny(lower, ['mom', 'mother', 'mama', 'mum', 'mami', 'amma', 'mommy', 'mamá', 'mère', 'madre']) ? 'mother/family context' : '',
+    includesAny(lower, ['dad', 'father', 'papa', 'baba', 'abuelo', 'grandpa', 'grandfather', 'opa', 'nonno', 'tata', 'baba']) ? 'father/grandfather context' : '',
+    includesAny(lower, ['aunt', 'tía', 'tante', 'zia', 'khala', 'chachi', 'mausi', 'antie']) ? 'aunt/family context' : '',
+    includesAny(lower, ['street', 'vendor', 'market', 'beach', 'hawker', 'stall', 'cart']) ? 'street/vendor/place context' : '',
+    includesAny(lower, ['restaurant', 'cafe', 'diner', 'cafeteria', 'trattoria', 'bistro']) ? 'restaurant context' : '',
+    includesAny(lower, ['wedding', 'funeral', 'birthday', 'baptism', 'bar mitzvah', 'celebration', 'party', 'feast']) ? 'celebration/gathering' : '',
+    includesAny(lower, ['breakfast', 'morning', 'brunch']) ? 'breakfast context' : '',
+    includesAny(lower, ['school', 'lunchbox', 'lunch', 'cafeteria']) ? 'school/lunch context' : '',
+    includesAny(lower, ['sunday', 'weekend', 'weeknight', 'weekday']) ? 'weekly routine' : '',
+    includesAny(lower, ['summer', 'winter', 'monsoon', 'harvest', 'rainy']) ? 'seasonal context' : '',
   ]);
 
   const nextQuestions = buildNextQuestions({
