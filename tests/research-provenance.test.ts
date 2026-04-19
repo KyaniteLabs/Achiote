@@ -82,3 +82,46 @@ describe('research provenance records', () => {
     expect(findings.sourceCount).toBe(1);
   });
 });
+
+  it('does not classify generic corn masa as green banana', () => {
+    const record = buildResearchRecord({
+      dishName: 'tamales',
+      query: 'tamales corn masa',
+      sources: [
+        {
+          title: 'Tamales source',
+          url: 'https://example.org/tamales',
+          sourceType: 'article',
+          accessedAt: '2026-04-18T00:00:00.000Z',
+          reliability: 'Medium',
+          extractedFacts: ['Tamales often use corn masa and are steamed in wrappers.'],
+        },
+      ],
+    });
+
+    expect(record.extractedFacts.ingredients).not.toContain('green banana');
+  });
+
+  it('returns validation issues instead of throwing when sources is malformed', () => {
+    const malformed = {
+      dishName: 'broken',
+      query: 'broken',
+      sources: undefined,
+      extractedFacts: {
+        namesAndAliases: [],
+        regions: [],
+        ingredients: [],
+        techniques: [],
+        sensoryDescriptors: [],
+        culturalOccasions: [],
+        regionalVariants: [],
+      },
+      uncertainty: [],
+      confidence: 'Low',
+      createdAt: '2026-04-18T00:00:00.000Z',
+    } as never;
+
+    expect(validateResearchRecord(malformed)).toEqual(
+      expect.arrayContaining([expect.objectContaining({ path: 'sources' })]),
+    );
+  });

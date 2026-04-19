@@ -4,7 +4,7 @@ import type { ResearchFindingsForDossier, ResearchRecord, ResearchRecordInput, R
 
 const INGREDIENT_PATTERNS: Array<[string, RegExp]> = [
   ['banana leaves', /banana leaves?/i],
-  ['green banana', /green banana|masa/i],
+  ['green banana', /green banana|green-bananas|banana masa|plantain masa/i],
   ['root-vegetable masa', /yaut[ií]a|root-vegetable/i],
   ['pork', /pork/i],
   ['sofrito', /sofrito/i],
@@ -101,7 +101,10 @@ export function validateResearchRecord(record: ResearchRecord): ResearchValidati
   const issues: ResearchValidationIssue[] = [];
   if (!isNonEmptyString(record.dishName)) pushIssue(issues, 'dishName', 'must be a non-empty string');
   if (!isNonEmptyString(record.query)) pushIssue(issues, 'query', 'must be a non-empty string');
-  if (!Array.isArray(record.sources) || record.sources.length === 0) pushIssue(issues, 'sources', 'must include at least one source');
+  if (!Array.isArray(record.sources) || record.sources.length === 0) {
+    pushIssue(issues, 'sources', 'must include at least one source');
+    return issues;
+  }
 
   record.sources.forEach((source, index) => {
     const path = `sources[${index}]`;
