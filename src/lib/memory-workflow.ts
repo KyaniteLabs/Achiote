@@ -1,3 +1,4 @@
+import dishFamiliesData from '../data/dish-families.json' with { type: 'json' };
 import type {
   CollectedFoodMemory,
   Confidence,
@@ -403,35 +404,136 @@ export function collectFoodMemory(input: FoodMemoryInput): CollectedFoodMemory {
   };
 }
 
-function puertoRicanHypotheses(memory: CollectedFoodMemory): DishHypothesis[] {
-  const text = memory.normalizedMemory.toLowerCase();
-  const hasPuertoRicanContext = memory.extractedClues.culturalOrRegionalHints.includes('Puerto Rican');
-  const likelyPastelSound = includesAny(text, ['pastelay', 'pass-teh-lay', 'pasteles', 'pastelón', 'pastelon']);
-  if (!hasPuertoRicanContext) return [];
+const REGION_TO_FAMILY_MAP: Record<string, string[]> = {
+  'Puerto Rican': ['Caribbean', 'Latin America'],
+  'Trinidad and Tobago': ['Caribbean'],
+  'Caribbean': ['Caribbean'],
+  'Cuban': ['Caribbean', 'Latin America'],
+  'Dominican': ['Caribbean', 'Latin America'],
+  'Haitian': ['Caribbean'],
+  'Jamaican': ['Caribbean'],
+  'Mexican': ['Latin America'],
+  'Colombian': ['Latin America'],
+  'Peruvian': ['Latin America'],
+  'Brazilian': ['Latin America'],
+  'Argentine': ['Latin America'],
+  'Central American': ['Latin America'],
+  'South American': ['Latin America'],
+  'Latin American': ['Latin America'],
+  'Indian': ['South Asia'],
+  'Pakistani': ['South Asia'],
+  'Bangladeshi': ['South Asia'],
+  'Sri Lankan': ['South Asia'],
+  'Nepali': ['South Asia'],
+  'Punjabi': ['South Asia'],
+  'Gujarati': ['South Asia'],
+  'Bengali': ['South Asia'],
+  'Tamil': ['South Asia'],
+  'Keralite': ['South Asia'],
+  'Chinese': ['East Asia'],
+  'Japanese': ['East Asia'],
+  'Korean': ['East Asia'],
+  'Taiwanese': ['East Asia'],
+  'Cantonese': ['East Asia'],
+  'Sichuan': ['East Asia'],
+  'Thai': ['Southeast Asia'],
+  'Vietnamese': ['Southeast Asia'],
+  'Filipino': ['Southeast Asia'],
+  'Indonesian': ['Southeast Asia'],
+  'Malaysian': ['Southeast Asia'],
+  'Singaporean': ['Southeast Asia'],
+  'Burmese': ['Southeast Asia'],
+  'Cambodian': ['Southeast Asia'],
+  'Lao': ['Southeast Asia'],
+  'Lebanese': ['Middle East'],
+  'Syrian': ['Middle East'],
+  'Palestinian': ['Middle East'],
+  'Jordanian': ['Middle East'],
+  'Iraqi': ['Middle East'],
+  'Iranian': ['Middle East'],
+  'Afghan': ['Middle East'],
+  'Turkish': ['Mediterranean', 'Middle East'],
+  'Greek': ['Mediterranean'],
+  'Italian': ['Mediterranean'],
+  'Spanish': ['Mediterranean'],
+  'Portuguese': ['Mediterranean'],
+  'French': ['Mediterranean'],
+  'Moroccan': ['North Africa', 'Mediterranean'],
+  'Tunisian': ['North Africa'],
+  'Algerian': ['North Africa'],
+  'Egyptian': ['North Africa'],
+  'Ethiopian': ['East Africa'],
+  'Eritrean': ['East Africa'],
+  'Nigerian': ['West Africa'],
+  'Ghanaian': ['West Africa'],
+  'Senegalese': ['West Africa'],
+  'Polish': ['Eastern Europe'],
+  'Russian': ['Eastern Europe'],
+  'Ukrainian': ['Eastern Europe'],
+  'Hungarian': ['Eastern Europe'],
+  'Romanian': ['Eastern Europe'],
+  'Southern US': ['Southern US'],
+  'Appalachian': ['Southern US'],
+  'Mediterranean': ['Mediterranean'],
+  'Middle Eastern': ['Middle East'],
+  'Balkan': ['Balkans'],
+  'West African': ['West Africa'],
+  'East African': ['East Africa'],
+  'North African': ['North Africa'],
+  'South African': ['South Africa'],
+};
 
-  return [
-    {
-      name: 'pasteles',
-      whyPossible: ['phonetic overlap with the remembered fragment', 'Puerto Rican family context', 'often family/holiday associated'],
-      whatWouldConfirm: ['wrapped in banana leaves', 'steamed packet', 'masa made from green banana/yautía', 'savory pork or sofrito filling'],
-      confidence: likelyPastelSound ? 'Medium' : 'Low',
-      researchRequired: true,
-    },
-    {
-      name: 'pastelón',
-      whyPossible: ['similar name family', 'Puerto Rican/Caribbean plantain association', 'may be remembered as a home casserole'],
-      whatWouldConfirm: ['layered casserole', 'sweet plantains', 'ground meat', 'sliced from a baking dish'],
-      confidence: memory.extractedClues.rememberedIngredients.includes('plantains') ? 'Medium' : 'Low',
-      researchRequired: true,
-    },
-    {
-      name: 'piononos',
-      whyPossible: ['Puerto Rican plantain-and-meat overlap', 'could be confused if only ingredients are remembered'],
-      whatWouldConfirm: ['fried sweet plantain', 'rolled or cup-shaped form', 'picadillo-like filling'],
-      confidence: 'Low',
-      researchRequired: true,
-    },
-  ];
+function familyRegionsForDetected(detectedRegions: string[]): string[] {
+  return unique(detectedRegions.flatMap((r) => REGION_TO_FAMILY_MAP[r] ?? []));
+}
+
+function dataDrivenHypotheses(memory: CollectedFoodMemory): DishHypothesis[] {
+  const { possibleDishNames, culturalOrRegionalHints } = memory.extractedClues;
+  if (possibleDishNames.length === 0) return [];
+
+  for (const family of dishFamiliesData.families) {
+    const matchedVariants = (family.variants ?? []).filter((variant) => {
+      const nameMatch = possibleDishNames.some((name) =>
+        variant.aliases.some((alias) => alias.toLowerCase() === name.toLowerCase()),
+      ) || variant.aliases.some((alias) =>
+        memory.normalizedMemory.toLowerCase().includes(alias.toLowerCase()),
+      );
+      if (!nameMatch) return false;
+      return variant.regions.some((r) => culturalOrRegionalHints.some((hint) => {
+        const mapped = REGION_TO_FAMILY_MAP[hint] ?? [];
+        return mapped.some((mr) => r === mr) || r === hint;
+      }));
+    });
+
+    if (matchedVariants.length === 0) continue;
+
+    const hypotheses: DishHypothesis[] = [];
+    const allVariants = family.variants ?? [];
+
+    for (const variant of allVariants) {
+      const isDirectMatch = matchedVariants.includes(variant);
+      const whyPossible: string[] = [];
+      if (isDirectMatch) {
+        whyPossible.push('phonetic overlap with the remembered fragment');
+      } else {
+        whyPossible.push('similar dish from the same family');
+      }
+      if (culturalOrRegionalHints.length > 0) whyPossible.push(`${culturalOrRegionalHints[0]} family context`);
+      if (memory.extractedClues.occasions.length > 0) whyPossible.push('often family/holiday associated');
+
+      hypotheses.push({
+        name: variant.name,
+        whyPossible,
+        whatWouldConfirm: variant.distinguishingElements,
+        confidence: isDirectMatch ? 'Medium' : 'Low',
+        researchRequired: true,
+      });
+    }
+
+    return hypotheses.slice(0, 5);
+  }
+
+  return [];
 }
 
 function genericHypotheses(memory: CollectedFoodMemory): DishHypothesis[] {
@@ -470,7 +572,7 @@ function genericHypotheses(memory: CollectedFoodMemory): DishHypothesis[] {
 }
 
 export function planDishResearch(memory: CollectedFoodMemory): DishResearchPlan {
-  const hypotheses = puertoRicanHypotheses(memory);
+  const hypotheses = dataDrivenHypotheses(memory);
   const finalHypotheses = hypotheses.length > 0 ? hypotheses : genericHypotheses(memory);
   const nameQueries = finalHypotheses.flatMap((hypothesis) => [
     `"${hypothesis.name}" traditional dish ingredients technique`,
@@ -529,6 +631,7 @@ export function buildReconstructionDossier(input: {
       'Do not finalize a recipe until the top hypothesis is confirmed or explicitly marked as a best-effort reconstruction.',
       'Preserve the strongest sensory cues before optimizing for exact ingredient names.',
       'Offer substitutions only with a clear note about what changes and what is preserved.',
+      'After the minimum viable nostalgia cue, help the user find ingredients near where they live now using the source_ingredients and find_sensory_substitutes tools.',
     ],
     whatToAskFamily: generateFamilyFollowupQuestions({ memory: input.memory, researchPlan: input.researchPlan }).questions,
     confidence,
@@ -627,7 +730,7 @@ function foodScienceCueProfile(signals: string): FoodScienceCueProfile {
       ],
       whyThisIsMinimum: 'A one-cup sip tests the chemistry of aroma release, body, acid, salt, and fat before wasting ingredients on a full pot.',
       safetyNotes: ['Use only known edible ingredients.', 'Keep tasting amounts small while adjusting salt, acid, or heat.'],
-      followUpIfItWorks: ['Ask what gave the liquid body.', 'Ask whether the brightness came from citrus, vinegar, dairy, fermentation, or tomato.', 'Ask what texture or garnish is missing.'],
+      followUpIfItWorks: ['Ask what gave the liquid body.', 'Ask whether the brightness came from citrus, vinegar, dairy, fermentation, or tomato.', 'Ask what texture or garnish is missing.', 'Use source_ingredients to help find key items near the user.'],
     };
   }
 
@@ -659,7 +762,7 @@ function foodScienceCueProfile(signals: string): FoodScienceCueProfile {
       ],
       whyThisIsMinimum: 'A composed bite tests the reusable food-science mechanisms—aroma, fat, browning, starch texture, and balance—before committing to specialty shopping or a full recipe.',
       safetyNotes: ['Cook proteins safely.', 'Avoid allergens and unknown ingredients.', 'Use high heat carefully if crisping or browning.'],
-      followUpIfItWorks: ['Ask which part hit first: smell, texture, sauce, fat, spice, or sweetness/acidity.', 'Ask what still feels missing.', 'Then decide whether specialty sourcing is worth it.'],
+      followUpIfItWorks: ['Ask which part hit first: smell, texture, sauce, fat, spice, or sweetness/acidity.', 'Ask what still feels missing.', 'Use find_sensory_substitutes and source_ingredients to help the user find items near where they live now.'],
     };
   }
 
@@ -691,7 +794,7 @@ function foodScienceCueProfile(signals: string): FoodScienceCueProfile {
       ],
       whyThisIsMinimum: 'A tablespoon of sauce on a neutral carrier tests the contrast and balance that often carries the nostalgic bite.',
       safetyNotes: ['Check condiment allergens and chile heat.', 'Do not mix unknown fermented or wild ingredients.'],
-      followUpIfItWorks: ['Ask whether the sauce was smooth or chunky.', 'Ask whether it leaned fatty, acidic, sweet, spicy, or savory.', 'Ask what carrier it was served on.'],
+      followUpIfItWorks: ['Ask whether the sauce was smooth or chunky.', 'Ask whether it leaned fatty, acidic, sweet, spicy, or savory.', 'Ask what carrier it was served on.', 'Use source_ingredients to help the user find sauce components near where they live.'],
     };
   }
 
@@ -719,7 +822,7 @@ function foodScienceCueProfile(signals: string): FoodScienceCueProfile {
       ],
       whyThisIsMinimum: 'One sensory variable is the cheapest way to learn whether the reconstruction is moving toward or away from the memory.',
       safetyNotes: ['Use only safe edible ingredients.', 'Do not taste unidentified wild plants or unknown powders.'],
-      followUpIfItWorks: ['Ask what dish format carried that aroma or balance.', 'Ask what texture or sauce belonged with it.'],
+      followUpIfItWorks: ['Ask what dish format carried that aroma or balance.', 'Ask what texture or sauce belonged with it.', 'Use find_sensory_substitutes to find accessible alternatives near the user.'],
     };
   }
 
@@ -746,7 +849,7 @@ function foodScienceCueProfile(signals: string): FoodScienceCueProfile {
     ],
     whyThisIsMinimum: 'The cheapest correct move is not a recipe; it is one more sensory clue that determines what kind of cue to test.',
     safetyNotes: ['Do not taste unknown ingredients.', 'Avoid allergens.'],
-    followUpIfItWorks: ['Use the new sensory clue to build a focused bite, sip, sauce, or aroma cue.'],
+    followUpIfItWorks: ['Use the new sensory clue to build a focused bite, sip, sauce, or aroma cue.', 'Once a cue works, use source_ingredients to help the user find items near where they live.'],
   };
 }
 

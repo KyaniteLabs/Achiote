@@ -46,7 +46,7 @@ describe('food memory reconstruction e2e flow', () => {
       const hypothesisNames = (researchPlan.structuredContent?.hypotheses as { name: string }[]).map(
         (hypothesis) => hypothesis.name,
       );
-      expect(hypothesisNames).toEqual(expect.arrayContaining(['pasteles', 'pastelón', 'piononos']));
+      expect(hypothesisNames).toEqual(expect.arrayContaining(['pasteles-puertorriquenos', 'pastelon', 'piononos']));
 
       const familyQuestions = await client.callTool({
         name: 'generate_family_followup_questions',

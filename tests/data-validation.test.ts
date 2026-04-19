@@ -46,7 +46,7 @@ describe('bundled data validation', () => {
     expectIssue(issues, 'dishFamilies.meta.description', 'non-empty string');
     expectIssue(issues, 'dishFamilies.families[0].aliases[12]', 'duplicate');
     expectIssue(issues, 'dishFamilies.families[0].aliases[13]', 'non-empty string');
-    expectIssue(issues, 'dishFamilies.families[6].canonicalName', 'duplicate');
+    expectIssue(issues, 'dishFamilies.families[8].canonicalName', 'duplicate');
   });
 
 

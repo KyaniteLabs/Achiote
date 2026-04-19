@@ -53,7 +53,7 @@ describe('memory workflow MCP tools', () => {
       });
       expect(plan.structuredContent).toMatchObject({ researchRequired: true });
       expect((plan.structuredContent?.hypotheses as { name: string }[]).map((hypothesis) => hypothesis.name)).toEqual(
-        expect.arrayContaining(['pasteles', 'pastelón']),
+        expect.arrayContaining(['pasteles-puertorriquenos', 'pastelon']),
       );
 
       const dossier = await client.callTool({
