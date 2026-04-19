@@ -246,8 +246,10 @@ export interface MinimumViableNostalgiaInput {
   maxEffortMinutes?: number;
 }
 
+export type CueComponentRole = 'starch' | 'protein' | 'sauce' | 'vegetable' | 'broth' | 'overall';
+
 export interface CueComponent {
-  role: string;
+  role: CueComponentRole;
   criticalElement: string;
   flavorProfile: string;
   localTestWith: string;
