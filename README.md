@@ -20,6 +20,7 @@ Member Berries is a research-first food-memory reconstruction server. It provide
 | Substitution | `find_sensory_substitutes` | Returns compound/group-matched substitutes from bundled ingredient data, plus regional hints when available. |
 | Sourcing | `source_ingredients` | Returns static regional store/corridor hints and a host-model prompt for sourcing. It does not perform live inventory or price lookup. |
 | Regional comparison | `discover_regional_similars` | Returns bundled dish-family context and a host-model prompt for neighboring/regional comparisons. |
+| Minimum viable nostalgia cue | `generate_minimum_viable_nostalgia` | Produces the smallest practical aroma, bite, sip, condiment, or ritual to test the likely memory trigger before attempting a full recipe. |
 | Recipe handoff | `generate_recipe` | Returns an expected recipe schema and a bounded host-model prompt for recipe generation and self-critique. It does not deterministically generate final recipe steps by itself. |
 
 All tools return MCP `structuredContent` plus backwards-compatible JSON text.
@@ -37,6 +38,7 @@ food memory fragment
   -> analyze_nostalgic_dish
   -> find_sensory_substitutes
   -> source_ingredients
+  -> generate_minimum_viable_nostalgia
   -> generate_recipe
 ```
 

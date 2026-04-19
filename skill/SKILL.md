@@ -69,8 +69,12 @@ Member Berries is a food-memory reconstruction skill. The recipe is not the star
 9. FAMILY LOOP → Connection questions
    Use `generate_family_followup_questions` to give the user gentle questions to ask relatives.
 
-10. RECREATE → Recipe only after enough grounding
-   If the likely dish and critical sensory triggers are clear, use the existing sensory/substitution/sourcing/recipe tools to prepare the recipe-generation handoff.
+10. MINIMUM VIABLE NOSTALGIA → Smallest sensory unit first
+   Before a full recipe, use `generate_minimum_viable_nostalgia` to offer the smallest aroma, bite, sip, condiment, or ritual that can test the likely memory trigger.
+   This is the preferred user-facing end step when the user wants something easy and emotionally close, not a full recreation.
+
+11. RECREATE → Recipe only after enough grounding
+   If the user wants a fuller dish and the likely dish/critical sensory triggers are clear, use the existing sensory/substitution/sourcing/recipe tools to prepare the recipe-generation handoff.
    The host AI writes the final recipe text from the structured context; the MCP server itself returns schemas, prompts, evidence, and constraints.
    If not clear, present a best-effort path and say exactly what is uncertain.
 ```
@@ -138,6 +142,11 @@ When enough evidence exists, continue into a recipe handoff:
 ## Sensory Analysis
 | Element | Target | Achieved | Confidence |
 |---------|--------|----------|------------|
+
+## Minimum Viable Nostalgia Cue
+- Smallest aroma/bite/ritual to try first
+- What it preserves
+- What it does not preserve
 
 ## Sourcing / Substitutions
 - [Ingredient]: [static hint, host-researched source, or clearly labeled uncertainty]

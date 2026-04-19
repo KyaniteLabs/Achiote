@@ -223,6 +223,37 @@ export const researchFindingsOutputSchema = z.object({
   confidence: confidenceSchema,
 });
 
+
+const minimumViableNostalgiaIngredientSchema = z.object({
+  item: z.string(),
+  amount: z.string(),
+  purpose: z.string(),
+  optional: z.boolean().optional(),
+});
+
+export const minimumViableNostalgiaInputSchema = z.object({
+  dossier: buildReconstructionDossierOutputSchema,
+  researchFindings: researchFindingsOutputSchema.optional(),
+  userLocation: z.string().optional(),
+  constraints: z.array(z.string()).optional(),
+  maxEffortMinutes: z.number().optional(),
+});
+
+export const minimumViableNostalgiaOutputSchema = z.object({
+  title: z.string(),
+  goal: z.string(),
+  effortMinutes: z.number(),
+  format: z.enum(['aroma-cue', 'bite', 'sip', 'condiment', 'ritual', 'shopping-shortcut']),
+  ingredients: z.array(minimumViableNostalgiaIngredientSchema),
+  steps: z.array(z.string()),
+  preserves: z.array(z.string()),
+  doesNotPreserve: z.array(z.string()),
+  whyThisIsMinimum: z.string(),
+  confidence: confidenceSchema,
+  safetyNotes: z.array(z.string()),
+  followUpIfItWorks: z.array(z.string()),
+});
+
 export const readOnlyAnnotations = {
   readOnlyHint: true,
   destructiveHint: false,
