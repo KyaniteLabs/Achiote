@@ -57,3 +57,22 @@ describe('minimum viable nostalgia cue', () => {
     expect(cue.confidence).toBe('Low');
   });
 });
+
+  it('does not route generic pork soup signals to the pasteles cue', () => {
+    const memory = collectFoodMemory({ memoryText: 'My uncle remembered pork broth with dill and sour greens.' });
+    const dossier = buildReconstructionDossier({
+      memory,
+      researchPlan: planDishResearch(memory),
+      researchedFacts: ['The remembered dish involved pork broth, dill, and sour greens.'],
+    });
+    const cue = generateMinimumViableNostalgiaCue({ dossier });
+
+    expect(cue.title).not.toContain('pasteles');
+    expect(cue.format).toBe('sip');
+  });
+
+  it('clamps max effort to a positive number', () => {
+    const cue = generateMinimumViableNostalgiaCue({ dossier: puertoRicanDossier(), maxEffortMinutes: -5 });
+
+    expect(cue.effortMinutes).toBeGreaterThan(0);
+  });

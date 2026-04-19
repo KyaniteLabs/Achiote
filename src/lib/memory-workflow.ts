@@ -289,10 +289,10 @@ function textSignals(input: MinimumViableNostalgiaInput): string {
 
 export function generateMinimumViableNostalgiaCue(input: MinimumViableNostalgiaInput): MinimumViableNostalgiaCue {
   const signals = textSignals(input);
-  const maxEffort = input.maxEffortMinutes ?? 20;
+  const maxEffort = Math.max(1, input.maxEffortMinutes ?? 20);
   const confidence = input.researchFindings?.confidence ?? input.dossier.confidence;
 
-  if (/banana leaves?|pasteles|sofrito|pork|plantain|green banana|masa/.test(signals)) {
+  if (/(banana leaves?|pasteles|sofrito|plantain|green banana|banana masa|plantain masa)/.test(signals)) {
     const effortMinutes = Math.min(maxEffort, 15);
     return {
       title: 'Minimum viable pasteles memory cue',
