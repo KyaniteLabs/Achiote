@@ -5,6 +5,8 @@ description: Reverse engineer nostalgic dishes using locally available ingredien
 
 # Member Berries
 
+Working codename: “Member Berries” is not the final public product name.
+
 Culinary reverse engineering that recreates the **sensory triggers** of nostalgic dishes using locally available ingredients.
 
 ## When to Use
@@ -70,7 +72,8 @@ Member Berries is a food-memory reconstruction skill. The recipe is not the star
    Use `generate_family_followup_questions` to give the user gentle questions to ask relatives.
 
 10. RECREATE → Recipe only after enough grounding
-   If the likely dish and critical sensory triggers are clear, use the existing sensory/substitution/sourcing/recipe tools to create an adapted recipe.
+   If the likely dish and critical sensory triggers are clear, use the existing sensory/substitution/sourcing/recipe tools to prepare the recipe-generation handoff.
+   The host AI writes the final recipe text from the structured context; the MCP server itself returns schemas, prompts, evidence, and constraints.
    If not clear, present a best-effort path and say exactly what is uncertain.
 ```
 
