@@ -171,3 +171,63 @@ export interface FamilyFollowupQuestions {
   questions: string[];
   toneGuidance: string;
 }
+
+
+export type SourceType = 'recipe' | 'video' | 'article' | 'book' | 'oral_history' | 'market' | 'other';
+
+export interface SourceReference {
+  title: string;
+  url: string;
+  sourceType: SourceType;
+  accessedAt: string;
+  reliability: Confidence;
+  author?: string;
+  quotedFacts: string[];
+}
+
+export interface ExtractedCulinaryFacts {
+  namesAndAliases: string[];
+  regions: string[];
+  ingredients: string[];
+  techniques: string[];
+  sensoryDescriptors: string[];
+  culturalOccasions: string[];
+  regionalVariants: string[];
+}
+
+export interface ResearchRecord {
+  dishName: string;
+  query: string;
+  sources: SourceReference[];
+  extractedFacts: ExtractedCulinaryFacts;
+  uncertainty: string[];
+  confidence: Confidence;
+  createdAt: string;
+}
+
+export interface ResearchRecordInput {
+  dishName: string;
+  query: string;
+  sources: Array<{
+    title: string;
+    url: string;
+    sourceType: SourceType;
+    accessedAt: string;
+    reliability: Confidence;
+    author?: string;
+    extractedFacts: string[];
+  }>;
+}
+
+export interface ResearchValidationIssue {
+  path: string;
+  message: string;
+}
+
+export interface ResearchFindingsForDossier {
+  researchedFacts: string[];
+  inferredFacts: string[];
+  unknowns: string[];
+  sourceCount: number;
+  confidence: Confidence;
+}

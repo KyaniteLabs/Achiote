@@ -14,14 +14,17 @@ const npmCommand = process.platform === 'win32' ? 'npm.cmd' : 'npm';
 const expectedTools = [
   'analyze_nostalgic_dish',
   'build_reconstruction_dossier',
+  'build_research_record',
   'collect_food_memory',
   'discover_regional_similars',
+  'extract_research_findings',
   'find_sensory_substitutes',
   'generate_family_followup_questions',
   'generate_recipe',
   'plan_dish_research',
   'resolve_dish_name',
   'source_ingredients',
+  'validate_research_record',
 ];
 
 function run(command, args, options = {}) {
@@ -119,7 +122,7 @@ async function assertPackagedCliListsTools(installDir, tempRoot) {
     const suffix = stderr ? `\n\nCLI stderr:\n${stderr}` : '';
     throw new Error(`${error instanceof Error ? error.message : String(error)}${suffix}`);
   } finally {
-    await client.close();
+    await withTimeout(client.close(), 5_000, 'MCP client close');
   }
 }
 

@@ -164,6 +164,65 @@ export const generateFamilyFollowupQuestionsOutputSchema = z.object({
   toneGuidance: z.string(),
 });
 
+
+const sourceReferenceSchema = z.object({
+  title: z.string(),
+  url: z.string(),
+  sourceType: z.enum(['recipe', 'video', 'article', 'book', 'oral_history', 'market', 'other']),
+  accessedAt: z.string(),
+  reliability: confidenceSchema,
+  author: z.string().optional(),
+  quotedFacts: z.array(z.string()),
+});
+
+const extractedCulinaryFactsSchema = z.object({
+  namesAndAliases: z.array(z.string()),
+  regions: z.array(z.string()),
+  ingredients: z.array(z.string()),
+  techniques: z.array(z.string()),
+  sensoryDescriptors: z.array(z.string()),
+  culturalOccasions: z.array(z.string()),
+  regionalVariants: z.array(z.string()),
+});
+
+export const researchRecordInputSchema = z.object({
+  dishName: z.string(),
+  query: z.string(),
+  sources: z.array(
+    z.object({
+      title: z.string(),
+      url: z.string(),
+      sourceType: z.enum(['recipe', 'video', 'article', 'book', 'oral_history', 'market', 'other']),
+      accessedAt: z.string(),
+      reliability: confidenceSchema,
+      author: z.string().optional(),
+      extractedFacts: z.array(z.string()),
+    }),
+  ),
+});
+
+export const researchRecordOutputSchema = z.object({
+  dishName: z.string(),
+  query: z.string(),
+  sources: z.array(sourceReferenceSchema),
+  extractedFacts: extractedCulinaryFactsSchema,
+  uncertainty: z.array(z.string()),
+  confidence: confidenceSchema,
+  createdAt: z.string(),
+});
+
+export const researchValidationOutputSchema = z.object({
+  issues: z.array(z.object({ path: z.string(), message: z.string() })),
+});
+
+export const researchFindingsOutputSchema = z.object({
+  researchedFacts: z.array(z.string()),
+  inferredFacts: z.array(z.string()),
+  unknowns: z.array(z.string()),
+  sourceCount: z.number(),
+  confidence: confidenceSchema,
+});
+
 export const readOnlyAnnotations = {
   readOnlyHint: true,
   destructiveHint: false,
