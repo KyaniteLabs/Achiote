@@ -1,8 +1,8 @@
 export type ToolPayload = Record<string, unknown>;
 
-export function structuredJsonResult(payload: ToolPayload) {
+export function structuredJsonResult(payload: ToolPayload, displayText?: string) {
   return {
-    content: [{ type: 'text' as const, text: JSON.stringify(payload, null, 2) }],
+    content: [{ type: 'text' as const, text: displayText ?? JSON.stringify(payload, null, 2) }],
     structuredContent: payload,
   };
 }

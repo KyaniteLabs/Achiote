@@ -59,7 +59,7 @@ Member Berries is a research-first food-memory reconstruction server. It provide
 | Minimum viable nostalgia cue | `generate_minimum_viable_nostalgia` | Produces the smallest practical aroma, bite, sip, condiment, or ritual to test the likely memory trigger before attempting a full recipe. |
 | Optional recipe handoff | `generate_recipe` | Returns an expected recipe schema and a bounded host-model prompt for recipe generation and self-critique. Use only after the minimum viable cue has been presented and the user wants something more complex. |
 
-All tools return MCP `structuredContent` plus backwards-compatible JSON text.
+All tools return MCP `structuredContent`. Most tools also display JSON text; intake tools may display a short human-readable summary so Claude Code output stays readable while structured data remains available to the host.
 
 ## End-to-end flow
 

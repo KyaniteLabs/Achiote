@@ -12,7 +12,7 @@
 
 The initial MCP direction remains: a stdio MCP server that helps a host model reverse-engineer nostalgic dishes. This pass intentionally does not add external research providers or new dependencies. Instead, it upgrades the project from prototype scaffolding to a trustworthy base:
 
-- MCP tools expose typed structured results while retaining JSON text for compatibility.
+- MCP tools expose typed structured results; most retain JSON text for compatibility, while intake tools may show concise display text.
 - Tool descriptions and server instructions clearly separate deterministic bundled analysis from host-model follow-up prompts.
 - Runtime cache creation is safe in clean clones and configurable through environment variables.
 - Tests run in clean checkouts and cover the actual MCP server registration path.

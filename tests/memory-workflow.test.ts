@@ -63,6 +63,39 @@ describe('research-first food memory workflow', () => {
     expect(questions.questions.join(' ')).toContain('wrapped');
     expect(questions.toneGuidance).toContain('No one needs to know the perfect spelling');
   });
+
+
+  it('asks clue-aware questions for sparse regional ingredient memories', () => {
+    const memory = collectFoodMemory({
+      memoryText: 'I ate a shark one time in Trinidad and Tobago',
+      knownRegion: 'Trinidad and Tobago',
+      userLocation: 'Long Beach, California',
+    });
+
+    expect(memory.extractedClues.culturalOrRegionalHints).toContain('Trinidad and Tobago');
+    expect(memory.extractedClues.rememberedIngredients).toContain('shark');
+    expect(memory.missingInformation).not.toContain('core ingredients');
+    expect(memory.missingInformation).not.toContain('country, island, region, town, or community');
+    expect(memory.nextQuestions.join(' ')).toContain('How was the shark served');
+    expect(memory.nextQuestions.join(' ')).not.toContain('wrapped in leaves');
+  });
+
+  it('normalizes curry and curried cooking-method clues without duplicate hints', () => {
+    const curryMemory = collectFoodMemory({ memoryText: 'I remember fish curry from Trinidad.' });
+    const curriedMemory = collectFoodMemory({ memoryText: 'I remember curried fish from Trinidad.' });
+
+    expect(curryMemory.missingInformation).not.toContain('cooking method or serving format');
+    expect(curriedMemory.missingInformation).not.toContain('cooking method or serving format');
+  });
+
+  it('does not extract generic hints from unrelated substrings', () => {
+    const selfishMemory = collectFoodMemory({ memoryText: 'This is a selfish memory about a beach trip.' });
+    const breadfruitMemory = collectFoodMemory({ memoryText: 'I remember breadfruit from the islands.' });
+
+    expect(selfishMemory.extractedClues.rememberedIngredients).not.toContain('fish');
+    expect(selfishMemory.missingInformation).toContain('core ingredients');
+    expect(breadfruitMemory.missingInformation).toContain('cooking method or serving format');
+  });
 });
 
 describe('general research planning', () => {
