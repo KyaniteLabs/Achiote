@@ -6,12 +6,13 @@ Member Berries is a local **Model Context Protocol (MCP)** server for culinary n
 
 ## What It Does Today
 
-Member Berries is a research-first food-memory reconstruction server. It provides 10 MCP tools that let a host AI chat client run the whole workflow from a fragment to a recipe-generation handoff:
+Member Berries is a research-first food-memory reconstruction server. It provides 13 MCP tools that let a host AI chat client run the whole workflow from a fragment to a recipe-generation handoff:
 
 | Stage | Tool | Implemented behavior |
 |------|------|----------------------|
 | Memory intake | `collect_food_memory` | Structures raw fragments, sound-alikes, family context, remembered ingredients, sensory clues, missing information, and gentle next questions. |
 | Research planning | `plan_dish_research` | Produces hypotheses, search queries, source preferences, facts to verify, and clarification questions. It plans research instead of pretending sparse fragments are solved. |
+| Research provenance | `build_research_record` / `validate_research_record` / `extract_research_findings` | Converts host-researched source facts into typed provenance records, validates source metadata, and summarizes researched facts/inferences/unknowns for dossier handoff. |
 | Evidence ledger | `build_reconstruction_dossier` | Builds a dossier that separates user-said, researched, inferred, and unknown claims, plus sensory priorities and adaptation strategy. |
 | Family connection | `generate_family_followup_questions` | Generates gentle questions the user can ask relatives to deepen the memory and resolve uncertainty. |
 | Name resolution | `resolve_dish_name` | Resolves names to broad families and ambiguity-aware candidates using bundled aliases, fuzzy matching, and transliterations. |
@@ -30,6 +31,7 @@ food memory fragment
   -> collect_food_memory
   -> plan_dish_research
   -> optional host research / family clarification
+  -> build_research_record / validate_research_record / extract_research_findings
   -> generate_family_followup_questions
   -> build_reconstruction_dossier
   -> analyze_nostalgic_dish

@@ -10,6 +10,7 @@ import {
   generateFamilyFollowupQuestions,
   planDishResearch,
 } from './lib/memory-workflow.js';
+import { buildResearchRecord, extractResearchFindings, validateResearchRecord } from './lib/research-provenance.js';
 import sensoryProfilesData from './data/sensory-profiles.json' with { type: 'json' };
 import dishFamiliesData from './data/dish-families.json' with { type: 'json' };
 import {
@@ -24,6 +25,10 @@ import {
   generateRecipeOutputSchema,
   dishResearchPlanSchema,
   planDishResearchOutputSchema,
+  researchFindingsOutputSchema,
+  researchRecordInputSchema,
+  researchRecordOutputSchema,
+  researchValidationOutputSchema,
   readOnlyAnnotations,
   sourceIngredientsOutputSchema,
 } from './schemas/tool-schemas.js';
@@ -44,6 +49,62 @@ export function createMemberBerriesServer(options: MemberBerriesServerOptions = 
     },
   );
 
+
+
+  server.registerTool(
+    'build_research_record',
+    {
+      title: 'Build Research Record',
+      description:
+        'Convert host-researched source facts into a typed provenance record with extracted ingredients, techniques, sensory descriptors, uncertainty, and confidence.',
+      inputSchema: researchRecordInputSchema.shape,
+      outputSchema: researchRecordOutputSchema,
+      annotations: readOnlyAnnotations,
+    },
+    async (input) => {
+      try {
+        return structuredJsonResult({ ...buildResearchRecord(input) });
+      } catch (error) {
+        return toolError(error, 'build_research_record_failed');
+      }
+    },
+  );
+
+  server.registerTool(
+    'validate_research_record',
+    {
+      title: 'Validate Research Record',
+      description: 'Validate that a typed research record has source metadata and extracted facts before it is trusted downstream.',
+      inputSchema: researchRecordOutputSchema.shape,
+      outputSchema: researchValidationOutputSchema,
+      annotations: readOnlyAnnotations,
+    },
+    async (record) => {
+      try {
+        return structuredJsonResult({ issues: validateResearchRecord(record) });
+      } catch (error) {
+        return toolError(error, 'validate_research_record_failed');
+      }
+    },
+  );
+
+  server.registerTool(
+    'extract_research_findings',
+    {
+      title: 'Extract Research Findings',
+      description: 'Summarize a typed research record into researched facts, inferred signals, unknowns, and confidence for dossier handoff.',
+      inputSchema: researchRecordOutputSchema.shape,
+      outputSchema: researchFindingsOutputSchema,
+      annotations: readOnlyAnnotations,
+    },
+    async (record) => {
+      try {
+        return structuredJsonResult({ ...extractResearchFindings(record) });
+      } catch (error) {
+        return toolError(error, 'extract_research_findings_failed');
+      }
+    },
+  );
 
   server.registerTool(
     'collect_food_memory',

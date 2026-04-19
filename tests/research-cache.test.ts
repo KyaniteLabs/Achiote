@@ -54,4 +54,37 @@ describe('ResearchCache', () => {
     const entry = cache.get('rice-dish', 'Pakistan');
     expect(entry!.hitCount).toBe(3);
   });
+
+  it('stores and retrieves typed research records as JSON', () => {
+    const record = {
+      dishName: 'pasteles',
+      query: 'pasteles Puerto Rican holiday',
+      sources: [
+        {
+          title: 'Source',
+          url: 'https://example.org/source',
+          sourceType: 'article',
+          accessedAt: '2026-04-18T00:00:00.000Z',
+          reliability: 'Medium',
+          quotedFacts: ['Pasteles are a hypothesis to verify.'],
+        },
+      ],
+      extractedFacts: {
+        namesAndAliases: ['pasteles'],
+        regions: ['Puerto Rican'],
+        ingredients: ['banana leaves'],
+        techniques: ['wrapped or steamed preparation'],
+        sensoryDescriptors: ['leaf aroma'],
+        culturalOccasions: [],
+        regionalVariants: [],
+      },
+      uncertainty: ['family-specific version'],
+      confidence: 'Medium',
+      createdAt: '2026-04-18T00:00:00.000Z',
+    };
+
+    cache.storeResearchRecord('pasteles', 'Puerto Rico', record);
+
+    expect(cache.getResearchRecord('pasteles', 'Puerto Rico')).toEqual(record);
+  });
 });

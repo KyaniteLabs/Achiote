@@ -1,7 +1,7 @@
 import Database from 'better-sqlite3';
 import fs from 'node:fs';
 import path from 'node:path';
-import type { ResearchCacheEntry } from './types.js';
+import type { ResearchCacheEntry, ResearchRecord } from './types.js';
 
 export class ResearchCache {
   private db: Database.Database;
@@ -27,6 +27,15 @@ export class ResearchCache {
       `INSERT OR REPLACE INTO research_cache (dish_family, region, research_data, created_at, hit_count)
        VALUES (?, ?, ?, datetime('now'), 0)`
     ).run(dishFamily, region, researchData);
+  }
+
+  storeResearchRecord(dishFamily: string, region: string, record: ResearchRecord): void {
+    this.store(dishFamily, region, JSON.stringify(record));
+  }
+
+  getResearchRecord(dishFamily: string, region: string): ResearchRecord | null {
+    const entry = this.get(dishFamily, region);
+    return entry ? JSON.parse(entry.researchData) as ResearchRecord : null;
   }
 
   get(dishFamily: string, region: string): ResearchCacheEntry | null {
