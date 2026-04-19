@@ -40,6 +40,10 @@ My mom said my Puerto Rican grandma made something that sounded like pass-teh-la
 
 Expected behavior: the host AI should use the MCP tools to collect the memory, plan research, build a dossier, and present a minimum viable nostalgia cue first. Only after that should it ask whether the user wants something more complex, such as sourcing help or a full recipe handoff.
 
+## Landing Page
+
+A polished static landing page lives at [`docs/landing/index.html`](docs/landing/index.html). Open it directly in a browser; it has no build step or external assets.
+
 ## What It Does Today
 
 Member Berries is a research-first food-memory reconstruction server. It provides 14 MCP tools that let a host AI chat client run the workflow from a fragment to a minimum viable nostalgia cue, with optional sourcing/substitution and recipe handoff if the user wants more:
