@@ -1,6 +1,6 @@
 # Member Berries
 
-Member Berries is a local **Model Context Protocol (MCP)** server for culinary nostalgia workflows. It helps a host model reverse-engineer the sensory triggers of remembered dishes using bundled cultural dish-family data, ingredient compound data, and regional sourcing hints.
+Member Berries is a local **Model Context Protocol (MCP)** server for research-first food-memory reconstruction. It helps a host AI turn incomplete family food memories into structured clues, research plans, cited/provenance-ready findings, sensory analysis, sourcing/substitution strategy, and a recipe-generation handoff.
 
 > "The nostalgia lives in the maillard crust's interaction with the lactic tang — here's how to reproduce that."
 
@@ -40,11 +40,11 @@ food memory fragment
   -> generate_recipe
 ```
 
-This executes through the full local workflow. The final recipe remains a host-model synthesis step because live research, family confirmation, and adaptation judgment should not be faked by static local data.
+This executes through the full local MCP workflow and is covered by `tests/reconstruction-flow-e2e.test.ts`. The final recipe remains a host-model synthesis step because live research, family confirmation, and adaptation judgment should not be faked by static local data.
 
 ## What It Does Not Do Yet
 
-The current implementation is intentionally local and offline. It does **not** perform live web search, geocoding, grocery inventory lookup, price lookup, or external recipe scraping. Host AI clients can use the research plan with their own browsing/search tools, then pass source-backed facts into the dossier and recipe handoff tools. See [`docs/ROADMAP.md`](docs/ROADMAP.md) for the provider-backed research plan.
+The current implementation is intentionally local and offline. It does **not** perform live web search, geocoding, grocery inventory lookup, price lookup, or external recipe scraping. It **does** provide typed provenance tools so a host AI can pass source-backed facts into the workflow after using its own browsing/search tools. See [`docs/ROADMAP.md`](docs/ROADMAP.md) for the provider-backed research plan.
 
 ## Requirements
 

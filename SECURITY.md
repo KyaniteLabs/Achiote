@@ -15,7 +15,7 @@ Please do not open public issues for vulnerabilities. Report privately to the re
 
 ## Security model
 
-Member Berries is a local stdio MCP server. It does not expose an HTTP listener and does not perform live web requests in the current implementation. Primary risks are:
+Member Berries is a local stdio MCP server. It does not expose an HTTP listener and does not perform live web requests in the current implementation. Host AI clients or future adapters may supply researched source facts; those facts must be represented as typed provenance records before downstream use. Primary risks are:
 
 - prompt-injection through user-provided memories or ingredient/location fields passed to host-model prompts
 - local cache privacy and filesystem permissions
@@ -27,4 +27,4 @@ Member Berries is a local stdio MCP server. It does not expose an HTTP listener 
 - Keep GitHub secret scanning/push protection and code scanning enabled when available.
 - Require CI before merging to the default branch.
 - Run `npm audit --audit-level=moderate` before releases.
-- Run `npm pack --dry-run` and inspect package contents before publishing.
+- Run `npm run pack:check` and inspect package contents before publishing.
