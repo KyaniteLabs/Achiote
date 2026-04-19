@@ -15,12 +15,17 @@ mkdir -p ~/.codex/skills/member-berries
 cp skill/SKILL.md ~/.codex/skills/member-berries/SKILL.md
 ```
 
-Add the MCP server to your host config:
+Add the MCP server to your host config. Use an absolute path to this repo's built `dist/index.js`:
+
+```bash
+pwd
+# copy the printed path and append /dist/index.js
+```
 
 ```toml
 [mcp_servers.member_berries]
 command = "node"
-args = ["/Users/simongonzalezdecruz/workspaces/member-berries/dist/index.js"]
+args = ["/absolute/path/to/member-berries/dist/index.js"]
 enabled = true
 startup_timeout_sec = 10
 ```
