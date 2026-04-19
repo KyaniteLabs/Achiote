@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "member-berries": {
+      "type": "stdio",
+      "command": "node",
+      "args": [
+        "dist/index.js"
+      ]
+    }
+  }
+}
