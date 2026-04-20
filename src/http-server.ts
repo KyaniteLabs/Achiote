@@ -677,20 +677,21 @@ async function serveStatic(req: IncomingMessage, res: ServerResponse): Promise<b
 
 const server = createServer(async (req, res) => {
   const origin = req.headers.origin;
-  const allowedOrigin = origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+  const isOriginAllowed = !origin || ALLOWED_ORIGINS.includes(origin);
+  const allowedOrigin = isOriginAllowed ? (origin || ALLOWED_ORIGINS[0]) : null;
   const originalWriteHead = res.writeHead.bind(res) as typeof res.writeHead;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (res as any).writeHead = (statusCode: number, ...rest: any[]) => {
     const extra = (typeof rest[rest.length - 1] === 'object' && rest[rest.length - 1] !== null)
       ? rest.pop() : {};
-    const merged = {
+    const corsHeaders = allowedOrigin ? {
       'Access-Control-Allow-Origin': allowedOrigin,
       'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type, mcp-session-id, Accept, x-api-key, authorization, x-session-id',
       'Access-Control-Expose-Headers': 'mcp-session-id, X-RateLimit-Remaining, X-RateLimit-Limit, X-RateLimit-Reset',
       Vary: 'Origin',
-      ...extra,
-    };
+    } : { Vary: 'Origin' };
+    const merged = { ...corsHeaders, ...extra };
     return originalWriteHead(statusCode, merged);
   };
 

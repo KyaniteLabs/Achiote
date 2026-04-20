@@ -77,7 +77,10 @@ function unique(values: string[]): string[] {
 }
 
 function includesAny(text: string, needles: string[]): boolean {
-  return needles.some((needle) => text.includes(needle));
+  return needles.some((needle) => {
+    const escaped = escapeRegExp(needle).replace(/\s+/g, '\\s+');
+    return new RegExp(`(?:^|\\b)${escaped}(?:$|\\b)`, 'i').test(text);
+  });
 }
 
 function escapeRegExp(value: string): string {
@@ -483,6 +486,22 @@ const REGION_TO_FAMILY_MAP: Record<string, string[]> = {
   'East African': ['East Africa'],
   'North African': ['North Africa'],
   'South African': ['South Africa'],
+  'Oaxacan': ['Latin America'],
+  'Yucatecan': ['Latin America'],
+  'Jaliscan': ['Latin America'],
+  'Sicilian': ['Mediterranean'],
+  'Catalan': ['Mediterranean'],
+  'German': ['Central Europe'],
+  'Georgian': ['Caucasus'],
+  'Armenian': ['Caucasus'],
+  'Azerbaijani': ['Caucasus'],
+  'Uzbek': ['Central Asia'],
+  'Somali': ['East Africa'],
+  'Kenyan': ['East Africa'],
+  'Southeast Asian': ['Southeast Asia'],
+  'South Asian': ['South Asia'],
+  'Caucasus': ['Caucasus'],
+  'Central Asian': ['Central Asia'],
 };
 
 function familyRegionsForDetected(detectedRegions: string[]): string[] {
@@ -492,6 +511,8 @@ function familyRegionsForDetected(detectedRegions: string[]): string[] {
 function dataDrivenHypotheses(memory: CollectedFoodMemory): DishHypothesis[] {
   const { possibleDishNames, culturalOrRegionalHints } = memory.extractedClues;
   if (possibleDishNames.length === 0) return [];
+
+  const allHypotheses: DishHypothesis[] = [];
 
   for (const family of dishFamiliesData.families) {
     const matchedVariants = (family.variants ?? []).filter((variant) => {
@@ -509,7 +530,6 @@ function dataDrivenHypotheses(memory: CollectedFoodMemory): DishHypothesis[] {
 
     if (matchedVariants.length === 0) continue;
 
-    const hypotheses: DishHypothesis[] = [];
     const allVariants = family.variants ?? [];
 
     for (const variant of allVariants) {
@@ -523,7 +543,7 @@ function dataDrivenHypotheses(memory: CollectedFoodMemory): DishHypothesis[] {
       if (culturalOrRegionalHints.length > 0) whyPossible.push(`${culturalOrRegionalHints[0]} family context`);
       if (memory.extractedClues.occasions.length > 0) whyPossible.push('often family/holiday associated');
 
-      hypotheses.push({
+      allHypotheses.push({
         name: variant.name,
         whyPossible,
         whatWouldConfirm: variant.distinguishingElements,
@@ -531,11 +551,9 @@ function dataDrivenHypotheses(memory: CollectedFoodMemory): DishHypothesis[] {
         researchRequired: true,
       });
     }
-
-    return hypotheses.slice(0, 5);
   }
 
-  return [];
+  return allHypotheses.slice(0, 5);
 }
 
 function genericHypotheses(memory: CollectedFoodMemory): DishHypothesis[] {
