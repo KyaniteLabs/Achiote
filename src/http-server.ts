@@ -7,6 +7,23 @@ import Anthropic from '@anthropic-ai/sdk';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { isInitializeRequest } from '@modelcontextprotocol/sdk/types.js';
 import { createAchioteServer } from './server.js';
+import {
+  analyzeNostalgicDishOutputSchema,
+  buildReconstructionDossierOutputSchema,
+  collectFoodMemoryOutputSchema,
+  discoverRegionalSimilarsOutputSchema,
+  dishNameResolutionSchema,
+  findSensorySubstitutesOutputSchema,
+  generateFamilyFollowupQuestionsOutputSchema,
+  generateRecipeOutputSchema,
+  minimumViableNostalgiaOutputSchema,
+  planDishResearchOutputSchema,
+  researchFindingsOutputSchema,
+  researchRecordOutputSchema,
+  researchValidationOutputSchema,
+  sourceIngredientsOutputSchema,
+} from './schemas/tool-schemas.js';
+import type { ZodTypeAny } from 'zod';
 
 // Simple in-memory rate limiter
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
@@ -326,6 +343,33 @@ const TOOLS: Anthropic.Tool[] = [
 
 type ToolInput = Record<string, unknown>;
 
+const outputSchemas: Record<string, ZodTypeAny> = {
+  collect_food_memory: collectFoodMemoryOutputSchema,
+  plan_dish_research: planDishResearchOutputSchema,
+  build_reconstruction_dossier: buildReconstructionDossierOutputSchema,
+  generate_family_followup_questions: generateFamilyFollowupQuestionsOutputSchema,
+  resolve_dish_name: dishNameResolutionSchema,
+  analyze_nostalgic_dish: analyzeNostalgicDishOutputSchema,
+  find_sensory_substitutes: findSensorySubstitutesOutputSchema,
+  source_ingredients: sourceIngredientsOutputSchema,
+  discover_regional_similars: discoverRegionalSimilarsOutputSchema,
+  generate_minimum_viable_nostalgia: minimumViableNostalgiaOutputSchema,
+  generate_recipe: generateRecipeOutputSchema,
+  build_research_record: researchRecordOutputSchema,
+  validate_research_record: researchValidationOutputSchema,
+  extract_research_findings: researchFindingsOutputSchema,
+};
+
+function validateToolOutput(toolName: string, result: unknown): void {
+  const schema = outputSchemas[toolName];
+  if (!schema) return;
+  const parsed = schema.safeParse(result);
+  if (!parsed.success) {
+    const issues = parsed.error.issues.map(i => `${i.path.join('.')}: ${i.message}`).join('; ');
+    console.warn(`[validation] ${toolName} output schema mismatch: ${issues}`);
+  }
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function executeTool(name: string, raw: unknown): any {
   const input = (raw ?? {}) as ToolInput;
@@ -476,6 +520,9 @@ function executeTool(name: string, raw: unknown): any {
       const sensoryAnalysis = input.sensoryAnalysis as string;
       const substitutions = input.substitutions as string;
       const sourcing = input.sourcing as string;
+      if (!sensoryAnalysis || !substitutions || !sourcing) {
+        throw new Error('generate_recipe requires completed sensory analysis, substitutions, and sourcing from prior pipeline steps');
+      }
       return {
         dishDescription,
         location,
@@ -609,6 +656,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       for (const block of toolBlocks) {
         try {
           const result = executeTool(block.name, block.input);
+          validateToolOutput(block.name, result);
           toolResults.push({ type: 'tool_result', tool_use_id: block.id, content: JSON.stringify(result) });
         } catch (err) {
           toolResults.push({
@@ -676,7 +724,10 @@ async function serveStatic(req: IncomingMessage, res: ServerResponse): Promise<b
     const data = await readFile(filePath);
     const ext = assetPath.slice(assetPath.lastIndexOf('.'));
     const contentType = MIME[ext] || 'application/octet-stream';
-    res.writeHead(200, { 'Content-Type': contentType });
+    res.writeHead(200, {
+      'Content-Type': contentType,
+      'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;",
+    });
     res.end(data);
     return true;
   } catch {

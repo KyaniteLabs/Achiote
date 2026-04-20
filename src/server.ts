@@ -525,6 +525,12 @@ For each similar dish:
       annotations: readOnlyAnnotations,
     },
     async ({ dishDescription, location, sensoryAnalysis, substitutions, sourcing }) => {
+      if (!sensoryAnalysis || !substitutions || !sourcing) {
+        return toolError(
+          new Error('generate_recipe requires completed sensory analysis, substitutions, and sourcing from prior pipeline steps'),
+          'pipeline_guard',
+        );
+      }
       try {
         const result: ToolPayload = {
           dishDescription,
