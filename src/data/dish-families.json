@@ -403,6 +403,20 @@
         "Spanish": [
           "tortilla española",
           "tortilla de patatas"
+        ],
+        "Japanese": [
+          "tamagoyaki",
+          "dashimaki tamago",
+          "omurice"
+        ],
+        "Chinese": [
+          "dan bing",
+          "egg foo young",
+          "chawanmushi"
+        ],
+        "French": [
+          "omelette",
+          "quiche lorraine"
         ]
       },
       "regions": [
@@ -1604,6 +1618,7 @@
         "buuz",
         "mandu-steamed",
         "har-gow",
+        "siu mai",
         "idli",
         "cwee-kueh",
         "putu-mayam",
