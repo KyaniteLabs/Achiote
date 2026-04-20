@@ -291,15 +291,18 @@
     async function streamResponse(res, el) {
       const reader = res.body.getReader();
       const decoder = new TextDecoder();
-      let buffer = '';
+      let pending = '';
       let text = '';
 
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
-        buffer += decoder.decode(value, { stream: true });
+        pending += decoder.decode(value, { stream: true });
 
-        for (const line of buffer.split('\n')) {
+        const lines = pending.split('\n');
+        pending = lines.pop() ?? '';
+
+        for (const line of lines) {
           if (line.startsWith('data: ')) {
             try {
               const d = JSON.parse(line.slice(6));
@@ -313,8 +316,13 @@
       if (!text) el.innerHTML = 'No response. Try rephrasing.';
     }
 
+    function escapeHtml(s) {
+      return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
     function formatMd(text) {
-      return text
+      const escaped = escapeHtml(text);
+      return escaped
         .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
         .replace(/\n- /g, '\n&#8226; ')
         .replace(/\n(\d+)\. /g, '\n$1. ')
