@@ -61,6 +61,9 @@ import { findSubstitutes } from './lib/substitution-engine.js';
 import { findMatchingRegion } from './lib/regional-matcher.js';
 import { buildResearchRecord, validateResearchRecord, extractResearchFindings } from './lib/research-provenance.js';
 import { createCache } from './lib/cache-path.js';
+import { createAuthenticator, loadKeysFromEnv } from './lib/auth.js';
+import { createRateLimiter } from './lib/rate-limit.js';
+import type { Tier } from './lib/auth.js';
 import sensoryProfilesData from './data/sensory-profiles.json' with { type: 'json' };
 import dishFamiliesData from './data/dish-families.json' with { type: 'json' };
 
@@ -82,6 +85,10 @@ const MIME: Record<string, string> = {
 const transports = new Map<string, StreamableHTTPServerTransport>();
 const cache = createCache({});
 const anthropic = new Anthropic();
+const authenticator = createAuthenticator(loadKeysFromEnv(process.env.ACHIOTE_API_KEYS));
+const rateLimiter = createRateLimiter();
+
+const AUTH_ENABLED = process.env.ACHIOTE_AUTH_ENABLED !== 'false';
 
 const SYSTEM_PROMPT = `You are a food memory assistant built into Achiote. You MUST use the provided tools — never answer from memory alone.
 
@@ -497,6 +504,40 @@ function executeTool(name: string, raw: unknown): any {
   }
 }
 
+// ── Auth middleware ─────────────────────────────────────────────────────────
+
+function extractApiKey(req: IncomingMessage): string | undefined {
+  const header = req.headers['x-api-key'];
+  if (typeof header === 'string' && header.length > 0) return header;
+  const url = req.url ?? '';
+  const param = new URL(url, 'http://localhost').searchParams.get('apiKey');
+  return param ?? undefined;
+}
+
+function extractBearer(req: IncomingMessage): string | undefined {
+  const header = req.headers['authorization'];
+  if (typeof header === 'string' && header.startsWith('Bearer ')) return header.slice(7).trim();
+  return undefined;
+}
+
+type AuthedRequest = { tier: Tier; name: string; keyId: string } | null;
+
+function authenticateRequest(req: IncomingMessage): AuthedRequest {
+  if (!AUTH_ENABLED) return { tier: 'free', name: 'anonymous', keyId: 'anon' };
+
+  const rawKey = extractApiKey(req) ?? extractBearer(req);
+  const result = authenticator.authenticate(rawKey);
+  if (!result.authenticated) return null;
+
+  return { tier: result.tier, name: result.name, keyId: rawKey! };
+}
+
+function sendRateLimitHeaders(res: ServerResponse, limitResult: { remaining: number; limit: number; resetAt: number }): void {
+  res.setHeader('X-RateLimit-Remaining', String(limitResult.remaining));
+  res.setHeader('X-RateLimit-Limit', String(limitResult.limit));
+  res.setHeader('X-RateLimit-Reset', String(Math.ceil(limitResult.resetAt / 1000)));
+}
+
 // ── AI agent endpoint ───────────────────────────────────────────────────────
 
 async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<void> {
@@ -507,12 +548,13 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
     return;
   }
 
-  // Rate limiting
-  const clientId = getClientIdentifier(req);
-  if (!checkRateLimit(clientId)) {
-    sendJson(res, 429, { error: 'Too Many Requests: Rate limit exceeded' });
-    return;
-  }
+  const authed = authenticateRequest(req);
+  if (!authed) { sendJson(res, 401, { error: 'Unauthorized. Provide a valid API key via x-api-key header or apiKey query param.' }); return; }
+
+  const sessionId = req.headers['x-session-id'] as string ?? authed.keyId;
+  const limitResult = rateLimiter.checkWebLimit(authed.tier, sessionId);
+  sendRateLimitHeaders(res, limitResult);
+  if (!limitResult.allowed) { sendJson(res, 429, { error: 'Rate limit exceeded. Upgrade your plan for more reconstructions.' }); return; }
 
   const raw = await readBody(req);
   let parsed: { message?: string };
@@ -635,8 +677,8 @@ const server = createServer(async (req, res) => {
     const merged = {
       'Access-Control-Allow-Origin': origin,
       'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type, mcp-session-id, Accept',
-      'Access-Control-Expose-Headers': 'mcp-session-id',
+      'Access-Control-Allow-Headers': 'Content-Type, mcp-session-id, Accept, x-api-key, authorization, x-session-id',
+      'Access-Control-Expose-Headers': 'mcp-session-id, X-RateLimit-Remaining, X-RateLimit-Limit, X-RateLimit-Reset',
       Vary: 'Origin',
       ...extra,
     };
@@ -651,18 +693,28 @@ const server = createServer(async (req, res) => {
 
   const pathname = req.url?.split('?')[0].replace(/\/$/, '') ?? '';
 
+  if (pathname === '/health') {
+    sendJson(res, 200, {
+      status: 'ok',
+      version: '0.2.0',
+      authEnabled: AUTH_ENABLED,
+      activeSessions: transports.size,
+    });
+    return;
+  }
+
   if (pathname === '/ask' && req.method === 'POST') {
     await handleAsk(req, res);
     return;
   }
 
   if (pathname === '/mcp') {
-    // Rate limiting for MCP endpoint
-    const clientId = getClientIdentifier(req);
-    if (!checkRateLimit(clientId)) {
-      sendJson(res, 429, { jsonrpc: '2.0', error: { code: -32000, message: 'Too Many Requests: Rate limit exceeded' }, id: null });
-      return;
-    }
+    const authed = authenticateRequest(req);
+    if (!authed) { sendJson(res, 401, { jsonrpc: '2.0', error: { code: -32001, message: 'Unauthorized: valid API key required' }, id: null }); return; }
+
+    const limitResult = rateLimiter.checkMcpLimit(authed.tier, authed.keyId);
+    sendRateLimitHeaders(res, limitResult);
+    if (!limitResult.allowed) { sendJson(res, 429, { jsonrpc: '2.0', error: { code: -32002, message: 'Rate limit exceeded' }, id: null }); return; }
 
     try {
       const sessionId = req.headers['mcp-session-id'] as string | undefined;

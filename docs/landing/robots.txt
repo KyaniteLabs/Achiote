@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /mcp
+Disallow: /ask
+Disallow: /health
+
+Sitemap: https://achiote.app/sitemap.xml
