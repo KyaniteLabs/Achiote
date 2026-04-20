@@ -1,6 +1,6 @@
-# Member Berries
+# Achiote
 
-Member Berries is a **Model Context Protocol (MCP)** server for research-first food-memory reconstruction. It helps a host AI turn incomplete family food memories into structured clues, research plans, cited/provenance-ready findings, sensory analysis, sourcing/substitution strategy, and a minimum viable nostalgia cue before any fuller recipe handoff.
+Achiote is a **Model Context Protocol (MCP)** server for research-first food-memory reconstruction. It helps a host AI turn incomplete family food memories into structured clues, research plans, cited/provenance-ready findings, sensory analysis, sourcing/substitution strategy, and a minimum viable nostalgia cue before any fuller recipe handoff.
 
 > "The nostalgia lives in the maillard crust's interaction with the lactic tang — here's how to reproduce that."
 
@@ -11,8 +11,8 @@ From this repo:
 ```bash
 npm ci
 npm run build
-mkdir -p ~/.codex/skills/member-berries
-cp skill/SKILL.md ~/.codex/skills/member-berries/SKILL.md
+mkdir -p ~/.codex/skills/achiote
+cp skill/SKILL.md ~/.codex/skills/achiote/SKILL.md
 ```
 
 Claude Code can use the checked-in `.mcp.json` after the build step. For Codex, add the MCP server to `~/.codex/config.toml` with an absolute path to this repo's built `dist/index.js`:
@@ -23,9 +23,9 @@ pwd
 ```
 
 ```toml
-[mcp_servers.member_berries]
+[mcp_servers.achiote]
 command = "node"
-args = ["/absolute/path/to/member-berries/dist/index.js"]
+args = ["/absolute/path/to/achiote/dist/index.js"]
 enabled = true
 startup_timeout_sec = 10
 ```
@@ -33,7 +33,7 @@ startup_timeout_sec = 10
 Restart the host AI session, then test with:
 
 ```text
-Use the member-berries skill.
+Use the achiote skill.
 
 My mom said my Puerto Rican grandma made something that sounded like pass-teh-lay. I don't speak Spanish. Maybe plantains or pork?
 ```
@@ -46,7 +46,7 @@ A polished static landing page lives at [`docs/landing/index.html`](docs/landing
 
 ## What It Does Today
 
-Member Berries is a research-first food-memory reconstruction server. It provides 14 MCP tools that let a host AI chat client run the workflow from a fragment to a minimum viable nostalgia cue, with optional sourcing/substitution and recipe handoff if the user wants more:
+Achiote is a research-first food-memory reconstruction server. It provides 14 MCP tools that let a host AI chat client run the workflow from a fragment to a minimum viable nostalgia cue, with optional sourcing/substitution and recipe handoff if the user wants more:
 
 | Stage | Tool | Implemented behavior |
 |------|------|----------------------|
@@ -103,23 +103,23 @@ After building, add the stdio server to your MCP settings:
 ```json
 {
   "mcpServers": {
-    "member-berries": {
+    "achiote": {
       "command": "node",
-      "args": ["/path/to/member-berries/dist/index.js"]
+      "args": ["/path/to/achiote/dist/index.js"]
     }
   }
 }
 ```
 
-If installed as a package, the CLI binary is `member-berries`.
+If installed as a package, the CLI binary is `achiote`.
 
 ## Cache and privacy
 
-Member Berries is a stdio MCP server. It does not open an HTTP port. The SQLite research cache path is:
+Achiote is a stdio MCP server. It does not open an HTTP port. The SQLite research cache path is:
 
-1. `$MEMBER_BERRIES_CACHE_PATH`, if set
-2. `$XDG_CACHE_HOME/member-berries/culture-cache.db`, if `XDG_CACHE_HOME` is set
-3. `~/.cache/member-berries/culture-cache.db`
+1. `$ACHIOTE_CACHE_PATH`, if set
+2. `$XDG_CACHE_HOME/achiote/culture-cache.db`, if `XDG_CACHE_HOME` is set
+3. `~/.cache/achiote/culture-cache.db`
 
 User memories can be emotionally sensitive. Do not add optional food-data provider integrations without documenting what is sent, where it is sent, and how it is cached.
 

@@ -1,7 +1,7 @@
 {
-  "name": "member-berries",
-  "version": "0.1.0",
-  "description": "Culinary reverse engineering MCP server — recreates nostalgic dishes using ingredients available where the user is",
+  "name": "achiote",
+  "version": "0.2.0",
+  "description": "Nostalgic food memory reconstruction MCP server — recreates childhood dishes using ingredients available where you are",
   "main": "dist/index.js",
   "type": "module",
   "scripts": {
@@ -32,7 +32,7 @@
   "license": "MIT",
   "types": "dist/index.d.ts",
   "bin": {
-    "member-berries": "bin/member-berries.mjs"
+    "achiote": "bin/achiote.mjs"
   },
   "exports": {
     ".": {
@@ -56,12 +56,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Pastorsimon1798/member-berries.git"
+    "url": "git+https://github.com/Pastorsimon1798/achiote.git"
   },
   "bugs": {
-    "url": "https://github.com/Pastorsimon1798/member-berries/issues"
+    "url": "https://github.com/Pastorsimon1798/achiote/issues"
   },
-  "homepage": "https://github.com/Pastorsimon1798/member-berries#readme",
+  "homepage": "https://github.com/Pastorsimon1798/achiote#readme",
   "keywords": [
     "mcp",
     "model-context-protocol",

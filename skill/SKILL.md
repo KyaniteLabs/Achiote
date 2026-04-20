@@ -1,9 +1,9 @@
 ---
-name: member-berries
+name: achiote
 description: "Reverse engineer nostalgic dishes using ingredients available where the user is. Triggers on: food memory, nostalgic recipe, recreate dish, miss eating, home cooking, traditional food, heritage food."
 ---
 
-# Member Berries
+# Achiote
 
 Culinary reverse engineering that recreates the **sensory triggers** of nostalgic dishes using ingredients available where the user is.
 
@@ -20,7 +20,7 @@ User describes a food they or their family miss from another place, time, or cul
 
 ## The Conversation Flow
 
-Member Berries is a food-memory reconstruction skill. The recipe is not the starting point; the user's fragment is the starting point.
+Achiote is a food-memory reconstruction skill. The recipe is not the starting point; the user's fragment is the starting point.
 
 ```text
 1. WELCOME → Normalize uncertainty

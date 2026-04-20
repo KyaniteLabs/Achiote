@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js';
-import { createMemberBerriesServer } from '../src/index.js';
+import { createAchioteServer } from '../src/index.js';
 
 describe('research provenance MCP tools', () => {
   async function withClient<T>(run: (client: Client) => Promise<T>): Promise<T> {
-    const server = createMemberBerriesServer({ enableCache: false });
+    const server = createAchioteServer({ enableCache: false });
     const client = new Client({ name: 'research-provenance-test', version: '0.0.0' });
     const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
     await server.connect(serverTransport);

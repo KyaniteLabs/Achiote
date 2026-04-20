@@ -3,34 +3,34 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Member Berries — Food Memory Detective</title>
+  <title>Achiote — Food Memory Detective</title>
   <meta name="description" content="Describe a half-remembered dish and we'll help you reconstruct it." />
   <style>
     :root {
-      --cream: #fff7e8;
-      --cream-2: #f8ead0;
-      --plum: #4a1635;
-      --plum-2: #6c2450;
-      --plum-light: rgba(74, 22, 53, 0.06);
-      --plum-lighter: rgba(74, 22, 53, 0.03);
+      --cream: #fff8f0;
+      --cream-2: #f8e8d4;
+      --achiote: #b5451b;
+      --achiote-2: #d4653a;
+      --achiote-light: rgba(181, 69, 27, 0.06);
+      --achiote-lighter: rgba(181, 69, 27, 0.03);
       --card-solid: #fffdfc;
-      --line: rgba(74, 22, 53, 0.14);
-      --line-light: rgba(74, 22, 53, 0.08);
+      --line: rgba(181, 69, 27, 0.14);
+      --line-light: rgba(181, 69, 27, 0.08);
       --radius-md: 24px;
       --radius-full: 999px;
-      --shadow: 0 2px 16px rgba(74, 22, 53, 0.06);
+      --shadow: 0 2px 16px rgba(181, 69, 27, 0.06);
       --transition-base: 0.25s ease;
       color-scheme: light;
     }
 
     [data-theme="dark"] {
-      --cream: #161014;
-      --cream-2: #1f161c;
-      --plum: #c47aa8;
-      --plum-2: #d492b8;
-      --plum-light: rgba(196, 122, 168, 0.08);
-      --plum-lighter: rgba(196, 122, 168, 0.04);
-      --card-solid: #1e181e;
+      --cream: #18120e;
+      --cream-2: #221a14;
+      --achiote: #e07845;
+      --achiote-2: #f09060;
+      --achiote-light: rgba(224, 120, 69, 0.08);
+      --achiote-lighter: rgba(224, 120, 69, 0.04);
+      --card-solid: #1e1610;
       --line: rgba(242, 184, 75, 0.12);
       --line-light: rgba(242, 184, 75, 0.06);
       color-scheme: dark;
@@ -43,7 +43,7 @@
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
       background: var(--cream);
-      color: var(--plum);
+      color: var(--achiote);
       display: flex;
       flex-direction: column;
     }
@@ -60,7 +60,7 @@
     }
     header .logo {
       width: 32px; height: 32px; border-radius: 50%;
-      background: conic-gradient(from 210deg, var(--plum), #8b4513, #f2b84b, #2d6a4f, var(--plum));
+      background: conic-gradient(from 210deg, var(--achiote), #8b4513, #f2b84b, #2d6a4f, var(--achiote));
     }
     header h1 {
       font-size: 1.05rem; font-weight: 800; letter-spacing: -0.01em;
@@ -68,7 +68,7 @@
     header h1 span { font-weight: 400; opacity: 0.5; }
     header nav { margin-left: auto; display: flex; align-items: center; gap: 12px; }
     header nav a {
-      font-size: 0.85rem; color: var(--plum); opacity: 0.5;
+      font-size: 0.85rem; color: var(--achiote); opacity: 0.5;
       text-decoration: none; font-weight: 600;
     }
     header nav a:hover { opacity: 1; }
@@ -76,7 +76,7 @@
       width: 32px; height: 32px; border-radius: 50%;
       border: 1px solid var(--line); background: var(--card-solid);
       cursor: pointer; display: grid; place-items: center;
-      color: var(--plum); font-size: 0.9rem; padding: 0;
+      color: var(--achiote); font-size: 0.9rem; padding: 0;
       transition: transform var(--transition-base);
     }
     .theme-btn:hover { transform: scale(1.08); }
@@ -103,7 +103,7 @@
       max-width: 400px; line-height: 1.3;
     }
     .welcome p {
-      color: var(--plum); opacity: 0.55; max-width: 420px;
+      color: var(--achiote); opacity: 0.55; max-width: 420px;
       font-size: 0.95rem; line-height: 1.6;
     }
     .welcome .suggestions {
@@ -113,7 +113,7 @@
     .suggestion {
       padding: 10px 16px; border-radius: var(--radius-full);
       border: 1px solid var(--line); background: var(--card-solid);
-      font-size: 0.85rem; color: var(--plum); cursor: pointer;
+      font-size: 0.85rem; color: var(--achiote); cursor: pointer;
       transition: transform var(--transition-base), box-shadow var(--transition-base);
       font-family: inherit;
     }
@@ -132,7 +132,7 @@
       line-height: 1.65; font-size: 0.95rem;
     }
     .msg.user {
-      background: var(--plum-light);
+      background: var(--achiote-light);
       border: 1px solid var(--line-light);
       margin-left: auto;
     }
@@ -141,7 +141,7 @@
       border: 1px solid var(--line);
       box-shadow: var(--shadow);
     }
-    .msg.ai strong { color: var(--plum); }
+    .msg.ai strong { color: var(--achiote); }
     .msg.ai ul, .msg.ai ol { margin: 8px 0; padding-left: 20px; }
     .msg.ai li { margin: 4px 0; }
 
@@ -150,7 +150,7 @@
     }
     .typing span {
       width: 6px; height: 6px; border-radius: 50%;
-      background: var(--plum); opacity: 0.3;
+      background: var(--achiote); opacity: 0.3;
       animation: blink 1.4s infinite;
     }
     .typing span:nth-child(2) { animation-delay: 0.2s; }
@@ -178,16 +178,16 @@
       border: 1px solid var(--line);
       background: var(--cream);
       font-size: 0.95rem; font-family: inherit;
-      color: var(--plum);
+      color: var(--achiote);
       outline: none;
       transition: border-color var(--transition-base);
     }
-    .input-wrap input::placeholder { color: var(--plum); opacity: 0.35; }
-    .input-wrap input:focus { border-color: var(--plum); }
+    .input-wrap input::placeholder { color: var(--achiote); opacity: 0.35; }
+    .input-wrap input:focus { border-color: var(--achiote); }
     .input-wrap button {
       width: 46px; height: 46px; border-radius: 50%;
       border: none; cursor: pointer;
-      background: linear-gradient(135deg, var(--plum), var(--plum-2));
+      background: linear-gradient(135deg, var(--achiote), var(--achiote-2));
       color: #fff; font-size: 1.2rem;
       display: grid; place-items: center;
       transition: transform var(--transition-base), box-shadow var(--transition-base);
@@ -208,8 +208,8 @@
 </head>
 <body>
   <header>
-    <div class="logo" role="img" aria-label="Member Berries logo"></div>
-    <h1>Member Berries <span>/ food memory detective</span></h1>
+    <div class="logo" role="img" aria-label="Achiote logo"></div>
+    <h1>Achiote <span>/ food memory detective</span></h1>
     <nav>
       <button class="theme-btn" id="theme-toggle" aria-label="Toggle dark mode">
         <span class="moon">&#9789;</span>

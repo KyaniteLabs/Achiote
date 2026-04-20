@@ -71,7 +71,7 @@ function parsePackJson(stdout) {
 
 function installedBinPath(installDir) {
   const suffix = process.platform === 'win32' ? '.cmd' : '';
-  return path.join(installDir, 'node_modules', '.bin', `member-berries${suffix}`);
+  return path.join(installDir, 'node_modules', '.bin', `achiote${suffix}`);
 }
 
 async function withTimeout(promise, ms, label) {
@@ -99,14 +99,14 @@ async function assertPackagedCliListsTools(installDir, tempRoot) {
     stderr: 'pipe',
     env: {
       ...process.env,
-      MEMBER_BERRIES_CACHE_PATH: path.join(tempRoot, 'cache', 'culture-cache.db'),
+      ACHIOTE_CACHE_PATH: path.join(tempRoot, 'cache', 'culture-cache.db'),
       XDG_CACHE_HOME: path.join(tempRoot, 'xdg-cache'),
     },
   });
   const stderrChunks = [];
   transport.stderr?.on('data', (chunk) => stderrChunks.push(Buffer.from(chunk).toString('utf8')));
 
-  const client = new Client({ name: 'member-berries-package-smoke', version: '0.0.0' });
+  const client = new Client({ name: 'achiote-package-smoke', version: '0.0.0' });
 
   try {
     await withTimeout(client.connect(transport), 10_000, 'MCP client connection');
@@ -128,7 +128,7 @@ async function assertPackagedCliListsTools(installDir, tempRoot) {
 }
 
 async function main() {
-  const smokeRoot = path.join(os.tmpdir(), 'member-berries-package-smoke');
+  const smokeRoot = path.join(os.tmpdir(), 'achiote-package-smoke');
   fs.mkdirSync(smokeRoot, { recursive: true });
   const tempRoot = fs.mkdtempSync(path.join(smokeRoot, 'run-'));
   const installDir = path.join(tempRoot, 'install');
@@ -137,7 +137,7 @@ async function main() {
     fs.mkdirSync(installDir, { recursive: true });
     fs.writeFileSync(path.join(installDir, 'package.json'), '{"private":true,"type":"module"}\n');
 
-    console.log(`Packing member-berries into ${tempRoot}`);
+    console.log(`Packing achiote into ${tempRoot}`);
     const packResult = run(npmCommand, ['pack', '--json', '--pack-destination', tempRoot]);
     const pack = parsePackJson(packResult.stdout ?? '');
     const tarballPath = path.isAbsolute(pack.filename) ? pack.filename : path.join(tempRoot, pack.filename);
@@ -156,7 +156,7 @@ async function main() {
 
     console.log(`Package smoke passed: installed tarball CLI listed ${expectedTools.length} MCP tools.`);
   } finally {
-    if (process.env.MEMBER_BERRIES_KEEP_PACKAGE_SMOKE !== '1') {
+    if (process.env.ACHIOTE_KEEP_PACKAGE_SMOKE !== '1') {
       fs.rmSync(tempRoot, { recursive: true, force: true });
     } else {
       console.log(`Preserved smoke temp directory: ${tempRoot}`);

@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for improving Member Berries.
+Thanks for improving Achiote.
 
 ## Development setup
 
