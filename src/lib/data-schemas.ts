@@ -25,6 +25,7 @@ type DishFamily = {
 
 type Ingredient = {
   name?: unknown;
+  aliases?: unknown;
   compounds?: unknown;
   sensoryContribution?: { aroma?: unknown; flavor?: unknown };
   substitutionGroup?: unknown;
@@ -239,6 +240,7 @@ function validateIngredients(issues: ValidationIssue[], data: BundledDataSet['in
       ingredientNames.add(normalized);
     }
 
+    validateStringArray(issues, `${base}.aliases`, ingredient.aliases, { requireNonEmpty: true, unique: true });
     validateStringArray(issues, `${base}.compounds`, ingredient.compounds, { requireNonEmpty: true, unique: true });
     validateNonEmptyString(issues, `${base}.sensoryContribution.aroma`, ingredient.sensoryContribution?.aroma);
     validateNonEmptyString(issues, `${base}.sensoryContribution.flavor`, ingredient.sensoryContribution?.flavor);

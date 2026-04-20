@@ -12,6 +12,7 @@
   "ingredients": {
     "cumin-seeds": {
       "name": "Cumin Seeds",
+      "aliases": ["jeera", "comino", "cumino", "Cuminum cyminum", "roman cumin"],
       "compounds": ["cuminaldehyde", "p-cymene", "beta-pinene", "gamma-terpinene"],
       "sensoryContribution": {
         "aroma": "warm, earthy, nutty, slightly sweet",
@@ -22,6 +23,7 @@
     },
     "coriander-seeds": {
       "name": "Coriander Seeds",
+      "aliases": ["dhania", "cilantro seeds", "Coriandrum sativum", "kothmir seeds", "coriandre"],
       "compounds": ["linalool", "geranyl-acetate", "camphor"],
       "sensoryContribution": {
         "aroma": "citrusy, floral, slightly sweet",
@@ -32,6 +34,7 @@
     },
     "smoked-paprika": {
       "name": "Smoked Paprika",
+      "aliases": ["pimenton", "pimenton de la Vera", "Capsicum annuum", "Spanish paprika", "ahumado"],
       "compounds": ["capsanthin", "smoky-phenols", "beta-carotene"],
       "sensoryContribution": {
         "aroma": "smoky, sweet, woody",
@@ -42,6 +45,7 @@
     },
     "fresh-cilantro": {
       "name": "Fresh Cilantro",
+      "aliases": ["coriander leaves", "dhania patta", "Chinese parsley", "Coriandrum sativum", "pak chi"],
       "compounds": ["decanal", "linalool", "E-2-dodecenal"],
       "sensoryContribution": {
         "aroma": "fresh, green, citrusy",
@@ -52,6 +56,7 @@
     },
     "fish-sauce": {
       "name": "Fish Sauce",
+      "aliases": ["nam pla", "nuoc mam", "patis", "ikan bilis sauce", "teuk trei"],
       "compounds": ["glutamate", "nucleotides", "volatile-amine-compounds"],
       "sensoryContribution": {
         "aroma": "pungent, fermented, oceanic",
@@ -62,6 +67,7 @@
     },
     "soy-sauce": {
       "name": "Soy Sauce",
+      "aliases": ["shoyu", "jiangyou", "ganjang", "ketjap", "tamari"],
       "compounds": ["glutamate", "melanoidins", "4-ethyl-guaiacol"],
       "sensoryContribution": {
         "aroma": "savory, roasted, slightly sweet",
@@ -72,6 +78,7 @@
     },
     "ghee": {
       "name": "Ghee",
+      "aliases": ["clarified butter", "ghritam", "samna", "rogan", "liquid gold"],
       "compounds": ["butyric-acid", "diacetyl", "lactones", "methyl-ketones"],
       "sensoryContribution": {
         "aroma": "rich, nutty, buttery, caramelized",
@@ -82,6 +89,7 @@
     },
     "tamarind": {
       "name": "Tamarind",
+      "aliases": ["imli", "tamarindo", "asam jawa", "Tamarindus indica", "me"],
       "compounds": ["tartaric-acid", "malic-acid", "citric-acid", "volatile-esters"],
       "sensoryContribution": {
         "aroma": "sweet-sour, fruity, slightly fermented",
@@ -92,6 +100,7 @@
     },
     "sumac": {
       "name": "Sumac",
+      "aliases": ["summac", "somaq", "Rhus coriaria", "Syrian sumac", "lemon spice"],
       "compounds": ["malic-acid", "anthocyanins", "gallic-acid"],
       "sensoryContribution": {
         "aroma": "tangy, citrusy, slightly fruity",
@@ -102,6 +111,7 @@
     },
     "dried-chilies": {
       "name": "Dried Chilies",
+      "aliases": ["chile seco", "lap xuong", "mirchi", "Capsicum annuum", "guajillo"],
       "compounds": ["capsaicin", "dihydrocapsaicin", "beta-carotene", "pyrazines"],
       "sensoryContribution": {
         "aroma": "smoky, fruity, earthy",
@@ -112,6 +122,7 @@
     },
     "turmeric": {
       "name": "Turmeric",
+      "aliases": ["haldi", "curcuma", "kunyit", "Curcuma longa", "Indian saffron"],
       "compounds": ["curcumin", "ar-turmerone", "alpha-turmerone", "beta-turmerone"],
       "sensoryContribution": {
         "aroma": "earthy, warm, slightly mustard-like",
@@ -122,6 +133,7 @@
     },
     "star-anise": {
       "name": "Star Anise",
+      "aliases": ["badain", "star aniseed", "Illicium verum", "phung thao", "badiane"],
       "compounds": ["anethole", "estragole", "limonene"],
       "sensoryContribution": {
         "aroma": "sweet, licorice-like, warm",
@@ -132,6 +144,7 @@
     },
     "garlic": {
       "name": "Garlic",
+      "aliases": ["ail", "ajo", "knoblauch", "Allium sativum", "ninniku"],
       "compounds": ["allicin", "diallyl-disulfide", "ajoene", "diallyl-trisulfide"],
       "sensoryContribution": {
         "aroma": "pungent, sulfurous, sharp",
@@ -142,6 +155,7 @@
     },
     "onion": {
       "name": "Onion",
+      "aliases": ["cebolla", "oignon", "pyaz", "Allium cepa", "Zwiebel"],
       "compounds": ["dipropyl-disulfide", "thiopropanal-s-oxide", "propenyl-sulfide"],
       "sensoryContribution": {
         "aroma": "sharp, pungent, sulfurous",
@@ -152,6 +166,7 @@
     },
     "shallot": {
       "name": "Shallot",
+      "aliases": ["echalote", "ascalonia", "bawang merah", "Allium cepa var. aggregatum", "kanda"],
       "compounds": ["dipropyl-disulfide", "methyl-propyl-disulfide", "allicin"],
       "sensoryContribution": {
         "aroma": "mild onion, sweet, slightly garlicky",
@@ -162,6 +177,7 @@
     },
     "scallion": {
       "name": "Scallion (Green Onion)",
+      "aliases": ["spring onion", "da cong", "negi", "cebollin", "Allium fistulosum"],
       "compounds": ["dipropyl-disulfide", "methyl-propyl-trisulfide", "hexanal"],
       "sensoryContribution": {
         "aroma": "fresh, mild onion, green",
@@ -172,6 +188,7 @@
     },
     "lime": {
       "name": "Lime Juice",
+      "aliases": ["limon", "nimbu", "Citrus aurantifolia", "citron vert", "manao"],
       "compounds": ["limonene", "citral", "citric-acid", "linalool"],
       "sensoryContribution": {
         "aroma": "bright, fresh, citrus",
@@ -182,6 +199,7 @@
     },
     "lemon": {
       "name": "Lemon Juice",
+      "aliases": ["citron", "limone", "limon", "Citrus limon", "neembu"],
       "compounds": ["limonene", "citral", "citric-acid", "alpha-pinene"],
       "sensoryContribution": {
         "aroma": "bright, clean, citrus floral",
@@ -192,6 +210,7 @@
     },
     "vinegar": {
       "name": "Vinegar (Rice/Apple Cider/White)",
+      "aliases": ["vinaigre", "aceto", "komezu", "suka", "acetic acid"],
       "compounds": ["acetic-acid", "ethyl-acetate", "acetaldehyde"],
       "sensoryContribution": {
         "aroma": "sharp, sour, fermented",
@@ -202,6 +221,7 @@
     },
     "pomegranate-molasses": {
       "name": "Pomegranate Molasses",
+      "aliases": ["nar eksisi", "dibs rumman", "rob-e-anar", "Punica granatum", "pomegranate syrup"],
       "compounds": ["malic-acid", "citric-acid", "anthocyanins", "ellagic-acid"],
       "sensoryContribution": {
         "aroma": "tangy, fruity, deeply sweet-sour",
@@ -212,6 +232,7 @@
     },
     "butter": {
       "name": "Butter",
+      "aliases": ["beurre", "mantequilla", "burro", "makhan", "beurre noisette"],
       "compounds": ["diacetyl", "butyric-acid", "lactones", "methyl-ketones"],
       "sensoryContribution": {
         "aroma": "rich, creamy, slightly nutty",
@@ -222,6 +243,7 @@
     },
     "sesame-oil": {
       "name": "Toasted Sesame Oil",
+      "aliases": ["chamgireum", "zhi ma you", "nuoc mam vung", "Sesamum indicum", "tila tel"],
       "compounds": ["sesamol", "sesamin", "furaneol", "pyrazines"],
       "sensoryContribution": {
         "aroma": "nutty, roasted, deep",
@@ -232,6 +254,7 @@
     },
     "coconut-oil": {
       "name": "Coconut Oil",
+      "aliases": ["kelapa oil", "nariyal tel", "Cocos nucifera", "copra oil", "virgin coconut oil"],
       "compounds": ["lauric-acid", "delta-lactones", "gamma-lactones"],
       "sensoryContribution": {
         "aroma": "tropical, sweet, coconut",
@@ -242,6 +265,7 @@
     },
     "olive-oil": {
       "name": "Extra Virgin Olive Oil",
+      "aliases": ["huile d'olive", "aceite de oliva", "Olea europaea", "EVOO", "olio d'oliva"],
       "compounds": ["oleic-acid", "hexanal", "E-2-hexenal", "polyphenols"],
       "sensoryContribution": {
         "aroma": "grassy, green, peppery, fruity",
@@ -252,6 +276,7 @@
     },
     "black-pepper": {
       "name": "Black Pepper",
+      "aliases": ["kali mirch", "poivre noir", "Piper nigrum", "pimienta negra", "marich"],
       "compounds": ["piperine", "caryophyllene", "limonene", "alpha-pinene"],
       "sensoryContribution": {
         "aroma": "sharp, woody, warm",
@@ -262,6 +287,7 @@
     },
     "ginger": {
       "name": "Fresh Ginger",
+      "aliases": ["adrak", "jenjibre", "shoga", "Zingiber officinale", "zingiber"],
       "compounds": ["gingerol", "zingiberene", "beta-bisabolene", "citral"],
       "sensoryContribution": {
         "aroma": "spicy, warm, citrusy, woody",
@@ -272,6 +298,7 @@
     },
     "szechuan-peppercorn": {
       "name": "Szechuan Peppercorn",
+      "aliases": ["hua jiao", "Zanthoxylum simulans", "mala pepper", "Japanese sansho", "prickly ash"],
       "compounds": ["hydroxy-alpha-sanshool", "limonene", "geraniol"],
       "sensoryContribution": {
         "aroma": "citrusy, floral, slightly woody",
@@ -282,6 +309,7 @@
     },
     "basil": {
       "name": "Fresh Basil",
+      "aliases": ["Ocimum basilicum", "basilico", "horapha", "rau hung", "basilic"],
       "compounds": ["linalool", "methyl-chavicol", "eugenol"],
       "sensoryContribution": {
         "aroma": "sweet, anise-like, peppery, fresh",
@@ -292,6 +320,7 @@
     },
     "mint": {
       "name": "Fresh Mint",
+      "aliases": ["Mentha spicata", "naana", "hierba buena", "phak hom", "menthe"],
       "compounds": ["menthol", "menthone", "limonene", "pulegone"],
       "sensoryContribution": {
         "aroma": "cool, fresh, sweet",
@@ -302,6 +331,7 @@
     },
     "dill": {
       "name": "Fresh Dill",
+      "aliases": ["Anethum graveolens", "aneto", "eneldo", "suwa", "dille"],
       "compounds": ["carvone", "alpha-phellandrene", "limonene"],
       "sensoryContribution": {
         "aroma": "grassy, fresh, slightly anise",
@@ -312,6 +342,7 @@
     },
     "parsley": {
       "name": "Fresh Parsley",
+      "aliases": ["Petroselinum crispum", "prezzemolo", "perejil", "persil", "baqdunis"],
       "compounds": ["apiol", "myristicin", "alpha-pinene", "limonene"],
       "sensoryContribution": {
         "aroma": "fresh, green, slightly grassy",
@@ -322,6 +353,7 @@
     },
     "oregano": {
       "name": "Oregano",
+      "aliases": ["Origanum vulgare", "origano", "oregano", "rigani", "wild marjoram"],
       "compounds": ["carvacrol", "thymol", "gamma-terpinene", "p-cymene"],
       "sensoryContribution": {
         "aroma": "warm, herbaceous, slightly camphor",
@@ -332,6 +364,7 @@
     },
     "honey": {
       "name": "Honey",
+      "aliases": ["asal", "miel", "miele", "shahad", "mel"],
       "compounds": ["phenylacetaldehyde", "methyl-anthranilate", "isovaleric-acid", "linalool-oxides"],
       "sensoryContribution": {
         "aroma": "floral, sweet, warm",
@@ -342,6 +375,7 @@
     },
     "palm-sugar": {
       "name": "Palm Sugar",
+      "aliases": ["gula melaka", "gur", "nam tan", "Arenga pinnata", "coconut sugar"],
       "compounds": ["caramel-compounds", "furaneol", "maltol"],
       "sensoryContribution": {
         "aroma": "caramel, toffee, earthy",
@@ -352,6 +386,7 @@
     },
     "miso": {
       "name": "Miso Paste",
+      "aliases": ["miso", "Glycine max", "fermented soybean paste", "jiang", "doenjang"],
       "compounds": ["glutamate", "nucleotides", "melanoidins", "ethyl-acetate"],
       "sensoryContribution": {
         "aroma": "savory, fermented, slightly sweet",
@@ -362,6 +397,7 @@
     },
     "anchovy": {
       "name": "Anchovy",
+      "aliases": ["anchoa", "anchois", "acciuga", "Engraulis encrasicolus", "ikan bilis"],
       "compounds": ["glutamate", "inosine-monophosphate", "trimethylamine", "pyrazines"],
       "sensoryContribution": {
         "aroma": "pungent, fishy, savory",
@@ -372,6 +408,7 @@
     },
     "cardamom": {
       "name": "Cardamom",
+      "aliases": ["elaichi", "Elettaria cardamomum", "hel", "kakule", "green cardamom"],
       "compounds": ["1,8-cineole", "alpha-terpinyl-acetate", "linalool", "limonene"],
       "sensoryContribution": {
         "aroma": "warm, eucalyptus, citrus, sweet",
@@ -382,6 +419,7 @@
     },
     "cinnamon": {
       "name": "Cinnamon",
+      "aliases": ["dalchini", "Cinnamomum verum", "cannelle", "canela", "Cassia bark"],
       "compounds": ["cinnamaldehyde", "eugenol", "linalool", "coumarin"],
       "sensoryContribution": {
         "aroma": "warm, sweet, woody, spicy",
@@ -392,6 +430,7 @@
     },
     "cloves": {
       "name": "Cloves",
+      "aliases": ["laung", "clou de girofle", "Syzygium aromaticum", "clavo", "kruidnagel"],
       "compounds": ["eugenol", "beta-caryophyllene", "acetyleugenol"],
       "sensoryContribution": {
         "aroma": "warm, sweet, pungent, woody",
@@ -402,6 +441,7 @@
     },
     "chickpea-flour": {
       "name": "Chickpea Flour (Besan)",
+      "aliases": ["besan", "gram flour", "Cicer arietinum", "farine de pois chiche", "kadalai maavu"],
       "compounds": ["saponins", "proteins", "volatile-aldehydes"],
       "sensoryContribution": {
         "aroma": "earthy, nutty, slightly beany",
@@ -412,6 +452,7 @@
     },
     "leek": {
       "name": "Leek",
+      "aliases": ["poireau", "puerro", "Allium ampeloprasum", "porri", "leker"],
       "compounds": ["allicin", "dipropyl-disulfide", "methyl-propyl-disulfide"],
       "sensoryContribution": {
         "aroma": "mild onion, sweet, green",
@@ -422,6 +463,7 @@
     },
     "garlic-scapes": {
       "name": "Garlic Scapes",
+      "aliases": ["garlic tops", "garlic curls", "suan tai", "nimannul", "Allium sativum scapes"],
       "compounds": ["allicin", "diallyl-disulfide", "methyl-allyl-thiosulfinate"],
       "sensoryContribution": {
         "aroma": "fresh garlic, green, grassy",
@@ -432,6 +474,7 @@
     },
     "amchoor": {
       "name": "Amchoor (Dried Mango Powder)",
+      "aliases": ["aamchur", "mango powder", "Mangifera indica", "dried mango", "amchoor powder"],
       "compounds": ["citric-acid", "malic-acid", "volatile-terpenes"],
       "sensoryContribution": {
         "aroma": "fruity, tart, tropical",
@@ -442,6 +485,7 @@
     },
     "lard": {
       "name": "Lard",
+      "aliases": ["manteca", "graisse de porc", "schweineschmalz", "pig fat", "pork fat"],
       "compounds": ["oleic-acid", "palmitic-acid", "stearic-acid", "volatile-aldehydes"],
       "sensoryContribution": {
         "aroma": "rich, meaty, slightly sweet",
@@ -452,6 +496,7 @@
     },
     "schmaltz": {
       "name": "Schmaltz (Chicken Fat)",
+      "aliases": ["gras de poulet", "gribenes fat", "chicken fat", "rendered chicken fat", "fette di pollo"],
       "compounds": ["oleic-acid", "linoleic-acid", "palmitic-acid", "volatile-sulfur-compounds"],
       "sensoryContribution": {
         "aroma": "rich, savory, poultry, onion-garlic notes",
@@ -462,6 +507,7 @@
     },
     "horseradish": {
       "name": "Horseradish",
+      "aliases": ["Armoracia rusticana", "meerrettich", "raifort", "kren", "chrzan"],
       "compounds": ["sinigrin", "allyl-isothiocyanate", "glucosinolates"],
       "sensoryContribution": {
         "aroma": "sharp, pungent, mustard-like, nasal-clearing",
@@ -472,6 +518,7 @@
     },
     "wasabi": {
       "name": "Wasabi",
+      "aliases": ["Eutrema japonicum", "Japanese horseradish", "namida", "wasabia", "seiyo wasabi"],
       "compounds": ["allyl-isothiocyanate", "sinigrin", "6-methylsulfinylhexyl-isothiocyanate"],
       "sensoryContribution": {
         "aroma": "sharp, green, pungent, nasal-clearing",
@@ -482,6 +529,7 @@
     },
     "thyme": {
       "name": "Thyme",
+      "aliases": ["Thymus vulgaris", "thym", "tomillo", "timo", "za'atar herb"],
       "compounds": ["thymol", "carvacrol", "linalool", "geraniol"],
       "sensoryContribution": {
         "aroma": "herbaceous, woody, warm, slightly floral",
@@ -492,6 +540,7 @@
     },
     "rosemary": {
       "name": "Rosemary",
+      "aliases": ["Rosmarinus officinalis", "romero", "rosmarin", "rosmarino", "compass plant"],
       "compounds": ["1,8-cineole", "camphor", "alpha-pinene", "borneol"],
       "sensoryContribution": {
         "aroma": "pine-like, woody, camphoraceous, evergreen",
@@ -502,6 +551,7 @@
     },
     "lemongrass": {
       "name": "Lemongrass",
+      "aliases": ["Cymbopogon citratus", "takrai", "serai", "capim-santo", "fever grass"],
       "compounds": ["citral", "geranial", "neral", "myrcene"],
       "sensoryContribution": {
         "aroma": "bright citrus, lemon, slightly floral",
@@ -512,6 +562,7 @@
     },
     "molasses": {
       "name": "Molasses",
+      "aliases": ["black treacle", "melaza", "melasse", "Saccharum officinarum", "sorghum molasses"],
       "compounds": ["maltol", "furanones", "caramel-compounds", "volatile-phenols"],
       "sensoryContribution": {
         "aroma": "deep caramel, burnt sugar, slightly bitter",
@@ -522,6 +573,7 @@
     },
     "jaggery": {
       "name": "Jaggery (Gur)",
+      "aliases": ["gur", "guda", "panela", "rapadura", "Saccharum officinarum"],
       "compounds": ["sucrose", "maltol", "furanones", "mineral-compounds"],
       "sensoryContribution": {
         "aroma": "caramel, earthy, toffee-like",
@@ -532,6 +584,7 @@
     },
     "maple-syrup": {
       "name": "Maple Syrup",
+      "aliases": ["sirop d'erable", "Acer saccharum", "maple sap", "xarope de bordo", "sirope de arce"],
       "compounds": ["sotolone", "vanillin", "maltol", "furaneol"],
       "sensoryContribution": {
         "aroma": "caramel, woody, vanilla, burnt sugar",
@@ -542,6 +595,7 @@
     },
     "msg": {
       "name": "MSG (Monosodium Glutamate)",
+      "aliases": ["ajinomoto", "ve-tsin", "monosodium glutamate", "umami seasoning", "C5H8NNaO4"],
       "compounds": ["glutamate", "sodium-ion"],
       "sensoryContribution": {
         "aroma": "none (pure umami without aroma)",
@@ -552,6 +606,7 @@
     },
     "mushroom": {
       "name": "Mushroom (Dried Shiitake)",
+      "aliases": ["Lentinula edodes", "xiang gu", "donggu", "shiitake", "black mushroom"],
       "compounds": ["guanylic-acid", "lentinic-acid", "sulfur-volatiles", "umami-peptides"],
       "sensoryContribution": {
         "aroma": "earthy, woody, smoky, meaty",
@@ -562,6 +617,7 @@
     },
     "fermented-bean-paste": {
       "name": "Fermented Bean Paste (Doenjang/Doubanjiang)",
+      "aliases": ["doenjang", "doubanjiang", "Glycine max paste", "chunjang", "taucheo"],
       "compounds": ["glutamate", "volatile-sulfur-compounds", "pyrazines", "isoflavones"],
       "sensoryContribution": {
         "aroma": "pungent, fermented, earthy, soy",
@@ -572,6 +628,7 @@
     },
     "fenugreek": {
       "name": "Fenugreek",
+      "aliases": ["methi", "Trigonella foenum-graecum", "fenugrec", "helba", "hilbeh"],
       "compounds": ["sotolone", "trigonelline", "4-hydroxy-isoleucine"],
       "sensoryContribution": {
         "aroma": "maple-like, sweet, slightly bitter, celery",
@@ -582,6 +639,7 @@
     },
     "saffron": {
       "name": "Saffron",
+      "aliases": ["zaafaran", "Crocus sativus", "kesar", "azafran", "krokos"],
       "compounds": ["safranal", "crocin", "picrocrocin"],
       "sensoryContribution": {
         "aroma": "floral, honey-like, hay-like, slightly metallic",
@@ -592,6 +650,7 @@
     },
     "nutmeg": {
       "name": "Nutmeg",
+      "aliases": ["jaiphal", "noix de muscade", "nuez moscada", "Myristica fragrans", "moscata"],
       "compounds": ["sabinene", "myristicin", "elemicin", "terpinen-4-ol"],
       "sensoryContribution": {
         "aroma": "warm, sweet, spicy, woody",
@@ -602,6 +661,7 @@
     },
     "vanilla": {
       "name": "Vanilla",
+      "aliases": ["Vanilla planifolia", "vainilla", "vanille", "vaniglia", "bourbon vanilla"],
       "compounds": ["vanillin", "vanillic-acid", "p-hydroxybenzaldehyde"],
       "sensoryContribution": {
         "aroma": "sweet, creamy, floral, warm",
@@ -612,6 +672,7 @@
     },
     "rice-flour": {
       "name": "Rice Flour",
+      "aliases": ["Oryza sativa flour", "mochiko", "nepulo", "bijirin beras", "rice powder"],
       "compounds": ["amylose", "amylopectin", "proteins"],
       "sensoryContribution": {
         "aroma": "neutral, slightly starchy",
@@ -622,6 +683,7 @@
     },
     "cornstarch": {
       "name": "Cornstarch",
+      "aliases": ["corn flour", "maizena", "fecula de maiz", "Zea mays starch", "cornstarch powder"],
       "compounds": ["amylose", "amylopectin"],
       "sensoryContribution": {
         "aroma": "neutral",
@@ -632,6 +694,7 @@
     },
     "tapioca": {
       "name": "Tapioca (Cassava Starch)",
+      "aliases": ["Manihot esculenta", "cassava starch", "yuca starch", "boba", "sago"],
       "compounds": ["amylopectin", "cyanogenic-glycosides-removed"],
       "sensoryContribution": {
         "aroma": "neutral, slightly sweet",
@@ -642,6 +705,7 @@
     },
     "semolina": {
       "name": "Semolina (Durum Wheat)",
+      "aliases": ["Triticum durum", "sooji", "rava", "semoule", "smeego"],
       "compounds": ["gluten-proteins", "carotenoids", "volatile-aldehydes"],
       "sensoryContribution": {
         "aroma": "nutty, wheaty, slightly sweet",
@@ -652,6 +716,7 @@
     },
     "yogurt": {
       "name": "Yogurt",
+      "aliases": ["dahi", "yaourt", "yogur", "yoghurt", "jugurt"],
       "compounds": ["lactic-acid", "diacetyl", "acetaldehyde"],
       "sensoryContribution": {
         "aroma": "tangy, milky, slightly buttery",
@@ -662,6 +727,7 @@
     },
     "paneer": {
       "name": "Paneer",
+      "aliases": ["Indian cottage cheese", "chhana", "panir", "farmer cheese", "queso paneer"],
       "compounds": ["casein", "milk-fat", "lactic-acid"],
       "sensoryContribution": {
         "aroma": "mild, milky, fresh",
@@ -672,6 +738,7 @@
     },
     "feta": {
       "name": "Feta Cheese",
+      "aliases": ["Ovis aries cheese", "fetir", "white cheese", "sirene", "telemea"],
       "compounds": ["butyric-acid", "capric-acid", "lactic-acid", "amino-acids"],
       "sensoryContribution": {
         "aroma": "tangy, briny, slightly sharp",
@@ -682,6 +749,7 @@
     },
     "tofu": {
       "name": "Tofu",
+      "aliases": ["doufu", "bean curd", "tahu", "okara curd", "Glycine max curd"],
       "compounds": ["soy-proteins", "isoflavones", "saponins"],
       "sensoryContribution": {
         "aroma": "mild, slightly beany, clean",
@@ -692,6 +760,7 @@
     },
     "eggplant": {
       "name": "Eggplant (Aubergine)",
+      "aliases": ["aubergine", "berenjena", "brinjal", "Solanum melongena", "nasu"],
       "compounds": ["chlorogenic-acid", "nasunin", "solanine"],
       "sensoryContribution": {
         "aroma": "earthy, slightly bitter, spongy when raw",
@@ -702,6 +771,7 @@
     },
     "plantain": {
       "name": "Plantain",
+      "aliases": ["platanos", "cooking banana", "Musa paradisiaca", "matooke", "togolese banana"],
       "compounds": ["starch", "sugars", "potassium", "volatile-esters"],
       "sensoryContribution": {
         "aroma": "mild, starchy, slightly sweet when ripe",
@@ -712,6 +782,7 @@
     },
     "okra": {
       "name": "Okra",
+      "aliases": ["lady's finger", "bamia", "gumbo", "Abelmoschus esculentus", "quingombo"],
       "compounds": ["mucilage", "pectin", "volatile-aldehydes"],
       "sensoryContribution": {
         "aroma": "green, grassy, slightly earthy",
@@ -722,6 +793,7 @@
     },
     "lentils": {
       "name": "Lentils",
+      "aliases": ["masoor dal", "Lens culinaris", "lenticchie", "lentejas", "adas"],
       "compounds": ["proteins", "saponins", "volatile-aldehydes", "iron"],
       "sensoryContribution": {
         "aroma": "earthy, slightly nutty, beany",
@@ -732,6 +804,7 @@
     },
     "black-beans": {
       "name": "Black Beans",
+      "aliases": ["frijoles negros", "feijao preto", "Phaseolus vulgaris", "kala chana", "turtle beans"],
       "compounds": ["anthocyanins", "proteins", "oligosaccharides"],
       "sensoryContribution": {
         "aroma": "earthy, slightly sweet, beany",
@@ -742,6 +815,7 @@
     },
     "masa-harina": {
       "name": "Masa Harina (Nixtamalized Corn Flour)",
+      "aliases": ["Zea mays flour", "corn masa", "masa de maiz", "nixtamal", "tortilla flour"],
       "compounds": ["amylose", "amylopectin", "calcium-hydroxide-treated", "niacin"],
       "sensoryContribution": {
         "aroma": "corny, slightly alkaline, toasted",
@@ -752,6 +826,7 @@
     },
     "dried-shrimp": {
       "name": "Dried Shrimp",
+      "aliases": ["ebi", "kung haeng", "camaron seco", "Crangon crangon", "heibei"],
       "compounds": ["glutamate", "inosine-monophosphate", "volatile-amines", "pyrazines"],
       "sensoryContribution": {
         "aroma": "pungent, fishy, umami-rich, sea-like",
@@ -762,6 +837,7 @@
     },
     "kombu": {
       "name": "Kombu (Kelp)",
+      "aliases": ["Saccharina japonica", "haidai", "dashima", "kelp", "sea tangle"],
       "compounds": ["glutamate", "mannitol", "alginates", "iodine"],
       "sensoryContribution": {
         "aroma": "oceanic, briny, slightly sweet",
@@ -772,6 +848,7 @@
     },
     "peanut": {
       "name": "Peanut",
+      "aliases": ["Arachis hypogaea", "groundnut", "mani", "cacahuete", "moongphali"],
       "compounds": ["pyrazines", "furanones", "proteins", "oleic-acid"],
       "sensoryContribution": {
         "aroma": "nutty, roasted, earthy, slightly sweet",
@@ -782,6 +859,7 @@
     },
     "sesame-seeds": {
       "name": "Sesame Seeds",
+      "aliases": ["Sesamum indicum", "till", "ajonjoli", "goma", "kunto"],
       "compounds": ["sesamol", "sesamin", "furanones"],
       "sensoryContribution": {
         "aroma": "nutty, toasted, slightly sweet",
@@ -792,6 +870,7 @@
     },
     "gochujang": {
       "name": "Gochujang (Korean Chili Paste)",
+      "aliases": ["kochujang", "gochu jang", "Korean chili paste", "red pepper paste", "gochujang paste"],
       "compounds": ["capsaicin", "glutamate", "maillard-products", "fermented-soy-compounds"],
       "sensoryContribution": {
         "aroma": "fermented, sweet-spicy, soy, smoky",
@@ -802,6 +881,7 @@
     },
     "harissa": {
       "name": "Harissa",
+      "aliases": ["harisa", "North African chili paste", "Tunisian pepper paste", "harrassa", "chili harissa"],
       "compounds": ["capsaicin", "carotenoids", "garlic-sulfur-compounds", "cumin-compounds"],
       "sensoryContribution": {
         "aroma": "roasted chili, smoky, garlicky, warm spice",
@@ -812,6 +892,7 @@
     },
     "tahini": {
       "name": "Tahini",
+      "aliases": ["tahina", "tehina", "sesame paste", "ar-deh", "Sesamum indicum paste"],
       "compounds": ["sesamol", "oleic-acid", "linoleic-acid", "sesamin"],
       "sensoryContribution": {
         "aroma": "nutty, roasted sesame, slightly bitter",
@@ -822,6 +903,7 @@
     },
     "chimichurri": {
       "name": "Chimichurri",
+      "aliases": ["chimichurri sauce", "Argentine herb sauce", "chimmi", "chimichurri verde", "parsley garlic sauce"],
       "compounds": ["allicin", "linalool", "carvacrol", "vinyl-dithiins"],
       "sensoryContribution": {
         "aroma": "herbaceous, garlicky, vinegary, fresh",
