@@ -770,24 +770,6 @@ startup_timeout_sec = <span class="tk-num">10</span></pre>
       }
     }
 
-    // Try-it widget
-    function runTryIt() {
-      const input = document.getElementById('tryit-input');
-      const output = document.getElementById('tryit-output');
-      const val = input.value.trim();
-      if (!val) return;
-      const responses = [
-        `<p><strong>Memory fragment captured.</strong></p><p>Possible clues: region (family recipe), texture (wrapped/fried), phonetic similarity to "pasteles." Next step: ask about the leaf, the masa texture, and whether it was boiled or steamed.</p>`,
-        `<p><strong>Sensory decomposition:</strong></p><p>Smell → toast/herb/sesame. Texture → soft interior, maybe starchy carrier. Sound → "everyone got quiet" suggests ritual significance. Recommended first test: one bite of toasted sesame oil on warm rice.</p>`,
-        `<p><strong>Pattern match:</strong></p><p>Input matches "sour + pale + dill + dairy" profile. Likely Eastern European or Central Asian soup family. Acid source unknown — could be fermented dairy, vinegar, or lemon. Test: a warm sip with dill and a spoonful of yogurt.</p>`
-      ];
-      const pick = responses[Math.floor(Math.random() * responses.length)];
-      output.innerHTML = pick;
-      output.classList.add('active');
-    }
-    document.getElementById('tryit-input').addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') runTryIt();
-    });
   </script>
 </body>
 </html>
