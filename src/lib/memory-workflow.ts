@@ -304,7 +304,7 @@ const REGION_PATTERNS: Array<{ pattern: RegExp; label: string }> = [
 
 const GEOGRAPHIC_CONTEXT_PATTERN_SOURCES = [
   { source: '(?:from|grew\\s+up\\s+in|born\\s+in|family\\s+(?:is\\s+)?from|lived\\s+in|visited|traveled\\s+to|my\\s+(?:mom|dad|grandma|grandpa|grandmother|grandfather|abuela|abuelo|oma|opa|nonna|nonno|baba|yaya|tata|nana|papa)\\s+(?:is|was)\\s+from)\\s+([a-zA-Z\\s]{2,30})', flags: 'gi' },
-  { source: '(?<![.!?]\\s|^)(?:in|at)\\s+([A-Z][a-zA-Z\\s]{1,28})\\s+(?:and|where|when|that|which|who|every|during|after|before)', flags: 'g' },
+  { source: '(?<![.!?]\\s)(?:in|at)\\s+([A-Z][a-zA-Z\\s]{1,28})\\s+(?:and|where|when|that|which|who|every|during|after|before)', flags: 'g' },
 ];
 
 function extractRegionHints(lowerText: string, originalText: string): string[] {
@@ -960,7 +960,7 @@ function foodScienceCueProfile(signals: string, userLocation?: string, overallCo
 
 export function generateMinimumViableNostalgiaCue(input: MinimumViableNostalgiaInput): MinimumViableNostalgiaCue {
   const signals = textSignals(input);
-  const maxEffort = Math.max(1, input.maxEffortMinutes ?? 20) || 20;
+  const maxEffort = Math.max(1, input.maxEffortMinutes ?? 20);
   const confidence = input.researchFindings?.confidence ?? input.dossier.confidence;
   const profile = foodScienceCueProfile(signals, input.userLocation, confidence);
 
