@@ -148,3 +148,15 @@ describe('general research planning', () => {
     expect(plan.searchQueries.join(' ')).toContain('momo achar');
   });
 });
+
+describe('extractRegionHints idempotency', () => {
+  it('returns the same region hints when called twice on the same input', () => {
+    const text = 'My grandma from Puerto Rico made something with plantains.';
+    const first = collectFoodMemory({ memoryText: text });
+    const second = collectFoodMemory({ memoryText: text });
+    expect(first.extractedClues.culturalOrRegionalHints).toEqual(
+      second.extractedClues.culturalOrRegionalHints,
+    );
+    expect(first.extractedClues.culturalOrRegionalHints).toContain('Puerto Rican');
+  });
+});
