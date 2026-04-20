@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Achiote — Food Memory Detective</title>
   <meta name="description" content="Describe a half-remembered dish and we'll help you reconstruct it." />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; object-src 'none'; base-uri 'self';">
   <style>
     :root {
       --cream: #fff8f0;
@@ -224,9 +225,9 @@
       <h2>What's the dish you can almost remember?</h2>
       <p>Describe a smell, a texture, a nickname, or the person who made it. Spelling doesn't matter — half memories are enough.</p>
       <div class="suggestions">
-        <button class="suggestion" onclick="send(this.textContent)">My abuela made pasteles with green bananas</button>
-        <button class="suggestion" onclick="send(this.textContent)">Sour soup with dill and pale white chunks</button>
-        <button class="suggestion" onclick="send(this.textContent)">Sticky rice wrapped in a leaf, tasted like coconut</button>
+        <button class="suggestion" data-suggestion="My abuela made pasteles with green bananas">My abuela made pasteles with green bananas</button>
+        <button class="suggestion" data-suggestion="Sour soup with dill and pale white chunks">Sour soup with dill and pale white chunks</button>
+        <button class="suggestion" data-suggestion="Sticky rice wrapped in a leaf, tasted like coconut">Sticky rice wrapped in a leaf, tasted like coconut</button>
       </div>
     </div>
     <div class="messages" id="messages"></div>
@@ -235,7 +236,7 @@
   <div class="input-bar">
     <div class="input-wrap">
       <input type="text" id="input" placeholder="Describe a food memory..." maxlength="600" autofocus />
-      <button id="send-btn" onclick="send()" aria-label="Send">&#8593;</button>
+      <button id="send-btn" aria-label="Send">&#8593;</button>
     </div>
   </div>
 
@@ -245,6 +246,14 @@
     const welcome = document.getElementById('welcome');
     const messages = document.getElementById('messages');
     let busy = false;
+
+    // Add event listeners for suggestion buttons
+    document.querySelectorAll('.suggestion').forEach(button => {
+      button.addEventListener('click', () => send(button.dataset.suggestion));
+    });
+
+    // Add event listener for send button
+    btn.addEventListener('click', () => send());
 
     input.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !busy) send(); });
 

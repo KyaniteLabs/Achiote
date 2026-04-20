@@ -70,6 +70,7 @@ import dishFamiliesData from './data/dish-families.json' with { type: 'json' };
 const PORT = 3000;
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const STATIC_DIR = resolve(__dirname, '..', 'docs', 'landing');
+const ALLOWED_ORIGINS = (process.env.ACHIOTE_ALLOWED_ORIGINS || 'http://localhost:3000').split(',');
 
 const MIME: Record<string, string> = {
   '.html': 'text/html',
@@ -668,14 +669,15 @@ async function serveStatic(req: IncomingMessage, res: ServerResponse): Promise<b
 // ── Server ──────────────────────────────────────────────────────────────────
 
 const server = createServer(async (req, res) => {
-  const origin = req.headers.origin || '*';
+  const origin = req.headers.origin;
+  const allowedOrigin = origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
   const originalWriteHead = res.writeHead.bind(res) as typeof res.writeHead;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (res as any).writeHead = (statusCode: number, ...rest: any[]) => {
     const extra = (typeof rest[rest.length - 1] === 'object' && rest[rest.length - 1] !== null)
       ? rest.pop() : {};
     const merged = {
-      'Access-Control-Allow-Origin': origin,
+      'Access-Control-Allow-Origin': allowedOrigin,
       'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type, mcp-session-id, Accept, x-api-key, authorization, x-session-id',
       'Access-Control-Expose-Headers': 'mcp-session-id, X-RateLimit-Remaining, X-RateLimit-Limit, X-RateLimit-Reset',
