@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
-import { dirname, join, resolve } from 'node:path';
+import { dirname, join, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import Anthropic from '@anthropic-ai/sdk';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
@@ -83,7 +83,17 @@ const MIME: Record<string, string> = {
   '.ico': 'image/x-icon',
 };
 
-const transports = new Map<string, StreamableHTTPServerTransport>();
+const transports = new Map<string, { transport: StreamableHTTPServerTransport; lastActivity: number }>();
+const SESSION_TTL = 30 * 60 * 1000; // 30 minutes
+
+function sweepStaleSessions(): void {
+  const now = Date.now();
+  for (const [sid, entry] of transports) {
+    if (now - entry.lastActivity > SESSION_TTL) {
+      transports.delete(sid);
+    }
+  }
+}
 const cache = createCache({});
 const anthropic = new Anthropic();
 const authenticator = createAuthenticator(loadKeysFromEnv(process.env.ACHIOTE_API_KEYS));
@@ -590,6 +600,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
 
     let iterations = 0;
     while (modelResponse.stop_reason === 'tool_use' && iterations < 15) {
+      if (res.writableEnded) return;
       iterations++;
       const toolBlocks = modelResponse.content.filter((b): b is Anthropic.ToolUseBlock => b.type === 'tool_use');
       console.log(`[ask] iteration=${iterations} calling tools: ${toolBlocks.map(b => b.name).join(', ')}`);
@@ -657,9 +668,9 @@ function sendJson(res: ServerResponse, status: number, body: unknown): void {
 async function serveStatic(req: IncomingMessage, res: ServerResponse): Promise<boolean> {
   const raw = req.url?.split('?')[0] ?? '/';
   const path = raw === '/' ? '/app.html' : raw === '/about' ? '/index.html' : raw;
-  const filePath = join(STATIC_DIR, path);
+  const filePath = resolve(STATIC_DIR, path);
 
-  if (!filePath.startsWith(STATIC_DIR)) return false;
+  if (!filePath.startsWith(resolve(STATIC_DIR) + sep)) return false;
 
   try {
     const data = await readFile(filePath);
@@ -731,8 +742,10 @@ const server = createServer(async (req, res) => {
       let transport: StreamableHTTPServerTransport | undefined;
 
       if (sessionId && transports.has(sessionId)) {
-        transport = transports.get(sessionId)!;
+        transport = transports.get(sessionId)!.transport;
+        transports.get(sessionId)!.lastActivity = Date.now();
       }
+      sweepStaleSessions();
 
       if (!transport) {
         const raw = await readBody(req);
@@ -745,7 +758,7 @@ const server = createServer(async (req, res) => {
         if (req.method === 'POST' && isInitializeRequest(parsed)) {
           transport = new StreamableHTTPServerTransport({
             sessionIdGenerator: () => randomUUID(),
-            onsessioninitialized: (sid) => { transports.set(sid, transport!); },
+            onsessioninitialized: (sid) => { transports.set(sid, { transport: transport!, lastActivity: Date.now() }); },
           });
           transport.onclose = () => {
             const sid = transport!.sessionId;
@@ -788,8 +801,8 @@ server.listen(PORT, () => {
 });
 
 process.on('SIGINT', async () => {
-  for (const [sid, transport] of transports) {
-    try { await transport.close(); } catch { /* ignore */ }
+  for (const [sid, entry] of transports) {
+    try { await entry.transport.close(); } catch { /* ignore */ }
     transports.delete(sid);
   }
   cache?.close();
