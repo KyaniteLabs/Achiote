@@ -8,6 +8,9 @@ export class ResearchCache {
   private db: Database.Database;
 
   constructor(dbPath: string) {
+    if (!dbPath || !dbPath.trim()) {
+      throw new Error('ResearchCache requires a non-empty dbPath');
+    }
     fs.mkdirSync(path.dirname(dbPath), { recursive: true });
     this.db = new Database(dbPath);
     this.db.pragma('journal_mode = WAL');

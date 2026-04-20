@@ -191,9 +191,11 @@ export function resolveDishName(input: string): DishNameResolution {
     return buildResolution(input, best, candidates, ambiguous);
   }
 
+  const normalized = normalize(input);
+  const safeName = normalized.length > 80 ? normalized.slice(0, 80) : input;
   return {
     input,
-    canonicalName: input,
+    canonicalName: safeName,
     aliases: [],
     transliterations: [],
     dishFamily: 'unknown',

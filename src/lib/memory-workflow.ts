@@ -13,24 +13,18 @@ import type {
 } from './types.js';
 
 const RESEARCH_STOPWORDS = new Set([
-  'my',
-  'mom',
-  'grandma',
-  'grandmother',
-  'auntie',
-  'friend',
-  'said',
-  'sounded',
-  'mentioned',
-  'called',
-  'something',
-  'like',
-  'with',
-  'from',
-  'and',
-  'the',
-  'that',
-  'a',
+  // English
+  'my', 'mom', 'grandma', 'grandmother', 'auntie', 'friend',
+  'said', 'sounded', 'mentioned', 'called', 'something', 'like',
+  'with', 'from', 'and', 'the', 'that', 'a', 'of', 'in', 'it',
+  // Spanish
+  'de', 'la', 'el', 'en', 'con', 'del', 'por', 'para', 'que', 'un', 'una',
+  // French
+  'du', 'le', 'les', 'des', 'au', 'aux', 'et', 'une',
+  // Portuguese
+  'da', 'do', 'das', 'dos', 'na', 'no', 'em',
+  // Common across languages
+  'di', 'il', 'al', 'der', 'die', 'das', 'den', 'dem',
 ]);
 
 const INGREDIENT_HINTS = [
@@ -95,8 +89,8 @@ function matchesWordOrPhrase(text: string, hint: string): boolean {
 function likelyDishPhrases(text: string): string[] {
   const lower = text.toLowerCase();
   const patterns = [
-    /(?:mentioned|called|named)\s+([a-zA-Zñáéíóúü-]+(?:\s+[a-zA-Zñáéíóúü-]+){0,2})/gi,
-    /(?:sounded like|something like)\s+([a-zA-Zñáéíóúü-]+(?:\s+[a-zA-Zñáéíóúü-]+){0,2})/gi,
+    /(?:mentioned|called|named)\s+([\p{L}\p{M}-]+(?:\s+[\p{L}\p{M}-]+){0,2})/giu,
+    /(?:sounded like|something like)\s+([\p{L}\p{M}-]+(?:\s+[\p{L}\p{M}-]+){0,2})/giu,
   ];
   const phrases = patterns.flatMap((pattern) => [...lower.matchAll(pattern)].map((match) => match[1].trim()));
 
@@ -113,7 +107,7 @@ function likelyDishPhrases(text: string): string[] {
 
 function extractPossibleNames(text: string): string[] {
   const quoted = [...text.matchAll(/[“\"]([^”\"]+)[”\"]/g)].map((match) => match[1]);
-  const phoneticFragments = [...text.matchAll(/\b[a-zA-Zñáéíóúü]+(?:-[a-zA-Zñáéíóúü]+){1,}\b/g)].map((match) => match[0]);
+  const phoneticFragments = [...text.matchAll(/\b[\p{L}\p{M}]+(?:-[\p{L}\p{M}]+){1,}\b/gu)].map((match) => match[0]);
   return unique([...quoted, ...likelyDishPhrases(text), ...phoneticFragments]);
 }
 
@@ -631,7 +625,8 @@ export function buildReconstructionDossier(input: {
 }): ReconstructionDossier {
   const researched = input.researchedFacts ?? [];
   const inferred = input.inferredFacts ?? [];
-  const confidence: Confidence = researched.length >= 2 ? 'Medium' : 'Low';
+  const dedupedResearched = [...new Set(researched)];
+  const confidence: Confidence = dedupedResearched.length >= 2 ? 'Medium' : 'Low';
 
   return {
     title: 'Food Memory Reconstruction Dossier',
