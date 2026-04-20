@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -20,20 +20,20 @@
       --radius-full: 999px;
       --shadow: 0 2px 16px rgba(74, 22, 53, 0.06);
       --transition-base: 0.25s ease;
+      color-scheme: light;
     }
 
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --cream: #161014;
-        --cream-2: #1f161c;
-        --plum: #c47aa8;
-        --plum-2: #d492b8;
-        --plum-light: rgba(196, 122, 168, 0.08);
-        --plum-lighter: rgba(196, 122, 168, 0.04);
-        --card-solid: #1e181e;
-        --line: rgba(242, 184, 75, 0.12);
-        --line-light: rgba(242, 184, 75, 0.06);
-      }
+    [data-theme="dark"] {
+      --cream: #161014;
+      --cream-2: #1f161c;
+      --plum: #c47aa8;
+      --plum-2: #d492b8;
+      --plum-light: rgba(196, 122, 168, 0.08);
+      --plum-lighter: rgba(196, 122, 168, 0.04);
+      --card-solid: #1e181e;
+      --line: rgba(242, 184, 75, 0.12);
+      --line-light: rgba(242, 184, 75, 0.06);
+      color-scheme: dark;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -66,12 +66,24 @@
       font-size: 1.05rem; font-weight: 800; letter-spacing: -0.01em;
     }
     header h1 span { font-weight: 400; opacity: 0.5; }
-    header nav { margin-left: auto; }
+    header nav { margin-left: auto; display: flex; align-items: center; gap: 12px; }
     header nav a {
       font-size: 0.85rem; color: var(--plum); opacity: 0.5;
       text-decoration: none; font-weight: 600;
     }
     header nav a:hover { opacity: 1; }
+    .theme-btn {
+      width: 32px; height: 32px; border-radius: 50%;
+      border: 1px solid var(--line); background: var(--card-solid);
+      cursor: pointer; display: grid; place-items: center;
+      color: var(--plum); font-size: 0.9rem; padding: 0;
+      transition: transform var(--transition-base);
+    }
+    .theme-btn:hover { transform: scale(1.08); }
+    .theme-btn .sun { display: none; }
+    .theme-btn .moon { display: block; }
+    [data-theme="dark"] .theme-btn .sun { display: block; }
+    [data-theme="dark"] .theme-btn .moon { display: none; }
 
     /* Chat area */
     main {
@@ -198,7 +210,13 @@
   <header>
     <div class="logo" role="img" aria-label="Member Berries logo"></div>
     <h1>Member Berries <span>/ food memory detective</span></h1>
-    <nav><a href="/about">About</a></nav>
+    <nav>
+      <button class="theme-btn" id="theme-toggle" aria-label="Toggle dark mode">
+        <span class="moon">&#9789;</span>
+        <span class="sun">&#9788;</span>
+      </button>
+      <a href="/about">About</a>
+    </nav>
   </header>
 
   <main>
@@ -302,6 +320,18 @@
         .replace(/\n(\d+)\. /g, '\n$1. ')
         .replace(/\n/g, '<br>');
     }
+
+    // Theme toggle
+    const html = document.documentElement;
+    const themeBtn = document.getElementById('theme-toggle');
+    const stored = localStorage.getItem('mb-theme');
+    if (stored) html.setAttribute('data-theme', stored);
+    else if (window.matchMedia('(prefers-color-scheme: dark)').matches) html.setAttribute('data-theme', 'dark');
+    themeBtn.addEventListener('click', () => {
+      const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('mb-theme', next);
+    });
   </script>
 </body>
 </html>

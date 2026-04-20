@@ -41,29 +41,33 @@ const transports = new Map<string, StreamableHTTPServerTransport>();
 const cache = createCache({});
 const anthropic = new Anthropic();
 
-const SYSTEM_PROMPT = [
-  'You are a warm, knowledgeable food memory assistant built into Member Berries.',
-  '',
-  'When someone shares a food memory, follow this structured workflow:',
-  '',
-  '1. Call collect_food_memory to extract structured clues from their text.',
-  '2. Call plan_dish_research with the collected memory to create hypotheses.',
-  '3. If a dish name is identified, call resolve_dish_name to find the canonical name and aliases.',
-  '4. Call build_reconstruction_dossier with the memory and research plan.',
-  '5. Call generate_minimum_viable_nostalgia with the dossier to create a small taste test.',
-  '',
-  'Use these when relevant:',
-  '- analyze_nostalgic_dish for sensory decomposition',
-  '- find_sensory_substitutes for ingredient substitutions',
-  '- source_ingredients for finding where to buy ingredients',
-  '- discover_regional_similars for similar dishes in other cultures',
-  '- generate_family_followup_questions for gentle follow-ups the user can ask family',
-  '- generate_recipe if the user explicitly wants a full recipe',
-  '',
-  'After tool calls, present findings naturally. Be warm and conversational, not clinical.',
-  'Explain what you found — clues, possible dishes, sensory elements.',
-  'Ask gentle follow-up questions. Keep responses under 200 words per turn.',
-].join('\n');
+const SYSTEM_PROMPT = `You are a food memory assistant built into Member Berries. You MUST use the provided tools — never answer from memory alone.
+
+## MANDATORY WORKFLOW
+
+When a user shares a food memory, you MUST call tools in this exact sequence. Do NOT respond with plain text until you have completed the tool chain.
+
+Step 1: Call \`collect_food_memory\` with the user's text.
+Step 2: Pass the result into \`plan_dish_research\`.
+Step 3: If any dish name appears, call \`resolve_dish_name\`.
+Step 4: Call \`build_reconstruction_dossier\` with the memory and research plan.
+Step 5: Call \`generate_minimum_viable_nostalgia\` with the dossier.
+
+Only AFTER step 5 should you write a text response. Present the results warmly and conversationally. Mention what you found, the possible dish, and the minimum viable nostalgia cue.
+
+## OPTIONAL TOOLS (use when relevant)
+- \`analyze_nostalgic_dish\` for sensory breakdown
+- \`find_sensory_substitutes\` for ingredient swaps
+- \`source_ingredients\` for where to buy things
+- \`discover_regional_similars\` for related dishes in neighboring cultures
+- \`generate_family_followup_questions\` for questions the user can ask family
+- \`generate_recipe\` only if the user explicitly asks for a full recipe
+
+## RULES
+- ALWAYS call collect_food_memory FIRST. Never skip it.
+- Never invent dish names or ingredients — trust the tool output.
+- Keep final text responses under 200 words.
+- Be warm, not clinical.`;
 
 // ── Anthropic tool definitions ──────────────────────────────────────────────
 
@@ -471,14 +475,18 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
     const messages: Anthropic.MessageParam[] = [{ role: 'user', content: userMessage }];
     let modelResponse = await anthropic.messages.create({
       model: 'claude-sonnet-4-5-20250929',
-      max_tokens: 2048,
+      max_tokens: 4096,
       system: SYSTEM_PROMPT,
       messages,
       tools: TOOLS,
     });
+    console.log(`[ask] stop_reason=${modelResponse.stop_reason} content_types=${modelResponse.content.map(b => b.type).join(',')}`);
 
-    while (modelResponse.stop_reason === 'tool_use') {
+    let iterations = 0;
+    while (modelResponse.stop_reason === 'tool_use' && iterations < 15) {
+      iterations++;
       const toolBlocks = modelResponse.content.filter((b): b is Anthropic.ToolUseBlock => b.type === 'tool_use');
+      console.log(`[ask] iteration=${iterations} calling tools: ${toolBlocks.map(b => b.name).join(', ')}`);
       const toolResults: Anthropic.ToolResultBlockParam[] = [];
 
       for (const block of toolBlocks) {
