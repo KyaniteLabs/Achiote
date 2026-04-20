@@ -6,11 +6,15 @@ const ingredients = ingredientsData.ingredients;
 export function findSubstitutes(ingredientKey: string): SubstitutionResult[] {
   const normalized = ingredientKey.toLowerCase().replace(/\s+/g, '-').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
   let target = ingredients[normalized as keyof typeof ingredients];
+  let matchedKey: string | null = normalized;
 
   if (!target) {
     for (const [key, value] of Object.entries(ingredients)) {
-      if (Array.isArray(value.aliases) && value.aliases.some(a => a.toLowerCase() === normalized)) {
+      if (Array.isArray(value.aliases) && value.aliases.some(a =>
+        a.toLowerCase().replace(/\s+/g, '-').normalize('NFD').replace(/[\u0300-\u036f]/g, '') === normalized
+      )) {
         target = value;
+        matchedKey = key;
         break;
       }
     }
@@ -21,7 +25,7 @@ export function findSubstitutes(ingredientKey: string): SubstitutionResult[] {
   const results: (SubstitutionResult & { compoundMatch: number })[] = [];
 
   for (const [key, candidate] of Object.entries(ingredients)) {
-    if (key === normalized) continue;
+    if (key === matchedKey) continue;
 
     const targetCompounds = new Set(target.compounds);
     const candidateCompounds = new Set(candidate.compounds);
