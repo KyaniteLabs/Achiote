@@ -556,7 +556,15 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
   sendRateLimitHeaders(res, limitResult);
   if (!limitResult.allowed) { sendJson(res, 429, { error: 'Rate limit exceeded. Upgrade your plan for more reconstructions.' }); return; }
 
-  const raw = await readBody(req);
+  let raw: string;
+  try {
+    raw = await readBody(req);
+  } catch (err) {
+    if (err instanceof Error && err.message === 'Body too large') {
+      sendJson(res, 413, { error: 'Body too large' });
+    }
+    return;
+  }
   let parsed: { message?: string };
   try { parsed = JSON.parse(raw); } catch { sendJson(res, 400, { error: 'Invalid JSON' }); return; }
 

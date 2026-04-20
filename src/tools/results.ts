@@ -1,8 +1,8 @@
 export type ToolPayload = Record<string, unknown>;
 
 export function sanitizeForPrompt(value: string): string {
-  return JSON.stringify(value)
-    .replace(/<\/?user_input>/g, '');
+  const stripped = value.replace(/<\/?\s*user_input\s*>/g, '');
+  return JSON.stringify(stripped);
 }
 
 export function structuredJsonResult(payload: ToolPayload, displayText?: string) {

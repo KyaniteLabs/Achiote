@@ -9,8 +9,9 @@ export type AchioteServerOptions = {
 
 export function defaultCachePath(): string {
   if (process.env.ACHIOTE_CACHE_PATH) {
-    const envPath = path.resolve(process.env.ACHIOTE_CACHE_PATH);
-    if (process.env.ACHIOTE_CACHE_PATH.includes('..')) {
+    const raw = process.env.ACHIOTE_CACHE_PATH;
+    const envPath = path.resolve(raw);
+    if (raw.split('/').some(seg => seg === '..')) {
       throw new Error('ACHIOTE_CACHE_PATH must not contain path traversal');
     }
     if (!envPath.endsWith('.db')) {

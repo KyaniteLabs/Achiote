@@ -59,6 +59,13 @@ function safeEqual(a: string, b: string): boolean {
 }
 
 export function createAuthenticator(keys: ApiKeyRecord[]) {
+  const seen = new Set<string>();
+  for (const r of keys) {
+    if (seen.has(r.key)) {
+      console.warn(`Duplicate API key detected (name: "${r.name}"). Last entry wins.`);
+    }
+    seen.add(r.key);
+  }
   const keyMap = new Map(keys.map((r) => [r.key, r]));
 
   return {
@@ -104,7 +111,8 @@ export function loadKeysFromEnv(envValue: string | undefined): ApiKeyRecord[] {
         VALID_TIERS.has((r as Record<string, unknown>).tier as string) &&
         typeof (r as Record<string, unknown>).name === 'string',
     ) as ApiKeyRecord[];
-  } catch {
+  } catch (err) {
+    console.warn('ACHIOTE_API_KEYS: failed to parse JSON —', err instanceof Error ? err.message : String(err));
     return [];
   }
 }
