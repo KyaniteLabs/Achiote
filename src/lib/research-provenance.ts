@@ -103,9 +103,9 @@ export function validateResearchRecord(record: ResearchRecord): ResearchValidati
   if (!isNonEmptyString(record.query)) pushIssue(issues, 'query', 'must be a non-empty string');
   if (!Array.isArray(record.sources) || record.sources.length === 0) {
     pushIssue(issues, 'sources', 'must include at least one source');
-    return issues;
   }
 
+  if (!Array.isArray(record.sources)) return issues;
   record.sources.forEach((source, index) => {
     const path = `sources[${index}]`;
     if (!isNonEmptyString(source.title)) pushIssue(issues, `${path}.title`, 'must be a non-empty string');

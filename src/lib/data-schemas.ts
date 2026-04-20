@@ -324,3 +324,23 @@ export function validateBundledData(data: BundledDataSet): ValidationIssue[] {
   validateSensoryProfiles(issues, data.sensoryProfiles);
   return issues;
 }
+
+export function validateCrossReferences(data: BundledDataSet): ValidationIssue[] {
+  const issues: ValidationIssue[] = [];
+  const substitutionGroupMembers = new Map<string, string[]>();
+  for (const [key, ingredient] of Object.entries(data.ingredients.ingredients)) {
+    if (typeof ingredient.substitutionGroup === 'string') {
+      const group = ingredient.substitutionGroup;
+      if (!substitutionGroupMembers.has(group)) substitutionGroupMembers.set(group, []);
+      substitutionGroupMembers.get(group)!.push(key);
+    }
+  }
+
+  for (const [group, members] of substitutionGroupMembers) {
+    if (members.length < 2) {
+      pushIssue(issues, `ingredients.ingredients.${members[0]}.substitutionGroup`, `group "${group}" has only ${members.length} member(s) — substitutions will be limited`);
+    }
+  }
+
+  return issues;
+}

@@ -1,8 +1,8 @@
 export type ToolPayload = Record<string, unknown>;
 
 export function sanitizeForPrompt(value: string): string {
-  return JSON.stringify(value)
-    .replace(/<\/?user_input>/g, '');
+  const stripped = value.replace(/<\/?\s*user_input\s*>/g, '');
+  return JSON.stringify(stripped);
 }
 
 export function structuredJsonResult(payload: ToolPayload, displayText?: string) {
@@ -14,7 +14,7 @@ export function structuredJsonResult(payload: ToolPayload, displayText?: string)
 
 export function toolError(error: unknown, code: string) {
   const raw = error instanceof Error ? error.message : String(error);
-  const message = raw.replace(/\/[^\s"']+/g, '[path]');
+  const message = raw.replace(/(?:\/(?:usr|home|var|tmp|etc|src|opt|Users)[^\s"']*)/g, '[path]');
   const payload = { error: { code, message } };
   return {
     content: [{ type: 'text' as const, text: JSON.stringify(payload, null, 2) }],

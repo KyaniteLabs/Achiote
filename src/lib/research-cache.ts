@@ -8,6 +8,9 @@ export class ResearchCache {
   private db: Database.Database;
 
   constructor(dbPath: string) {
+    if (!dbPath || !dbPath.trim()) {
+      throw new Error('ResearchCache requires a non-empty dbPath');
+    }
     fs.mkdirSync(path.dirname(dbPath), { recursive: true });
     this.db = new Database(dbPath);
     this.db.pragma('journal_mode = WAL');
@@ -27,10 +30,14 @@ export class ResearchCache {
     if (Buffer.byteLength(researchData, 'utf8') > ResearchCache.MAX_DATA_SIZE) {
       throw new Error(`Research data exceeds maximum cache entry size (${ResearchCache.MAX_DATA_SIZE} bytes)`);
     }
-    this.db.prepare(
-      `INSERT OR REPLACE INTO research_cache (dish_family, region, research_data, created_at, hit_count)
-       VALUES (?, ?, ?, datetime('now'), 0)`
-    ).run(dishFamily, region, researchData);
+    try {
+      this.db.prepare(
+        `INSERT OR REPLACE INTO research_cache (dish_family, region, research_data, created_at, hit_count)
+         VALUES (?, ?, ?, datetime('now'), 0)`
+      ).run(dishFamily, region, researchData);
+    } catch (err) {
+      console.warn('Research cache store failed:', err instanceof Error ? err.message : String(err));
+    }
   }
 
   storeResearchRecord(dishFamily: string, region: string, record: ResearchRecord): void {
@@ -48,15 +55,21 @@ export class ResearchCache {
   }
 
   get(dishFamily: string, region: string): ResearchCacheEntry | null {
-    this.db.prepare(
-      'UPDATE research_cache SET hit_count = hit_count + 1 WHERE dish_family = ? AND region = ?'
-    ).run(dishFamily, region);
+    try {
+      const stmt = this.db.transaction(() => {
+        this.db.prepare(
+          'UPDATE research_cache SET hit_count = hit_count + 1 WHERE dish_family = ? AND region = ?'
+        ).run(dishFamily, region);
 
-    const row = this.db.prepare(
-      "SELECT dish_family AS dishFamily, region, research_data AS researchData, created_at AS createdAt, hit_count AS hitCount FROM research_cache WHERE dish_family = ? AND region = ?"
-    ).get(dishFamily, region) as ResearchCacheEntry | undefined;
+        return this.db.prepare(
+          "SELECT dish_family AS dishFamily, region, research_data AS researchData, created_at AS createdAt, hit_count AS hitCount FROM research_cache WHERE dish_family = ? AND region = ?"
+        ).get(dishFamily, region) as ResearchCacheEntry | undefined;
+      });
 
-    return row ?? null;
+      return stmt() ?? null;
+    } catch {
+      return null;
+    }
   }
 
   close(): void {

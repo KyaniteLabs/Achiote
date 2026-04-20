@@ -15,9 +15,23 @@ export interface RateLimitResult {
 
 export function createRateLimiter() {
   const usage = new Map<string, UsageEntry>();
+  let lastSweep = 0;
+
+  function sweepStaleEntries(): void {
+    const now = Date.now();
+    if (now - lastSweep < 60_000) return; // sweep at most once per minute
+    lastSweep = now;
+    const currentPeriod = Date.UTC(new Date(now).getUTCFullYear(), new Date(now).getUTCMonth(), 1);
+    for (const [key, entry] of usage) {
+      if (entry.periodStart !== currentPeriod) {
+        usage.delete(key);
+      }
+    }
+  }
 
   return {
     checkMcpLimit(tier: Tier, keyId: string): RateLimitResult {
+      sweepStaleEntries();
       const limits = getTierLimits(tier);
       const limit = limits.mcpCallsPerMonth;
       const now = Date.now();
@@ -46,10 +60,11 @@ export function createRateLimiter() {
     },
 
     checkWebLimit(tier: Tier, sessionId: string): RateLimitResult {
+      sweepStaleEntries();
       const limits = getTierLimits(tier);
       const limit = limits.webReconstructions;
       if (!isFinite(limit)) {
-        return { allowed: true, remaining: Infinity, limit: Infinity, resetAt: Date.now() + 60_000 };
+        return { allowed: true, remaining: Number.MAX_SAFE_INTEGER, limit: Number.MAX_SAFE_INTEGER, resetAt: Date.now() + 60_000 };
       }
 
       const windowKey = `web:${sessionId}`;

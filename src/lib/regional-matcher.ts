@@ -11,6 +11,7 @@ export type MatchedRegion = {
 
 export function findMatchingRegion(location: string): MatchedRegion | null {
   const normalized = location.toLowerCase().trim();
+  if (normalized.length < 2) return null;
 
   for (const [key, data] of Object.entries(regionalData.regions)) {
     if (normalized.includes(key.replace(/-/g, ' ')) || key.replace(/-/g, ' ').includes(normalized)) {

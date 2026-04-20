@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
-import { dirname, join, resolve } from 'node:path';
+import { dirname, join, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import Anthropic from '@anthropic-ai/sdk';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
@@ -83,9 +83,19 @@ const MIME: Record<string, string> = {
   '.ico': 'image/x-icon',
 };
 
-const transports = new Map<string, StreamableHTTPServerTransport>();
+const transports = new Map<string, { transport: StreamableHTTPServerTransport; lastActivity: number }>();
+const SESSION_TTL = 30 * 60 * 1000; // 30 minutes
+
+function sweepStaleSessions(): void {
+  const now = Date.now();
+  for (const [sid, entry] of transports) {
+    if (now - entry.lastActivity > SESSION_TTL) {
+      transports.delete(sid);
+    }
+  }
+}
 const cache = createCache({});
-const anthropic = new Anthropic();
+const anthropic = new Anthropic({ timeout: 60_000 });
 const authenticator = createAuthenticator(loadKeysFromEnv(process.env.ACHIOTE_API_KEYS));
 const rateLimiter = createRateLimiter();
 
@@ -556,7 +566,15 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
   sendRateLimitHeaders(res, limitResult);
   if (!limitResult.allowed) { sendJson(res, 429, { error: 'Rate limit exceeded. Upgrade your plan for more reconstructions.' }); return; }
 
-  const raw = await readBody(req);
+  let raw: string;
+  try {
+    raw = await readBody(req);
+  } catch (err) {
+    if (err instanceof Error && err.message === 'Body too large') {
+      sendJson(res, 413, { error: 'Body too large' });
+    }
+    return;
+  }
   let parsed: { message?: string };
   try { parsed = JSON.parse(raw); } catch { sendJson(res, 400, { error: 'Invalid JSON' }); return; }
 
@@ -582,6 +600,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
 
     let iterations = 0;
     while (modelResponse.stop_reason === 'tool_use' && iterations < 15) {
+      if (res.writableEnded) return;
       iterations++;
       const toolBlocks = modelResponse.content.filter((b): b is Anthropic.ToolUseBlock => b.type === 'tool_use');
       console.log(`[ask] iteration=${iterations} calling tools: ${toolBlocks.map(b => b.name).join(', ')}`);
@@ -648,14 +667,14 @@ function sendJson(res: ServerResponse, status: number, body: unknown): void {
 
 async function serveStatic(req: IncomingMessage, res: ServerResponse): Promise<boolean> {
   const raw = req.url?.split('?')[0] ?? '/';
-  const path = raw === '/' ? '/app.html' : raw === '/about' ? '/index.html' : raw;
-  const filePath = join(STATIC_DIR, path);
+  const assetPath = raw === '/' ? 'app.html' : raw === '/about' ? 'index.html' : raw.replace(/^\//, '');
+  const filePath = resolve(STATIC_DIR, assetPath);
 
-  if (!filePath.startsWith(STATIC_DIR)) return false;
+  if (!filePath.startsWith(resolve(STATIC_DIR) + sep)) return false;
 
   try {
     const data = await readFile(filePath);
-    const ext = path.slice(path.lastIndexOf('.'));
+    const ext = assetPath.slice(assetPath.lastIndexOf('.'));
     const contentType = MIME[ext] || 'application/octet-stream';
     res.writeHead(200, { 'Content-Type': contentType });
     res.end(data);
@@ -669,20 +688,21 @@ async function serveStatic(req: IncomingMessage, res: ServerResponse): Promise<b
 
 const server = createServer(async (req, res) => {
   const origin = req.headers.origin;
-  const allowedOrigin = origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+  const isOriginAllowed = !origin || ALLOWED_ORIGINS.includes(origin);
+  const allowedOrigin = isOriginAllowed ? (origin || ALLOWED_ORIGINS[0]) : null;
   const originalWriteHead = res.writeHead.bind(res) as typeof res.writeHead;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (res as any).writeHead = (statusCode: number, ...rest: any[]) => {
     const extra = (typeof rest[rest.length - 1] === 'object' && rest[rest.length - 1] !== null)
       ? rest.pop() : {};
-    const merged = {
+    const corsHeaders = allowedOrigin ? {
       'Access-Control-Allow-Origin': allowedOrigin,
       'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type, mcp-session-id, Accept, x-api-key, authorization, x-session-id',
       'Access-Control-Expose-Headers': 'mcp-session-id, X-RateLimit-Remaining, X-RateLimit-Limit, X-RateLimit-Reset',
       Vary: 'Origin',
-      ...extra,
-    };
+    } : { Vary: 'Origin' };
+    const merged = { ...corsHeaders, ...extra };
     return originalWriteHead(statusCode, merged);
   };
 
@@ -722,8 +742,10 @@ const server = createServer(async (req, res) => {
       let transport: StreamableHTTPServerTransport | undefined;
 
       if (sessionId && transports.has(sessionId)) {
-        transport = transports.get(sessionId)!;
+        transport = transports.get(sessionId)!.transport;
+        transports.get(sessionId)!.lastActivity = Date.now();
       }
+      sweepStaleSessions();
 
       if (!transport) {
         const raw = await readBody(req);
@@ -736,7 +758,7 @@ const server = createServer(async (req, res) => {
         if (req.method === 'POST' && isInitializeRequest(parsed)) {
           transport = new StreamableHTTPServerTransport({
             sessionIdGenerator: () => randomUUID(),
-            onsessioninitialized: (sid) => { transports.set(sid, transport!); },
+            onsessioninitialized: (sid) => { transports.set(sid, { transport: transport!, lastActivity: Date.now() }); },
           });
           transport.onclose = () => {
             const sid = transport!.sessionId;
@@ -774,13 +796,16 @@ const server = createServer(async (req, res) => {
   }
 });
 
+server.requestTimeout = 120_000;
+server.headersTimeout = 125_000;
+
 server.listen(PORT, () => {
   console.log(`Achiote — http://localhost:${PORT}`);
 });
 
 process.on('SIGINT', async () => {
-  for (const [sid, transport] of transports) {
-    try { await transport.close(); } catch { /* ignore */ }
+  for (const [sid, entry] of transports) {
+    try { await entry.transport.close(); } catch { /* ignore */ }
     transports.delete(sid);
   }
   cache?.close();

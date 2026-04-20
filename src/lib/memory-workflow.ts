@@ -13,24 +13,18 @@ import type {
 } from './types.js';
 
 const RESEARCH_STOPWORDS = new Set([
-  'my',
-  'mom',
-  'grandma',
-  'grandmother',
-  'auntie',
-  'friend',
-  'said',
-  'sounded',
-  'mentioned',
-  'called',
-  'something',
-  'like',
-  'with',
-  'from',
-  'and',
-  'the',
-  'that',
-  'a',
+  // English
+  'my', 'mom', 'grandma', 'grandmother', 'auntie', 'friend',
+  'said', 'sounded', 'mentioned', 'called', 'something', 'like',
+  'with', 'from', 'and', 'the', 'that', 'a', 'of', 'in', 'it',
+  // Spanish
+  'de', 'la', 'el', 'en', 'con', 'del', 'por', 'para', 'que', 'un', 'una',
+  // French
+  'du', 'le', 'les', 'des', 'au', 'aux', 'et', 'une',
+  // Portuguese
+  'da', 'do', 'das', 'dos', 'na', 'no', 'em',
+  // Common across languages
+  'di', 'il', 'al', 'der', 'die', 'das', 'den', 'dem',
 ]);
 
 const INGREDIENT_HINTS = [
@@ -77,7 +71,10 @@ function unique(values: string[]): string[] {
 }
 
 function includesAny(text: string, needles: string[]): boolean {
-  return needles.some((needle) => text.includes(needle));
+  return needles.some((needle) => {
+    const escaped = escapeRegExp(needle).replace(/\s+/g, '\\s+');
+    return new RegExp(`(?:^|\\b)${escaped}(?:$|\\b)`, 'i').test(text);
+  });
 }
 
 function escapeRegExp(value: string): string {
@@ -92,8 +89,8 @@ function matchesWordOrPhrase(text: string, hint: string): boolean {
 function likelyDishPhrases(text: string): string[] {
   const lower = text.toLowerCase();
   const patterns = [
-    /(?:mentioned|called|named)\s+([a-zA-Zñáéíóúü-]+(?:\s+[a-zA-Zñáéíóúü-]+){0,2})/gi,
-    /(?:sounded like|something like)\s+([a-zA-Zñáéíóúü-]+(?:\s+[a-zA-Zñáéíóúü-]+){0,2})/gi,
+    /(?:mentioned|called|named)\s+([\p{L}\p{M}-]+(?:\s+[\p{L}\p{M}-]+){0,2})/giu,
+    /(?:sounded like|something like)\s+([\p{L}\p{M}-]+(?:\s+[\p{L}\p{M}-]+){0,2})/giu,
   ];
   const phrases = patterns.flatMap((pattern) => [...lower.matchAll(pattern)].map((match) => match[1].trim()));
 
@@ -110,7 +107,7 @@ function likelyDishPhrases(text: string): string[] {
 
 function extractPossibleNames(text: string): string[] {
   const quoted = [...text.matchAll(/[“\"]([^”\"]+)[”\"]/g)].map((match) => match[1]);
-  const phoneticFragments = [...text.matchAll(/\b[a-zA-Zñáéíóúü]+(?:-[a-zA-Zñáéíóúü]+){1,}\b/g)].map((match) => match[0]);
+  const phoneticFragments = [...text.matchAll(/\b[\p{L}\p{M}]+(?:-[\p{L}\p{M}]+){1,}\b/gu)].map((match) => match[0]);
   return unique([...quoted, ...likelyDishPhrases(text), ...phoneticFragments]);
 }
 
@@ -307,7 +304,7 @@ const REGION_PATTERNS: Array<{ pattern: RegExp; label: string }> = [
 
 const GEOGRAPHIC_CONTEXT_PATTERN_SOURCES = [
   { source: '(?:from|grew\\s+up\\s+in|born\\s+in|family\\s+(?:is\\s+)?from|lived\\s+in|visited|traveled\\s+to|my\\s+(?:mom|dad|grandma|grandpa|grandmother|grandfather|abuela|abuelo|oma|opa|nonna|nonno|baba|yaya|tata|nana|papa)\\s+(?:is|was)\\s+from)\\s+([a-zA-Z\\s]{2,30})', flags: 'gi' },
-  { source: '(?:in|at)\\s+([A-Z][a-zA-Z\\s]{1,28})\\s+(?:and|where|when|that|which|who|every|during|after|before)', flags: 'g' },
+  { source: '(?<![.!?]\\s)(?:in|at)\\s+([A-Z][a-zA-Z\\s]{1,28})\\s+(?:and|where|when|that|which|who|every|during|after|before)', flags: 'g' },
 ];
 
 function extractRegionHints(lowerText: string, originalText: string): string[] {
@@ -483,6 +480,22 @@ const REGION_TO_FAMILY_MAP: Record<string, string[]> = {
   'East African': ['East Africa'],
   'North African': ['North Africa'],
   'South African': ['South Africa'],
+  'Oaxacan': ['Latin America'],
+  'Yucatecan': ['Latin America'],
+  'Jaliscan': ['Latin America'],
+  'Sicilian': ['Mediterranean'],
+  'Catalan': ['Mediterranean'],
+  'German': ['Central Europe'],
+  'Georgian': ['Caucasus'],
+  'Armenian': ['Caucasus'],
+  'Azerbaijani': ['Caucasus'],
+  'Uzbek': ['Central Asia'],
+  'Somali': ['East Africa'],
+  'Kenyan': ['East Africa'],
+  'Southeast Asian': ['Southeast Asia'],
+  'South Asian': ['South Asia'],
+  'Caucasus': ['Caucasus'],
+  'Central Asian': ['Central Asia'],
 };
 
 function familyRegionsForDetected(detectedRegions: string[]): string[] {
@@ -492,6 +505,8 @@ function familyRegionsForDetected(detectedRegions: string[]): string[] {
 function dataDrivenHypotheses(memory: CollectedFoodMemory): DishHypothesis[] {
   const { possibleDishNames, culturalOrRegionalHints } = memory.extractedClues;
   if (possibleDishNames.length === 0) return [];
+
+  const allHypotheses: DishHypothesis[] = [];
 
   for (const family of dishFamiliesData.families) {
     const matchedVariants = (family.variants ?? []).filter((variant) => {
@@ -509,7 +524,6 @@ function dataDrivenHypotheses(memory: CollectedFoodMemory): DishHypothesis[] {
 
     if (matchedVariants.length === 0) continue;
 
-    const hypotheses: DishHypothesis[] = [];
     const allVariants = family.variants ?? [];
 
     for (const variant of allVariants) {
@@ -523,7 +537,7 @@ function dataDrivenHypotheses(memory: CollectedFoodMemory): DishHypothesis[] {
       if (culturalOrRegionalHints.length > 0) whyPossible.push(`${culturalOrRegionalHints[0]} family context`);
       if (memory.extractedClues.occasions.length > 0) whyPossible.push('often family/holiday associated');
 
-      hypotheses.push({
+      allHypotheses.push({
         name: variant.name,
         whyPossible,
         whatWouldConfirm: variant.distinguishingElements,
@@ -531,11 +545,9 @@ function dataDrivenHypotheses(memory: CollectedFoodMemory): DishHypothesis[] {
         researchRequired: true,
       });
     }
-
-    return hypotheses.slice(0, 5);
   }
 
-  return [];
+  return allHypotheses.slice(0, 5);
 }
 
 function genericHypotheses(memory: CollectedFoodMemory): DishHypothesis[] {
@@ -613,7 +625,8 @@ export function buildReconstructionDossier(input: {
 }): ReconstructionDossier {
   const researched = input.researchedFacts ?? [];
   const inferred = input.inferredFacts ?? [];
-  const confidence: Confidence = researched.length >= 2 ? 'Medium' : 'Low';
+  const dedupedResearched = [...new Set(researched)];
+  const confidence: Confidence = dedupedResearched.length >= 2 ? 'Medium' : 'Low';
 
   return {
     title: 'Food Memory Reconstruction Dossier',
@@ -731,8 +744,11 @@ const ROLE_ORDER: ComponentRole[] = ['starch', 'protein', 'sauce', 'vegetable', 
 
 function sanitizeLocation(raw?: string): string {
   if (!raw) return 'at any grocery store';
-  const trimmed = raw.trim().slice(0, 80);
-  return `near ${trimmed}`;
+  const trimmed = raw.trim();
+  if (trimmed.length <= 80) return `near ${trimmed}`;
+  const truncated = trimmed.slice(0, 80);
+  const lastSep = Math.max(truncated.lastIndexOf(','), truncated.lastIndexOf(' '));
+  return `near ${truncated.slice(0, lastSep > 0 ? lastSep : 80)}`;
 }
 
 function decomposeIntoComponents(signals: string, userLocation?: string, overallConfidence?: Confidence): CueComponent[] {
@@ -772,7 +788,8 @@ function hasAnySignal(text: string, patterns: RegExp[]): boolean {
 }
 
 function wordSignal(words: string): RegExp {
-  return new RegExp(`\\b(${words})\\b`);
+  const escaped = words.split('|').map(w => escapeRegExp(w)).join('|');
+  return new RegExp(`\\b(${escaped})\\b`, 'i');
 }
 
 function foodScienceCueProfile(signals: string, userLocation?: string, overallConfidence?: Confidence): FoodScienceCueProfile {

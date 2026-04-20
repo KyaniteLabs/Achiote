@@ -9,8 +9,9 @@ export type AchioteServerOptions = {
 
 export function defaultCachePath(): string {
   if (process.env.ACHIOTE_CACHE_PATH) {
-    const envPath = path.resolve(process.env.ACHIOTE_CACHE_PATH);
-    if (process.env.ACHIOTE_CACHE_PATH.includes('..')) {
+    const raw = process.env.ACHIOTE_CACHE_PATH;
+    const envPath = path.resolve(raw);
+    if (raw.split(/[/\\]/).some(seg => seg === '..')) {
       throw new Error('ACHIOTE_CACHE_PATH must not contain path traversal');
     }
     if (!envPath.endsWith('.db')) {
@@ -25,5 +26,11 @@ export function defaultCachePath(): string {
 
 export function createCache(options: AchioteServerOptions): ResearchCache | null {
   if (options.enableCache === false) return null;
-  return new ResearchCache(options.cachePath ?? defaultCachePath());
+  const dbPath = options.cachePath ?? defaultCachePath();
+  try {
+    return new ResearchCache(dbPath);
+  } catch (err) {
+    console.warn(`Cache init failed for ${dbPath}, using fallback:`, err instanceof Error ? err.message : String(err));
+    return new ResearchCache(path.join(os.homedir(), '.cache', 'achiote', 'culture-cache.db'));
+  }
 }
