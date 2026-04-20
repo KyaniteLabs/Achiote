@@ -27,6 +27,11 @@ describe('defaultCachePath', () => {
     expect(defaultCachePath()).toContain('test-cache.db');
   });
 
+  it('rejects path traversal with ..', () => {
+    process.env.MEMBER_BERRIES_CACHE_PATH = '/tmp/../../../etc/passwd.db';
+    expect(() => defaultCachePath()).toThrow(/path traversal/);
+  });
+
   it('returns XDG default when env var is unset', () => {
     delete process.env.MEMBER_BERRIES_CACHE_PATH;
     const result = defaultCachePath();

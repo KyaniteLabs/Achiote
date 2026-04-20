@@ -24,7 +24,7 @@ export class ResearchCache {
   }
 
   store(dishFamily: string, region: string, researchData: string): void {
-    if (researchData.length > ResearchCache.MAX_DATA_SIZE) {
+    if (Buffer.byteLength(researchData, 'utf8') > ResearchCache.MAX_DATA_SIZE) {
       throw new Error(`Research data exceeds maximum cache entry size (${ResearchCache.MAX_DATA_SIZE} bytes)`);
     }
     this.db.prepare(

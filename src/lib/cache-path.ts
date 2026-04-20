@@ -10,6 +10,9 @@ export type MemberBerriesServerOptions = {
 export function defaultCachePath(): string {
   if (process.env.MEMBER_BERRIES_CACHE_PATH) {
     const envPath = path.resolve(process.env.MEMBER_BERRIES_CACHE_PATH);
+    if (process.env.MEMBER_BERRIES_CACHE_PATH.includes('..')) {
+      throw new Error('MEMBER_BERRIES_CACHE_PATH must not contain path traversal');
+    }
     if (!envPath.endsWith('.db')) {
       throw new Error('MEMBER_BERRIES_CACHE_PATH must end with .db');
     }
