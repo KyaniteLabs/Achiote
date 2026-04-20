@@ -667,14 +667,14 @@ function sendJson(res: ServerResponse, status: number, body: unknown): void {
 
 async function serveStatic(req: IncomingMessage, res: ServerResponse): Promise<boolean> {
   const raw = req.url?.split('?')[0] ?? '/';
-  const path = raw === '/' ? '/app.html' : raw === '/about' ? '/index.html' : raw;
-  const filePath = resolve(STATIC_DIR, path);
+  const assetPath = raw === '/' ? 'app.html' : raw === '/about' ? 'index.html' : raw.replace(/^\//, '');
+  const filePath = resolve(STATIC_DIR, assetPath);
 
   if (!filePath.startsWith(resolve(STATIC_DIR) + sep)) return false;
 
   try {
     const data = await readFile(filePath);
-    const ext = path.slice(path.lastIndexOf('.'));
+    const ext = assetPath.slice(assetPath.lastIndexOf('.'));
     const contentType = MIME[ext] || 'application/octet-stream';
     res.writeHead(200, { 'Content-Type': contentType });
     res.end(data);
