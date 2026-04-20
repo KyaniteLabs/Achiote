@@ -960,7 +960,8 @@ function foodScienceCueProfile(signals: string, userLocation?: string, overallCo
 
 export function generateMinimumViableNostalgiaCue(input: MinimumViableNostalgiaInput): MinimumViableNostalgiaCue {
   const signals = textSignals(input);
-  const maxEffort = Number.isFinite(input.maxEffortMinutes) ? Math.max(1, input.maxEffortMinutes!) : 20;
+  const effort = input.maxEffortMinutes;
+  const maxEffort = Number.isFinite(effort) ? Math.max(1, effort!) : 20;
   const confidence = input.researchFindings?.confidence ?? input.dossier.confidence;
   const profile = foodScienceCueProfile(signals, input.userLocation, confidence);
 
