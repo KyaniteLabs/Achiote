@@ -624,6 +624,963 @@
         "street or market aroma",
         "specific dipping sauce"
       ]
+    },
+    {
+      "canonicalName": "curry",
+      "aliases": [
+        "curry",
+        "kari",
+        "karhi",
+        "masala",
+        "rougaille",
+        "rendang",
+        "amok",
+        "opor",
+        "gulai",
+        "korma"
+      ],
+      "transliterations": {
+        "Hindi": [
+          "करी"
+        ],
+        "Thai": [
+          "แกง"
+        ],
+        "Japanese": [
+          "カレー"
+        ],
+        "Tamil": [
+          "கறி"
+        ]
+      },
+      "regions": [
+        "South Asia",
+        "Southeast Asia",
+        "East Asia",
+        "Caribbean",
+        "East Africa",
+        "Pacific"
+      ],
+      "sharedElements": [
+        "spice-forward sauce",
+        "slow-cooked",
+        "served over rice or with bread"
+      ],
+      "divergentElements": [
+        "liquid base (coconut milk, yogurt, tomato, broth)",
+        "spice blend",
+        "protein"
+      ],
+      "nostalgiaTriggers": [
+        "specific spice aroma",
+        "sauce consistency",
+        "family recipe variation"
+      ]
+    },
+    {
+      "canonicalName": "grilled-meat",
+      "aliases": [
+        "asado",
+        "barbecue",
+        "BBQ",
+        "kebab",
+        "kabob",
+        "satay",
+        "yakitori",
+        "churrasco",
+        "souvlaki",
+        "shashlik",
+        "braai",
+        "jerk"
+      ],
+      "transliterations": {
+        "Arabic": [
+          "كباب"
+        ],
+        "Japanese": [
+          "焼き鳥"
+        ],
+        "Portuguese": [
+          "churrasco"
+        ],
+        "Greek": [
+          "σουβλάκι"
+        ]
+      },
+      "regions": [
+        "Middle East",
+        "East Asia",
+        "South America",
+        "Mediterranean",
+        "Southern Africa",
+        "Caribbean"
+      ],
+      "sharedElements": [
+        "direct heat cooking",
+        "caramelized exterior",
+        "smoke flavor"
+      ],
+      "divergentElements": [
+        "marinade",
+        "cut of meat",
+        "fuel type",
+        "sauce"
+      ],
+      "nostalgiaTriggers": [
+        "smoke aroma",
+        "char marks",
+        "outdoor cooking"
+      ]
+    },
+    {
+      "canonicalName": "steamed-bun",
+      "aliases": [
+        "bao",
+        "baozi",
+        "mantou",
+        "bao bun",
+        "humbow",
+        "nikuman",
+        "siopao",
+        "salapao",
+        "hirata bun",
+        "gua bao",
+        "momo"
+      ],
+      "transliterations": {
+        "Chinese": [
+          "包子",
+          "馒头"
+        ],
+        "Japanese": [
+          "肉まん"
+        ],
+        "Tagalog": [
+          "siopao"
+        ],
+        "Thai": [
+          "ซาลาเปา"
+        ]
+      },
+      "regions": [
+        "East Asia",
+        "Southeast Asia",
+        "South Asia",
+        "Central Asia"
+      ],
+      "sharedElements": [
+        "leavened dough",
+        "steamed",
+        "soft fluffy texture"
+      ],
+      "divergentElements": [
+        "filling vs plain",
+        "filling type",
+        "shape"
+      ],
+      "nostalgiaTriggers": [
+        "soft texture",
+        "steam cloud when opened",
+        "specific filling aroma"
+      ]
+    },
+    {
+      "canonicalName": "bone-broth",
+      "aliases": [
+        "broth",
+        "stock",
+        "consommé",
+        "caldo",
+        "caldo de pollo",
+        "pho",
+        "ramen broth",
+        "bone broth",
+        "sopas",
+        "sopa",
+        "chinmi"
+      ],
+      "transliterations": {
+        "Vietnamese": [
+          "phở"
+        ],
+        "Japanese": [
+          "ラーメン"
+        ],
+        "Spanish": [
+          "caldo"
+        ],
+        "Korean": [
+          "곰탕"
+        ]
+      },
+      "regions": [
+        "East Asia",
+        "Southeast Asia",
+        "Latin America",
+        "Eastern Europe",
+        "Mediterranean"
+      ],
+      "sharedElements": [
+        "long-simmered bones",
+        "collagen-rich",
+        "sipped as comfort"
+      ],
+      "divergentElements": [
+        "bone type",
+        "simmering time",
+        "aromatics",
+        "additions"
+      ],
+      "nostalgiaTriggers": [
+        "the way it smells when someone is sick",
+        "specific bone type",
+        "served in a particular mug"
+      ]
+    },
+    {
+      "canonicalName": "savory-pie",
+      "aliases": [
+        "empanada",
+        "pasty",
+        "turnovers",
+        "meat pie",
+        "pot pie",
+        "tourtière",
+        "burek",
+        "börek",
+        "banitsa",
+        "spanakopita",
+        "samosa",
+        "knish",
+        "bridie",
+        "pastel de carne"
+      ],
+      "transliterations": {
+        "Spanish": [
+          "empanada"
+        ],
+        "Turkish": [
+          "börek"
+        ],
+        "Greek": [
+          "σπανακόπιτα"
+        ],
+        "French": [
+          "tourtière"
+        ]
+      },
+      "regions": [
+        "Latin America",
+        "Mediterranean",
+        "Eastern Europe",
+        "South Asia",
+        "Northern Europe"
+      ],
+      "sharedElements": [
+        "pastry crust",
+        "savory filling",
+        "baked or fried"
+      ],
+      "divergentElements": [
+        "crust type",
+        "filling",
+        "shape",
+        "size"
+      ],
+      "nostalgiaTriggers": [
+        "specific crust texture",
+        "filling aroma while baking",
+        "shape from family tradition"
+      ]
+    },
+    {
+      "canonicalName": "fermented-vegetable",
+      "aliases": [
+        "kimchi",
+        "sauerkraut",
+        "curtido",
+        "tsukemono",
+        "achar",
+        "atchara",
+        "pickles",
+        "giardiniera",
+        "chow-chow",
+        "preserved lemon",
+        "dakgangjeong"
+      ],
+      "transliterations": {
+        "Korean": [
+          "김치"
+        ],
+        "Japanese": [
+          "漬物"
+        ],
+        "Hindi": [
+          "अचार"
+        ],
+        "German": [
+          "Sauerkraut"
+        ]
+      },
+      "regions": [
+        "East Asia",
+        "Eastern Europe",
+        "South Asia",
+        "Latin America",
+        "Mediterranean"
+      ],
+      "sharedElements": [
+        "vegetable preserved by fermentation or vinegar",
+        "tangy flavor",
+        "served as condiment"
+      ],
+      "divergentElements": [
+        "vegetable type",
+        "fermentation method",
+        "spice level",
+        "fish/shrimp paste"
+      ],
+      "nostalgiaTriggers": [
+        "specific tang level",
+        "family jar",
+        "aroma when opening"
+      ]
+    },
+    {
+      "canonicalName": "noodle-soup",
+      "aliases": [
+        "ramen",
+        "pho",
+        "laksa",
+        "udon",
+        "chicken noodle soup",
+        "chicken soup",
+        "sopa de fideo",
+        "thukpa",
+        "mohinga",
+        "khao soi",
+        "bun bo hue",
+        "wonton soup",
+        "chicken and stars"
+      ],
+      "transliterations": {
+        "Vietnamese": [
+          "phở bún"
+        ],
+        "Japanese": [
+          "ラーメン",
+          "うどん"
+        ],
+        "Spanish": [
+          "sopa de fideo"
+        ],
+        "Tibetan": [
+          "ཐུག་པ"
+        ]
+      },
+      "regions": [
+        "East Asia",
+        "Southeast Asia",
+        "South Asia",
+        "Latin America",
+        "Eastern Europe"
+      ],
+      "sharedElements": [
+        "noodles in broth",
+        "served hot",
+        "spoon-and-chopstick eating"
+      ],
+      "divergentElements": [
+        "noodle type",
+        "broth base",
+        "toppings",
+        "spice level"
+      ],
+      "nostalgiaTriggers": [
+        "specific broth aroma",
+        "noodle texture",
+        "being served when sick"
+      ]
+    },
+    {
+      "canonicalName": "sweet-dumpling",
+      "aliases": [
+        "tangyuan",
+        "mochi",
+        "daifuku",
+        "buchi",
+        "kochi",
+        "sesame ball",
+        "jian dui",
+        "modak",
+        "gulab jamun",
+        "rasgulla",
+        "chhena poda",
+        "loukoumades",
+        "loukoum",
+        "lokma",
+        "pretzel"
+      ],
+      "transliterations": {
+        "Chinese": [
+          "汤圆",
+          "麻球"
+        ],
+        "Japanese": [
+          "餅"
+        ],
+        "Hindi": [
+          "मोदक"
+        ],
+        "Arabic": [
+          "لقمة"
+        ]
+      },
+      "regions": [
+        "East Asia",
+        "South Asia",
+        "Mediterranean",
+        "Middle East"
+      ],
+      "sharedElements": [
+        "sweet filling or sweet dough",
+        "often fried or steamed",
+        "celebratory"
+      ],
+      "divergentElements": [
+        "wrapper type",
+        "filling",
+        "cooking method",
+        "syrup"
+      ],
+      "nostalgiaTriggers": [
+        "specific sweetness level",
+        "holiday association",
+        "texture of first bite"
+      ]
+    },
+    {
+      "canonicalName": "spice-paste",
+      "aliases": [
+        "sofrito",
+        "recaito",
+        "refogado",
+        "mirepoix",
+        "soffritto",
+        "base",
+        "tadka",
+        "baghar",
+        "dukkah",
+        "za'atar",
+        "chimichurri",
+        "mojo",
+        "romesco",
+        "sambal",
+        "berbere",
+        "ras el hanout",
+        "baharat"
+      ],
+      "transliterations": {
+        "Spanish": [
+          "sofrito"
+        ],
+        "Arabic": [
+          "بهارات"
+        ],
+        "Hindi": [
+          "तड़का"
+        ],
+        "Japanese": [
+          "そふりと"
+        ]
+      },
+      "regions": [
+        "Mediterranean",
+        "Latin America",
+        "South Asia",
+        "Middle East",
+        "East Africa",
+        "Southeast Asia"
+      ],
+      "sharedElements": [
+        "aromatic base for cooking",
+        "ground or pounded",
+        "defines cuisine character"
+      ],
+      "divergentElements": [
+        "ingredients",
+        "raw vs cooked",
+        "wet vs dry"
+      ],
+      "nostalgiaTriggers": [
+        "specific sizzle sound",
+        "aroma that signals cooking starts here",
+        "family recipe"
+      ]
+    },
+    {
+      "canonicalName": "salad",
+      "aliases": [
+        "ensalada",
+        "salata",
+        "som tam",
+        "larb",
+        "gado-gado",
+        "kachumber",
+        "tabbouleh",
+        "fattoush",
+        "salade niçoise",
+        "coleslaw",
+        "kapusta",
+        "pikliz",
+        "curtido",
+        "esqueixada"
+      ],
+      "transliterations": {
+        "Arabic": [
+          "سلطة"
+        ],
+        "Thai": [
+          "ส้มตำ"
+        ],
+        "French": [
+          "salade"
+        ],
+        "Lao": [
+          "ລາບ"
+        ]
+      },
+      "regions": [
+        "Mediterranean",
+        "Southeast Asia",
+        "South Asia",
+        "Eastern Europe",
+        "Caribbean",
+        "Latin America"
+      ],
+      "sharedElements": [
+        "raw or lightly dressed vegetables",
+        "fresh flavors",
+        "served cold"
+      ],
+      "divergentElements": [
+        "dressing type",
+        "vegetables",
+        "herbs",
+        "protein additions"
+      ],
+      "nostalgiaTriggers": [
+        "specific herb combination",
+        "dressing acidity",
+        "seasonal vegetables"
+      ]
+    },
+    {
+      "canonicalName": "casserole",
+      "aliases": [
+        "pastitsio",
+        "moussaka",
+        "lasagna",
+        "pastelón",
+        "timbal",
+        "gratin",
+        "dauphinoise",
+        "mac and cheese",
+        "shepherd's pie",
+        "cottage pie",
+        "kugel",
+        "tian",
+        "escalivada"
+      ],
+      "transliterations": {
+        "Greek": [
+          "μουσακάς"
+        ],
+        "Italian": [
+          "lasagna"
+        ],
+        "French": [
+          "gratin"
+        ],
+        "Hebrew": [
+          "קוגל"
+        ]
+      },
+      "regions": [
+        "Mediterranean",
+        "Eastern Europe",
+        "Latin America",
+        "North America"
+      ],
+      "sharedElements": [
+        "layered or mixed ingredients",
+        "baked in dish",
+        "melty top"
+      ],
+      "divergentElements": [
+        "starch base",
+        "sauce",
+        "cheese type",
+        "protein"
+      ],
+      "nostalgiaTriggers": [
+        "the browned top",
+        "way it's cut into squares",
+        "specific cheese aroma"
+      ]
+    },
+    {
+      "canonicalName": "sweet-bread",
+      "aliases": [
+        "pan dulce",
+        "conchas",
+        "rosca",
+        "brioche",
+        "challah",
+        "babka",
+        "stollen",
+        "panettone",
+        "king cake",
+        "rosca de reyes",
+        "cozonac",
+        "tsoureki",
+        "kulich",
+        "mona",
+        "hot cross bun",
+        "cinnamon roll"
+      ],
+      "transliterations": {
+        "Spanish": [
+          "pan dulce"
+        ],
+        "Hebrew": [
+          "חלה"
+        ],
+        "Italian": [
+          "panettone"
+        ],
+        "Romanian": [
+          "cozonac"
+        ],
+        "Greek": [
+          "τσουρέκι"
+        ]
+      },
+      "regions": [
+        "Latin America",
+        "Mediterranean",
+        "Eastern Europe",
+        "Western Europe",
+        "North America",
+        "Middle East"
+      ],
+      "sharedElements": [
+        "enriched sweet dough",
+        "often celebratory",
+        "fragrant"
+      ],
+      "divergentElements": [
+        "shape",
+        "filling",
+        "icing",
+        "holiday association"
+      ],
+      "nostalgiaTriggers": [
+        "specific holiday",
+        "shape from family tradition",
+        "aroma while baking"
+      ]
+    },
+    {
+      "canonicalName": "grilled-seafood",
+      "aliases": ["pescado-a-la-talla", "ikan-bakar", "yakitori-fish", "grouper-on-grill", "grilled-sardines", "lechon-de-mar", "pla-pao", "encocado", "moqueca-grilled", "pescado-asado"],
+      "transliterations": {
+        "Spanish": ["pescado asado", "pescado a la talla"],
+        "Malay": ["ikan bakar"],
+        "Thai": ["ปลาเผา"],
+        "Portuguese": ["peixe na brasa"],
+        "Japanese": ["焼き魚"]
+      },
+      "regions": ["Latin America", "Southeast Asia", "Mediterranean", "West Africa", "Japan"],
+      "sharedElements": ["whole or large-cut fish or shellfish", "direct heat cooking", "minimal batter or coating", "citrus or acid finish"],
+      "divergentElements": ["type of seafood", "marinade base (chili-herb vs soy-ginger vs citrus-garlic)", "char level", "accompaniment (tortilla vs rice vs bread)"],
+      "nostalgiaTriggers": ["char and smoke aroma", "beach or market setting", "specific fish species from home region"]
+    },
+    {
+      "canonicalName": "smoked-fish",
+      "aliases": ["lox", "gravlax", "smoked-salmon", "kippers", "balyk", "finnan-haddie", "arbroath-smokie", "palamida", "raucherfisch", "sikhae"],
+      "transliterations": {
+        "Yiddish": ["לאַקס"],
+        "Scots": ["Arbroath smokie"],
+        "Russian": ["балык"],
+        "German": ["Räucherfisch"],
+        "Korean": ["식해"]
+      },
+      "regions": ["Scandinavia", "Eastern Europe", "Scotland", "Pacific Northwest", "Japan"],
+      "sharedElements": ["cured or brined fish", "smoke exposure (cold or hot)", "preserved fat content", "umami concentration"],
+      "divergentElements": ["smoking method (cold vs hot)", "wood type", "fish species (salmon vs herring vs mackerel)", "salt level"],
+      "nostalgiaTriggers": ["smoky aroma from childhood kitchen", "breakfast or holiday pairing", "texture of specific cure"]
+    },
+    {
+      "canonicalName": "barbecue",
+      "aliases": ["bbq", "asado", "braai", "churrasco", "lechon", "char-siu", "bulgogi", "yakiniku", "jerk", "tandoori"],
+      "transliterations": {
+        "Spanish": ["asado"],
+        "Afrikaans": ["braai"],
+        "Portuguese": ["churrasco"],
+        "Chinese": ["叉燒"],
+        "Korean": ["불고기"],
+        "Jamaican": ["jerk"]
+      },
+      "regions": ["American South", "Argentina", "South Africa", "Caribbean", "Korea", "Japan"],
+      "sharedElements": ["meat cooked over live fire or coals", "marinade or dry rub", "caramelized exterior", "communal eating event"],
+      "divergentElements": ["cut of meat", "sauce vs rub vs marinade", "wood or fuel type", "cooking time and temperature"],
+      "nostalgiaTriggers": ["smoke aroma specific to family gatherings", "sauce recipe from grandparent", "char pattern on specific cut"]
+    },
+    {
+      "canonicalName": "fermented-soybean",
+      "aliases": ["miso", "doenjang", "douchi", "tauchu", "tempeh-ferment", "natto", "chunjang", "choujiu", "kinema", "thua-nao"],
+      "transliterations": {
+        "Japanese": ["味噌", "納豆"],
+        "Korean": ["된장"],
+        "Chinese": ["豆豉"],
+        "Indonesian": ["tauchu"],
+        "Thai": ["ถั่วเน่า"]
+      },
+      "regions": ["Japan", "Korea", "China", "Southeast Asia", "Himalayan"],
+      "sharedElements": ["soybean substrate", "fungal or bacterial fermentation", "deep umami flavor", "long shelf life"],
+      "divergentElements": ["fermentation organism", "salt content", "aging time", "texture (paste vs whole bean)"],
+      "nostalgiaTriggers": ["specific mother culture from home", "aroma of fermenting beans", "soup base from childhood"]
+    },
+    {
+      "canonicalName": "fermented-dairy",
+      "aliases": ["yogurt", "kefir", "labneh", "quark", "skyr", "dahi", "matsoni", "kishk", "amarula-milk", "filmjolk"],
+      "transliterations": {
+        "Arabic": ["لبنة"],
+        "Hindi": ["दही"],
+        "Turkish": ["kefir"],
+        "Georgian": ["მაწონი"],
+        "Icelandic": ["skyr"]
+      },
+      "regions": ["Middle East", "South Asia", "Caucasus", "Eastern Europe", "Scandinavia"],
+      "sharedElements": ["milk substrate", "lactic acid bacterial culture", "tangy flavor", "creamy texture"],
+      "divergentElements": ["milk type (cow vs sheep vs goat vs buffalo)", "thickness (drinkable vs spreadable)", "secondary fermentation", "use in cooking vs direct consumption"],
+      "nostalgiaTriggers": ["tang level from home culture", "breakfast ritual", "grandmother's specific strain"]
+    },
+    {
+      "canonicalName": "steamed-dumpling",
+      "aliases": ["xiaolongbao", "momos", "buuz", "mandu-steamed", "har-gow", "idli", "cwee-kueh", "putu-mayam", "tutu-kueh", "kueh-tee"],
+      "transliterations": {
+        "Chinese": ["小笼包", "虾饺"],
+        "Tibetan": ["མོག་མོག"],
+        "Mongolian": ["бууз"],
+        "Korean": ["만두"],
+        "Malay": ["putu mayam"]
+      },
+      "regions": ["China", "Tibet", "Mongolia", "Korea", "Southeast Asia"],
+      "sharedElements": ["dough wrapper", "steamed cooking method", "sealed filling", "dipping sauce accompaniment"],
+      "divergentElements": ["wrapper dough (wheat vs rice vs starch)", "filling (meat vs vegetable vs sweet)", "shape and pleat style", "soup-filled vs dry"],
+      "nostalgiaTriggers": ["first bite releasing steam", "dipping sauce from family recipe", "shape taught by grandparent"]
+    },
+    {
+      "canonicalName": "steamed-pudding",
+      "aliases": ["spotted-dick", "christmas-pudding", "persimmon-pudding", "hasty-pudding", "couscous-sweet", "putu", "kue-lapis", "bikaner-pudding", "podi-pudi", "tavuk-gogsu"],
+      "transliterations": {
+        "English": ["spotted dick"],
+        "Malay": ["kue lapis"],
+        "Indonesian": ["putu"],
+        "Turkish": ["tavuk göğsü"]
+      },
+      "regions": ["Britain", "American South", "Southeast Asia", "Turkey", "India"],
+      "sharedElements": ["steamed batter or mixture", "sweet profile", "dense moist texture", "sauce or syrup topping"],
+      "divergentElements": ["base ingredient (flour vs rice vs semolina)", "dried fruit inclusion", "spice profile", "serving temperature"],
+      "nostalgiaTriggers": ["steaming time and kitchen aroma", "holiday association", "specific dried fruit combination"]
+    },
+    {
+      "canonicalName": "hearty-soup",
+      "aliases": ["stew-soup", "caldo", "sopa", "chorba", "shorba", "rasam", "sambar", "pozole", "menudo", "thukpa"],
+      "transliterations": {
+        "Spanish": ["caldo", "sopa"],
+        "Arabic": ["شوربة"],
+        "Hindi": ["रसम", "सांभर"],
+        "Tibetan": ["ཐུག་པ"],
+        "Turkish": ["çorba"]
+      },
+      "regions": ["Latin America", "Middle East", "South Asia", "Eastern Europe", "East Asia"],
+      "sharedElements": ["liquid base with solids", "slow-simmered", "warming and filling", "meal-in-a-bowl"],
+      "divergentElements": ["broth base (meat vs vegetable vs legume)", "thickness (brothy vs thick)", "spice level", "acid element (lime vs tamarind vs tomato)"],
+      "nostalgiaTriggers": ["aroma filling the house on cold days", "sickness-comfort association", "specific garnish from family tradition"]
+    },
+    {
+      "canonicalName": "cold-soup",
+      "aliases": ["gazpacho", "vichyssoise", "borscht-cold", "naengmyeon-broth", "okroshka", "tarator", "ajillo", "mango-soup", "salmorejo", "chilled-cucumber"],
+      "transliterations": {
+        "Spanish": ["gazpacho", "salmorejo"],
+        "Russian": ["окрошка"],
+        "Korean": ["냉면"],
+        "Bulgarian": ["таратор"]
+      },
+      "regions": ["Mediterranean", "Eastern Europe", "Korea", "Latin America", "Middle East"],
+      "sharedElements": ["served chilled", "vegetable or fruit base", "refreshing profile", "summer dish"],
+      "divergentElements": ["base (tomato vs cucumber vs fruit vs beet)", "smooth vs chunky", "dairy inclusion", "bread thickening"],
+      "nostalgiaTriggers": ["summer temperature association", "garden-fresh ingredients", "specific chill level"]
+    },
+    {
+      "canonicalName": "filled-bread",
+      "aliases": ["empanada", "pasty", "calzone", "stromboli", "pide", "lahmacun", "burek", "gözleme", "paratha-stuffed", "arepa-rellena"],
+      "transliterations": {
+        "Spanish": ["empanada"],
+        "Turkish": ["börek", "pide", "lahmacun"],
+        "Italian": ["calzone"],
+        "Cornish": ["pasty"],
+        "Hindi": ["पराठा"]
+      },
+      "regions": ["Latin America", "Mediterranean", "Eastern Europe", "South Asia", "Britain"],
+      "sharedElements": ["bread or dough exterior", "sealed filling", "baked or pan-cooked", "portable"],
+      "divergentElements": ["dough type (wheat vs corn vs phyllo)", "filling (meat vs cheese vs vegetable vs sweet)", "cooking method", "shape and seal style"],
+      "nostalgiaTriggers": ["shape recognition from family recipe", "filling spilling out", "street vendor or market memory"]
+    },
+    {
+      "canonicalName": "baked-pasta",
+      "aliases": ["lasagna", "lasagne", "pastitsio", "macaroni-pie", "timmble", "imqaret-pasta", "mac-and-cheese", "ziti-baked", "cannelloni", "baked-ziti"],
+      "transliterations": {
+        "Italian": ["lasagne", "cannelloni"],
+        "Greek": ["παστίτσιο"],
+        "English": ["macaroni pie"]
+      },
+      "regions": ["Italy", "Greece", "American South", "Caribbean", "Eastern Europe"],
+      "sharedElements": ["pasta base", "baked with sauce and cheese or topping", "crispy top layer", "comfort food profile"],
+      "divergentElements": ["pasta shape", "sauce (tomato vs bechamel vs cheese)", "meat layer inclusion", "cheese type"],
+      "nostalgiaTriggers": ["bubbly cheese top from oven", "specific pasta shape from childhood", "holiday or Sunday dinner"]
+    },
+    {
+      "canonicalName": "cured-meat",
+      "aliases": ["prosciutto", "jamón", "bacon", "pancetta", "salami", "sujuk", "basturma", "chorizo", "lap-cheong", "bresaola"],
+      "transliterations": {
+        "Italian": ["prosciutto", "salame"],
+        "Spanish": ["jamón", "chorizo"],
+        "Turkish": ["sucuk", "pastırma"],
+        "Chinese": ["臘腸"]
+      },
+      "regions": ["Mediterranean", "Eastern Europe", "China", "Middle East", "American South"],
+      "sharedElements": ["preserved meat", "salt or cure agent", "drying or aging process", "concentrated flavor"],
+      "divergentElements": ["meat type (pork vs beef vs duck)", "cure method (dry salt vs smoke vs fermented)", "spice coating", "aging duration"],
+      "nostalgiaTriggers": ["aroma of curing room or smokehouse", "specific slice thickness from family", "holiday slicing ritual"]
+    },
+    {
+      "canonicalName": "pickled-vegetable",
+      "aliases": ["kimchi", "sauerkraut", "achar", "tsukemono", "pickle", "cortido", "torshi", "giardiniera", "escabeche", "atjar"],
+      "transliterations": {
+        "Korean": ["김치"],
+        "German": ["Sauerkraut"],
+        "Hindi": ["अचार"],
+        "Japanese": ["漬物"],
+        "Persian": ["ترشی"]
+      },
+      "regions": ["Korea", "Eastern Europe", "South Asia", "Japan", "Latin America"],
+      "sharedElements": ["vegetable substrate", "acid or fermentation preservation", "tangy-sour profile", "condiment or side role"],
+      "divergentElements": ["vegetable type (cabbage vs cucumber vs radish vs mango)", "fermentation vs vinegar", "spice level", "crunch retention"],
+      "nostalgiaTriggers": ["specific tang level from home", "color of family recipe batch", "jar or crock from grandparent"]
+    },
+    {
+      "canonicalName": "dried-fruit",
+      "aliases": ["raisin", "prune", "dried-apricot", "dried-mango", "dried-date", "dried-fig", "dried-plum", "preserved-lemon", "oshim", "lukaim"],
+      "transliterations": {
+        "Arabic": ["قمر الدين", "تمر"],
+        "Farsi": ["آلو بخارا"],
+        "Hindi": ["मुनक्का"],
+        "Turkish": ["kayısı"]
+      },
+      "regions": ["Middle East", "Central Asia", "Mediterranean", "South Asia", "North Africa"],
+      "sharedElements": ["fruit with moisture removed", "concentrated sweetness", "long shelf life", "snack or ingredient"],
+      "divergentElements": ["fruit type", "drying method (sun vs oven vs freeze)", "sulfur treatment", "use in sweet vs savory dishes"],
+      "nostalgiaTriggers": ["specific fruit from home region", "snack ritual", "holiday dish ingredient"]
+    },
+    {
+      "canonicalName": "confit",
+      "aliases": ["duck-confit", "confit-de-canard", "carnita", "rillettes", "ginataan-meat", "lechon-kawali", "kondiment", "tavuk-confit", "goose-confit", "pork-confit"],
+      "transliterations": {
+        "French": ["confit de canard"],
+        "Spanish": ["carnita"],
+        "Filipino": ["lechon kawali"]
+      },
+      "regions": ["France", "Mexico", "Philippines", "Southern US", "Eastern Europe"],
+      "sharedElements": ["slow-cooked in fat", "tender shreddable texture", "rich flavor", "preserved quality"],
+      "divergentElements": ["protein (duck vs pork vs goose vs chicken)", "fat type (its own fat vs lard vs coconut milk)", "cooking time", "serving style (shredded vs whole)"],
+      "nostalgiaTriggers": ["rich fat aroma", "texture of falling-apart meat", "special occasion dish"]
+    },
+    {
+      "canonicalName": "ceviche",
+      "aliases": ["ceviche", "ceviche-de-pescado", "kinilaw", "poke", "yukhoe", "crudo", "tartare-fish", "aguachile", "tiradito", "poisson-cru"],
+      "transliterations": {
+        "Spanish": ["ceviche", "aguachile"],
+        "Filipino": ["kinilaw"],
+        "Hawaiian": ["poke"],
+        "French": ["poisson cru"]
+      },
+      "regions": ["Peru", "Mexico", "Philippines", "Hawaii", "Mediterranean"],
+      "sharedElements": ["raw or acid-cured fish", "citrus or acid marinade", "fresh and bright", "no heat cooking"],
+      "divergentElements": ["fish type", "acid source (lime vs lemon vs vinegar vs coconut milk)", "heat element (chili vs none)", "additional ingredients (onion vs avocado vs coconut)"],
+      "nostalgiaTriggers": ["bright citrus smell", "beach or coastal memory", "specific fish from home waters"]
+    },
+    {
+      "canonicalName": "fresh-roll",
+      "aliases": ["spring-roll-fresh", "gỏi-cuốn", "popiah", "lumpia-sariwa", "bánh-tráng", "bo-bia", "khanom-jiin", "maki-unrolled", "hand-roll", "taco-de-pescado-fresh"],
+      "transliterations": {
+        "Vietnamese": ["gỏi cuốn"],
+        "Chinese": ["薄饼"],
+        "Filipino": ["lumpiang sariwa"],
+        "Thai": ["ปอเปี๊ยะ"]
+      },
+      "regions": ["Vietnam", "China", "Philippines", "Thailand", "Japan"],
+      "sharedElements": ["wrapper (rice paper or thin dough)", "fresh uncooked filling", "dipping sauce", "hand-assembled"],
+      "divergentElements": ["wrapper material", "filling (shrimp vs pork vs vegetable)", "dipping sauce type", "herb inclusion"],
+      "nostalgiaTriggers": ["assembly ritual at table", "specific herb combination", "wrapper texture"]
+    },
+    {
+      "canonicalName": "tartare",
+      "aliases": ["steak-tartare", "kitfo", "yukhoe", "carpaccio", "crudo-beef", "kibbeh-raw", "oysters-raw", "mett", "beef-carpaccio", "raw-beef"],
+      "transliterations": {
+        "French": ["steak tartare"],
+        "Ethiopian": ["ክትፎ"],
+        "Korean": ["육회"],
+        "Italian": ["carpaccio"],
+        "German": ["Mett"]
+      },
+      "regions": ["France", "Ethiopia", "Korea", "Italy", "Lebanon"],
+      "sharedElements": ["raw or barely treated protein", "seasoning applied raw", "bright and rich", "premium ingredient"],
+      "divergentElements": ["protein (beef vs fish vs lamb)", "seasoning (mustard vs chili vs citrus vs spice paste)", "texture (finely chopped vs sliced)", "egg yolk inclusion"],
+      "nostalgiaTriggers": ["specific seasoning blend from home", "first taste experience", "restaurant or market setting"]
+    },
+    {
+      "canonicalName": "pudding-custard",
+      "aliases": ["flan", "creme-caramel", "kheer", "arroz-con-leche", "rice-pudding", "maja-blanca", "pudim", "creme-brulee", "panna-cotta", "mahalabia"],
+      "transliterations": {
+        "Spanish": ["flan", "arroz con leche"],
+        "Hindi": ["खीर"],
+        "Filipino": ["majablanca"],
+        "Portuguese": ["pudim"],
+        "Arabic": ["مهلبية"]
+      },
+      "regions": ["Latin America", "South Asia", "Mediterranean", "Europe", "Philippines"],
+      "sharedElements": ["sweet custard or starch-thickened base", "smooth creamy texture", "served chilled", "comfort dessert"],
+      "divergentElements": ["base (egg custard vs rice vs starch vs gelatin)", "dairy type (milk vs coconut vs condensed)", "sweetener (sugar vs jaggery vs honey)", "caramel inclusion"],
+      "nostalgiaTriggers": ["specific sweetness level from home", "holiday dessert table", "aroma of caramelizing sugar"]
+    },
+    {
+      "canonicalName": "confection",
+      "aliases": ["halva", "loukoum", "baklava", "barfi", "mochi-sweet", "brigadeiro", "dulce-de-leche", "nougat", "fudge", "kok"],
+      "transliterations": {
+        "Arabic": ["حلاوة"],
+        "Turkish": ["lokum"],
+        "Hindi": ["बर्फी"],
+        "Japanese": ["餅"],
+        "Portuguese": ["brigadeiro"]
+      },
+      "regions": ["Middle East", "South Asia", "Mediterranean", "Japan", "Latin America"],
+      "sharedElements": ["sweet concentrated preparation", "bite-sized or sliceable", "gift or celebration food", "specific technique"],
+      "divergentElements": ["base (nut paste vs sugar vs starch vs condensed milk)", "texture (chewy vs crumbly vs hard)", "flavoring (rose vs cardamom vs chocolate vs matcha)", "coating or garnish"],
+      "nostalgiaTriggers": ["gift-giving occasion", "specific sweetness from home culture", "shape or cut from family tradition"]
     }
   ]
 }

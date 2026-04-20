@@ -1,6 +1,6 @@
 # Architecture
 
-Member Berries is a TypeScript MCP server for research-first food-memory reconstruction. It provides deterministic structured context, typed provenance contracts, cache helpers, and bounded prompts that a host model can use to reconstruct recipes from food memories.
+Achiote is a TypeScript MCP server for research-first food-memory reconstruction. It provides deterministic structured context, typed provenance contracts, cache helpers, and bounded prompts that a host model can use to reconstruct recipes from food memories.
 
 ## Runtime shape
 
@@ -58,9 +58,9 @@ The server does not browse the web itself. It can structure and validate source 
 `ResearchCache` stores optional research data in SQLite and can store/retrieve typed `ResearchRecord` JSON. By default the CLI uses:
 
 ```text
-$MEMBER_BERRIES_CACHE_PATH
-or $XDG_CACHE_HOME/member-berries/culture-cache.db
-or ~/.cache/member-berries/culture-cache.db
+$ACHIOTE_CACHE_PATH
+or $XDG_CACHE_HOME/achiote/culture-cache.db
+or ~/.cache/achiote/culture-cache.db
 ```
 
 Tests use temporary directories. Package installs should not write beside `dist/`.

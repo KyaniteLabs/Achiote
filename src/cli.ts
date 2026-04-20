@@ -1,8 +1,8 @@
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import { createMemberBerriesServer } from './server.js';
+import { createAchioteServer } from './server.js';
 
-export async function runMemberBerriesStdioServer() {
-  const server = createMemberBerriesServer();
+export async function runAchioteStdioServer() {
+  const server = createAchioteServer();
   const transport = new StdioServerTransport();
 
   process.on('SIGINT', () => {

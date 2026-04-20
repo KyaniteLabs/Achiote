@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import Anthropic from '@anthropic-ai/sdk';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { isInitializeRequest } from '@modelcontextprotocol/sdk/types.js';
-import { createMemberBerriesServer } from './server.js';
+import { createAchioteServer } from './server.js';
 import {
   collectFoodMemory,
   planDishResearch,
@@ -41,7 +41,7 @@ const transports = new Map<string, StreamableHTTPServerTransport>();
 const cache = createCache({});
 const anthropic = new Anthropic();
 
-const SYSTEM_PROMPT = `You are a food memory assistant built into Member Berries. You MUST use the provided tools — never answer from memory alone.
+const SYSTEM_PROMPT = `You are a food memory assistant built into Achiote. You MUST use the provided tools — never answer from memory alone.
 
 ## MANDATORY WORKFLOW
 
@@ -626,7 +626,7 @@ const server = createServer(async (req, res) => {
             const sid = transport!.sessionId;
             if (sid) transports.delete(sid);
           };
-          const mcpServer = createMemberBerriesServer();
+          const mcpServer = createAchioteServer();
           await mcpServer.connect(transport);
           await transport.handleRequest(req, res, parsed);
           return;
@@ -659,7 +659,7 @@ const server = createServer(async (req, res) => {
 });
 
 server.listen(PORT, () => {
-  console.log(`Member Berries — http://localhost:${PORT}`);
+  console.log(`Achiote — http://localhost:${PORT}`);
 });
 
 process.on('SIGINT', async () => {

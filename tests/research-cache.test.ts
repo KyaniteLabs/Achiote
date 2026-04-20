@@ -21,7 +21,7 @@ describe('ResearchCache', () => {
   });
 
   it('creates parent directories for new database paths', () => {
-    const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'member-berries-cache-parent-'));
+    const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'achiote-cache-parent-'));
     const nestedDb = path.join(tempRoot, 'nested', 'cache.db');
     const nestedCache = new ResearchCache(nestedDb);
 

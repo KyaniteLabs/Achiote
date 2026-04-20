@@ -87,7 +87,7 @@ async function validateDOI(citation) {
       method: "GET",
       redirect: "follow",
       headers: {
-        "User-Agent": "MemberBerries-CitationValidator/1.0 (mailto:hello@member-berries.dev)",
+        "User-Agent": "Achiote-CitationValidator/1.0 (mailto:hello@achiote.dev)",
         Accept: "text/html",
       },
     });

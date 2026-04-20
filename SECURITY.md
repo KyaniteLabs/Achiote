@@ -2,7 +2,7 @@
 
 ## Supported versions
 
-Member Berries is pre-1.0. Security fixes target the current `master` branch until release branches exist.
+Achiote is pre-1.0. Security fixes target the current `master` branch until release branches exist.
 
 ## Reporting a vulnerability
 
@@ -15,7 +15,7 @@ Please do not open public issues for vulnerabilities. Report privately to the re
 
 ## Security model
 
-Member Berries is a stdio MCP server. It does not expose an HTTP listener and does not perform live web requests in the current implementation. Host AI clients or future adapters may supply researched source facts; those facts must be represented as typed provenance records before downstream use. Primary risks are:
+Achiote is a stdio MCP server. It does not expose an HTTP listener and does not perform live web requests in the current implementation. Host AI clients or future adapters may supply researched source facts; those facts must be represented as typed provenance records before downstream use. Primary risks are:
 
 - prompt-injection through user-provided memories or ingredient/location fields passed to host-model prompts
 - cache privacy and filesystem permissions

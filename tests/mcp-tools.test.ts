@@ -113,7 +113,7 @@ describe('find_sensory_substitutes integration', () => {
 describe('source_ingredients regional data integration', () => {
   it('has 5 US regions', () => {
     const regions = Object.keys(regionalData.regions);
-    expect(regions).toHaveLength(5);
+    expect(regions).toHaveLength(15);
     expect(regions).toContain('southern-california');
     expect(regions).toContain('bay-area');
     expect(regions).toContain('new-york-metro');
@@ -221,7 +221,7 @@ describe('generate_recipe schema integration', () => {
 // ---------------------------------------------------------------------------
 describe('ResearchCache integration with MCP tools pattern', () => {
   it('cache stores and retrieves research for dish families', () => {
-    const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'member-berries-mcp-cache-'));
+    const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'achiote-mcp-cache-'));
     const dbPath = path.join(tempRoot, 'test-mcp-cache.db');
     const testCache = new ResearchCache(dbPath);
 
@@ -248,7 +248,7 @@ describe('ResearchCache integration with MCP tools pattern', () => {
   });
 
   it('cache miss returns null', () => {
-    const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'member-berries-mcp-cache-miss-'));
+    const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'achiote-mcp-cache-miss-'));
     const dbPath = path.join(tempRoot, 'test-mcp-cache-miss.db');
     const testCache = new ResearchCache(dbPath);
 

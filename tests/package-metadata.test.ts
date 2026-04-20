@@ -6,7 +6,7 @@ describe('package distribution metadata', () => {
   it('declares install, type, executable, and source-control metadata', () => {
     expect(pkg.license).toBe('MIT');
     expect(pkg.types).toBe('dist/index.d.ts');
-    expect(pkg.bin).toEqual({ 'member-berries': 'bin/member-berries.mjs' });
+    expect(pkg.bin).toEqual({ achiote: 'bin/achiote.mjs' });
     expect(pkg.exports).toEqual({
       '.': {
         types: './dist/index.d.ts',
@@ -15,12 +15,12 @@ describe('package distribution metadata', () => {
     });
     expect(pkg.repository).toEqual({
       type: 'git',
-      url: 'git+https://github.com/Pastorsimon1798/member-berries.git',
+      url: 'git+https://github.com/Pastorsimon1798/achiote.git',
     });
     expect(pkg.bugs).toEqual({
-      url: 'https://github.com/Pastorsimon1798/member-berries/issues',
+      url: 'https://github.com/Pastorsimon1798/achiote/issues',
     });
-    expect(pkg.homepage).toBe('https://github.com/Pastorsimon1798/member-berries#readme');
+    expect(pkg.homepage).toBe('https://github.com/Pastorsimon1798/achiote#readme');
     expect(pkg.engines.node).toBe('>=22.0.0');
   });
 
@@ -48,11 +48,11 @@ describe('package distribution metadata', () => {
   it('uses a portable package-smoke temp directory prefix', () => {
     const smokeScript = fs.readFileSync('scripts/package-smoke.mjs', 'utf8');
 
-    expect(smokeScript).toContain("const smokeRoot = path.join(os.tmpdir(), 'member-berries-package-smoke');");
+    expect(smokeScript).toContain("const smokeRoot = path.join(os.tmpdir(), 'achiote-package-smoke');");
     expect(smokeScript).toContain("fs.mkdirSync(smokeRoot, { recursive: true });");
     expect(smokeScript).toContain("fs.mkdtempSync(path.join(smokeRoot, 'run-'))");
-    expect(smokeScript).not.toContain("fs.mkdtempSync(path.join(os.tmpdir(), 'member-berries-package-smoke-'))");
-    expect(smokeScript).not.toContain("member-berries-package-smoke-XXXXXX");
+    expect(smokeScript).not.toContain("fs.mkdtempSync(path.join(os.tmpdir(), 'achiote-package-smoke-'))");
+    expect(smokeScript).not.toContain("achiote-package-smoke-XXXXXX");
   });
 
 });

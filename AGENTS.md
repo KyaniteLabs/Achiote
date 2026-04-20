@@ -1,4 +1,4 @@
-# Member Berries Agent Guardrails
+# Achiote Agent Guardrails
 
 This repository is a **Model Context Protocol server + skill** for research-first food-memory reconstruction. Keep it small, trustworthy, and mechanism-driven.
 

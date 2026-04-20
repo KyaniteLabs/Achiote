@@ -1,6 +1,6 @@
 {
   "mcpServers": {
-    "member-berries": {
+    "achiote": {
       "type": "stdio",
       "command": "node",
       "args": [
