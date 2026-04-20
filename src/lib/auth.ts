@@ -22,6 +22,9 @@ export interface AuthFailure {
 
 export type AuthOutcome = AuthResult | AuthFailure;
 
+const VALID_TIERS = new Set<string>(['free', 'pro', 'business', 'enterprise']);
+
+
 const TIER_LIMITS: Record<Tier, { mcpCallsPerMonth: number; webReconstructions: number }> = {
   free: { mcpCallsPerMonth: 50, webReconstructions: 3 },
   pro: { mcpCallsPerMonth: 5_000, webReconstructions: Infinity },
@@ -98,6 +101,7 @@ export function loadKeysFromEnv(envValue: string | undefined): ApiKeyRecord[] {
         typeof r === 'object' && r !== null &&
         typeof (r as Record<string, unknown>).key === 'string' &&
         typeof (r as Record<string, unknown>).tier === 'string' &&
+        VALID_TIERS.has((r as Record<string, unknown>).tier as string) &&
         typeof (r as Record<string, unknown>).name === 'string',
     ) as ApiKeyRecord[];
   } catch {

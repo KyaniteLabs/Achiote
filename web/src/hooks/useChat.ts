@@ -63,6 +63,11 @@ export function useChat() {
                 }
                 return [...prev, { id: assistantId, role: 'assistant', text: accumulated }];
               });
+            } else if (typeof parsed === 'object' && parsed !== null && 'message' in parsed) {
+              setMessages((prev) => [
+                ...prev,
+                { id: crypto.randomUUID(), role: 'assistant', text: `Error: ${(parsed as { message: string }).message}` },
+              ]);
             }
           } catch {
             // skip malformed SSE data

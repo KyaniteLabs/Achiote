@@ -551,8 +551,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
   const authed = authenticateRequest(req);
   if (!authed) { sendJson(res, 401, { error: 'Unauthorized. Provide a valid API key via x-api-key header or apiKey query param.' }); return; }
 
-  const sessionId = req.headers['x-session-id'] as string ?? authed.keyId;
-  const limitResult = rateLimiter.checkWebLimit(authed.tier, sessionId);
+  const limitResult = rateLimiter.checkWebLimit(authed.tier, authed.keyId);
   sendRateLimitHeaders(res, limitResult);
   if (!limitResult.allowed) { sendJson(res, 429, { error: 'Rate limit exceeded. Upgrade your plan for more reconstructions.' }); return; }
 
