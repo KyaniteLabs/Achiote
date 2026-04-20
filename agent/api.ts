@@ -1,8 +1,5 @@
 import type { IncomingMessage, ServerResponse } from 'node:http';
 import { achioteAgent } from './index.js';
-import { createAchioteMcpClient } from './tools.js';
-
-const mcpClient = createAchioteMcpClient(process.env.ACHIOTE_MCP_URL || 'http://localhost:3000');
 
 export async function handleAgentStream(req: IncomingMessage, res: ServerResponse): Promise<void> {
   const raw = await readBody(req);
@@ -19,8 +16,7 @@ export async function handleAgentStream(req: IncomingMessage, res: ServerRespons
   });
 
   try {
-    const toolsets = await mcpClient.listToolsets();
-    const stream = await achioteAgent.stream(userMessage, { toolsets });
+    const stream = await achioteAgent.stream(userMessage);
 
     for await (const chunk of stream) {
       const text = typeof chunk === 'string' ? chunk : chunk?.text;
