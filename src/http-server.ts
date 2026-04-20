@@ -796,6 +796,9 @@ const server = createServer(async (req, res) => {
   }
 });
 
+server.requestTimeout = 120_000;
+server.headersTimeout = 125_000;
+
 server.listen(PORT, () => {
   console.log(`Achiote — http://localhost:${PORT}`);
 });

@@ -4,8 +4,17 @@ import ingredientsData from '../data/ingredients.json' with { type: 'json' };
 const ingredients = ingredientsData.ingredients;
 
 export function findSubstitutes(ingredientKey: string): SubstitutionResult[] {
-  const normalized = ingredientKey.toLowerCase().replace(/\s+/g, '-');
-  const target = ingredients[normalized as keyof typeof ingredients];
+  const normalized = ingredientKey.toLowerCase().replace(/\s+/g, '-').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  let target = ingredients[normalized as keyof typeof ingredients];
+
+  if (!target) {
+    for (const [key, value] of Object.entries(ingredients)) {
+      if (Array.isArray(value.aliases) && value.aliases.some(a => a.toLowerCase() === normalized)) {
+        target = value;
+        break;
+      }
+    }
+  }
 
   if (!target) return [];
 

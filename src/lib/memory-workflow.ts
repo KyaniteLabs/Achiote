@@ -304,7 +304,7 @@ const REGION_PATTERNS: Array<{ pattern: RegExp; label: string }> = [
 
 const GEOGRAPHIC_CONTEXT_PATTERN_SOURCES = [
   { source: '(?:from|grew\\s+up\\s+in|born\\s+in|family\\s+(?:is\\s+)?from|lived\\s+in|visited|traveled\\s+to|my\\s+(?:mom|dad|grandma|grandpa|grandmother|grandfather|abuela|abuelo|oma|opa|nonna|nonno|baba|yaya|tata|nana|papa)\\s+(?:is|was)\\s+from)\\s+([a-zA-Z\\s]{2,30})', flags: 'gi' },
-  { source: '(?:in|at)\\s+([A-Z][a-zA-Z\\s]{1,28})\\s+(?:and|where|when|that|which|who|every|during|after|before)', flags: 'g' },
+  { source: '(?<![.!?]\\s|^)(?:in|at)\\s+([A-Z][a-zA-Z\\s]{1,28})\\s+(?:and|where|when|that|which|who|every|during|after|before)', flags: 'g' },
 ];
 
 function extractRegionHints(lowerText: string, originalText: string): string[] {
@@ -744,8 +744,11 @@ const ROLE_ORDER: ComponentRole[] = ['starch', 'protein', 'sauce', 'vegetable', 
 
 function sanitizeLocation(raw?: string): string {
   if (!raw) return 'at any grocery store';
-  const trimmed = raw.trim().slice(0, 80);
-  return `near ${trimmed}`;
+  const trimmed = raw.trim();
+  if (trimmed.length <= 80) return `near ${trimmed}`;
+  const truncated = trimmed.slice(0, 80);
+  const lastSep = Math.max(truncated.lastIndexOf(','), truncated.lastIndexOf(' '));
+  return `near ${truncated.slice(0, lastSep > 0 ? lastSep : 80)}`;
 }
 
 function decomposeIntoComponents(signals: string, userLocation?: string, overallConfidence?: Confidence): CueComponent[] {
@@ -785,7 +788,8 @@ function hasAnySignal(text: string, patterns: RegExp[]): boolean {
 }
 
 function wordSignal(words: string): RegExp {
-  return new RegExp(`\\b(${words})\\b`);
+  const escaped = words.split('|').map(w => escapeRegExp(w)).join('|');
+  return new RegExp(`\\b(${escaped})\\b`, 'i');
 }
 
 function foodScienceCueProfile(signals: string, userLocation?: string, overallConfidence?: Confidence): FoodScienceCueProfile {
