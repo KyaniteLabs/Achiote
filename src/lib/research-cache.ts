@@ -4,6 +4,7 @@ import path from 'node:path';
 import type { ResearchCacheEntry, ResearchRecord } from './types.js';
 
 export class ResearchCache {
+  private static readonly MAX_DATA_SIZE = 512 * 1024; // 512 KB
   private db: Database.Database;
 
   constructor(dbPath: string) {
@@ -23,6 +24,9 @@ export class ResearchCache {
   }
 
   store(dishFamily: string, region: string, researchData: string): void {
+    if (Buffer.byteLength(researchData, 'utf8') > ResearchCache.MAX_DATA_SIZE) {
+      throw new Error(`Research data exceeds maximum cache entry size (${ResearchCache.MAX_DATA_SIZE} bytes)`);
+    }
     this.db.prepare(
       `INSERT OR REPLACE INTO research_cache (dish_family, region, research_data, created_at, hit_count)
        VALUES (?, ?, ?, datetime('now'), 0)`
@@ -35,7 +39,12 @@ export class ResearchCache {
 
   getResearchRecord(dishFamily: string, region: string): ResearchRecord | null {
     const entry = this.get(dishFamily, region);
-    return entry ? JSON.parse(entry.researchData) as ResearchRecord : null;
+    if (!entry) return null;
+    try {
+      return JSON.parse(entry.researchData) as ResearchRecord;
+    } catch {
+      return null;
+    }
   }
 
   get(dishFamily: string, region: string): ResearchCacheEntry | null {

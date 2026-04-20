@@ -9,7 +9,14 @@ export type MemberBerriesServerOptions = {
 
 export function defaultCachePath(): string {
   if (process.env.MEMBER_BERRIES_CACHE_PATH) {
-    return process.env.MEMBER_BERRIES_CACHE_PATH;
+    const envPath = path.resolve(process.env.MEMBER_BERRIES_CACHE_PATH);
+    if (process.env.MEMBER_BERRIES_CACHE_PATH.includes('..')) {
+      throw new Error('MEMBER_BERRIES_CACHE_PATH must not contain path traversal');
+    }
+    if (!envPath.endsWith('.db')) {
+      throw new Error('MEMBER_BERRIES_CACHE_PATH must end with .db');
+    }
+    return envPath;
   }
 
   const cacheRoot = process.env.XDG_CACHE_HOME ?? path.join(os.homedir(), '.cache');

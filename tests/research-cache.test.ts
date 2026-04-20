@@ -87,4 +87,20 @@ describe('ResearchCache', () => {
 
     expect(cache.getResearchRecord('pasteles', 'Puerto Rico')).toEqual(record);
   });
+
+  it('returns null when cached JSON is corrupted', () => {
+    cache.store('dumpling', 'China', 'not-valid-json{{{');
+    expect(cache.getResearchRecord('dumpling', 'China')).toBeNull();
+  });
+
+  it('rejects entries exceeding max data size', () => {
+    const oversized = 'x'.repeat(513 * 1024);
+    expect(() => cache.store('stew-braise', 'Morocco', oversized)).toThrow(/maximum cache entry size/);
+  });
+
+  it('rejects entries exceeding max data size with multi-byte characters', () => {
+    // Each CJK character is 3 bytes in UTF-8
+    const oversized = '\u{4E00}'.repeat(172 * 1024); // 172K chars * 3 bytes = 516 KB
+    expect(() => cache.store('dumpling', 'China', oversized)).toThrow(/maximum cache entry size/);
+  });
 });

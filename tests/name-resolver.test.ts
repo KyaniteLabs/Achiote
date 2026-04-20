@@ -79,3 +79,22 @@ describe('resolveDishName ambiguity-aware candidates', () => {
     });
   });
 });
+
+describe('resolveDishName levenshtein edge cases', () => {
+  it('handles empty string input', () => {
+    const result = resolveDishName('');
+    expect(result.canonicalName).toBe('');
+    expect(result.confidence).toBe('Low');
+  });
+
+  it('handles single character input', () => {
+    const result = resolveDishName('x');
+    expect(result.confidence).toBe('Low');
+  });
+
+  it('returns identical result for the same input called twice', () => {
+    const first = resolveDishName('pierogi');
+    const second = resolveDishName('pierogi');
+    expect(first).toEqual(second);
+  });
+});
