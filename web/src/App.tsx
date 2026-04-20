@@ -18,25 +18,58 @@ const COLORS = {
 export function App() {
   const { messages, isStreaming, sendMessage } = useChat();
   const [input, setInput] = useState('');
+  const [apiKey, setApiKey] = useState(() => localStorage.getItem('achiote-api-key') ?? '');
+  const [showKeyInput, setShowKeyInput] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
+  const handleSaveKey = () => {
+    localStorage.setItem('achiote-api-key', apiKey);
+    setShowKeyInput(false);
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const trimmed = input.trim();
     if (!trimmed || isStreaming) return;
-    sendMessage(trimmed);
+    sendMessage(trimmed, apiKey || undefined);
     setInput('');
   };
 
   return (
     <div style={styles.container}>
       <header style={styles.header}>
-        <h1 style={styles.title}>Achiote</h1>
-        <p style={styles.subtitle}>Recreate the dishes you remember</p>
+        <div style={styles.headerRow}>
+          <div>
+            <h1 style={styles.title}>Achiote</h1>
+            <p style={styles.subtitle}>Recreate the dishes you remember</p>
+          </div>
+          <button
+            style={styles.gearBtn}
+            onClick={() => setShowKeyInput(!showKeyInput)}
+            aria-label="API key settings"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={apiKey ? COLORS.achiote : COLORS.textMuted} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+            </svg>
+          </button>
+        </div>
+        {showKeyInput && (
+          <div style={styles.keyBar}>
+            <input
+              style={styles.keyInput}
+              type="password"
+              value={apiKey}
+              onChange={(e) => setApiKey(e.target.value)}
+              placeholder="Enter API key (ach_...)"
+              aria-label="API key input"
+            />
+            <button style={styles.keySaveBtn} onClick={handleSaveKey}>Save</button>
+          </div>
+        )}
       </header>
 
       <main style={styles.chatArea}>
@@ -104,9 +137,48 @@ const styles: Record<string, React.CSSProperties> = {
     color: COLORS.text,
   },
   header: {
-    padding: '16px 20px',
+    padding: '12px 16px',
     borderBottom: `1px solid ${COLORS.border}`,
-    textAlign: 'center' as const,
+  },
+  headerRow: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 12,
+  },
+  gearBtn: {
+    background: 'none',
+    border: 'none',
+    cursor: 'pointer',
+    padding: 6,
+    display: 'flex',
+    alignItems: 'center',
+  },
+  keyBar: {
+    display: 'flex',
+    gap: 8,
+    marginTop: 10,
+  },
+  keyInput: {
+    flex: 1,
+    fontSize: 14,
+    padding: '8px 12px',
+    borderRadius: 8,
+    border: `1px solid ${COLORS.border}`,
+    outline: 'none',
+    background: COLORS.surface,
+    color: COLORS.text,
+  },
+  keySaveBtn: {
+    padding: '8px 16px',
+    borderRadius: 8,
+    border: 'none',
+    background: COLORS.achiote,
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: 600,
+    cursor: 'pointer',
+    minHeight: 44,
   },
   title: {
     fontSize: 22,

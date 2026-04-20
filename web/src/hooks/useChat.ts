@@ -10,15 +10,18 @@ export function useChat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isStreaming, setIsStreaming] = useState(false);
 
-  const sendMessage = useCallback(async (text: string) => {
+  const sendMessage = useCallback(async (text: string, apiKey?: string) => {
     const userMsg: Message = { id: crypto.randomUUID(), role: 'user', text };
     setMessages((prev) => [...prev, userMsg]);
     setIsStreaming(true);
 
     try {
+      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+      if (apiKey) headers['x-api-key'] = apiKey;
+
       const res = await fetch('/ask', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify({ message: text }),
       });
 
