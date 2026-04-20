@@ -41,6 +41,11 @@ async function copyTerminal(btn) {
   }
 }
 
+// Wire up copy buttons via addEventListener (CSP blocks inline onclick)
+document.querySelectorAll('.copy-btn').forEach(btn => {
+  btn.addEventListener('click', () => copyTerminal(btn));
+});
+
 // Try-it widget
 function runTryIt() {
   const input = document.getElementById('tryit-input');

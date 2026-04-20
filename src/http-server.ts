@@ -30,11 +30,25 @@ function checkRateLimit(identifier: string): boolean {
   return true;
 }
 
+const TRUST_PROXY = process.env.ACHIOTE_TRUST_PROXY === 'true';
+
 function getClientIdentifier(req: IncomingMessage): string {
-  const forwardedFor = req.headers['x-forwarded-for'];
-  const ip = forwardedFor ? (Array.isArray(forwardedFor) ? forwardedFor[0] : forwardedFor.split(',')[0]) : req.socket.remoteAddress;
-  return ip || 'unknown';
+  if (TRUST_PROXY) {
+    const forwardedFor = req.headers['x-forwarded-for'];
+    if (forwardedFor) {
+      return (Array.isArray(forwardedFor) ? forwardedFor[0] : forwardedFor.split(',')[0]).trim();
+    }
+  }
+  return req.socket.remoteAddress || 'unknown';
 }
+
+// Periodic cleanup of expired rate limit entries to prevent memory leak
+setInterval(() => {
+  const now = Date.now();
+  for (const [key, record] of rateLimitMap) {
+    if (now > record.resetTime) rateLimitMap.delete(key);
+  }
+}, RATE_LIMIT_WINDOW).unref();
 import {
   collectFoodMemory,
   planDishResearch,
