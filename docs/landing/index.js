@@ -3,14 +3,14 @@ document.documentElement.classList.add('js');
 // Dark mode
 const themeToggle = document.getElementById('theme-toggle');
 const html = document.documentElement;
-const stored = localStorage.getItem('mb-theme');
+const stored = localStorage.getItem('achiote-theme');
 const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 if (stored) { html.setAttribute('data-theme', stored); }
 else if (prefersDark) { html.setAttribute('data-theme', 'dark'); }
 themeToggle.addEventListener('click', () => {
   const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
   html.setAttribute('data-theme', next);
-  localStorage.setItem('mb-theme', next);
+  localStorage.setItem('achiote-theme', next);
 });
 
 // Scroll reveal

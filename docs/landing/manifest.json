@@ -1,0 +1,16 @@
+{
+  "name": "Achiote",
+  "short_name": "Achiote",
+  "description": "Recreate the dishes you remember, with ingredients you can find.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#faf7f5",
+  "theme_color": "#b5451b",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='35' cy='55' r='22' fill='%23b5451b'/%3E%3Ccircle cx='65' cy='45' r='26' fill='%23d4653a'/%3E%3Ccircle cx='50' cy='30' r='18' fill='%23f2b84b'/%3E%3C/svg%3E",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
