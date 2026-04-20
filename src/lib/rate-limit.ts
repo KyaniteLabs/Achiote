@@ -64,7 +64,7 @@ export function createRateLimiter() {
       const limits = getTierLimits(tier);
       const limit = limits.webReconstructions;
       if (!isFinite(limit)) {
-        return { allowed: true, remaining: Infinity, limit: Infinity, resetAt: Date.now() + 60_000 };
+        return { allowed: true, remaining: Number.MAX_SAFE_INTEGER, limit: Number.MAX_SAFE_INTEGER, resetAt: Date.now() + 60_000 };
       }
 
       const windowKey = `web:${sessionId}`;

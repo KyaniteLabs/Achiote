@@ -28,9 +28,13 @@ function send(text) {
   busy = true;
   btn.disabled = true;
 
+  const apiKey = document.getElementById('api-key')?.value || '';
+  const headers = { 'Content-Type': 'application/json' };
+  if (apiKey) headers['x-api-key'] = apiKey;
+
   fetch('/ask', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers,
     body: JSON.stringify({ message: val }),
   })
   .then(res => {
@@ -65,6 +69,7 @@ async function streamResponse(res, el) {
   const decoder = new TextDecoder();
   let pending = '';
   let text = '';
+  let hasError = false;
 
   while (true) {
     const { done, value } = await reader.read();
@@ -75,10 +80,13 @@ async function streamResponse(res, el) {
     pending = lines.pop() ?? '';
 
     for (const line of lines) {
-      if (line.startsWith('data: ')) {
+      if (line.startsWith('event: error')) {
+        hasError = true;
+      } else if (line.startsWith('data: ')) {
         try {
           const d = JSON.parse(line.slice(6));
           if (typeof d === 'string') text += d;
+          else if (hasError) text += d.message || d.error || JSON.stringify(d);
         } catch { /* skip */ }
       }
     }

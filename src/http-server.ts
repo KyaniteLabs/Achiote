@@ -95,7 +95,7 @@ function sweepStaleSessions(): void {
   }
 }
 const cache = createCache({});
-const anthropic = new Anthropic();
+const anthropic = new Anthropic({ timeout: 60_000 });
 const authenticator = createAuthenticator(loadKeysFromEnv(process.env.ACHIOTE_API_KEYS));
 const rateLimiter = createRateLimiter();
 
