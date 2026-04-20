@@ -37,13 +37,15 @@ export function useChat() {
       if (!reader) throw new Error('No response stream');
 
       const decoder = new TextDecoder();
+      let carryOver = '';
 
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
 
-        const chunk = decoder.decode(value, { stream: true });
-        const lines = chunk.split('\n');
+        carryOver += decoder.decode(value, { stream: true });
+        const lines = carryOver.split('\n');
+        carryOver = lines.pop() ?? '';
 
         for (const line of lines) {
           if (!line.startsWith('data: ')) continue;

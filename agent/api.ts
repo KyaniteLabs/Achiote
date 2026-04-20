@@ -6,7 +6,7 @@ const mcpClient = createAchioteMcpClient(process.env.ACHIOTE_MCP_URL || 'http://
 
 export async function handleAgentStream(req: IncomingMessage, res: ServerResponse): Promise<void> {
   const raw = await readBody(req);
-  let parsed: { message?: string; threadId?: string };
+  let parsed: { message?: string };
   try { parsed = JSON.parse(raw); } catch { sendJson(res, 400, { error: 'Invalid JSON' }); return; }
 
   const userMessage = parsed.message?.trim();
