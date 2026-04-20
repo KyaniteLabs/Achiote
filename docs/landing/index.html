@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Achiote — Turn half-remembered food stories into the taste that brings them back</title>
   <meta name="description" content="Achiote is an open-source MCP server that helps AI agents turn half-remembered food stories into structured research, sensory tests, and the smallest taste that brings a dish back." />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:;" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'unsafe-inline'; img-src 'self' data:; object-src 'none'; base-uri 'self';" />
 
   <!-- Open Graph -->
   <meta property="og:title" content="Achiote — Turn half-remembered food stories into the taste that brings them back" />
@@ -601,7 +601,7 @@
           </div>
           <div class="terminal reveal" aria-label="Example minimum viable nostalgia cue">
             <div class="terminal-header"><span></span><span></span><span></span></div>
-            <button class="copy-btn" onclick="copyTerminal(this)" aria-label="Copy to clipboard">Copy</button>
+            <button class="copy-btn" aria-label="Copy to clipboard">Copy</button>
 <pre>{
   <span class="tk-key">"title"</span>: <span class="tk-str">"Minimum viable composed-bite cue"</span>,
   <span class="tk-key">"format"</span>: <span class="tk-str">"bite"</span>,
@@ -648,7 +648,7 @@
           </div>
           <div class="terminal reveal" aria-label="Installation commands">
             <div class="terminal-header"><span></span><span></span><span></span></div>
-            <button class="copy-btn" onclick="copyTerminal(this)" aria-label="Copy to clipboard">Copy</button>
+            <button class="copy-btn" aria-label="Copy to clipboard">Copy</button>
 <pre><span class="tk-com"># Install dependencies and build</span>
 npm ci
 npm run build
@@ -730,69 +730,6 @@ startup_timeout_sec = <span class="tk-num">10</span></pre>
     </footer>
   </div>
 
-  <script>document.documentElement.classList.add('js');</script>
-  <script>
-    // Dark mode
-    const themeToggle = document.getElementById('theme-toggle');
-    const html = document.documentElement;
-    const stored = localStorage.getItem('mb-theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    if (stored) { html.setAttribute('data-theme', stored); }
-    else if (prefersDark) { html.setAttribute('data-theme', 'dark'); }
-    themeToggle.addEventListener('click', () => {
-      const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-      html.setAttribute('data-theme', next);
-      localStorage.setItem('mb-theme', next);
-    });
-
-    // Scroll reveal
-    const reveals = document.querySelectorAll('.reveal');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-    reveals.forEach(el => observer.observe(el));
-
-    // Copy terminal
-    async function copyTerminal(btn) {
-      const pre = btn.nextElementSibling;
-      const text = pre.innerText;
-      try {
-        await navigator.clipboard.writeText(text);
-        const original = btn.textContent;
-        btn.textContent = 'Copied';
-        btn.classList.add('copied');
-        setTimeout(() => { btn.textContent = original; btn.classList.remove('copied'); }, 2000);
-      } catch (e) {
-        btn.textContent = 'Failed';
-        setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
-      }
-    }
-
-    // Try-it widget
-    function runTryIt() {
-      const input = document.getElementById('tryit-input');
-      const output = document.getElementById('tryit-output');
-      const val = input.value.trim();
-      if (!val) return;
-      const responses = [
-        `<p><strong>Memory fragment captured.</strong></p><p>Possible clues: region (family recipe), texture (wrapped/fried), phonetic similarity to "pasteles." Next step: ask about the leaf, the masa texture, and whether it was boiled or steamed.</p>`,
-        `<p><strong>Sensory decomposition:</strong></p><p>Smell → toast/herb/sesame. Texture → soft interior, maybe starchy carrier. Sound → "everyone got quiet" suggests ritual significance. Recommended first test: one bite of toasted sesame oil on warm rice.</p>`,
-        `<p><strong>Pattern match:</strong></p><p>Input matches "sour + pale + dill + dairy" profile. Likely Eastern European or Central Asian soup family. Acid source unknown — could be fermented dairy, vinegar, or lemon. Test: a warm sip with dill and a spoonful of yogurt.</p>`
-      ];
-      const pick = responses[Math.floor(Math.random() * responses.length)];
-      output.innerHTML = '';
-      const parsed = new DOMParser().parseFromString(pick, 'text/html');
-      output.replaceChildren(...parsed.body.childNodes);
-      output.classList.add('active');
-    }
-    document.getElementById('tryit-input').addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') runTryIt();
-    });
-  </script>
+  <script src="index.js" defer></script>
 </body>
 </html>

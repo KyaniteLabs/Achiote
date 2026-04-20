@@ -272,9 +272,10 @@
         return streamResponse(res, aiEl);
       })
       .catch(err => {
-        aiEl.innerHTML = err.message.includes('fetch')
-          ? '<p>Server not running. Start it with <code>npm run demo</code>.</p>'
-          : `<p>Error: ${err.message}</p>`;
+        const safeMsg = escapeHtml(err.message);
+        aiEl.textContent = err.message.includes('fetch')
+          ? 'Server not running. Start it with npm run demo.'
+          : `Error: ${safeMsg}`;
       })
       .finally(() => { busy = false; btn.disabled = false; input.focus(); });
     }
@@ -282,7 +283,12 @@
     function addMsg(role, html) {
       const el = document.createElement('div');
       el.className = `msg ${role}`;
-      el.innerHTML = html;
+      // Only use innerHTML for trusted static HTML, not user content
+      if (role === 'user') {
+        el.textContent = html;
+      } else {
+        el.innerHTML = html;
+      }
       messages.appendChild(el);
       el.closest('main').scrollTop = 1e6;
       return el;
@@ -313,7 +319,7 @@
         if (text) el.innerHTML = formatMd(text);
         el.closest('main').scrollTop = 1e6;
       }
-      if (!text) el.innerHTML = 'No response. Try rephrasing.';
+      if (!text) el.textContent = 'No response. Try rephrasing.';
     }
 
     function escapeHtml(s) {

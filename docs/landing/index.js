@@ -1,0 +1,71 @@
+document.documentElement.classList.add('js');
+
+// Dark mode
+const themeToggle = document.getElementById('theme-toggle');
+const html = document.documentElement;
+const stored = localStorage.getItem('mb-theme');
+const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+if (stored) { html.setAttribute('data-theme', stored); }
+else if (prefersDark) { html.setAttribute('data-theme', 'dark'); }
+themeToggle.addEventListener('click', () => {
+  const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  localStorage.setItem('mb-theme', next);
+});
+
+// Scroll reveal
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+reveals.forEach(el => observer.observe(el));
+
+// Copy terminal
+async function copyTerminal(btn) {
+  const pre = btn.nextElementSibling;
+  const text = pre.innerText;
+  try {
+    await navigator.clipboard.writeText(text);
+    const original = btn.textContent;
+    btn.textContent = 'Copied';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = original; btn.classList.remove('copied'); }, 2000);
+  } catch (e) {
+    btn.textContent = 'Failed';
+    setTimeout(() => { btn.textContent = 'Copy'; }, 2000);
+  }
+}
+
+// Wire up copy buttons via addEventListener (CSP blocks inline onclick)
+document.querySelectorAll('.copy-btn').forEach(btn => {
+  btn.addEventListener('click', () => copyTerminal(btn));
+});
+
+// Try-it widget
+function runTryIt() {
+  const input = document.getElementById('tryit-input');
+  const output = document.getElementById('tryit-output');
+  const val = input.value.trim();
+  if (!val) return;
+  const responses = [
+    `<p><strong>Memory fragment captured.</strong></p><p>Possible clues: region (family recipe), texture (wrapped/fried), phonetic similarity to "pasteles." Next step: ask about the leaf, the masa texture, and whether it was boiled or steamed.</p>`,
+    `<p><strong>Sensory decomposition:</strong></p><p>Smell → toast/herb/sesame. Texture → soft interior, maybe starchy carrier. Sound → "everyone got quiet" suggests ritual significance. Recommended first test: one bite of toasted sesame oil on warm rice.</p>`,
+    `<p><strong>Pattern match:</strong></p><p>Input matches "sour + pale + dill + dairy" profile. Likely Eastern European or Central Asian soup family. Acid source unknown — could be fermented dairy, vinegar, or lemon. Test: a warm sip with dill and a spoonful of yogurt.</p>`
+  ];
+  const pick = responses[Math.floor(Math.random() * responses.length)];
+  output.innerHTML = '';
+  const parsed = new DOMParser().parseFromString(pick, 'text/html');
+  output.replaceChildren(...parsed.body.childNodes);
+  output.classList.add('active');
+}
+const tryitInput = document.getElementById('tryit-input');
+if (tryitInput) {
+  tryitInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') runTryIt();
+  });
+}
