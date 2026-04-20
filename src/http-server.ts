@@ -7,6 +7,34 @@ import Anthropic from '@anthropic-ai/sdk';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { isInitializeRequest } from '@modelcontextprotocol/sdk/types.js';
 import { createAchioteServer } from './server.js';
+
+// Simple in-memory rate limiter
+const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
+const RATE_LIMIT_WINDOW = 60000; // 1 minute
+const RATE_LIMIT_MAX_REQUESTS = 60; // 60 requests per minute
+
+function checkRateLimit(identifier: string): boolean {
+  const now = Date.now();
+  const record = rateLimitMap.get(identifier);
+
+  if (!record || now > record.resetTime) {
+    rateLimitMap.set(identifier, { count: 1, resetTime: now + RATE_LIMIT_WINDOW });
+    return true;
+  }
+
+  if (record.count >= RATE_LIMIT_MAX_REQUESTS) {
+    return false;
+  }
+
+  record.count++;
+  return true;
+}
+
+function getClientIdentifier(req: IncomingMessage): string {
+  const forwardedFor = req.headers['x-forwarded-for'];
+  const ip = forwardedFor ? (Array.isArray(forwardedFor) ? forwardedFor[0] : forwardedFor.split(',')[0]) : req.socket.remoteAddress;
+  return ip || 'unknown';
+}
 import {
   collectFoodMemory,
   planDishResearch,
@@ -458,6 +486,20 @@ function executeTool(name: string, raw: unknown): any {
 // ── AI agent endpoint ───────────────────────────────────────────────────────
 
 async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<void> {
+  // Validate content-type
+  const contentType = req.headers['content-type'];
+  if (!contentType || !contentType.includes('application/json')) {
+    sendJson(res, 415, { error: 'Unsupported Media Type: Content-Type must be application/json' });
+    return;
+  }
+
+  // Rate limiting
+  const clientId = getClientIdentifier(req);
+  if (!checkRateLimit(clientId)) {
+    sendJson(res, 429, { error: 'Too Many Requests: Rate limit exceeded' });
+    return;
+  }
+
   const raw = await readBody(req);
   let parsed: { message?: string };
   try { parsed = JSON.parse(raw); } catch { sendJson(res, 400, { error: 'Invalid JSON' }); return; }
@@ -601,6 +643,13 @@ const server = createServer(async (req, res) => {
   }
 
   if (pathname === '/mcp') {
+    // Rate limiting for MCP endpoint
+    const clientId = getClientIdentifier(req);
+    if (!checkRateLimit(clientId)) {
+      sendJson(res, 429, { jsonrpc: '2.0', error: { code: -32000, message: 'Too Many Requests: Rate limit exceeded' }, id: null });
+      return;
+    }
+
     try {
       const sessionId = req.headers['mcp-session-id'] as string | undefined;
       let transport: StreamableHTTPServerTransport | undefined;
