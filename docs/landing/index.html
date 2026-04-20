@@ -496,6 +496,7 @@
               <li><a href="#science">Food science</a></li>
               <li><a href="#examples">Examples</a></li>
               <li><a href="#install">Install</a></li>
+	              <li><a href="/">Try it live</a></li>
             </ul>
           </nav>
           <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
@@ -534,10 +535,8 @@
         <div class="container">
           <div class="tryit reveal">
             <h3>Try a memory fragment</h3>
-            <p>Type something half-remembered and see how Member Berries thinks about it.</p>
-            <input type="text" class="tryit-input" id="tryit-input" placeholder="e.g. 'My abuela made something like pasteles...'" maxlength="120" />
-            <button class="button primary" id="tryit-btn" onclick="runTryIt()">See what it surfaces</button>
-            <div class="tryit-output" id="tryit-output"></div>
+            <p>Type something half-remembered and our AI will walk you through the full reconstruction pipeline.</p>
+            <a href="/" class="button primary">Open the food memory detective</a>
           </div>
         </div>
       </section>
@@ -771,24 +770,6 @@ startup_timeout_sec = <span class="tk-num">10</span></pre>
       }
     }
 
-    // Try-it widget
-    function runTryIt() {
-      const input = document.getElementById('tryit-input');
-      const output = document.getElementById('tryit-output');
-      const val = input.value.trim();
-      if (!val) return;
-      const responses = [
-        `<p><strong>Memory fragment captured.</strong></p><p>Possible clues: region (family recipe), texture (wrapped/fried), phonetic similarity to "pasteles." Next step: ask about the leaf, the masa texture, and whether it was boiled or steamed.</p>`,
-        `<p><strong>Sensory decomposition:</strong></p><p>Smell → toast/herb/sesame. Texture → soft interior, maybe starchy carrier. Sound → "everyone got quiet" suggests ritual significance. Recommended first test: one bite of toasted sesame oil on warm rice.</p>`,
-        `<p><strong>Pattern match:</strong></p><p>Input matches "sour + pale + dill + dairy" profile. Likely Eastern European or Central Asian soup family. Acid source unknown — could be fermented dairy, vinegar, or lemon. Test: a warm sip with dill and a spoonful of yogurt.</p>`
-      ];
-      const pick = responses[Math.floor(Math.random() * responses.length)];
-      output.innerHTML = pick;
-      output.classList.add('active');
-    }
-    document.getElementById('tryit-input').addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') runTryIt();
-    });
   </script>
 </body>
 </html>
