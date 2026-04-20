@@ -12,905 +12,2121 @@
   "ingredients": {
     "cumin-seeds": {
       "name": "Cumin Seeds",
-      "aliases": ["jeera", "comino", "cumino", "Cuminum cyminum", "roman cumin"],
-      "compounds": ["cuminaldehyde", "p-cymene", "beta-pinene", "gamma-terpinene"],
+      "aliases": [
+        "jeera",
+        "comino",
+        "cumino",
+        "Cuminum cyminum",
+        "roman cumin"
+      ],
+      "compounds": [
+        "cuminaldehyde",
+        "p-cymene",
+        "beta-pinene",
+        "gamma-terpinene"
+      ],
       "sensoryContribution": {
         "aroma": "warm, earthy, nutty, slightly sweet",
         "flavor": "savory, slightly bitter, warming"
       },
       "substitutionGroup": "warm-spice",
-      "commonIn": ["Middle Eastern", "South Asian", "Mexican", "North African"]
+      "commonIn": [
+        "Middle Eastern",
+        "South Asian",
+        "Mexican",
+        "North African"
+      ]
     },
     "coriander-seeds": {
       "name": "Coriander Seeds",
-      "aliases": ["dhania", "cilantro seeds", "Coriandrum sativum", "kothmir seeds", "coriandre"],
-      "compounds": ["linalool", "geranyl-acetate", "camphor"],
+      "aliases": [
+        "dhania",
+        "cilantro seeds",
+        "Coriandrum sativum",
+        "kothmir seeds",
+        "coriandre"
+      ],
+      "compounds": [
+        "linalool",
+        "geranyl-acetate",
+        "camphor"
+      ],
       "sensoryContribution": {
         "aroma": "citrusy, floral, slightly sweet",
         "flavor": "citrus, mild, slightly sweet"
       },
       "substitutionGroup": "citrus-spice",
-      "commonIn": ["South Asian", "Middle Eastern", "Southeast Asian", "Mexican"]
+      "commonIn": [
+        "South Asian",
+        "Middle Eastern",
+        "Southeast Asian",
+        "Mexican"
+      ]
     },
     "smoked-paprika": {
       "name": "Smoked Paprika",
-      "aliases": ["pimenton", "pimenton de la Vera", "Capsicum annuum", "Spanish paprika", "ahumado"],
-      "compounds": ["capsanthin", "smoky-phenols", "beta-carotene"],
+      "aliases": [
+        "pimenton",
+        "pimenton de la Vera",
+        "Spanish paprika",
+        "ahumado"
+      ],
+      "compounds": [
+        "capsanthin",
+        "smoky-phenols",
+        "beta-carotene"
+      ],
       "sensoryContribution": {
         "aroma": "smoky, sweet, woody",
         "flavor": "smoky, sweet, mildly pungent"
       },
       "substitutionGroup": "smoke-heat",
-      "commonIn": ["Spanish", "Hungarian", "Mexican"]
+      "commonIn": [
+        "Spanish",
+        "Hungarian",
+        "Mexican"
+      ]
     },
     "fresh-cilantro": {
       "name": "Fresh Cilantro",
-      "aliases": ["coriander leaves", "dhania patta", "Chinese parsley", "Coriandrum sativum", "pak chi"],
-      "compounds": ["decanal", "linalool", "E-2-dodecenal"],
+      "aliases": [
+        "coriander leaves",
+        "dhania patta",
+        "Chinese parsley",
+        "pak chi"
+      ],
+      "compounds": [
+        "decanal",
+        "linalool",
+        "E-2-dodecenal"
+      ],
       "sensoryContribution": {
         "aroma": "fresh, green, citrusy",
         "flavor": "bright, herbal, citrus-like"
       },
       "substitutionGroup": "fresh-herb-citrus",
-      "commonIn": ["Mexican", "South Asian", "Southeast Asian", "Middle Eastern"]
+      "commonIn": [
+        "Mexican",
+        "South Asian",
+        "Southeast Asian",
+        "Middle Eastern"
+      ]
     },
     "fish-sauce": {
       "name": "Fish Sauce",
-      "aliases": ["nam pla", "nuoc mam", "patis", "ikan bilis sauce", "teuk trei"],
-      "compounds": ["glutamate", "nucleotides", "volatile-amine-compounds"],
+      "aliases": [
+        "nam pla",
+        "nuoc mam",
+        "patis",
+        "ikan bilis sauce",
+        "teuk trei"
+      ],
+      "compounds": [
+        "glutamate",
+        "nucleotides",
+        "volatile-amine-compounds"
+      ],
       "sensoryContribution": {
         "aroma": "pungent, fermented, oceanic",
         "flavor": "deeply savory, salty, umami-rich"
       },
       "substitutionGroup": "umami-ferment",
-      "commonIn": ["Southeast Asian", "Vietnamese", "Thai", "Filipino", "Korean"]
+      "commonIn": [
+        "Southeast Asian",
+        "Vietnamese",
+        "Thai",
+        "Filipino",
+        "Korean"
+      ]
     },
     "soy-sauce": {
       "name": "Soy Sauce",
-      "aliases": ["shoyu", "jiangyou", "ganjang", "ketjap", "tamari"],
-      "compounds": ["glutamate", "melanoidins", "4-ethyl-guaiacol"],
+      "aliases": [
+        "shoyu",
+        "jiangyou",
+        "ganjang",
+        "ketjap",
+        "tamari"
+      ],
+      "compounds": [
+        "glutamate",
+        "melanoidins",
+        "4-ethyl-guaiacol"
+      ],
       "sensoryContribution": {
         "aroma": "savory, roasted, slightly sweet",
         "flavor": "salty, umami, slightly sweet, roasted"
       },
       "substitutionGroup": "umami-ferment",
-      "commonIn": ["East Asian", "Southeast Asian"]
+      "commonIn": [
+        "East Asian",
+        "Southeast Asian"
+      ]
     },
     "ghee": {
       "name": "Ghee",
-      "aliases": ["clarified butter", "ghritam", "samna", "rogan", "liquid gold"],
-      "compounds": ["butyric-acid", "diacetyl", "lactones", "methyl-ketones"],
+      "aliases": [
+        "clarified butter",
+        "ghritam",
+        "samna",
+        "rogan",
+        "liquid gold"
+      ],
+      "compounds": [
+        "butyric-acid",
+        "diacetyl",
+        "lactones",
+        "methyl-ketones"
+      ],
       "sensoryContribution": {
         "aroma": "rich, nutty, buttery, caramelized",
         "flavor": "rich, nutty, deep butter"
       },
       "substitutionGroup": "cooking-fat-nutty",
-      "commonIn": ["South Asian", "Middle Eastern"]
+      "commonIn": [
+        "South Asian",
+        "Middle Eastern"
+      ]
     },
     "tamarind": {
       "name": "Tamarind",
-      "aliases": ["imli", "tamarindo", "asam jawa", "Tamarindus indica", "me"],
-      "compounds": ["tartaric-acid", "malic-acid", "citric-acid", "volatile-esters"],
+      "aliases": [
+        "imli",
+        "tamarindo",
+        "asam jawa",
+        "Tamarindus indica",
+        "me"
+      ],
+      "compounds": [
+        "tartaric-acid",
+        "malic-acid",
+        "citric-acid",
+        "volatile-esters"
+      ],
       "sensoryContribution": {
         "aroma": "sweet-sour, fruity, slightly fermented",
         "flavor": "intensely sour, sweet undertone, fruity"
       },
       "substitutionGroup": "sour-fruit",
-      "commonIn": ["South Asian", "Southeast Asian", "Mexican", "Middle Eastern"]
+      "commonIn": [
+        "South Asian",
+        "Southeast Asian",
+        "Mexican",
+        "Middle Eastern"
+      ]
     },
     "sumac": {
       "name": "Sumac",
-      "aliases": ["summac", "somaq", "Rhus coriaria", "Syrian sumac", "lemon spice"],
-      "compounds": ["malic-acid", "anthocyanins", "gallic-acid"],
+      "aliases": [
+        "summac",
+        "somaq",
+        "Rhus coriaria",
+        "Syrian sumac",
+        "lemon spice"
+      ],
+      "compounds": [
+        "malic-acid",
+        "anthocyanins",
+        "gallic-acid"
+      ],
       "sensoryContribution": {
         "aroma": "tangy, citrusy, slightly fruity",
         "flavor": "tangy, sour, astringent, citrus-like"
       },
       "substitutionGroup": "citrus-sour",
-      "commonIn": ["Middle Eastern", "Mediterranean"]
+      "commonIn": [
+        "Middle Eastern",
+        "Mediterranean"
+      ]
     },
     "dried-chilies": {
       "name": "Dried Chilies",
-      "aliases": ["chile seco", "lap xuong", "mirchi", "Capsicum annuum", "guajillo"],
-      "compounds": ["capsaicin", "dihydrocapsaicin", "beta-carotene", "pyrazines"],
+      "aliases": [
+        "chile seco",
+        "lap xuong",
+        "mirchi",
+        "Capsicum annuum",
+        "guajillo"
+      ],
+      "compounds": [
+        "capsaicin",
+        "dihydrocapsaicin",
+        "beta-carotene",
+        "pyrazines"
+      ],
       "sensoryContribution": {
         "aroma": "smoky, fruity, earthy",
         "flavor": "heat, fruity, earthy, complex"
       },
       "substitutionGroup": "heat-fruit",
-      "commonIn": ["Mexican", "South Asian", "Southeast Asian", "Sichuan", "Korean"]
+      "commonIn": [
+        "Mexican",
+        "South Asian",
+        "Southeast Asian",
+        "Sichuan",
+        "Korean"
+      ]
     },
     "turmeric": {
       "name": "Turmeric",
-      "aliases": ["haldi", "curcuma", "kunyit", "Curcuma longa", "Indian saffron"],
-      "compounds": ["curcumin", "ar-turmerone", "alpha-turmerone", "beta-turmerone"],
+      "aliases": [
+        "haldi",
+        "curcuma",
+        "kunyit",
+        "Curcuma longa",
+        "Indian saffron"
+      ],
+      "compounds": [
+        "curcumin",
+        "ar-turmerone",
+        "alpha-turmerone",
+        "beta-turmerone"
+      ],
       "sensoryContribution": {
         "aroma": "earthy, warm, slightly mustard-like",
         "flavor": "bitter, earthy, warm, slightly peppery"
       },
       "substitutionGroup": "warm-spice",
-      "commonIn": ["South Asian", "Southeast Asian", "Middle Eastern"]
+      "commonIn": [
+        "South Asian",
+        "Southeast Asian",
+        "Middle Eastern"
+      ]
     },
     "star-anise": {
       "name": "Star Anise",
-      "aliases": ["badain", "star aniseed", "Illicium verum", "phung thao", "badiane"],
-      "compounds": ["anethole", "estragole", "limonene"],
+      "aliases": [
+        "badain",
+        "star aniseed",
+        "Illicium verum",
+        "phung thao",
+        "badiane"
+      ],
+      "compounds": [
+        "anethole",
+        "estragole",
+        "limonene"
+      ],
       "sensoryContribution": {
         "aroma": "sweet, licorice-like, warm",
         "flavor": "sweet, licorice, warm, slightly numbing"
       },
       "substitutionGroup": "sweet-aromatic",
-      "commonIn": ["Chinese", "Vietnamese", "Southeast Asian"]
+      "commonIn": [
+        "Chinese",
+        "Vietnamese",
+        "Southeast Asian"
+      ]
     },
     "garlic": {
       "name": "Garlic",
-      "aliases": ["ail", "ajo", "knoblauch", "Allium sativum", "ninniku"],
-      "compounds": ["allicin", "diallyl-disulfide", "ajoene", "diallyl-trisulfide"],
+      "aliases": [
+        "ail",
+        "ajo",
+        "knoblauch",
+        "Allium sativum",
+        "ninniku"
+      ],
+      "compounds": [
+        "allicin",
+        "diallyl-disulfide",
+        "ajoene",
+        "diallyl-trisulfide"
+      ],
       "sensoryContribution": {
         "aroma": "pungent, sulfurous, sharp",
         "flavor": "sharp, savory, pungent, sweet when cooked"
       },
       "substitutionGroup": "allium",
-      "commonIn": ["Mediterranean", "East Asian", "South Asian", "Latin American", "Middle Eastern"]
+      "commonIn": [
+        "Mediterranean",
+        "East Asian",
+        "South Asian",
+        "Latin American",
+        "Middle Eastern"
+      ]
     },
     "onion": {
       "name": "Onion",
-      "aliases": ["cebolla", "oignon", "pyaz", "Allium cepa", "Zwiebel"],
-      "compounds": ["dipropyl-disulfide", "thiopropanal-s-oxide", "propenyl-sulfide"],
+      "aliases": [
+        "cebolla",
+        "oignon",
+        "pyaz",
+        "Allium cepa",
+        "Zwiebel"
+      ],
+      "compounds": [
+        "dipropyl-disulfide",
+        "thiopropanal-s-oxide",
+        "propenyl-sulfide"
+      ],
       "sensoryContribution": {
         "aroma": "sharp, pungent, sulfurous",
         "flavor": "sweet when cooked, sharp raw, savory"
       },
       "substitutionGroup": "allium",
-      "commonIn": ["Global"]
+      "commonIn": [
+        "Global"
+      ]
     },
     "shallot": {
       "name": "Shallot",
-      "aliases": ["echalote", "ascalonia", "bawang merah", "Allium cepa var. aggregatum", "kanda"],
-      "compounds": ["dipropyl-disulfide", "methyl-propyl-disulfide", "allicin"],
+      "aliases": [
+        "echalote",
+        "ascalonia",
+        "bawang merah",
+        "Allium cepa var. aggregatum",
+        "kanda"
+      ],
+      "compounds": [
+        "dipropyl-disulfide",
+        "methyl-propyl-disulfide",
+        "allicin"
+      ],
       "sensoryContribution": {
         "aroma": "mild onion, sweet, slightly garlicky",
         "flavor": "milder than onion, sweet, delicate"
       },
       "substitutionGroup": "allium",
-      "commonIn": ["French", "Southeast Asian", "Mediterranean"]
+      "commonIn": [
+        "French",
+        "Southeast Asian",
+        "Mediterranean"
+      ]
     },
     "scallion": {
       "name": "Scallion (Green Onion)",
-      "aliases": ["spring onion", "da cong", "negi", "cebollin", "Allium fistulosum"],
-      "compounds": ["dipropyl-disulfide", "methyl-propyl-trisulfide", "hexanal"],
+      "aliases": [
+        "spring onion",
+        "da cong",
+        "negi",
+        "cebollin",
+        "Allium fistulosum"
+      ],
+      "compounds": [
+        "dipropyl-disulfide",
+        "methyl-propyl-trisulfide",
+        "hexanal"
+      ],
       "sensoryContribution": {
         "aroma": "fresh, mild onion, green",
         "flavor": "mild onion, fresh, slightly sweet"
       },
       "substitutionGroup": "allium",
-      "commonIn": ["East Asian", "Latin American", "Caribbean"]
+      "commonIn": [
+        "East Asian",
+        "Latin American",
+        "Caribbean"
+      ]
     },
     "lime": {
       "name": "Lime Juice",
-      "aliases": ["limon", "nimbu", "Citrus aurantifolia", "citron vert", "manao"],
-      "compounds": ["limonene", "citral", "citric-acid", "linalool"],
+      "aliases": [
+        "nimbu",
+        "Citrus aurantifolia",
+        "citron vert",
+        "manao"
+      ],
+      "compounds": [
+        "limonene",
+        "citral",
+        "citric-acid",
+        "linalool"
+      ],
       "sensoryContribution": {
         "aroma": "bright, fresh, citrus",
         "flavor": "sharp sour, bright, aromatic"
       },
       "substitutionGroup": "acid-citrus",
-      "commonIn": ["Mexican", "Southeast Asian", "Caribbean", "South Asian"]
+      "commonIn": [
+        "Mexican",
+        "Southeast Asian",
+        "Caribbean",
+        "South Asian"
+      ]
     },
     "lemon": {
       "name": "Lemon Juice",
-      "aliases": ["citron", "limone", "limon", "Citrus limon", "neembu"],
-      "compounds": ["limonene", "citral", "citric-acid", "alpha-pinene"],
+      "aliases": [
+        "citron",
+        "limone",
+        "limon",
+        "Citrus limon",
+        "neembu"
+      ],
+      "compounds": [
+        "limonene",
+        "citral",
+        "citric-acid",
+        "alpha-pinene"
+      ],
       "sensoryContribution": {
         "aroma": "bright, clean, citrus floral",
         "flavor": "sour, bright, clean"
       },
       "substitutionGroup": "acid-citrus",
-      "commonIn": ["Mediterranean", "Middle Eastern", "European"]
+      "commonIn": [
+        "Mediterranean",
+        "Middle Eastern",
+        "European"
+      ]
     },
     "vinegar": {
       "name": "Vinegar (Rice/Apple Cider/White)",
-      "aliases": ["vinaigre", "aceto", "komezu", "suka", "acetic acid"],
-      "compounds": ["acetic-acid", "ethyl-acetate", "acetaldehyde"],
+      "aliases": [
+        "vinaigre",
+        "aceto",
+        "komezu",
+        "suka",
+        "acetic acid"
+      ],
+      "compounds": [
+        "acetic-acid",
+        "ethyl-acetate",
+        "acetaldehyde"
+      ],
       "sensoryContribution": {
         "aroma": "sharp, sour, fermented",
         "flavor": "sharp sour, acidic, clean"
       },
       "substitutionGroup": "acid-citrus",
-      "commonIn": ["East Asian", "European", "Latin American"]
+      "commonIn": [
+        "East Asian",
+        "European",
+        "Latin American"
+      ]
     },
     "pomegranate-molasses": {
       "name": "Pomegranate Molasses",
-      "aliases": ["nar eksisi", "dibs rumman", "rob-e-anar", "Punica granatum", "pomegranate syrup"],
-      "compounds": ["malic-acid", "citric-acid", "anthocyanins", "ellagic-acid"],
+      "aliases": [
+        "nar eksisi",
+        "dibs rumman",
+        "rob-e-anar",
+        "Punica granatum",
+        "pomegranate syrup"
+      ],
+      "compounds": [
+        "malic-acid",
+        "citric-acid",
+        "anthocyanins",
+        "ellagic-acid"
+      ],
       "sensoryContribution": {
         "aroma": "tangy, fruity, deeply sweet-sour",
         "flavor": "tart, sweet, fruity, syrupy"
       },
       "substitutionGroup": "acid-citrus",
-      "commonIn": ["Middle Eastern", "Mediterranean", "Persian"]
+      "commonIn": [
+        "Middle Eastern",
+        "Mediterranean",
+        "Persian"
+      ]
     },
     "butter": {
       "name": "Butter",
-      "aliases": ["beurre", "mantequilla", "burro", "makhan", "beurre noisette"],
-      "compounds": ["diacetyl", "butyric-acid", "lactones", "methyl-ketones"],
+      "aliases": [
+        "beurre",
+        "mantequilla",
+        "burro",
+        "makhan",
+        "beurre noisette"
+      ],
+      "compounds": [
+        "diacetyl",
+        "butyric-acid",
+        "lactones",
+        "methyl-ketones"
+      ],
       "sensoryContribution": {
         "aroma": "rich, creamy, slightly nutty",
         "flavor": "rich, creamy, sweet, nutty when browned"
       },
       "substitutionGroup": "cooking-fat",
-      "commonIn": ["European", "North American", "South Asian"]
+      "commonIn": [
+        "European",
+        "North American",
+        "South Asian"
+      ]
     },
     "sesame-oil": {
       "name": "Toasted Sesame Oil",
-      "aliases": ["chamgireum", "zhi ma you", "nuoc mam vung", "Sesamum indicum", "tila tel"],
-      "compounds": ["sesamol", "sesamin", "furaneol", "pyrazines"],
+      "aliases": [
+        "chamgireum",
+        "zhi ma you",
+        "nuoc mam vung",
+        "tila tel"
+      ],
+      "compounds": [
+        "sesamol",
+        "sesamin",
+        "furaneol",
+        "pyrazines"
+      ],
       "sensoryContribution": {
         "aroma": "nutty, roasted, deep",
         "flavor": "nutty, roasted, rich, savory"
       },
       "substitutionGroup": "cooking-fat",
-      "commonIn": ["East Asian", "Korean", "Southeast Asian"]
+      "commonIn": [
+        "East Asian",
+        "Korean",
+        "Southeast Asian"
+      ]
     },
     "coconut-oil": {
       "name": "Coconut Oil",
-      "aliases": ["kelapa oil", "nariyal tel", "Cocos nucifera", "copra oil", "virgin coconut oil"],
-      "compounds": ["lauric-acid", "delta-lactones", "gamma-lactones"],
+      "aliases": [
+        "kelapa oil",
+        "nariyal tel",
+        "Cocos nucifera",
+        "copra oil",
+        "virgin coconut oil"
+      ],
+      "compounds": [
+        "lauric-acid",
+        "delta-lactones",
+        "gamma-lactones"
+      ],
       "sensoryContribution": {
         "aroma": "tropical, sweet, coconut",
         "flavor": "mildly sweet, coconut, clean"
       },
       "substitutionGroup": "cooking-fat",
-      "commonIn": ["Southeast Asian", "South Asian", "Caribbean", "Filipino"]
+      "commonIn": [
+        "Southeast Asian",
+        "South Asian",
+        "Caribbean",
+        "Filipino"
+      ]
     },
     "olive-oil": {
       "name": "Extra Virgin Olive Oil",
-      "aliases": ["huile d'olive", "aceite de oliva", "Olea europaea", "EVOO", "olio d'oliva"],
-      "compounds": ["oleic-acid", "hexanal", "E-2-hexenal", "polyphenols"],
+      "aliases": [
+        "huile d'olive",
+        "aceite de oliva",
+        "Olea europaea",
+        "EVOO",
+        "olio d'oliva"
+      ],
+      "compounds": [
+        "oleic-acid",
+        "hexanal",
+        "E-2-hexenal",
+        "polyphenols"
+      ],
       "sensoryContribution": {
         "aroma": "grassy, green, peppery, fruity",
         "flavor": "fruity, peppery, bitter, grassy"
       },
       "substitutionGroup": "cooking-fat",
-      "commonIn": ["Mediterranean", "Middle Eastern", "European"]
+      "commonIn": [
+        "Mediterranean",
+        "Middle Eastern",
+        "European"
+      ]
     },
     "black-pepper": {
       "name": "Black Pepper",
-      "aliases": ["kali mirch", "poivre noir", "Piper nigrum", "pimienta negra", "marich"],
-      "compounds": ["piperine", "caryophyllene", "limonene", "alpha-pinene"],
+      "aliases": [
+        "kali mirch",
+        "poivre noir",
+        "Piper nigrum",
+        "pimienta negra",
+        "marich"
+      ],
+      "compounds": [
+        "piperine",
+        "caryophyllene",
+        "limonene",
+        "alpha-pinene"
+      ],
       "sensoryContribution": {
         "aroma": "sharp, woody, warm",
         "flavor": "sharp heat, woody, slightly floral"
       },
       "substitutionGroup": "heat-pungent",
-      "commonIn": ["Global"]
+      "commonIn": [
+        "Global"
+      ]
     },
     "ginger": {
       "name": "Fresh Ginger",
-      "aliases": ["adrak", "jenjibre", "shoga", "Zingiber officinale", "zingiber"],
-      "compounds": ["gingerol", "zingiberene", "beta-bisabolene", "citral"],
+      "aliases": [
+        "adrak",
+        "jenjibre",
+        "shoga",
+        "Zingiber officinale",
+        "zingiber"
+      ],
+      "compounds": [
+        "gingerol",
+        "zingiberene",
+        "beta-bisabolene",
+        "citral"
+      ],
       "sensoryContribution": {
         "aroma": "spicy, warm, citrusy, woody",
         "flavor": "spicy heat, warm, slightly sweet, citrusy"
       },
       "substitutionGroup": "heat-pungent",
-      "commonIn": ["East Asian", "South Asian", "Southeast Asian", "Caribbean"]
+      "commonIn": [
+        "East Asian",
+        "South Asian",
+        "Southeast Asian",
+        "Caribbean"
+      ]
     },
     "szechuan-peppercorn": {
       "name": "Szechuan Peppercorn",
-      "aliases": ["hua jiao", "Zanthoxylum simulans", "mala pepper", "Japanese sansho", "prickly ash"],
-      "compounds": ["hydroxy-alpha-sanshool", "limonene", "geraniol"],
+      "aliases": [
+        "hua jiao",
+        "Zanthoxylum simulans",
+        "mala pepper",
+        "Japanese sansho",
+        "prickly ash"
+      ],
+      "compounds": [
+        "hydroxy-alpha-sanshool",
+        "limonene",
+        "geraniol"
+      ],
       "sensoryContribution": {
         "aroma": "citrusy, floral, slightly woody",
         "flavor": "tingling numbing, citrus, floral"
       },
       "substitutionGroup": "heat-pungent",
-      "commonIn": ["Sichuan", "Chinese", "Tibetan", "Japanese"]
+      "commonIn": [
+        "Sichuan",
+        "Chinese",
+        "Tibetan",
+        "Japanese"
+      ]
     },
     "basil": {
       "name": "Fresh Basil",
-      "aliases": ["Ocimum basilicum", "basilico", "horapha", "rau hung", "basilic"],
-      "compounds": ["linalool", "methyl-chavicol", "eugenol"],
+      "aliases": [
+        "Ocimum basilicum",
+        "basilico",
+        "horapha",
+        "rau hung",
+        "basilic"
+      ],
+      "compounds": [
+        "linalool",
+        "methyl-chavicol",
+        "eugenol"
+      ],
       "sensoryContribution": {
         "aroma": "sweet, anise-like, peppery, fresh",
         "flavor": "sweet, aromatic, slightly anise, peppery"
       },
       "substitutionGroup": "fresh-herb",
-      "commonIn": ["Mediterranean", "Italian", "Thai", "Vietnamese"]
+      "commonIn": [
+        "Mediterranean",
+        "Italian",
+        "Thai",
+        "Vietnamese"
+      ]
     },
     "mint": {
       "name": "Fresh Mint",
-      "aliases": ["Mentha spicata", "naana", "hierba buena", "phak hom", "menthe"],
-      "compounds": ["menthol", "menthone", "limonene", "pulegone"],
+      "aliases": [
+        "Mentha spicata",
+        "naana",
+        "hierba buena",
+        "phak hom",
+        "menthe"
+      ],
+      "compounds": [
+        "menthol",
+        "menthone",
+        "limonene",
+        "pulegone"
+      ],
       "sensoryContribution": {
         "aroma": "cool, fresh, sweet",
         "flavor": "cool, sweet, refreshing, slightly bitter"
       },
       "substitutionGroup": "fresh-herb",
-      "commonIn": ["Middle Eastern", "Mediterranean", "South Asian", "Southeast Asian"]
+      "commonIn": [
+        "Middle Eastern",
+        "Mediterranean",
+        "South Asian",
+        "Southeast Asian"
+      ]
     },
     "dill": {
       "name": "Fresh Dill",
-      "aliases": ["Anethum graveolens", "aneto", "eneldo", "suwa", "dille"],
-      "compounds": ["carvone", "alpha-phellandrene", "limonene"],
+      "aliases": [
+        "Anethum graveolens",
+        "aneto",
+        "eneldo",
+        "suwa",
+        "dille"
+      ],
+      "compounds": [
+        "carvone",
+        "alpha-phellandrene",
+        "limonene"
+      ],
       "sensoryContribution": {
         "aroma": "grassy, fresh, slightly anise",
         "flavor": "grassy, fresh, slightly sweet, anise-like"
       },
       "substitutionGroup": "fresh-herb",
-      "commonIn": ["Eastern European", "Scandinavian", "Mediterranean", "Middle Eastern"]
+      "commonIn": [
+        "Eastern European",
+        "Scandinavian",
+        "Mediterranean",
+        "Middle Eastern"
+      ]
     },
     "parsley": {
       "name": "Fresh Parsley",
-      "aliases": ["Petroselinum crispum", "prezzemolo", "perejil", "persil", "baqdunis"],
-      "compounds": ["apiol", "myristicin", "alpha-pinene", "limonene"],
+      "aliases": [
+        "Petroselinum crispum",
+        "prezzemolo",
+        "perejil",
+        "persil",
+        "baqdunis"
+      ],
+      "compounds": [
+        "apiol",
+        "myristicin",
+        "alpha-pinene",
+        "limonene"
+      ],
       "sensoryContribution": {
         "aroma": "fresh, green, slightly grassy",
         "flavor": "fresh, clean, slightly bitter, green"
       },
       "substitutionGroup": "fresh-herb",
-      "commonIn": ["Mediterranean", "Middle Eastern", "European", "Latin American"]
+      "commonIn": [
+        "Mediterranean",
+        "Middle Eastern",
+        "European",
+        "Latin American"
+      ]
     },
     "oregano": {
       "name": "Oregano",
-      "aliases": ["Origanum vulgare", "origano", "oregano", "rigani", "wild marjoram"],
-      "compounds": ["carvacrol", "thymol", "gamma-terpinene", "p-cymene"],
+      "aliases": [
+        "Origanum vulgare",
+        "origano",
+        "oregano",
+        "rigani",
+        "wild marjoram"
+      ],
+      "compounds": [
+        "carvacrol",
+        "thymol",
+        "gamma-terpinene",
+        "p-cymene"
+      ],
       "sensoryContribution": {
         "aroma": "warm, herbaceous, slightly camphor",
         "flavor": "warm, herbaceous, slightly bitter, aromatic"
       },
       "substitutionGroup": "fresh-herb",
-      "commonIn": ["Mediterranean", "Mexican", "Italian", "Greek"]
+      "commonIn": [
+        "Mediterranean",
+        "Mexican",
+        "Italian",
+        "Greek"
+      ]
     },
     "honey": {
       "name": "Honey",
-      "aliases": ["asal", "miel", "miele", "shahad", "mel"],
-      "compounds": ["phenylacetaldehyde", "methyl-anthranilate", "isovaleric-acid", "linalool-oxides"],
+      "aliases": [
+        "asal",
+        "miel",
+        "miele",
+        "shahad",
+        "mel"
+      ],
+      "compounds": [
+        "phenylacetaldehyde",
+        "methyl-anthranilate",
+        "isovaleric-acid",
+        "linalool-oxides"
+      ],
       "sensoryContribution": {
         "aroma": "floral, sweet, warm",
         "flavor": "sweet, floral, complex, varies by source"
       },
       "substitutionGroup": "sweetener",
-      "commonIn": ["Global"]
+      "commonIn": [
+        "Global"
+      ]
     },
     "palm-sugar": {
       "name": "Palm Sugar",
-      "aliases": ["gula melaka", "gur", "nam tan", "Arenga pinnata", "coconut sugar"],
-      "compounds": ["caramel-compounds", "furaneol", "maltol"],
+      "aliases": [
+        "gula melaka",
+        "nam tan",
+        "Arenga pinnata",
+        "coconut sugar"
+      ],
+      "compounds": [
+        "caramel-compounds",
+        "furaneol",
+        "maltol"
+      ],
       "sensoryContribution": {
         "aroma": "caramel, toffee, earthy",
         "flavor": "deep sweet, caramel, earthy, complex"
       },
       "substitutionGroup": "sweetener",
-      "commonIn": ["Southeast Asian", "South Asian"]
+      "commonIn": [
+        "Southeast Asian",
+        "South Asian"
+      ]
     },
     "miso": {
       "name": "Miso Paste",
-      "aliases": ["miso", "Glycine max", "fermented soybean paste", "jiang", "doenjang"],
-      "compounds": ["glutamate", "nucleotides", "melanoidins", "ethyl-acetate"],
+      "aliases": [
+        "miso",
+        "Glycine max",
+        "fermented soybean paste",
+        "jiang"
+      ],
+      "compounds": [
+        "glutamate",
+        "nucleotides",
+        "melanoidins",
+        "ethyl-acetate"
+      ],
       "sensoryContribution": {
         "aroma": "savory, fermented, slightly sweet",
         "flavor": "deeply savory, salty, sweet, fermented"
       },
       "substitutionGroup": "umami-ferment",
-      "commonIn": ["Japanese", "East Asian"]
+      "commonIn": [
+        "Japanese",
+        "East Asian"
+      ]
     },
     "anchovy": {
       "name": "Anchovy",
-      "aliases": ["anchoa", "anchois", "acciuga", "Engraulis encrasicolus", "ikan bilis"],
-      "compounds": ["glutamate", "inosine-monophosphate", "trimethylamine", "pyrazines"],
+      "aliases": [
+        "anchoa",
+        "anchois",
+        "acciuga",
+        "Engraulis encrasicolus",
+        "ikan bilis"
+      ],
+      "compounds": [
+        "glutamate",
+        "inosine-monophosphate",
+        "trimethylamine",
+        "pyrazines"
+      ],
       "sensoryContribution": {
         "aroma": "pungent, fishy, savory",
         "flavor": "deeply savory, salty, umami-rich, fishy"
       },
       "substitutionGroup": "umami-ferment",
-      "commonIn": ["Mediterranean", "Italian", "Southeast Asian", "Latin American"]
+      "commonIn": [
+        "Mediterranean",
+        "Italian",
+        "Southeast Asian",
+        "Latin American"
+      ]
     },
     "cardamom": {
       "name": "Cardamom",
-      "aliases": ["elaichi", "Elettaria cardamomum", "hel", "kakule", "green cardamom"],
-      "compounds": ["1,8-cineole", "alpha-terpinyl-acetate", "linalool", "limonene"],
+      "aliases": [
+        "elaichi",
+        "Elettaria cardamomum",
+        "hel",
+        "kakule",
+        "green cardamom"
+      ],
+      "compounds": [
+        "1,8-cineole",
+        "alpha-terpinyl-acetate",
+        "linalool",
+        "limonene"
+      ],
       "sensoryContribution": {
         "aroma": "warm, eucalyptus, citrus, sweet",
         "flavor": "warm, sweet, eucalyptus, citrus"
       },
       "substitutionGroup": "warm-spice",
-      "commonIn": ["South Asian", "Middle Eastern", "Scandinavian"]
+      "commonIn": [
+        "South Asian",
+        "Middle Eastern",
+        "Scandinavian"
+      ]
     },
     "cinnamon": {
       "name": "Cinnamon",
-      "aliases": ["dalchini", "Cinnamomum verum", "cannelle", "canela", "Cassia bark"],
-      "compounds": ["cinnamaldehyde", "eugenol", "linalool", "coumarin"],
+      "aliases": [
+        "dalchini",
+        "Cinnamomum verum",
+        "cannelle",
+        "canela",
+        "Cassia bark"
+      ],
+      "compounds": [
+        "cinnamaldehyde",
+        "eugenol",
+        "linalool",
+        "coumarin"
+      ],
       "sensoryContribution": {
         "aroma": "warm, sweet, woody, spicy",
         "flavor": "sweet, warm, slightly woody, spicy"
       },
       "substitutionGroup": "sweet-aromatic",
-      "commonIn": ["Global"]
+      "commonIn": [
+        "Global"
+      ]
     },
     "cloves": {
       "name": "Cloves",
-      "aliases": ["laung", "clou de girofle", "Syzygium aromaticum", "clavo", "kruidnagel"],
-      "compounds": ["eugenol", "beta-caryophyllene", "acetyleugenol"],
+      "aliases": [
+        "laung",
+        "clou de girofle",
+        "Syzygium aromaticum",
+        "clavo",
+        "kruidnagel"
+      ],
+      "compounds": [
+        "eugenol",
+        "beta-caryophyllene",
+        "acetyleugenol"
+      ],
       "sensoryContribution": {
         "aroma": "warm, sweet, pungent, woody",
         "flavor": "warm, sweet, pungent, slightly numbing"
       },
       "substitutionGroup": "sweet-aromatic",
-      "commonIn": ["Indonesian", "South Asian", "Middle Eastern", "East African"]
+      "commonIn": [
+        "Indonesian",
+        "South Asian",
+        "Middle Eastern",
+        "East African"
+      ]
     },
     "chickpea-flour": {
       "name": "Chickpea Flour (Besan)",
-      "aliases": ["besan", "gram flour", "Cicer arietinum", "farine de pois chiche", "kadalai maavu"],
-      "compounds": ["saponins", "proteins", "volatile-aldehydes"],
+      "aliases": [
+        "besan",
+        "gram flour",
+        "Cicer arietinum",
+        "farine de pois chiche",
+        "kadalai maavu"
+      ],
+      "compounds": [
+        "saponins",
+        "proteins",
+        "volatile-aldehydes"
+      ],
       "sensoryContribution": {
         "aroma": "earthy, nutty, slightly beany",
         "flavor": "nutty, earthy, slightly bitter, hearty"
       },
       "substitutionGroup": "starch",
-      "commonIn": ["South Asian", "Mediterranean", "Middle Eastern", "French"]
+      "commonIn": [
+        "South Asian",
+        "Mediterranean",
+        "Middle Eastern",
+        "French"
+      ]
     },
     "leek": {
       "name": "Leek",
-      "aliases": ["poireau", "puerro", "Allium ampeloprasum", "porri", "leker"],
-      "compounds": ["allicin", "dipropyl-disulfide", "methyl-propyl-disulfide"],
+      "aliases": [
+        "poireau",
+        "puerro",
+        "Allium ampeloprasum",
+        "porri",
+        "leker"
+      ],
+      "compounds": [
+        "allicin",
+        "dipropyl-disulfide",
+        "methyl-propyl-disulfide"
+      ],
       "sensoryContribution": {
         "aroma": "mild onion, sweet, green",
         "flavor": "sweet, mild allium, slightly sulfurous"
       },
       "substitutionGroup": "allium",
-      "commonIn": ["French", "Welsh", "Eastern European", "Mediterranean"]
+      "commonIn": [
+        "French",
+        "Welsh",
+        "Eastern European",
+        "Mediterranean"
+      ]
     },
     "garlic-scapes": {
       "name": "Garlic Scapes",
-      "aliases": ["garlic tops", "garlic curls", "suan tai", "nimannul", "Allium sativum scapes"],
-      "compounds": ["allicin", "diallyl-disulfide", "methyl-allyl-thiosulfinate"],
+      "aliases": [
+        "garlic tops",
+        "garlic curls",
+        "suan tai",
+        "nimannul",
+        "Allium sativum scapes"
+      ],
+      "compounds": [
+        "allicin",
+        "diallyl-disulfide",
+        "methyl-allyl-thiosulfinate"
+      ],
       "sensoryContribution": {
         "aroma": "fresh garlic, green, grassy",
         "flavor": "mild garlic, sweet, slightly pungent"
       },
       "substitutionGroup": "allium",
-      "commonIn": ["Chinese", "Korean", "Eastern European", "North American"]
+      "commonIn": [
+        "Chinese",
+        "Korean",
+        "Eastern European",
+        "North American"
+      ]
     },
     "amchoor": {
       "name": "Amchoor (Dried Mango Powder)",
-      "aliases": ["aamchur", "mango powder", "Mangifera indica", "dried mango", "amchoor powder"],
-      "compounds": ["citric-acid", "malic-acid", "volatile-terpenes"],
+      "aliases": [
+        "aamchur",
+        "mango powder",
+        "Mangifera indica",
+        "dried mango",
+        "amchoor powder"
+      ],
+      "compounds": [
+        "citric-acid",
+        "malic-acid",
+        "volatile-terpenes"
+      ],
       "sensoryContribution": {
         "aroma": "fruity, tart, tropical",
         "flavor": "sharp sour, fruity, astringent"
       },
       "substitutionGroup": "acid-citrus",
-      "commonIn": ["South Asian", "North Indian", "Gujarati"]
+      "commonIn": [
+        "South Asian",
+        "North Indian",
+        "Gujarati"
+      ]
     },
     "lard": {
       "name": "Lard",
-      "aliases": ["manteca", "graisse de porc", "schweineschmalz", "pig fat", "pork fat"],
-      "compounds": ["oleic-acid", "palmitic-acid", "stearic-acid", "volatile-aldehydes"],
+      "aliases": [
+        "manteca",
+        "graisse de porc",
+        "schweineschmalz",
+        "pig fat",
+        "pork fat"
+      ],
+      "compounds": [
+        "oleic-acid",
+        "palmitic-acid",
+        "stearic-acid",
+        "volatile-aldehydes"
+      ],
       "sensoryContribution": {
         "aroma": "rich, meaty, slightly sweet",
         "flavor": "rich, silky, neutral carrier, mouth-coating"
       },
       "substitutionGroup": "cooking-fat",
-      "commonIn": ["Mexican", "Southern US", "Eastern European", "Chinese"]
+      "commonIn": [
+        "Mexican",
+        "Southern US",
+        "Eastern European",
+        "Chinese"
+      ]
     },
     "schmaltz": {
       "name": "Schmaltz (Chicken Fat)",
-      "aliases": ["gras de poulet", "gribenes fat", "chicken fat", "rendered chicken fat", "fette di pollo"],
-      "compounds": ["oleic-acid", "linoleic-acid", "palmitic-acid", "volatile-sulfur-compounds"],
+      "aliases": [
+        "gras de poulet",
+        "gribenes fat",
+        "chicken fat",
+        "rendered chicken fat",
+        "fette di pollo"
+      ],
+      "compounds": [
+        "oleic-acid",
+        "linoleic-acid",
+        "palmitic-acid",
+        "volatile-sulfur-compounds"
+      ],
       "sensoryContribution": {
         "aroma": "rich, savory, poultry, onion-garlic notes",
         "flavor": "rich, savory, silky, poultry depth"
       },
       "substitutionGroup": "cooking-fat",
-      "commonIn": ["Ashkenazi Jewish", "Eastern European", "French"]
+      "commonIn": [
+        "Ashkenazi Jewish",
+        "Eastern European",
+        "French"
+      ]
     },
     "horseradish": {
       "name": "Horseradish",
-      "aliases": ["Armoracia rusticana", "meerrettich", "raifort", "kren", "chrzan"],
-      "compounds": ["sinigrin", "allyl-isothiocyanate", "glucosinolates"],
+      "aliases": [
+        "Armoracia rusticana",
+        "meerrettich",
+        "raifort",
+        "kren",
+        "chrzan"
+      ],
+      "compounds": [
+        "sinigrin",
+        "allyl-isothiocyanate",
+        "glucosinolates"
+      ],
       "sensoryContribution": {
         "aroma": "sharp, pungent, mustard-like, nasal-clearing",
         "flavor": "hot, pungent, mustard-like, bitter undertone"
       },
       "substitutionGroup": "heat-pungent",
-      "commonIn": ["Eastern European", "Ashkenazi Jewish", "German", "British"]
+      "commonIn": [
+        "Eastern European",
+        "Ashkenazi Jewish",
+        "German",
+        "British"
+      ]
     },
     "wasabi": {
       "name": "Wasabi",
-      "aliases": ["Eutrema japonicum", "Japanese horseradish", "namida", "wasabia", "seiyo wasabi"],
-      "compounds": ["allyl-isothiocyanate", "sinigrin", "6-methylsulfinylhexyl-isothiocyanate"],
+      "aliases": [
+        "Eutrema japonicum",
+        "Japanese horseradish",
+        "namida",
+        "wasabia",
+        "seiyo wasabi"
+      ],
+      "compounds": [
+        "allyl-isothiocyanate",
+        "sinigrin",
+        "6-methylsulfinylhexyl-isothiocyanate"
+      ],
       "sensoryContribution": {
         "aroma": "sharp, green, pungent, nasal-clearing",
         "flavor": "hot, green, pungent, sweet undertone, rapid fade"
       },
       "substitutionGroup": "heat-pungent",
-      "commonIn": ["Japanese"]
+      "commonIn": [
+        "Japanese"
+      ]
     },
     "thyme": {
       "name": "Thyme",
-      "aliases": ["Thymus vulgaris", "thym", "tomillo", "timo", "za'atar herb"],
-      "compounds": ["thymol", "carvacrol", "linalool", "geraniol"],
+      "aliases": [
+        "Thymus vulgaris",
+        "thym",
+        "tomillo",
+        "timo",
+        "za'atar herb"
+      ],
+      "compounds": [
+        "thymol",
+        "carvacrol",
+        "linalool",
+        "geraniol"
+      ],
       "sensoryContribution": {
         "aroma": "herbaceous, woody, warm, slightly floral",
         "flavor": "earthy, minty, slightly lemony, warm"
       },
       "substitutionGroup": "fresh-herb",
-      "commonIn": ["Mediterranean", "French", "Caribbean", "Middle Eastern"]
+      "commonIn": [
+        "Mediterranean",
+        "French",
+        "Caribbean",
+        "Middle Eastern"
+      ]
     },
     "rosemary": {
       "name": "Rosemary",
-      "aliases": ["Rosmarinus officinalis", "romero", "rosmarin", "rosmarino", "compass plant"],
-      "compounds": ["1,8-cineole", "camphor", "alpha-pinene", "borneol"],
+      "aliases": [
+        "Rosmarinus officinalis",
+        "romero",
+        "rosmarin",
+        "rosmarino",
+        "compass plant"
+      ],
+      "compounds": [
+        "1,8-cineole",
+        "camphor",
+        "alpha-pinene",
+        "borneol"
+      ],
       "sensoryContribution": {
         "aroma": "pine-like, woody, camphoraceous, evergreen",
         "flavor": "piney, woody, bitter, astringent, warm"
       },
       "substitutionGroup": "fresh-herb",
-      "commonIn": ["Mediterranean", "Italian", "French", "North African"]
+      "commonIn": [
+        "Mediterranean",
+        "Italian",
+        "French",
+        "North African"
+      ]
     },
     "lemongrass": {
       "name": "Lemongrass",
-      "aliases": ["Cymbopogon citratus", "takrai", "serai", "capim-santo", "fever grass"],
-      "compounds": ["citral", "geranial", "neral", "myrcene"],
+      "aliases": [
+        "Cymbopogon citratus",
+        "takrai",
+        "serai",
+        "capim-santo",
+        "fever grass"
+      ],
+      "compounds": [
+        "citral",
+        "geranial",
+        "neral",
+        "myrcene"
+      ],
       "sensoryContribution": {
         "aroma": "bright citrus, lemon, slightly floral",
         "flavor": "lemony, fresh, slightly sweet, floral"
       },
       "substitutionGroup": "fresh-herb",
-      "commonIn": ["Thai", "Vietnamese", "Indonesian", "Caribbean"]
+      "commonIn": [
+        "Thai",
+        "Vietnamese",
+        "Indonesian",
+        "Caribbean"
+      ]
     },
     "molasses": {
       "name": "Molasses",
-      "aliases": ["black treacle", "melaza", "melasse", "Saccharum officinarum", "sorghum molasses"],
-      "compounds": ["maltol", "furanones", "caramel-compounds", "volatile-phenols"],
+      "aliases": [
+        "black treacle",
+        "melaza",
+        "melasse",
+        "Saccharum officinarum",
+        "sorghum molasses"
+      ],
+      "compounds": [
+        "maltol",
+        "furanones",
+        "caramel-compounds",
+        "volatile-phenols"
+      ],
       "sensoryContribution": {
         "aroma": "deep caramel, burnt sugar, slightly bitter",
         "flavor": "deep sweet, bittersweet, earthy, mineral"
       },
       "substitutionGroup": "sweetener",
-      "commonIn": ["Southern US", "Caribbean", "Middle Eastern", "South Asian"]
+      "commonIn": [
+        "Southern US",
+        "Caribbean",
+        "Middle Eastern",
+        "South Asian"
+      ]
     },
     "jaggery": {
       "name": "Jaggery (Gur)",
-      "aliases": ["gur", "guda", "panela", "rapadura", "Saccharum officinarum"],
-      "compounds": ["sucrose", "maltol", "furanones", "mineral-compounds"],
+      "aliases": [
+        "gur",
+        "guda",
+        "panela",
+        "rapadura"
+      ],
+      "compounds": [
+        "sucrose",
+        "maltol",
+        "furanones",
+        "mineral-compounds"
+      ],
       "sensoryContribution": {
         "aroma": "caramel, earthy, toffee-like",
         "flavor": "deep sweet, earthy, caramel, slightly smoky"
       },
       "substitutionGroup": "sweetener",
-      "commonIn": ["South Asian", "Sri Lankan", "East African"]
+      "commonIn": [
+        "South Asian",
+        "Sri Lankan",
+        "East African"
+      ]
     },
     "maple-syrup": {
       "name": "Maple Syrup",
-      "aliases": ["sirop d'erable", "Acer saccharum", "maple sap", "xarope de bordo", "sirope de arce"],
-      "compounds": ["sotolone", "vanillin", "maltol", "furaneol"],
+      "aliases": [
+        "sirop d'erable",
+        "Acer saccharum",
+        "maple sap",
+        "xarope de bordo",
+        "sirope de arce"
+      ],
+      "compounds": [
+        "sotolone",
+        "vanillin",
+        "maltol",
+        "furaneol"
+      ],
       "sensoryContribution": {
         "aroma": "caramel, woody, vanilla, burnt sugar",
         "flavor": "sweet, caramel, woody, vanilla, slightly smoky"
       },
       "substitutionGroup": "sweetener",
-      "commonIn": ["North American", "Canadian", "New England"]
+      "commonIn": [
+        "North American",
+        "Canadian",
+        "New England"
+      ]
     },
     "msg": {
       "name": "MSG (Monosodium Glutamate)",
-      "aliases": ["ajinomoto", "ve-tsin", "monosodium glutamate", "umami seasoning", "C5H8NNaO4"],
-      "compounds": ["glutamate", "sodium-ion"],
+      "aliases": [
+        "ajinomoto",
+        "ve-tsin",
+        "monosodium glutamate",
+        "umami seasoning",
+        "C5H8NNaO4"
+      ],
+      "compounds": [
+        "glutamate",
+        "sodium-ion"
+      ],
       "sensoryContribution": {
         "aroma": "none (pure umami without aroma)",
         "flavor": "pure savory, mouth-filling, synergistic flavor enhancer"
       },
       "substitutionGroup": "umami-ferment",
-      "commonIn": ["East Asian", "Southeast Asian", "West African", "Latin American"]
+      "commonIn": [
+        "East Asian",
+        "Southeast Asian",
+        "West African",
+        "Latin American"
+      ]
     },
     "mushroom": {
       "name": "Mushroom (Dried Shiitake)",
-      "aliases": ["Lentinula edodes", "xiang gu", "donggu", "shiitake", "black mushroom"],
-      "compounds": ["guanylic-acid", "lentinic-acid", "sulfur-volatiles", "umami-peptides"],
+      "aliases": [
+        "Lentinula edodes",
+        "xiang gu",
+        "donggu",
+        "shiitake",
+        "black mushroom"
+      ],
+      "compounds": [
+        "guanylic-acid",
+        "lentinic-acid",
+        "sulfur-volatiles",
+        "umami-peptides"
+      ],
       "sensoryContribution": {
         "aroma": "earthy, woody, smoky, meaty",
         "flavor": "deep savory, earthy, meaty, umami-rich"
       },
       "substitutionGroup": "umami-ferment",
-      "commonIn": ["Chinese", "Japanese", "Korean", "East Asian"]
+      "commonIn": [
+        "Chinese",
+        "Japanese",
+        "Korean",
+        "East Asian"
+      ]
     },
     "fermented-bean-paste": {
       "name": "Fermented Bean Paste (Doenjang/Doubanjiang)",
-      "aliases": ["doenjang", "doubanjiang", "Glycine max paste", "chunjang", "taucheo"],
-      "compounds": ["glutamate", "volatile-sulfur-compounds", "pyrazines", "isoflavones"],
+      "aliases": [
+        "doenjang",
+        "doubanjiang",
+        "Glycine max paste",
+        "chunjang",
+        "taucheo"
+      ],
+      "compounds": [
+        "glutamate",
+        "volatile-sulfur-compounds",
+        "pyrazines",
+        "isoflavones"
+      ],
       "sensoryContribution": {
         "aroma": "pungent, fermented, earthy, soy",
         "flavor": "deep savory, salty, fermented, complex umami"
       },
       "substitutionGroup": "umami-ferment",
-      "commonIn": ["Korean", "Chinese", "Japanese"]
+      "commonIn": [
+        "Korean",
+        "Chinese",
+        "Japanese"
+      ]
     },
     "fenugreek": {
       "name": "Fenugreek",
-      "aliases": ["methi", "Trigonella foenum-graecum", "fenugrec", "helba", "hilbeh"],
-      "compounds": ["sotolone", "trigonelline", "4-hydroxy-isoleucine"],
+      "aliases": [
+        "methi",
+        "Trigonella foenum-graecum",
+        "fenugrec",
+        "helba",
+        "hilbeh"
+      ],
+      "compounds": [
+        "sotolone",
+        "trigonelline",
+        "4-hydroxy-isoleucine"
+      ],
       "sensoryContribution": {
         "aroma": "maple-like, sweet, slightly bitter, celery",
         "flavor": "bittersweet, maple, slightly nutty, earthy"
       },
       "substitutionGroup": "warm-spice",
-      "commonIn": ["South Asian", "Middle Eastern", "Ethiopian", "Egyptian"]
+      "commonIn": [
+        "South Asian",
+        "Middle Eastern",
+        "Ethiopian",
+        "Egyptian"
+      ]
     },
     "saffron": {
       "name": "Saffron",
-      "aliases": ["zaafaran", "Crocus sativus", "kesar", "azafran", "krokos"],
-      "compounds": ["safranal", "crocin", "picrocrocin"],
+      "aliases": [
+        "zaafaran",
+        "Crocus sativus",
+        "kesar",
+        "azafran",
+        "krokos"
+      ],
+      "compounds": [
+        "safranal",
+        "crocin",
+        "picrocrocin"
+      ],
       "sensoryContribution": {
         "aroma": "floral, honey-like, hay-like, slightly metallic",
         "flavor": "floral, honey, slightly bitter, metallic undertone"
       },
       "substitutionGroup": "warm-spice",
-      "commonIn": ["Persian", "Spanish", "Indian", "Italian"]
+      "commonIn": [
+        "Persian",
+        "Spanish",
+        "Indian",
+        "Italian"
+      ]
     },
     "nutmeg": {
       "name": "Nutmeg",
-      "aliases": ["jaiphal", "noix de muscade", "nuez moscada", "Myristica fragrans", "moscata"],
-      "compounds": ["sabinene", "myristicin", "elemicin", "terpinen-4-ol"],
+      "aliases": [
+        "jaiphal",
+        "noix de muscade",
+        "nuez moscada",
+        "Myristica fragrans",
+        "moscata"
+      ],
+      "compounds": [
+        "sabinene",
+        "myristicin",
+        "elemicin",
+        "terpinen-4-ol"
+      ],
       "sensoryContribution": {
         "aroma": "warm, sweet, spicy, woody",
         "flavor": "warm, sweet, slightly woody, bittersweet"
       },
       "substitutionGroup": "sweet-aromatic",
-      "commonIn": ["Indonesian", "South Asian", "Caribbean", "European"]
+      "commonIn": [
+        "Indonesian",
+        "South Asian",
+        "Caribbean",
+        "European"
+      ]
     },
     "vanilla": {
       "name": "Vanilla",
-      "aliases": ["Vanilla planifolia", "vainilla", "vanille", "vaniglia", "bourbon vanilla"],
-      "compounds": ["vanillin", "vanillic-acid", "p-hydroxybenzaldehyde"],
+      "aliases": [
+        "Vanilla planifolia",
+        "vainilla",
+        "vanille",
+        "vaniglia",
+        "bourbon vanilla"
+      ],
+      "compounds": [
+        "vanillin",
+        "vanillic-acid",
+        "p-hydroxybenzaldehyde"
+      ],
       "sensoryContribution": {
         "aroma": "sweet, creamy, floral, warm",
         "flavor": "sweet, creamy, smooth, floral, warm"
       },
       "substitutionGroup": "sweet-aromatic",
-      "commonIn": ["Mexican", "French", "North American", "Global dessert"]
+      "commonIn": [
+        "Mexican",
+        "French",
+        "North American",
+        "Global dessert"
+      ]
     },
     "rice-flour": {
       "name": "Rice Flour",
-      "aliases": ["Oryza sativa flour", "mochiko", "nepulo", "bijirin beras", "rice powder"],
-      "compounds": ["amylose", "amylopectin", "proteins"],
+      "aliases": [
+        "Oryza sativa flour",
+        "mochiko",
+        "nepulo",
+        "bijirin beras",
+        "rice powder"
+      ],
+      "compounds": [
+        "amylose",
+        "amylopectin",
+        "proteins"
+      ],
       "sensoryContribution": {
         "aroma": "neutral, slightly starchy",
         "flavor": "neutral, clean, slightly sweet"
       },
       "substitutionGroup": "starch",
-      "commonIn": ["Japanese", "Southeast Asian", "South Indian", "Chinese"]
+      "commonIn": [
+        "Japanese",
+        "Southeast Asian",
+        "South Indian",
+        "Chinese"
+      ]
     },
     "cornstarch": {
       "name": "Cornstarch",
-      "aliases": ["corn flour", "maizena", "fecula de maiz", "Zea mays starch", "cornstarch powder"],
-      "compounds": ["amylose", "amylopectin"],
+      "aliases": [
+        "corn flour",
+        "maizena",
+        "fecula de maiz",
+        "Zea mays starch",
+        "cornstarch powder"
+      ],
+      "compounds": [
+        "amylose",
+        "amylopectin"
+      ],
       "sensoryContribution": {
         "aroma": "neutral",
         "flavor": "neutral, clean, thickening agent"
       },
       "substitutionGroup": "starch",
-      "commonIn": ["Chinese", "North American", "European"]
+      "commonIn": [
+        "Chinese",
+        "North American",
+        "European"
+      ]
     },
     "tapioca": {
       "name": "Tapioca (Cassava Starch)",
-      "aliases": ["Manihot esculenta", "cassava starch", "yuca starch", "boba", "sago"],
-      "compounds": ["amylopectin", "cyanogenic-glycosides-removed"],
+      "aliases": [
+        "Manihot esculenta",
+        "cassava starch",
+        "yuca starch",
+        "boba",
+        "sago"
+      ],
+      "compounds": [
+        "amylopectin",
+        "cyanogenic-glycosides-removed"
+      ],
       "sensoryContribution": {
         "aroma": "neutral, slightly sweet",
         "flavor": "neutral, chewy texture, clean"
       },
       "substitutionGroup": "starch",
-      "commonIn": ["Brazilian", "Southeast Asian", "West African", "Taiwanese"]
+      "commonIn": [
+        "Brazilian",
+        "Southeast Asian",
+        "West African",
+        "Taiwanese"
+      ]
     },
     "semolina": {
       "name": "Semolina (Durum Wheat)",
-      "aliases": ["Triticum durum", "sooji", "rava", "semoule", "smeego"],
-      "compounds": ["gluten-proteins", "carotenoids", "volatile-aldehydes"],
+      "aliases": [
+        "Triticum durum",
+        "sooji",
+        "rava",
+        "semoule",
+        "smeego"
+      ],
+      "compounds": [
+        "gluten-proteins",
+        "carotenoids",
+        "volatile-aldehydes"
+      ],
       "sensoryContribution": {
         "aroma": "nutty, wheaty, slightly sweet",
         "flavor": "nutty, wheaty, hearty, slightly sweet"
       },
       "substitutionGroup": "starch",
-      "commonIn": ["Italian", "Mediterranean", "North African", "Middle Eastern"]
+      "commonIn": [
+        "Italian",
+        "Mediterranean",
+        "North African",
+        "Middle Eastern"
+      ]
     },
     "yogurt": {
       "name": "Yogurt",
-      "aliases": ["dahi", "yaourt", "yogur", "yoghurt", "jugurt"],
-      "compounds": ["lactic-acid", "diacetyl", "acetaldehyde"],
+      "aliases": [
+        "dahi",
+        "yaourt",
+        "yogur",
+        "yoghurt",
+        "jugurt"
+      ],
+      "compounds": [
+        "lactic-acid",
+        "diacetyl",
+        "acetaldehyde"
+      ],
       "sensoryContribution": {
         "aroma": "tangy, milky, slightly buttery",
         "flavor": "tangy, creamy, sour, cooling"
       },
       "substitutionGroup": "dairy",
-      "commonIn": ["South Asian", "Middle Eastern", "Mediterranean", "Eastern European"]
+      "commonIn": [
+        "South Asian",
+        "Middle Eastern",
+        "Mediterranean",
+        "Eastern European"
+      ]
     },
     "paneer": {
       "name": "Paneer",
-      "aliases": ["Indian cottage cheese", "chhana", "panir", "farmer cheese", "queso paneer"],
-      "compounds": ["casein", "milk-fat", "lactic-acid"],
+      "aliases": [
+        "Indian cottage cheese",
+        "chhana",
+        "panir",
+        "farmer cheese",
+        "queso paneer"
+      ],
+      "compounds": [
+        "casein",
+        "milk-fat",
+        "lactic-acid"
+      ],
       "sensoryContribution": {
         "aroma": "mild, milky, fresh",
         "flavor": "mild, milky, slightly tangy, creamy"
       },
       "substitutionGroup": "dairy",
-      "commonIn": ["South Asian", "North Indian", "Pakistani"]
+      "commonIn": [
+        "South Asian",
+        "North Indian",
+        "Pakistani"
+      ]
     },
     "feta": {
       "name": "Feta Cheese",
-      "aliases": ["Ovis aries cheese", "fetir", "white cheese", "sirene", "telemea"],
-      "compounds": ["butyric-acid", "capric-acid", "lactic-acid", "amino-acids"],
+      "aliases": [
+        "Ovis aries cheese",
+        "fetir",
+        "white cheese",
+        "sirene",
+        "telemea"
+      ],
+      "compounds": [
+        "butyric-acid",
+        "capric-acid",
+        "lactic-acid",
+        "amino-acids"
+      ],
       "sensoryContribution": {
         "aroma": "tangy, briny, slightly sharp",
         "flavor": "salty, tangy, creamy-crumbly, briny"
       },
       "substitutionGroup": "dairy",
-      "commonIn": ["Greek", "Mediterranean", "Middle Eastern", "Balkan"]
+      "commonIn": [
+        "Greek",
+        "Mediterranean",
+        "Middle Eastern",
+        "Balkan"
+      ]
     },
     "tofu": {
       "name": "Tofu",
-      "aliases": ["doufu", "bean curd", "tahu", "okara curd", "Glycine max curd"],
-      "compounds": ["soy-proteins", "isoflavones", "saponins"],
+      "aliases": [
+        "doufu",
+        "bean curd",
+        "tahu",
+        "okara curd",
+        "Glycine max curd"
+      ],
+      "compounds": [
+        "soy-proteins",
+        "isoflavones",
+        "saponins"
+      ],
       "sensoryContribution": {
         "aroma": "mild, slightly beany, clean",
         "flavor": "neutral, slightly beany, absorbs surrounding flavors"
       },
       "substitutionGroup": "protein",
-      "commonIn": ["Chinese", "Japanese", "Korean", "Southeast Asian"]
+      "commonIn": [
+        "Chinese",
+        "Japanese",
+        "Korean",
+        "Southeast Asian"
+      ]
     },
     "eggplant": {
       "name": "Eggplant (Aubergine)",
-      "aliases": ["aubergine", "berenjena", "brinjal", "Solanum melongena", "nasu"],
-      "compounds": ["chlorogenic-acid", "nasunin", "solanine"],
+      "aliases": [
+        "aubergine",
+        "berenjena",
+        "brinjal",
+        "Solanum melongena",
+        "nasu"
+      ],
+      "compounds": [
+        "chlorogenic-acid",
+        "nasunin",
+        "solanine"
+      ],
       "sensoryContribution": {
         "aroma": "earthy, slightly bitter, spongy when raw",
         "flavor": "earthy, slightly bitter, creamy when cooked, absorbs fat"
       },
       "substitutionGroup": "vegetable",
-      "commonIn": ["Mediterranean", "Middle Eastern", "South Asian", "East Asian"]
+      "commonIn": [
+        "Mediterranean",
+        "Middle Eastern",
+        "South Asian",
+        "East Asian"
+      ]
     },
     "plantain": {
       "name": "Plantain",
-      "aliases": ["platanos", "cooking banana", "Musa paradisiaca", "matooke", "togolese banana"],
-      "compounds": ["starch", "sugars", "potassium", "volatile-esters"],
+      "aliases": [
+        "platanos",
+        "cooking banana",
+        "Musa paradisiaca",
+        "matooke",
+        "togolese banana"
+      ],
+      "compounds": [
+        "starch",
+        "sugars",
+        "potassium",
+        "volatile-esters"
+      ],
       "sensoryContribution": {
         "aroma": "mild, starchy, slightly sweet when ripe",
         "flavor": "starchy when green, sweet when ripe, earthy"
       },
       "substitutionGroup": "vegetable",
-      "commonIn": ["West African", "Caribbean", "Latin American", "Central American"]
+      "commonIn": [
+        "West African",
+        "Caribbean",
+        "Latin American",
+        "Central American"
+      ]
     },
     "okra": {
       "name": "Okra",
-      "aliases": ["lady's finger", "bamia", "gumbo", "Abelmoschus esculentus", "quingombo"],
-      "compounds": ["mucilage", "pectin", "volatile-aldehydes"],
+      "aliases": [
+        "lady's finger",
+        "bamia",
+        "gumbo",
+        "Abelmoschus esculentus",
+        "quingombo"
+      ],
+      "compounds": [
+        "mucilage",
+        "pectin",
+        "volatile-aldehydes"
+      ],
       "sensoryContribution": {
         "aroma": "green, grassy, slightly earthy",
         "flavor": "green, slightly sweet, mucilaginous texture"
       },
       "substitutionGroup": "vegetable",
-      "commonIn": ["West African", "Southern US", "South Asian", "Middle Eastern"]
+      "commonIn": [
+        "West African",
+        "Southern US",
+        "South Asian",
+        "Middle Eastern"
+      ]
     },
     "lentils": {
       "name": "Lentils",
-      "aliases": ["masoor dal", "Lens culinaris", "lenticchie", "lentejas", "adas"],
-      "compounds": ["proteins", "saponins", "volatile-aldehydes", "iron"],
+      "aliases": [
+        "masoor dal",
+        "Lens culinaris",
+        "lenticchie",
+        "lentejas",
+        "adas"
+      ],
+      "compounds": [
+        "proteins",
+        "saponins",
+        "volatile-aldehydes",
+        "iron"
+      ],
       "sensoryContribution": {
         "aroma": "earthy, slightly nutty, beany",
         "flavor": "earthy, nutty, hearty, mild"
       },
       "substitutionGroup": "legume",
-      "commonIn": ["South Asian", "Mediterranean", "Middle Eastern", "Ethiopian"]
+      "commonIn": [
+        "South Asian",
+        "Mediterranean",
+        "Middle Eastern",
+        "Ethiopian"
+      ]
     },
     "black-beans": {
       "name": "Black Beans",
-      "aliases": ["frijoles negros", "feijao preto", "Phaseolus vulgaris", "kala chana", "turtle beans"],
-      "compounds": ["anthocyanins", "proteins", "oligosaccharides"],
+      "aliases": [
+        "frijoles negros",
+        "feijao preto",
+        "Phaseolus vulgaris",
+        "kala chana",
+        "turtle beans"
+      ],
+      "compounds": [
+        "anthocyanins",
+        "proteins",
+        "oligosaccharides"
+      ],
       "sensoryContribution": {
         "aroma": "earthy, slightly sweet, beany",
         "flavor": "earthy, creamy, slightly sweet, hearty"
       },
       "substitutionGroup": "legume",
-      "commonIn": ["Latin American", "Caribbean", "Brazilian", "Venezuelan"]
+      "commonIn": [
+        "Latin American",
+        "Caribbean",
+        "Brazilian",
+        "Venezuelan"
+      ]
     },
     "masa-harina": {
       "name": "Masa Harina (Nixtamalized Corn Flour)",
-      "aliases": ["Zea mays flour", "corn masa", "masa de maiz", "nixtamal", "tortilla flour"],
-      "compounds": ["amylose", "amylopectin", "calcium-hydroxide-treated", "niacin"],
+      "aliases": [
+        "Zea mays flour",
+        "corn masa",
+        "masa de maiz",
+        "nixtamal",
+        "tortilla flour"
+      ],
+      "compounds": [
+        "amylose",
+        "amylopectin",
+        "calcium-hydroxide-treated",
+        "niacin"
+      ],
       "sensoryContribution": {
         "aroma": "corny, slightly alkaline, toasted",
         "flavor": "corny, earthy, slightly alkaline, toasty"
       },
       "substitutionGroup": "grain",
-      "commonIn": ["Mexican", "Central American", "Latin American"]
+      "commonIn": [
+        "Mexican",
+        "Central American",
+        "Latin American"
+      ]
     },
     "dried-shrimp": {
       "name": "Dried Shrimp",
-      "aliases": ["ebi", "kung haeng", "camaron seco", "Crangon crangon", "heibei"],
-      "compounds": ["glutamate", "inosine-monophosphate", "volatile-amines", "pyrazines"],
+      "aliases": [
+        "ebi",
+        "kung haeng",
+        "camaron seco",
+        "Crangon crangon",
+        "heibei"
+      ],
+      "compounds": [
+        "glutamate",
+        "inosine-monophosphate",
+        "volatile-amines",
+        "pyrazines"
+      ],
       "sensoryContribution": {
         "aroma": "pungent, fishy, umami-rich, sea-like",
         "flavor": "intensely savory, seafood, salty, umami-rich"
       },
       "substitutionGroup": "seafood",
-      "commonIn": ["Southeast Asian", "Chinese", "West African", "Brazilian"]
+      "commonIn": [
+        "Southeast Asian",
+        "Chinese",
+        "West African",
+        "Brazilian"
+      ]
     },
     "kombu": {
       "name": "Kombu (Kelp)",
-      "aliases": ["Saccharina japonica", "haidai", "dashima", "kelp", "sea tangle"],
-      "compounds": ["glutamate", "mannitol", "alginates", "iodine"],
+      "aliases": [
+        "Saccharina japonica",
+        "haidai",
+        "dashima",
+        "kelp",
+        "sea tangle"
+      ],
+      "compounds": [
+        "glutamate",
+        "mannitol",
+        "alginates",
+        "iodine"
+      ],
       "sensoryContribution": {
         "aroma": "oceanic, briny, slightly sweet",
         "flavor": "deep savory, oceanic, umami-rich, mineral"
       },
       "substitutionGroup": "seafood",
-      "commonIn": ["Japanese", "Korean", "Chinese"]
+      "commonIn": [
+        "Japanese",
+        "Korean",
+        "Chinese"
+      ]
     },
     "peanut": {
       "name": "Peanut",
-      "aliases": ["Arachis hypogaea", "groundnut", "mani", "cacahuete", "moongphali"],
-      "compounds": ["pyrazines", "furanones", "proteins", "oleic-acid"],
+      "aliases": [
+        "Arachis hypogaea",
+        "groundnut",
+        "mani",
+        "cacahuete",
+        "moongphali"
+      ],
+      "compounds": [
+        "pyrazines",
+        "furanones",
+        "proteins",
+        "oleic-acid"
+      ],
       "sensoryContribution": {
         "aroma": "nutty, roasted, earthy, slightly sweet",
         "flavor": "nutty, roasted, earthy, rich, slightly sweet"
       },
       "substitutionGroup": "nut",
-      "commonIn": ["West African", "Southeast Asian", "Chinese", "Latin American"]
+      "commonIn": [
+        "West African",
+        "Southeast Asian",
+        "Chinese",
+        "Latin American"
+      ]
     },
     "sesame-seeds": {
       "name": "Sesame Seeds",
-      "aliases": ["Sesamum indicum", "till", "ajonjoli", "goma", "kunto"],
-      "compounds": ["sesamol", "sesamin", "furanones"],
+      "aliases": [
+        "Sesamum indicum",
+        "till",
+        "ajonjoli",
+        "goma",
+        "kunto"
+      ],
+      "compounds": [
+        "sesamol",
+        "sesamin",
+        "furanones"
+      ],
       "sensoryContribution": {
         "aroma": "nutty, toasted, slightly sweet",
         "flavor": "nutty, roasted, rich, slightly bitter"
       },
       "substitutionGroup": "nut",
-      "commonIn": ["Middle Eastern", "East Asian", "Japanese", "Korean"]
+      "commonIn": [
+        "Middle Eastern",
+        "East Asian",
+        "Japanese",
+        "Korean"
+      ]
     },
     "gochujang": {
       "name": "Gochujang (Korean Chili Paste)",
-      "aliases": ["kochujang", "gochu jang", "Korean chili paste", "red pepper paste", "gochujang paste"],
-      "compounds": ["capsaicin", "glutamate", "maillard-products", "fermented-soy-compounds"],
+      "aliases": [
+        "kochujang",
+        "gochu jang",
+        "Korean chili paste",
+        "red pepper paste",
+        "gochujang paste"
+      ],
+      "compounds": [
+        "capsaicin",
+        "glutamate",
+        "maillard-products",
+        "fermented-soy-compounds"
+      ],
       "sensoryContribution": {
         "aroma": "fermented, sweet-spicy, soy, smoky",
         "flavor": "sweet-spicy, fermented, savory, deep umami"
       },
       "substitutionGroup": "condiment",
-      "commonIn": ["Korean"]
+      "commonIn": [
+        "Korean"
+      ]
     },
     "harissa": {
       "name": "Harissa",
-      "aliases": ["harisa", "North African chili paste", "Tunisian pepper paste", "harrassa", "chili harissa"],
-      "compounds": ["capsaicin", "carotenoids", "garlic-sulfur-compounds", "cumin-compounds"],
+      "aliases": [
+        "harisa",
+        "North African chili paste",
+        "Tunisian pepper paste",
+        "harrassa",
+        "chili harissa"
+      ],
+      "compounds": [
+        "capsaicin",
+        "carotenoids",
+        "garlic-sulfur-compounds",
+        "cumin-compounds"
+      ],
       "sensoryContribution": {
         "aroma": "roasted chili, smoky, garlicky, warm spice",
         "flavor": "hot, smoky, garlicky, complex spice, slightly tangy"
       },
       "substitutionGroup": "condiment",
-      "commonIn": ["Tunisian", "North African", "Middle Eastern"]
+      "commonIn": [
+        "Tunisian",
+        "North African",
+        "Middle Eastern"
+      ]
     },
     "tahini": {
       "name": "Tahini",
-      "aliases": ["tahina", "tehina", "sesame paste", "ar-deh", "Sesamum indicum paste"],
-      "compounds": ["sesamol", "oleic-acid", "linoleic-acid", "sesamin"],
+      "aliases": [
+        "tahina",
+        "tehina",
+        "sesame paste",
+        "ar-deh",
+        "Sesamum indicum paste"
+      ],
+      "compounds": [
+        "sesamol",
+        "oleic-acid",
+        "linoleic-acid",
+        "sesamin"
+      ],
       "sensoryContribution": {
         "aroma": "nutty, roasted sesame, slightly bitter",
         "flavor": "nutty, creamy, slightly bitter, rich"
       },
       "substitutionGroup": "condiment",
-      "commonIn": ["Middle Eastern", "Mediterranean", "Levantine", "North African"]
+      "commonIn": [
+        "Middle Eastern",
+        "Mediterranean",
+        "Levantine",
+        "North African"
+      ]
     },
     "chimichurri": {
       "name": "Chimichurri",
-      "aliases": ["chimichurri sauce", "Argentine herb sauce", "chimmi", "chimichurri verde", "parsley garlic sauce"],
-      "compounds": ["allicin", "linalool", "carvacrol", "vinyl-dithiins"],
+      "aliases": [
+        "chimichurri sauce",
+        "Argentine herb sauce",
+        "chimmi",
+        "chimichurri verde",
+        "parsley garlic sauce"
+      ],
+      "compounds": [
+        "allicin",
+        "linalool",
+        "carvacrol",
+        "vinyl-dithiins"
+      ],
       "sensoryContribution": {
         "aroma": "herbaceous, garlicky, vinegary, fresh",
         "flavor": "herbaceous, tangy, garlicky, slightly spicy"
       },
       "substitutionGroup": "condiment",
-      "commonIn": ["Argentinian", "Uruguayan", "Latin American"]
+      "commonIn": [
+        "Argentinian",
+        "Uruguayan",
+        "Latin American"
+      ]
     }
   }
 }
