@@ -11,13 +11,15 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
-    "check": "npm run typecheck && npm run build && npm run validate:citations && npm test",
+    "check": "npm run typecheck && npm run lint && npm run coverage:guard && npm run build && npm run validate:citations && npm test",
     "validate:citations": "node scripts/validate-citations.mjs",
     "pack:check": "npm run check && npm run package:smoke && npm pack --dry-run",
     "package:smoke": "node scripts/package-smoke.mjs",
     "prepack": "npm run build",
     "keygen": "node scripts/generate-api-key.mjs",
-    "docker:smoke": "node scripts/docker-smoke.mjs"
+    "docker:smoke": "node scripts/docker-smoke.mjs",
+    "lint": "node scripts/static-checks.mjs",
+    "coverage:guard": "node scripts/coverage-threshold.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.90.0",

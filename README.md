@@ -150,9 +150,11 @@ User memories can be emotionally sensitive. Do not add optional food-data provid
 ```bash
 npm ci                         # Install locked dependencies
 npm run typecheck              # TypeScript no-emit check
+npm run lint                   # Dependency-free static launch checks
+npm run coverage:guard         # Dependency-free test-surface threshold guard
 npm run build                  # Compile TypeScript
 npm test                       # Run tests
-npm run check                  # Typecheck + build + tests
+npm run check                  # Full local gate: typecheck, static checks, coverage guard, build, citations, tests
 npm audit --audit-level=moderate
 npm run package:smoke          # Pack, install in temp project, and verify packaged MCP CLI
 npm run pack:check             # Full release gate
