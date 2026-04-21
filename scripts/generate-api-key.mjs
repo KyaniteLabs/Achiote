@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { randomBytes } from 'node:crypto';
+import { createHash, randomBytes } from 'node:crypto';
 
 const args = new Map();
 for (let i = 2; i < process.argv.length; i += 2) {
@@ -14,12 +14,18 @@ if (!validTiers.has(tier)) {
   process.exit(1);
 }
 
-const record = {
-  key: `ach_${randomBytes(24).toString('hex')}`,
+function hashApiKey(rawKey) {
+  return `sha256:${createHash('sha256').update(rawKey).digest('hex')}`;
+}
+
+const rawKey = `ach_${randomBytes(24).toString('hex')}`;
+const envRecord = {
+  keyId: `ak_${randomBytes(8).toString('hex')}`,
+  keyHash: hashApiKey(rawKey),
   tier,
   name,
   createdAt: new Date().toISOString(),
 };
 
-console.log(JSON.stringify(record, null, 2));
-console.error('\nAdd this object to the ACHIOTE_API_KEYS JSON array for self-hosted HTTP auth.');
+console.log(JSON.stringify({ key: rawKey, envRecord, envExample: `ACHIOTE_API_KEYS='${JSON.stringify([envRecord])}'` }, null, 2));
+console.error('\nPut envRecord inside the ACHIOTE_API_KEYS JSON array. The raw key is shown once; do not store it in configuration.');

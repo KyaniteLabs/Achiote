@@ -12,7 +12,7 @@ export type AuthenticatedIdentity = {
   authenticated: true;
   tier: Tier;
   name: string;
-  rawKey: string;
+  keyId: string;
 };
 
 export type RequestIdentityInput = {
@@ -96,7 +96,7 @@ export function getRequestRateLimitIdentity(input: RequestIdentityInput): Reques
     return {
       tier: input.authenticated.tier,
       name: input.authenticated.name,
-      keyId: `key:${input.authenticated.rawKey}`,
+      keyId: `key:${input.authenticated.keyId}`,
     };
   }
 

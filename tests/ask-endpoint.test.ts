@@ -3,6 +3,7 @@ import { spawn, type ChildProcess } from 'node:child_process';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { getFreePort } from './helpers/ports.js';
+import { generateApiKey } from '../src/lib/auth.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
@@ -139,6 +140,24 @@ describe('/ask endpoint with auth enabled', () => {
     const body = await res.json();
     expect(body.error).toContain('Unauthorized');
   });
+
+  it('accepts hashed ACHIOTE_API_KEYS env records with a raw x-api-key', async () => {
+    const port = await getFreePort();
+    const record = generateApiKey('free', 'hashed-env');
+    const envRecord = { keyId: record.keyId, keyHash: record.keyHash, tier: record.tier, name: record.name, createdAt: record.createdAt };
+    const server = await spawnServer(port, 'true', { ACHIOTE_API_KEYS: JSON.stringify([envRecord]) });
+    try {
+      const res = await fetch(`http://127.0.0.1:${port}/ask`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-api-key': record.key },
+        body: JSON.stringify({ message: '   ' }),
+      });
+      expect(res.status).toBe(400);
+      const body = await res.json();
+      expect(body.error).toContain('message');
+    } finally { server.kill('SIGINT'); }
+  });
+
 });
 
 describe('/ask endpoint with auth disabled', () => {

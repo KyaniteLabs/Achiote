@@ -1,9 +1,25 @@
-import { randomBytes, timingSafeEqual } from 'node:crypto';
+import { createHash, randomBytes, timingSafeEqual } from 'node:crypto';
 
 export type Tier = 'free' | 'pro' | 'business' | 'enterprise';
 
 export interface ApiKeyRecord {
+  key?: string;
+  keyId?: string;
+  keyHash?: string;
+  tier: Tier;
+  name: string;
+  createdAt: string;
+}
+
+export interface ApiKeyGenerationRecord extends ApiKeyRecord {
   key: string;
+  keyId: string;
+  keyHash: string;
+}
+
+export interface ApiKeyStoredRecord {
+  keyId: string;
+  keyHash: string;
   tier: Tier;
   name: string;
   createdAt: string;
@@ -13,6 +29,7 @@ export interface AuthResult {
   authenticated: true;
   tier: Tier;
   name: string;
+  keyId: string;
 }
 
 export interface AuthFailure {
@@ -23,7 +40,6 @@ export interface AuthFailure {
 export type AuthOutcome = AuthResult | AuthFailure;
 
 const VALID_TIERS = new Set<string>(['free', 'pro', 'business', 'enterprise']);
-
 
 const TIER_LIMITS: Record<Tier, { mcpCallsPerMonth: number; webReconstructions: number }> = {
   free: { mcpCallsPerMonth: 50, webReconstructions: 3 },
@@ -37,12 +53,22 @@ export function getTierLimits(tier: Tier) {
 }
 
 const KEY_PREFIX = 'ach_';
+const KEY_ID_PREFIX = 'ak_';
+const HASH_PREFIX = 'sha256:';
+const HASH_RE = /^sha256:[0-9a-f]{64}$/;
+const KEY_ID_RE = /^(ak|legacy)_[0-9a-f]{16}$/;
 
-export function generateApiKey(tier: Tier, name: string): ApiKeyRecord {
+export function hashApiKey(rawKey: string): string {
+  return `${HASH_PREFIX}${createHash('sha256').update(rawKey).digest('hex')}`;
+}
+
+export function generateApiKey(tier: Tier, name: string): ApiKeyGenerationRecord {
   const secret = randomBytes(24).toString('hex');
   const key = `${KEY_PREFIX}${secret}`;
   return {
     key,
+    keyId: `${KEY_ID_PREFIX}${randomBytes(8).toString('hex')}`,
+    keyHash: hashApiKey(key),
     tier,
     name,
     createdAt: new Date().toISOString(),
@@ -58,25 +84,62 @@ function safeEqual(a: string, b: string): boolean {
   }
 }
 
-export function createAuthenticator(keys: ApiKeyRecord[]) {
-  const seen = new Set<string>();
-  for (const r of keys) {
-    if (seen.has(r.key)) {
-      console.warn(`Duplicate API key detected (name: "${r.name}"). Last entry wins.`);
-    }
-    seen.add(r.key);
+function stableLegacyKeyId(rawKey: string): string {
+  return `legacy_${createHash('sha256').update(rawKey).digest('hex').slice(0, 16)}`;
+}
+
+function normalizedRecord(record: ApiKeyRecord): ApiKeyStoredRecord | null {
+  if (record.keyHash) {
+    return {
+      keyId: record.keyId ?? stableLegacyKeyId(record.keyHash),
+      keyHash: record.keyHash,
+      tier: record.tier,
+      name: record.name,
+      createdAt: record.createdAt,
+    };
   }
-  const keyMap = new Map(keys.map((r) => [r.key, r]));
+
+  if (record.key) {
+    console.warn(`Plaintext API key record detected (name: "${record.name}"). Use keyHash instead.`);
+    return {
+      keyId: record.keyId ?? stableLegacyKeyId(record.key),
+      keyHash: hashApiKey(record.key),
+      tier: record.tier,
+      name: record.name,
+      createdAt: record.createdAt,
+    };
+  }
+
+  return null;
+}
+
+export function createAuthenticator(keys: ApiKeyRecord[]) {
+  const keyMap = new Map<string, ApiKeyStoredRecord>();
+  for (const record of keys) {
+    const normalized = normalizedRecord(record);
+    if (!normalized) continue;
+    for (const [existingKeyId, existing] of keyMap.entries()) {
+      if (safeEqual(existing.keyHash, normalized.keyHash) && existingKeyId !== normalized.keyId) {
+        console.warn(`Duplicate API key hash detected (name: "${normalized.name}"). Last entry wins.`);
+        keyMap.delete(existingKeyId);
+      }
+    }
+    if (keyMap.has(normalized.keyId)) {
+      console.warn(`Duplicate API key detected (name: "${normalized.name}"). Last entry wins.`);
+    }
+    keyMap.set(normalized.keyId, normalized);
+  }
 
   return {
     authenticate(rawKey: string | undefined): AuthOutcome {
       if (!rawKey) {
-        return { authenticated: false, error: 'API key required. Pass via x-api-key header or apiKey query param.' };
+        return { authenticated: false, error: 'API key required. Pass via x-api-key header or Authorization bearer token.' };
       }
 
+      const submittedHash = hashApiKey(rawKey);
       for (const record of keyMap.values()) {
-        if (safeEqual(rawKey, record.key)) {
-          return { authenticated: true, tier: record.tier, name: record.name };
+        if (safeEqual(submittedHash, record.keyHash)) {
+          return { authenticated: true, tier: record.tier, name: record.name, keyId: record.keyId };
         }
       }
 
@@ -84,17 +147,42 @@ export function createAuthenticator(keys: ApiKeyRecord[]) {
     },
 
     addKey(record: ApiKeyRecord) {
-      keyMap.set(record.key, record);
+      const normalized = normalizedRecord(record);
+      if (normalized) keyMap.set(normalized.keyId, normalized);
     },
 
-    removeKey(key: string) {
-      keyMap.delete(key);
+    removeKey(keyIdOrLegacyKey: string) {
+      keyMap.delete(keyIdOrLegacyKey);
+      keyMap.delete(stableLegacyKeyId(keyIdOrLegacyKey));
+      if (keyIdOrLegacyKey.startsWith(KEY_PREFIX)) {
+        const keyHash = hashApiKey(keyIdOrLegacyKey);
+        for (const [keyId, record] of keyMap.entries()) {
+          if (safeEqual(keyHash, record.keyHash)) {
+            keyMap.delete(keyId);
+          }
+        }
+      }
     },
 
-    listKeys(): Omit<ApiKeyRecord, 'key'>[] {
-      return [...keyMap.values()].map(({ key: _key, ...rest }) => rest);
+    listKeys(): Array<Omit<ApiKeyStoredRecord, 'keyHash'>> {
+      return [...keyMap.values()].map(({ keyHash: _keyHash, ...rest }) => rest);
     },
   };
+}
+
+function isValidRecord(value: unknown): value is ApiKeyRecord {
+  if (typeof value !== 'object' || value === null) return false;
+  const record = value as Record<string, unknown>;
+  const hasHashedKey = typeof record.keyHash === 'string' && HASH_RE.test(record.keyHash);
+  const hasPlaintextKey = typeof record.key === 'string' && record.key.startsWith(KEY_PREFIX);
+  return (
+    (hasHashedKey || hasPlaintextKey) &&
+    (record.keyId === undefined || (typeof record.keyId === 'string' && KEY_ID_RE.test(record.keyId))) &&
+    typeof record.tier === 'string' &&
+    VALID_TIERS.has(record.tier) &&
+    typeof record.name === 'string' &&
+    (record.createdAt === undefined || typeof record.createdAt === 'string')
+  );
 }
 
 export function loadKeysFromEnv(envValue: string | undefined): ApiKeyRecord[] {
@@ -103,14 +191,10 @@ export function loadKeysFromEnv(envValue: string | undefined): ApiKeyRecord[] {
   try {
     const parsed = JSON.parse(envValue);
     if (!Array.isArray(parsed)) return [];
-    return parsed.filter(
-      (r: unknown) =>
-        typeof r === 'object' && r !== null &&
-        typeof (r as Record<string, unknown>).key === 'string' &&
-        typeof (r as Record<string, unknown>).tier === 'string' &&
-        VALID_TIERS.has((r as Record<string, unknown>).tier as string) &&
-        typeof (r as Record<string, unknown>).name === 'string',
-    ) as ApiKeyRecord[];
+    return parsed.filter(isValidRecord).map((record) => ({
+      ...record,
+      createdAt: record.createdAt ?? new Date(0).toISOString(),
+    }));
   } catch (err) {
     console.warn('ACHIOTE_API_KEYS: failed to parse JSON —', err instanceof Error ? err.message : String(err));
     return [];

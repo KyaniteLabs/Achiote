@@ -113,8 +113,11 @@ function assertPackagedHelperScripts(installDir) {
     throw new Error(`Packaged keygen helper failed\nstdout:\n${keygen.stdout}\nstderr:\n${keygen.stderr}`);
   }
   const parsed = JSON.parse(keygen.stdout);
-  if (!/^ach_[0-9a-f]{48}$/.test(parsed.key) || parsed.tier !== 'free' || parsed.name !== 'package-smoke') {
+  if (!/^ach_[0-9a-f]{48}$/.test(parsed.key) || parsed.envRecord?.tier !== 'free' || parsed.envRecord?.name !== 'package-smoke') {
     throw new Error(`Packaged keygen helper returned unexpected record: ${keygen.stdout}`);
+  }
+  if (!/^ak_[0-9a-f]{16}$/.test(parsed.envRecord.keyId) || !/^sha256:[0-9a-f]{64}$/.test(parsed.envRecord.keyHash) || 'key' in parsed.envRecord) {
+    throw new Error(`Packaged keygen helper returned unsafe envRecord: ${keygen.stdout}`);
   }
 }
 
