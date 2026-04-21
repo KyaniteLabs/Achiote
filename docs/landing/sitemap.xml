@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://achiote.app/</loc>
+    <loc>https://github.com/Pastorsimon1798/Achiote</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://achiote.app/about</loc>
+    <loc>https://github.com/Pastorsimon1798/Achiote/tree/master/docs/landing</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>

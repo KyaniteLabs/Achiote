@@ -27,16 +27,6 @@ import type { ZodTypeAny } from 'zod';
 
 const TRUST_PROXY = process.env.ACHIOTE_TRUST_PROXY === 'true';
 
-function getClientIdentifier(req: IncomingMessage): string {
-  if (TRUST_PROXY) {
-    const forwardedFor = req.headers['x-forwarded-for'];
-    if (forwardedFor) {
-      return (Array.isArray(forwardedFor) ? forwardedFor[0] : forwardedFor.split(',')[0]).trim();
-    }
-  }
-  return req.socket.remoteAddress || 'unknown';
-}
-
 import {
   collectFoodMemory,
   planDishResearch,
@@ -51,6 +41,7 @@ import { buildResearchRecord, validateResearchRecord, extractResearchFindings } 
 import { createCache } from './lib/cache-path.js';
 import { createAuthenticator, loadKeysFromEnv } from './lib/auth.js';
 import { createRateLimiter } from './lib/rate-limit.js';
+import { getHttpReadiness, getRequestRateLimitIdentity, shouldApplyRateLimit } from './lib/http-runtime.js';
 import { sanitizeForPrompt } from './tools/results.js';
 import { assembleRecipePrompt } from './lib/recipe-generator.js';
 import type { Tier } from './lib/auth.js';
@@ -73,14 +64,25 @@ const MIME: Record<string, string> = {
   '.ico': 'image/x-icon',
 };
 
-const transports = new Map<string, { transport: StreamableHTTPServerTransport; lastActivity: number }>();
+type McpSessionEntry = {
+  transport: StreamableHTTPServerTransport;
+  mcpServer: ReturnType<typeof createAchioteServer>;
+  lastActivity: number;
+};
+
+const transports = new Map<string, McpSessionEntry>();
 const SESSION_TTL = 30 * 60 * 1000; // 30 minutes
+
+async function closeMcpSession(sid: string, entry: McpSessionEntry): Promise<void> {
+  transports.delete(sid);
+  await Promise.allSettled([entry.transport.close(), entry.mcpServer.close()]);
+}
 
 function sweepStaleSessions(): void {
   const now = Date.now();
   for (const [sid, entry] of transports) {
     if (now - entry.lastActivity > SESSION_TTL) {
-      transports.delete(sid);
+      void closeMcpSession(sid, entry);
     }
   }
 }
@@ -89,7 +91,8 @@ function sweepStaleSessions(): void {
 setInterval(sweepStaleSessions, SESSION_TTL).unref();
 const cache = createCache({});
 const anthropic = new Anthropic({ timeout: 60_000 });
-const authenticator = createAuthenticator(loadKeysFromEnv(process.env.ACHIOTE_API_KEYS));
+const configuredApiKeys = loadKeysFromEnv(process.env.ACHIOTE_API_KEYS);
+const authenticator = createAuthenticator(configuredApiKeys);
 const rateLimiter = createRateLimiter(process.env.ACHIOTE_RATE_LIMIT_DB);
 
 const AUTH_ENABLED = process.env.ACHIOTE_AUTH_ENABLED !== 'false';
@@ -540,13 +543,16 @@ function extractBearer(req: IncomingMessage): string | undefined {
 type AuthedRequest = { tier: Tier; name: string; keyId: string } | null;
 
 function authenticateRequest(req: IncomingMessage): AuthedRequest {
-  if (!AUTH_ENABLED) return { tier: 'free', name: 'anonymous', keyId: 'anon' };
-
   const rawKey = extractApiKey(req) ?? extractBearer(req);
-  const result = authenticator.authenticate(rawKey);
-  if (!result.authenticated) return null;
+  const result = AUTH_ENABLED ? authenticator.authenticate(rawKey) : { authenticated: false as const, error: 'auth disabled' };
 
-  return { tier: result.tier, name: result.name, keyId: rawKey! };
+  return getRequestRateLimitIdentity({
+    authEnabled: AUTH_ENABLED,
+    authenticated: result.authenticated ? { authenticated: true, tier: result.tier, name: result.name, rawKey: rawKey! } : undefined,
+    headers: req.headers,
+    remoteAddress: req.socket.remoteAddress,
+    trustProxy: TRUST_PROXY,
+  });
 }
 
 function sendRateLimitHeaders(res: ServerResponse, limitResult: { remaining: number; limit: number; resetAt: number }): void {
@@ -566,11 +572,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
   }
 
   const authed = authenticateRequest(req);
-  if (!authed) { sendJson(res, 401, { error: 'Unauthorized. Provide a valid API key via x-api-key header or apiKey query param.' }); return; }
-
-  const limitResult = rateLimiter.checkWebLimit(authed.tier, authed.keyId);
-  sendRateLimitHeaders(res, limitResult);
-  if (!limitResult.allowed) { sendJson(res, 429, { error: 'Rate limit exceeded. Upgrade your plan for more reconstructions.' }); return; }
+  if (!authed) { sendJson(res, 401, { error: 'Unauthorized. Provide a valid API key via x-api-key header or Authorization bearer token.' }); return; }
 
   let raw: string;
   try {
@@ -587,6 +589,12 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
 
   const userMessage = parsed.message?.trim();
   if (!userMessage) { sendJson(res, 400, { error: 'message is required' }); return; }
+
+  if (shouldApplyRateLimit({ contentType, parsedBody: parsed })) {
+    const limitResult = rateLimiter.checkWebLimit(authed.tier, authed.keyId);
+    sendRateLimitHeaders(res, limitResult);
+    if (!limitResult.allowed) { sendJson(res, 429, { error: 'Rate limit exceeded. Upgrade your plan for more reconstructions.' }); return; }
+  }
 
   res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', Connection: 'keep-alive' });
 
@@ -731,12 +739,20 @@ const server = createServer(async (req, res) => {
 
   const pathname = req.url?.split('?')[0].replace(/\/$/, '') ?? '';
 
-  if (pathname === '/health') {
-    sendJson(res, 200, {
-      status: 'ok',
+  if (pathname === '/health' || pathname === '/ready') {
+    const readiness = getHttpReadiness({
+      authEnabled: AUTH_ENABLED,
+      apiKeyCount: configuredApiKeys.length,
+      anthropicApiKey: process.env.ANTHROPIC_API_KEY,
+      cacheAvailable: cache !== null,
+      rateLimitPersistenceConfigured: Boolean(process.env.ACHIOTE_RATE_LIMIT_DB),
+    });
+    sendJson(res, pathname === '/ready' && !readiness.ready ? 503 : 200, {
+      status: pathname === '/health' ? 'ok' : readiness.status,
       version: '0.2.0',
       authEnabled: AUTH_ENABLED,
       activeSessions: transports.size,
+      readiness,
       memory: process.memoryUsage(),
       uptime: process.uptime(),
     });
@@ -775,15 +791,18 @@ const server = createServer(async (req, res) => {
         }
 
         if (req.method === 'POST' && isInitializeRequest(parsed)) {
+          const mcpServer = createAchioteServer();
           transport = new StreamableHTTPServerTransport({
             sessionIdGenerator: () => randomUUID(),
-            onsessioninitialized: (sid) => { transports.set(sid, { transport: transport!, lastActivity: Date.now() }); },
+            onsessioninitialized: (sid) => { transports.set(sid, { transport: transport!, mcpServer, lastActivity: Date.now() }); },
           });
           transport.onclose = () => {
             const sid = transport!.sessionId;
-            if (sid) transports.delete(sid);
+            if (sid) {
+              const entry = transports.get(sid);
+              if (entry) void closeMcpSession(sid, entry);
+            }
           };
-          const mcpServer = createAchioteServer();
           await mcpServer.connect(transport);
           await transport.handleRequest(req, res, parsed);
           return;
@@ -827,13 +846,17 @@ server.listen(PORT, () => {
   console.log(`Achiote — http://localhost:${PORT}`);
 });
 
-process.on('SIGINT', async () => {
-  for (const [sid, entry] of transports) {
-    try { await entry.transport.close(); } catch { /* ignore */ }
-    transports.delete(sid);
-  }
+async function shutdown(): Promise<void> {
+  await Promise.allSettled([...transports].map(([sid, entry]) => closeMcpSession(sid, entry)));
   cache?.close();
   rateLimiter.close();
   server.close();
-  process.exit(0);
+}
+
+process.on('SIGINT', () => {
+  void shutdown().finally(() => process.exit(0));
+});
+
+process.on('SIGTERM', () => {
+  void shutdown().finally(() => process.exit(0));
 });

@@ -29,7 +29,7 @@ Primary risks are:
 
 ### HTTP server security
 
-- **Authentication** — configurable via `ACHIOTE_AUTH_ENABLED` env var. When enabled, requires API key via `x-api-key` header or `?apiKey=` query param. Keys are tiered (free/pro/business/enterprise).
+- **Authentication** — configurable via `ACHIOTE_AUTH_ENABLED` env var. When enabled, requires API key via `x-api-key` header or `Authorization: Bearer` header. Keys are tiered (free/pro/business/enterprise).
 - **Rate limiting** — tiered per calendar month. Free tier: 50 MCP calls, 3 web reconstructions. Rate limit headers exposed in responses.
 - **`/ask` endpoint** — SSE streaming AI agent endpoint. Validates content-type, parses JSON body, enforces rate limits before calling Anthropic API. User messages are embedded in prompts inside `<user_input>` tags with a "do not follow instructions" directive.
 - **Body size** — 1MB limit on request bodies.
