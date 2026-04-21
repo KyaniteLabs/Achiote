@@ -1014,10 +1014,18 @@ function enforceKnownConstraintTerms(text: string, classes: Set<ConstraintClass>
       [/\brender fat\b/gi, 'carry oil-soluble browning notes'],
     ]);
   } else if (hasAnyConstraint(classes, ['halal', 'kosher', 'pork-free'])) {
-    rewritten = replaceConstraintText(rewritten, [
-      [/\bground pork\b|\bpork\b/gi, 'certified compliant protein'],
-      [/\brendered fat\b/gi, 'certified compliant fat or oil'],
-    ]);
+    const compliantProteinReplacements: Array<[RegExp, string]> = hasAnyConstraint(classes, ['halal', 'kosher'])
+      ? [
+          [/\bfat-rendered\b/gi, 'certified compliant fat-driven'],
+          [/\bground pork\b|\bpork\b|\bchicken thigh\b|\bchicken\b|\bbeef\b|\blamb\b|\bmeat\b/gi, 'certified compliant protein'],
+          [/\brendered fat\b/gi, 'certified compliant fat or oil'],
+          [/\brender fat\b/gi, 'carry certified compliant fat-soluble browning notes'],
+        ]
+      : [
+          [/\bground pork\b|\bpork\b/gi, 'pork-free protein'],
+          [/\brendered fat\b/gi, 'pork-free fat or oil'],
+        ];
+    rewritten = replaceConstraintText(rewritten, compliantProteinReplacements);
   }
 
   if (classes.has('dairy-free')) {

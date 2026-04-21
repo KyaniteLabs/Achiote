@@ -219,6 +219,18 @@ describe('minimum viable nostalgia cue', () => {
     expect(cue.safetyNotes.join(' ').toLowerCase()).toContain('halal');
   });
 
+  it('qualifies animal proteins instead of naming pork or chicken for halal constraints', () => {
+    const cue = generateMinimumViableNostalgiaCue({
+      dossier: spicedSausageMashDossier(),
+      constraints: ['halal'],
+      maxEffortMinutes: 20,
+    });
+    const recommendationText = cueRecommendationText(cue);
+
+    expect(recommendationText).not.toMatch(/ground pork|pork|chicken thigh|rendered fat/);
+    expect(recommendationText).toMatch(/certified compliant (?:protein|meat|fat)/);
+  });
+
   it('rewrites carriers for common gluten-free constraint phrasing', () => {
     const cue = generateMinimumViableNostalgiaCue({
       dossier: carimanolaDossier(),
