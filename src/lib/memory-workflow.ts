@@ -964,7 +964,7 @@ const CONSTRAINT_PATTERNS: Array<[ConstraintClass, RegExp]> = [
   ['vegan', /\bvegan\b|\bno animal products?\b|\bplant[-\s]?based\b/i],
   ['vegetarian', /\bvegetarian\b|\bmeat[-\s]?free\b|\bno meat\b/i],
   ['gluten-free', /\bgluten[-\s]?free\b|\bceliac\b|\bcoeliac\b|\bno gluten\b|\bwheat[-\s]?free\b/i],
-  ['nut-allergy', /\bnut allerg|\bpeanut allerg|\btree nut\b|\bpeanut[-\s]?free\b|\bnut[-\s]?free\b|\bno peanuts?\b|\bno nuts?\b|\ballergic to (?:peanuts?|nuts?)\b/i],
+  ['nut-allergy', /\bnut allerg|\bpeanut allerg|\btree nuts?\b|\bpeanut[-\s]?free\b|\bnut[-\s]?free\b|\bno peanuts?\b|\bno nuts?\b|\ballergic to (?:peanuts?|tree nuts?|nuts?)\b/i],
   ['halal', /\bhalal\b/i],
   ['kosher', /\bkosher\b/i],
   ['dairy-free', /\bdairy[-\s]?free\b|\blactose[-\s]?free\b|\bno dairy\b|\blactose intolerant\b|\bmilk allerg|\bno milk\b/i],

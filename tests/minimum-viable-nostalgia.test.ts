@@ -260,12 +260,12 @@ describe('minimum viable nostalgia cue', () => {
     expect(safety).toContain('peanut allergy');
   });
 
-  it('removes coconut and dairy cues when tree nut allergy overlaps dairy-free', () => {
+  it('removes coconut and dairy cues when plural tree nut allergy phrasing overlaps dairy-free', () => {
     const memory = collectFoodMemory({ memoryText: 'warm sour soup with dill and creamy body' });
     const dossier = buildReconstructionDossier({ memory, researchPlan: planDishResearch(memory) });
     const cue = generateMinimumViableNostalgiaCue({
       dossier,
-      constraints: ['tree nut allergy', 'no dairy'],
+      constraints: ['allergic to tree nuts', 'no dairy'],
       maxEffortMinutes: 12,
     });
     const recommendationText = cueRecommendationText(cue);
