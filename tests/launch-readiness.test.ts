@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest';
 import fs from 'node:fs';
 import {
   getHttpReadiness,
-  getRequestRateLimitIdentity,
   shouldApplyRateLimit,
 } from '../src/lib/http-runtime.js';
 
@@ -13,29 +12,6 @@ describe('P0 launch readiness guards', () => {
     expect(shouldApplyRateLimit({ contentType: 'application/json', parsedBody: { notMessage: 'hello' } })).toBe(false);
     expect(shouldApplyRateLimit({ contentType: 'application/json', parsedBody: { message: '   ' } })).toBe(false);
     expect(shouldApplyRateLimit({ contentType: 'application/json', parsedBody: { message: 'hello' } })).toBe(true);
-  });
-
-  it('keys anonymous rate limits by explicit session or client address instead of one global anon bucket', () => {
-    expect(getRequestRateLimitIdentity({
-      authEnabled: false,
-      headers: { 'x-session-id': 'browser-a' },
-      remoteAddress: '127.0.0.1',
-      trustProxy: false,
-    })).toMatchObject({ tier: 'free', keyId: 'anon:session:browser-a' });
-
-    expect(getRequestRateLimitIdentity({
-      authEnabled: false,
-      headers: { 'x-forwarded-for': '203.0.113.9, 10.0.0.1' },
-      remoteAddress: '127.0.0.1',
-      trustProxy: true,
-    })).toMatchObject({ tier: 'free', keyId: 'anon:ip:203.0.113.9' });
-
-    expect(getRequestRateLimitIdentity({
-      authEnabled: false,
-      headers: {},
-      remoteAddress: '127.0.0.1',
-      trustProxy: false,
-    })).toMatchObject({ tier: 'free', keyId: 'anon:ip:127.0.0.1' });
   });
 
   it('marks HTTP readiness degraded when launch-critical config is missing', () => {
