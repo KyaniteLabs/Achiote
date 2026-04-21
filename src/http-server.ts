@@ -730,6 +730,8 @@ const server = createServer(async (req, res) => {
       version: '0.2.0',
       authEnabled: AUTH_ENABLED,
       activeSessions: transports.size,
+      memory: process.memoryUsage(),
+      uptime: process.uptime(),
     });
     return;
   }

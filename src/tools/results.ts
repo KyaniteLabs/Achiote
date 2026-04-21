@@ -1,7 +1,9 @@
 export type ToolPayload = Record<string, unknown>;
 
 export function sanitizeForPrompt(value: string): string {
-  const stripped = value.replace(/<\/?\s*user_input\s*>/g, '');
+  const stripped = value
+    .replace(/<\/?\s*user_input\s*>/g, '')
+    .replace(/[\x00-\x08\x0b\x0c\x0e-\x1f]/g, '');
   return JSON.stringify(stripped);
 }
 
