@@ -102,6 +102,18 @@ export const discoverRegionalSimilarsOutputSchema = z.object({
   promptForAgent: z.string(),
 });
 
+export const RECIPE_OUTPUT_FIELDS: Record<string, string> = {
+  title: 'string - Recipe name (e.g., "Recreated [Dish Name]")',
+  yield: 'string - Number of servings',
+  prepTime: 'string - Preparation time',
+  cookTime: 'string - Cooking time',
+  ingredients: 'Array of { item: string, amount: string, notes?: string }',
+  steps: 'Array of step-by-step instruction strings',
+  sensoryAnalysis: 'string - Summary of sensory recreation strategy',
+  confidencePerElement: 'Record<string, "High" | "Medium" | "Low"> - Confidence per key sensory element',
+  whatsDifferent: 'string - Honest assessment of what will differ and why',
+};
+
 export const generateRecipeOutputSchema = z.object({
   dishDescription: z.string(),
   location: z.string(),

@@ -29,6 +29,24 @@ describe('findMatchingRegion', () => {
     expect(findMatchingRegion('antarctica-research-station')).toBeNull();
   });
 
+  it('matches hyphenated input (southern-california)', () => {
+    const result = findMatchingRegion('southern-california');
+    expect(result).not.toBeNull();
+    expect(result!.key).toBe('southern-california');
+  });
+
+  it('matches hyphenated input (bay-area)', () => {
+    const result = findMatchingRegion('bay-area');
+    expect(result).not.toBeNull();
+    expect(result!.key).toBe('bay-area');
+  });
+
+  it('matches mixed-case hyphenated input', () => {
+    const result = findMatchingRegion('New-York-Metro');
+    expect(result).not.toBeNull();
+    expect(result!.key).toBe('new-york-metro');
+  });
+
   it('returns data with expected structure', () => {
     const result = findMatchingRegion('atlanta-metro');
     expect(result).not.toBeNull();

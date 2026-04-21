@@ -1,18 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { Client } from '@modelcontextprotocol/sdk/client/index.js';
-import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js';
-import { createAchioteServer } from '../src/index.js';
+import { withClient } from './helpers/mcp-client.js';
 
 describe('research provenance MCP tools', () => {
-  async function withClient<T>(run: (client: Client) => Promise<T>): Promise<T> {
-    const server = createAchioteServer({ enableCache: false });
-    const client = new Client({ name: 'research-provenance-test', version: '0.0.0' });
-    const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
-    await server.connect(serverTransport);
-    await client.connect(clientTransport);
-    try { return await run(client); } finally { await client.close(); await server.close(); }
-  }
-
   it('builds, validates, and extracts findings from sourced research facts', async () => {
     await withClient(async (client) => {
       const record = await client.callTool({
