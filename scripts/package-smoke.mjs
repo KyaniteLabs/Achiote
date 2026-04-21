@@ -11,23 +11,10 @@ import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js'
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, '..');
 const npmCommand = process.platform === 'win32' ? 'npm.cmd' : 'npm';
-const expectedTools = [
-  'analyze_nostalgic_dish',
-  'build_reconstruction_dossier',
-  'build_research_record',
-  'collect_food_memory',
-  'discover_regional_similars',
-  'extract_research_findings',
-  'find_sensory_substitutes',
-  'generate_family_followup_questions',
-  'generate_minimum_viable_nostalgia',
-  'generate_recipe',
-  'plan_dish_research',
-  'resolve_dish_name',
-  'source_ingredients',
-  'validate_recipe_output',
-  'validate_research_record',
-];
+async function loadExpectedTools() {
+  const registry = await import(path.join(repoRoot, 'dist', 'tools', 'tool-registry.js'));
+  return registry.toolNames;
+}
 
 function run(command, args, options = {}) {
   const printable = [command, ...args].join(' ');
@@ -158,7 +145,7 @@ async function assertPackagedHttpServerStarts(installDir, tempRoot) {
   }
 }
 
-async function assertPackagedCliListsTools(installDir, tempRoot) {
+async function assertPackagedCliListsTools(installDir, tempRoot, expectedTools) {
   const cliPath = installedBinPath(installDir);
   if (!fs.existsSync(cliPath)) {
     throw new Error(`Installed CLI bin was not found at ${cliPath}`);
@@ -222,8 +209,10 @@ async function main() {
       cwd: installDir,
     });
 
+    const expectedTools = await loadExpectedTools();
+
     console.log('Checking packaged CLI MCP tools/list response');
-    await assertPackagedCliListsTools(installDir, tempRoot);
+    await assertPackagedCliListsTools(installDir, tempRoot, expectedTools);
 
     console.log('Checking packaged helper scripts');
     assertPackagedHelperScripts(installDir);
