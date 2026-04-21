@@ -1,7 +1,7 @@
 {
   "name": "achiote",
   "version": "0.2.0",
-  "description": "Nostalgic food memory reconstruction MCP server — recreates childhood dishes using ingredients available where you are",
+  "description": "Nostalgic food memory reconstruction MCP server \u2014 recreates childhood dishes using ingredients available where you are",
   "main": "dist/index.js",
   "type": "module",
   "scripts": {
@@ -15,7 +15,9 @@
     "validate:citations": "node scripts/validate-citations.mjs",
     "pack:check": "npm run check && npm run package:smoke && npm pack --dry-run",
     "package:smoke": "node scripts/package-smoke.mjs",
-    "prepack": "npm run build"
+    "prepack": "npm run build",
+    "keygen": "node scripts/generate-api-key.mjs",
+    "docker:smoke": "node scripts/docker-smoke.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.90.0",

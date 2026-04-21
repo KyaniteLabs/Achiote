@@ -958,15 +958,39 @@ function foodScienceCueProfile(signals: string, userLocation?: string, overallCo
   };
 }
 
+function buildConstraintGuidance(constraints?: string[]): Pick<FoodScienceCueProfile, 'accessibilityPrinciples' | 'substituteLogic' | 'safetyNotes'> {
+  const normalized = unique((constraints ?? []).map((constraint) => constraint.trim()).filter(Boolean));
+  if (normalized.length === 0) return { accessibilityPrinciples: [], substituteLogic: [], safetyNotes: [] };
+
+  const joined = normalized.join(', ');
+  return {
+    accessibilityPrinciples: [
+      `Honor user constraints before nostalgia matching: ${joined}.`,
+      'Choose the cheapest accessible proxy that satisfies the constraint instead of treating the exact ingredient as mandatory.',
+    ],
+    substituteLogic: [
+      `For constraints (${joined}), match the sensory mechanism with compliant carriers; do not use restricted ingredients just because they are traditional.`,
+    ],
+    safetyNotes: [
+      `Do not use ingredients that conflict with these user constraints: ${joined}.`,
+      'For allergies, use clean utensils and avoid cross-contact; if uncertain, do not taste the cue.',
+    ],
+  };
+}
+
 export function generateMinimumViableNostalgiaCue(input: MinimumViableNostalgiaInput): MinimumViableNostalgiaCue {
   const signals = textSignals(input);
   const effort = input.maxEffortMinutes;
   const maxEffort = Number.isFinite(effort) ? Math.max(1, effort!) : 20;
   const confidence = input.researchFindings?.confidence ?? input.dossier.confidence;
   const profile = foodScienceCueProfile(signals, input.userLocation, confidence);
+  const constraintGuidance = buildConstraintGuidance(input.constraints);
 
   return {
     ...profile,
+    accessibilityPrinciples: unique([...profile.accessibilityPrinciples, ...constraintGuidance.accessibilityPrinciples]),
+    substituteLogic: unique([...profile.substituteLogic, ...constraintGuidance.substituteLogic]),
+    safetyNotes: unique([...profile.safetyNotes, ...constraintGuidance.safetyNotes]),
     effortMinutes: Math.min(maxEffort, profile.effortMinutes),
     confidence: profile.title === 'Minimum viable memory-probe cue' ? 'Low' : confidence,
   };

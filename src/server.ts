@@ -33,11 +33,12 @@ import {
   researchRecordInputSchema,
   researchRecordOutputSchema,
   researchValidationOutputSchema,
+  recipeValidationOutputSchema,
   readOnlyAnnotations,
   sourceIngredientsOutputSchema,
 } from './schemas/tool-schemas.js';
 import { structuredJsonResult, toolError, sanitizeForPrompt, type ToolPayload } from './tools/results.js';
-import { assembleRecipePrompt } from './lib/recipe-generator.js';
+import { assembleRecipePrompt, validateRecipeOutput } from './lib/recipe-generator.js';
 
 export type { AchioteServerOptions } from './lib/cache-path.js';
 
@@ -559,6 +560,27 @@ For each similar dish:
         return structuredJsonResult({ ...result });
       } catch (error) {
         return toolError(error, 'generate_recipe_failed');
+      }
+    },
+  );
+
+  server.registerTool(
+    'validate_recipe_output',
+    {
+      title: 'Validate Recipe Output',
+      description: 'Validate a host-synthesized final recipe object against the expected Achiote recipe schema before presenting it as structured output.',
+      inputSchema: {
+        recipe: z.unknown().describe('Host-synthesized recipe object to validate after generate_recipe handoff'),
+      },
+      outputSchema: recipeValidationOutputSchema,
+      annotations: readOnlyAnnotations,
+    },
+    async ({ recipe }) => {
+      try {
+        const issues = validateRecipeOutput(recipe);
+        return structuredJsonResult({ valid: issues.length === 0, issues });
+      } catch (error) {
+        return toolError(error, 'validate_recipe_output_failed');
       }
     },
   );

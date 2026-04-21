@@ -4,7 +4,7 @@ import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js';
 import { createAchioteServer } from '../src/index.js';
 
 describe('Achiote MCP server', () => {
-  it('registers six annotated tools with structured output schemas', async () => {
+  it('registers annotated tools with structured output schemas', async () => {
     const server = createAchioteServer({ enableCache: false });
     const client = new Client({ name: 'achiote-test', version: '0.0.0' });
     const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
@@ -28,6 +28,7 @@ describe('Achiote MCP server', () => {
         'plan_dish_research',
         'resolve_dish_name',
         'source_ingredients',
+        'validate_recipe_output',
         'validate_research_record',
       ]);
       for (const tool of tools) {

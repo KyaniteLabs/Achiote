@@ -46,7 +46,7 @@ A polished static landing page lives at [`docs/landing/index.html`](docs/landing
 
 ## What It Does Today
 
-Achiote is a research-first food-memory reconstruction server. It provides 14 MCP tools that let a host AI chat client run the workflow from a fragment to a minimum viable nostalgia cue, with optional sourcing/substitution and recipe handoff if the user wants more:
+Achiote is a research-first food-memory reconstruction server. It provides 15 MCP tools that let a host AI chat client run the workflow from a fragment to a minimum viable nostalgia cue, with optional sourcing/substitution and recipe handoff if the user wants more:
 
 | Stage | Tool | Implemented behavior |
 |------|------|----------------------|
@@ -58,10 +58,11 @@ Achiote is a research-first food-memory reconstruction server. It provides 14 MC
 | Name resolution | `resolve_dish_name` | Resolves names to broad families and ambiguity-aware candidates using bundled aliases, fuzzy matching, and transliterations. |
 | Sensory analysis | `analyze_nostalgic_dish` | Returns sensory-dimension criteria and a bounded prompt for the host model to analyze nostalgia-critical elements. |
 | Substitution | `find_sensory_substitutes` | Returns compound/group-matched substitutes from bundled ingredient data, plus regional hints when available. |
-| Sourcing | `source_ingredients` | Returns static regional store/corridor hints and a host-model prompt for sourcing. It does not perform live inventory or price lookup. |
+| Sourcing | `source_ingredients` | Returns static regional store/corridor hints and a host-model prompt for sourcing. It returns static sourcing guidance, not live inventory, and does not perform live price lookup. |
 | Regional comparison | `discover_regional_similars` | Returns bundled dish-family context and a host-model prompt for neighboring/regional comparisons. |
 | Minimum viable nostalgia cue | `generate_minimum_viable_nostalgia` | Produces the smallest practical aroma, bite, sip, condiment, or ritual to test the likely memory trigger before attempting a full recipe. It prioritizes cheap, accessible, easy-to-find proxies and explains the substitute logic instead of defaulting to exact specialty ingredients. |
 | Optional recipe handoff | `generate_recipe` | Returns an expected recipe schema and a bounded host-model prompt for recipe generation and self-critique. Use only after the minimum viable cue has been presented and the user wants something more complex. |
+| Recipe validation | `validate_recipe_output` | Validates a host-synthesized final recipe object against the expected schema before treating it as structured output. |
 
 All tools return MCP `structuredContent`. Most tools also display JSON text; intake tools may display a short human-readable summary so Claude Code output stays readable while structured data remains available to the host.
 
@@ -132,7 +133,7 @@ node dist/http-server.js
 | `POST /ask` | SSE streaming AI agent (auth + rate limited) |
 | `POST /mcp` | Streamable HTTP MCP transport |
 
-Authentication is enabled by default for the HTTP server. Configure `ACHIOTE_API_KEYS` for `/ask` and `/mcp`, or set `ACHIOTE_AUTH_ENABLED=false` only for local demos. Port defaults to 3000, configurable via `PORT` env var.
+Authentication is enabled by default for the HTTP server. Configure `ACHIOTE_API_KEYS` for `/ask` and `/mcp`, or set `ACHIOTE_AUTH_ENABLED=false` only for local demos. Generate a self-hosted key with `npm run keygen -- --tier pro --name admin`. Port defaults to 3000, configurable via `PORT` env var.
 
 ## Cache and privacy
 
@@ -155,6 +156,7 @@ npm run check                  # Typecheck + build + tests
 npm audit --audit-level=moderate
 npm run package:smoke          # Pack, install in temp project, and verify packaged MCP CLI
 npm run pack:check             # Full release gate
+npm run docker:smoke           # Build the Docker image for a container smoke check
 npm pack --dry-run             # Inspect publish contents
 npm start                      # Start the MCP server after build
 ```

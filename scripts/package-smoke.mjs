@@ -25,6 +25,7 @@ const expectedTools = [
   'plan_dish_research',
   'resolve_dish_name',
   'source_ingredients',
+  'validate_recipe_output',
   'validate_research_record',
 ];
 
