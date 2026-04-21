@@ -91,6 +91,8 @@ This executes through the full MCP workflow and is covered by `tests/reconstruct
 
 ## Installation
 
+Achiote is not published to npm yet. Use a source checkout, a Git URL install, or the tarball produced by `npm pack` until the package is published.
+
 ```bash
 npm ci
 npm run build
@@ -130,7 +132,7 @@ node dist/http-server.js
 | `POST /ask` | SSE streaming AI agent (auth + rate limited) |
 | `POST /mcp` | Streamable HTTP MCP transport |
 
-Set `ACHIOTE_AUTH_ENABLED=true` to require API key authentication. Port defaults to 3000, configurable via `PORT` env var.
+Authentication is enabled by default for the HTTP server. Configure `ACHIOTE_API_KEYS` for `/ask` and `/mcp`, or set `ACHIOTE_AUTH_ENABLED=false` only for local demos. Port defaults to 3000, configurable via `PORT` env var.
 
 ## Cache and privacy
 

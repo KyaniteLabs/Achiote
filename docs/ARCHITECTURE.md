@@ -38,7 +38,7 @@ src/http-server.ts
       POST /ask        → SSE streaming AI agent (auth + rate limited)
       POST /mcp        → Streamable HTTP MCP transport
       GET  /static/*   → JS/CSS assets
-  - auth: x-api-key header or ?apiKey= query param (configurable via ACHIOTE_AUTH_ENABLED)
+  - auth: x-api-key header or Authorization bearer token (configurable via ACHIOTE_AUTH_ENABLED)
   - rate limiting: tiered (free/pro/business/enterprise) per calendar month
   - shares tool execution logic with src/server.ts
 ```
