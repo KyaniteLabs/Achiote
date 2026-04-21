@@ -46,6 +46,7 @@ describe('package distribution metadata', () => {
     expect(pkg.scripts['coverage:guard']).toBe('node scripts/coverage-threshold.mjs');
     expect(pkg.scripts.keygen).toBe('node scripts/generate-api-key.mjs');
     expect(pkg.scripts['docker:smoke']).toBe('node scripts/docker-smoke.mjs');
+    expect(pkg.scripts['live:ask']).toBe('node scripts/live-ask-smoke.mjs');
     expect(pkg.scripts['pack:check']).toBe('npm run check && npm run package:smoke && npm pack --dry-run');
     expect(pkg.scripts['package:smoke']).toBe('node scripts/package-smoke.mjs');
   });
@@ -62,6 +63,15 @@ describe('package distribution metadata', () => {
     expect(smokeScript).toContain("await withTimeout(exited, 5_000, 'packaged HTTP shutdown');");
   });
 
+
+  it('keeps live ask smoke diagnostics graceful', () => {
+    const liveSmokeScript = fs.readFileSync('scripts/live-ask-smoke.mjs', 'utf8');
+
+    expect(liveSmokeScript).toContain('function cleanupListeners()');
+    expect(liveSmokeScript).toContain('Malformed text event JSON');
+    expect(liveSmokeScript).toContain('parseTextPayload');
+  });
+
 });
 
 
@@ -69,5 +79,6 @@ describe('packaged helper scripts', () => {
   it('ships helper scripts referenced by package metadata', () => {
     expect(fs.existsSync('scripts/generate-api-key.mjs')).toBe(true);
     expect(fs.existsSync('scripts/docker-smoke.mjs')).toBe(true);
+    expect(fs.existsSync('scripts/live-ask-smoke.mjs')).toBe(true);
   });
 });
