@@ -117,7 +117,7 @@ export function getHttpReadiness(input: HttpReadinessInput): HttpReadiness {
     {
       name: 'cache',
       ok: input.cacheAvailable,
-      message: input.cacheAvailable ? 'research cache is available' : 'research cache failed to initialize',
+      message: input.cacheAvailable ? 'research cache is available' : 'research cache failed to initialize or fell back to a different path',
     },
     {
       name: 'rateLimitPersistence',

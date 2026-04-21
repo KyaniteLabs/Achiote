@@ -39,7 +39,7 @@ import { resolveDishName } from './lib/name-resolver.js';
 import { findSubstitutes } from './lib/substitution-engine.js';
 import { findMatchingRegion } from './lib/regional-matcher.js';
 import { buildResearchRecord, validateResearchRecord, extractResearchFindings } from './lib/research-provenance.js';
-import { createCache } from './lib/cache-path.js';
+import { createCacheWithStatus } from './lib/cache-path.js';
 import { createAuthenticator, loadKeysFromEnv } from './lib/auth.js';
 import { createRateLimiter } from './lib/rate-limit.js';
 import { getHttpReadiness, getRequestRateLimitIdentity, shouldApplyRateLimit } from './lib/http-runtime.js';
@@ -90,7 +90,8 @@ function sweepStaleSessions(): void {
 
 // Periodic cleanup of stale sessions to prevent memory leak
 setInterval(sweepStaleSessions, SESSION_TTL).unref();
-const cache = createCache({});
+const cacheState = createCacheWithStatus({});
+const cache = cacheState.cache;
 const anthropic = new Anthropic({ timeout: 60_000 });
 const configuredApiKeys = loadKeysFromEnv(process.env.ACHIOTE_API_KEYS);
 const authenticator = createAuthenticator(configuredApiKeys);
@@ -766,7 +767,7 @@ const server = createServer(async (req, res) => {
       authEnabled: AUTH_ENABLED,
       apiKeyCount: configuredApiKeys.length,
       anthropicApiKey: process.env.ANTHROPIC_API_KEY,
-      cacheAvailable: cache !== null,
+      cacheAvailable: cache !== null && !cacheState.fallbackUsed,
       rateLimitPersistenceConfigured: Boolean(process.env.ACHIOTE_RATE_LIMIT_DB),
     });
     sendJson(res, pathname === '/ready' && !readiness.ready ? 503 : 200, {

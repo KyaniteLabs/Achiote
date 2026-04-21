@@ -13,3 +13,5 @@ coverage/
 .omc/
 .worktrees/
 .playwright-mcp/
+
+.claude/
