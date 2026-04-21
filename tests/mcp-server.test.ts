@@ -130,9 +130,9 @@ describe('Achiote MCP server', () => {
         arguments: {
           dishDescription: adversarial,
           location: adversarial,
-          sensoryAnalysis: adversarial,
-          substitutions: adversarial,
-          sourcing: adversarial,
+          sensoryAnalysis: { description: adversarial, region: adversarial, sensoryDimensions: {}, nostalgiaCriticalCriteria: 'test', promptForAgent: 'test' },
+          substitutions: { ingredient: adversarial, location: adversarial, mode: 'prompt-only', promptForAgent: 'test' },
+          sourcing: { ingredients: [adversarial], location: adversarial, promptForAgent: 'test' },
         },
         expectedQuotedFields: [adversarial],
       },
@@ -168,7 +168,7 @@ describe('Achiote MCP server', () => {
       { name: 'find_sensory_substitutes', arguments: { ingredient: adversarial, location: 'test' } },
       { name: 'source_ingredients', arguments: { ingredients: [adversarial], location: 'test' } },
       { name: 'discover_regional_similars', arguments: { dishName: adversarial, region: 'test' } },
-      { name: 'generate_recipe', arguments: { dishDescription: adversarial, location: 'test', sensoryAnalysis: '{}', substitutions: '{}', sourcing: '{}' } },
+      { name: 'generate_recipe', arguments: { dishDescription: adversarial, location: 'test', sensoryAnalysis: { description: 'test', region: 'test', sensoryDimensions: {}, nostalgiaCriticalCriteria: 'test', promptForAgent: 'test' }, substitutions: { ingredient: 'test', location: 'test', mode: 'prompt-only', promptForAgent: 'test' }, sourcing: { ingredients: ['test'], location: 'test', promptForAgent: 'test' } } },
     ];
 
     await server.connect(serverTransport);

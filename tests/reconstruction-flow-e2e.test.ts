@@ -1,24 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { Client } from '@modelcontextprotocol/sdk/client/index.js';
-import { InMemoryTransport } from '@modelcontextprotocol/sdk/inMemory.js';
-import { createAchioteServer } from '../src/index.js';
+import { withClient } from './helpers/mcp-client.js';
 
 describe('food memory reconstruction e2e flow', () => {
-  async function withClient<T>(run: (client: Client) => Promise<T>): Promise<T> {
-    const server = createAchioteServer({ enableCache: false });
-    const client = new Client({ name: 'reconstruction-e2e-test', version: '0.0.0' });
-    const [clientTransport, serverTransport] = InMemoryTransport.createLinkedPair();
-
-    await server.connect(serverTransport);
-    await client.connect(clientTransport);
-    try {
-      return await run(client);
-    } finally {
-      await client.close();
-      await server.close();
-    }
-  }
-
   it('executes memory fragment to research dossier to recipe-generation handoff', async () => {
     await withClient(async (client) => {
       const collected = await client.callTool({
@@ -134,9 +117,9 @@ describe('food memory reconstruction e2e flow', () => {
         arguments: {
           dishDescription: 'Best-effort Puerto Rican food-memory reconstruction for pass-teh-lay fragment',
           location: 'Orlando, FL',
-          sensoryAnalysis: JSON.stringify(sensory.structuredContent),
-          substitutions: JSON.stringify(substitutes.structuredContent),
-          sourcing: JSON.stringify(sourcing.structuredContent),
+          sensoryAnalysis: sensory.structuredContent,
+          substitutions: substitutes.structuredContent,
+          sourcing: sourcing.structuredContent,
         },
       });
       expect(recipe.isError).not.toBe(true);

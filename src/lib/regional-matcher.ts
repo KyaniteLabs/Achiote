@@ -10,7 +10,7 @@ export type MatchedRegion = {
 };
 
 export function findMatchingRegion(location: string): MatchedRegion | null {
-  const normalized = location.toLowerCase().trim();
+  const normalized = location.toLowerCase().trim().replace(/-/g, ' ');
   if (normalized.length < 2) return null;
 
   for (const [key, data] of Object.entries(regionalData.regions)) {

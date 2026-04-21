@@ -52,11 +52,12 @@ import { createCache } from './lib/cache-path.js';
 import { createAuthenticator, loadKeysFromEnv } from './lib/auth.js';
 import { createRateLimiter } from './lib/rate-limit.js';
 import { sanitizeForPrompt } from './tools/results.js';
+import { assembleRecipePrompt } from './lib/recipe-generator.js';
 import type { Tier } from './lib/auth.js';
 import sensoryProfilesData from './data/sensory-profiles.json' with { type: 'json' };
 import dishFamiliesData from './data/dish-families.json' with { type: 'json' };
 
-const PORT = 3000;
+const PORT = parseInt(process.env.PORT || '3000', 10);
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const STATIC_DIR = resolve(__dirname, '..', 'docs', 'landing');
 const ALLOWED_ORIGINS = (process.env.ACHIOTE_ALLOWED_ORIGINS || 'http://localhost:3000').split(',');
@@ -490,37 +491,19 @@ function executeTool(name: string, raw: unknown): any {
       return generateMinimumViableNostalgiaCue(input as unknown as Parameters<typeof generateMinimumViableNostalgiaCue>[0]);
 
     case 'generate_recipe': {
-      const dishDescription = input.dishDescription as string;
-      const location = input.location as string;
-      const sensoryAnalysis = input.sensoryAnalysis as string;
-      const substitutions = input.substitutions as string;
-      const sourcing = input.sourcing as string;
+      const sensoryAnalysis = input.sensoryAnalysis;
+      const substitutions = input.substitutions;
+      const sourcing = input.sourcing;
       if (!sensoryAnalysis || !substitutions || !sourcing) {
         throw new Error('generate_recipe requires completed sensory analysis, substitutions, and sourcing from prior pipeline steps');
       }
-      return {
-        dishDescription,
-        location,
-        expectedOutputSchema: {
-          title: 'string - Recipe name',
-          yield: 'string - Number of servings',
-          prepTime: 'string - Preparation time',
-          cookTime: 'string - Cooking time',
-          ingredients: 'Array of { item: string, amount: string, notes?: string }',
-          steps: 'Array of step-by-step instruction strings',
-          sensoryAnalysis: 'string - Summary of sensory recreation strategy',
-          confidencePerElement: 'Record<string, "High" | "Medium" | "Low">',
-          whatsDifferent: 'string - Honest assessment of what will differ and why',
-        },
-        promptForAgent:
-          `Generate the complete reverse-engineered recipe.\n\n` +
-          `Original dish memory: ${sanitizeForPrompt(dishDescription)}\nLocation: ${sanitizeForPrompt(location)}\n\n` +
-          `Sensory analysis:\n${sanitizeForPrompt(sensoryAnalysis)}\n\n` +
-          `Ingredient substitutions:\n${sanitizeForPrompt(substitutions)}\n\n` +
-          `Sourcing guide:\n${sanitizeForPrompt(sourcing)}\n\n` +
-          `Generate a recipe with:\n1. Title\n2. Yield, prep time, cook time\n3. Full ingredient list\n` +
-          `4. Step-by-step instructions\n5. Sensory analysis summary\n6. Confidence per element\n7. What will be different and why`,
-      };
+      return assembleRecipePrompt({
+        dishDescription: input.dishDescription as string,
+        location: input.location as string,
+        sensoryAnalysis: sensoryAnalysis as Parameters<typeof assembleRecipePrompt>[0]['sensoryAnalysis'],
+        substitutions: substitutions as Parameters<typeof assembleRecipePrompt>[0]['substitutions'],
+        sourcing: sourcing as Parameters<typeof assembleRecipePrompt>[0]['sourcing'],
+      });
     }
 
     case 'build_research_record':
