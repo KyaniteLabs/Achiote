@@ -1,9 +1,10 @@
-# Technical Roadmap
+# Technical Roadmap (v0.2.0)
 
-This roadmap is scoped to the MCP server and skill behavior only.
+This roadmap is scoped to the MCP server, HTTP server, and skill behavior.
 
-## Completed foundation
+## Completed
 
+### Foundation
 - Structured MCP outputs and output schemas
 - Clean-checkout tests
 - Package hygiene and CI
@@ -12,6 +13,29 @@ This roadmap is scoped to the MCP server and skill behavior only.
 - Research-first memory workflow tools (`collect_food_memory`, `plan_dish_research`, dossier/family-question tools)
 - Typed research provenance records and cache helpers
 - End-to-end MCP regression from memory fragment to recipe-generation handoff
+
+### HTTP server and production hardening
+- Optional HTTP server with web UI, landing page, and `/ask` SSE streaming endpoint
+- Streamable HTTP MCP transport at `/mcp`
+- Tiered API key authentication (`ACHIOTE_AUTH_ENABLED`, `ACHIOTE_API_KEYS`)
+- Monthly calendar-window rate limiting (free/pro/business/enterprise)
+- SQLite-backed persistent rate limits (`ACHIOTE_RATE_LIMIT_DB`) with SHA-256 hashed keys
+- `sanitizeForPrompt()` security — strips `<user_input>` tags, control characters, and JSON-wraps user values as inert data literals
+- Body size limits (1MB) with proper 413 handling across `/ask` and `/mcp`
+- `/health` endpoint with memory and uptime metrics
+- CORS configuration via `ACHIOTE_ALLOWED_ORIGINS`
+- Reverse proxy support (`ACHIOTE_TRUST_PROXY`, `X-Forwarded-For`)
+- Multi-stage Dockerfile for containerized deployment
+- TLS/reverse proxy documentation (Caddy, nginx examples)
+- `.env.example` documenting all environment variables
+- Landing page with dark mode, scroll reveals, try-it widget, structured data, CSP headers
+- Web UI (`app.html`) with SSE streaming chat, dark mode, suggestion buttons, API key input
+
+### Data quality and validation
+- DOI-validated food science references (12 mechanism areas)
+- Automated citation validation in CI
+- Regional matcher with input normalization
+- Per-component cue decomposition with location-aware sourcing
 
 ## Next: optional food-data provider lookups
 
