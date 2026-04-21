@@ -1,7 +1,14 @@
 {
   "meta": {
     "version": "0.1.0",
-    "description": "Cultural dish families with aliases, transliterations, and regional variants"
+    "description": "Cultural dish families with aliases, transliterations, and regional variants",
+    "provenance": {
+      "sourceType": "curated cultural taxonomy",
+      "notes": [
+        "Broad dish-family groupings are curated as research-starting heuristics, not authoritative cultural definitions.",
+        "Entries should be treated as prompts for host-led research and family follow-up, not final recipe claims."
+      ]
+    }
   },
   "families": [
     {
@@ -69,7 +76,14 @@
         "herb combination from specific region",
         "wrapper texture",
         "sauce flavor"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
     },
     {
       "canonicalName": "dumpling",
@@ -148,7 +162,14 @@
         "filling seasoning",
         "cooking method aroma",
         "shape and size"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
     },
     {
       "canonicalName": "flatbread",
@@ -251,7 +272,14 @@
           ],
           "clarificationPrompt": "Do you mean the wheat flour flatbread common in Northern Mexico and the US Southwest?"
         }
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
     },
     {
       "canonicalName": "rice-dish",
@@ -318,7 +346,14 @@
         "rice grain texture (separate vs sticky vs creamy)",
         "bottom crust (tahdig, socarrat)",
         "specific spice aroma during cooking"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
     },
     {
       "canonicalName": "stew-braise",
@@ -386,7 +421,14 @@
         "specific aroma that fills the house during cooking",
         "protein tenderness level",
         "gravy/sauce consistency"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
     },
     {
       "canonicalName": "egg-dish",
@@ -463,7 +505,14 @@
           ],
           "clarificationPrompt": "Do you mean the Spanish egg-and-potato tortilla rather than the Mexican flatbread?"
         }
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
     },
     {
       "canonicalName": "wrapped-masa",
@@ -589,7 +638,14 @@
           ],
           "clarificationPrompt": "Do you mean the Puerto Rican fried plantain roll (piononos)?"
         }
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
     },
     {
       "canonicalName": "fritter",
@@ -650,7 +706,14 @@
         "crispy first bite sound",
         "street or market aroma",
         "specific dipping sauce"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
     },
     {
       "canonicalName": "curry",
@@ -702,7 +765,14 @@
         "specific spice aroma",
         "sauce consistency",
         "family recipe variation"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
     },
     {
       "canonicalName": "grilled-meat",
@@ -757,7 +827,14 @@
         "smoke aroma",
         "char marks",
         "outdoor cooking"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
     },
     {
       "canonicalName": "steamed-bun",
@@ -811,7 +888,14 @@
         "soft texture",
         "steam cloud when opened",
         "specific filling aroma"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
     },
     {
       "canonicalName": "bone-broth",
@@ -864,7 +948,14 @@
         "the way it smells when someone is sick",
         "specific bone type",
         "served in a particular mug"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
     },
     {
       "canonicalName": "savory-pie",
@@ -920,7 +1011,14 @@
         "specific crust texture",
         "filling aroma while baking",
         "shape from family tradition"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
     },
     {
       "canonicalName": "fermented-vegetable",
@@ -973,7 +1071,14 @@
         "specific tang level",
         "family jar",
         "aroma when opening"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
     },
     {
       "canonicalName": "noodle-soup",
@@ -1029,7 +1134,14 @@
         "specific broth aroma",
         "noodle texture",
         "being served when sick"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
     },
     {
       "canonicalName": "sweet-dumpling",
@@ -1088,7 +1200,14 @@
         "specific sweetness level",
         "holiday association",
         "texture of first bite"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
     },
     {
       "canonicalName": "spice-paste",
@@ -1147,7 +1266,14 @@
         "specific sizzle sound",
         "aroma that signals cooking starts here",
         "family recipe"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
     },
     {
       "canonicalName": "salad",
@@ -1204,7 +1330,14 @@
         "specific herb combination",
         "dressing acidity",
         "seasonal vegetables"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
     },
     {
       "canonicalName": "casserole",
@@ -1260,7 +1393,14 @@
         "the browned top",
         "way it's cut into squares",
         "specific cheese aroma"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
     },
     {
       "canonicalName": "sweet-bread",
@@ -1322,7 +1462,14 @@
         "specific holiday",
         "shape from family tradition",
         "aroma while baking"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
     },
     {
       "canonicalName": "grilled-seafood",
@@ -1379,7 +1526,14 @@
         "char and smoke aroma",
         "beach or market setting",
         "specific fish species from home region"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
     },
     {
       "canonicalName": "smoked-fish",
@@ -1435,7 +1589,14 @@
         "smoky aroma from childhood kitchen",
         "breakfast or holiday pairing",
         "texture of specific cure"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
     },
     {
       "canonicalName": "barbecue",
@@ -1495,7 +1656,14 @@
         "smoke aroma specific to family gatherings",
         "sauce recipe from grandparent",
         "char pattern on specific cut"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
     },
     {
       "canonicalName": "fermented-soybean",
@@ -1552,7 +1720,14 @@
         "specific mother culture from home",
         "aroma of fermenting beans",
         "soup base from childhood"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
     },
     {
       "canonicalName": "fermented-dairy",
@@ -1608,7 +1783,14 @@
         "tang level from home culture",
         "breakfast ritual",
         "grandmother's specific strain"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
     },
     {
       "canonicalName": "steamed-dumpling",
@@ -1666,7 +1848,14 @@
         "first bite releasing steam",
         "dipping sauce from family recipe",
         "shape taught by grandparent"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
     },
     {
       "canonicalName": "steamed-pudding",
@@ -1719,7 +1908,14 @@
         "steaming time and kitchen aroma",
         "holiday association",
         "specific dried fruit combination"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
     },
     {
       "canonicalName": "hearty-soup",
@@ -1777,7 +1973,14 @@
         "aroma filling the house on cold days",
         "sickness-comfort association",
         "specific garnish from family tradition"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
     },
     {
       "canonicalName": "cold-soup",
@@ -1831,7 +2034,14 @@
         "summer temperature association",
         "garden-fresh ingredients",
         "specific chill level"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
     },
     {
       "canonicalName": "filled-bread",
@@ -1889,7 +2099,14 @@
         "shape recognition from family recipe",
         "filling spilling out",
         "street vendor or market memory"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
     },
     {
       "canonicalName": "baked-pasta",
@@ -1940,7 +2157,14 @@
         "bubbly cheese top from oven",
         "specific pasta shape from childhood",
         "holiday or Sunday dinner"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
     },
     {
       "canonicalName": "cured-meat",
@@ -1996,7 +2220,14 @@
         "aroma of curing room or smokehouse",
         "specific slice thickness from family",
         "holiday slicing ritual"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
     },
     {
       "canonicalName": "pickled-vegetable",
@@ -2052,7 +2283,14 @@
         "specific tang level from home",
         "color of family recipe batch",
         "jar or crock from grandparent"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
     },
     {
       "canonicalName": "dried-fruit",
@@ -2106,7 +2344,14 @@
         "specific fruit from home region",
         "snack ritual",
         "holiday dish ingredient"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
     },
     {
       "canonicalName": "confit",
@@ -2156,7 +2401,14 @@
         "rich fat aroma",
         "texture of falling-apart meat",
         "special occasion dish"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
     },
     {
       "canonicalName": "ceviche",
@@ -2210,7 +2462,14 @@
         "bright citrus smell",
         "beach or coastal memory",
         "specific fish from home waters"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
     },
     {
       "canonicalName": "fresh-roll",
@@ -2263,7 +2522,14 @@
         "assembly ritual at table",
         "specific herb combination",
         "wrapper texture"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
     },
     {
       "canonicalName": "tartare",
@@ -2319,7 +2585,14 @@
         "specific seasoning blend from home",
         "first taste experience",
         "restaurant or market setting"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
     },
     {
       "canonicalName": "pudding-custard",
@@ -2376,7 +2649,14 @@
         "specific sweetness level from home",
         "holiday dessert table",
         "aroma of caramelizing sugar"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
     },
     {
       "canonicalName": "confection",
@@ -2432,7 +2712,14 @@
         "gift-giving occasion",
         "specific sweetness from home culture",
         "shape or cut from family tradition"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
     }
   ]
 }

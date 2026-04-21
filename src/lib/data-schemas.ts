@@ -20,6 +20,7 @@ type DishFamily = {
   sharedElements?: unknown;
   divergentElements?: unknown;
   nostalgiaTriggers?: unknown;
+  provenance?: unknown;
   [key: string]: unknown;
 };
 
@@ -30,6 +31,7 @@ type Ingredient = {
   sensoryContribution?: { aroma?: unknown; flavor?: unknown };
   substitutionGroup?: unknown;
   commonIn?: unknown;
+  provenance?: unknown;
   [key: string]: unknown;
 };
 
@@ -48,6 +50,21 @@ type SensoryDimension = {
   [key: string]: unknown;
 };
 
+type MemoryHintPattern = {
+  label?: unknown;
+  regexSource?: unknown;
+  flags?: unknown;
+  [key: string]: unknown;
+};
+
+type MemoryHints = {
+  meta: Meta;
+  ingredients: unknown;
+  cookingMethods: MemoryHintPattern[];
+  regionPatterns: MemoryHintPattern[];
+  regionFamilyMap: Record<string, unknown>;
+};
+
 export type BundledDataSet = {
   dishFamilies: { meta: Meta; families: DishFamily[] };
   ingredients: { meta: Meta; ingredients: Record<string, Ingredient> };
@@ -57,6 +74,7 @@ export type BundledDataSet = {
     dimensions: Record<string, SensoryDimension | undefined>;
     nostalgiaCriticalCriteria?: unknown;
   };
+  memoryHints: MemoryHints;
 };
 
 const VALID_CONFIDENCE = new Set(['High', 'Medium', 'Low']);
@@ -147,6 +165,14 @@ function validateProvenance(issues: ValidationIssue[], path: string, value: unkn
   }
 }
 
+function validateRequiredProvenance(issues: ValidationIssue[], path: string, value: unknown): void {
+  if (value === undefined) {
+    pushIssue(issues, path, 'provenance is required');
+    return;
+  }
+  validateProvenance(issues, path, value);
+}
+
 function validateMeta(issues: ValidationIssue[], path: string, meta: Meta): void {
   validateNonEmptyString(issues, `${path}.version`, meta.version);
   validateNonEmptyString(issues, `${path}.description`, meta.description);
@@ -184,6 +210,7 @@ function validateDishFamilies(issues: ValidationIssue[], data: BundledDataSet['d
     validateStringArray(issues, `${base}.sharedElements`, family.sharedElements, { requireNonEmpty: true, unique: true });
     validateStringArray(issues, `${base}.divergentElements`, family.divergentElements, { requireNonEmpty: true, unique: true });
     validateStringArray(issues, `${base}.nostalgiaTriggers`, family.nostalgiaTriggers, { requireNonEmpty: true, unique: true });
+    validateRequiredProvenance(issues, `${base}.provenance`, family.provenance);
 
     if (!validateNonEmptyRecord(issues, `${base}.transliterations`, family.transliterations)) {
       return;
@@ -246,7 +273,79 @@ function validateIngredients(issues: ValidationIssue[], data: BundledDataSet['in
     validateNonEmptyString(issues, `${base}.sensoryContribution.flavor`, ingredient.sensoryContribution?.flavor);
     validateNonEmptyString(issues, `${base}.substitutionGroup`, ingredient.substitutionGroup);
     validateStringArray(issues, `${base}.commonIn`, ingredient.commonIn, { requireNonEmpty: true, unique: true });
+    validateRequiredProvenance(issues, `${base}.provenance`, ingredient.provenance);
   }
+}
+
+function validateRegex(issues: ValidationIssue[], path: string, source: unknown, flags: unknown): void {
+  if (!isNonEmptyString(source)) {
+    pushIssue(issues, path, 'must be a non-empty string');
+    return;
+  }
+
+  if (flags !== undefined && !isNonEmptyString(flags)) {
+    pushIssue(issues, path.replace(/\.regexSource$/, '.flags'), 'must be a non-empty string');
+    return;
+  }
+
+  try {
+    new RegExp(source, typeof flags === 'string' ? flags : undefined);
+  } catch {
+    pushIssue(issues, path, 'must be a valid regular expression');
+  }
+}
+
+function validateLabeledRegexHints(issues: ValidationIssue[], path: string, value: unknown, options: { requireRegex?: boolean } = {}): void {
+  if (!Array.isArray(value)) {
+    pushIssue(issues, path, 'must be an array');
+    return;
+  }
+
+  if (value.length === 0) {
+    pushIssue(issues, path, 'must be a non-empty array');
+    return;
+  }
+
+  const labels = new Set<string>();
+  value.forEach((entry, index) => {
+    const entryPath = `${path}[${index}]`;
+    if (!isRecord(entry)) {
+      pushIssue(issues, entryPath, 'must be an object');
+      return;
+    }
+
+    validateNonEmptyString(issues, `${entryPath}.label`, entry.label);
+    if (isNonEmptyString(entry.label)) {
+      const normalized = entry.label.trim().toLowerCase();
+      if (labels.has(normalized)) {
+        pushIssue(issues, `${entryPath}.label`, 'duplicate label');
+      }
+      labels.add(normalized);
+    }
+
+    if (entry.regexSource !== undefined || options.requireRegex) {
+      validateRegex(issues, `${entryPath}.regexSource`, entry.regexSource, entry.flags);
+    }
+  });
+}
+
+function validateRegionFamilyMap(issues: ValidationIssue[], path: string, value: unknown): void {
+  if (!validateNonEmptyRecord(issues, path, value)) return;
+
+  for (const [region, families] of Object.entries(value)) {
+    if (!isNonEmptyString(region)) {
+      pushIssue(issues, `${path}.${region}`, 'must use a non-empty string key');
+    }
+    validateStringArray(issues, `${path}.${region}`, families, { requireNonEmpty: true, unique: true });
+  }
+}
+
+function validateMemoryHints(issues: ValidationIssue[], data: BundledDataSet['memoryHints']): void {
+  validateMeta(issues, 'memoryHints.meta', data.meta);
+  validateStringArray(issues, 'memoryHints.ingredients', data.ingredients, { requireNonEmpty: true, unique: true });
+  validateLabeledRegexHints(issues, 'memoryHints.cookingMethods', data.cookingMethods);
+  validateLabeledRegexHints(issues, 'memoryHints.regionPatterns', data.regionPatterns, { requireRegex: true });
+  validateRegionFamilyMap(issues, 'memoryHints.regionFamilyMap', data.regionFamilyMap);
 }
 
 function validateRegionalAvailability(issues: ValidationIssue[], data: BundledDataSet['regionalAvailability']): void {
@@ -322,6 +421,7 @@ export function validateBundledData(data: BundledDataSet): ValidationIssue[] {
   validateIngredients(issues, data.ingredients);
   validateRegionalAvailability(issues, data.regionalAvailability);
   validateSensoryProfiles(issues, data.sensoryProfiles);
+  validateMemoryHints(issues, data.memoryHints);
   return issues;
 }
 
