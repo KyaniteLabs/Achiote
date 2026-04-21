@@ -141,7 +141,7 @@ function authenticateRequest(req: IncomingMessage): AuthedRequest {
 
   return getRequestRateLimitIdentity({
     authEnabled: AUTH_ENABLED,
-    authenticated: result.authenticated ? { authenticated: true, tier: result.tier, name: result.name, rawKey: rawKey! } : undefined,
+    authenticated: result.authenticated ? { authenticated: true, tier: result.tier, name: result.name, keyId: result.keyId } : undefined,
     headers: req.headers,
     remoteAddress: req.socket.remoteAddress,
     trustProxy: TRUST_PROXY,
@@ -178,7 +178,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
   } catch (err) {
     if (err instanceof Error && err.message === 'Body too large') {
       sendJson(res, 413, { error: 'Body too large' });
-      req.destroy();
+      req.resume();
     }
     return;
   }
@@ -438,7 +438,7 @@ const server = createServer(async (req, res) => {
     } catch (error) {
       if (error instanceof Error && error.message === 'Body too large') {
         sendJson(res, 413, { jsonrpc: '2.0', error: { code: -32603, message: 'Body too large' }, id: null });
-        req.destroy();
+        req.resume();
       } else {
         console.error('Request error:', error);
         if (!res.headersSent) {

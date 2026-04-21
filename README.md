@@ -133,7 +133,7 @@ node dist/http-server.js
 | `POST /ask` | SSE streaming AI agent (auth + rate limited) |
 | `POST /mcp` | Streamable HTTP MCP transport |
 
-Authentication is enabled by default for the HTTP server. Configure `ACHIOTE_API_KEYS` for `/ask` and `/mcp`. Setting `ACHIOTE_AUTH_ENABLED=false` does not by itself expose anonymous `/ask`; set `ACHIOTE_ALLOW_ANON_ASK=true` only for local demos. Generate a self-hosted key with `npm run keygen -- --tier pro --name admin`. Port defaults to 3000, configurable via `PORT` env var.
+Authentication is enabled by default for the HTTP server. Configure `ACHIOTE_API_KEYS` for `/ask` and `/mcp`. Setting `ACHIOTE_AUTH_ENABLED=false` does not by itself expose anonymous `/ask`; set `ACHIOTE_ALLOW_ANON_ASK=true` only for local demos. Generate a self-hosted key with `npm run keygen -- --tier pro --name admin`; put the printed `envRecord` inside the `ACHIOTE_API_KEYS` JSON array, not the one-time raw key. Port defaults to 3000, configurable via `PORT` env var.
 
 ## Cache and privacy
 
