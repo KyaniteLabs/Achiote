@@ -833,6 +833,7 @@ process.on('SIGINT', async () => {
     transports.delete(sid);
   }
   cache?.close();
+  rateLimiter.close();
   server.close();
   process.exit(0);
 });

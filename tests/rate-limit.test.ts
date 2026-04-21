@@ -1,5 +1,8 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, afterAll } from 'vitest';
 import { createRateLimiter } from '../src/lib/rate-limit.js';
+import { mkdtempSync, rmSync } from 'node:fs';
+import { join } from 'node:path';
+import { tmpdir } from 'node:os';
 
 describe('rate limiter', () => {
   it('allows requests under the limit', () => {
@@ -74,5 +77,112 @@ describe('rate limiter', () => {
       }
       expect(limiter.checkWebLimit('pro', 'session-2').allowed).toBe(true);
     });
+  });
+
+  describe('close()', () => {
+    it('does not throw when called without db', () => {
+      const limiter = createRateLimiter();
+      expect(() => limiter.close()).not.toThrow();
+    });
+
+    it('does not throw on double close', () => {
+      const limiter = createRateLimiter();
+      limiter.close();
+      expect(() => limiter.close()).not.toThrow();
+    });
+  });
+
+  describe('resetAt timestamp', () => {
+    it('returns a future resetAt timestamp', () => {
+      const limiter = createRateLimiter();
+      const result = limiter.checkMcpLimit('free', 'ts-key');
+      expect(result.resetAt).toBeGreaterThan(Date.now());
+    });
+
+    it('resetAt is start of next month', () => {
+      const limiter = createRateLimiter();
+      const result = limiter.checkMcpLimit('free', 'month-key');
+      const now = new Date();
+      const expected = Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 1);
+      expect(result.resetAt).toBe(expected);
+    });
+  });
+
+  describe('remaining count', () => {
+    it('counts down correctly', () => {
+      const limiter = createRateLimiter();
+      const r1 = limiter.checkMcpLimit('free', 'count-key');
+      expect(r1.remaining).toBe(49);
+      const r2 = limiter.checkMcpLimit('free', 'count-key');
+      expect(r2.remaining).toBe(48);
+      const r3 = limiter.checkMcpLimit('free', 'count-key');
+      expect(r3.remaining).toBe(47);
+    });
+
+    it('remaining stays at 0 after limit reached', () => {
+      const limiter = createRateLimiter();
+      for (let i = 0; i < 50; i++) {
+        limiter.checkMcpLimit('free', 'floor-key');
+      }
+      const result = limiter.checkMcpLimit('free', 'floor-key');
+      expect(result.remaining).toBe(0);
+      expect(result.allowed).toBe(false);
+    });
+  });
+});
+
+describe('rate limiter with SQLite persistence', () => {
+  const tmpDir = mkdtempSync(join(tmpdir(), 'rl-test-'));
+
+  afterAll(() => {
+    try { rmSync(tmpDir, { recursive: true, force: true }); } catch { /* ignore */ }
+  });
+
+  it('persists usage across instances', () => {
+    const dbPath = join(tmpDir, 'persist.db');
+    const limiter1 = createRateLimiter(dbPath);
+    limiter1.checkMcpLimit('free', 'persist-key');
+    limiter1.checkMcpLimit('free', 'persist-key');
+    limiter1.close();
+
+    const limiter2 = createRateLimiter(dbPath);
+    const result = limiter2.checkMcpLimit('free', 'persist-key');
+    expect(result.remaining).toBe(47);
+    limiter2.close();
+  });
+
+  it('survives reset and reopen', () => {
+    const dbPath = join(tmpDir, 'reset.db');
+    const limiter1 = createRateLimiter(dbPath);
+    for (let i = 0; i < 50; i++) {
+      limiter1.checkMcpLimit('free', 'reset-persist-key');
+    }
+    expect(limiter1.checkMcpLimit('free', 'reset-persist-key').allowed).toBe(false);
+    limiter1.close();
+
+    const limiter2 = createRateLimiter(dbPath);
+    expect(limiter2.checkMcpLimit('free', 'reset-persist-key').allowed).toBe(false);
+    limiter2.resetUsage('reset-persist-key');
+    expect(limiter2.checkMcpLimit('free', 'reset-persist-key').allowed).toBe(true);
+    limiter2.close();
+  });
+
+  it('creates DB directory if missing', () => {
+    const nestedDir = join(tmpDir, 'nested', 'deep');
+    const nestedDb = join(nestedDir, 'rl.db');
+    const limiter = createRateLimiter(nestedDb);
+    const result = limiter.checkMcpLimit('free', 'nested-key');
+    expect(result.allowed).toBe(true);
+    limiter.close();
+  });
+
+  it('tracks web and MCP limits independently per key', () => {
+    const dbPath = join(tmpDir, 'dual.db');
+    const limiter = createRateLimiter(dbPath);
+    const mcpResult = limiter.checkMcpLimit('free', 'dual-key');
+    const webResult = limiter.checkWebLimit('free', 'dual-key');
+    expect(mcpResult.allowed).toBe(true);
+    expect(webResult.allowed).toBe(true);
+    limiter.close();
   });
 });
