@@ -1,4 +1,5 @@
 import { sanitizeForPrompt } from '../tools/results.js';
+import { RECIPE_OUTPUT_FIELDS } from '../schemas/tool-schemas.js';
 
 export interface GenerateRecipeInput {
   dishDescription: string;
@@ -24,18 +25,6 @@ export interface GenerateRecipeInput {
   };
 }
 
-export const RECIPE_OUTPUT_SCHEMA = {
-  title: 'string - Recipe name (e.g., "Recreated [Dish Name]")',
-  yield: 'string - Number of servings',
-  prepTime: 'string - Preparation time',
-  cookTime: 'string - Cooking time',
-  ingredients: 'Array of { item: string, amount: string, notes?: string }',
-  steps: 'Array of step-by-step instruction strings',
-  sensoryAnalysis: 'string - Summary of sensory recreation strategy',
-  confidencePerElement: 'Record<string, "High" | "Medium" | "Low"> - Confidence per key sensory element',
-  whatsDifferent: 'string - Honest assessment of what will differ and why',
-} as const;
-
 export interface AssembleRecipeResult {
   dishDescription: string;
   location: string;
@@ -47,7 +36,7 @@ export function assembleRecipePrompt(input: GenerateRecipeInput): AssembleRecipe
   return {
     dishDescription: input.dishDescription,
     location: input.location,
-    expectedOutputSchema: { ...RECIPE_OUTPUT_SCHEMA },
+    expectedOutputSchema: { ...RECIPE_OUTPUT_FIELDS },
     promptForAgent: `Generate the complete reverse-engineered recipe only if the user has already seen the minimum viable nostalgia cue and wants the fuller dish.
 
 <user_input>
