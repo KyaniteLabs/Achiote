@@ -29,6 +29,7 @@ describe('package distribution metadata', () => {
       'bin/',
       'dist/',
       'skill/',
+      'scripts/',
       'docs/ARCHITECTURE.md',
       'docs/ROADMAP.md',
       'docs/SELF_HOSTED_RUNNER.md',
@@ -43,6 +44,8 @@ describe('package distribution metadata', () => {
     expect(pkg.scripts.check).toBe('npm run typecheck && npm run lint && npm run coverage:guard && npm run build && npm run validate:citations && npm test');
     expect(pkg.scripts.lint).toBe('node scripts/static-checks.mjs');
     expect(pkg.scripts['coverage:guard']).toBe('node scripts/coverage-threshold.mjs');
+    expect(pkg.scripts.keygen).toBe('node scripts/generate-api-key.mjs');
+    expect(pkg.scripts['docker:smoke']).toBe('node scripts/docker-smoke.mjs');
     expect(pkg.scripts['pack:check']).toBe('npm run check && npm run package:smoke && npm pack --dry-run');
     expect(pkg.scripts['package:smoke']).toBe('node scripts/package-smoke.mjs');
   });
@@ -55,6 +58,16 @@ describe('package distribution metadata', () => {
     expect(smokeScript).toContain("fs.mkdtempSync(path.join(smokeRoot, 'run-'))");
     expect(smokeScript).not.toContain("fs.mkdtempSync(path.join(os.tmpdir(), 'achiote-package-smoke-'))");
     expect(smokeScript).not.toContain("achiote-package-smoke-XXXXXX");
+    expect(smokeScript).toContain("const exited = new Promise((resolve) => child.once('exit', resolve));");
+    expect(smokeScript).toContain("await withTimeout(exited, 5_000, 'packaged HTTP shutdown');");
   });
 
+});
+
+
+describe('packaged helper scripts', () => {
+  it('ships helper scripts referenced by package metadata', () => {
+    expect(fs.existsSync('scripts/generate-api-key.mjs')).toBe(true);
+    expect(fs.existsSync('scripts/docker-smoke.mjs')).toBe(true);
+  });
 });
