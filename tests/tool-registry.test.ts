@@ -1,0 +1,78 @@
+import { describe, expect, it } from 'vitest';
+import fs from 'node:fs';
+import { anthropicTools, toolRegistry, toolNames, outputSchemas, findToolDefinition } from '../src/tools/tool-registry.js';
+
+const expectedToolNames = [
+  'analyze_nostalgic_dish',
+  'build_reconstruction_dossier',
+  'build_research_record',
+  'collect_food_memory',
+  'discover_regional_similars',
+  'extract_research_findings',
+  'find_sensory_substitutes',
+  'generate_family_followup_questions',
+  'generate_minimum_viable_nostalgia',
+  'generate_recipe',
+  'plan_dish_research',
+  'resolve_dish_name',
+  'source_ingredients',
+  'validate_recipe_output',
+  'validate_research_record',
+];
+
+describe('shared tool registry', () => {
+  it('contains the complete launch tool set in sorted order', () => {
+    expect(toolNames).toEqual(expectedToolNames);
+    expect(toolRegistry.map((tool) => tool.name).sort()).toEqual(expectedToolNames);
+  });
+
+  it('requires every tool to define MCP metadata, HTTP metadata, output schema, and executor', () => {
+    for (const tool of toolRegistry) {
+      expect(tool.name).toBeTruthy();
+      expect(tool.mcp.title).toBeTruthy();
+      expect(tool.mcp.description).toBeTruthy();
+      expect(tool.mcp.inputSchema).toBeTruthy();
+      expect(tool.mcp.outputSchema).toBe(tool.outputSchema);
+      expect(tool.anthropic.name).toBe(tool.name);
+      expect(tool.anthropic.description).toBeTruthy();
+      expect(tool.anthropic.input_schema).toBeTruthy();
+      expect(tool.outputSchema).toBeTruthy();
+      expect(typeof tool.execute).toBe('function');
+    }
+  });
+
+  it('keeps protocol wrappers and package smoke wired to the registry', () => {
+    const serverSource = fs.readFileSync('src/server.ts', 'utf8');
+    const httpSource = fs.readFileSync('src/http-server.ts', 'utf8');
+    const smokeSource = fs.readFileSync('scripts/package-smoke.mjs', 'utf8');
+
+    expect(serverSource).toContain('toolRegistry');
+    expect(serverSource).not.toContain("'collect_food_memory'");
+    expect(httpSource).toContain('anthropicTools as TOOLS');
+    expect(httpSource).toContain('executeToolDefinition');
+    expect(httpSource).not.toContain('function executeTool(');
+    expect(smokeSource).toContain('dist');
+    expect(smokeSource).toContain('tool-registry.js');
+  });
+
+  it('keeps Anthropic tools in workflow-first order for /ask model behavior', () => {
+    expect(anthropicTools.map((tool) => tool.name).slice(0, 5)).toEqual([
+      'collect_food_memory',
+      'plan_dish_research',
+      'build_reconstruction_dossier',
+      'generate_family_followup_questions',
+      'resolve_dish_name',
+    ]);
+    expect(anthropicTools.map((tool) => tool.name).sort()).toEqual(expectedToolNames);
+  });
+
+  it('exports output schema and lookup maps from the same registry', () => {
+    expect(Object.keys(outputSchemas).sort()).toEqual(expectedToolNames);
+    for (const name of expectedToolNames) {
+      const tool = findToolDefinition(name);
+      expect(tool?.name).toBe(name);
+      expect(outputSchemas[name]).toBe(tool?.outputSchema);
+    }
+    expect(findToolDefinition('missing_tool')).toBeUndefined();
+  });
+});
