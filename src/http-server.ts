@@ -345,7 +345,7 @@ function validateToolOutput(toolName: string, result: unknown): void {
   const parsed = schema.safeParse(result);
   if (!parsed.success) {
     const issues = parsed.error.issues.map(i => `${i.path.join('.')}: ${i.message}`).join('; ');
-    console.warn(`[validation] ${toolName} output schema mismatch: ${issues}`);
+    throw new Error(`[validation] ${toolName} output schema mismatch: ${issues}`);
   }
 }
 
@@ -529,9 +529,7 @@ function executeTool(name: string, raw: unknown): any {
 function extractApiKey(req: IncomingMessage): string | undefined {
   const header = req.headers['x-api-key'];
   if (typeof header === 'string' && header.length > 0) return header;
-  const url = req.url ?? '';
-  const param = new URL(url, 'http://localhost').searchParams.get('apiKey');
-  return param ?? undefined;
+  return undefined;
 }
 
 function extractBearer(req: IncomingMessage): string | undefined {
@@ -627,12 +625,8 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
           validateToolOutput(block.name, result);
           toolResults.push({ type: 'tool_result', tool_use_id: block.id, content: JSON.stringify(result) });
         } catch (err) {
-          toolResults.push({
-            type: 'tool_result',
-            tool_use_id: block.id,
-            content: JSON.stringify({ error: err instanceof Error ? err.message : String(err) }),
-            is_error: true,
-          });
+          send('error', { message: 'Tool failed', tool: block.name, detail: err instanceof Error ? err.message : String(err) });
+          return;
         }
       }
 
@@ -687,6 +681,11 @@ function sendJson(res: ServerResponse, status: number, body: unknown): void {
   res.end(JSON.stringify(body));
 }
 
+function sendMethodNotAllowed(res: ServerResponse, allowed: string[]): void {
+  res.writeHead(405, { Allow: allowed.join(', '), 'Content-Type': 'application/json' });
+  res.end(JSON.stringify({ error: 'Method not allowed', allowed }));
+}
+
 async function serveStatic(req: IncomingMessage, res: ServerResponse): Promise<boolean> {
   const raw = req.url?.split('?')[0] ?? '/';
   const assetPath = raw === '/' ? 'app.html' : raw === '/about' ? 'index.html' : raw.replace(/^\//, '');
@@ -722,7 +721,7 @@ const server = createServer(async (req, res) => {
       ? rest.pop() : {};
     const corsHeaders = allowedOrigin ? {
       'Access-Control-Allow-Origin': allowedOrigin,
-      'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
+      'Access-Control-Allow-Methods': 'GET, HEAD, POST, DELETE, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type, mcp-session-id, Accept, x-api-key, authorization, x-session-id',
       'Access-Control-Expose-Headers': 'mcp-session-id, X-RateLimit-Remaining, X-RateLimit-Limit, X-RateLimit-Reset',
       Vary: 'Origin',
@@ -738,6 +737,11 @@ const server = createServer(async (req, res) => {
   }
 
   const pathname = req.url?.split('?')[0].replace(/\/$/, '') ?? '';
+
+  if ((pathname === '/health' || pathname === '/ready') && req.method !== 'GET' && req.method !== 'HEAD') {
+    sendMethodNotAllowed(res, ['GET', 'HEAD']);
+    return;
+  }
 
   if (pathname === '/health' || pathname === '/ready') {
     const readiness = getHttpReadiness({
@@ -759,8 +763,18 @@ const server = createServer(async (req, res) => {
     return;
   }
 
+  if (pathname === '/ask' && req.method !== 'POST') {
+    sendMethodNotAllowed(res, ['POST']);
+    return;
+  }
+
   if (pathname === '/ask' && req.method === 'POST') {
     await handleAsk(req, res);
+    return;
+  }
+
+  if (pathname === '/mcp' && !['GET', 'POST', 'DELETE'].includes(req.method ?? '')) {
+    sendMethodNotAllowed(res, ['GET', 'POST', 'DELETE']);
     return;
   }
 
@@ -830,6 +844,11 @@ const server = createServer(async (req, res) => {
         }
       }
     }
+    return;
+  }
+
+  if (req.method !== 'GET' && req.method !== 'HEAD') {
+    sendMethodNotAllowed(res, ['GET', 'HEAD']);
     return;
   }
 

@@ -165,8 +165,8 @@ async function main() {
   const citations = extractCitations(html);
 
   if (citations.length === 0) {
-    console.log("⚠️  No citations found");
-    process.exit(0);
+    console.error("❌ No DOI citations found in landing page sources");
+    process.exit(1);
   }
 
   let failures = 0;

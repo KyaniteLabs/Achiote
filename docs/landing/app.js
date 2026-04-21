@@ -37,17 +37,32 @@ function send(text) {
     headers,
     body: JSON.stringify({ message: val }),
   })
-  .then(res => {
-    if (!res.ok) throw new Error(`Server ${res.status}`);
+  .then(async res => {
+    if (!res.ok) throw new Error(await explainHttpError(res));
     return streamResponse(res, aiEl);
   })
   .catch(err => {
-    const safeMsg = escapeHtml(err.message);
     aiEl.textContent = err.message.includes('fetch')
-      ? 'Server not running. Start it with npm run demo.'
-      : `Error: ${safeMsg}`;
+      ? 'Server not running. Start it with node dist/http-server.js.'
+      : err.message;
   })
   .finally(() => { busy = false; btn.disabled = false; input.focus(); });
+}
+
+async function explainHttpError(res) {
+  let detail = '';
+  try {
+    const body = await res.json();
+    detail = body?.error || body?.message || body?.error?.message || '';
+  } catch {
+    detail = 'Could not parse server response';
+  }
+
+  if (res.status === 401) return `Authentication required. Open API Key and enter a valid key. ${detail}`.trim();
+  if (res.status === 429) return `Rate limit exceeded. ${detail}`.trim();
+  if (res.status === 413) return `Message is too large. ${detail}`.trim();
+  if (res.status === 415) return `Server expected JSON but received a different content type. ${detail}`.trim();
+  return `Server error ${res.status}. ${detail || 'Could not parse server response'}`.trim();
 }
 
 function addMsg(role, html) {
