@@ -61,6 +61,19 @@ function spicedSausageMashDossier() {
   });
 }
 
+
+function cueRecommendationText(cue: ReturnType<typeof generateMinimumViableNostalgiaCue>) {
+  return [
+    ...cue.ingredients.map((ingredient) => `${ingredient.item} ${ingredient.purpose}`),
+    ...cue.components.flatMap((component) => [
+      component.criticalElement,
+      component.flavorProfile,
+      component.localTestWith,
+      component.substitutionReason,
+    ]),
+  ].join(' ').toLowerCase();
+}
+
 describe('minimum viable nostalgia cue', () => {
   it('creates a small food-science cue instead of a full recipe for a named path', () => {
     const cue = generateMinimumViableNostalgiaCue({
@@ -190,6 +203,75 @@ describe('minimum viable nostalgia cue', () => {
     expect(cue.format).toBe('sip');
 
     expect(cue.components.length).toBeGreaterThanOrEqual(1);
+  });
+
+  it('rewrites composed-bite ingredients and components for vegan and halal constraints', () => {
+    const cue = generateMinimumViableNostalgiaCue({
+      dossier: spicedSausageMashDossier(),
+      constraints: ['vegan', 'halal'],
+      maxEffortMinutes: 20,
+    });
+    const ingredients = cue.ingredients.map((ingredient) => ingredient.item).join(' ').toLowerCase();
+    const recommendationText = cueRecommendationText(cue);
+
+    expect(recommendationText).not.toMatch(/meat|pork|chicken|lamb|dairy|butter|\bmilk\b|rendered fat|certified compliant (?:protein|meat)/);
+    expect(ingredients).toMatch(/bean|mushroom|tofu|plant-based|olive oil/);
+    expect(cue.safetyNotes.join(' ').toLowerCase()).toContain('halal');
+  });
+
+  it('qualifies animal proteins instead of naming pork or chicken for halal constraints', () => {
+    const cue = generateMinimumViableNostalgiaCue({
+      dossier: spicedSausageMashDossier(),
+      constraints: ['halal'],
+      maxEffortMinutes: 20,
+    });
+    const recommendationText = cueRecommendationText(cue);
+
+    expect(recommendationText).not.toMatch(/ground pork|pork|chicken thigh|rendered fat/);
+    expect(recommendationText).toMatch(/certified compliant (?:protein|meat|fat)/);
+  });
+
+  it('rewrites carriers for common gluten-free constraint phrasing', () => {
+    const cue = generateMinimumViableNostalgiaCue({
+      dossier: carimanolaDossier(),
+      constraints: ['no gluten'],
+      maxEffortMinutes: 20,
+    });
+    const ingredients = cue.ingredients.map((ingredient) => ingredient.item).join(' ').toLowerCase();
+    const recommendationText = cueRecommendationText(cue);
+
+    expect(recommendationText).not.toMatch(/bread|flour|tortilla/);
+    expect(ingredients).toMatch(/rice|potato|corn|certified gluten-free/);
+  });
+
+  it('rewrites liquid cues for dairy-free and peanut allergy constraints', () => {
+    const memory = collectFoodMemory({ memoryText: 'warm sour soup with dill and creamy body' });
+    const dossier = buildReconstructionDossier({ memory, researchPlan: planDishResearch(memory) });
+    const cue = generateMinimumViableNostalgiaCue({
+      dossier,
+      constraints: ['dairy-free', 'peanut allergy'],
+      maxEffortMinutes: 12,
+    });
+    const recommendationText = cueRecommendationText(cue);
+    const safety = cue.safetyNotes.join(' ').toLowerCase();
+
+    expect(recommendationText).not.toMatch(/\bdairy\b|\bbutter\b|cow's milk|peanut/);
+    expect(`${recommendationText} ${safety}`).toMatch(/water|broth|olive oil|clean utensils|cross-contact/);
+    expect(safety).toContain('peanut allergy');
+  });
+
+  it('removes coconut and dairy cues when plural tree nut allergy phrasing overlaps dairy-free', () => {
+    const memory = collectFoodMemory({ memoryText: 'warm sour soup with dill and creamy body' });
+    const dossier = buildReconstructionDossier({ memory, researchPlan: planDishResearch(memory) });
+    const cue = generateMinimumViableNostalgiaCue({
+      dossier,
+      constraints: ['allergic to tree nuts', 'no dairy'],
+      maxEffortMinutes: 12,
+    });
+    const recommendationText = cueRecommendationText(cue);
+
+    expect(recommendationText).not.toMatch(/coconut|peanut|tree nut|\bnut\b|\bdairy\b|\bbutter\b|\bmilk\b|yogurt/);
+    expect(recommendationText).toMatch(/water|broth|olive oil|plant-based|oil-herb/);
   });
 
   it('clamps max effort to a positive number', () => {
