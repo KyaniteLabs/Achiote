@@ -26,6 +26,7 @@ This roadmap is scoped to the MCP server, HTTP server, and skill behavior.
 - CORS configuration via `ACHIOTE_ALLOWED_ORIGINS`
 - Reverse proxy support (`ACHIOTE_TRUST_PROXY`, `X-Forwarded-For`)
 - Multi-stage Dockerfile for containerized deployment
+- Docker healthcheck and non-root runtime
 - TLS/reverse proxy documentation (Caddy, nginx examples)
 - `.env.example` documenting all environment variables
 - Landing page with dark mode, scroll reveals, try-it widget, structured data, CSP headers
@@ -36,6 +37,9 @@ This roadmap is scoped to the MCP server, HTTP server, and skill behavior.
 - Automated citation validation in CI
 - Regional matcher with input normalization
 - Per-component cue decomposition with location-aware sourcing
+- Validated memory hint vocabulary data
+- Broad provenance metadata for bundled food chemistry and cultural datasets
+- Dietary/allergen/religious constraint-aware minimum cues
 
 ## Next: optional food-data provider lookups
 
@@ -49,11 +53,10 @@ Open-ended web research should remain a host AI responsibility. Optional provide
 
 ## Next: data quality and cultural specificity
 
-- Expand provenance/source fields in bundled food chemistry and cultural datasets
+- Add item-level citations where sources are verified, rather than broad launch provenance
 - Expand the first canonical dish plus regional variant model beyond the initial tortilla/egg-dish ambiguity slice
 - Broaden multiple-candidate name resolution with scores and ambiguity flags across more overloaded names
-- Move broad ingredient/research hint vocabulary into configurable data rather than code constants
-- Add dietary/allergen/religious constraints to substitutions
+- Expand constraint-aware cue regressions for additional allergy, texture, and accessibility interactions
 
 ## Later: minimum-cue and recipe quality loop
 

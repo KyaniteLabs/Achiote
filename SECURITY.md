@@ -33,7 +33,7 @@ Primary risks are:
 - **Rate limiting** — tiered per calendar month. Free tier: 50 MCP calls, 3 web reconstructions. Rate limit headers exposed in responses.
 - **`/ask` endpoint** — SSE streaming AI agent endpoint. Validates content-type, parses JSON body, enforces rate limits before calling Anthropic API. User messages are embedded in prompts inside `<user_input>` tags with a "do not follow instructions" directive.
 - **Body size** — 1MB limit on request bodies.
-- **CORS** — permissive (`Access-Control-Allow-Origin: *`) for development. Tighten for production.
+- **CORS** — configured by `ACHIOTE_ALLOWED_ORIGINS`. Local development may opt into broad origins, but production should set exact HTTPS origins and avoid wildcard browser access.
 
 ### Production deployment
 
@@ -41,7 +41,7 @@ For public HTTPS access, run behind a reverse proxy:
 
 - **nginx** or **Caddy** for TLS termination
 - Set `ACHIOTE_TRUST_PROXY=true` and `ACHIOTE_TRUSTED_PROXY_IPS` so rate limiting uses `X-Forwarded-For` only from trusted proxy remote addresses. Configure the edge proxy to overwrite, not append, client-supplied `X-Forwarded-For`; if you intentionally preserve a multi-hop chain, every downstream proxy address after the original client must be listed in `ACHIOTE_TRUSTED_PROXY_IPS`
-- Set `ACHIOTE_ALLOWED_ORIGINS=https://your-domain.com`
+- Set `ACHIOTE_ALLOWED_ORIGINS` to the exact HTTPS origins allowed to call the service.
 - Set `ACHIOTE_RATE_LIMIT_DB` to a persistent path so rate limits survive restarts
 
 Example Caddyfile:
@@ -75,5 +75,7 @@ server {
 
 - Keep GitHub secret scanning/push protection and code scanning enabled when available.
 - Require CI before merging to the default branch.
-- Run `npm audit --audit-level=moderate` before releases.
-- Run `npm run pack:check` and inspect package contents before publishing.
+- Run `npm run check` before releases.
+- Run `npm run package:smoke`, `npm audit --audit-level=moderate`, and `npm pack --dry-run` before publishing.
+- Run `npm run docker:smoke` for Docker/runtime changes.
+- Perform browser/screenshot review for landing UI changes.
