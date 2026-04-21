@@ -1,0 +1,577 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Achiote — Architecture Diagram</title>
+  <style>
+    :root {
+      --bg: #0e0c0a;
+      --surface: #1a1612;
+      --surface-2: #241e18;
+      --border: #3a2e24;
+      --text: #e8ddd0;
+      --text-muted: #9a8b7a;
+      --orange: #e07845;
+      --orange-dim: rgba(224,120,69,0.15);
+      --green: #5cb87a;
+      --green-dim: rgba(92,184,122,0.12);
+      --blue: #5a9fd4;
+      --blue-dim: rgba(90,159,212,0.12);
+      --purple: #b07cc8;
+      --purple-dim: rgba(176,124,200,0.12);
+      --yellow: #d4b45a;
+      --yellow-dim: rgba(212,180,90,0.12);
+      --red: #d45a5a;
+      --red-dim: rgba(212,90,90,0.10);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'SF Mono', 'Fira Code', 'JetBrains Mono', monospace;
+      background: var(--bg);
+      color: var(--text);
+      padding: 40px 24px;
+      min-height: 100vh;
+    }
+
+    .container { max-width: 1200px; margin: 0 auto; }
+
+    h1 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 6px;
+    }
+    h1 span { color: var(--orange); }
+    .subtitle { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 48px; }
+
+    /* Section */
+    .section { margin-bottom: 40px; }
+    .section-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* Box grid */
+    .box-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .box {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      position: relative;
+      overflow: hidden;
+    }
+    .box::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0.4;
+      border-radius: 10px;
+      pointer-events: none;
+    }
+
+    .box-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .box-desc {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .box-tag {
+      font-size: 0.6rem;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Colors by category */
+    .entry .box { border-color: var(--orange); }
+    .entry .box::before { background: var(--orange-dim); }
+    .entry .box-title { color: var(--orange); }
+    .entry .box-tag { background: var(--orange-dim); color: var(--orange); }
+
+    .server .box { border-color: var(--green); }
+    .server .box::before { background: var(--green-dim); }
+    .server .box-title { color: var(--green); }
+    .server .box-tag { background: var(--green-dim); color: var(--green); }
+
+    .lib .box { border-color: var(--blue); }
+    .lib .box::before { background: var(--blue-dim); }
+    .lib .box-title { color: var(--blue); }
+    .lib .box-tag { background: var(--blue-dim); color: var(--blue); }
+
+    .data .box { border-color: var(--yellow); }
+    .data .box::before { background: var(--yellow-dim); }
+    .data .box-title { color: var(--yellow); }
+    .data .box-tag { background: var(--yellow-dim); color: var(--yellow); }
+
+    .agent .box { border-color: var(--purple); }
+    .agent .box::before { background: var(--purple-dim); }
+    .agent .box-title { color: var(--purple); }
+    .agent .box-tag { background: var(--purple-dim); color: var(--purple); }
+
+    .front .box { border-color: var(--red); }
+    .front .box::before { background: var(--red-dim); }
+    .front .box-title { color: var(--red); }
+    .front .box-tag { background: var(--red-dim); color: var(--red); }
+
+    /* Sizes */
+    .w-full { flex: 1 1 100%; }
+    .w-half { flex: 1 1 calc(50% - 12px); min-width: 280px; }
+    .w-third { flex: 1 1 calc(33.33% - 12px); min-width: 220px; }
+    .w-quarter { flex: 1 1 calc(25% - 12px); min-width: 180px; }
+
+    /* Arrow connections */
+    .arrow-row {
+      display: flex;
+      justify-content: center;
+      padding: 4px 0;
+      color: var(--text-muted);
+      font-size: 0.7rem;
+      gap: 8px;
+    }
+    .arrow-row span {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .arrow-down::before { content: '\2193'; font-size: 1rem; }
+    .arrow-up-down::before { content: '\2195'; font-size: 1rem; }
+
+    /* Pipeline */
+    .pipeline {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      overflow-x: auto;
+      padding: 8px 0;
+    }
+    .pipe-step {
+      flex-shrink: 0;
+      border: 1px solid var(--blue);
+      border-radius: 8px;
+      padding: 10px 14px;
+      background: var(--blue-dim);
+      text-align: center;
+      min-width: 130px;
+    }
+    .pipe-step .step-num {
+      font-size: 0.6rem;
+      color: var(--blue);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .pipe-step .step-name {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-top: 2px;
+    }
+    .pipe-step .step-desc {
+      font-size: 0.62rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+      line-height: 1.4;
+    }
+    .pipe-arrow {
+      flex-shrink: 0;
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      padding: 0 4px;
+    }
+    .pipe-step.optional {
+      border-color: var(--border);
+      background: var(--surface);
+      opacity: 0.7;
+    }
+    .pipe-step.optional .step-num { color: var(--text-muted); }
+
+    /* File list inside boxes */
+    .file-list {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-top: 6px;
+    }
+    .file-list code {
+      color: var(--text);
+      background: rgba(255,255,255,0.06);
+      padding: 1px 4px;
+      border-radius: 3px;
+      font-size: 0.66rem;
+    }
+
+    /* Legend */
+    .legend {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--surface);
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+    .legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    /* Stats bar */
+    .stats {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-bottom: 48px;
+    }
+    .stat {
+      text-align: center;
+    }
+    .stat-value {
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--orange);
+    }
+    .stat-label {
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-top: 2px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1><span>Achiote</span> Architecture</h1>
+    <p class="subtitle">Food Memory Detective &mdash; MCP server + HTTP API + web chat</p>
+
+    <div class="stats">
+      <div class="stat"><div class="stat-value">14</div><div class="stat-label">MCP Tools</div></div>
+      <div class="stat"><div class="stat-value">40</div><div class="stat-label">Dish Families</div></div>
+      <div class="stat"><div class="stat-value">82</div><div class="stat-label">Ingredients</div></div>
+      <div class="stat"><div class="stat-value">135</div><div class="stat-label">Tests</div></div>
+    </div>
+
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--orange)"></div>Entry Points</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>Server Layer</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--blue)"></div>Core Library</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--yellow)"></div>Bundled Data</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--purple)"></div>Agent (Mastra)</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div>Frontend</div>
+    </div>
+
+    <!-- ENTRY POINTS -->
+    <div class="section entry">
+      <div class="section-label">Entry Points</div>
+      <div class="box-row">
+        <div class="box w-third">
+          <div class="box-title">bin/achiote.mjs</div>
+          <div class="box-desc">CLI binary. Launches MCP server over stdio for Claude Desktop, Cursor, etc.</div>
+        </div>
+        <div class="box w-third">
+          <div class="box-title">src/http-server.ts <span class="box-tag">port 3000</span></div>
+          <div class="box-desc">Standalone HTTP server. SSE chat endpoint, MCP transport, static files, auth, rate limiting.</div>
+        </div>
+        <div class="box w-third">
+          <div class="box-title">src/cli.ts</div>
+          <div class="box-desc">Stdio MCP server with graceful shutdown. Used by the bin entry point.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="arrow-row"><span class="arrow-down"></span></div>
+
+    <!-- SERVER LAYER -->
+    <div class="section server">
+      <div class="section-label">Server Layer</div>
+      <div class="box-row">
+        <div class="box w-half">
+          <div class="box-title">POST /ask <span class="box-tag">SSE stream</span></div>
+          <div class="box-desc">
+            Chat endpoint. Anthropic SDK drives Claude through a 5-step tool-use loop (max 15 iterations). Streams text events to the client.
+            <div class="file-list">Auth: <code>auth.ts</code> &middot; Rate limit: <code>rate-limit.ts</code> &middot; CORS + CSP</div>
+          </div>
+        </div>
+        <div class="box w-half">
+          <div class="box-title">POST /mcp <span class="box-tag">Streamable HTTP</span></div>
+          <div class="box-desc">
+            MCP protocol endpoint. Session-based transport via <code>mcp-session-id</code>. Exposes all 14 tools for remote MCP clients.
+            <div class="file-list">Transport: <code>StreamableHTTPServerTransport</code> &middot; Server: <code>src/server.ts</code></div>
+          </div>
+        </div>
+      </div>
+      <div class="box-row">
+        <div class="box w-third">
+          <div class="box-title">GET /health</div>
+          <div class="box-desc">Returns status, version, auth state, active sessions.</div>
+        </div>
+        <div class="box w-third">
+          <div class="box-title">Static Files</div>
+          <div class="box-desc">Serves <code>docs/landing/</code> &mdash; routes <code>/</code> to app.html, <code>/about</code> to index.html.</div>
+        </div>
+        <div class="box w-third">
+          <div class="box-title">Auth + Rate Limiting</div>
+          <div class="box-desc"><code>ach_</code> prefixed keys. Timing-safe comparison. Tier-based monthly quotas (free: 3 web / 50 MCP).</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="arrow-row"><span class="arrow-down"></span></div>
+
+    <!-- CORE PIPELINE -->
+    <div class="section lib">
+      <div class="section-label">Core Pipeline &mdash; 5-Step Mandatory Workflow</div>
+      <div class="pipeline">
+        <div class="pipe-step">
+          <div class="step-num">Step 1</div>
+          <div class="step-name">Collect Memory</div>
+          <div class="step-desc">Regex extraction: dish names, regions, ingredients, sensory cues</div>
+        </div>
+        <div class="pipe-arrow">&rarr;</div>
+        <div class="pipe-step">
+          <div class="step-num">Step 2</div>
+          <div class="step-name">Plan Research</div>
+          <div class="step-desc">Hypotheses from dish families, search queries, facts to verify</div>
+        </div>
+        <div class="pipe-arrow">&rarr;</div>
+        <div class="pipe-step">
+          <div class="step-num">Step 3</div>
+          <div class="step-name">Resolve Name</div>
+          <div class="step-desc">Levenshtein + transliteration matching against bundled data</div>
+        </div>
+        <div class="pipe-arrow">&rarr;</div>
+        <div class="pipe-step">
+          <div class="step-num">Step 4</div>
+          <div class="step-name">Build Dossier</div>
+          <div class="step-desc">Evidence ledger: user-stated, researched, inferred, unknown</div>
+        </div>
+        <div class="pipe-arrow">&rarr;</div>
+        <div class="pipe-step">
+          <div class="step-num">Step 5</div>
+          <div class="step-name">MVN Cue</div>
+          <div class="step-desc">Smallest taste/smell test to trigger the memory</div>
+        </div>
+      </div>
+      <div style="margin-top:12px">
+        <div class="pipeline">
+          <div class="pipe-step optional">
+            <div class="step-num">Optional</div>
+            <div class="step-name">Substitutes</div>
+            <div class="step-desc">Compound-overlap ingredient swaps</div>
+          </div>
+          <div class="pipe-arrow">&rarr;</div>
+          <div class="pipe-step optional">
+            <div class="step-num">Optional</div>
+            <div class="step-name">Source</div>
+            <div class="step-desc">Regional store/corridor lookup</div>
+          </div>
+          <div class="pipe-arrow">&rarr;</div>
+          <div class="pipe-step optional">
+            <div class="step-num">Optional</div>
+            <div class="step-name">Region Similars</div>
+            <div class="step-desc">Similar dishes from neighboring cultures</div>
+          </div>
+          <div class="pipe-arrow">&rarr;</div>
+          <div class="pipe-step optional">
+            <div class="step-num">Optional</div>
+            <div class="step-name">Recipe</div>
+            <div class="step-desc">Full reverse-engineered recipe</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="arrow-row"><span class="arrow-down"></span></div>
+
+    <!-- LIBRARY MODULES -->
+    <div class="section lib">
+      <div class="section-label">Library Modules &mdash; src/lib/</div>
+      <div class="box-row">
+        <div class="box w-quarter">
+          <div class="box-title">memory-workflow.ts</div>
+          <div class="box-desc">955 lines. Regex-based extraction, hypothesis generation, dossier building, MVN cue creation.</div>
+        </div>
+        <div class="box w-quarter">
+          <div class="box-title">name-resolver.ts</div>
+          <div class="box-desc">Levenshtein distance + transliteration matching. Ambiguity detection.</div>
+        </div>
+        <div class="box w-quarter">
+          <div class="box-title">substitution-engine.ts</div>
+          <div class="box-desc">Jaccard similarity on volatile compounds. Substitution group bonus. High/Medium/Low confidence.</div>
+        </div>
+        <div class="box w-quarter">
+          <div class="box-title">regional-matcher.ts</div>
+          <div class="box-desc">Location string to region key lookup against availability data.</div>
+        </div>
+      </div>
+      <div class="box-row">
+        <div class="box w-quarter">
+          <div class="box-title">research-provenance.ts</div>
+          <div class="box-desc">Build, validate, extract findings from typed research records.</div>
+        </div>
+        <div class="box w-quarter">
+          <div class="box-title">research-cache.ts</div>
+          <div class="box-desc">SQLite (WAL) cache keyed by (dish_family, region). 512KB max entries.</div>
+        </div>
+        <div class="box w-quarter">
+          <div class="box-title">auth.ts</div>
+          <div class="box-desc"><code>ach_</code> key gen, timing-safe auth, tier validation, 4 tiers.</div>
+        </div>
+        <div class="box w-quarter">
+          <div class="box-title">rate-limit.ts</div>
+          <div class="box-desc">Per-key, per-tier monthly quota tracking. Calendar-month reset.</div>
+        </div>
+      </div>
+      <div class="box-row">
+        <div class="box w-quarter">
+          <div class="box-title">types.ts</div>
+          <div class="box-desc">~277 lines of shared interfaces. SensoryProfile, Dossier, ResearchRecord, etc.</div>
+        </div>
+        <div class="box w-quarter">
+          <div class="box-title">data-schemas.ts</div>
+          <div class="box-desc">Structural validation for all bundled JSON data files.</div>
+        </div>
+        <div class="box w-quarter">
+          <div class="box-title">cache-path.ts</div>
+          <div class="box-desc">Cache path resolution. XDG or env override.</div>
+        </div>
+        <div class="box w-quarter">
+          <div class="box-title">schemas/ + tools/</div>
+          <div class="box-desc">Zod schemas for all 14 tools. Result helpers: structured JSON, sanitization, errors.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="arrow-row"><span class="arrow-up-down"></span></div>
+
+    <!-- DATA FILES -->
+    <div class="section data">
+      <div class="section-label">Bundled Data &mdash; src/data/</div>
+      <div class="box-row">
+        <div class="box w-third">
+          <div class="box-title">dish-families.json <span class="box-tag">40 families</span></div>
+          <div class="box-desc">Canonical names, aliases, transliterations (Arabic, Turkish, Greek...), regions (5+), shared/divergent elements, nostalgia triggers, variants.</div>
+        </div>
+        <div class="box w-third">
+          <div class="box-title">ingredients.json <span class="box-tag">82 ingredients</span></div>
+          <div class="box-desc">Keyed by slug. Volatile compounds, sensory contribution, substitution groups, cultural regions, aliases (3+), DOI-cited science.</div>
+        </div>
+        <div class="box w-third">
+          <div class="box-title">regional-availability.json</div>
+          <div class="box-desc">US regional sourcing. Ethnic corridors, major stores, cuisine categories per metro area.</div>
+        </div>
+      </div>
+      <div class="box-row">
+        <div class="box w-half">
+          <div class="box-title">sensory-profiles.json</div>
+          <div class="box-desc">5 dimensions (aroma, texture, flavor, visual, temperature) with scales, categories, nostalgia indicators. Cites Reid 2023, Yamamoto 2025.</div>
+        </div>
+        <div class="box w-half">
+          <div class="box-title">food-science-references.json</div>
+          <div class="box-desc">Mechanism areas (fat-soluble aromatics, Maillard browning, etc.) with summaries, practical implications, and DOI-linked sources.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AGENT LAYER -->
+    <div class="section agent">
+      <div class="section-label">Agent Layer &mdash; agent/</div>
+      <div class="box-row">
+        <div class="box w-third">
+          <div class="box-title">agent/index.ts</div>
+          <div class="box-desc">Mastra Agent using <code>@ai-sdk/anthropic</code>. Same 5-step mandatory workflow system prompt.</div>
+        </div>
+        <div class="box w-third">
+          <div class="box-title">agent/api.ts</div>
+          <div class="box-desc">SSE streaming handler for the agent. Streams text chunks from Mastra agent responses.</div>
+        </div>
+        <div class="box w-third">
+          <div class="box-title">agent/tools.ts</div>
+          <div class="box-desc">MCP client factory. Creates <code>@mastra/mcp</code> client pointing at <code>/mcp</code>.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FRONTEND -->
+    <div class="section front">
+      <div class="section-label">Frontend</div>
+      <div class="box-row">
+        <div class="box w-half">
+          <div class="box-title">web/ &mdash; React + Vite</div>
+          <div class="box-desc">
+            Chat UI with streaming responses, API key input, mobile-friendly. Vite dev server proxies to :3000.
+            <div class="file-list"><code>App.tsx</code> &middot; <code>useChat.ts</code> &middot; SSE streaming with carry-over buffer</div>
+          </div>
+        </div>
+        <div class="box w-half">
+          <div class="box-title">docs/landing/ &mdash; Static</div>
+          <div class="box-desc">
+            Served directly by HTTP server. External JS (CSP-compliant). Dark mode toggle. DOI-cited food science.
+            <div class="file-list"><code>app.html + app.js</code> (chat) &middot; <code>index.html + index.js</code> (about page)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEPENDENCIES -->
+    <div class="section" style="margin-top:48px;">
+      <div class="section-label">Key Dependencies</div>
+      <div class="box-row">
+        <div class="box w-third" style="border-color:var(--border);">
+          <div class="box-title" style="color:var(--text);">Protocol</div>
+          <div class="box-desc"><code>@modelcontextprotocol/sdk</code> &mdash; McpServer, StdioServerTransport, StreamableHTTPServerTransport</div>
+        </div>
+        <div class="box w-third" style="border-color:var(--border);">
+          <div class="box-title" style="color:var(--text);">AI / LLM</div>
+          <div class="box-desc"><code>@anthropic-ai/sdk</code> (HTTP tool loop) &middot; <code>@mastra/core</code> + <code>@ai-sdk/anthropic</code> (agent)</div>
+        </div>
+        <div class="box w-third" style="border-color:var(--border);">
+          <div class="box-title" style="color:var(--text);">Storage / Validation</div>
+          <div class="box-desc"><code>better-sqlite3</code> (research cache) &middot; <code>zod</code> (MCP tool schemas) &middot; React + Vite (frontend)</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
