@@ -25,7 +25,22 @@ src/index.ts
               +--> src/lib/substitution-engine.ts
               +--> src/lib/research-cache.ts
               +--> src/lib/research-provenance.ts
+              +--> src/lib/recipe-generator.ts
               +--> src/data/*.json
+
+src/http-server.ts
+  - optional HTTP mode for web UI and AI agent endpoint
+  - started via: node dist/http-server.js
+  - endpoints:
+      GET  /           → docs/landing/app.html (web UI)
+      GET  /about      → docs/landing/index.html (landing page)
+      GET  /health     → JSON status with memory/uptime metrics
+      POST /ask        → SSE streaming AI agent (auth + rate limited)
+      POST /mcp        → Streamable HTTP MCP transport
+      GET  /static/*   → JS/CSS assets
+  - auth: x-api-key header or ?apiKey= query param (configurable via ACHIOTE_AUTH_ENABLED)
+  - rate limiting: tiered (free/pro/business/enterprise) per calendar month
+  - shares tool execution logic with src/server.ts
 ```
 
 ## Tool boundaries

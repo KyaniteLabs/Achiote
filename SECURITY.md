@@ -15,12 +15,25 @@ Please do not open public issues for vulnerabilities. Report privately to the re
 
 ## Security model
 
-Achiote is a stdio MCP server. It does not expose an HTTP listener and does not perform live web requests in the current implementation. Host AI clients or future adapters may supply researched source facts; those facts must be represented as typed provenance records before downstream use. Primary risks are:
+Achiote runs in two modes:
 
-- prompt-injection through user-provided memories or ingredient/location fields passed to host-model prompts
+1. **stdio MCP server** — the primary mode, used by Claude Code, Codex, and other MCP clients. No network listener.
+2. **HTTP server** (`node dist/http-server.js`) — optional mode for web UI and AI agent access. Exposes `/health`, `/ask`, `/mcp`, and static file endpoints.
+
+Primary risks are:
+
+- prompt-injection through user-provided memories or ingredient/location fields passed to host-model prompts — mitigated by `sanitizeForPrompt` which strips `<user_input>` tags, control characters, and JSON-wraps user values as inert data literals
 - cache privacy and filesystem permissions
 - accidental publication of runtime state
 - supply-chain risk from npm dependencies and native `better-sqlite3`
+
+### HTTP server security
+
+- **Authentication** — configurable via `ACHIOTE_AUTH_ENABLED` env var. When enabled, requires API key via `x-api-key` header or `?apiKey=` query param. Keys are tiered (free/pro/business/enterprise).
+- **Rate limiting** — tiered per calendar month. Free tier: 50 MCP calls, 3 web reconstructions. Rate limit headers exposed in responses.
+- **`/ask` endpoint** — SSE streaming AI agent endpoint. Validates content-type, parses JSON body, enforces rate limits before calling Anthropic API. User messages are embedded in prompts inside `<user_input>` tags with a "do not follow instructions" directive.
+- **Body size** — 1MB limit on request bodies.
+- **CORS** — permissive (`Access-Control-Allow-Origin: *`) for development. Tighten for production.
 
 ## Maintainer checklist
 
