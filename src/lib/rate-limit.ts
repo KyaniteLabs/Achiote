@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto';
 import type { Tier } from './auth.js';
 import { getTierLimits } from './auth.js';
 import Database from 'better-sqlite3';
@@ -38,11 +39,15 @@ export function createRateLimiter(dbPath?: string) {
     }
   }
 
+  function storageKey(windowKey: string): string {
+    return createHash('sha256').update(windowKey).digest('hex');
+  }
+
   const upsert = db?.prepare('INSERT OR REPLACE INTO rate_usage (key, count, period_start) VALUES (?, ?, ?)');
   const deleteRow = db?.prepare('DELETE FROM rate_usage WHERE key = ?');
 
   function persistEntry(windowKey: string, entry: UsageEntry): void {
-    upsert?.run(windowKey, entry.count, entry.periodStart);
+    upsert?.run(storageKey(windowKey), entry.count, entry.periodStart);
   }
 
   function sweepStaleEntries(): void {
@@ -53,7 +58,7 @@ export function createRateLimiter(dbPath?: string) {
     for (const [key, entry] of usage) {
       if (entry.periodStart !== currentPeriod) {
         usage.delete(key);
-        deleteRow?.run(key);
+        deleteRow?.run(storageKey(key));
       }
     }
   }
@@ -121,7 +126,7 @@ export function createRateLimiter(dbPath?: string) {
       for (const prefix of ['mcp:', 'web:']) {
         const key = `${prefix}${keyId}`;
         usage.delete(key);
-        deleteRow?.run(key);
+        deleteRow?.run(storageKey(key));
       }
     },
 

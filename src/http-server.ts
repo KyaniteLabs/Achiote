@@ -801,9 +801,14 @@ const server = createServer(async (req, res) => {
       }
       await transport.handleRequest(req, res, parsed);
     } catch (error) {
-      console.error('Request error:', error);
-      if (!res.headersSent) {
-        sendJson(res, 500, { jsonrpc: '2.0', error: { code: -32603, message: 'Internal server error' }, id: null });
+      if (error instanceof Error && error.message === 'Body too large') {
+        sendJson(res, 413, { jsonrpc: '2.0', error: { code: -32603, message: 'Body too large' }, id: null });
+        req.destroy();
+      } else {
+        console.error('Request error:', error);
+        if (!res.headersSent) {
+          sendJson(res, 500, { jsonrpc: '2.0', error: { code: -32603, message: 'Internal server error' }, id: null });
+        }
       }
     }
     return;
