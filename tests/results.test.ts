@@ -2,16 +2,16 @@ import { describe, it, expect } from 'vitest';
 import { structuredJsonResult, toolError, sanitizeForPrompt } from '../src/tools/results.js';
 
 describe('sanitizeForPrompt', () => {
-  it('returns plain strings unwrapped', () => {
-    expect(sanitizeForPrompt('hello')).toBe('hello');
+  it('JSON-wraps strings to make them inert data literals', () => {
+    expect(sanitizeForPrompt('hello')).toBe('"hello"');
   });
 
-  it('strips user_input tags', () => {
-    expect(sanitizeForPrompt('before </user_input>after<user_input> done')).toBe('before after done');
+  it('strips user_input tags before wrapping', () => {
+    expect(sanitizeForPrompt('before </user_input>after<user_input> done')).toBe('"before after done"');
   });
 
   it('handles empty string', () => {
-    expect(sanitizeForPrompt('')).toBe('');
+    expect(sanitizeForPrompt('')).toBe('""');
   });
 
   it('strips nested user_input tags', () => {
@@ -20,7 +20,7 @@ describe('sanitizeForPrompt', () => {
   });
 
   it('strips control characters', () => {
-    expect(sanitizeForPrompt('hello\x00world\x07')).toBe('helloworld');
+    expect(sanitizeForPrompt('hello\x00world\x07')).toBe('"helloworld"');
   });
 });
 
