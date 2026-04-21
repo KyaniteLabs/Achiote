@@ -12,3 +12,4 @@ coverage/
 .omx/
 .omc/
 .worktrees/
+.playwright-mcp/

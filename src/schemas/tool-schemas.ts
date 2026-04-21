@@ -252,7 +252,7 @@ export const minimumViableNostalgiaOutputSchema = z.object({
   title: z.string(),
   goal: z.string(),
   effortMinutes: z.number(),
-  format: z.enum(['aroma-cue', 'bite', 'sip', 'condiment', 'ritual', 'shopping-shortcut']),
+  format: z.enum(['aroma-cue', 'bite', 'sip', 'condiment', 'ritual']),
   ingredients: z.array(minimumViableNostalgiaIngredientSchema),
   steps: z.array(z.string()),
   preserves: z.array(z.string()),
