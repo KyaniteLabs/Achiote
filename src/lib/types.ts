@@ -261,7 +261,7 @@ export interface MinimumViableNostalgiaCue {
   title: string;
   goal: string;
   effortMinutes: number;
-  format: 'aroma-cue' | 'bite' | 'sip' | 'condiment' | 'ritual' | 'shopping-shortcut';
+  format: 'aroma-cue' | 'bite' | 'sip' | 'condiment' | 'ritual';
   ingredients: Array<{ item: string; amount: string; purpose: string; optional?: boolean }>;
   steps: string[];
   preserves: string[];
