@@ -113,9 +113,28 @@ After building, add the stdio server to your MCP settings:
 
 If installed as a package, the CLI binary is `achiote`.
 
+## HTTP server
+
+An optional HTTP server provides a web UI and AI agent endpoint:
+
+```bash
+node dist/http-server.js
+# Listening on http://localhost:3000
+```
+
+| Endpoint | Description |
+|----------|-------------|
+| `GET /` | Web UI (`app.html`) |
+| `GET /about` | Landing page (`index.html`) |
+| `GET /health` | JSON status with memory/uptime metrics |
+| `POST /ask` | SSE streaming AI agent (auth + rate limited) |
+| `POST /mcp` | Streamable HTTP MCP transport |
+
+Set `ACHIOTE_AUTH_ENABLED=true` to require API key authentication. Port defaults to 3000, configurable via `PORT` env var.
+
 ## Cache and privacy
 
-Achiote is a stdio MCP server. It does not open an HTTP port. The SQLite research cache path is:
+The SQLite research cache path is:
 
 1. `$ACHIOTE_CACHE_PATH`, if set
 2. `$XDG_CACHE_HOME/achiote/culture-cache.db`, if `XDG_CACHE_HOME` is set
