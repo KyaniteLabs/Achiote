@@ -103,8 +103,10 @@ function assertPackagedHelperScripts(installDir) {
   const packageRoot = path.join(installDir, 'node_modules', 'achiote');
   const keygenPath = path.join(packageRoot, 'scripts', 'generate-api-key.mjs');
   const dockerSmokePath = path.join(packageRoot, 'scripts', 'docker-smoke.mjs');
+  const liveAskPath = path.join(packageRoot, 'scripts', 'live-ask-smoke.mjs');
   if (!fs.existsSync(keygenPath)) throw new Error(`Packaged keygen helper missing at ${keygenPath}`);
   if (!fs.existsSync(dockerSmokePath)) throw new Error(`Packaged docker smoke helper missing at ${dockerSmokePath}`);
+  if (!fs.existsSync(liveAskPath)) throw new Error(`Packaged live ask smoke helper missing at ${liveAskPath}`);
 
   const keygen = spawnSync(process.execPath, [keygenPath, '--tier', 'free', '--name', 'package-smoke'], { encoding: 'utf8' });
   if (keygen.status !== 0) {

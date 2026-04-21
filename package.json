@@ -19,7 +19,8 @@
     "keygen": "node scripts/generate-api-key.mjs",
     "docker:smoke": "node scripts/docker-smoke.mjs",
     "lint": "node scripts/static-checks.mjs",
-    "coverage:guard": "node scripts/coverage-threshold.mjs"
+    "coverage:guard": "node scripts/coverage-threshold.mjs",
+    "live:ask": "node scripts/live-ask-smoke.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.90.0",
