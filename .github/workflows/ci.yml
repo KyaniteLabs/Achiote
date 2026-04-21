@@ -28,14 +28,8 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
-      - name: Typecheck
-        run: npm run typecheck
-
-      - name: Build
-        run: npm run build
-
-      - name: Test
-        run: npm test
+      - name: Check
+        run: npm run check
 
       - name: Audit production dependency vulnerabilities
         run: npm audit --audit-level=moderate

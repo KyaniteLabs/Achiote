@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { spawnSync } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -87,6 +87,58 @@ async function withTimeout(promise, ms, label) {
   }
 }
 
+function waitForServer(child, port) {
+  return new Promise((resolve, reject) => {
+    let stderr = '';
+    const timeout = setTimeout(() => reject(new Error(`Packaged HTTP server startup timed out on port ${port}${stderr ? `\n\nstderr:\n${stderr}` : ''}`)), 10_000);
+    child.stdout?.on('data', (chunk) => {
+      if (Buffer.from(chunk).toString('utf8').includes(`localhost:${port}`)) {
+        clearTimeout(timeout);
+        resolve();
+      }
+    });
+    child.stderr?.on('data', (chunk) => { stderr += Buffer.from(chunk).toString('utf8'); });
+    child.on('error', (error) => {
+      clearTimeout(timeout);
+      reject(error);
+    });
+    child.on('exit', (code) => {
+      if (code !== null && code !== 0) {
+        clearTimeout(timeout);
+        reject(new Error(`Packaged HTTP server exited early with ${code}${stderr ? `\n\nstderr:\n${stderr}` : ''}`));
+      }
+    });
+  });
+}
+
+async function assertPackagedHttpServerStarts(installDir, tempRoot) {
+  const port = 39000 + Math.floor(Math.random() * 20000);
+  const serverPath = path.join(installDir, 'node_modules', 'achiote', 'dist', 'http-server.js');
+  const child = spawn(process.execPath, [serverPath], {
+    cwd: installDir,
+    stdio: ['ignore', 'pipe', 'pipe'],
+    env: {
+      ...process.env,
+      PORT: String(port),
+      ACHIOTE_AUTH_ENABLED: 'false',
+      ACHIOTE_CACHE_PATH: path.join(tempRoot, 'http-cache', 'culture-cache.db'),
+      ACHIOTE_RATE_LIMIT_DB: path.join(tempRoot, 'http-rate-limit.db'),
+      ANTHROPIC_API_KEY: 'package-smoke-placeholder',
+    },
+  });
+
+  try {
+    await withTimeout(waitForServer(child, port), 12_000, 'packaged HTTP startup');
+    for (const pathPart of ['/health', '/about']) {
+      const res = await withTimeout(fetch(`http://127.0.0.1:${port}${pathPart}`), 5_000, `GET ${pathPart}`);
+      if (!res.ok) throw new Error(`GET ${pathPart} returned ${res.status}`);
+    }
+  } finally {
+    child.kill('SIGTERM');
+    await new Promise((resolve) => child.once('exit', resolve));
+  }
+}
+
 async function assertPackagedCliListsTools(installDir, tempRoot) {
   const cliPath = installedBinPath(installDir);
   if (!fs.existsSync(cliPath)) {
@@ -154,7 +206,10 @@ async function main() {
     console.log('Checking packaged CLI MCP tools/list response');
     await assertPackagedCliListsTools(installDir, tempRoot);
 
-    console.log(`Package smoke passed: installed tarball CLI listed ${expectedTools.length} MCP tools.`);
+    console.log('Checking packaged HTTP server /health and /about responses');
+    await assertPackagedHttpServerStarts(installDir, tempRoot);
+
+    console.log(`Package smoke passed: installed tarball CLI listed ${expectedTools.length} MCP tools and HTTP smoke responded.`);
   } finally {
     if (process.env.ACHIOTE_KEEP_PACKAGE_SMOKE !== '1') {
       fs.rmSync(tempRoot, { recursive: true, force: true });

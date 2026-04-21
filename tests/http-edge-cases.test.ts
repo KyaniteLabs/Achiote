@@ -102,18 +102,18 @@ describe('HTTP method edge cases', () => {
     expect([404, 405]).toContain(res.status);
   });
 
-  it('PUT /health returns 200 (simple router ignores method)', async () => {
+  it('PUT /health returns 405 method not allowed', async () => {
     const res = await fetch(`${baseUrl}/health`, {
       method: 'PUT',
       body: '{}',
       headers: { 'Content-Type': 'application/json' },
     });
-    expect(res.status).toBe(200);
+    expect(res.status).toBe(405);
   });
 
-  it('DELETE / returns 200 (simple router ignores method)', async () => {
+  it('DELETE / returns 405 method not allowed', async () => {
     const res = await fetch(`${baseUrl}/`, { method: 'DELETE' });
-    expect(res.status).toBe(200);
+    expect(res.status).toBe(405);
   });
 
   it('GET /mcp without session returns error', async () => {
