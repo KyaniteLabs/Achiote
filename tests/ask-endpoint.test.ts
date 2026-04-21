@@ -56,6 +56,16 @@ describe('/ask endpoint — pre-rate-limit guards', () => {
     const body = await res.json();
     expect(body.error).toContain('application/json');
   });
+
+  it('returns 413 for body too large', async () => {
+    const hugeBody = 'x'.repeat(1_100_000);
+    const res = await fetch(`${baseUrl}/ask`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: hugeBody,
+    });
+    expect(res.status).toBe(413);
+  });
 });
 
 // Tests that run AFTER rate limiting — each gets its own server to avoid quota exhaustion
