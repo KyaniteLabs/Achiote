@@ -10,7 +10,7 @@ import { createAchioteServer } from './server.js';
 import { createCacheWithStatus } from './lib/cache-path.js';
 import { createAuthenticator, loadKeysFromEnv } from './lib/auth.js';
 import { createRateLimiter } from './lib/rate-limit.js';
-import { getHttpReadiness, getRequestRateLimitIdentity, shouldApplyRateLimit } from './lib/http-runtime.js';
+import { getHttpReadiness, getRequestRateLimitIdentity, isAnonymousAskAllowed, shouldApplyRateLimit } from './lib/http-runtime.js';
 import type { Tier } from './lib/auth.js';
 import {
   anthropicTools as TOOLS,
@@ -22,6 +22,11 @@ import {
 } from './tools/tool-registry.js';
 
 const TRUST_PROXY = process.env.ACHIOTE_TRUST_PROXY === 'true';
+const TRUSTED_PROXY_IPS = (process.env.ACHIOTE_TRUSTED_PROXY_IPS || '')
+  .split(',')
+  .map((value) => value.trim())
+  .filter(Boolean);
+const ALLOW_ANON_ASK = process.env.ACHIOTE_ALLOW_ANON_ASK === 'true';
 
 const PORT = parseInt(process.env.PORT || '3000', 10);
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -140,6 +145,7 @@ function authenticateRequest(req: IncomingMessage): AuthedRequest {
     headers: req.headers,
     remoteAddress: req.socket.remoteAddress,
     trustProxy: TRUST_PROXY,
+    trustedProxyIps: TRUSTED_PROXY_IPS,
   });
 }
 
@@ -161,6 +167,10 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
 
   const authed = authenticateRequest(req);
   if (!authed) { sendJson(res, 401, { error: 'Unauthorized. Provide a valid API key via x-api-key header or Authorization bearer token.' }); return; }
+  if (!isAnonymousAskAllowed({ authEnabled: AUTH_ENABLED, allowAnonymousAsk: ALLOW_ANON_ASK })) {
+    sendJson(res, 401, { error: 'Anonymous /ask access is disabled. Enable ACHIOTE_ALLOW_ANON_ASK=true only for local demos, or provide a valid API key.' });
+    return;
+  }
 
   let raw: string;
   try {
@@ -314,7 +324,7 @@ const server = createServer(async (req, res) => {
     const corsHeaders = allowedOrigin ? {
       'Access-Control-Allow-Origin': allowedOrigin,
       'Access-Control-Allow-Methods': 'GET, HEAD, POST, DELETE, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type, mcp-session-id, Accept, x-api-key, authorization, x-session-id',
+      'Access-Control-Allow-Headers': 'Content-Type, mcp-session-id, Accept, x-api-key, authorization',
       'Access-Control-Expose-Headers': 'mcp-session-id, X-RateLimit-Remaining, X-RateLimit-Limit, X-RateLimit-Reset',
       Vary: 'Origin',
     } : { Vary: 'Origin' };

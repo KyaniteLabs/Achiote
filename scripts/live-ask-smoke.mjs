@@ -119,6 +119,7 @@ async function main() {
       ...process.env,
       PORT: String(port),
       ACHIOTE_AUTH_ENABLED: 'false',
+      ACHIOTE_ALLOW_ANON_ASK: 'true',
       ACHIOTE_CACHE_PATH: path.join(tmpRoot, 'cache.db'),
       ACHIOTE_RATE_LIMIT_DB: path.join(tmpRoot, 'rate-limit.db'),
     },

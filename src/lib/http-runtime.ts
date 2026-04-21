@@ -21,6 +21,12 @@ export type RequestIdentityInput = {
   headers: HeaderBag;
   remoteAddress?: string;
   trustProxy: boolean;
+  trustedProxyIps?: string[];
+};
+
+export type AnonymousAskPolicyInput = {
+  authEnabled: boolean;
+  allowAnonymousAsk: boolean;
 };
 
 export type RateLimitGateInput = {
@@ -57,13 +63,31 @@ function normalizedHeader(headers: HeaderBag, name: string): string | undefined 
   return firstHeader(headers[name] ?? headers[name.toLowerCase()] ?? headers[name.toUpperCase()]);
 }
 
-function clientAddress(headers: HeaderBag, remoteAddress: string | undefined, trustProxy: boolean): string {
-  if (trustProxy) {
+function normalizeAddress(value: string | undefined): string {
+  return (value || 'unknown').replace(/^::ffff:/, '').trim();
+}
+
+function isTrustedProxy(remoteAddress: string | undefined, trustedProxyIps: string[] | undefined): boolean {
+  const normalizedRemote = normalizeAddress(remoteAddress);
+  return (trustedProxyIps ?? []).map(normalizeAddress).includes(normalizedRemote);
+}
+
+function clientAddress(headers: HeaderBag, remoteAddress: string | undefined, trustProxy: boolean, trustedProxyIps?: string[]): string {
+  if (trustProxy && isTrustedProxy(remoteAddress, trustedProxyIps)) {
     const forwardedFor = normalizedHeader(headers, 'x-forwarded-for');
-    const firstForwarded = forwardedFor?.split(',')[0]?.trim();
-    if (firstForwarded) return firstForwarded;
+    const chain = forwardedFor
+      ?.split(',')
+      .map((value) => normalizeAddress(value))
+      .filter((value) => value && value !== 'unknown');
+
+    if (chain?.length === 1) return chain[0];
+    if (chain && chain.length > 1) {
+      const downstreamProxyChain = chain.slice(1);
+      const allDownstreamProxiesTrusted = downstreamProxyChain.every((address) => isTrustedProxy(address, trustedProxyIps));
+      if (allDownstreamProxiesTrusted) return chain[0];
+    }
   }
-  return remoteAddress || 'unknown';
+  return normalizeAddress(remoteAddress);
 }
 
 export function getRequestRateLimitIdentity(input: RequestIdentityInput): RequestRateLimitIdentity | null {
@@ -76,16 +100,15 @@ export function getRequestRateLimitIdentity(input: RequestIdentityInput): Reques
     };
   }
 
-  const explicitSession = normalizedHeader(input.headers, 'x-session-id')?.trim();
-  if (explicitSession) {
-    return { tier: 'free', name: 'anonymous', keyId: `anon:session:${explicitSession}` };
-  }
-
   return {
     tier: 'free',
     name: 'anonymous',
-    keyId: `anon:ip:${clientAddress(input.headers, input.remoteAddress, input.trustProxy)}`,
+    keyId: `anon:ip:${clientAddress(input.headers, input.remoteAddress, input.trustProxy, input.trustedProxyIps)}`,
   };
+}
+
+export function isAnonymousAskAllowed(input: AnonymousAskPolicyInput): boolean {
+  return input.authEnabled || input.allowAnonymousAsk;
 }
 
 export function shouldApplyRateLimit(input: RateLimitGateInput): boolean {

@@ -70,6 +70,7 @@ describe('package distribution metadata', () => {
     expect(liveSmokeScript).toContain('function cleanupListeners()');
     expect(liveSmokeScript).toContain('Malformed text event JSON');
     expect(liveSmokeScript).toContain('parseTextPayload');
+    expect(liveSmokeScript).toContain("ACHIOTE_ALLOW_ANON_ASK: 'true'");
   });
 
 });

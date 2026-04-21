@@ -29,7 +29,7 @@ Primary risks are:
 
 ### HTTP server security
 
-- **Authentication** — configurable via `ACHIOTE_AUTH_ENABLED` env var. When enabled, requires API key via `x-api-key` header or `Authorization: Bearer` header. Keys are tiered (free/pro/business/enterprise).
+- **Authentication** — configurable via `ACHIOTE_AUTH_ENABLED` env var. When enabled, requires API key via `x-api-key` header or `Authorization: Bearer` header. Keys are tiered (free/pro/business/enterprise). Anonymous `/ask` requires the separate local-demo-only `ACHIOTE_ALLOW_ANON_ASK=true` opt-in when auth is disabled.
 - **Rate limiting** — tiered per calendar month. Free tier: 50 MCP calls, 3 web reconstructions. Rate limit headers exposed in responses.
 - **`/ask` endpoint** — SSE streaming AI agent endpoint. Validates content-type, parses JSON body, enforces rate limits before calling Anthropic API. User messages are embedded in prompts inside `<user_input>` tags with a "do not follow instructions" directive.
 - **Body size** — 1MB limit on request bodies.
@@ -40,7 +40,7 @@ Primary risks are:
 For public HTTPS access, run behind a reverse proxy:
 
 - **nginx** or **Caddy** for TLS termination
-- Set `ACHIOTE_TRUST_PROXY=true` so rate limiting uses `X-Forwarded-For`
+- Set `ACHIOTE_TRUST_PROXY=true` and `ACHIOTE_TRUSTED_PROXY_IPS` so rate limiting uses `X-Forwarded-For` only from trusted proxy remote addresses. Configure the edge proxy to overwrite, not append, client-supplied `X-Forwarded-For`; if you intentionally preserve a multi-hop chain, every downstream proxy address after the original client must be listed in `ACHIOTE_TRUSTED_PROXY_IPS`
 - Set `ACHIOTE_ALLOWED_ORIGINS=https://your-domain.com`
 - Set `ACHIOTE_RATE_LIMIT_DB` to a persistent path so rate limits survive restarts
 
@@ -65,7 +65,7 @@ server {
     location / {
         proxy_pass http://127.0.0.1:3000;
         proxy_set_header Host $host;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-For $remote_addr;
         proxy_set_header X-Forwarded-Proto $scheme;
     }
 }

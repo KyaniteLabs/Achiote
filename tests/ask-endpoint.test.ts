@@ -6,9 +6,9 @@ import { fileURLToPath } from 'node:url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
 
-function spawnServer(port: number, authEnabled: string): Promise<ChildProcess> {
+function spawnServer(port: number, authEnabled: string, env?: Record<string, string>): Promise<ChildProcess> {
   const server = spawn('node', [resolve(ROOT, 'dist/http-server.js')], {
-    env: { ...process.env, PORT: String(port), ACHIOTE_AUTH_ENABLED: authEnabled },
+    env: { ...process.env, PORT: String(port), ACHIOTE_AUTH_ENABLED: authEnabled, ...env },
     stdio: ['pipe', 'pipe', 'pipe'],
   });
 
@@ -41,7 +41,7 @@ describe('/ask endpoint — pre-rate-limit guards', () => {
   beforeAll(async () => {
     const port = 20000 + Math.floor(Math.random() * 40000);
     baseUrl = `http://127.0.0.1:${port}`;
-    server = await spawnServer(port, 'false');
+    server = await spawnServer(port, 'false', { ACHIOTE_ALLOW_ANON_ASK: 'true' });
   }, 15000);
 
   afterAll(() => { server?.kill('SIGINT'); });
@@ -72,7 +72,7 @@ describe('/ask endpoint — pre-rate-limit guards', () => {
 describe('/ask endpoint — post-rate-limit guards', () => {
   it('returns 400 for invalid JSON', async () => {
     const port = 25000 + Math.floor(Math.random() * 30000);
-    const server = await spawnServer(port, 'false');
+    const server = await spawnServer(port, 'false', { ACHIOTE_ALLOW_ANON_ASK: 'true' });
     try {
       const res = await fetch(`http://127.0.0.1:${port}/ask`, {
         method: 'POST',
@@ -87,7 +87,7 @@ describe('/ask endpoint — post-rate-limit guards', () => {
 
   it('returns 400 for missing message field', async () => {
     const port = 25000 + Math.floor(Math.random() * 30000);
-    const server = await spawnServer(port, 'false');
+    const server = await spawnServer(port, 'false', { ACHIOTE_ALLOW_ANON_ASK: 'true' });
     try {
       const res = await fetch(`http://127.0.0.1:${port}/ask`, {
         method: 'POST',
@@ -102,7 +102,7 @@ describe('/ask endpoint — post-rate-limit guards', () => {
 
   it('returns 400 for empty message', async () => {
     const port = 25000 + Math.floor(Math.random() * 30000);
-    const server = await spawnServer(port, 'false');
+    const server = await spawnServer(port, 'false', { ACHIOTE_ALLOW_ANON_ASK: 'true' });
     try {
       const res = await fetch(`http://127.0.0.1:${port}/ask`, {
         method: 'POST',
@@ -137,5 +137,35 @@ describe('/ask endpoint with auth enabled', () => {
     expect(res.status).toBe(401);
     const body = await res.json();
     expect(body.error).toContain('Unauthorized');
+  });
+});
+
+describe('/ask endpoint with auth disabled', () => {
+  it('requires explicit ACHIOTE_ALLOW_ANON_ASK for anonymous /ask', async () => {
+    const port = 33000 + Math.floor(Math.random() * 25000);
+    const server = await spawnServer(port, 'false');
+    try {
+      const res = await fetch(`http://127.0.0.1:${port}/ask`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: 'hello' }),
+      });
+      expect(res.status).toBe(401);
+      const body = await res.json();
+      expect(body.error).toContain('ACHIOTE_ALLOW_ANON_ASK');
+    } finally { server.kill('SIGINT'); }
+  });
+
+  it('allows anonymous /ask only when ACHIOTE_ALLOW_ANON_ASK=true', async () => {
+    const port = 33000 + Math.floor(Math.random() * 25000);
+    const server = await spawnServer(port, 'false', { ACHIOTE_ALLOW_ANON_ASK: 'true' });
+    try {
+      const res = await fetch(`http://127.0.0.1:${port}/ask`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: '   ' }),
+      });
+      expect(res.status).toBe(400);
+    } finally { server.kill('SIGINT'); }
   });
 });
