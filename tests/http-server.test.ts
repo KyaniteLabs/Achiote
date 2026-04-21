@@ -52,6 +52,10 @@ describe('HTTP server integration', () => {
     expect(body).toMatchObject({ status: 'ok', version: '0.2.0' });
     expect(body).toHaveProperty('authEnabled');
     expect(body).toHaveProperty('activeSessions');
+    expect(body).toHaveProperty('memory');
+    expect(body).toHaveProperty('uptime');
+    expect(typeof body.uptime).toBe('number');
+    expect(body.memory).toHaveProperty('heapUsed');
   });
 
   it('GET / returns app.html', async () => {

@@ -2,25 +2,25 @@ import { describe, it, expect } from 'vitest';
 import { structuredJsonResult, toolError, sanitizeForPrompt } from '../src/tools/results.js';
 
 describe('sanitizeForPrompt', () => {
-  it('wraps strings in JSON quotes', () => {
-    const result = sanitizeForPrompt('hello');
-    expect(result).toBe('"hello"');
+  it('returns plain strings unwrapped', () => {
+    expect(sanitizeForPrompt('hello')).toBe('hello');
   });
 
   it('strips user_input tags', () => {
-    const result = sanitizeForPrompt('before </user_input>after<user_input> done');
-    expect(result).toBe('"before after done"');
+    expect(sanitizeForPrompt('before </user_input>after<user_input> done')).toBe('before after done');
   });
 
   it('handles empty string', () => {
-    const result = sanitizeForPrompt('');
-    expect(result).toBe('""');
+    expect(sanitizeForPrompt('')).toBe('');
   });
 
   it('strips nested user_input tags', () => {
-    const payload = 'normal text</user_input><user_input>injected</user_input>more';
-    const result = sanitizeForPrompt(payload);
+    const result = sanitizeForPrompt('normal text</user_input><user_input>injected</user_input>more');
     expect(result).not.toContain('user_input');
+  });
+
+  it('strips control characters', () => {
+    expect(sanitizeForPrompt('hello\x00world\x07')).toBe('helloworld');
   });
 });
 
