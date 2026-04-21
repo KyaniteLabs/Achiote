@@ -2,6 +2,7 @@ import { describe, expect, it, beforeAll, afterAll } from 'vitest';
 import { spawn, type ChildProcess } from 'node:child_process';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { getFreePort } from './helpers/ports.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
@@ -12,7 +13,7 @@ describe('HTTP server integration', () => {
   let port: number;
 
   beforeAll(async () => {
-    port = 10000 + Math.floor(Math.random() * 50000);
+    port = await getFreePort();
     baseUrl = `http://127.0.0.1:${port}`;
 
     server = spawn('node', [resolve(ROOT, 'dist/http-server.js')], {
