@@ -21,6 +21,7 @@ import {
   researchFindingsOutputSchema,
   researchRecordOutputSchema,
   researchValidationOutputSchema,
+  recipeValidationOutputSchema,
   sourceIngredientsOutputSchema,
 } from './schemas/tool-schemas.js';
 import type { ZodTypeAny } from 'zod';
@@ -43,7 +44,7 @@ import { createAuthenticator, loadKeysFromEnv } from './lib/auth.js';
 import { createRateLimiter } from './lib/rate-limit.js';
 import { getHttpReadiness, getRequestRateLimitIdentity, shouldApplyRateLimit } from './lib/http-runtime.js';
 import { sanitizeForPrompt } from './tools/results.js';
-import { assembleRecipePrompt } from './lib/recipe-generator.js';
+import { assembleRecipePrompt, validateRecipeOutput } from './lib/recipe-generator.js';
 import type { Tier } from './lib/auth.js';
 import sensoryProfilesData from './data/sensory-profiles.json' with { type: 'json' };
 import dishFamiliesData from './data/dish-families.json' with { type: 'json' };
@@ -316,6 +317,17 @@ const TOOLS: Anthropic.Tool[] = [
       },
     },
   },
+  {
+    name: 'validate_recipe_output',
+    description: 'Validate a host-synthesized final recipe object against the expected Achiote recipe schema.',
+    input_schema: {
+      type: 'object' as const,
+      required: ['recipe'],
+      properties: {
+        recipe: { type: 'object' as const, description: 'Host-synthesized recipe object to validate after generate_recipe handoff' },
+      },
+    },
+  },
 ];
 
 // ── Tool execution ──────────────────────────────────────────────────────────
@@ -337,6 +349,7 @@ const outputSchemas: Record<string, ZodTypeAny> = {
   build_research_record: researchRecordOutputSchema,
   validate_research_record: researchValidationOutputSchema,
   extract_research_findings: researchFindingsOutputSchema,
+  validate_recipe_output: recipeValidationOutputSchema,
 };
 
 function validateToolOutput(toolName: string, result: unknown): void {
@@ -518,6 +531,11 @@ function executeTool(name: string, raw: unknown): any {
 
     case 'extract_research_findings':
       return extractResearchFindings(input as unknown as Parameters<typeof extractResearchFindings>[0]);
+
+    case 'validate_recipe_output': {
+      const issues = validateRecipeOutput(input.recipe);
+      return { valid: issues.length === 0, issues };
+    }
 
     default:
       throw new Error(`Unknown tool: ${name}`);

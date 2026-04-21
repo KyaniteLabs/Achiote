@@ -114,6 +114,29 @@ export const RECIPE_OUTPUT_FIELDS: Record<string, string> = {
   whatsDifferent: 'string - Honest assessment of what will differ and why',
 };
 
+const recipeIngredientOutputSchema = z.object({
+  item: z.string().min(1),
+  amount: z.string().min(1),
+  notes: z.string().optional(),
+});
+
+export const recipeOutputSchema = z.object({
+  title: z.string().min(1),
+  yield: z.string().min(1),
+  prepTime: z.string().min(1),
+  cookTime: z.string().min(1),
+  ingredients: z.array(recipeIngredientOutputSchema).min(1),
+  steps: z.array(z.string().min(1)).min(1),
+  sensoryAnalysis: z.string().min(1),
+  confidencePerElement: z.record(z.string(), confidenceSchema),
+  whatsDifferent: z.string().min(1),
+});
+
+export const recipeValidationOutputSchema = z.object({
+  valid: z.boolean(),
+  issues: z.array(z.object({ path: z.string(), message: z.string() })),
+});
+
 export const generateRecipeOutputSchema = z.object({
   dishDescription: z.string(),
   location: z.string(),

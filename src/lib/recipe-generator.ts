@@ -1,5 +1,5 @@
 import { sanitizeForPrompt } from '../tools/results.js';
-import { RECIPE_OUTPUT_FIELDS } from '../schemas/tool-schemas.js';
+import { RECIPE_OUTPUT_FIELDS, recipeOutputSchema } from '../schemas/tool-schemas.js';
 
 export interface GenerateRecipeInput {
   dishDescription: string;
@@ -66,4 +66,19 @@ Generate a recipe with:
 
 Then self-critique: Does this recipe recreate the target sensory experience? If not, suggest adjustments.`,
   };
+}
+
+
+export interface RecipeValidationIssue {
+  path: string;
+  message: string;
+}
+
+export function validateRecipeOutput(recipe: unknown): RecipeValidationIssue[] {
+  const parsed = recipeOutputSchema.safeParse(recipe);
+  if (parsed.success) return [];
+  return parsed.error.issues.map((issue) => ({
+    path: issue.path.join('.') || 'recipe',
+    message: issue.message,
+  }));
 }

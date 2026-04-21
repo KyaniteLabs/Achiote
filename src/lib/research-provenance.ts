@@ -120,6 +120,11 @@ export function validateResearchRecord(record: ResearchRecord): ResearchValidati
 }
 
 export function extractResearchFindings(record: ResearchRecord): ResearchFindingsForDossier {
+  const issues = validateResearchRecord(record);
+  if (issues.length > 0) {
+    throw new Error(`Research record validation failed: ${issues.map((issue) => `${issue.path} ${issue.message}`).join('; ')}`);
+  }
+
   return {
     researchedFacts: record.sources.flatMap((source) => source.quotedFacts),
     inferredFacts: [
