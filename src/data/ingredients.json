@@ -7,7 +7,14 @@
       "Liu, S. et al. (2022). Insights into flavor and key influencing factors of Maillard reaction products. Frontiers in Nutrition, 9, 973677. doi:10.3389/fnut.2022.973677",
       "Zhang, F. et al. (2008). Molecular mechanism for the umami taste synergism. PNAS, 105(52), 20930–20934. doi:10.1073/pnas.0810174106",
       "Yamamoto, T. & Inui-Yamamoto, C. (2023). The flavor-enhancing action of glutamate. npj Science of Food, 7, 3. doi:10.1038/s41538-023-00178-2"
-    ]
+    ],
+    "provenance": {
+      "sourceType": "published food-science references and curated ingredient grouping",
+      "notes": [
+        "Compound-level references are listed in compoundDataSources; individual ingredient groupings are launch-curated proxies.",
+        "Use substitutions as sensory hypotheses, not exact chemical equivalence claims."
+      ]
+    }
   },
   "ingredients": {
     "cumin-seeds": {
@@ -35,7 +42,14 @@
         "South Asian",
         "Mexican",
         "North African"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "coriander-seeds": {
       "name": "Coriander Seeds",
@@ -61,7 +75,14 @@
         "Middle Eastern",
         "Southeast Asian",
         "Mexican"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "smoked-paprika": {
       "name": "Smoked Paprika",
@@ -85,7 +106,14 @@
         "Spanish",
         "Hungarian",
         "Mexican"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "fresh-cilantro": {
       "name": "Fresh Cilantro",
@@ -110,7 +138,14 @@
         "South Asian",
         "Southeast Asian",
         "Middle Eastern"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "fish-sauce": {
       "name": "Fish Sauce",
@@ -137,7 +172,14 @@
         "Thai",
         "Filipino",
         "Korean"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "soy-sauce": {
       "name": "Soy Sauce",
@@ -161,7 +203,14 @@
       "commonIn": [
         "East Asian",
         "Southeast Asian"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "ghee": {
       "name": "Ghee",
@@ -186,7 +235,14 @@
       "commonIn": [
         "South Asian",
         "Middle Eastern"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "tamarind": {
       "name": "Tamarind",
@@ -213,7 +269,14 @@
         "Southeast Asian",
         "Mexican",
         "Middle Eastern"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "sumac": {
       "name": "Sumac",
@@ -237,7 +300,14 @@
       "commonIn": [
         "Middle Eastern",
         "Mediterranean"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "dried-chilies": {
       "name": "Dried Chilies",
@@ -265,7 +335,14 @@
         "Southeast Asian",
         "Sichuan",
         "Korean"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "turmeric": {
       "name": "Turmeric",
@@ -291,7 +368,14 @@
         "South Asian",
         "Southeast Asian",
         "Middle Eastern"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "star-anise": {
       "name": "Star Anise",
@@ -316,7 +400,14 @@
         "Chinese",
         "Vietnamese",
         "Southeast Asian"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "garlic": {
       "name": "Garlic",
@@ -344,7 +435,14 @@
         "South Asian",
         "Latin American",
         "Middle Eastern"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "onion": {
       "name": "Onion",
@@ -367,7 +465,14 @@
       "substitutionGroup": "allium",
       "commonIn": [
         "Global"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "shallot": {
       "name": "Shallot",
@@ -392,7 +497,14 @@
         "French",
         "Southeast Asian",
         "Mediterranean"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "scallion": {
       "name": "Scallion (Green Onion)",
@@ -417,7 +529,14 @@
         "East Asian",
         "Latin American",
         "Caribbean"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "lime": {
       "name": "Lime Juice",
@@ -443,7 +562,14 @@
         "Southeast Asian",
         "Caribbean",
         "South Asian"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "lemon": {
       "name": "Lemon Juice",
@@ -469,7 +595,14 @@
         "Mediterranean",
         "Middle Eastern",
         "European"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "vinegar": {
       "name": "Vinegar (Rice/Apple Cider/White)",
@@ -494,7 +627,14 @@
         "East Asian",
         "European",
         "Latin American"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "pomegranate-molasses": {
       "name": "Pomegranate Molasses",
@@ -520,7 +660,14 @@
         "Middle Eastern",
         "Mediterranean",
         "Persian"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "butter": {
       "name": "Butter",
@@ -546,7 +693,14 @@
         "European",
         "North American",
         "South Asian"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "sesame-oil": {
       "name": "Toasted Sesame Oil",
@@ -571,7 +725,14 @@
         "East Asian",
         "Korean",
         "Southeast Asian"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "coconut-oil": {
       "name": "Coconut Oil",
@@ -597,7 +758,14 @@
         "South Asian",
         "Caribbean",
         "Filipino"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "olive-oil": {
       "name": "Extra Virgin Olive Oil",
@@ -623,7 +791,14 @@
         "Mediterranean",
         "Middle Eastern",
         "European"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "black-pepper": {
       "name": "Black Pepper",
@@ -647,7 +822,14 @@
       "substitutionGroup": "heat-pungent",
       "commonIn": [
         "Global"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "ginger": {
       "name": "Fresh Ginger",
@@ -674,7 +856,14 @@
         "South Asian",
         "Southeast Asian",
         "Caribbean"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "szechuan-peppercorn": {
       "name": "Szechuan Peppercorn",
@@ -700,7 +889,14 @@
         "Chinese",
         "Tibetan",
         "Japanese"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "basil": {
       "name": "Fresh Basil",
@@ -726,7 +922,14 @@
         "Italian",
         "Thai",
         "Vietnamese"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "mint": {
       "name": "Fresh Mint",
@@ -753,7 +956,14 @@
         "Mediterranean",
         "South Asian",
         "Southeast Asian"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "dill": {
       "name": "Fresh Dill",
@@ -779,7 +989,14 @@
         "Scandinavian",
         "Mediterranean",
         "Middle Eastern"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "parsley": {
       "name": "Fresh Parsley",
@@ -806,7 +1023,14 @@
         "Middle Eastern",
         "European",
         "Latin American"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "oregano": {
       "name": "Oregano",
@@ -833,7 +1057,14 @@
         "Mexican",
         "Italian",
         "Greek"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "honey": {
       "name": "Honey",
@@ -857,7 +1088,14 @@
       "substitutionGroup": "sweetener",
       "commonIn": [
         "Global"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "palm-sugar": {
       "name": "Palm Sugar",
@@ -880,7 +1118,14 @@
       "commonIn": [
         "Southeast Asian",
         "South Asian"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "miso": {
       "name": "Miso Paste",
@@ -904,7 +1149,14 @@
       "commonIn": [
         "Japanese",
         "East Asian"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "anchovy": {
       "name": "Anchovy",
@@ -931,7 +1183,14 @@
         "Italian",
         "Southeast Asian",
         "Latin American"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "cardamom": {
       "name": "Cardamom",
@@ -957,7 +1216,14 @@
         "South Asian",
         "Middle Eastern",
         "Scandinavian"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "cinnamon": {
       "name": "Cinnamon",
@@ -981,7 +1247,14 @@
       "substitutionGroup": "sweet-aromatic",
       "commonIn": [
         "Global"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "cloves": {
       "name": "Cloves",
@@ -1007,7 +1280,14 @@
         "South Asian",
         "Middle Eastern",
         "East African"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "chickpea-flour": {
       "name": "Chickpea Flour (Besan)",
@@ -1033,7 +1313,14 @@
         "Mediterranean",
         "Middle Eastern",
         "French"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "leek": {
       "name": "Leek",
@@ -1059,7 +1346,14 @@
         "Welsh",
         "Eastern European",
         "Mediterranean"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "garlic-scapes": {
       "name": "Garlic Scapes",
@@ -1085,7 +1379,14 @@
         "Korean",
         "Eastern European",
         "North American"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "amchoor": {
       "name": "Amchoor (Dried Mango Powder)",
@@ -1110,7 +1411,14 @@
         "South Asian",
         "North Indian",
         "Gujarati"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "lard": {
       "name": "Lard",
@@ -1137,7 +1445,14 @@
         "Southern US",
         "Eastern European",
         "Chinese"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "schmaltz": {
       "name": "Schmaltz (Chicken Fat)",
@@ -1163,7 +1478,14 @@
         "Ashkenazi Jewish",
         "Eastern European",
         "French"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "horseradish": {
       "name": "Horseradish",
@@ -1189,7 +1511,14 @@
         "Ashkenazi Jewish",
         "German",
         "British"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "wasabi": {
       "name": "Wasabi",
@@ -1212,7 +1541,14 @@
       "substitutionGroup": "heat-pungent",
       "commonIn": [
         "Japanese"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "thyme": {
       "name": "Thyme",
@@ -1239,7 +1575,14 @@
         "French",
         "Caribbean",
         "Middle Eastern"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "rosemary": {
       "name": "Rosemary",
@@ -1266,7 +1609,14 @@
         "Italian",
         "French",
         "North African"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "lemongrass": {
       "name": "Lemongrass",
@@ -1293,7 +1643,14 @@
         "Vietnamese",
         "Indonesian",
         "Caribbean"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "molasses": {
       "name": "Molasses",
@@ -1320,7 +1677,14 @@
         "Caribbean",
         "Middle Eastern",
         "South Asian"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "jaggery": {
       "name": "Jaggery (Gur)",
@@ -1345,7 +1709,14 @@
         "South Asian",
         "Sri Lankan",
         "East African"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "maple-syrup": {
       "name": "Maple Syrup",
@@ -1371,7 +1742,14 @@
         "North American",
         "Canadian",
         "New England"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "msg": {
       "name": "MSG (Monosodium Glutamate)",
@@ -1396,7 +1774,14 @@
         "Southeast Asian",
         "West African",
         "Latin American"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "mushroom": {
       "name": "Mushroom (Dried Shiitake)",
@@ -1423,7 +1808,14 @@
         "Japanese",
         "Korean",
         "East Asian"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "fermented-bean-paste": {
       "name": "Fermented Bean Paste (Doenjang/Doubanjiang)",
@@ -1449,7 +1841,14 @@
         "Korean",
         "Chinese",
         "Japanese"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "fenugreek": {
       "name": "Fenugreek",
@@ -1475,7 +1874,14 @@
         "Middle Eastern",
         "Ethiopian",
         "Egyptian"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "saffron": {
       "name": "Saffron",
@@ -1501,7 +1907,14 @@
         "Spanish",
         "Indian",
         "Italian"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "nutmeg": {
       "name": "Nutmeg",
@@ -1528,7 +1941,14 @@
         "South Asian",
         "Caribbean",
         "European"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "vanilla": {
       "name": "Vanilla",
@@ -1554,7 +1974,14 @@
         "French",
         "North American",
         "Global dessert"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "rice-flour": {
       "name": "Rice Flour",
@@ -1580,7 +2007,14 @@
         "Southeast Asian",
         "South Indian",
         "Chinese"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "cornstarch": {
       "name": "Cornstarch",
@@ -1604,7 +2038,14 @@
         "Chinese",
         "North American",
         "European"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "tapioca": {
       "name": "Tapioca (Cassava Starch)",
@@ -1629,7 +2070,14 @@
         "Southeast Asian",
         "West African",
         "Taiwanese"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "semolina": {
       "name": "Semolina (Durum Wheat)",
@@ -1655,7 +2103,14 @@
         "Mediterranean",
         "North African",
         "Middle Eastern"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "yogurt": {
       "name": "Yogurt",
@@ -1681,7 +2136,14 @@
         "Middle Eastern",
         "Mediterranean",
         "Eastern European"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "paneer": {
       "name": "Paneer",
@@ -1706,7 +2168,14 @@
         "South Asian",
         "North Indian",
         "Pakistani"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "feta": {
       "name": "Feta Cheese",
@@ -1733,7 +2202,14 @@
         "Mediterranean",
         "Middle Eastern",
         "Balkan"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "tofu": {
       "name": "Tofu",
@@ -1759,7 +2235,14 @@
         "Japanese",
         "Korean",
         "Southeast Asian"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "eggplant": {
       "name": "Eggplant (Aubergine)",
@@ -1785,7 +2268,14 @@
         "Middle Eastern",
         "South Asian",
         "East Asian"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "plantain": {
       "name": "Plantain",
@@ -1812,7 +2302,14 @@
         "Caribbean",
         "Latin American",
         "Central American"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "okra": {
       "name": "Okra",
@@ -1838,7 +2335,14 @@
         "Southern US",
         "South Asian",
         "Middle Eastern"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "lentils": {
       "name": "Lentils",
@@ -1865,7 +2369,14 @@
         "Mediterranean",
         "Middle Eastern",
         "Ethiopian"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "black-beans": {
       "name": "Black Beans",
@@ -1891,7 +2402,14 @@
         "Caribbean",
         "Brazilian",
         "Venezuelan"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "masa-harina": {
       "name": "Masa Harina (Nixtamalized Corn Flour)",
@@ -1917,7 +2435,14 @@
         "Mexican",
         "Central American",
         "Latin American"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "dried-shrimp": {
       "name": "Dried Shrimp",
@@ -1944,7 +2469,14 @@
         "Chinese",
         "West African",
         "Brazilian"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "kombu": {
       "name": "Kombu (Kelp)",
@@ -1970,7 +2502,14 @@
         "Japanese",
         "Korean",
         "Chinese"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "peanut": {
       "name": "Peanut",
@@ -1997,7 +2536,14 @@
         "Southeast Asian",
         "Chinese",
         "Latin American"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "sesame-seeds": {
       "name": "Sesame Seeds",
@@ -2023,7 +2569,14 @@
         "East Asian",
         "Japanese",
         "Korean"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "gochujang": {
       "name": "Gochujang (Korean Chili Paste)",
@@ -2047,7 +2600,14 @@
       "substitutionGroup": "condiment",
       "commonIn": [
         "Korean"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "harissa": {
       "name": "Harissa",
@@ -2073,7 +2633,14 @@
         "Tunisian",
         "North African",
         "Middle Eastern"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "tahini": {
       "name": "Tahini",
@@ -2100,7 +2667,14 @@
         "Mediterranean",
         "Levantine",
         "North African"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     },
     "chimichurri": {
       "name": "Chimichurri",
@@ -2126,7 +2700,14 @@
         "Argentinian",
         "Uruguayan",
         "Latin American"
-      ]
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      }
     }
   }
 }

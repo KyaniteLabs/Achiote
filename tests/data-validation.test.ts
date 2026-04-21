@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import dishFamiliesData from '../src/data/dish-families.json' with { type: 'json' };
 import ingredientsData from '../src/data/ingredients.json' with { type: 'json' };
+import memoryHintsData from '../src/data/memory-hints.json' with { type: 'json' };
 import regionalAvailabilityData from '../src/data/regional-availability.json' with { type: 'json' };
 import sensoryProfilesData from '../src/data/sensory-profiles.json' with { type: 'json' };
 import { validateBundledData, type BundledDataSet } from '../src/lib/data-schemas.js';
@@ -10,6 +11,7 @@ const bundledData: BundledDataSet = {
   ingredients: ingredientsData,
   regionalAvailability: regionalAvailabilityData,
   sensoryProfiles: sensoryProfilesData,
+  memoryHints: memoryHintsData,
 };
 
 function cloneBundledData(): BundledDataSet {
@@ -87,6 +89,35 @@ describe('bundled data validation', () => {
     expectIssue(issues, 'ingredients.ingredients.cumin-seeds-copy.compounds[2]', 'non-empty string');
     expectIssue(issues, 'ingredients.ingredients.cumin-seeds-copy.sensoryContribution.aroma', 'non-empty string');
     expectIssue(issues, 'ingredients.ingredients.cumin-seeds-copy.commonIn[1]', 'duplicate');
+  });
+
+
+  it('rejects malformed memory hint vocabularies', () => {
+    const data = cloneBundledData();
+    data.memoryHints.ingredients.push('pork');
+    data.memoryHints.cookingMethods.push({ label: ' ', regexSource: '(' });
+    data.memoryHints.regionPatterns.push({ label: 'Puerto Rican', regexSource: '(' });
+    data.memoryHints.regionFamilyMap['Puerto Rican'] = [];
+
+    const issues = validateBundledData(data);
+
+    expectIssue(issues, 'memoryHints.ingredients[19]', 'duplicate');
+    expectIssue(issues, 'memoryHints.cookingMethods[14].label', 'non-empty string');
+    expectIssue(issues, 'memoryHints.cookingMethods[14].regexSource', 'valid regular expression');
+    expectIssue(issues, 'memoryHints.regionPatterns[92].label', 'duplicate');
+    expectIssue(issues, 'memoryHints.regionPatterns[92].regexSource', 'valid regular expression');
+    expectIssue(issues, 'memoryHints.regionFamilyMap.Puerto Rican', 'non-empty array');
+  });
+
+  it('requires provenance on bundled dish families and ingredient groups', () => {
+    const data = cloneBundledData();
+    delete data.dishFamilies.families[0].provenance;
+    delete data.ingredients.ingredients['cumin-seeds'].provenance;
+
+    const issues = validateBundledData(data);
+
+    expectIssue(issues, 'dishFamilies.families[0].provenance', 'provenance');
+    expectIssue(issues, 'ingredients.ingredients.cumin-seeds.provenance', 'provenance');
   });
 
   it('rejects regional availability data with empty corridors, stores, or duplicate location entries', () => {

@@ -1,0 +1,825 @@
+{
+  "meta": {
+    "version": "0.1.0",
+    "description": "Validated food-memory extraction hints for ingredients, cooking methods, region patterns, and region-to-family mapping",
+    "confidence": "Medium",
+    "provenance": {
+      "sourceType": "curated internal vocabulary",
+      "notes": [
+        "Extracted from the launch-tested memory workflow constants so behavior stays unchanged while making future data edits validateable.",
+        "Patterns are broad regional/cultural cues for research planning, not identity inference or definitive dish classification."
+      ]
+    }
+  },
+  "ingredients": [
+    "plantains",
+    "pork",
+    "dill",
+    "lamb",
+    "shark",
+    "fish",
+    "seafood",
+    "melon seeds",
+    "bitter greens",
+    "greens",
+    "banana leaves",
+    "masa",
+    "sofrito",
+    "rice",
+    "beans",
+    "yuca",
+    "cassava",
+    "cheese",
+    "coconut"
+  ],
+  "cookingMethods": [
+    {
+      "label": "fried"
+    },
+    {
+      "label": "grilled"
+    },
+    {
+      "label": "roasted"
+    },
+    {
+      "label": "baked"
+    },
+    {
+      "label": "boiled"
+    },
+    {
+      "label": "steamed"
+    },
+    {
+      "label": "stewed"
+    },
+    {
+      "label": "curry/curried",
+      "regexSource": "\\bcurr(?:y|ied)\\b"
+    },
+    {
+      "label": "sandwich"
+    },
+    {
+      "label": "bread"
+    },
+    {
+      "label": "broth"
+    },
+    {
+      "label": "soup"
+    },
+    {
+      "label": "wrapped"
+    },
+    {
+      "label": "layered"
+    }
+  ],
+  "regionPatterns": [
+    {
+      "label": "Puerto Rican",
+      "regexSource": "(?:\\bpuerto\\s+ric(?:an|o)\\b)|(?:\\bpuerto\\s+rico\\b)",
+      "flags": "i"
+    },
+    {
+      "label": "Trinidad and Tobago",
+      "regexSource": "\\btrinidad(?:\\s+(?:and|&)\\s+tobago)?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Caribbean",
+      "regexSource": "\\bcaribbean\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Central American",
+      "regexSource": "\\bcentral\\s+american?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "South American",
+      "regexSource": "\\bsouth\\s+american?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Latin American",
+      "regexSource": "\\blatin\\s+american?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Mexican",
+      "regexSource": "(?:\\bmexican?\\b)|(?:\\bm[eé]xico\\b)",
+      "flags": "i"
+    },
+    {
+      "label": "Oaxacan",
+      "regexSource": "\\boaxac(?:a|an|e[ñn]o)\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Yucatecan",
+      "regexSource": "\\byucat[eé]c?[ao]\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Jaliscan",
+      "regexSource": "\\bjalisc(?:o|ense)\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Colombian",
+      "regexSource": "\\bcolombian?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Peruvian",
+      "regexSource": "\\bperuvian?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Brazilian",
+      "regexSource": "\\bbrazil(?:ian)?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Argentine",
+      "regexSource": "\\bargent(?:in[ae]|o)\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Cuban",
+      "regexSource": "\\bcuban?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Dominican",
+      "regexSource": "\\bdominican?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Haitian",
+      "regexSource": "\\bhaitian?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Jamaican",
+      "regexSource": "\\bjamaican?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Filipino",
+      "regexSource": "\\bfilipin?[oa]\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Vietnamese",
+      "regexSource": "\\bvietnam(?:ese)?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Thai",
+      "regexSource": "\\bthai(?:land)?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Korean",
+      "regexSource": "\\bkorean?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Japanese",
+      "regexSource": "\\bjapan(?:ese)?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Chinese",
+      "regexSource": "\\bchinese?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Sichuan",
+      "regexSource": "\\bszechuan\\b|\\bsichuan\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Cantonese",
+      "regexSource": "\\bcantonese\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Taiwanese",
+      "regexSource": "\\btaiwan(?:ese)?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Indian",
+      "regexSource": "\\bindian?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "South Asian",
+      "regexSource": "\\bsouth\\s+(?:asian|indian)\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Punjabi",
+      "regexSource": "\\bpunjabi\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Gujarati",
+      "regexSource": "\\bgujarati\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Bengali",
+      "regexSource": "(?:\\bbengali\\b)|(?:\\bbengal(?:i)?\\b)",
+      "flags": "i"
+    },
+    {
+      "label": "Keralite",
+      "regexSource": "\\bmalayali\\b|\\bkeral(?:a|ite)\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Tamil",
+      "regexSource": "\\btamil\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Sri Lankan",
+      "regexSource": "\\bsri\\s+lank(?:an?)?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Pakistani",
+      "regexSource": "\\bpakistan?i?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Bangladeshi",
+      "regexSource": "\\bbangladeshi?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Nepali",
+      "regexSource": "\\bnepal(?:ese|i)?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Southeast Asian",
+      "regexSource": "\\bsoutheast\\s+asian?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Indonesian",
+      "regexSource": "\\bindonesian?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Malaysian",
+      "regexSource": "\\bmalaysian?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Singaporean",
+      "regexSource": "\\bsingapor(?:ean|e)\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Burmese",
+      "regexSource": "\\bburmese\\b|\\bmyanmar\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Cambodian",
+      "regexSource": "\\bcambodian?\\b|\\bkhmer\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Lao",
+      "regexSource": "\\blao(?:tian)?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Lebanese",
+      "regexSource": "\\blebanese?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Syrian",
+      "regexSource": "\\bsyrian?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Palestinian",
+      "regexSource": "\\bpalestinian?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Jordanian",
+      "regexSource": "\\bjordanian?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Iraqi",
+      "regexSource": "\\biraqi?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Iranian",
+      "regexSource": "\\biranian?\\b|\\bpersian\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Afghan",
+      "regexSource": "\\bafghan?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Turkish",
+      "regexSource": "\\bturkish?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Greek",
+      "regexSource": "\\bgreek?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Italian",
+      "regexSource": "\\bitalian?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Sicilian",
+      "regexSource": "\\bsicilian?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Spanish",
+      "regexSource": "\\bspanish?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Catalan",
+      "regexSource": "\\bcatalan?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Portuguese",
+      "regexSource": "\\bportuguese?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "French",
+      "regexSource": "\\bfrench?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "German",
+      "regexSource": "\\bgerman?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Polish",
+      "regexSource": "\\bpolish?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Russian",
+      "regexSource": "\\brussian?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Ukrainian",
+      "regexSource": "\\bukrainian?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Romanian",
+      "regexSource": "\\bromanian?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Hungarian",
+      "regexSource": "\\bhungarian?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Georgian",
+      "regexSource": "\\bgeorgian?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Armenian",
+      "regexSource": "\\barmenian?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Azerbaijani",
+      "regexSource": "\\bazerbaijani?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Uzbek",
+      "regexSource": "\\buzbek?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Moroccan",
+      "regexSource": "\\bmoroccan?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Tunisian",
+      "regexSource": "\\btunisian?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Algerian",
+      "regexSource": "\\bAlgerian?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Egyptian",
+      "regexSource": "\\bEgypt(?:ian)?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Ethiopian",
+      "regexSource": "\\bethiopian?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Eritrean",
+      "regexSource": "\\beritrean?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Somali",
+      "regexSource": "\\bsomali\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Kenyan",
+      "regexSource": "\\bkenyan?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Nigerian",
+      "regexSource": "\\bnigerian?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Ghanaian",
+      "regexSource": "\\bghan(?:aian|a)?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Senegalese",
+      "regexSource": "\\bsenegalese?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "West African",
+      "regexSource": "\\bwest\\s+african?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "East African",
+      "regexSource": "\\beast\\s+african?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "North African",
+      "regexSource": "\\bnorth\\s+african?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "South African",
+      "regexSource": "\\bsouth\\s+african?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Middle Eastern",
+      "regexSource": "\\bmiddle\\s+east(?:ern)?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Mediterranean",
+      "regexSource": "\\bmediterranean\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Balkan",
+      "regexSource": "\\bbalkan\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Caucasus",
+      "regexSource": "\\bcaucasus\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Central Asian",
+      "regexSource": "\\bcentral\\s+asia(?:n)?\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Appalachian",
+      "regexSource": "\\bappalachian\\b",
+      "flags": "i"
+    },
+    {
+      "label": "Southern US",
+      "regexSource": "(?:\\bsouthern\\b.*\\b(?:u\\.?s\\.?|united\\s+states|american)\\b)|(?:\\bsoul\\s+food\\b)",
+      "flags": "i"
+    }
+  ],
+  "regionFamilyMap": {
+    "Puerto Rican": [
+      "Caribbean",
+      "Latin America"
+    ],
+    "Trinidad and Tobago": [
+      "Caribbean"
+    ],
+    "Caribbean": [
+      "Caribbean"
+    ],
+    "Cuban": [
+      "Caribbean",
+      "Latin America"
+    ],
+    "Dominican": [
+      "Caribbean",
+      "Latin America"
+    ],
+    "Haitian": [
+      "Caribbean"
+    ],
+    "Jamaican": [
+      "Caribbean"
+    ],
+    "Mexican": [
+      "Latin America"
+    ],
+    "Colombian": [
+      "Latin America"
+    ],
+    "Peruvian": [
+      "Latin America"
+    ],
+    "Brazilian": [
+      "Latin America"
+    ],
+    "Argentine": [
+      "Latin America"
+    ],
+    "Central American": [
+      "Latin America"
+    ],
+    "South American": [
+      "Latin America"
+    ],
+    "Latin American": [
+      "Latin America"
+    ],
+    "Indian": [
+      "South Asia"
+    ],
+    "Pakistani": [
+      "South Asia"
+    ],
+    "Bangladeshi": [
+      "South Asia"
+    ],
+    "Sri Lankan": [
+      "South Asia"
+    ],
+    "Nepali": [
+      "South Asia"
+    ],
+    "Punjabi": [
+      "South Asia"
+    ],
+    "Gujarati": [
+      "South Asia"
+    ],
+    "Bengali": [
+      "South Asia"
+    ],
+    "Tamil": [
+      "South Asia"
+    ],
+    "Keralite": [
+      "South Asia"
+    ],
+    "Chinese": [
+      "East Asia"
+    ],
+    "Japanese": [
+      "East Asia"
+    ],
+    "Korean": [
+      "East Asia"
+    ],
+    "Taiwanese": [
+      "East Asia"
+    ],
+    "Cantonese": [
+      "East Asia"
+    ],
+    "Sichuan": [
+      "East Asia"
+    ],
+    "Thai": [
+      "Southeast Asia"
+    ],
+    "Vietnamese": [
+      "Southeast Asia"
+    ],
+    "Filipino": [
+      "Southeast Asia"
+    ],
+    "Indonesian": [
+      "Southeast Asia"
+    ],
+    "Malaysian": [
+      "Southeast Asia"
+    ],
+    "Singaporean": [
+      "Southeast Asia"
+    ],
+    "Burmese": [
+      "Southeast Asia"
+    ],
+    "Cambodian": [
+      "Southeast Asia"
+    ],
+    "Lao": [
+      "Southeast Asia"
+    ],
+    "Lebanese": [
+      "Middle East"
+    ],
+    "Syrian": [
+      "Middle East"
+    ],
+    "Palestinian": [
+      "Middle East"
+    ],
+    "Jordanian": [
+      "Middle East"
+    ],
+    "Iraqi": [
+      "Middle East"
+    ],
+    "Iranian": [
+      "Middle East"
+    ],
+    "Afghan": [
+      "Middle East"
+    ],
+    "Turkish": [
+      "Mediterranean",
+      "Middle East"
+    ],
+    "Greek": [
+      "Mediterranean"
+    ],
+    "Italian": [
+      "Mediterranean"
+    ],
+    "Spanish": [
+      "Mediterranean"
+    ],
+    "Portuguese": [
+      "Mediterranean"
+    ],
+    "French": [
+      "Mediterranean"
+    ],
+    "Moroccan": [
+      "North Africa",
+      "Mediterranean"
+    ],
+    "Tunisian": [
+      "North Africa"
+    ],
+    "Algerian": [
+      "North Africa"
+    ],
+    "Egyptian": [
+      "North Africa"
+    ],
+    "Ethiopian": [
+      "East Africa"
+    ],
+    "Eritrean": [
+      "East Africa"
+    ],
+    "Nigerian": [
+      "West Africa"
+    ],
+    "Ghanaian": [
+      "West Africa"
+    ],
+    "Senegalese": [
+      "West Africa"
+    ],
+    "Polish": [
+      "Eastern Europe"
+    ],
+    "Russian": [
+      "Eastern Europe"
+    ],
+    "Ukrainian": [
+      "Eastern Europe"
+    ],
+    "Hungarian": [
+      "Eastern Europe"
+    ],
+    "Romanian": [
+      "Eastern Europe"
+    ],
+    "Southern US": [
+      "Southern US"
+    ],
+    "Appalachian": [
+      "Southern US"
+    ],
+    "Mediterranean": [
+      "Mediterranean"
+    ],
+    "Middle Eastern": [
+      "Middle East"
+    ],
+    "Balkan": [
+      "Balkans"
+    ],
+    "West African": [
+      "West Africa"
+    ],
+    "East African": [
+      "East Africa"
+    ],
+    "North African": [
+      "North Africa"
+    ],
+    "South African": [
+      "South Africa"
+    ],
+    "Oaxacan": [
+      "Latin America"
+    ],
+    "Yucatecan": [
+      "Latin America"
+    ],
+    "Jaliscan": [
+      "Latin America"
+    ],
+    "Sicilian": [
+      "Mediterranean"
+    ],
+    "Catalan": [
+      "Mediterranean"
+    ],
+    "German": [
+      "Central Europe"
+    ],
+    "Georgian": [
+      "Caucasus"
+    ],
+    "Armenian": [
+      "Caucasus"
+    ],
+    "Azerbaijani": [
+      "Caucasus"
+    ],
+    "Uzbek": [
+      "Central Asia"
+    ],
+    "Somali": [
+      "East Africa"
+    ],
+    "Kenyan": [
+      "East Africa"
+    ],
+    "Southeast Asian": [
+      "Southeast Asia"
+    ],
+    "South Asian": [
+      "South Asia"
+    ],
+    "Caucasus": [
+      "Caucasus"
+    ],
+    "Central Asian": [
+      "Central Asia"
+    ]
+  }
+}
