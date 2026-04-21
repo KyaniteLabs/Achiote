@@ -1,6 +1,6 @@
 import { describe, it, expect, afterAll } from 'vitest';
 import { createRateLimiter } from '../src/lib/rate-limit.js';
-import { mkdtempSync, rmSync } from 'node:fs';
+import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 
@@ -41,13 +41,18 @@ describe('rate limiter', () => {
     expect(result.limit).toBe(5_000);
   });
 
-  it('enterprise tier has infinite limit', () => {
+  it('enterprise tier has infinite MCP limit with monthly reset metadata', () => {
     const limiter = createRateLimiter();
     for (let i = 0; i < 200; i++) {
       limiter.checkMcpLimit('enterprise', 'ent-key');
     }
     const result = limiter.checkMcpLimit('enterprise', 'ent-key');
+    const now = new Date();
+    const expectedReset = Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 1);
     expect(result.allowed).toBe(true);
+    expect(result.limit).toBe(Infinity);
+    expect(result.remaining).toBe(Infinity);
+    expect(result.resetAt).toBe(expectedReset);
   });
 
   it('resets usage for a key', () => {
@@ -184,5 +189,62 @@ describe('rate limiter with SQLite persistence', () => {
     expect(mcpResult.allowed).toBe(true);
     expect(webResult.allowed).toBe(true);
     limiter.close();
+  });
+
+  it('uses immediate transactions for persistent limit checks', () => {
+    const source = readFileSync('src/lib/rate-limit.ts', 'utf8');
+    expect(source).toContain('dbCheck.immediate');
+  });
+
+  it('enforces MCP limits across separate limiter instances sharing one database', () => {
+    const dbPath = join(tmpDir, 'multi-instance-mcp.db');
+    const limiterA = createRateLimiter(dbPath);
+    const limiterB = createRateLimiter(dbPath);
+
+    try {
+      for (let i = 0; i < 25; i++) {
+        expect(limiterA.checkMcpLimit('free', 'shared-key').allowed).toBe(true);
+        expect(limiterB.checkMcpLimit('free', 'shared-key').allowed).toBe(true);
+      }
+
+      expect(limiterA.checkMcpLimit('free', 'shared-key')).toMatchObject({ allowed: false, remaining: 0 });
+      expect(limiterB.checkMcpLimit('free', 'shared-key')).toMatchObject({ allowed: false, remaining: 0 });
+    } finally {
+      limiterA.close();
+      limiterB.close();
+    }
+  });
+
+  it('enforces web limits across separate limiter instances sharing one database', () => {
+    const dbPath = join(tmpDir, 'multi-instance-web.db');
+    const limiterA = createRateLimiter(dbPath);
+    const limiterB = createRateLimiter(dbPath);
+
+    try {
+      expect(limiterA.checkWebLimit('free', 'shared-web').allowed).toBe(true);
+      expect(limiterB.checkWebLimit('free', 'shared-web').allowed).toBe(true);
+      expect(limiterA.checkWebLimit('free', 'shared-web').allowed).toBe(true);
+      expect(limiterB.checkWebLimit('free', 'shared-web')).toMatchObject({ allowed: false, remaining: 0 });
+    } finally {
+      limiterA.close();
+      limiterB.close();
+    }
+  });
+
+  it('does not throw when many SQLite-backed limiter instances contend for the same quota', async () => {
+    const dbPath = join(tmpDir, 'contended.db');
+    const limiters = Array.from({ length: 10 }, () => createRateLimiter(dbPath));
+
+    try {
+      const results = await Promise.all(
+        limiters.map((limiter) => new Promise((resolve) => {
+          setImmediate(() => resolve(limiter.checkMcpLimit('free', 'contended-key')));
+        })),
+      );
+
+      expect(results.filter((result) => result.allowed)).toHaveLength(10);
+    } finally {
+      for (const limiter of limiters) limiter.close();
+    }
   });
 });

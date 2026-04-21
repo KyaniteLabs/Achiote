@@ -2,6 +2,7 @@ import { describe, expect, it, beforeAll, afterAll } from 'vitest';
 import { spawn, type ChildProcess } from 'node:child_process';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { getFreePort } from './helpers/ports.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
@@ -33,9 +34,6 @@ function spawnServer(port: number, env?: Record<string, string>): Promise<ChildP
   });
 }
 
-function randomPort(): number {
-  return 35000 + Math.floor(Math.random() * 25000);
-}
 
 // ─── CORS edge cases ─────────────────────────────────────────────
 
@@ -44,7 +42,7 @@ describe('CORS edge cases', () => {
   let baseUrl: string;
 
   beforeAll(async () => {
-    const port = randomPort();
+    const port = await getFreePort();
     baseUrl = `http://127.0.0.1:${port}`;
     server = await spawnServer(port);
   }, 15000);
@@ -90,7 +88,7 @@ describe('HTTP method edge cases', () => {
   let baseUrl: string;
 
   beforeAll(async () => {
-    const port = randomPort();
+    const port = await getFreePort();
     baseUrl = `http://127.0.0.1:${port}`;
     server = await spawnServer(port);
   }, 15000);
@@ -138,7 +136,7 @@ describe('path traversal protection', () => {
   let baseUrl: string;
 
   beforeAll(async () => {
-    const port = randomPort();
+    const port = await getFreePort();
     baseUrl = `http://127.0.0.1:${port}`;
     server = await spawnServer(port);
   }, 15000);
@@ -165,7 +163,7 @@ describe('path traversal protection', () => {
 
 describe('/ask pre-API-call guards', () => {
   it('returns 415 for wrong content-type', async () => {
-    const port = randomPort();
+    const port = await getFreePort();
     const server = await spawnServer(port);
     try {
       const res = await fetch(`http://127.0.0.1:${port}/ask`, {
@@ -180,7 +178,7 @@ describe('/ask pre-API-call guards', () => {
   });
 
   it('returns 413 for body too large', async () => {
-    const port = randomPort();
+    const port = await getFreePort();
     const server = await spawnServer(port);
     try {
       const hugeBody = 'x'.repeat(1_100_000);
@@ -194,7 +192,7 @@ describe('/ask pre-API-call guards', () => {
   });
 
   it('returns 400 for invalid JSON', async () => {
-    const port = randomPort();
+    const port = await getFreePort();
     const server = await spawnServer(port);
     try {
       const res = await fetch(`http://127.0.0.1:${port}/ask`, {
@@ -209,7 +207,7 @@ describe('/ask pre-API-call guards', () => {
   });
 
   it('returns 400 for missing message field', async () => {
-    const port = randomPort();
+    const port = await getFreePort();
     const server = await spawnServer(port);
     try {
       const res = await fetch(`http://127.0.0.1:${port}/ask`, {
@@ -224,7 +222,7 @@ describe('/ask pre-API-call guards', () => {
   });
 
   it('returns 400 for empty message', async () => {
-    const port = randomPort();
+    const port = await getFreePort();
     const server = await spawnServer(port);
     try {
       const res = await fetch(`http://127.0.0.1:${port}/ask`, {
@@ -246,7 +244,7 @@ describe('auth edge cases', () => {
   let baseUrl: string;
 
   beforeAll(async () => {
-    const port = randomPort();
+    const port = await getFreePort();
     baseUrl = `http://127.0.0.1:${port}`;
     server = await spawnServer(port, { ACHIOTE_AUTH_ENABLED: 'true' });
   }, 15000);
@@ -295,7 +293,7 @@ describe('static file edge cases', () => {
   let baseUrl: string;
 
   beforeAll(async () => {
-    const port = randomPort();
+    const port = await getFreePort();
     baseUrl = `http://127.0.0.1:${port}`;
     server = await spawnServer(port);
   }, 15000);

@@ -2,6 +2,7 @@ import { describe, expect, it, beforeAll, afterAll } from 'vitest';
 import { spawn, type ChildProcess } from 'node:child_process';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { getFreePort } from './helpers/ports.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
@@ -39,7 +40,7 @@ describe('/ask endpoint — pre-rate-limit guards', () => {
   let baseUrl: string;
 
   beforeAll(async () => {
-    const port = 20000 + Math.floor(Math.random() * 40000);
+    const port = await getFreePort();
     baseUrl = `http://127.0.0.1:${port}`;
     server = await spawnServer(port, 'false', { ACHIOTE_ALLOW_ANON_ASK: 'true' });
   }, 15000);
@@ -71,7 +72,7 @@ describe('/ask endpoint — pre-rate-limit guards', () => {
 // Tests that run AFTER rate limiting — each gets its own server to avoid quota exhaustion
 describe('/ask endpoint — post-rate-limit guards', () => {
   it('returns 400 for invalid JSON', async () => {
-    const port = 25000 + Math.floor(Math.random() * 30000);
+    const port = await getFreePort();
     const server = await spawnServer(port, 'false', { ACHIOTE_ALLOW_ANON_ASK: 'true' });
     try {
       const res = await fetch(`http://127.0.0.1:${port}/ask`, {
@@ -86,7 +87,7 @@ describe('/ask endpoint — post-rate-limit guards', () => {
   });
 
   it('returns 400 for missing message field', async () => {
-    const port = 25000 + Math.floor(Math.random() * 30000);
+    const port = await getFreePort();
     const server = await spawnServer(port, 'false', { ACHIOTE_ALLOW_ANON_ASK: 'true' });
     try {
       const res = await fetch(`http://127.0.0.1:${port}/ask`, {
@@ -101,7 +102,7 @@ describe('/ask endpoint — post-rate-limit guards', () => {
   });
 
   it('returns 400 for empty message', async () => {
-    const port = 25000 + Math.floor(Math.random() * 30000);
+    const port = await getFreePort();
     const server = await spawnServer(port, 'false', { ACHIOTE_ALLOW_ANON_ASK: 'true' });
     try {
       const res = await fetch(`http://127.0.0.1:${port}/ask`, {
@@ -121,7 +122,7 @@ describe('/ask endpoint with auth enabled', () => {
   let baseUrl: string;
 
   beforeAll(async () => {
-    const port = 30000 + Math.floor(Math.random() * 30000);
+    const port = await getFreePort();
     baseUrl = `http://127.0.0.1:${port}`;
     server = await spawnServer(port, 'true');
   }, 15000);
@@ -142,7 +143,7 @@ describe('/ask endpoint with auth enabled', () => {
 
 describe('/ask endpoint with auth disabled', () => {
   it('requires explicit ACHIOTE_ALLOW_ANON_ASK for anonymous /ask', async () => {
-    const port = 33000 + Math.floor(Math.random() * 25000);
+    const port = await getFreePort();
     const server = await spawnServer(port, 'false');
     try {
       const res = await fetch(`http://127.0.0.1:${port}/ask`, {
@@ -157,7 +158,7 @@ describe('/ask endpoint with auth disabled', () => {
   });
 
   it('allows anonymous /ask only when ACHIOTE_ALLOW_ANON_ASK=true', async () => {
-    const port = 33000 + Math.floor(Math.random() * 25000);
+    const port = await getFreePort();
     const server = await spawnServer(port, 'false', { ACHIOTE_ALLOW_ANON_ASK: 'true' });
     try {
       const res = await fetch(`http://127.0.0.1:${port}/ask`, {

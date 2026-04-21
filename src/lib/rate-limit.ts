@@ -17,6 +17,22 @@ export interface RateLimitResult {
   resetAt: number;
 }
 
+function monthWindow(now: number): { periodStart: number; periodEnd: number } {
+  return {
+    periodStart: Date.UTC(new Date(now).getUTCFullYear(), new Date(now).getUTCMonth(), 1),
+    periodEnd: Date.UTC(new Date(now).getUTCFullYear(), new Date(now).getUTCMonth() + 1, 1),
+  };
+}
+
+function storageKey(windowKey: string): string {
+  return createHash('sha256').update(windowKey).digest('hex');
+}
+
+function unlimitedWebResult(): RateLimitResult {
+  // Preserve the existing web unlimited-tier response shape for API compatibility.
+  return { allowed: true, remaining: Number.MAX_SAFE_INTEGER, limit: Number.MAX_SAFE_INTEGER, resetAt: Date.now() + 60_000 };
+}
+
 export function createRateLimiter(dbPath?: string) {
   const usage = new Map<string, UsageEntry>();
   let lastSweep = 0;
@@ -26,6 +42,7 @@ export function createRateLimiter(dbPath?: string) {
     fs.mkdirSync(path.dirname(dbPath), { recursive: true });
     db = new Database(dbPath);
     db.pragma('journal_mode = WAL');
+    db.pragma('busy_timeout = 5000');
     db.exec(`
       CREATE TABLE IF NOT EXISTS rate_usage (
         key TEXT PRIMARY KEY,
@@ -33,93 +50,99 @@ export function createRateLimiter(dbPath?: string) {
         period_start INTEGER NOT NULL
       )
     `);
-    const rows = db.prepare('SELECT key, count, period_start FROM rate_usage').all() as Array<{ key: string; count: number; period_start: number }>;
-    for (const row of rows) {
-      usage.set(row.key, { count: row.count, periodStart: row.period_start });
-    }
   }
 
-  function storageKey(windowKey: string): string {
-    return createHash('sha256').update(windowKey).digest('hex');
-  }
-
-  const upsert = db?.prepare('INSERT OR REPLACE INTO rate_usage (key, count, period_start) VALUES (?, ?, ?)');
+  const selectRow = db?.prepare('SELECT count, period_start FROM rate_usage WHERE key = ?');
+  const insertRow = db?.prepare('INSERT INTO rate_usage (key, count, period_start) VALUES (?, ?, ?)');
+  const updateRow = db?.prepare('UPDATE rate_usage SET count = ?, period_start = ? WHERE key = ?');
   const deleteRow = db?.prepare('DELETE FROM rate_usage WHERE key = ?');
+  const deleteStaleRows = db?.prepare('DELETE FROM rate_usage WHERE period_start != ?');
 
-  function persistEntry(sk: string, entry: UsageEntry): void {
-    upsert?.run(sk, entry.count, entry.periodStart);
-  }
+  const dbCheck = db?.transaction((key: string, limit: number, periodStart: number, periodEnd: number): RateLimitResult => {
+    const row = selectRow!.get(key) as { count: number; period_start: number } | undefined;
+    const count = row && row.period_start === periodStart ? row.count : 0;
+
+    if (count >= limit) {
+      if (!row) insertRow!.run(key, count, periodStart);
+      else if (row.period_start !== periodStart) updateRow!.run(count, periodStart, key);
+      return { allowed: false, remaining: 0, limit, resetAt: periodEnd };
+    }
+
+    const nextCount = count + 1;
+    if (!row) insertRow!.run(key, nextCount, periodStart);
+    else updateRow!.run(nextCount, periodStart, key);
+
+    return {
+      allowed: true,
+      remaining: Math.max(0, limit - nextCount),
+      limit,
+      resetAt: periodEnd,
+    };
+  });
 
   function sweepStaleEntries(): void {
     const now = Date.now();
     if (now - lastSweep < 60_000) return;
     lastSweep = now;
-    const currentPeriod = Date.UTC(new Date(now).getUTCFullYear(), new Date(now).getUTCMonth(), 1);
+    const { periodStart } = monthWindow(now);
+
+    if (db) {
+      deleteStaleRows?.run(periodStart);
+      return;
+    }
+
     for (const [key, entry] of usage) {
-      if (entry.periodStart !== currentPeriod) {
+      if (entry.periodStart !== periodStart) {
         usage.delete(key);
-        deleteRow?.run(key);
       }
     }
   }
 
+  function checkLimit(scope: 'mcp' | 'web', keyId: string, limit: number): RateLimitResult {
+    sweepStaleEntries();
+    const now = Date.now();
+    const { periodStart, periodEnd } = monthWindow(now);
+    const sk = storageKey(`${scope}:${keyId}`);
+
+    if (dbCheck) {
+      return dbCheck.immediate(sk, limit, periodStart, periodEnd);
+    }
+
+    let entry = usage.get(sk);
+    if (!entry || entry.periodStart !== periodStart) {
+      entry = { count: 0, periodStart };
+      usage.set(sk, entry);
+    }
+
+    if (entry.count >= limit) {
+      return { allowed: false, remaining: 0, limit, resetAt: periodEnd };
+    }
+
+    entry.count++;
+    return {
+      allowed: true,
+      remaining: Math.max(0, limit - entry.count),
+      limit,
+      resetAt: periodEnd,
+    };
+  }
+
   return {
     checkMcpLimit(tier: Tier, keyId: string): RateLimitResult {
-      sweepStaleEntries();
-      const limits = getTierLimits(tier);
-      const limit = limits.mcpCallsPerMonth;
-      const now = Date.now();
-      const sk = storageKey(`mcp:${keyId}`);
-
-      const periodStart = Date.UTC(new Date(now).getUTCFullYear(), new Date(now).getUTCMonth(), 1);
-      const periodEnd = Date.UTC(new Date(now).getUTCFullYear(), new Date(now).getUTCMonth() + 1, 1);
-
-      let entry = usage.get(sk);
-      if (!entry || entry.periodStart !== periodStart) {
-        entry = { count: 0, periodStart };
-        usage.set(sk, entry);
+      const limit = getTierLimits(tier).mcpCallsPerMonth;
+      const { periodEnd } = monthWindow(Date.now());
+      if (!isFinite(limit)) {
+        return { allowed: true, remaining: Infinity, limit: Infinity, resetAt: periodEnd };
       }
-
-      if (entry.count >= limit) {
-        return { allowed: false, remaining: 0, limit, resetAt: periodEnd };
-      }
-
-      entry.count++;
-      persistEntry(sk, entry);
-      return {
-        allowed: true,
-        remaining: Math.max(0, limit - entry.count),
-        limit,
-        resetAt: periodEnd,
-      };
+      return checkLimit('mcp', keyId, limit);
     },
 
     checkWebLimit(tier: Tier, sessionId: string): RateLimitResult {
-      sweepStaleEntries();
-      const limits = getTierLimits(tier);
-      const limit = limits.webReconstructions;
+      const limit = getTierLimits(tier).webReconstructions;
       if (!isFinite(limit)) {
-        return { allowed: true, remaining: Number.MAX_SAFE_INTEGER, limit: Number.MAX_SAFE_INTEGER, resetAt: Date.now() + 60_000 };
+        return unlimitedWebResult();
       }
-
-      const sk = storageKey(`web:${sessionId}`);
-      const now = Date.now();
-      const periodStart = Date.UTC(new Date(now).getUTCFullYear(), new Date(now).getUTCMonth(), 1);
-      const periodEnd = Date.UTC(new Date(now).getUTCFullYear(), new Date(now).getUTCMonth() + 1, 1);
-
-      let entry = usage.get(sk);
-      if (!entry || entry.periodStart !== periodStart) {
-        entry = { count: 0, periodStart };
-        usage.set(sk, entry);
-      }
-
-      if (entry.count >= limit) {
-        return { allowed: false, remaining: 0, limit, resetAt: periodEnd };
-      }
-
-      entry.count++;
-      persistEntry(sk, entry);
-      return { allowed: true, remaining: limit - entry.count, limit, resetAt: periodEnd };
+      return checkLimit('web', sessionId, limit);
     },
 
     resetUsage(keyId: string) {
