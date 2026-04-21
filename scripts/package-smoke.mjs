@@ -112,6 +112,23 @@ function waitForServer(child, port) {
   });
 }
 
+function assertPackagedHelperScripts(installDir) {
+  const packageRoot = path.join(installDir, 'node_modules', 'achiote');
+  const keygenPath = path.join(packageRoot, 'scripts', 'generate-api-key.mjs');
+  const dockerSmokePath = path.join(packageRoot, 'scripts', 'docker-smoke.mjs');
+  if (!fs.existsSync(keygenPath)) throw new Error(`Packaged keygen helper missing at ${keygenPath}`);
+  if (!fs.existsSync(dockerSmokePath)) throw new Error(`Packaged docker smoke helper missing at ${dockerSmokePath}`);
+
+  const keygen = spawnSync(process.execPath, [keygenPath, '--tier', 'free', '--name', 'package-smoke'], { encoding: 'utf8' });
+  if (keygen.status !== 0) {
+    throw new Error(`Packaged keygen helper failed\nstdout:\n${keygen.stdout}\nstderr:\n${keygen.stderr}`);
+  }
+  const parsed = JSON.parse(keygen.stdout);
+  if (!/^ach_[0-9a-f]{48}$/.test(parsed.key) || parsed.tier !== 'free' || parsed.name !== 'package-smoke') {
+    throw new Error(`Packaged keygen helper returned unexpected record: ${keygen.stdout}`);
+  }
+}
+
 async function assertPackagedHttpServerStarts(installDir, tempRoot) {
   const port = 39000 + Math.floor(Math.random() * 20000);
   const serverPath = path.join(installDir, 'node_modules', 'achiote', 'dist', 'http-server.js');
@@ -135,8 +152,9 @@ async function assertPackagedHttpServerStarts(installDir, tempRoot) {
       if (!res.ok) throw new Error(`GET ${pathPart} returned ${res.status}`);
     }
   } finally {
+    const exited = new Promise((resolve) => child.once('exit', resolve));
     child.kill('SIGTERM');
-    await new Promise((resolve) => child.once('exit', resolve));
+    await withTimeout(exited, 5_000, 'packaged HTTP shutdown');
   }
 }
 
@@ -206,6 +224,9 @@ async function main() {
 
     console.log('Checking packaged CLI MCP tools/list response');
     await assertPackagedCliListsTools(installDir, tempRoot);
+
+    console.log('Checking packaged helper scripts');
+    assertPackagedHelperScripts(installDir);
 
     console.log('Checking packaged HTTP server /health and /about responses');
     await assertPackagedHttpServerStarts(installDir, tempRoot);
