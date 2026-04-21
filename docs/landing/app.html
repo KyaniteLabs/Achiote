@@ -122,6 +122,10 @@
       transform: translateY(-1px);
       box-shadow: var(--shadow);
     }
+    .suggestion:active {
+      transform: scale(0.97);
+      box-shadow: none;
+    }
 
     /* Messages */
     .messages { display: none; flex-direction: column; gap: 16px; }
@@ -185,6 +189,7 @@
     }
     .input-wrap input::placeholder { color: var(--achiote); opacity: 0.35; }
     .input-wrap input:focus { border-color: var(--achiote); }
+    .input-wrap input { touch-action: manipulation; }
     .input-wrap button {
       width: 46px; height: 46px; border-radius: 50%;
       border: none; cursor: pointer;
@@ -195,15 +200,27 @@
       flex-shrink: 0;
     }
     .input-wrap button:hover { transform: scale(1.05); box-shadow: 0 4px 16px rgba(74, 22, 53, 0.3); }
+    .input-wrap button:active { transform: scale(0.95); }
     .input-wrap button:disabled { opacity: 0.4; transform: none; box-shadow: none; cursor: default; }
 
-    /* Responsive */
+    /* Responsive — tablet */
+    @media (max-width: 980px) {
+      .msg { max-width: 100%; }
+      .input-wrap { max-width: 100%; }
+    }
+
+    /* Responsive — phone */
     @media (max-width: 640px) {
       header { padding: 12px 16px; }
+      header h1 span { display: none; }
       main { padding: 16px; }
       .input-bar { padding: 12px 16px; }
-      .msg { padding: 14px 16px; }
+      .msg { padding: 14px 16px; max-width: 100%; }
       .welcome h2 { font-size: 1.25rem; }
+      .welcome .suggestions { max-width: 100%; }
+      .suggestion { font-size: 0.82rem; padding: 8px 14px; }
+      .input-wrap input { font-size: 16px; padding: 12px 16px; }
+      .input-wrap button { width: 44px; height: 44px; }
     }
   </style>
 </head>
