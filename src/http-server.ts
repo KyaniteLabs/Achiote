@@ -90,7 +90,7 @@ setInterval(sweepStaleSessions, SESSION_TTL).unref();
 const cache = createCache({});
 const anthropic = new Anthropic({ timeout: 60_000 });
 const authenticator = createAuthenticator(loadKeysFromEnv(process.env.ACHIOTE_API_KEYS));
-const rateLimiter = createRateLimiter();
+const rateLimiter = createRateLimiter(process.env.ACHIOTE_RATE_LIMIT_DB);
 
 const AUTH_ENABLED = process.env.ACHIOTE_AUTH_ENABLED !== 'false';
 
@@ -578,6 +578,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
   } catch (err) {
     if (err instanceof Error && err.message === 'Body too large') {
       sendJson(res, 413, { error: 'Body too large' });
+      req.destroy();
     }
     return;
   }
@@ -657,12 +658,18 @@ function readBody(req: IncomingMessage, maxBytes = 1_000_000): Promise<string> {
   return new Promise((resolve, reject) => {
     const chunks: Buffer[] = [];
     let total = 0;
+    let rejected = false;
     req.on('data', (chunk: Buffer) => {
+      if (rejected) return;
       total += chunk.length;
-      if (total > maxBytes) { req.destroy(); reject(new Error('Body too large')); return; }
+      if (total > maxBytes) {
+        rejected = true;
+        reject(new Error('Body too large'));
+        return;
+      }
       chunks.push(chunk);
     });
-    req.on('end', () => resolve(Buffer.concat(chunks).toString('utf-8')));
+    req.on('end', () => { if (!rejected) resolve(Buffer.concat(chunks).toString('utf-8')); });
     req.on('error', reject);
   });
 }

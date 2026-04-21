@@ -35,6 +35,42 @@ Primary risks are:
 - **Body size** — 1MB limit on request bodies.
 - **CORS** — permissive (`Access-Control-Allow-Origin: *`) for development. Tighten for production.
 
+### Production deployment
+
+For public HTTPS access, run behind a reverse proxy:
+
+- **nginx** or **Caddy** for TLS termination
+- Set `ACHIOTE_TRUST_PROXY=true` so rate limiting uses `X-Forwarded-For`
+- Set `ACHIOTE_ALLOWED_ORIGINS=https://your-domain.com`
+- Set `ACHIOTE_RATE_LIMIT_DB` to a persistent path so rate limits survive restarts
+
+Example Caddyfile:
+
+```text
+your-domain.com {
+  reverse_proxy localhost:3000
+}
+```
+
+Example nginx:
+
+```nginx
+server {
+    listen 443 ssl http2;
+    server_name your-domain.com;
+
+    ssl_certificate     /etc/ssl/certs/your-domain.pem;
+    ssl_certificate_key /etc/ssl/private/your-domain.key;
+
+    location / {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
+
 ## Maintainer checklist
 
 - Keep GitHub secret scanning/push protection and code scanning enabled when available.
