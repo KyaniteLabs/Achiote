@@ -260,9 +260,9 @@ const TOOLS: Anthropic.Tool[] = [
       properties: {
         dishDescription: { type: 'string' as const, description: "The user's original dish description" },
         location: { type: 'string' as const, description: "User's location" },
-        sensoryAnalysis: { type: 'string' as const, description: 'Completed sensory analysis from analyze_nostalgic_dish' },
-        substitutions: { type: 'string' as const, description: 'Completed substitutions from find_sensory_substitutes' },
-        sourcing: { type: 'string' as const, description: 'Completed sourcing guide from source_ingredients' },
+        sensoryAnalysis: { type: 'object' as const, description: 'Completed sensory analysis from analyze_nostalgic_dish' },
+        substitutions: { type: 'object' as const, description: 'Completed substitutions from find_sensory_substitutes' },
+        sourcing: { type: 'object' as const, description: 'Completed sourcing guide from source_ingredients' },
       },
     },
   },
@@ -491,9 +491,10 @@ function executeTool(name: string, raw: unknown): any {
       return generateMinimumViableNostalgiaCue(input as unknown as Parameters<typeof generateMinimumViableNostalgiaCue>[0]);
 
     case 'generate_recipe': {
-      const sensoryAnalysis = input.sensoryAnalysis;
-      const substitutions = input.substitutions;
-      const sourcing = input.sourcing;
+      const ensureObject = (v: unknown): unknown => typeof v === 'string' ? JSON.parse(v) : v;
+      const sensoryAnalysis = ensureObject(input.sensoryAnalysis);
+      const substitutions = ensureObject(input.substitutions);
+      const sourcing = ensureObject(input.sourcing);
       if (!sensoryAnalysis || !substitutions || !sourcing) {
         throw new Error('generate_recipe requires completed sensory analysis, substitutions, and sourcing from prior pipeline steps');
       }
