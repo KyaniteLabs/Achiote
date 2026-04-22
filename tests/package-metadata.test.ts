@@ -91,6 +91,7 @@ describe('package distribution metadata', () => {
     expect(httpServer).toContain('authToken');
     expect(httpServer).toContain('createOpenAICompatibleAskSession');
     expect(httpServer).toContain('OPENAI_BASE_URL');
+    expect(httpServer).toContain('LM_STUDIO_MODEL');
     expect(httpServer).toContain('claude-sonnet-4-5-20250929');
     expect(httpServer).not.toContain("model: 'claude-sonnet-4-5-20250929'");
   });

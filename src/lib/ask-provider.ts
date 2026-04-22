@@ -1,7 +1,5 @@
 import Anthropic from '@anthropic-ai/sdk';
-import type { anthropicTools } from '../tools/tool-registry.js';
-
-type AnthropicTool = (typeof anthropicTools)[number];
+type AnthropicTool = Anthropic.Tool;
 
 type OpenAITool = {
   type: 'function';
@@ -72,8 +70,9 @@ function parseJsonObject(value: string | undefined): unknown {
   if (!value) return {};
   try {
     return JSON.parse(value);
-  } catch {
-    return {};
+  } catch (error) {
+    const detail = error instanceof Error ? error.message : String(error);
+    throw new Error(`Failed to parse tool arguments: ${detail}. Raw args: ${value.slice(0, 500)}`);
   }
 }
 

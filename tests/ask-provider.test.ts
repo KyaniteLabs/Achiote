@@ -23,6 +23,30 @@ describe('ask provider compatibility', () => {
     expect(resolveAskProviderKind({ ANTHROPIC_BASE_URL: 'https://api.anthropic.com' })).toBe('anthropic');
   });
 
+
+  it('throws on malformed OpenAI-compatible tool arguments instead of swallowing them', async () => {
+    const session = createOpenAICompatibleAskSession({
+      model: 'local-model',
+      systemPrompt: 'Use tools first.',
+      userMessage: 'memory',
+      tools: anthropicTools.slice(0, 1),
+      baseUrl: 'http://local.test/v1',
+      timeoutMs: 30_000,
+      fetchImpl: async () => new Response(JSON.stringify({
+        choices: [{
+          message: {
+            role: 'assistant',
+            content: '',
+            tool_calls: [{ id: 'call_bad', type: 'function', function: { name: 'collect_food_memory', arguments: '{bad' } }],
+          },
+          finish_reason: 'tool_calls',
+        }],
+      }), { status: 200, headers: { 'content-type': 'application/json' } }),
+    });
+
+    await expect(session.create(128)).rejects.toThrow('Failed to parse tool arguments');
+  });
+
   it('runs an OpenAI-compatible tool-call cycle', async () => {
     const requests: unknown[] = [];
     const session = createOpenAICompatibleAskSession({

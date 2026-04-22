@@ -32,7 +32,7 @@ const ALLOW_ANON_ASK = process.env.ACHIOTE_ALLOW_ANON_ASK === 'true';
 const PORT = parseInt(process.env.PORT || '3000', 10);
 const ASK_PROVIDER_KIND = resolveAskProviderKind();
 const ASK_MODEL = ASK_PROVIDER_KIND === 'openai'
-  ? process.env.ACHIOTE_ASK_MODEL || process.env.OPENAI_MODEL || process.env.LMSTUDIO_MODEL || process.env.ANTHROPIC_DEFAULT_SONNET_MODEL || 'gpt-4o-mini'
+  ? process.env.ACHIOTE_ASK_MODEL || process.env.OPENAI_MODEL || process.env.LMSTUDIO_MODEL || process.env.LM_STUDIO_MODEL || process.env.ANTHROPIC_DEFAULT_SONNET_MODEL || 'gpt-4o-mini'
   : process.env.ACHIOTE_ASK_MODEL || process.env.ANTHROPIC_DEFAULT_SONNET_MODEL || 'claude-sonnet-4-5-20250929';
 const ANTHROPIC_TIMEOUT_MS = parseInt(process.env.ANTHROPIC_TIMEOUT_MS || process.env.API_TIMEOUT_MS || '120000', 10);
 const OPENAI_TIMEOUT_MS = parseInt(process.env.OPENAI_TIMEOUT_MS || process.env.LMSTUDIO_TIMEOUT_MS || process.env.API_TIMEOUT_MS || '180000', 10);

@@ -43,6 +43,16 @@ describe('shared tool registry', () => {
 
 
 
+
+  it('recovers research planning when a model passes the memory object directly', async () => {
+    const plan = await executeToolDefinition('plan_dish_research', {
+      normalizedMemory: "Grandma's sour dill soup with pale chunks",
+    }, defaultToolExecutionContext);
+
+    expect(outputSchemas.plan_dish_research.safeParse(plan.payload).success).toBe(true);
+    expect(plan.payload.researchRequired).toBe(true);
+  });
+
   it('recovers research planning when a model passes only normalized memory text', async () => {
     const plan = await executeToolDefinition('plan_dish_research', {
       memory: { normalizedMemory: "Grandma's sour dill soup with pale chunks" },
