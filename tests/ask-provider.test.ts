@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { anthropicTools } from '../src/tools/tool-registry.js';
-import { createOpenAICompatibleAskSession, openAiToolsFromAnthropic, resolveAskProviderKind } from '../src/lib/ask-provider.js';
+import { createOpenAICompatibleAskSession, openAICompatibleProviderReady, openAIBaseUrlFromEnv, openAiToolsFromAnthropic, resolveAskProviderKind } from '../src/lib/ask-provider.js';
 
 describe('ask provider compatibility', () => {
   it('maps Anthropic tool definitions into OpenAI-compatible function tools', () => {
@@ -16,11 +16,20 @@ describe('ask provider compatibility', () => {
     expect(tools.map((tool) => tool.function.name)).toEqual(anthropicTools.map((tool) => tool.name));
   });
 
-  it('chooses OpenAI-compatible mode from explicit provider or OpenAI/LM Studio env', () => {
+  it('requires explicit provider selection before switching away from Anthropic', () => {
     expect(resolveAskProviderKind({ ACHIOTE_ASK_PROVIDER: 'openai' })).toBe('openai');
-    expect(resolveAskProviderKind({ OPENAI_BASE_URL: 'http://127.0.0.1:1234/v1' })).toBe('openai');
-    expect(resolveAskProviderKind({ LMSTUDIO_BASE_URL: 'http://127.0.0.1:1234/v1' })).toBe('openai');
+    expect(resolveAskProviderKind({ ACHIOTE_ASK_PROVIDER: 'lmstudio' })).toBe('openai');
+    expect(resolveAskProviderKind({ OPENAI_API_KEY: 'ambient-openai-key' })).toBe('anthropic');
+    expect(resolveAskProviderKind({ OPENAI_BASE_URL: 'http://127.0.0.1:1234/v1' })).toBe('anthropic');
     expect(resolveAskProviderKind({ ANTHROPIC_BASE_URL: 'https://api.anthropic.com' })).toBe('anthropic');
+  });
+
+  it('resolves OpenAI-compatible base URLs and readiness without pretending localhost is OpenAI', () => {
+    expect(openAIBaseUrlFromEnv({ ACHIOTE_ASK_PROVIDER: 'openai' })).toBe('https://api.openai.com/v1');
+    expect(openAIBaseUrlFromEnv({ ACHIOTE_ASK_PROVIDER: 'lmstudio' })).toBe('http://127.0.0.1:1234/v1');
+    expect(openAICompatibleProviderReady('https://api.openai.com/v1', undefined)).toBe(false);
+    expect(openAICompatibleProviderReady('https://api.openai.com/v1', 'sk-test')).toBe(true);
+    expect(openAICompatibleProviderReady('http://127.0.0.1:1234/v1', undefined)).toBe(true);
   });
 
 

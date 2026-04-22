@@ -4,7 +4,7 @@ import { createServer, type IncomingMessage, type ServerResponse } from 'node:ht
 import { dirname, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import Anthropic from '@anthropic-ai/sdk';
-import { createAnthropicAskSession, createOpenAICompatibleAskSession, resolveAskProviderKind } from './lib/ask-provider.js';
+import { createAnthropicAskSession, createOpenAICompatibleAskSession, openAIBaseUrlFromEnv, openAICompatibleProviderReady, resolveAskProviderKind } from './lib/ask-provider.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { isInitializeRequest } from '@modelcontextprotocol/sdk/types.js';
 import { createAchioteServer } from './server.js';
@@ -36,7 +36,7 @@ const ASK_MODEL = ASK_PROVIDER_KIND === 'openai'
   : process.env.ACHIOTE_ASK_MODEL || process.env.ANTHROPIC_DEFAULT_SONNET_MODEL || 'claude-sonnet-4-5-20250929';
 const ANTHROPIC_TIMEOUT_MS = parseInt(process.env.ANTHROPIC_TIMEOUT_MS || process.env.API_TIMEOUT_MS || '120000', 10);
 const OPENAI_TIMEOUT_MS = parseInt(process.env.OPENAI_TIMEOUT_MS || process.env.LMSTUDIO_TIMEOUT_MS || process.env.API_TIMEOUT_MS || '180000', 10);
-const OPENAI_BASE_URL = process.env.OPENAI_BASE_URL || process.env.LMSTUDIO_BASE_URL || process.env.LM_STUDIO_BASE_URL || 'http://127.0.0.1:1234/v1';
+const OPENAI_BASE_URL = openAIBaseUrlFromEnv();
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const STATIC_DIR = resolve(__dirname, '..', 'docs', 'landing');
 const ALLOWED_ORIGINS = (process.env.ACHIOTE_ALLOWED_ORIGINS || 'http://localhost:3000').split(',');
@@ -100,7 +100,7 @@ function createAskSession(userMessage: string) {
       userMessage,
       tools: TOOLS,
       baseUrl: OPENAI_BASE_URL,
-      apiKey: process.env.OPENAI_API_KEY || process.env.LMSTUDIO_API_KEY || null,
+      apiKey: process.env.OPENAI_API_KEY || process.env.LMSTUDIO_API_KEY || process.env.LM_STUDIO_API_KEY || null,
       timeoutMs: OPENAI_TIMEOUT_MS,
     });
   }
@@ -368,7 +368,7 @@ const server = createServer(async (req, res) => {
     const readiness = getHttpReadiness({
       authEnabled: AUTH_ENABLED,
       apiKeyCount: configuredApiKeys.length,
-      anthropicApiKey: ASK_PROVIDER_KIND === 'openai' ? 'openai-compatible-provider' : process.env.ANTHROPIC_API_KEY,
+      anthropicApiKey: ASK_PROVIDER_KIND === 'openai' && openAICompatibleProviderReady(OPENAI_BASE_URL, process.env.OPENAI_API_KEY || process.env.LMSTUDIO_API_KEY || process.env.LM_STUDIO_API_KEY) ? 'openai-compatible-provider' : ASK_PROVIDER_KIND === 'openai' ? undefined : process.env.ANTHROPIC_API_KEY,
       anthropicAuthToken: ASK_PROVIDER_KIND === 'openai' ? undefined : process.env.ANTHROPIC_AUTH_TOKEN,
       cacheAvailable: cache !== null && !cacheState.fallbackUsed,
       rateLimitPersistenceConfigured: Boolean(process.env.ACHIOTE_RATE_LIMIT_DB),
