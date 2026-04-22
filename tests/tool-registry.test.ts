@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import fs from 'node:fs';
-import { anthropicTools, toolRegistry, toolNames, outputSchemas, findToolDefinition } from '../src/tools/tool-registry.js';
+import { anthropicTools, toolRegistry, toolNames, outputSchemas, findToolDefinition, executeToolDefinition, defaultToolExecutionContext } from '../src/tools/tool-registry.js';
 
 const expectedToolNames = [
   'analyze_nostalgic_dish',
@@ -39,6 +39,29 @@ describe('shared tool registry', () => {
       expect(tool.outputSchema).toBeTruthy();
       expect(typeof tool.execute).toBe('function');
     }
+  });
+
+
+  it('recovers reconstruction dossiers when a model passes an incomplete research plan', async () => {
+    const memory = (await executeToolDefinition('collect_food_memory', {
+      memoryText: 'Warm sour dill soup with pale chunks, dairy-free and allergic to tree nuts.',
+    }, defaultToolExecutionContext)).payload;
+
+    const dossier = await executeToolDefinition('build_reconstruction_dossier', {
+      memory,
+      researchPlan: {
+        researchRequired: true,
+        hypotheses: [{ name: 'sour dill soup' }],
+        searchQueries: ['sour dill soup'],
+        preferredSourceTypes: ['family memory'],
+        factsToVerify: ['exact dish identity'],
+        questionsForUser: ['What gave the soup body?'],
+      },
+    }, defaultToolExecutionContext);
+
+    expect(outputSchemas.build_reconstruction_dossier.safeParse(dossier.payload).success).toBe(true);
+    expect(dossier.payload.hypotheses.length).toBeGreaterThan(0);
+    expect(dossier.payload.hypotheses.every((hypothesis: { researchRequired?: unknown }) => typeof hypothesis.researchRequired === 'boolean')).toBe(true);
   });
 
   it('keeps protocol wrappers and package smoke wired to the registry', () => {

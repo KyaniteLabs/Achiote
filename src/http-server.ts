@@ -74,7 +74,12 @@ setInterval(sweepStaleSessions, SESSION_TTL).unref();
 const cacheState = createCacheWithStatus({});
 const cache = cacheState.cache;
 const toolContext: AchioteToolExecutionContext = { ...defaultToolExecutionContext, cache };
-const anthropic = new Anthropic({ timeout: ANTHROPIC_TIMEOUT_MS });
+const anthropicClientOptions = {
+  timeout: ANTHROPIC_TIMEOUT_MS,
+  apiKey: process.env.ANTHROPIC_API_KEY?.trim() || null,
+  authToken: process.env.ANTHROPIC_AUTH_TOKEN?.trim() || null,
+};
+const anthropic = new Anthropic(anthropicClientOptions);
 const configuredApiKeys = loadKeysFromEnv(process.env.ACHIOTE_API_KEYS);
 const authenticator = createAuthenticator(configuredApiKeys);
 const rateLimiter = createRateLimiter(process.env.ACHIOTE_RATE_LIMIT_DB);
