@@ -62,5 +62,9 @@ describe('P0 launch readiness guards', () => {
     expect(readme).toContain('Authentication is enabled by default');
     expect(readme).toContain('Achiote is not published to npm yet');
     expect(envExample).toContain('ACHIOTE_AUTH_ENABLED=true');
+    expect(envExample).toContain('ACHIOTE_ASK_PROVIDER=anthropic');
+    expect(envExample).toContain('ANTHROPIC_API_KEY=');
+    expect(envExample).toContain('OPENAI_BASE_URL=');
+    expect(envExample).toContain('OPENAI_MODEL=');
   });
 });

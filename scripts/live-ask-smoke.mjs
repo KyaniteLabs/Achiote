@@ -4,10 +4,18 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 
-const hasAnthropicCredential = Boolean(process.env.ANTHROPIC_API_KEY?.trim() || process.env.ANTHROPIC_AUTH_TOKEN?.trim());
+const isOpenAICompatible = ['openai', 'openai-compatible', 'lmstudio', 'lm-studio'].includes(process.env.ACHIOTE_ASK_PROVIDER?.trim().toLowerCase() ?? '')
+  || Boolean(process.env.OPENAI_BASE_URL?.trim() || process.env.LMSTUDIO_BASE_URL?.trim() || process.env.LM_STUDIO_BASE_URL?.trim());
+const hasProviderCredential = Boolean(
+  process.env.ANTHROPIC_API_KEY?.trim()
+  || process.env.ANTHROPIC_AUTH_TOKEN?.trim()
+  || process.env.OPENAI_API_KEY?.trim()
+  || process.env.LMSTUDIO_API_KEY?.trim()
+  || isOpenAICompatible,
+);
 
-if (!hasAnthropicCredential) {
-  console.error('ANTHROPIC_API_KEY or ANTHROPIC_AUTH_TOKEN is required for live /ask smoke.');
+if (!hasProviderCredential) {
+  console.error('ANTHROPIC_API_KEY, ANTHROPIC_AUTH_TOKEN, OPENAI_API_KEY, or a local OpenAI-compatible base URL is required for live /ask smoke.');
   process.exit(1);
 }
 
@@ -115,7 +123,9 @@ async function main() {
     throw new Error(`Build output missing at ${serverPath}. Run npm run build first.`);
   }
 
-  console.log(`Live /ask smoke target: base=${process.env.ANTHROPIC_BASE_URL || 'https://api.anthropic.com'} model=${process.env.ACHIOTE_ASK_MODEL || process.env.ANTHROPIC_DEFAULT_SONNET_MODEL || 'claude-sonnet-4-5-20250929'} timeout=${liveAskTimeoutMs}ms`);
+  const providerBase = process.env.OPENAI_BASE_URL || process.env.LMSTUDIO_BASE_URL || process.env.LM_STUDIO_BASE_URL || process.env.ANTHROPIC_BASE_URL || 'https://api.anthropic.com';
+  const providerModel = process.env.ACHIOTE_ASK_MODEL || process.env.OPENAI_MODEL || process.env.LMSTUDIO_MODEL || process.env.ANTHROPIC_DEFAULT_SONNET_MODEL || 'claude-sonnet-4-5-20250929';
+  console.log(`Live /ask smoke target: provider=${process.env.ACHIOTE_ASK_PROVIDER || (isOpenAICompatible ? 'openai' : 'anthropic')} base=${providerBase} model=${providerModel} timeout=${liveAskTimeoutMs}ms`);
 
   const child = spawn(process.execPath, [serverPath], {
     cwd: root,

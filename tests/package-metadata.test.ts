@@ -75,6 +75,8 @@ describe('package distribution metadata', () => {
     expect(liveSmokeScript).toContain('ANTHROPIC_BASE_URL');
     expect(liveSmokeScript).toContain('ANTHROPIC_DEFAULT_SONNET_MODEL');
     expect(liveSmokeScript).toContain('LIVE_ASK_TIMEOUT_MS');
+    expect(liveSmokeScript).toContain('OPENAI_BASE_URL');
+    expect(liveSmokeScript).toContain('ACHIOTE_ASK_PROVIDER');
   });
 
 
@@ -87,6 +89,9 @@ describe('package distribution metadata', () => {
     expect(httpServer).toContain('API_TIMEOUT_MS');
     expect(httpServer).toContain('anthropicClientOptions');
     expect(httpServer).toContain('authToken');
+    expect(httpServer).toContain('createOpenAICompatibleAskSession');
+    expect(httpServer).toContain('OPENAI_BASE_URL');
+    expect(httpServer).toContain('LM_STUDIO_MODEL');
     expect(httpServer).toContain('claude-sonnet-4-5-20250929');
     expect(httpServer).not.toContain("model: 'claude-sonnet-4-5-20250929'");
   });

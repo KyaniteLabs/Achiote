@@ -457,7 +457,10 @@ export const toolRegistry = [
       required: ['memory'],
       properties: { memory: { type: 'object' as const, description: 'Structured output from collect_food_memory' } },
     },
-    execute: (raw) => output({ ...planDishResearch(memoryFromModelInput(asInput(raw).memory)) }),
+    execute: (raw) => {
+      const input = asInput(raw);
+      return output({ ...planDishResearch(memoryFromModelInput(input.memory ?? input)) });
+    },
   }),
   createTool({
     name: 'build_reconstruction_dossier',

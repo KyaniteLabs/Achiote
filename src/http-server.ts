@@ -4,6 +4,7 @@ import { createServer, type IncomingMessage, type ServerResponse } from 'node:ht
 import { dirname, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import Anthropic from '@anthropic-ai/sdk';
+import { createAnthropicAskSession, createOpenAICompatibleAskSession, openAIBaseUrlFromEnv, openAICompatibleProviderReady, resolveAskProviderKind } from './lib/ask-provider.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { isInitializeRequest } from '@modelcontextprotocol/sdk/types.js';
 import { createAchioteServer } from './server.js';
@@ -29,8 +30,13 @@ const TRUSTED_PROXY_IPS = (process.env.ACHIOTE_TRUSTED_PROXY_IPS || '')
 const ALLOW_ANON_ASK = process.env.ACHIOTE_ALLOW_ANON_ASK === 'true';
 
 const PORT = parseInt(process.env.PORT || '3000', 10);
-const ASK_MODEL = process.env.ACHIOTE_ASK_MODEL || process.env.ANTHROPIC_DEFAULT_SONNET_MODEL || 'claude-sonnet-4-5-20250929';
+const ASK_PROVIDER_KIND = resolveAskProviderKind();
+const ASK_MODEL = ASK_PROVIDER_KIND === 'openai'
+  ? process.env.ACHIOTE_ASK_MODEL || process.env.OPENAI_MODEL || process.env.LMSTUDIO_MODEL || process.env.LM_STUDIO_MODEL || process.env.ANTHROPIC_DEFAULT_SONNET_MODEL || 'gpt-4o-mini'
+  : process.env.ACHIOTE_ASK_MODEL || process.env.ANTHROPIC_DEFAULT_SONNET_MODEL || 'claude-sonnet-4-5-20250929';
 const ANTHROPIC_TIMEOUT_MS = parseInt(process.env.ANTHROPIC_TIMEOUT_MS || process.env.API_TIMEOUT_MS || '120000', 10);
+const OPENAI_TIMEOUT_MS = parseInt(process.env.OPENAI_TIMEOUT_MS || process.env.LMSTUDIO_TIMEOUT_MS || process.env.API_TIMEOUT_MS || '180000', 10);
+const OPENAI_BASE_URL = openAIBaseUrlFromEnv();
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const STATIC_DIR = resolve(__dirname, '..', 'docs', 'landing');
 const ALLOWED_ORIGINS = (process.env.ACHIOTE_ALLOWED_ORIGINS || 'http://localhost:3000').split(',');
@@ -85,6 +91,28 @@ const authenticator = createAuthenticator(configuredApiKeys);
 const rateLimiter = createRateLimiter(process.env.ACHIOTE_RATE_LIMIT_DB);
 
 const AUTH_ENABLED = process.env.ACHIOTE_AUTH_ENABLED !== 'false';
+
+function createAskSession(userMessage: string) {
+  if (ASK_PROVIDER_KIND === 'openai') {
+    return createOpenAICompatibleAskSession({
+      model: ASK_MODEL,
+      systemPrompt: SYSTEM_PROMPT,
+      userMessage,
+      tools: TOOLS,
+      baseUrl: OPENAI_BASE_URL,
+      apiKey: process.env.OPENAI_API_KEY || process.env.LMSTUDIO_API_KEY || process.env.LM_STUDIO_API_KEY || null,
+      timeoutMs: OPENAI_TIMEOUT_MS,
+    });
+  }
+
+  return createAnthropicAskSession({
+    client: anthropic,
+    model: ASK_MODEL,
+    systemPrompt: SYSTEM_PROMPT,
+    userMessage,
+    tools: TOOLS,
+  });
+}
 
 const SYSTEM_PROMPT = `You are a food memory assistant built into Achiote. You MUST use the provided tools — never answer from memory alone.
 
@@ -208,52 +236,36 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
   };
 
   try {
-    const messages: Anthropic.MessageParam[] = [{ role: 'user', content: userMessage }];
-    let modelResponse = await anthropic.messages.create({
-      model: ASK_MODEL,
-      max_tokens: 4096,
-      system: SYSTEM_PROMPT,
-      messages,
-      tools: TOOLS,
-    });
-    console.log(`[ask] stop_reason=${modelResponse.stop_reason} content_types=${modelResponse.content.map(b => b.type).join(',')}`);
+    const askSession = createAskSession(userMessage);
+    let modelResponse = await askSession.create(4096);
+    console.log(`[ask] provider=${ASK_PROVIDER_KIND} content=text:${modelResponse.textBlocks.length},tools:${modelResponse.toolCalls.length}`);
 
     let iterations = 0;
-    while (modelResponse.stop_reason === 'tool_use' && iterations < 15) {
+    while (modelResponse.toolCalls.length > 0 && iterations < 15) {
       if (res.writableEnded) return;
       iterations++;
-      const toolBlocks = modelResponse.content.filter((b): b is Anthropic.ToolUseBlock => b.type === 'tool_use');
-      console.log(`[ask] iteration=${iterations} calling tools: ${toolBlocks.map(b => b.name).join(', ')}`);
-      const toolResults: Anthropic.ToolResultBlockParam[] = [];
+      console.log(`[ask] iteration=${iterations} calling tools: ${modelResponse.toolCalls.map((call) => call.name).join(', ')}`);
+      const toolResults: Array<{ id: string; content: string }> = [];
 
-      for (const block of toolBlocks) {
+      for (const call of modelResponse.toolCalls) {
         try {
-          const result = await executeToolDefinition(block.name, block.input, toolContext);
-          validateToolOutput(block.name, result.payload);
-          toolResults.push({ type: 'tool_result', tool_use_id: block.id, content: JSON.stringify(result.payload) });
+          const result = await executeToolDefinition(call.name, call.input, toolContext);
+          validateToolOutput(call.name, result.payload);
+          toolResults.push({ id: call.id, content: JSON.stringify(result.payload) });
         } catch (err) {
           const detail = err instanceof Error ? err.message : String(err);
           const code = err instanceof ToolExecutionError ? err.code : 'tool_failed';
-          send('error', { message: 'Tool failed', tool: block.name, code, detail });
+          send('error', { message: 'Tool failed', tool: call.name, code, detail });
           return;
         }
       }
 
-      messages.push({ role: 'assistant', content: modelResponse.content });
-      messages.push({ role: 'user', content: toolResults });
-
-      modelResponse = await anthropic.messages.create({
-        model: ASK_MODEL,
-        max_tokens: 2048,
-        system: SYSTEM_PROMPT,
-        messages,
-        tools: TOOLS,
-      });
+      askSession.appendToolResults(modelResponse, toolResults);
+      modelResponse = await askSession.create(2048);
     }
 
-    const textBlocks = modelResponse.content.filter((b): b is Anthropic.TextBlock => b.type === 'text');
-    for (const block of textBlocks) {
-      send('text', block.text);
+    for (const text of modelResponse.textBlocks) {
+      send('text', text);
     }
     send('done', {});
   } catch (err) {
@@ -356,8 +368,8 @@ const server = createServer(async (req, res) => {
     const readiness = getHttpReadiness({
       authEnabled: AUTH_ENABLED,
       apiKeyCount: configuredApiKeys.length,
-      anthropicApiKey: process.env.ANTHROPIC_API_KEY,
-      anthropicAuthToken: process.env.ANTHROPIC_AUTH_TOKEN,
+      anthropicApiKey: ASK_PROVIDER_KIND === 'openai' && openAICompatibleProviderReady(OPENAI_BASE_URL, process.env.OPENAI_API_KEY || process.env.LMSTUDIO_API_KEY || process.env.LM_STUDIO_API_KEY) ? 'openai-compatible-provider' : ASK_PROVIDER_KIND === 'openai' ? undefined : process.env.ANTHROPIC_API_KEY,
+      anthropicAuthToken: ASK_PROVIDER_KIND === 'openai' ? undefined : process.env.ANTHROPIC_AUTH_TOKEN,
       cacheAvailable: cache !== null && !cacheState.fallbackUsed,
       rateLimitPersistenceConfigured: Boolean(process.env.ACHIOTE_RATE_LIMIT_DB),
     });
