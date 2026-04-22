@@ -1,0 +1,178 @@
+import Anthropic from '@anthropic-ai/sdk';
+import type { anthropicTools } from '../tools/tool-registry.js';
+
+type AnthropicTool = (typeof anthropicTools)[number];
+
+type OpenAITool = {
+  type: 'function';
+  function: {
+    name: string;
+    description?: string;
+    parameters: AnthropicTool['input_schema'];
+  };
+};
+
+type OpenAIMessage =
+  | { role: 'system' | 'user'; content: string }
+  | { role: 'assistant'; content: string | null; tool_calls?: OpenAIToolCall[] }
+  | { role: 'tool'; tool_call_id: string; content: string };
+
+type OpenAIToolCall = {
+  id: string;
+  type: 'function';
+  function: { name: string; arguments?: string };
+};
+
+type FetchLike = typeof fetch;
+
+export type AskProviderKind = 'anthropic' | 'openai';
+
+export type AskToolCall = {
+  id: string;
+  name: string;
+  input: unknown;
+};
+
+export type AskToolResult = {
+  id: string;
+  content: string;
+};
+
+export type AskModelResponse = {
+  textBlocks: string[];
+  toolCalls: AskToolCall[];
+  providerMessage: unknown;
+};
+
+export interface AskSession {
+  create(maxTokens: number): Promise<AskModelResponse>;
+  appendToolResults(response: AskModelResponse, toolResults: AskToolResult[]): void;
+}
+
+export function resolveAskProviderKind(env: Record<string, string | undefined> = process.env): AskProviderKind {
+  const explicit = env.ACHIOTE_ASK_PROVIDER?.trim().toLowerCase();
+  if (explicit === 'openai' || explicit === 'openai-compatible' || explicit === 'lmstudio' || explicit === 'lm-studio') return 'openai';
+  if (explicit === 'anthropic' || explicit === 'anthropic-compatible') return 'anthropic';
+  if (env.OPENAI_BASE_URL?.trim() || env.OPENAI_API_KEY?.trim() || env.LMSTUDIO_BASE_URL?.trim() || env.LM_STUDIO_BASE_URL?.trim()) return 'openai';
+  return 'anthropic';
+}
+
+export function openAiToolsFromAnthropic(tools: AnthropicTool[]): OpenAITool[] {
+  return tools.map((tool) => ({
+    type: 'function',
+    function: {
+      name: tool.name,
+      description: tool.description,
+      parameters: tool.input_schema,
+    },
+  }));
+}
+
+function parseJsonObject(value: string | undefined): unknown {
+  if (!value) return {};
+  try {
+    return JSON.parse(value);
+  } catch {
+    return {};
+  }
+}
+
+export function createAnthropicAskSession(input: {
+  client: Anthropic;
+  model: string;
+  systemPrompt: string;
+  userMessage: string;
+  tools: AnthropicTool[];
+}): AskSession {
+  const messages: Anthropic.MessageParam[] = [{ role: 'user', content: input.userMessage }];
+
+  return {
+    async create(maxTokens: number): Promise<AskModelResponse> {
+      const response = await input.client.messages.create({
+        model: input.model,
+        max_tokens: maxTokens,
+        system: input.systemPrompt,
+        messages,
+        tools: input.tools,
+      });
+      const toolCalls = response.content
+        .filter((block): block is Anthropic.ToolUseBlock => block.type === 'tool_use')
+        .map((block) => ({ id: block.id, name: block.name, input: block.input }));
+      const textBlocks = response.content
+        .filter((block): block is Anthropic.TextBlock => block.type === 'text')
+        .map((block) => block.text);
+      return { textBlocks, toolCalls, providerMessage: response.content };
+    },
+    appendToolResults(response: AskModelResponse, toolResults: AskToolResult[]): void {
+      messages.push({ role: 'assistant', content: response.providerMessage as Anthropic.ContentBlockParam[] });
+      messages.push({
+        role: 'user',
+        content: toolResults.map((result): Anthropic.ToolResultBlockParam => ({
+          type: 'tool_result',
+          tool_use_id: result.id,
+          content: result.content,
+        })),
+      });
+    },
+  };
+}
+
+export function createOpenAICompatibleAskSession(input: {
+  model: string;
+  systemPrompt: string;
+  userMessage: string;
+  tools: AnthropicTool[];
+  baseUrl: string;
+  apiKey?: string | null;
+  timeoutMs: number;
+  fetchImpl?: FetchLike;
+}): AskSession {
+  const fetchImpl = input.fetchImpl ?? fetch;
+  const messages: OpenAIMessage[] = [
+    { role: 'system', content: input.systemPrompt },
+    { role: 'user', content: input.userMessage },
+  ];
+
+  return {
+    async create(maxTokens: number): Promise<AskModelResponse> {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), input.timeoutMs);
+      try {
+        const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+        if (input.apiKey?.trim()) headers.Authorization = `Bearer ${input.apiKey.trim()}`;
+        const response = await fetchImpl(`${input.baseUrl.replace(/\/$/, '')}/chat/completions`, {
+          method: 'POST',
+          headers,
+          signal: controller.signal,
+          body: JSON.stringify({
+            model: input.model,
+            messages,
+            tools: openAiToolsFromAnthropic(input.tools),
+            tool_choice: 'auto',
+            max_tokens: maxTokens,
+          }),
+        });
+        const body = await response.text();
+        if (!response.ok) throw new Error(`OpenAI-compatible provider returned ${response.status}: ${body.slice(0, 1000)}`);
+        const parsed = JSON.parse(body) as { choices?: Array<{ message?: OpenAIMessage; finish_reason?: string }> };
+        const message = parsed.choices?.[0]?.message;
+        if (!message || message.role !== 'assistant') throw new Error('OpenAI-compatible provider returned no assistant message');
+        const toolCalls = (message.tool_calls ?? []).map((call) => ({
+          id: call.id,
+          name: call.function.name,
+          input: parseJsonObject(call.function.arguments),
+        }));
+        const textBlocks = typeof message.content === 'string' && message.content.length > 0 ? [message.content] : [];
+        return { textBlocks, toolCalls, providerMessage: message };
+      } finally {
+        clearTimeout(timeout);
+      }
+    },
+    appendToolResults(response: AskModelResponse, toolResults: AskToolResult[]): void {
+      messages.push(response.providerMessage as OpenAIMessage);
+      for (const result of toolResults) {
+        messages.push({ role: 'tool', tool_call_id: result.id, content: result.content });
+      }
+    },
+  };
+}
