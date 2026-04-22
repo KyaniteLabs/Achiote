@@ -73,6 +73,23 @@ describe('shared tool registry', () => {
     expect(cue.payload.title).toContain('Minimum viable');
   });
 
+
+  it('preserves research confidence metadata even when model fact arrays are empty', async () => {
+    const memory = (await executeToolDefinition('collect_food_memory', {
+      memoryText: 'Warm sour dill soup with pale chunks.',
+    }, defaultToolExecutionContext)).payload;
+    const researchPlan = (await executeToolDefinition('plan_dish_research', { memory }, defaultToolExecutionContext)).payload;
+    const dossier = (await executeToolDefinition('build_reconstruction_dossier', { memory, researchPlan }, defaultToolExecutionContext)).payload;
+
+    const cue = await executeToolDefinition('generate_minimum_viable_nostalgia', {
+      dossier,
+      researchFindings: { researchedFacts: [], inferredFacts: [], unknowns: [], sourceCount: 2, confidence: 'High' },
+    }, defaultToolExecutionContext);
+
+    expect(outputSchemas.generate_minimum_viable_nostalgia.safeParse(cue.payload).success).toBe(true);
+    expect(cue.payload.confidence).toBe('High');
+  });
+
   it('recovers reconstruction dossiers when a model passes an incomplete research plan', async () => {
     const memory = (await executeToolDefinition('collect_food_memory', {
       memoryText: 'Warm sour dill soup with pale chunks, dairy-free and allergic to tree nuts.',

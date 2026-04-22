@@ -145,14 +145,16 @@ function researchFindingsFromModelInput(rawFindings: unknown): Parameters<typeof
   const inferredFacts = stringArrayField(input, 'inferredFacts', 'inferred');
   const unknowns = stringArrayField(input, 'unknowns', 'unknown');
 
-  if (researchedFacts.length === 0 && inferredFacts.length === 0 && unknowns.length === 0) return undefined;
+  const confidence = confidenceFromModelInput(input.confidence);
+  const hasConfidenceMetadata = input.confidence !== undefined || typeof input.sourceCount === 'number';
+  if (researchedFacts.length === 0 && inferredFacts.length === 0 && unknowns.length === 0 && !hasConfidenceMetadata) return undefined;
 
   return {
     researchedFacts,
     inferredFacts,
     unknowns,
     sourceCount: typeof input.sourceCount === 'number' ? input.sourceCount : 0,
-    confidence: confidenceFromModelInput(input.confidence),
+    confidence,
   };
 }
 
