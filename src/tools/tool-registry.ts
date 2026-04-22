@@ -87,6 +87,16 @@ function output(payload: ToolPayload, displayText?: string): AchioteToolExecutio
   return { payload, displayText };
 }
 
+function researchPlanFromModelInput(input: Input): Parameters<typeof buildReconstructionDossier>[0]['researchPlan'] {
+  const parsedPlan = dishResearchPlanSchema.safeParse(input.researchPlan);
+  if (parsedPlan.success) return parsedPlan.data;
+
+  const parsedMemory = collectedFoodMemorySchema.safeParse(input.memory);
+  if (parsedMemory.success) return planDishResearch(parsedMemory.data);
+
+  return input.researchPlan as Parameters<typeof buildReconstructionDossier>[0]['researchPlan'];
+}
+
 function analyzeNostalgicDish(input: Input, context: AchioteToolExecutionContext): AchioteToolExecutionResult {
   const description = text(input.description);
   const region = (input.region as string | undefined) ?? 'unknown';
@@ -406,7 +416,7 @@ export const toolRegistry = [
       return output({
         ...buildReconstructionDossier({
           memory: input.memory as Parameters<typeof buildReconstructionDossier>[0]['memory'],
-          researchPlan: input.researchPlan as Parameters<typeof buildReconstructionDossier>[0]['researchPlan'],
+          researchPlan: researchPlanFromModelInput(input),
           researchedFacts: input.researchedFacts as string[] | undefined,
           inferredFacts: input.inferredFacts as string[] | undefined,
         }),

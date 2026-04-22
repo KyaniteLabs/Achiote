@@ -85,6 +85,8 @@ describe('package distribution metadata', () => {
     expect(httpServer).toContain('ANTHROPIC_DEFAULT_SONNET_MODEL');
     expect(httpServer).toContain('ANTHROPIC_TIMEOUT_MS');
     expect(httpServer).toContain('API_TIMEOUT_MS');
+    expect(httpServer).toContain('anthropicClientOptions');
+    expect(httpServer).toContain('authToken');
     expect(httpServer).toContain('claude-sonnet-4-5-20250929');
     expect(httpServer).not.toContain("model: 'claude-sonnet-4-5-20250929'");
   });
