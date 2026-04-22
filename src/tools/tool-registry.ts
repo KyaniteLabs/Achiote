@@ -104,21 +104,34 @@ function memoryFromModelInput(rawMemory: unknown): Parameters<typeof planDishRes
 }
 
 
+function stringArrayField(input: Input, preferred: string, fallback: string): string[] {
+  const value = input[preferred] ?? input[fallback];
+  return Array.isArray(value) ? value.filter((entry): entry is string => typeof entry === 'string' && entry.trim().length > 0) : [];
+}
+
+function confidenceFromModelInput(value: unknown): 'High' | 'Medium' | 'Low' {
+  const normalized = text(value).toLowerCase();
+  if (normalized === 'high') return 'High';
+  if (normalized === 'medium') return 'Medium';
+  return 'Low';
+}
+
+
 function dossierFromModelInput(rawDossier: unknown): Parameters<typeof generateMinimumViableNostalgiaCue>[0]['dossier'] {
   const parsedDossier = buildReconstructionDossierOutputSchema.safeParse(rawDossier);
   if (parsedDossier.success) return parsedDossier.data;
 
   const input = asInput(rawDossier);
   const ledger = asInput(input.evidenceLedger);
-  const userSaid = Array.isArray(ledger.userSaid) ? ledger.userSaid.find((value) => typeof value === 'string' && value.trim()) : undefined;
-  const memoryText = text(userSaid ?? input.rawMemory ?? input.normalizedMemory ?? input.memoryText).trim();
+  const userSaid = stringArrayField(ledger, 'userSaid', 'userSaid').join(' ');
+  const memoryText = text(userSaid || input.rawMemory || input.normalizedMemory || input.memoryText).trim();
   if (memoryText) {
     const memory = collectFoodMemory({ memoryText });
     return buildReconstructionDossier({
       memory,
       researchPlan: planDishResearch(memory),
-      researchedFacts: Array.isArray(ledger.researched) ? ledger.researched.filter((value): value is string => typeof value === 'string') : undefined,
-      inferredFacts: Array.isArray(ledger.inferred) ? ledger.inferred.filter((value): value is string => typeof value === 'string') : undefined,
+      researchedFacts: stringArrayField(ledger, 'researchedFacts', 'researched'),
+      inferredFacts: stringArrayField(ledger, 'inferredFacts', 'inferred'),
     });
   }
 
@@ -128,21 +141,9 @@ function dossierFromModelInput(rawDossier: unknown): Parameters<typeof generateM
 
 function researchFindingsFromModelInput(rawFindings: unknown): Parameters<typeof generateMinimumViableNostalgiaCue>[0]['researchFindings'] {
   const input = asInput(rawFindings);
-  const researchedFacts = Array.isArray(input.researchedFacts)
-    ? input.researchedFacts.filter((value): value is string => typeof value === 'string')
-    : Array.isArray(input.researched)
-      ? input.researched.filter((value): value is string => typeof value === 'string')
-      : [];
-  const inferredFacts = Array.isArray(input.inferredFacts)
-    ? input.inferredFacts.filter((value): value is string => typeof value === 'string')
-    : Array.isArray(input.inferred)
-      ? input.inferred.filter((value): value is string => typeof value === 'string')
-      : [];
-  const unknowns = Array.isArray(input.unknowns)
-    ? input.unknowns.filter((value): value is string => typeof value === 'string')
-    : Array.isArray(input.unknown)
-      ? input.unknown.filter((value): value is string => typeof value === 'string')
-      : [];
+  const researchedFacts = stringArrayField(input, 'researchedFacts', 'researched');
+  const inferredFacts = stringArrayField(input, 'inferredFacts', 'inferred');
+  const unknowns = stringArrayField(input, 'unknowns', 'unknown');
 
   if (researchedFacts.length === 0 && inferredFacts.length === 0 && unknowns.length === 0) return undefined;
 
@@ -151,7 +152,7 @@ function researchFindingsFromModelInput(rawFindings: unknown): Parameters<typeof
     inferredFacts,
     unknowns,
     sourceCount: typeof input.sourceCount === 'number' ? input.sourceCount : 0,
-    confidence: input.confidence === 'High' || input.confidence === 'Medium' || input.confidence === 'Low' ? input.confidence : 'Low',
+    confidence: confidenceFromModelInput(input.confidence),
   };
 }
 
