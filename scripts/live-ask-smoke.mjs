@@ -4,8 +4,10 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 
-if (!process.env.ANTHROPIC_API_KEY?.trim()) {
-  console.error('ANTHROPIC_API_KEY is required for live /ask smoke.');
+const hasAnthropicCredential = Boolean(process.env.ANTHROPIC_API_KEY?.trim() || process.env.ANTHROPIC_AUTH_TOKEN?.trim());
+
+if (!hasAnthropicCredential) {
+  console.error('ANTHROPIC_API_KEY or ANTHROPIC_AUTH_TOKEN is required for live /ask smoke.');
   process.exit(1);
 }
 
@@ -13,6 +15,7 @@ const root = process.cwd();
 const tmpRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'achiote-live-ask-'));
 const port = 42000 + Math.floor(Math.random() * 10000);
 const serverPath = path.join(root, 'dist', 'http-server.js');
+const liveAskTimeoutMs = Number.parseInt(process.env.LIVE_ASK_TIMEOUT_MS || '180000', 10);
 
 function cleanupDir() {
   if (process.env.ACHIOTE_KEEP_LIVE_ASK_SMOKE !== '1') {
@@ -112,6 +115,8 @@ async function main() {
     throw new Error(`Build output missing at ${serverPath}. Run npm run build first.`);
   }
 
+  console.log(`Live /ask smoke target: base=${process.env.ANTHROPIC_BASE_URL || 'https://api.anthropic.com'} model=${process.env.ACHIOTE_ASK_MODEL || process.env.ANTHROPIC_DEFAULT_SONNET_MODEL || 'claude-sonnet-4-5-20250929'} timeout=${liveAskTimeoutMs}ms`);
+
   const child = spawn(process.execPath, [serverPath], {
     cwd: root,
     stdio: ['ignore', 'pipe', 'pipe'],
@@ -139,13 +144,13 @@ async function main() {
       body: JSON.stringify({
         message: 'My grandma made a warm sour dill soup with pale chunks. What is the smallest safe cue to test first?',
       }),
-    }), 75_000, '/ask request');
+    }), liveAskTimeoutMs, '/ask request');
 
     if (!response.ok) {
       throw new Error(`/ask returned ${response.status}: ${await response.text()}`);
     }
 
-    const body = await withTimeout(response.text(), 75_000, '/ask SSE body');
+    const body = await withTimeout(response.text(), liveAskTimeoutMs, '/ask SSE body');
     const events = parseSse(body);
     const errors = events.filter((item) => item.event === 'error');
     if (errors.length > 0) {
