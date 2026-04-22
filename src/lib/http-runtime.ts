@@ -44,6 +44,7 @@ export type HttpReadinessInput = {
   authEnabled: boolean;
   apiKeyCount: number;
   anthropicApiKey?: string;
+  anthropicAuthToken?: string;
   cacheAvailable: boolean;
   rateLimitPersistenceConfigured: boolean;
 };
@@ -120,6 +121,7 @@ export function shouldApplyRateLimit(input: RateLimitGateInput): boolean {
 }
 
 export function getHttpReadiness(input: HttpReadinessInput): HttpReadiness {
+  const hasAnthropicCredential = Boolean(input.anthropicApiKey?.trim() || input.anthropicAuthToken?.trim());
   const checks: ReadinessCheck[] = [
     {
       name: 'apiKeys',
@@ -132,10 +134,10 @@ export function getHttpReadiness(input: HttpReadinessInput): HttpReadiness {
     },
     {
       name: 'anthropicApiKey',
-      ok: typeof input.anthropicApiKey === 'string' && input.anthropicApiKey.trim().length > 0,
-      message: input.anthropicApiKey?.trim()
-        ? 'ANTHROPIC_API_KEY is configured for /ask'
-        : 'ANTHROPIC_API_KEY is missing; /ask cannot call the model',
+      ok: hasAnthropicCredential,
+      message: hasAnthropicCredential
+        ? 'Anthropic-compatible credential is configured for /ask'
+        : 'ANTHROPIC_API_KEY or ANTHROPIC_AUTH_TOKEN is missing; /ask cannot call the model',
     },
     {
       name: 'cache',

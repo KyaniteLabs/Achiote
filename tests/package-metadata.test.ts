@@ -71,6 +71,22 @@ describe('package distribution metadata', () => {
     expect(liveSmokeScript).toContain('Malformed text event JSON');
     expect(liveSmokeScript).toContain('parseTextPayload');
     expect(liveSmokeScript).toContain("ACHIOTE_ALLOW_ANON_ASK: 'true'");
+    expect(liveSmokeScript).toContain('ANTHROPIC_AUTH_TOKEN');
+    expect(liveSmokeScript).toContain('ANTHROPIC_BASE_URL');
+    expect(liveSmokeScript).toContain('ANTHROPIC_DEFAULT_SONNET_MODEL');
+    expect(liveSmokeScript).toContain('LIVE_ASK_TIMEOUT_MS');
+  });
+
+
+  it('allows the /ask model to be overridden for Anthropic-compatible providers', () => {
+    const httpServer = fs.readFileSync('src/http-server.ts', 'utf8');
+
+    expect(httpServer).toContain('const ASK_MODEL');
+    expect(httpServer).toContain('ANTHROPIC_DEFAULT_SONNET_MODEL');
+    expect(httpServer).toContain('ANTHROPIC_TIMEOUT_MS');
+    expect(httpServer).toContain('API_TIMEOUT_MS');
+    expect(httpServer).toContain('claude-sonnet-4-5-20250929');
+    expect(httpServer).not.toContain("model: 'claude-sonnet-4-5-20250929'");
   });
 
 });

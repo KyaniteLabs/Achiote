@@ -32,6 +32,21 @@ describe('P0 launch readiness guards', () => {
     ]));
   });
 
+  it('accepts Anthropic-compatible auth tokens for /ask readiness', () => {
+    const readiness = getHttpReadiness({
+      authEnabled: false,
+      apiKeyCount: 0,
+      anthropicAuthToken: 'token-for-compatible-provider',
+      cacheAvailable: true,
+      rateLimitPersistenceConfigured: true,
+    });
+
+    expect(readiness.ready).toBe(true);
+    expect(readiness.checks).toEqual(expect.arrayContaining([
+      expect.objectContaining({ name: 'anthropicApiKey', ok: true }),
+    ]));
+  });
+
   it('does not publish unresolved achiote.app metadata before DNS exists', () => {
     const landing = fs.readFileSync('docs/landing/index.html', 'utf8');
     const robots = fs.readFileSync('docs/landing/robots.txt', 'utf8');

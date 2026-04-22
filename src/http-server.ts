@@ -29,6 +29,8 @@ const TRUSTED_PROXY_IPS = (process.env.ACHIOTE_TRUSTED_PROXY_IPS || '')
 const ALLOW_ANON_ASK = process.env.ACHIOTE_ALLOW_ANON_ASK === 'true';
 
 const PORT = parseInt(process.env.PORT || '3000', 10);
+const ASK_MODEL = process.env.ACHIOTE_ASK_MODEL || process.env.ANTHROPIC_DEFAULT_SONNET_MODEL || 'claude-sonnet-4-5-20250929';
+const ANTHROPIC_TIMEOUT_MS = parseInt(process.env.ANTHROPIC_TIMEOUT_MS || process.env.API_TIMEOUT_MS || '120000', 10);
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const STATIC_DIR = resolve(__dirname, '..', 'docs', 'landing');
 const ALLOWED_ORIGINS = (process.env.ACHIOTE_ALLOWED_ORIGINS || 'http://localhost:3000').split(',');
@@ -72,7 +74,7 @@ setInterval(sweepStaleSessions, SESSION_TTL).unref();
 const cacheState = createCacheWithStatus({});
 const cache = cacheState.cache;
 const toolContext: AchioteToolExecutionContext = { ...defaultToolExecutionContext, cache };
-const anthropic = new Anthropic({ timeout: 60_000 });
+const anthropic = new Anthropic({ timeout: ANTHROPIC_TIMEOUT_MS });
 const configuredApiKeys = loadKeysFromEnv(process.env.ACHIOTE_API_KEYS);
 const authenticator = createAuthenticator(configuredApiKeys);
 const rateLimiter = createRateLimiter(process.env.ACHIOTE_RATE_LIMIT_DB);
@@ -203,7 +205,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
   try {
     const messages: Anthropic.MessageParam[] = [{ role: 'user', content: userMessage }];
     let modelResponse = await anthropic.messages.create({
-      model: 'claude-sonnet-4-5-20250929',
+      model: ASK_MODEL,
       max_tokens: 4096,
       system: SYSTEM_PROMPT,
       messages,
@@ -236,7 +238,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       messages.push({ role: 'user', content: toolResults });
 
       modelResponse = await anthropic.messages.create({
-        model: 'claude-sonnet-4-5-20250929',
+        model: ASK_MODEL,
         max_tokens: 2048,
         system: SYSTEM_PROMPT,
         messages,
@@ -350,6 +352,7 @@ const server = createServer(async (req, res) => {
       authEnabled: AUTH_ENABLED,
       apiKeyCount: configuredApiKeys.length,
       anthropicApiKey: process.env.ANTHROPIC_API_KEY,
+      anthropicAuthToken: process.env.ANTHROPIC_AUTH_TOKEN,
       cacheAvailable: cache !== null && !cacheState.fallbackUsed,
       rateLimitPersistenceConfigured: Boolean(process.env.ACHIOTE_RATE_LIMIT_DB),
     });
