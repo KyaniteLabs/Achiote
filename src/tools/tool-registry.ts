@@ -87,11 +87,83 @@ function output(payload: ToolPayload, displayText?: string): AchioteToolExecutio
   return { payload, displayText };
 }
 
+function memoryFromModelInput(rawMemory: unknown): Parameters<typeof planDishResearch>[0] {
+  const parsedMemory = collectedFoodMemorySchema.safeParse(rawMemory);
+  if (parsedMemory.success) return parsedMemory.data;
+
+  const input = asInput(rawMemory);
+  const memoryText = text(input.rawMemory ?? input.normalizedMemory ?? input.memoryText).trim();
+  if (memoryText) {
+    return collectFoodMemory({
+      memoryText,
+      userLocation: typeof input.userLocation === 'string' ? input.userLocation : undefined,
+    });
+  }
+
+  return rawMemory as Parameters<typeof planDishResearch>[0];
+}
+
+
+function stringArrayField(input: Input, preferred: string, fallback: string): string[] {
+  const value = input[preferred] ?? input[fallback];
+  return Array.isArray(value) ? value.filter((entry): entry is string => typeof entry === 'string' && entry.trim().length > 0) : [];
+}
+
+function confidenceFromModelInput(value: unknown): 'High' | 'Medium' | 'Low' {
+  const normalized = text(value).toLowerCase();
+  if (normalized === 'high') return 'High';
+  if (normalized === 'medium') return 'Medium';
+  return 'Low';
+}
+
+
+function dossierFromModelInput(rawDossier: unknown): Parameters<typeof generateMinimumViableNostalgiaCue>[0]['dossier'] {
+  const parsedDossier = buildReconstructionDossierOutputSchema.safeParse(rawDossier);
+  if (parsedDossier.success) return parsedDossier.data;
+
+  const input = asInput(rawDossier);
+  const ledger = asInput(input.evidenceLedger);
+  const userSaid = stringArrayField(ledger, 'userSaid', 'userSaid').join(' ');
+  const memoryText = text(userSaid || input.rawMemory || input.normalizedMemory || input.memoryText).trim();
+  if (memoryText) {
+    const memory = collectFoodMemory({ memoryText });
+    return buildReconstructionDossier({
+      memory,
+      researchPlan: planDishResearch(memory),
+      researchedFacts: stringArrayField(ledger, 'researchedFacts', 'researched'),
+      inferredFacts: stringArrayField(ledger, 'inferredFacts', 'inferred'),
+    });
+  }
+
+  return rawDossier as Parameters<typeof generateMinimumViableNostalgiaCue>[0]['dossier'];
+}
+
+
+function researchFindingsFromModelInput(rawFindings: unknown): Parameters<typeof generateMinimumViableNostalgiaCue>[0]['researchFindings'] {
+  const input = asInput(rawFindings);
+  const researchedFacts = stringArrayField(input, 'researchedFacts', 'researched');
+  const inferredFacts = stringArrayField(input, 'inferredFacts', 'inferred');
+  const unknowns = stringArrayField(input, 'unknowns', 'unknown');
+
+  const confidence = confidenceFromModelInput(input.confidence);
+  const hasConfidenceMetadata = input.confidence !== undefined || typeof input.sourceCount === 'number';
+  if (researchedFacts.length === 0 && inferredFacts.length === 0 && unknowns.length === 0 && !hasConfidenceMetadata) return undefined;
+
+  return {
+    researchedFacts,
+    inferredFacts,
+    unknowns,
+    sourceCount: typeof input.sourceCount === 'number' ? input.sourceCount : 0,
+    confidence,
+  };
+}
+
 function researchPlanFromModelInput(input: Input): Parameters<typeof buildReconstructionDossier>[0]['researchPlan'] {
   const parsedPlan = dishResearchPlanSchema.safeParse(input.researchPlan);
   if (parsedPlan.success) return parsedPlan.data;
 
-  const parsedMemory = collectedFoodMemorySchema.safeParse(input.memory);
+  const memory = memoryFromModelInput(input.memory);
+  const parsedMemory = collectedFoodMemorySchema.safeParse(memory);
   if (parsedMemory.success) return planDishResearch(parsedMemory.data);
 
   return input.researchPlan as Parameters<typeof buildReconstructionDossier>[0]['researchPlan'];
@@ -385,7 +457,7 @@ export const toolRegistry = [
       required: ['memory'],
       properties: { memory: { type: 'object' as const, description: 'Structured output from collect_food_memory' } },
     },
-    execute: (raw) => output({ ...planDishResearch(asInput(raw).memory as Parameters<typeof planDishResearch>[0]) }),
+    execute: (raw) => output({ ...planDishResearch(memoryFromModelInput(asInput(raw).memory)) }),
   }),
   createTool({
     name: 'build_reconstruction_dossier',
@@ -415,7 +487,7 @@ export const toolRegistry = [
       const input = asInput(raw);
       return output({
         ...buildReconstructionDossier({
-          memory: input.memory as Parameters<typeof buildReconstructionDossier>[0]['memory'],
+          memory: memoryFromModelInput(input.memory),
           researchPlan: researchPlanFromModelInput(input),
           researchedFacts: input.researchedFacts as string[] | undefined,
           inferredFacts: input.inferredFacts as string[] | undefined,
@@ -447,7 +519,7 @@ export const toolRegistry = [
       const input = asInput(raw);
       return output({
         ...generateFamilyFollowupQuestions({
-          memory: input.memory as Parameters<typeof generateFamilyFollowupQuestions>[0]['memory'],
+          memory: memoryFromModelInput(input.memory),
           researchPlan: input.researchPlan as Parameters<typeof generateFamilyFollowupQuestions>[0]['researchPlan'],
         }),
       });
@@ -577,7 +649,16 @@ export const toolRegistry = [
         maxEffortMinutes: { type: 'number' as const, description: 'Max effort in minutes' },
       },
     },
-    execute: (raw) => output({ ...generateMinimumViableNostalgiaCue(raw as Parameters<typeof generateMinimumViableNostalgiaCue>[0]) }),
+    execute: (raw) => {
+      const input = asInput(raw);
+      return output({
+        ...generateMinimumViableNostalgiaCue({
+          ...input,
+          dossier: dossierFromModelInput(input.dossier),
+          researchFindings: researchFindingsFromModelInput(input.researchFindings),
+        } as Parameters<typeof generateMinimumViableNostalgiaCue>[0]),
+      });
+    },
   }),
   createTool({
     name: 'generate_recipe',
