@@ -42,6 +42,37 @@ describe('shared tool registry', () => {
   });
 
 
+
+  it('recovers research planning when a model passes only normalized memory text', async () => {
+    const plan = await executeToolDefinition('plan_dish_research', {
+      memory: { normalizedMemory: "Grandma's sour dill soup with pale chunks" },
+    }, defaultToolExecutionContext);
+
+    expect(outputSchemas.plan_dish_research.safeParse(plan.payload).success).toBe(true);
+    expect(plan.payload.researchRequired).toBe(true);
+    expect(plan.payload.factsToVerify).toEqual(expect.arrayContaining(['base ingredient or starch', 'cooking method']));
+  });
+
+
+  it('recovers minimum nostalgia cues when a model passes an incomplete dossier', async () => {
+    const cue = await executeToolDefinition('generate_minimum_viable_nostalgia', {
+      dossier: {
+        evidenceLedger: {
+          userSaid: ["Grandma's warm sour dill soup with pale chunks"],
+          researched: ['dill', 'sour/tangy'],
+          inferred: ['unknown regional dish'],
+          unknown: ['exact dish identity'],
+        },
+      },
+      researchFindings: { researched: ['dill'] },
+      maxEffortMinutes: 12,
+    }, defaultToolExecutionContext);
+
+    expect(outputSchemas.generate_minimum_viable_nostalgia.safeParse(cue.payload).success).toBe(true);
+    expect(cue.payload.effortMinutes).toBeLessThanOrEqual(12);
+    expect(cue.payload.title).toContain('Minimum viable');
+  });
+
   it('recovers reconstruction dossiers when a model passes an incomplete research plan', async () => {
     const memory = (await executeToolDefinition('collect_food_memory', {
       memoryText: 'Warm sour dill soup with pale chunks, dairy-free and allergic to tree nuts.',
