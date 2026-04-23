@@ -167,7 +167,7 @@ function buildNextQuestions(input: {
   const questions: string[] = [];
 
   if (input.culturalOrRegionalHints.length === 0) {
-    questions.push('Where is your family from, or where did you eat this? Even a country, island, city, or "my grandma was from ___" is enough.');
+    questions.push('Where did you eat this, or where was it from? Even a country, island, city, or "I had it in ___" is enough.');
   }
 
   if (input.possibleNames.length === 0) {
@@ -780,7 +780,35 @@ function wordSignal(words: string): RegExp {
   return new RegExp(`\\b(${escaped})\\b`, 'i');
 }
 
-function foodScienceCueProfile(signals: string, userLocation?: string, overallConfidence?: Confidence): FoodScienceCueProfile {
+function foodScienceCueProfile(signals: string, userLocation?: string, overallConfidence?: Confidence, forceProbe?: boolean): FoodScienceCueProfile {
+  if (forceProbe) {
+    return {
+      title: 'Minimum viable memory-probe cue',
+      goal: 'Gather one more sensory datapoint before pretending to reconstruct a dish.',
+      effortMinutes: 5,
+      format: 'ritual',
+      ingredients: [
+        { item: 'no specialty ingredient yet', amount: 'none', purpose: 'avoid false certainty and wasted shopping' },
+        { item: 'one safe remembered ingredient only if the user already has it', amount: 'tiny amount', purpose: 'optional sensory probe', optional: true },
+      ],
+      steps: [
+        'Ask the user for one concrete sensory detail: smell, texture, sauce, temperature, spice/heat, acid/sweetness, or serving format.',
+        'If they have a safe remembered ingredient already, smell or taste a tiny amount on a neutral carrier.',
+        'Use that reaction to choose a bite, sip, sauce, or aroma cue next.',
+      ],
+      preserves: ['uncertainty', 'user memory as evidence', 'low-cost next step'],
+      doesNotPreserve: ['dish identity', 'recipe structure', 'source specificity'],
+      accessibilityPrinciples: ['buy nothing yet', 'ask for the highest-value missing sensory detail', 'only test safe ingredients already available'],
+      substituteLogic: [
+        'Without a sensory mechanism, any ingredient purchase is guesswork.',
+        'The next useful proxy depends on whether the memory is carried by aroma, texture, sauce, fat, acid, sweetness, or ritual.',
+      ],
+      whyThisIsMinimum: 'The cheapest correct move is not a recipe; it is one more sensory clue that determines what kind of cue to test.',
+      safetyNotes: ['Do not taste unknown ingredients.', 'Avoid allergens.'],
+      followUpIfItWorks: ['Use the new sensory clue to build a focused bite, sip, sauce, or aroma cue.', 'Once a cue works, use source_ingredients to help the user find items near where they live.'],
+      components: decomposeIntoComponents(signals, userLocation, overallConfidence),
+    };
+  }
   const hasProteinOrFat = hasAnySignal(signals, [wordSignal('meat|sausage|fish|shark|beef|pork|chicken|lamb|cheese|fat|butter|oil|fried')]);
   const hasStarchOrBase = hasAnySignal(signals, [wordSignal('starch|rice|potato|potatoes|mash|masa|dough|bread|yuca|cassava|plantain|dumpling|noodle|bean|beans')]);
   const hasSauceOrCondiment = hasAnySignal(signals, [wordSignal('sauce|gravy|relish|chutney|salsa|condiment|dip|orange|creamy')]);
@@ -808,7 +836,7 @@ function foodScienceCueProfile(signals: string, userLocation?: string, overallCo
         'Test at room temperature first, then briefly chilled if the memory might have been cooled.',
       ],
       preserves: ['sugar crystallization texture', 'caramelization depth', 'dairy fat mouthfeel', 'spice aroma direction'],
-      doesNotPreserve: ['exact regional recipe', 'family-specific cooking time', 'original wrapper or presentation'],
+      doesNotPreserve: ['exact regional recipe', 'specific cooking time', 'original wrapper or presentation'],
       accessibilityPrinciples: ['use any grocery-store sweet with the right texture first', 'test one small piece', 'adjust with pantry spices before buying specialty ingredients', 'avoid making a full batch until the texture direction is confirmed'],
       substituteLogic: [
         'Confectionery nostalgia is usually about sugar crystallization structure and dairy fat mouthfeel, not the exact recipe.',
@@ -1231,7 +1259,21 @@ export function generateMinimumViableNostalgiaCue(input: MinimumViableNostalgiaI
   const effort = input.maxEffortMinutes;
   const maxEffort = Number.isFinite(effort) ? Math.max(1, effort!) : 20;
   const confidence = input.researchFindings?.confidence ?? input.dossier.confidence;
-  const profile = applyConstraintsToProfile(foodScienceCueProfile(signals, input.userLocation, confidence), input.constraints);
+
+  // Be conservative: if we have almost no information, ask questions instead of prescribing a test.
+  const wordCount = (arr: string[]) => arr.join(' ').trim().split(/\s+/).filter(Boolean).length;
+  const totalWords = wordCount(input.dossier.evidenceLedger.userSaid)
+    + wordCount(input.dossier.evidenceLedger.researched)
+    + wordCount(input.dossier.evidenceLedger.inferred);
+  const hasDishName = input.dossier.hypotheses.some((h) => h.confidence !== 'Low' && !h.researchRequired);
+
+  // Force the memory-probe cue when information is too sparse to justify a specific test.
+  const forceProbe = confidence === 'Low' && totalWords < 10 && !hasDishName;
+
+  const profile = applyConstraintsToProfile(
+    foodScienceCueProfile(signals, input.userLocation, confidence, forceProbe),
+    input.constraints,
+  );
   const constraintGuidance = buildConstraintGuidance(input.constraints);
 
   return {
