@@ -3,28 +3,28 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Achiote — Turn half-remembered food stories into the taste that brings them back</title>
-  <meta name="description" content="Achiote is an open-source MCP server that helps AI agents turn half-remembered food stories into structured research, sensory tests, and the smallest taste that brings a dish back." />
+  <title>Achiote — AI Food Memory Reconstruction | Open-Source MCP Server</title>
+  <meta name="description" content="Open-source MCP server for AI-powered food memory reconstruction. Turn half-remembered dishes into structured research, sensory cues, and the one bite that proves you found it." />
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'unsafe-inline'; img-src 'self' data:; object-src 'none'; base-uri 'self';" />
 
   <!-- PWA manifest -->
   <link rel="manifest" href="manifest.json" />
 
   <!-- Canonical URL -->
-  <link rel="canonical" href="https://github.com/Pastorsimon1798/Achiote" />
+  <link rel="canonical" href="https://achiote.kyanitelabs.tech" />
 
   <!-- Open Graph -->
-  <meta property="og:title" content="Achiote — Turn half-remembered food stories into the taste that brings them back" />
-  <meta property="og:description" content="Open-source MCP server for food-memory reconstruction. Your AI does the research; Achiote keeps it honest, sensory, and organized." />
+  <meta property="og:title" content="Achiote — AI Food Memory Reconstruction | Open-Source MCP Server" />
+  <meta property="og:description" content="Open-source MCP server for AI-powered food memory reconstruction. Turn half-remembered dishes into structured research, sensory cues, and the one bite that proves you found it." />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://github.com/Pastorsimon1798/achiote" />
-  <meta property="og:image" content="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='630' viewBox='0 0 1200 630'%3E%3Crect fill='%23fff7e8' width='1200' height='630'/%3E%3Ccircle cx='200' cy='150' r='300' fill='%23f2b84b' opacity='0.22'/%3E%3Ccircle cx='1000' cy='500' r='350' fill='%23b5451b' opacity='0.12'/%3E%3Ccircle cx='950' cy='120' r='220' fill='%232d6a4f' opacity='0.18'/%3E%3Ctext x='600' y='290' font-family='system-ui, -apple-system, sans-serif' font-size='72' font-weight='800' text-anchor='middle' fill='%23b5451b' letter-spacing='-0.04em'%3EAchiote%3C/text%3E%3Ctext x='600' y='370' font-family='system-ui, -apple-system, sans-serif' font-size='28' font-weight='500' text-anchor='middle' fill='%235a4a52'%3EFood-memory reconstruction for AI agents%3C/text%3E%3C/svg%3E" />
+  <meta property="og:url" content="https://achiote.kyanitelabs.tech" />
+  <meta property="og:image" content="https://achiote.kyanitelabs.tech/og-image.jpg" />
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Achiote — Food-memory reconstruction for AI agents" />
-  <meta name="twitter:description" content="Turn half-remembered food stories into structured research and the smallest taste that brings them back." />
-  <meta name="twitter:image" content="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='630' viewBox='0 0 1200 630'%3E%3Crect fill='%23fff7e8' width='1200' height='630'/%3E%3Ccircle cx='200' cy='150' r='300' fill='%23f2b84b' opacity='0.22'/%3E%3Ccircle cx='1000' cy='500' r='350' fill='%23b5451b' opacity='0.12'/%3E%3Ccircle cx='950' cy='120' r='220' fill='%232d6a4f' opacity='0.18'/%3E%3Ctext x='600' y='290' font-family='system-ui, -apple-system, sans-serif' font-size='72' font-weight='800' text-anchor='middle' fill='%23b5451b' letter-spacing='-0.04em'%3EAchiote%3C/text%3E%3Ctext x='600' y='370' font-family='system-ui, -apple-system, sans-serif' font-size='28' font-weight='500' text-anchor='middle' fill='%235a4a52'%3EFood-memory reconstruction for AI agents%3C/text%3E%3C/svg%3E" />
+  <meta name="twitter:title" content="Achiote — AI Food Memory Reconstruction | Open-Source MCP Server" />
+  <meta name="twitter:description" content="Open-source MCP server for AI-powered food memory reconstruction. Turn half-remembered dishes into structured research, sensory cues, and the one bite that proves you found it." />
+  <meta name="twitter:image" content="https://achiote.kyanitelabs.tech/og-image.jpg" />
 
   <!-- Favicon -->
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='35' cy='55' r='22' fill='%23b5451b'/%3E%3Ccircle cx='65' cy='45' r='26' fill='%23d4653a'/%3E%3Ccircle cx='50' cy='30' r='18' fill='%23f2b84b'/%3E%3C/svg%3E" />
@@ -236,6 +236,43 @@
     /* Hero */
     .hero { padding: 100px 0 70px; }
     .hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 56px; align-items: center; }
+
+    /* Hero image */
+    .hero-image {
+      width: 100%;
+      height: clamp(280px, 40vw, 520px);
+      object-fit: cover;
+      object-position: center 35%;
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+      margin-top: 20px;
+      transition: transform var(--transition-base), box-shadow var(--transition-base);
+    }
+    .hero-image:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    /* Names of Achiote section */
+    .names-section { background: linear-gradient(135deg, rgba(242,184,75,.06), rgba(207,232,216,.08), rgba(155,74,27,.04)); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .names-section .section-head { margin-bottom: 28px; }
+    .names-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+    .name-card {
+      padding: 22px; border-radius: var(--radius-lg); background: var(--card); border: 1px solid var(--line);
+      transition: transform var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base);
+      position: relative; overflow: hidden;
+    }
+    .name-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: var(--saffron); }
+    .name-card::before {
+      content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--achiote), var(--saffron), var(--sofrito));
+      opacity: 0.6;
+    }
+    .name-script { font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 6px; color: var(--ink); }
+    .name-lang { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: var(--achiote); margin-bottom: 10px; }
+    .name-why { font-size: 0.92rem; color: var(--muted); line-height: 1.55; margin: 0; }
+    .name-why strong { color: var(--sofrito); font-weight: 700; }
+    .names-lead { max-width: 720px; color: var(--muted); font-size: 1.05rem; line-height: 1.65; margin: 0 0 32px; }
     .eyebrow {
       display: inline-flex; align-items: center; gap: 10px; margin-bottom: 22px; padding: 10px 16px;
       border: 1px solid var(--line); border-radius: var(--radius-full);
@@ -388,6 +425,25 @@
     .install { display: grid; grid-template-columns: .95fr 1.05fr; gap: 24px; align-items: stretch; }
     .install .card { background: var(--card-solid); }
 
+    /* FAQ / AEO */
+    .pricing-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; align-items: start; }
+    .pricing-card { position: relative; }
+    .pricing-card.popular { border-color: var(--achiote); box-shadow: 0 0 0 1px var(--achiote), var(--shadow); }
+    .pricing-card.popular::before { content: 'Most Popular'; position: absolute; top: -11px; left: 50%; transform: translateX(-50%); background: var(--achiote); color: white; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding: 4px 14px; border-radius: 20px; }
+    .price { font-size: 2.6rem; font-weight: 850; letter-spacing: -0.04em; line-height: 1; margin: 16px 0 6px; }
+    .price-period { color: var(--muted); font-size: 0.9rem; }
+    .feature-list { list-style: none; margin: 20px 0 0; padding: 0; display: grid; gap: 10px; }
+    .feature-list li { display: flex; gap: 10px; align-items: flex-start; font-size: 0.92rem; color: var(--muted); }
+    .feature-list li::before { content: '✓'; color: var(--success); font-weight: 700; flex-shrink: 0; }
+    .checkout-btn { display: block; width: 100%; margin-top: 20px; padding: 0.75rem; border-radius: 12px; border: none; background: var(--achiote); color: white; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: opacity 0.2s; text-align: center; text-decoration: none; }
+    .checkout-btn:hover { opacity: 0.85; }
+    .checkout-btn.secondary { background: transparent; color: var(--achiote); border: 1.5px solid var(--achiote); }
+    .faq-grid { display: grid; gap: 16px; }
+    .faq-item { padding: 24px; border-radius: var(--radius-lg); background: var(--card); border: 1px solid var(--line); transition: box-shadow var(--transition-base); }
+    .faq-item:hover { box-shadow: var(--shadow-sm); }
+    .faq-item h3 { margin: 0 0 10px; font-size: 1.05rem; font-weight: 750; letter-spacing: -0.01em; }
+    .faq-item p { margin: 0; color: var(--muted); font-size: 0.97rem; line-height: 1.6; }
+
     /* Trust */
     .trust {
       background: linear-gradient(135deg, rgba(242,184,75,.12), rgba(207,232,216,.18), rgba(155,74,27,.08));
@@ -459,7 +515,7 @@
     /* Responsive */
     @media (max-width: 980px) {
       .hero-grid, .grid-2, .science-grid, .install { grid-template-columns: 1fr; }
-      .grid-3, .examples, .science-list { grid-template-columns: 1fr; }
+      .grid-3, .examples, .science-list, .pricing-grid { grid-template-columns: 1fr; }
       .section-head { display: block; }
       .section-head p { margin-top: 14px; }
       .memory-card { transform: none; }
@@ -492,11 +548,13 @@
     "@type": "WebApplication",
     "name": "Achiote",
     "description": "Open-source MCP server for food-memory reconstruction. Turns half-remembered food stories into structured research, sensory tests, and the smallest taste that brings a dish back.",
-    "url": "https://github.com/Pastorsimon1798/Achiote",
-    "applicationCategory": "LifestyleApplication",
+    "url": "https://achiote.kyanitelabs.tech",
+    "applicationCategory": "DeveloperApplication",
     "operatingSystem": "Any",
     "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-    "author": { "@type": "Organization", "name": "Achiote contributors", "url": "https://github.com/Pastorsimon1798/achiote" },
+    "featureList": "Memory collection, research planning, provenance tracking, sensory analysis, ingredient sourcing, minimum viable nostalgia cue generation",
+    "softwareVersion": "1.0.0",
+    "author": { "@type": "Organization", "name": "Achiote contributors", "url": "https://achiote.kyanitelabs.tech" },
     "license": "https://opensource.org/licenses/MIT"
   }
   </script>
@@ -505,9 +563,11 @@
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
-      { "@type": "Question", "name": "What is Achiote?", "acceptedAnswer": { "@type": "Answer", "text": "Achiote is an open-source MCP server that helps AI agents reconstruct nostalgic dishes from fragmented food memories. It provides 15 deterministic tools for collecting memories, researching dishes, finding sensory triggers, and locating ingredients nearby." } },
-      { "@type": "Question", "name": "How does food memory reconstruction work?", "acceptedAnswer": { "@type": "Answer", "text": "Achiote follows a 5-step workflow: collect the memory, research hypotheses, build an evidence-separated dossier, find the smallest taste that proves it, and help find ingredients nearby." } },
-      { "@type": "Question", "name": "Can I use Achiote with ChatGPT, Claude, or other AI agents?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Achiote runs as an MCP server that any AI agent can connect to. It works with Claude Code, OpenAI Codex, Cursor, and any agent that supports the Model Context Protocol." } },
+      { "@type": "Question", "name": "What is Achiote?", "acceptedAnswer": { "@type": "Answer", "text": "Achiote is an open-source Model Context Protocol (MCP) server that helps AI agents reconstruct nostalgic dishes from fragmented food memories. It provides 15 deterministic tools for memory collection, research planning, provenance tracking, sensory analysis, and generating minimum viable nostalgia cues." } },
+      { "@type": "Question", "name": "How does food memory reconstruction work?", "acceptedAnswer": { "@type": "Answer", "text": "Achiote follows a 5-step workflow: collect the memory fragment, plan research hypotheses, build an evidence-separated dossier, generate the smallest sensory cue to test, and help source ingredients. Your AI does the live research; Achiote keeps it structured, honest, and organized." } },
+      { "@type": "Question", "name": "What is a minimum viable nostalgia cue?", "acceptedAnswer": { "@type": "Answer", "text": "The smallest practical aroma, bite, sip, or condiment that tests whether a reconstructed memory is on the right track. It uses grocery-store ingredients and takes under 15 minutes — before anyone commits to a full recipe or shops for specialty items." } },
+      { "@type": "Question", "name": "What are other names for achiote?", "acceptedAnswer": { "@type": "Answer", "text": "Achiote is known as annatto (English), urucum (Portuguese/Brazil), roucou (French/Caribbean), atsuete (Tagalog/Philippines), bija (Carib/Andes), onoto (Venezuela), kesumba (Indonesian), beninoki (Japanese), latkan (Hindi), and achiotl (Nahuatl) — among dozens of others across every continent." } },
+      { "@type": "Question", "name": "Can I use Achiote with ChatGPT, Claude, or other AI agents?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Achiote runs as an MCP server that any AI agent can connect to. It works with Claude Code, OpenAI Codex, Cursor, and any agent that supports the Model Context Protocol. A hosted HTTP API is also available." } },
       { "@type": "Question", "name": "Is Achiote free?", "acceptedAnswer": { "@type": "Answer", "text": "Achiote is open source under the MIT License. Self-host it for free, or use the hosted API with a free tier of 50 MCP calls per month." } }
     ]
   }
@@ -533,7 +593,8 @@
               <li><a href="#science">Food science</a></li>
               <li><a href="#examples">Examples</a></li>
               <li><a href="#install">Install</a></li>
-	              <li><a href="/">Try it live</a></li>
+              <li><a href="#faq">FAQ</a></li>
+		      <li><a href="/app">Try it live</a></li>
             </ul>
           </nav>
           <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
@@ -549,11 +610,11 @@
         <div class="container hero-grid">
           <div>
             <div class="eyebrow">Open-source <span>MCP server</span></div>
-            <h1>Find the <span class="accent">smallest taste</span> that brings it back.</h1>
-            <p>Someone remembers a dish they haven't eaten in years. A smell, a nickname, a texture — not a recipe. Achiote turns those fragments into the one bite that proves you found it.</p>
+            <h1>One seed. A hundred names. <span class="accent">The taste that proves you found it.</span></h1>
+            <p>Achiote is an open-source MCP server that helps AI agents reconstruct nostalgic dishes from half-remembered fragments — a smell, a nickname, a texture, the wrong name in the right language. It turns those clues into structured research, sensory tests, and the one bite that proves the memory is real.</p>
             <div class="cta-row">
-              <a class="button primary" href="#install">Install Achiote</a>
-              <a class="button secondary" href="#workflow">See how it works</a>
+              <a class="button primary" href="/app">Try the live demo</a>
+              <a class="button secondary" href="#install">Add to Claude or ChatGPT</a>
             </div>
           </div>
           <aside class="memory-card" aria-label="Example food memory card">
@@ -570,10 +631,88 @@
 
       <section>
         <div class="container">
+          <img src="hero-image.jpg" alt="Achiote fruit pod opened to reveal vivid red seeds inside its spiky green husk" class="hero-image reveal" loading="eager" />
+        </div>
+      </section>
+
+      <section class="names-section">
+        <div class="container">
+          <div class="section-head reveal">
+            <h2>You might know it by another name.</h2>
+            <p>Achiote is annatto. It's urucum, roucou, atsuete, achiotl, bija, kesumba, beninoki — a single seed called a hundred names across every continent it touched. The name changes. The memory doesn't. That's why this project exists.</p>
+          </div>
+          <p class="names-lead reveal">Every culture that encountered this seed gave it their own name. Each one tells a story — of trade routes, of colonization, of grandmothers passing down the only word they had for the thing that made the rice red. Food memory works the same way: the name you remember may be wrong, borrowed, or half-forgotten. But the taste underneath is real.</p>
+          <div class="names-grid">
+            <article class="name-card reveal">
+              <div class="name-script">Achiotl</div>
+              <div class="name-lang">Nahuatl — Mexico</div>
+              <p class="name-why"><strong>"Shiny seed."</strong> The original name. The Aztecs used it to color manuscripts and ritual body paint. Every other name on this list descends from this one word.</p>
+            </article>
+            <article class="name-card reveal">
+              <div class="name-script">Achiote</div>
+              <div class="name-lang">Spanish — Latin America &amp; Caribbean</div>
+              <p class="name-why"><strong>The name we chose.</strong> Adapted from Taíno via Nahuatl. Spanish colonizers heard "achiotl" and spread it from Mexico to the Caribbean to the Philippines. It is the word most of the world knows today.</p>
+            </article>
+            <article class="name-card reveal">
+              <div class="name-script">Uruku</div>
+              <div class="name-lang">Tupi — Brazil</div>
+              <p class="name-why"><strong>"Red."</strong> The Tupi people of the Amazon crushed the seeds into a paste for face paint, sun protection, and ceremony. The word became <em>urucum</em> in Portuguese — still the primary name in Brazil.</p>
+            </article>
+            <article class="name-card reveal">
+              <div class="name-script">Bija</div>
+              <div class="name-lang">Carib — Venezuela &amp; Colombia</div>
+              <p class="name-why"><strong>The original Carib plant name.</strong> Before Spanish or Portuguese arrived, the Carib peoples already had a word for the tree that paints. It survives in Venezuelan Spanish today.</p>
+            </article>
+            <article class="name-card reveal">
+              <div class="name-script">Anato</div>
+              <div class="name-lang">Portuguese — Portugal &amp; Brazil</div>
+              <p class="name-why"><strong>From "a-netto" — "the seed."</strong> Portuguese traders gave it this utilitarian name. It became the scientific and commercial label that traveled to Europe, Africa, and Asia.</p>
+            </article>
+            <article class="name-card reveal">
+              <div class="name-script">Annatto</div>
+              <div class="name-lang">English — Global</div>
+              <p class="name-why"><strong>The international trade name.</strong> Derived from Portuguese, adopted by British and Dutch merchants. It's the word on EU food labels, American cheese ingredient lists, and global shipping manifests.</p>
+            </article>
+            <article class="name-card reveal">
+              <div class="name-script">Roucou</div>
+              <div class="name-lang">French Creole — Trinidad &amp; Tobago</div>
+              <p class="name-why"><strong>The stew name.</strong> In Trinidad, roucou isn't just a spice — it's a water extract cured with salt that gives pelau and stew fish their deep red color. Every grandmother has her own jar.</p>
+            </article>
+            <article class="name-card reveal">
+              <div class="name-script">Atsuete</div>
+              <div class="name-lang">Tagalog — Philippines</div>
+              <p class="name-why"><strong>Brought by the Manila galleons.</strong> Spanish colonizers introduced achiote to the Philippines in the 16th century. Filipinos adapted the word into <em>atsuete</em> — now essential in kare-kare, adobo, and pancit.</p>
+            </article>
+            <article class="name-card reveal">
+              <div class="name-script">紅木</div>
+              <div class="name-lang">Japanese — Beninoki</div>
+              <p class="name-why"><strong>"Red tree."</strong> Japanese traders encountered annatto through Dutch merchants in the 17th century. They named it for what it does: turn things red. It became a culinary curiosity in Nagasaki.</p>
+            </article>
+            <article class="name-card reveal">
+              <div class="name-script">Kesumba</div>
+              <div class="name-lang">Indonesian — Java &amp; Sumatra</div>
+              <p class="name-why"><strong>The native name that stuck.</strong> Unlike the Philippines, Indonesia already had a word for the plant before European contact. <em>Kesumba</em> colors <em>nasi kuning</em> and traditional Javanese stews to this day.</p>
+            </article>
+            <article class="name-card reveal">
+              <div class="name-script">Dầu màu điều</div>
+              <div class="name-lang">Vietnamese</div>
+              <p class="name-why"><strong>"Annatto oil."</strong> Vietnamese cooks use the oil to color bún bò Huế, batters, and coconut curries. The French brought the seed; the Vietnamese made it indispensable to their cuisine.</p>
+            </article>
+            <article class="name-card reveal">
+              <div class="name-script">लटकन</div>
+              <div class="name-lang">Hindi — Latkan</div>
+              <p class="name-why"><strong>"Pendant" or "ornament."</strong> In India, the seed was named for how it hangs — like jewelry. It was cultivated commercially by 1787 after British traders recognized its value as a saffron substitute.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="container">
           <div class="tryit reveal">
-            <h3>Illustrative demo — try a memory fragment</h3>
-            <p>Type something half-remembered and our AI will walk you through the full reconstruction pipeline.</p>
-            <a href="/" class="button primary">Open the food memory detective</a>
+            <h3>Try it now</h3>
+            <p>Type a half-remembered dish. Our AI walks you through memory collection, research, and the one sensory cue to test first — in under 60 seconds.</p>
+            <a href="/app" class="button primary">Open the food memory detective</a>
           </div>
         </div>
       </section>
@@ -585,7 +724,7 @@
             <p>A person may only remember a smell, a texture, a nickname, or the person who made it. Achiote organizes those fragments into research instead of guessing.</p>
           </div>
           <div class="grid-3">
-            <article class="card reveal"><span class="number">1</span><h3>The name may be wrong</h3><p>Misspellings, phonetic fragments, family nicknames, and borrowed-language names are normal inputs — not failures.</p></article>
+            <article class="card reveal"><span class="number">1</span><h3>The name may be wrong — or in another language</h3><p>Misspellings, phonetic fragments, family nicknames, and borrowed-language names are normal inputs. Achiote resolves names across languages and cultures.</p></article>
             <article class="card reveal"><span class="number">2</span><h3>The trigger may be tiny</h3><p>The thing that matters may be one browned edge, one spice bloom, one sour note, one chewy bite, or one table ritual.</p></article>
             <article class="card reveal"><span class="number">3</span><h3>Guesses stay labeled</h3><p>What someone remembers, what research found, what the AI guessed, and what nobody knows — kept separate so nothing pretends to be certain.</p></article>
           </div>
@@ -599,11 +738,11 @@
             <p>Your AI does the searching. Achiote keeps the work honest and organized.</p>
           </div>
           <div class="workflow">
-            <div class="step reveal"><span class="step-number">1</span><div><h3>Collect the memory</h3><p>Capture rough names, region clues, ingredients, sensory details, and the gaps in what someone remembers — then ask gentle follow-up questions.</p></div></div>
-            <div class="step reveal"><span class="step-number">2</span><div><h3>Research before guessing</h3><p>Turn clues into hypotheses, facts to verify, and the right questions to ask family members before committing to a dish.</p></div></div>
-            <div class="step reveal"><span class="step-number">3</span><div><h3>Keep the picture honest</h3><p>What someone said, what research found, what the AI guessed, and what's still unknown — all labeled, all visible.</p></div></div>
-            <div class="step reveal"><span class="step-number">4</span><div><h3>Find the smallest taste that proves it</h3><p>A single bite, sip, or aroma using ingredients from any grocery store — before anyone shops for something obscure or commits to a full recipe.</p></div></div>
-            <div class="step reveal"><span class="step-number">5</span><div><h3>Help them find it nearby</h3><p>Once a cue works, suggest where to find the real ingredients near where they live now — and what to substitute if something isn't available.</p></div></div>
+            <div class="step reveal"><span class="step-number">1</span><div><h3>Collect the memory</h3><p>Achiote structures the input; your AI asks gentle follow-up questions. Capture rough names, region clues, ingredients, sensory details, and the gaps in what someone remembers.</p></div></div>
+            <div class="step reveal"><span class="step-number">2</span><div><h3>Research before guessing</h3><p>Your AI searches the web; Achiote plans the research strategy. Turn clues into hypotheses, facts to verify, and the right questions to ask family members.</p></div></div>
+            <div class="step reveal"><span class="step-number">3</span><div><h3>Keep the picture honest</h3><p>Achiote labels every claim: what someone said, what research found, what the AI guessed, and what's still unknown — all visible, nothing pretending to be certain.</p></div></div>
+            <div class="step reveal"><span class="step-number">4</span><div><h3>Find the smallest taste that proves it</h3><p>Achiote generates a grocery-store cue — a single bite, sip, or aroma — to test whether the memory is on the right track, before anyone commits to a full recipe.</p></div></div>
+            <div class="step reveal"><span class="step-number">5</span><div><h3>Help them find it nearby</h3><p>Once a cue works, Achiote suggests where to source ingredients and what to substitute. Your AI helps the user find shops near where they live now.</p></div></div>
           </div>
         </div>
       </section>
@@ -663,12 +802,12 @@
         <div class="container">
           <div class="section-head reveal">
             <h2>Real inputs. Not recipe searches.</h2>
-            <p>Each one follows the same path: gather what someone remembers, research, find the sensory trigger, test it with one bite, then help them find ingredients nearby.</p>
+            <p>Each one follows the same path: gather what someone remembers, research, find the sensory trigger, test it with one bite, then help them find ingredients nearby. <em>Illustrative demo</em></p>
           </div>
           <div class="examples">
-            <article class="card example-card reveal"><div><span class="tag">Sound-alike name</span><q>"My mom said my abuela made something that sounded like pass-teh-lay. Maybe plantains or pork?"</q></div><small>Match phonetic fragments against Puerto Rican wrapped-masa family. Test one bite of plantain with a spice bloom. Then find a shop that sells banana leaves near Orlando.</small></article>
-            <article class="card example-card reveal"><div><span class="tag">Place + ingredient</span><q>"A soup my aunt made. Sour, pale, lots of dill, maybe dairy, but nobody remembers the name."</q></div><small>Separate the acid source, herb aroma, fat body, and serving temperature. Test a one-cup aroma sip. Find Eastern European or Central Asian shops nearby.</small></article>
-            <article class="card example-card reveal"><div><span class="tag">Sensory plate</span><q>"I ate shark one time in Trinidad. Fried, in some kind of bread, with a green sauce."</q></div><small>Isolate the fried crunch, the bread carrier, the herb-chile condiment. Test two bites with cod and store-bought flatbread. Find a Caribbean market near Long Beach.</small></article>
+            <article class="card example-card reveal"><div><span class="tag">Sound-alike name</span><q>"My mom said my abuela made something that sounded like pass-teh-lay. Maybe plantains or pork?"</q></div><small>Match phonetic fragments against Puerto Rican wrapped-masa family. Test one bite of plantain with a spice bloom. Then help find banana leaves and substitutes near where they live.</small></article>
+            <article class="card example-card reveal"><div><span class="tag">Place + ingredient</span><q>"A soup my aunt made. Sour, pale, lots of dill, maybe dairy, but nobody remembers the name."</q></div><small>Separate the acid source, herb aroma, fat body, and serving temperature. Test a one-cup aroma sip. Suggest Eastern European or Central Asian sourcing and pantry substitutes.</small></article>
+            <article class="card example-card reveal"><div><span class="tag">Sensory plate</span><q>"I ate shark one time in Trinidad. Fried, in some kind of bread, with a green sauce."</q></div><small>Isolate the fried crunch, the bread carrier, the herb-chile condiment. Test two bites with cod and store-bought flatbread. Suggest Caribbean markets and substitute ingredients.</small></article>
           </div>
         </div>
       </section>
@@ -676,9 +815,9 @@
       <section id="install">
         <div class="container install">
           <div class="card reveal">
-            <h2>Add it to your AI agent</h2>
-            <p>Achiote runs as a stdio MCP server. Build it, point your agent at the output, and it's ready.</p>
-            <div class="cta-row"><a class="button primary" href="../../README.md">Read the docs</a><a class="button secondary" href="../ARCHITECTURE.md">Architecture</a></div>
+            <h2>Connect Achiote to your AI</h2>
+            <p>Works with Claude Code, OpenAI Codex, Cursor, and any MCP-compatible agent. Self-host for free, or use the hosted API.</p>
+            <div class="cta-row"><a class="button primary" href="../../README.md">Read the docs</a><a class="button secondary" href="/app">Use the web demo</a></div>
           </div>
           <div class="terminal reveal" aria-label="Installation commands">
             <div class="terminal-header"><span></span><span></span><span></span></div>
@@ -717,8 +856,107 @@ startup_timeout_sec = <span class="tk-num">10</span></pre>
               <li>What someone remembers, what research found, what the AI guessed, and what's unknown — all labeled.</li>
               <li>One bite before a full recipe. One grocery-store ingredient before specialty sourcing.</li>
               <li>After the cue works, help them find the real ingredients near where they live now.</li>
-              <li>Food-memory work can be deeply meaningful. It is not a medical claim.</li>
+              <li>Built on peer-reviewed food science. Every sensory principle is backed by cited research.</li>
             </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="pricing">
+        <div class="container">
+          <div class="section-head reveal">
+            <h2>Simple pricing for every appetite</h2>
+            <p>Start free. Upgrade when you need more. No contracts, no surprise fees.</p>
+          </div>
+          <div class="pricing-grid">
+            <div class="card pricing-card reveal">
+              <h3>Free</h3>
+              <div class="price">$0</div>
+              <div class="price-period">Forever</div>
+              <ul class="feature-list">
+                <li>50 MCP calls / month</li>
+                <li>1,000 web reconstructions</li>
+                <li>All 12 research tools</li>
+                <li>Community support</li>
+              </ul>
+              <a href="/app" class="checkout-btn secondary">Start free</a>
+            </div>
+            <div class="card pricing-card popular reveal">
+              <h3>Pro</h3>
+              <div class="price">$9<span style="font-size:1rem;font-weight:500;color:var(--muted)">/mo</span></div>
+              <div class="price-period">Billed monthly</div>
+              <ul class="feature-list">
+                <li>5,000 MCP calls / month</li>
+                <li>Unlimited web reconstructions</li>
+                <li>All 12 research tools</li>
+                <li>Priority support</li>
+              </ul>
+              <button class="checkout-btn" data-checkout-tier="pro" data-checkout-mode="subscription">Get Pro</button>
+            </div>
+            <div class="card pricing-card reveal">
+              <h3>Business</h3>
+              <div class="price">$49<span style="font-size:1rem;font-weight:500;color:var(--muted)">/mo</span></div>
+              <div class="price-period">Billed monthly</div>
+              <ul class="feature-list">
+                <li>100,000 MCP calls / month</li>
+                <li>Unlimited web reconstructions</li>
+                <li>All 12 research tools</li>
+                <li>Dedicated support</li>
+              </ul>
+              <button class="checkout-btn" data-checkout-tier="business" data-checkout-mode="subscription">Get Business</button>
+            </div>
+            <div class="card pricing-card reveal">
+              <h3>Enterprise</h3>
+              <div class="price">Custom</div>
+              <div class="price-period">Tailored to your team</div>
+              <ul class="feature-list">
+                <li>Unlimited MCP calls</li>
+                <li>Unlimited web reconstructions</li>
+                <li>Custom integrations</li>
+                <li>SLA & dedicated support</li>
+              </ul>
+              <a href="mailto:hello@kyanitelabs.tech" class="checkout-btn secondary">Contact us</a>
+            </div>
+          </div>
+          <div style="margin-top: 24px; text-align: center;">
+            <p style="font-size: 0.9rem; color: var(--muted);">
+              Need a one-time boost? <a href="#" id="credit-pack-link" style="color: var(--achiote); text-decoration: underline;">Buy a credit pack</a> — $5 for 1,000 extra calls, never expire.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="faq">
+        <div class="container">
+          <div class="section-head reveal">
+            <h2>What is Achiote?</h2>
+            <p>Answers optimized for AI engines and humans alike — concise, factual, and easy to cite.</p>
+          </div>
+          <div class="faq-grid">
+            <div class="faq-item reveal">
+              <h3>What is Achiote?</h3>
+              <p>Achiote is an open-source Model Context Protocol (MCP) server that helps AI agents reconstruct nostalgic dishes from fragmented food memories. It provides 15 deterministic tools for memory collection, research planning, provenance tracking, sensory analysis, and generating minimum viable nostalgia cues.</p>
+            </div>
+            <div class="faq-item reveal">
+              <h3>How does food memory reconstruction work?</h3>
+              <p>Achiote follows a 5-step workflow: collect the memory fragment, plan research hypotheses, build an evidence-separated dossier, generate the smallest sensory cue to test, and help source ingredients. Your AI does the live research; Achiote keeps it structured, honest, and organized.</p>
+            </div>
+            <div class="faq-item reveal">
+              <h3>What is a minimum viable nostalgia cue?</h3>
+              <p>The smallest practical aroma, bite, sip, or condiment that tests whether a reconstructed memory is on the right track. It uses grocery-store ingredients and takes under 15 minutes — before anyone commits to a full recipe or shops for specialty items.</p>
+            </div>
+            <div class="faq-item reveal">
+              <h3>What are other names for achiote?</h3>
+              <p>Achiote is known as annatto (English), urucum (Portuguese/Brazil), roucou (French/Caribbean), atsuete (Tagalog/Philippines), bija (Carib/Andes), onoto (Venezuela), kesumba (Indonesian), beninoki (Japanese), latkan (Hindi), and achiotl (Nahuatl) — among dozens of others across every continent.</p>
+            </div>
+            <div class="faq-item reveal">
+              <h3>Can I use Achiote with ChatGPT or Claude?</h3>
+              <p>Yes. Achiote runs as an MCP server. Add it to Claude Code via .mcp.json, to OpenAI Codex via config.toml, or to any agent that supports the Model Context Protocol. A hosted HTTP API is also available.</p>
+            </div>
+            <div class="faq-item reveal">
+              <h3>Is Achiote free?</h3>
+              <p>Yes. Achiote is open source under the MIT License. Self-host it for free, or use the hosted API with a free tier of 50 MCP calls per month.</p>
+            </div>
           </div>
         </div>
       </section>
@@ -741,6 +979,7 @@ startup_timeout_sec = <span class="tk-num">10</span></pre>
             <li><a href="#science">Food science</a></li>
             <li><a href="#examples">Examples</a></li>
             <li><a href="#install">Install</a></li>
+            <li><a href="#faq">FAQ</a></li>
           </ul>
         </div>
         <div>

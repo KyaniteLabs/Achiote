@@ -106,8 +106,11 @@ describe('/ask OpenAI-compatible provider mode', () => {
 
     expect(response.status).toBe(200);
     const events = parseSse(await response.text());
-    expect(events.map((event) => event.event)).toEqual(['text', 'done']);
-    expect(JSON.parse(events[0].data)).toBe('OpenAI-compatible final minimum cue.');
+    const eventNames = events.map((event) => event.event);
+    expect(eventNames[0]).toBe('status');
+    expect(eventNames.at(-2)).toBe('text');
+    expect(eventNames.at(-1)).toBe('done');
+    expect(JSON.parse(events.find((e) => e.event === 'text')!.data)).toBe('OpenAI-compatible final minimum cue.');
     expect(requestCount).toBe(5);
     expect(seenAuthHeaders.every((header) => header === 'Bearer test-openai-key')).toBe(true);
   });

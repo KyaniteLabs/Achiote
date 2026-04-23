@@ -176,6 +176,7 @@ export const dishResearchPlanSchema = z.object({
   preferredSourceTypes: z.array(z.string()),
   factsToVerify: z.array(z.string()),
   questionsForUser: z.array(z.string()),
+  researchedFacts: z.array(z.string()).optional().describe('Source-backed facts from web search about this dish'),
 });
 
 export const collectFoodMemoryOutputSchema = collectedFoodMemorySchema;
@@ -267,7 +268,7 @@ const minimumViableNostalgiaIngredientSchema = z.object({
 });
 
 const cueComponentSchema = z.object({
-  role: z.enum(['starch', 'protein', 'sauce', 'vegetable', 'broth', 'overall']),
+  role: z.enum(['starch', 'protein', 'sauce', 'vegetable', 'broth', 'confectionery', 'overall']),
   criticalElement: z.string(),
   flavorProfile: z.string(),
   localTestWith: z.string(),
@@ -299,6 +300,17 @@ export const minimumViableNostalgiaOutputSchema = z.object({
   safetyNotes: z.array(z.string()),
   followUpIfItWorks: z.array(z.string()),
   components: z.array(cueComponentSchema),
+});
+
+export const webSearchOutputSchema = z.object({
+  query: z.string(),
+  results: z.array(
+    z.object({
+      title: z.string(),
+      link: z.string(),
+      snippet: z.string(),
+    }),
+  ),
 });
 
 export const readOnlyAnnotations = {

@@ -42,7 +42,7 @@ export type AuthOutcome = AuthResult | AuthFailure;
 const VALID_TIERS = new Set<string>(['free', 'pro', 'business', 'enterprise']);
 
 const TIER_LIMITS: Record<Tier, { mcpCallsPerMonth: number; webReconstructions: number }> = {
-  free: { mcpCallsPerMonth: 50, webReconstructions: 3 },
+  free: { mcpCallsPerMonth: 50, webReconstructions: 1_000 },
   pro: { mcpCallsPerMonth: 5_000, webReconstructions: Infinity },
   business: { mcpCallsPerMonth: 100_000, webReconstructions: Infinity },
   enterprise: { mcpCallsPerMonth: Infinity, webReconstructions: Infinity },

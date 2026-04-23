@@ -15,6 +15,7 @@ const expectedToolNames = [
   'generate_recipe',
   'plan_dish_research',
   'resolve_dish_name',
+  'search_web',
   'source_ingredients',
   'validate_recipe_output',
   'validate_research_record',

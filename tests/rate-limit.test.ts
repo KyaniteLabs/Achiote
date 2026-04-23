@@ -67,11 +67,11 @@ describe('rate limiter', () => {
   });
 
   describe('web limits', () => {
-    it('free tier allows 3 reconstructions', () => {
+    it('free tier allows 1000 reconstructions', () => {
       const limiter = createRateLimiter();
-      expect(limiter.checkWebLimit('free', 'session-1').allowed).toBe(true);
-      expect(limiter.checkWebLimit('free', 'session-1').allowed).toBe(true);
-      expect(limiter.checkWebLimit('free', 'session-1').allowed).toBe(true);
+      for (let i = 0; i < 1000; i++) {
+        expect(limiter.checkWebLimit('free', 'session-1').allowed).toBe(true);
+      }
       expect(limiter.checkWebLimit('free', 'session-1').allowed).toBe(false);
     });
 
@@ -221,10 +221,11 @@ describe('rate limiter with SQLite persistence', () => {
     const limiterB = createRateLimiter(dbPath);
 
     try {
-      expect(limiterA.checkWebLimit('free', 'shared-web').allowed).toBe(true);
-      expect(limiterB.checkWebLimit('free', 'shared-web').allowed).toBe(true);
-      expect(limiterA.checkWebLimit('free', 'shared-web').allowed).toBe(true);
-      expect(limiterB.checkWebLimit('free', 'shared-web')).toMatchObject({ allowed: false, remaining: 0 });
+      for (let i = 0; i < 500; i++) {
+        expect(limiterA.checkWebLimit('free', 'shared-web').allowed).toBe(true);
+        expect(limiterB.checkWebLimit('free', 'shared-web').allowed).toBe(true);
+      }
+      expect(limiterA.checkWebLimit('free', 'shared-web')).toMatchObject({ allowed: false, remaining: 0 });
     } finally {
       limiterA.close();
       limiterB.close();

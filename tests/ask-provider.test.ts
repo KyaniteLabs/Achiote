@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { anthropicTools } from '../src/tools/tool-registry.js';
-import { createOpenAICompatibleAskSession, openAICompatibleProviderReady, openAIBaseUrlFromEnv, openAiToolsFromAnthropic, resolveAskProviderKind } from '../src/lib/ask-provider.js';
+import { createOpenAICompatibleAskSession, openAICompatibleProviderReady, openAIBaseUrlFromEnv, openAiToolsFromAnthropic, resolveAskProviderKind, anthropicBaseUrlFromEnv } from '../src/lib/ask-provider.js';
 
 describe('ask provider compatibility', () => {
   it('maps Anthropic tool definitions into OpenAI-compatible function tools', () => {
@@ -19,6 +19,8 @@ describe('ask provider compatibility', () => {
   it('requires explicit provider selection before switching away from Anthropic', () => {
     expect(resolveAskProviderKind({ ACHIOTE_ASK_PROVIDER: 'openai' })).toBe('openai');
     expect(resolveAskProviderKind({ ACHIOTE_ASK_PROVIDER: 'lmstudio' })).toBe('openai');
+    expect(resolveAskProviderKind({ ACHIOTE_ASK_PROVIDER: 'glm' })).toBe('anthropic');
+    expect(resolveAskProviderKind({ ACHIOTE_ASK_PROVIDER: 'zhipu' })).toBe('anthropic');
     expect(resolveAskProviderKind({ OPENAI_API_KEY: 'ambient-openai-key' })).toBe('anthropic');
     expect(resolveAskProviderKind({ OPENAI_BASE_URL: 'http://127.0.0.1:1234/v1' })).toBe('anthropic');
     expect(resolveAskProviderKind({ ANTHROPIC_BASE_URL: 'https://api.anthropic.com' })).toBe('anthropic');
@@ -30,6 +32,14 @@ describe('ask provider compatibility', () => {
     expect(openAICompatibleProviderReady('https://api.openai.com/v1', undefined)).toBe(false);
     expect(openAICompatibleProviderReady('https://api.openai.com/v1', 'sk-test')).toBe(true);
     expect(openAICompatibleProviderReady('http://127.0.0.1:1234/v1', undefined)).toBe(true);
+  });
+
+  it('resolves Anthropic-compatible base URLs for GLM/Zhipu', () => {
+    expect(anthropicBaseUrlFromEnv({ ACHIOTE_ASK_PROVIDER: 'glm' })).toBe('https://api.z.ai/api/anthropic');
+    expect(anthropicBaseUrlFromEnv({ ACHIOTE_ASK_PROVIDER: 'zhipu' })).toBe('https://api.z.ai/api/anthropic');
+    expect(anthropicBaseUrlFromEnv({ GLM_BASE_URL: 'https://custom.z.ai/api/anthropic' })).toBe('https://custom.z.ai/api/anthropic');
+    expect(anthropicBaseUrlFromEnv({ ANTHROPIC_BASE_URL: 'https://api.anthropic.com' })).toBe('https://api.anthropic.com');
+    expect(anthropicBaseUrlFromEnv({})).toBeUndefined();
   });
 
 

@@ -43,9 +43,10 @@ Achiote is a food-memory reconstruction skill. The recipe is not the starting po
    - search queries and source types
    - facts to verify
 
-4. CLARIFY → Ask 1-3 high-yield questions
-   Ask only the questions most likely to separate hypotheses.
-   Do not interrogate the user. Offer to continue with uncertainty if they do not know.
+4. CLARIFY → Ask 0-3 high-yield questions ONLY if the memory is sparse
+   Check the `memorySufficiencyScore` in the collected memory. If the user provided region + multiple sensory details + any context, the memory is already sufficient. Skip this step entirely and go straight to the minimum viable nostalgia cue.
+   Only ask questions if region is missing, sensory clues are fewer than 2, or no context (occasion/method) was given.
+   Do not interrogate the user. If they already gave rich details, do NOT ask for more.
 
 5. RESEARCH → Host research when available
    Use available host web/search tools to investigate names, regional variants, ingredients, techniques, and sensory cues.
@@ -84,7 +85,7 @@ Achiote is a food-memory reconstruction skill. The recipe is not the starting po
 
 ## Key Principles
 
-1. **Uncertainty is sacred.** Do not pretend a fragment is resolved when research or family clarification is needed.
+1. **Uncertainty is sacred, but decisiveness is kind.** When the user provides rich sensory details and a region, make your best-effort hypothesis and test it with a minimum viable nostalgia cue. Do not hide behind "I need more information" when they already gave you texture, flavor, appearance, and origin.
 2. **Nostalgia-critical elements are sacred.** If a substitution kills a nostalgia trigger, it fails. Try harder.
 3. **Start with the person, not the recipe.** The memory is the input. The recipe is the output.
 4. **Chemistry over names.** "Cumin" and "caraway" are different. "Cumin" and "something with cuminaldehyde" is the right framing.
@@ -166,6 +167,8 @@ When enough evidence exists and the user wants more than the minimum viable cue,
 | Generic ingredient substitution | Use compound matching, not name matching |
 | Skipping the memory interview | The person's memory IS the spec — don't skip it |
 | Ignoring regional variation | "Indian food" is meaningless — which region? which state? |
+| Asking for more details when the user already gave rich clues | If region + texture + flavor are present, present the cue directly |
+| Suggesting "other cultures" when the user named a region | Anchor to the region they gave. Never float away from it. |
 | Presenting without self-critique | Always validate before showing to the user |
 | Jumping straight to a full recipe | Start with the minimum viable nostalgia cue, then ask if the user wants something more complex |
 | Buying the exact specialty ingredient first | Break down what it is made of and test cheap grocery-store proxies first |

@@ -36,6 +36,7 @@ import {
   researchRecordOutputSchema,
   researchValidationOutputSchema,
   sourceIngredientsOutputSchema,
+  webSearchOutputSchema,
 } from '../schemas/tool-schemas.js';
 import sensoryProfilesData from '../data/sensory-profiles.json' with { type: 'json' };
 import dishFamiliesData from '../data/dish-families.json' with { type: 'json' };
@@ -418,7 +419,7 @@ export const toolRegistry = [
     name: 'collect_food_memory',
     mcp: {
       title: 'Collect Food Memory',
-      description: 'Structure a raw food-memory fragment into clues, missing information, and gentle follow-up questions without requiring correct spelling or language knowledge.',
+      description: 'Structure a raw food-memory fragment into clues, missing information, and optional follow-up questions. Returns a sufficiency score: when region + sensory details + context are present, the memory is sufficient and no follow-up questions are needed.',
       inputSchema: {
         memoryText: z.string().min(1).max(6000).describe('Raw user memory, spelling fragment, family story, or sensory clue'),
         knownRegion: z.string().min(1).max(200).optional().describe('Optional known country, island, region, or community'),
@@ -459,7 +460,8 @@ export const toolRegistry = [
     },
     execute: (raw) => {
       const input = asInput(raw);
-      return output({ ...planDishResearch(memoryFromModelInput(input.memory ?? input)) });
+      const researchPlan = planDishResearch(memoryFromModelInput(input.memory ?? input));
+      return output({ ...researchPlan } as ToolPayload);
     },
   }),
   createTool({
@@ -733,6 +735,51 @@ export const toolRegistry = [
       return output({ valid: issues.length === 0, issues });
     },
   }),
+  createTool({
+    name: 'search_web',
+    mcp: {
+      title: 'Search Web',
+      description: 'Search the web for current information about a dish, ingredient, technique, or regional variation. Returns search result titles, links, and snippets.',
+      inputSchema: { query: z.string().min(1).max(500).describe('Search query') },
+      outputSchema: webSearchOutputSchema,
+    },
+    outputSchema: webSearchOutputSchema,
+    anthropicInputSchema: {
+      type: 'object' as const,
+      required: ['query'],
+      properties: { query: { type: 'string' as const, description: 'Search query' } },
+    },
+    execute: async (raw) => {
+      const query = text(asInput(raw).query);
+      const apiKey = process.env.SERPER_API_KEY?.trim();
+      if (!apiKey) {
+        return output({ query, results: [], note: 'Web search is not configured. Set SERPER_API_KEY to enable.' });
+      }
+      try {
+        const response = await fetch('https://google.serper.dev/search', {
+          method: 'POST',
+          headers: { 'X-API-KEY': apiKey, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ q: query }),
+        });
+        if (!response.ok) {
+          const body = await response.text();
+          return output({ query, results: [], error: `Search API returned ${response.status}: ${body.slice(0, 200)}` });
+        }
+        const data = await response.json() as {
+          organic?: Array<{ title: string; link: string; snippet: string }>;
+          answerBox?: { title?: string; link?: string; answer?: string };
+        };
+        const organic = (data.organic ?? []).slice(0, 5).map((r) => ({
+          title: r.title ?? '',
+          link: r.link ?? '',
+          snippet: r.snippet ?? '',
+        }));
+        return output({ query, results: organic });
+      } catch (err) {
+        return output({ query, results: [], error: err instanceof Error ? err.message : String(err) });
+      }
+    },
+  }),
 ] as const satisfies readonly AchioteToolDefinition[];
 
 export const toolNames = toolRegistry.map((tool) => tool.name).sort();
@@ -757,6 +804,7 @@ const anthropicWorkflowToolOrder = [
   'validate_research_record',
   'extract_research_findings',
   'validate_recipe_output',
+  'search_web',
 ];
 
 export const anthropicTools = anthropicWorkflowToolOrder.map((name) => {
