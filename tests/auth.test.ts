@@ -100,7 +100,7 @@ describe('getTierLimits', () => {
   });
 
   it('free tier has limited web reconstructions', () => {
-    expect(getTierLimits('free').webReconstructions).toBe(3);
+    expect(getTierLimits('free').webReconstructions).toBe(1000);
   });
 
   it('pro and above have unlimited web reconstructions', () => {

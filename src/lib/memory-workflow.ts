@@ -84,6 +84,38 @@ function extractCookingMethodHints(text: string): string[] {
   )).map((hint) => hint.label);
 }
 
+function memorySufficiencyScore(input: {
+  possibleNames: string[];
+  culturalOrRegionalHints: string[];
+  rememberedIngredients: string[];
+  cookingMethodHints: string[];
+  sensoryClues: string[];
+  occasions: string[];
+}): { sufficient: boolean; score: number; reason: string } {
+  let score = 0;
+  if (input.culturalOrRegionalHints.length > 0) score += 2;
+  if (input.sensoryClues.length >= 3) score += 3;
+  else if (input.sensoryClues.length >= 1) score += 1;
+  if (input.rememberedIngredients.length > 0) score += 1;
+  if (input.cookingMethodHints.length > 0) score += 1;
+  if (input.occasions.length > 0) score += 1;
+  if (input.possibleNames.length > 0) score += 1;
+
+  // Sufficient if we have region + rich sensory, or region + ingredient + sensory + method/occasion
+  const sufficient =
+    (input.culturalOrRegionalHints.length > 0 && input.sensoryClues.length >= 2 && (input.rememberedIngredients.length > 0 || input.cookingMethodHints.length > 0 || input.occasions.length > 0))
+    || (input.culturalOrRegionalHints.length > 0 && input.sensoryClues.length >= 3)
+    || score >= 5;
+
+  return {
+    sufficient,
+    score,
+    reason: sufficient
+      ? 'User provided enough region, sensory, and contextual detail to form a testable hypothesis.'
+      : 'Need more clues to narrow down safely.',
+  };
+}
+
 function buildMissingInformation(input: {
   possibleNames: string[];
   culturalOrRegionalHints: string[];
@@ -92,6 +124,13 @@ function buildMissingInformation(input: {
   sensoryClues: string[];
   occasions: string[];
 }): string[] {
+  const sufficiency = memorySufficiencyScore(input);
+  if (sufficiency.sufficient) {
+    // Only report missing items that would help confirm, not gather from scratch
+    return unique([
+      input.possibleNames.length === 0 ? 'dish name or local nickname (helpful but not required)' : '',
+    ]);
+  }
   return unique([
     input.possibleNames.length === 0 ? 'dish name or local nickname' : '',
     input.culturalOrRegionalHints.length === 0 ? 'country, island, region, town, or community' : '',
@@ -110,6 +149,19 @@ function buildNextQuestions(input: {
   sensoryClues: string[];
   occasions: string[];
 }): string[] {
+  const sufficiency = memorySufficiencyScore(input);
+  if (sufficiency.sufficient) {
+    // When we have enough detail, only ask high-value confirmation questions
+    const questions: string[] = [];
+    if (input.possibleNames.length === 0) {
+      questions.push('Do you remember anything about the name, even a rough sound-alike?');
+    }
+    if (input.occasions.length === 0) {
+      questions.push('Was this street food, home cooking, a restaurant dish, or tied to a holiday or person?');
+    }
+    return unique(questions).slice(0, 2);
+  }
+
   const ingredient = input.rememberedIngredients[0];
   const region = input.culturalOrRegionalHints[0];
   const questions: string[] = [];
@@ -227,6 +279,13 @@ export function collectFoodMemory(input: FoodMemoryInput): CollectedFoodMemory {
     includesAny(lower, ['smoky', 'smoke', 'wood-fired']) ? 'smoky' : '',
     includesAny(lower, ['fermented', 'funk', 'pungent', 'stinky', 'aged']) ? 'fermented/pungent' : '',
     includesAny(lower, ['umami', 'savory', 'meaty', 'mushroom']) ? 'umami/savory' : '',
+    includesAny(lower, ['caramel', 'cajeta', 'dulce de leche', 'manjar']) ? 'caramel/dulce de leche' : '',
+    includesAny(lower, ['sandy', 'grainy', 'fudge', 'crystalline']) ? 'grainy/crystalline texture' : '',
+    includesAny(lower, ['custard', 'pudding', 'flan', 'creme caramel']) ? 'custard/pudding' : '',
+    includesAny(lower, ['nougat', 'turrón', 'taffy', 'chewy candy', 'melcocha']) ? 'chewy/nougat candy' : '',
+    includesAny(lower, ['cookie', 'biscuit', 'cracker', 'shortbread']) ? 'cookie/biscuit' : '',
+    includesAny(lower, ['coconut', 'cocada']) ? 'coconut' : '',
+    includesAny(lower, ['chocolate', 'cocoa']) ? 'chocolate' : '',
   ]);
   const occasions = unique([
     includesAny(lower, ['christmas', 'holiday', 'navidad', 'eid', 'diwali', 'ramadan', 'passover', 'thanksgiving', 'lunar new year', 'tet', 'new year']) ? 'holiday/festival' : '',
@@ -330,6 +389,148 @@ function dataDrivenHypotheses(memory: CollectedFoodMemory): DishHypothesis[] {
   return allHypotheses.slice(0, 5);
 }
 
+// Ingredient + region + sensory → specific dish inference for when no name was given
+const INFERRED_DISH_PATTERNS: Array<{
+  regions: string[];
+  ingredients: string[];
+  sensory: string[];
+  dish: string;
+  why: string;
+  confidence: Confidence;
+}> = [
+  { regions: ['poland', 'eastern europe', 'europe'], ingredients: ['dill', 'potato'], sensory: ['sour', 'soup'], dish: 'Zupa Ogórkowa', why: 'Polish dill pickle soup with potatoes and fermented brine sourness', confidence: 'Medium' },
+  { regions: ['ukraine', 'russia', 'eastern europe', 'europe'], ingredients: ['dill', 'egg'], sensory: ['sour', 'soup'], dish: 'Sorrel Soup (Shchavelya Sup)', why: 'Ukrainian/Russian sour soup with sorrel leaves, egg, and dill', confidence: 'Medium' },
+  { regions: ['czech', 'slovakia', 'eastern europe', 'europe'], ingredients: ['dill', 'potato'], sensory: ['sour', 'soup'], dish: 'Kulajda', why: 'Czech sour mushroom-dill soup with potatoes and sour cream', confidence: 'Medium' },
+  { regions: ['poland', 'eastern europe', 'europe'], ingredients: ['rye', 'sausage'], sensory: ['sour', 'soup'], dish: 'Żurek', why: 'Polish rye sour soup with sausage and potatoes', confidence: 'Medium' },
+  { regions: ['russia', 'ukraine', 'eastern europe', 'europe'], ingredients: ['cabbage'], sensory: ['sour', 'soup'], dish: 'Shchi', why: 'Russian sour cabbage soup', confidence: 'Medium' },
+  { regions: ['mexico', 'latin america'], ingredients: ['pork', 'tomatillo'], sensory: ['sour', 'soup'], dish: 'Pozole Verde', why: 'Mexican hominy stew with tomatillo and pork', confidence: 'Medium' },
+  { regions: ['mexico', 'latin america'], ingredients: ['tortilla', 'chicken'], sensory: ['soup'], dish: 'Sopa de Tortilla', why: 'Mexican tortilla soup with chile and chicken', confidence: 'Medium' },
+  { regions: ['thailand', 'southeast asia'], ingredients: ['lemongrass', 'lime', 'chile'], sensory: ['sour', 'spicy', 'soup'], dish: 'Tom Yum', why: 'Thai hot and sour soup with lemongrass, lime, and chile', confidence: 'High' },
+  { regions: ['philippines', 'southeast asia'], ingredients: ['tamarind', 'pork', 'fish'], sensory: ['sour', 'soup'], dish: 'Sinigang', why: 'Filipino sour soup with tamarind and meat or fish', confidence: 'High' },
+  { regions: ['vietnam', 'southeast asia'], ingredients: ['tamarind', 'pineapple', 'tomato'], sensory: ['sour', 'soup', 'fish'], dish: 'Canh Chua', why: 'Vietnamese sour fish soup with tamarind and pineapple', confidence: 'High' },
+  { regions: ['china', 'east asia'], ingredients: ['vinegar', 'pepper', 'tofu'], sensory: ['sour', 'spicy', 'soup'], dish: 'Hot and Sour Soup (Suan La Tang)', why: 'Chinese soup with vinegar, pepper, and tofu', confidence: 'High' },
+  { regions: ['india', 'south asia'], ingredients: ['lentil', 'tamarind'], sensory: ['sour', 'soup'], dish: 'Rasam', why: 'South Indian sour lentil soup with tamarind and spices', confidence: 'Medium' },
+  { regions: ['germany', 'central europe', 'europe'], ingredients: ['cabbage', 'sausage'], sensory: ['sour', 'soup'], dish: 'Sauerkrautsuppe', why: 'German sour cabbage soup with sausage', confidence: 'Medium' },
+  { regions: ['greece', 'mediterranean', 'europe'], ingredients: ['egg', 'lemon'], sensory: ['sour', 'soup'], dish: 'Avgolemono', why: 'Greek egg-lemon soup with rice or orzo', confidence: 'High' },
+  { regions: ['turkey', 'middle east'], ingredients: ['yogurt', 'mint'], sensory: ['sour', 'soup'], dish: 'Yayla Çorbası', why: 'Turkish yogurt soup with mint and rice', confidence: 'Medium' },
+  { regions: ['iran', 'middle east'], ingredients: ['pomegranate', 'herb'], sensory: ['sour', 'soup'], dish: 'Ash-e Anar', why: 'Iranian pomegranate soup with herbs and meatballs', confidence: 'Medium' },
+  { regions: ['japan', 'east asia'], ingredients: ['miso', 'tofu', 'seaweed'], sensory: ['soup'], dish: 'Miso Soup', why: 'Japanese fermented soybean paste soup', confidence: 'High' },
+  { regions: ['korea', 'east asia'], ingredients: ['soybean paste', 'tofu'], sensory: ['soup'], dish: 'Doenjang Guk', why: 'Korean fermented soybean paste soup', confidence: 'High' },
+  // Central American / Panamanian confectionery
+  { regions: ['panama', 'central america', 'latin america', 'colombia'], ingredients: ['milk', 'sugar', 'caramel'], sensory: ['sweet', 'soft texture', 'grainy/crystalline texture'], dish: 'Dulce de Leche en Tabla (Manjar Blanco)', why: 'Slow-cooked milk candy cut into rectangles, grainy from lactose crystallization, wrapped in paper', confidence: 'High' },
+  { regions: ['panama', 'central america', 'latin america', 'mexico'], ingredients: ['milk', 'sugar'], sensory: ['sweet', 'soft texture'], dish: 'Leche Quemada', why: 'Burnt milk fudge with grainy texture, common in Central America', confidence: 'Medium' },
+  { regions: ['panama', 'central america', 'latin america', 'caribbean'], ingredients: ['coconut', 'sugar'], sensory: ['sweet'], dish: 'Cocada', why: 'Coconut candy made with sugar, common throughout Latin America and the Caribbean', confidence: 'Medium' },
+  { regions: ['latin america', 'caribbean', 'puerto rican', 'cuban', 'dominican'], ingredients: ['rice', 'coconut', 'milk', 'cinnamon'], sensory: ['sweet'], dish: 'Arroz con Dulce', why: 'Caribbean/Latin American rice pudding with coconut milk and cinnamon', confidence: 'High' },
+  { regions: ['latin america', 'mexico', 'central america', 'spain'], ingredients: ['egg', 'milk', 'caramel'], sensory: ['sweet', 'custard/pudding'], dish: 'Flan (Crème Caramel)', why: 'Caramel custard ubiquitous in Latin America', confidence: 'High' },
+  { regions: ['argentina', 'uruguay', 'latin america'], ingredients: ['caramel', 'cookie'], sensory: ['sweet'], dish: 'Alfajor', why: 'Dulce de leche sandwich cookie, very popular in Argentina and Uruguay', confidence: 'High' },
+  { regions: ['mexico', 'latin america'], ingredients: ['masa', 'cinnamon', 'sugar'], sensory: ['sweet'], dish: 'Champurrado / Atole', why: 'Thick Mexican hot drink/porridge made with masa, chocolate or cinnamon, and sugar', confidence: 'Medium' },
+  { regions: ['mexico', 'latin america'], ingredients: ['masa', 'cinnamon', 'sugar'], sensory: ['sweet'], dish: 'Tamales Dulces', why: 'Sweet tamales made with masa, sugar, cinnamon, raisins, or pineapple', confidence: 'Medium' },
+  { regions: ['colombia', 'venezuela', 'latin america'], ingredients: ['corn', 'cheese'], sensory: ['sweet'], dish: 'Arepa de Maíz Dulce / Arepa de Anís', why: 'Sweet corn arepa, sometimes with anise or cheese', confidence: 'Medium' },
+  { regions: ['latin america', 'caribbean'], ingredients: ['plantains', 'sugar'], sensory: ['sweet', 'soft texture'], dish: 'Plátano en Tentación / Plátano Maduro', why: 'Sweet caramelized ripe plantains, common throughout Latin America', confidence: 'High' },
+  { regions: ['peru', 'bolivia', 'latin america'], ingredients: ['honey', 'nuts'], sensory: ['sweet'], dish: 'King Kong (Dulce de Leche and Honey Cookie)', why: 'Peruvian layered cookie with dulce de leche, honey, and nuts', confidence: 'Medium' },
+  // Indian subcontinent confectionery
+  { regions: ['india', 'south asia'], ingredients: ['milk', 'sugar'], sensory: ['sweet'], dish: 'Barfi / Pedha', why: 'Indian milk fudge made by reducing milk with sugar, often grainy', confidence: 'High' },
+  { regions: ['india', 'south asia'], ingredients: ['coconut', 'sugar'], sensory: ['sweet'], dish: 'Nariyal Barfi / Coconut Ladoo', why: 'Indian coconut sweet made with condensed milk or sugar', confidence: 'High' },
+  // Middle Eastern / Mediterranean confectionery
+  { regions: ['middle east', 'turkey', 'greece', 'mediterranean'], ingredients: ['nuts', 'honey'], sensory: ['sweet'], dish: 'Baklava', why: 'Layered phyllo pastry with nuts and honey syrup', confidence: 'High' },
+  { regions: ['middle east', 'turkey', 'mediterranean'], ingredients: ['sesame', 'honey'], sensory: ['sweet'], dish: 'Halva / Halwa', why: 'Sesame and honey confection with crumbly/grainy texture', confidence: 'High' },
+  { regions: ['turkey', 'middle east'], ingredients: ['milk', 'sugar', 'flour'], sensory: ['sweet'], dish: 'Tavuk Göğsü / Kazandibi', why: 'Turkish milk pudding with caramelized bottom, sometimes chicken breast for texture', confidence: 'Medium' },
+  // European confectionery
+  { regions: ['france', 'europe'], ingredients: ['caramel', 'butter', 'sugar'], sensory: ['sweet', 'soft texture'], dish: 'Caramel au Beurre Salé / Salted Butter Caramel', why: 'French soft caramel candy, often wrapped individually', confidence: 'High' },
+  { regions: ['scotland', 'uk', 'europe'], ingredients: ['sugar', 'butter'], sensory: ['sweet', 'grainy/crystalline texture'], dish: 'Tablet / Scottish Tablet', why: 'Scottish confection made from sugar, butter, and condensed milk with a grainy, melt-in-mouth texture', confidence: 'High' },
+  { regions: ['england', 'uk', 'europe'], ingredients: ['sugar', 'butter'], sensory: ['sweet', 'soft texture'], dish: 'Fudge', why: 'British soft candy made from sugar, butter, and milk', confidence: 'High' },
+  { regions: ['ireland', 'uk', 'europe'], ingredients: ['potato', 'sugar'], sensory: ['sweet'], dish: 'Potato Candy / Irish Potato Candy', why: 'Coconut cream candy rolled in cinnamon to look like potatoes', confidence: 'Medium' },
+  { regions: ['usa', 'america', 'southern us'], ingredients: ['peanut', 'sugar'], sensory: ['sweet'], dish: 'Peanut Brittle / Peanut Butter Fudge', why: 'American confection with peanuts and caramelized sugar', confidence: 'Medium' },
+  { regions: ['usa', 'america'], ingredients: ['marshmallow', 'chocolate'], sensory: ['sweet'], dish: "S'mores / Rocky Road Fudge", why: 'American marshmallow and chocolate confection', confidence: 'Medium' },
+  // East Asian confectionery
+  { regions: ['japan', 'east asia'], ingredients: ['rice', 'sugar'], sensory: ['sweet'], dish: 'Mochi / Daifuku', why: 'Japanese rice cake with sweet filling', confidence: 'High' },
+  { regions: ['japan', 'east asia'], ingredients: ['bean', 'sugar'], sensory: ['sweet'], dish: 'Yokan / Anko (Red Bean Paste)', why: 'Japanese sweet bean jelly or paste', confidence: 'High' },
+  { regions: ['china', 'east asia'], ingredients: ['rice', 'sugar'], sensory: ['sweet'], dish: 'Nian Gao (Rice Cake)', why: 'Chinese New Year sticky rice cake', confidence: 'High' },
+  { regions: ['china', 'east asia'], ingredients: ['nuts', 'sugar'], sensory: ['sweet'], dish: 'Hùntáo Gāo (Walnut Cookie)', why: 'Chinese walnut shortbread cookie that crumbles in the mouth', confidence: 'Medium' },
+  // Southeast Asian confectionery
+  { regions: ['thailand', 'southeast asia'], ingredients: ['coconut', 'sugar', 'milk'], sensory: ['sweet'], dish: 'Khanom Krok / Coconut Pancake', why: 'Thai coconut griddle cake with sweet creamy center', confidence: 'Medium' },
+  { regions: ['philippines', 'southeast asia'], ingredients: ['milk', 'sugar'], sensory: ['sweet'], dish: 'Pastillas de Leche', why: 'Filipino milk candy made from carabao milk and sugar, often wrapped in paper', confidence: 'High' },
+  { regions: ['philippines', 'southeast asia'], ingredients: ['coconut', 'sugar'], sensory: ['sweet'], dish: 'Bukayo / Cocada Filipina', why: 'Filipino coconut candy made with caramelized sugar', confidence: 'Medium' },
+  { regions: ['indonesia', 'malaysia', 'southeast asia'], ingredients: ['coconut', 'sugar', 'rice'], sensory: ['sweet'], dish: 'Klepon / Onde-Onde', why: 'Indonesian/Malaysian glutinous rice balls with palm sugar and coconut', confidence: 'High' },
+  // African confectionery
+  { regions: ['south africa'], ingredients: ['milk', 'sugar'], sensory: ['sweet'], dish: 'Fudge / Cape Malay Fudge', why: 'South African milk fudge with grainy texture', confidence: 'Medium' },
+  { regions: ['nigeria', 'ghana', 'west africa'], ingredients: ['coconut', 'sugar'], sensory: ['sweet'], dish: 'Coconut Candy / Chin Chin', why: 'West African coconut toffee or fried sweet dough', confidence: 'Medium' },
+];
+
+function inferredHypotheses(memory: CollectedFoodMemory): DishHypothesis[] {
+  const regions = memory.extractedClues.culturalOrRegionalHints.map((r) => r.toLowerCase());
+  const ingredients = memory.extractedClues.rememberedIngredients.map((i) => i.toLowerCase());
+  const sensory = memory.extractedClues.sensoryClues.map((s) => s.toLowerCase());
+  const text = memory.normalizedMemory.toLowerCase();
+
+  const matches = INFERRED_DISH_PATTERNS.filter((pattern) => {
+    const regionMatch = pattern.regions.some((r) => regions.some((region) => region.includes(r) || r.includes(region)));
+    const ingredientMatch = pattern.ingredients.some((i) => ingredients.some((ing) => ing.includes(i) || i.includes(ing)) || text.includes(i));
+    const sensoryMatch = pattern.sensory.some((s) => sensory.some((sen) => sen.includes(s) || s.includes(sen)) || text.includes(s));
+    return regionMatch && (ingredientMatch || sensoryMatch);
+  });
+
+  return matches.map((match) => ({
+    name: match.dish,
+    whyPossible: [match.why, 'inferred from ingredient, region, and sensory clues'],
+    whatWouldConfirm: ['original language spelling', 'region/town', 'ingredients', 'cooking method', 'occasion'],
+    confidence: match.confidence,
+    researchRequired: true,
+  }));
+}
+
+function buildDescriptiveHypothesis(memory: CollectedFoodMemory): DishHypothesis | null {
+  const region = memory.extractedClues.culturalOrRegionalHints[0];
+  const sensory = memory.extractedClues.sensoryClues;
+  const ingredients = memory.extractedClues.rememberedIngredients;
+  const text = memory.normalizedMemory.toLowerCase();
+
+  if (!region && sensory.length === 0 && ingredients.length === 0) return null;
+
+  // Detect food format from text and sensory clues
+  const isSweet = sensory.some((s) => s.includes('sweet')) || text.includes('sweet') || text.includes('sugar') || text.includes('caramel');
+  const isSoup = sensory.some((s) => s.includes('soup') || s.includes('broth')) || text.includes('soup') || text.includes('broth');
+  const isFried = sensory.some((s) => s.includes('fried') || s.includes('crispy')) || text.includes('fried') || text.includes('crispy');
+  const isBread = text.includes('bread') || text.includes('loaf') || text.includes('roll') || text.includes('bun');
+  const isCandy = isSweet && (text.includes('candy') || text.includes('wrapped') || text.includes('paper') || text.includes('rectangle') || sensory.some((s) => s.includes('grainy') || s.includes('crystalline') || s.includes('chewy')));
+  const isCookie = text.includes('cookie') || text.includes('biscuit') || sensory.some((s) => s.includes('cookie'));
+  const isCake = text.includes('cake') || text.includes('pastry');
+  const isDrink = text.includes('drink') || text.includes('beverage') || text.includes('juice');
+
+  const regionPhrase = region || 'the region';
+
+  let descriptor = '';
+  if (isCandy) descriptor = 'candy or confection';
+  else if (isCookie) descriptor = 'cookie or biscuit';
+  else if (isCake) descriptor = 'cake or pastry';
+  else if (isBread) descriptor = 'bread or baked good';
+  else if (isSoup) descriptor = 'soup or stew';
+  else if (isDrink) descriptor = 'drink or beverage';
+  else if (isFried) descriptor = 'fried dish';
+  else if (isSweet) descriptor = 'sweet dish or dessert';
+  else descriptor = 'traditional dish';
+
+  const textureWords = sensory.filter((s) => s.includes('texture') || s.includes('soft') || s.includes('crispy') || s.includes('chewy') || s.includes('grainy') || s.includes('creamy'));
+  const flavorWords = sensory.filter((s) => s.includes('sweet') || s.includes('sour') || s.includes('spicy') || s.includes('bitter') || s.includes('rich') || s.includes('smoky') || s.includes('umami'));
+
+  const texturePhrase = textureWords.length > 0 ? ` with ${textureWords.slice(0, 2).join(', ').replace(/,([^,]*)$/, ' and$1')}` : '';
+  const flavorPhrase = flavorWords.length > 0 ? `, ${flavorWords.slice(0, 2).join('/')} in flavor` : '';
+  const ingredientPhrase = ingredients.length > 0 ? ` made with ${ingredients.slice(0, 2).join(' and ')}` : '';
+
+  const name = `A${texturePhrase} ${descriptor}${ingredientPhrase}${flavorPhrase} from ${regionPhrase}`;
+
+  return {
+    name,
+    whyPossible: [
+      `User described: ${sensory.slice(0, 3).join(', ')}${ingredients.length > 0 ? '; ingredients: ' + ingredients.slice(0, 2).join(', ') : ''}`,
+      'No exact dish name was given, but the sensory and regional clues are specific enough to form a testable hypothesis.',
+    ],
+    whatWouldConfirm: ['exact dish name or local nickname', 'how it was made or served', 'who made it or on what occasion'],
+    confidence: sensory.length >= 2 && region ? 'Medium' : 'Low',
+    researchRequired: true,
+  };
+}
+
 function genericHypotheses(memory: CollectedFoodMemory): DishHypothesis[] {
   const names = memory.extractedClues.possibleDishNames;
   if (names.length > 0) {
@@ -342,16 +543,16 @@ function genericHypotheses(memory: CollectedFoodMemory): DishHypothesis[] {
     }));
   }
 
-  if (memory.extractedClues.culturalOrRegionalHints.length > 0 || memory.extractedClues.rememberedIngredients.length > 0) {
-    return [
-      {
-        name: 'unknown regional dish',
-        whyPossible: ['user supplied cultural, regional, ingredient, or sensory clues but not enough evidence to resolve safely'],
-        whatWouldConfirm: ['original language spelling', 'region/town', 'ingredients', 'cooking method', 'occasion'],
-        confidence: 'Low',
-        researchRequired: true,
-      },
-    ];
+  // Try inferred hypotheses first
+  const inferred = inferredHypotheses(memory);
+  if (inferred.length > 0) {
+    return inferred.slice(0, 3);
+  }
+
+  // Build a descriptive hypothesis from the user's actual clues instead of saying "unknown"
+  const descriptive = buildDescriptiveHypothesis(memory);
+  if (descriptive) {
+    return [descriptive];
   }
 
   return [
@@ -516,11 +717,18 @@ const COMPONENT_ROLES = {
     localTestWith: 'any warm broth or stock with a pinch of the remembered spice',
     substitutionReason: 'Warm liquid releases volatile aromatics the same way regardless of the stock base; the nostalgia is in the aroma chemistry',
   },
+  confectionery: {
+    keywords: 'caramel|dulce de leche|manjar|fudge|barfi|halva|baklava|mochi|candy|sweet|dessert|confection|cookie|biscuit|nougat|turrón|taffy|melcocha|cocada|flan|custard|pudding|chocolate|pastillas',
+    criticalElement: 'sugar crystallization structure and fat-soluble aroma delivery in a solid or semi-solid matrix',
+    flavorProfile: 'sweetness balanced by dairy fat, caramelization bitterness, or aromatic spice; texture from crystalline, chewy, or crumbly structure',
+    localTestWith: 'any grocery-store sweet with a similar texture: soft caramel, fudge, coconut candy, milk toffee, or shortbread cookie',
+    substitutionReason: 'Confectionery nostalgia is driven by sugar crystallization texture, dairy fat mouthfeel, and caramelization depth; these are reproducible with common sweets before sourcing exact regional ingredients',
+  },
 } as const;
 
 type ComponentRole = keyof typeof COMPONENT_ROLES;
 
-const ROLE_ORDER: ComponentRole[] = ['starch', 'protein', 'sauce', 'vegetable', 'broth'];
+const ROLE_ORDER: ComponentRole[] = ['starch', 'protein', 'sauce', 'vegetable', 'broth', 'confectionery'];
 
 function sanitizeLocation(raw?: string): string {
   if (!raw) return 'at any grocery store';
@@ -580,6 +788,39 @@ function foodScienceCueProfile(signals: string, userLocation?: string, overallCo
   const hasAroma = hasAnySignal(signals, [wordSignal('aroma|smell|spice|spiced|seasoned|garlic|onion|herb|pepper|cumin|coriander|clove|nutmeg|cinnamon')]);
   const hasTextureContrast = hasAnySignal(signals, [wordSignal('crispy|crunchy|chewy|creamy|soft|tender|stretchy|crisp|fried|grilled|charred|brown|golden')]);
   const hasAcidOrSweet = hasAnySignal(signals, [wordSignal('sour|tangy|acid|vinegar|citrus|lime|lemon|fermented|sweet|syrup|molasses|sugar')]);
+  const hasConfectionery = hasAnySignal(signals, [wordSignal('caramel|dulce de leche|manjar|fudge|barfi|halva|baklava|mochi|candy|sweet|dessert|confection|cookie|biscuit|nougat|turrón|taffy|melcocha|cocada|flan|custard|pudding|chocolate|pastillas|milk candy|grainy/crystalline texture')]);
+
+  if (hasConfectionery) {
+    return {
+      title: 'Minimum viable sweet-texture cue',
+      goal: 'Test the memory through a tiny piece of a grocery-store sweet with a matching texture and flavor direction before making a full batch.',
+      effortMinutes: 8,
+      format: 'bite',
+      ingredients: [
+        { item: 'grocery-store sweet matching the texture direction: soft caramel, fudge, coconut candy, shortbread, or milk toffee', amount: '1 small piece', purpose: 'tests sugar crystallization texture and dairy fat mouthfeel' },
+        { item: 'pantry adjustment for flavor direction: cinnamon, vanilla extract, pinch of salt, or coconut flakes', amount: 'pinch or drop', purpose: 'aroma and flavor tuning', optional: true },
+        { item: 'warm water or black coffee as a palate cleanser', amount: 'sip', purpose: 'resets sweetness perception between tests', optional: true },
+      ],
+      steps: [
+        'Take one small piece of the grocery-store sweet and let it sit on the tongue without chewing immediately.',
+        'Note whether the memory trigger is texture (grainy, creamy, crumbly, chewy), flavor (caramel, dairy, coconut, spice), or both.',
+        'If a specific spice or aroma is missing, add a tiny pinch to the next piece and compare.',
+        'Test at room temperature first, then briefly chilled if the memory might have been cooled.',
+      ],
+      preserves: ['sugar crystallization texture', 'caramelization depth', 'dairy fat mouthfeel', 'spice aroma direction'],
+      doesNotPreserve: ['exact regional recipe', 'family-specific cooking time', 'original wrapper or presentation'],
+      accessibilityPrinciples: ['use any grocery-store sweet with the right texture first', 'test one small piece', 'adjust with pantry spices before buying specialty ingredients', 'avoid making a full batch until the texture direction is confirmed'],
+      substituteLogic: [
+        'Confectionery nostalgia is usually about sugar crystallization structure and dairy fat mouthfeel, not the exact recipe.',
+        'Soft caramel or fudge tests creamy/grainy textures; shortbread tests crumbly textures; coconut candy tests fibrous-chewy textures.',
+        'A tiny pinch of cinnamon, vanilla, or salt can reveal whether the memory is about the base sweet or the aromatic accent.',
+      ],
+      whyThisIsMinimum: 'One piece of a texture-matched grocery-store sweet tests the core sugar-crystallization and fat-delivery mechanisms before any cooking.',
+      safetyNotes: ['Check for dairy or nut allergies before testing.', 'Keep pieces small; high-sugar foods can be intense.'],
+      followUpIfItWorks: ['Ask whether the original was darker/caramelly or lighter/milky.', 'Ask whether it was grainy, creamy, or crumbly.', 'Ask what aroma comes to mind: vanilla, cinnamon, coconut, or something else.', 'Use source_ingredients to help find regional sweet ingredients near the user.'],
+      components: decomposeIntoComponents(signals, userLocation, overallConfidence),
+    };
+  }
 
   if (hasLiquid) {
     return {

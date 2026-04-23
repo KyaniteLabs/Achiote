@@ -69,3 +69,44 @@ if (tryitInput) {
     if (e.key === 'Enter') runTryIt();
   });
 }
+
+// ── Checkout ────────────────────────────────────────────────────────────────
+
+async function startCheckout(tier, mode) {
+  const btn = event.target;
+  const original = btn.textContent;
+  btn.textContent = 'Redirecting…';
+  btn.disabled = true;
+  try {
+    const res = await fetch('/billing/checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ tier, mode }),
+    });
+    const data = await res.json();
+    if (res.ok && data.url) {
+      window.location.href = data.url;
+    } else {
+      throw new Error(data.error || 'Checkout failed');
+    }
+  } catch (err) {
+    alert('Checkout error: ' + err.message);
+    btn.textContent = original;
+    btn.disabled = false;
+  }
+}
+
+// Wire up checkout buttons (CSP blocks inline onclick)
+document.querySelectorAll('[data-checkout-tier]').forEach(btn => {
+  const tier = btn.dataset.checkoutTier;
+  const mode = btn.dataset.checkoutMode || 'subscription';
+  btn.addEventListener('click', () => startCheckout(tier, mode));
+});
+
+const creditPackLink = document.getElementById('credit-pack-link');
+if (creditPackLink) {
+  creditPackLink.addEventListener('click', (e) => {
+    e.preventDefault();
+    startCheckout('pro', 'payment');
+  });
+}

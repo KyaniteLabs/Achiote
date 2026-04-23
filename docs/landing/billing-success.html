@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Successful — Achiote</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23D4A574'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      --cream: #FFF7E8;
+      --ink: #2A1810;
+      --muted: #8B7355;
+      --achiote: #C75B3A;
+      --achiote-2: #D4A574;
+      --success: #2D8A4E;
+      --card: rgba(255,255,255,0.6);
+      --line: rgba(42,24,16,0.08);
+      --shadow: 0 8px 32px rgba(42,24,16,0.08);
+      --radius: 16px;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --cream: #1a1410;
+        --ink: #f5e6d3;
+        --muted: #a09080;
+        --card: rgba(255,255,255,0.05);
+        --line: rgba(255,247,232,0.08);
+        --shadow: 0 8px 32px rgba(0,0,0,0.3);
+      }
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      background: var(--cream);
+      color: var(--ink);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .container {
+      max-width: 560px;
+      width: 100%;
+      text-align: center;
+    }
+    .logo {
+      width: 64px;
+      height: 64px;
+      border-radius: 16px;
+      background: conic-gradient(from 180deg, var(--achiote), var(--achiote-2), var(--achiote));
+      margin: 0 auto 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.75rem;
+    }
+    h1 { font-size: 1.75rem; font-weight: 600; margin-bottom: 0.5rem; }
+    p { color: var(--muted); line-height: 1.6; margin-bottom: 2rem; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--line);
+      border-top-color: var(--achiote);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .api-key-box {
+      background: rgba(45,138,78,0.08);
+      border: 1px solid rgba(45,138,78,0.2);
+      border-radius: 12px;
+      padding: 1rem;
+      margin: 1rem 0;
+      word-break: break-all;
+      font-family: 'SF Mono', Monaco, monospace;
+      font-size: 0.85rem;
+      text-align: left;
+      position: relative;
+    }
+    .copy-btn {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background: var(--achiote);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 0.35rem 0.75rem;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .copy-btn:hover { opacity: 0.85; }
+    .copy-btn.copied { background: var(--success); }
+    .btn {
+      display: inline-block;
+      background: var(--achiote);
+      color: white;
+      text-decoration: none;
+      padding: 0.85rem 1.5rem;
+      border-radius: 12px;
+      font-weight: 500;
+      margin-top: 1rem;
+      transition: opacity 0.2s;
+    }
+    .btn:hover { opacity: 0.85; }
+    .error { color: #C75B3A; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">🌶</div>
+    <div id="content">
+      <div class="card">
+        <div class="spinner"></div>
+        <h1>Processing your payment...</h1>
+        <p>We're generating your API key. This takes just a few seconds.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const sessionId = params.get('session_id');
+    const content = document.getElementById('content');
+
+    if (!sessionId) {
+      content.innerHTML = `
+        <div class="card">
+          <h1 class="error">Missing session</h1>
+          <p>No checkout session was found. If you believe this is an error, please contact support.</p>
+          <a href="/" class="btn">Back to Achiote</a>
+        </div>
+      `;
+    } else {
+      let attempts = 0;
+      const maxAttempts = 30;
+
+      async function poll() {
+        try {
+          const res = await fetch(`/billing/session?session_id=${encodeURIComponent(sessionId)}`);
+          const data = await res.json();
+
+          if (res.status === 202) {
+            attempts++;
+            if (attempts >= maxAttempts) {
+              content.innerHTML = `
+                <div class="card">
+                  <h1 class="error">Taking longer than expected</h1>
+                  <p>Your payment was received, but we're still preparing your API key. Check your email for confirmation, or refresh this page in a moment.</p>
+                  <a href="/" class="btn">Back to Achiote</a>
+                </div>
+              `;
+              return;
+            }
+            setTimeout(poll, 2000);
+            return;
+          }
+
+          if (res.ok && data.apiKey) {
+            content.innerHTML = `
+              <div class="card">
+                <h1 style="color: var(--success)">Payment successful!</h1>
+                <p>Your API key is ready. Copy it now — this is the only time you'll see the full key.</p>
+                <div class="api-key-box">
+                  <code id="api-key">${escapeHtml(data.apiKey)}</code>
+                  <button class="copy-btn" id="copy-btn" onclick="copyKey()">Copy</button>
+                </div>
+                <p style="font-size: 0.85rem; color: var(--muted); margin-top: 0.5rem;">
+                  Tier: <strong>${escapeHtml(data.tier)}</strong> &middot; Key ID: <strong>${escapeHtml(data.keyId)}</strong>
+                </p>
+                <a href="/app" class="btn">Try the live demo</a>
+              </div>
+            `;
+            return;
+          }
+
+          throw new Error(data.error || 'Failed to retrieve session');
+        } catch (err) {
+          content.innerHTML = `
+            <div class="card">
+              <h1 class="error">Something went wrong</h1>
+              <p>${escapeHtml(err.message)}</p>
+              <a href="/" class="btn">Back to Achiote</a>
+            </div>
+          `;
+        }
+      }
+
+      function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+      }
+
+      function copyKey() {
+        const key = document.getElementById('api-key').textContent;
+        navigator.clipboard.writeText(key).then(() => {
+          const btn = document.getElementById('copy-btn');
+          btn.textContent = 'Copied!';
+          btn.classList.add('copied');
+          setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+        });
+      }
+
+      poll();
+    }
+  </script>
+</body>
+</html>

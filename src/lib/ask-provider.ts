@@ -50,16 +50,26 @@ export interface AskSession {
 export function resolveAskProviderKind(env: Record<string, string | undefined> = process.env): AskProviderKind {
   const explicit = env.ACHIOTE_ASK_PROVIDER?.trim().toLowerCase();
   if (explicit === 'openai' || explicit === 'openai-compatible' || explicit === 'lmstudio' || explicit === 'lm-studio') return 'openai';
-  if (explicit === 'anthropic' || explicit === 'anthropic-compatible') return 'anthropic';
+  if (explicit === 'anthropic' || explicit === 'anthropic-compatible' || explicit === 'glm' || explicit === 'zhipu') return 'anthropic';
   return 'anthropic';
 }
 
 
 export function openAIBaseUrlFromEnv(env: Record<string, string | undefined> = process.env): string {
+  const provider = env.ACHIOTE_ASK_PROVIDER?.trim().toLowerCase();
   return env.OPENAI_BASE_URL?.trim()
     || env.LMSTUDIO_BASE_URL?.trim()
     || env.LM_STUDIO_BASE_URL?.trim()
-    || (env.ACHIOTE_ASK_PROVIDER?.trim().toLowerCase().includes('lm') ? 'http://127.0.0.1:1234/v1' : 'https://api.openai.com/v1');
+    || (provider === 'lmstudio' || provider === 'lm-studio' ? 'http://127.0.0.1:1234/v1'
+      : 'https://api.openai.com/v1');
+}
+
+export function anthropicBaseUrlFromEnv(env: Record<string, string | undefined> = process.env): string | undefined {
+  const provider = env.ACHIOTE_ASK_PROVIDER?.trim().toLowerCase();
+  return env.ANTHROPIC_BASE_URL?.trim()
+    || env.GLM_BASE_URL?.trim()
+    || env.ZHIPU_BASE_URL?.trim()
+    || (provider === 'glm' || provider === 'zhipu' ? 'https://api.z.ai/api/anthropic' : undefined);
 }
 
 export function openAICompatibleProviderReady(baseUrl: string, apiKey?: string | null): boolean {

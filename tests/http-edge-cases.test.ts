@@ -305,8 +305,8 @@ describe('static file edge cases', () => {
     expect(res.status).toBe(404);
   });
 
-  it('serves about page', async () => {
-    const res = await fetch(`${baseUrl}/about`);
+  it('serves app page', async () => {
+    const res = await fetch(`${baseUrl}/app`);
     expect(res.status).toBe(200);
     const html = await res.text();
     expect(html).toContain('doctype html');

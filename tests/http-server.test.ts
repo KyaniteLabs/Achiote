@@ -67,8 +67,8 @@ describe('HTTP server integration', () => {
     expect(html).toContain('doctype html');
   });
 
-  it('GET /about returns index.html', async () => {
-    const res = await fetch(`${baseUrl}/about`);
+  it('GET /app returns app.html', async () => {
+    const res = await fetch(`${baseUrl}/app`);
     expect(res.status).toBe(200);
     expect(res.headers.get('content-type')).toContain('text/html');
   });

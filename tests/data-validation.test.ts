@@ -101,11 +101,11 @@ describe('bundled data validation', () => {
 
     const issues = validateBundledData(data);
 
-    expectIssue(issues, 'memoryHints.ingredients[19]', 'duplicate');
+    expectIssue(issues, 'memoryHints.ingredients[29]', 'duplicate');
     expectIssue(issues, 'memoryHints.cookingMethods[14].label', 'non-empty string');
     expectIssue(issues, 'memoryHints.cookingMethods[14].regexSource', 'valid regular expression');
-    expectIssue(issues, 'memoryHints.regionPatterns[92].label', 'duplicate');
-    expectIssue(issues, 'memoryHints.regionPatterns[92].regexSource', 'valid regular expression');
+    expectIssue(issues, 'memoryHints.regionPatterns[94].label', 'duplicate');
+    expectIssue(issues, 'memoryHints.regionPatterns[94].regexSource', 'valid regular expression');
     expectIssue(issues, 'memoryHints.regionFamilyMap.Puerto Rican', 'non-empty array');
   });
 
