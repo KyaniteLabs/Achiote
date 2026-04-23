@@ -458,29 +458,10 @@ export const toolRegistry = [
       required: ['memory'],
       properties: { memory: { type: 'object' as const, description: 'Structured output from collect_food_memory' } },
     },
-    execute: async (raw) => {
+    execute: (raw) => {
       const input = asInput(raw);
       const researchPlan = planDishResearch(memoryFromModelInput(input.memory ?? input));
-      const apiKey = process.env.SERPER_API_KEY?.trim();
-      let researchedFacts: string[] | undefined;
-      if (apiKey && researchPlan.searchQueries.length > 0) {
-        try {
-          const response = await fetch('https://google.serper.dev/search', {
-            method: 'POST',
-            headers: { 'X-API-KEY': apiKey, 'Content-Type': 'application/json' },
-            body: JSON.stringify({ q: researchPlan.searchQueries[0] }),
-          });
-          if (response.ok) {
-            const data = await response.json() as { organic?: Array<{ title: string; link: string; snippet: string }> };
-            researchedFacts = (data.organic ?? []).slice(0, 5).map(
-              (r) => `${r.title}: ${r.snippet} (${r.link})`,
-            );
-          }
-        } catch {
-          // silently fail — research plan is still valid without web results
-        }
-      }
-      return output({ ...researchPlan, researchedFacts });
+      return output({ ...researchPlan } as ToolPayload);
     },
   }),
   createTool({

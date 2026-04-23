@@ -29,8 +29,12 @@ function send(text) {
   btn.disabled = true;
 
   const demoPassword = document.getElementById('demo-password')?.value || localStorage.getItem('achiote-demo-password') || '';
+  const apiKey = document.getElementById('api-key')?.value || localStorage.getItem('achiote-api-key') || '';
   const headers = { 'Content-Type': 'application/json' };
-  if (demoPassword) {
+  if (apiKey) {
+    headers['x-api-key'] = apiKey;
+    localStorage.setItem('achiote-api-key', apiKey);
+  } else if (demoPassword) {
     headers['x-demo-password'] = demoPassword;
     localStorage.setItem('achiote-demo-password', demoPassword);
   }

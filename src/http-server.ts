@@ -108,9 +108,9 @@ function isGlm4Model(model: string): boolean {
 }
 
 function createAskSession(userMessage: string) {
-  // GLM 4.x models (4.7, 4.5-air, etc.) use OpenAI-compatible endpoint with OpenAI-style tools
-  // GLM 5.x models (5.1, 5, 5-turbo) use Anthropic-compatible endpoint
-  if (isGlm4Model(ASK_MODEL)) {
+  // GLM 4.x models on Z.ai use OpenAI-compatible endpoint; honor explicit openai provider
+  const provider = process.env.ACHIOTE_ASK_PROVIDER?.trim().toLowerCase() ?? '';
+  if ((provider === 'glm' || provider === 'zhipu') && isGlm4Model(ASK_MODEL)) {
     return createOpenAICompatibleAskSession({
       model: ASK_MODEL,
       systemPrompt: SYSTEM_PROMPT,

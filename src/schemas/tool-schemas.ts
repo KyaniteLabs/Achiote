@@ -268,7 +268,7 @@ const minimumViableNostalgiaIngredientSchema = z.object({
 });
 
 const cueComponentSchema = z.object({
-  role: z.enum(['starch', 'protein', 'sauce', 'vegetable', 'broth', 'overall']),
+  role: z.enum(['starch', 'protein', 'sauce', 'vegetable', 'broth', 'confectionery', 'overall']),
   criticalElement: z.string(),
   flavorProfile: z.string(),
   localTestWith: z.string(),
