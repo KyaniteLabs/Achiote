@@ -393,7 +393,7 @@ function sendMethodNotAllowed(res: ServerResponse, allowed: string[]): void {
 
 async function serveStatic(req: IncomingMessage, res: ServerResponse): Promise<boolean> {
   const raw = req.url?.split('?')[0] ?? '/';
-  const assetPath = raw === '/' ? 'index.html' : raw === '/app' ? 'app.html' : raw.replace(/^\//, '');
+  const assetPath = raw === '/' ? 'index.html' : raw === '/app' ? 'app.html' : raw === '/about' ? 'about.html' : raw.replace(/^\//, '');
   const filePath = resolve(STATIC_DIR, assetPath);
 
   if (!filePath.startsWith(resolve(STATIC_DIR) + sep)) return false;

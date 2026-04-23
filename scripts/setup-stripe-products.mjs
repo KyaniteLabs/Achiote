@@ -44,10 +44,11 @@ async function stripeFetch(path, method = 'GET', body = null) {
 }
 
 async function createProduct(name, description) {
-  const existing = await stripeFetch(`/products?search=${encodeURIComponent(name)}`);
-  if (existing.data?.length > 0) {
-    console.log(`Product "${name}" already exists: ${existing.data[0].id}`);
-    return existing.data[0];
+  const existing = await stripeFetch('/products?limit=100');
+  const found = existing.data?.find((p) => p.name === name);
+  if (found) {
+    console.log(`Product "${name}" already exists: ${found.id}`);
+    return found;
   }
   const product = await stripeFetch('/products', 'POST', { name, description });
   console.log(`Created product "${name}": ${product.id}`);
