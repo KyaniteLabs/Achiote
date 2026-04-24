@@ -103,6 +103,14 @@ describe('P2 product trust improvements', () => {
     expect(landing).toContain('Illustrative demo');
   });
 
+  it('requires the /ask prompt to gate concrete food cues behind the cue tool', () => {
+    const server = fs.readFileSync('src/http-server.ts', 'utf8');
+
+    expect(server).toContain('Do not give a concrete food cue');
+    expect(server).toContain('generate_minimum_viable_nostalgia');
+    expect(server).toContain('clarification-only response');
+  });
+
   it('adds self-hosted key generation and Docker smoke runbooks', () => {
     const pkg = fs.readFileSync('package.json', 'utf8');
     const keygen = fs.readFileSync('scripts/generate-api-key.mjs', 'utf8');
