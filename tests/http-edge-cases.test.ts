@@ -181,7 +181,7 @@ describe('/ask pre-API-call guards', () => {
     const port = await getFreePort();
     const server = await spawnServer(port);
     try {
-      const hugeBody = 'x'.repeat(1_100_000);
+      const hugeBody = 'x'.repeat(3_100_000);
       const res = await fetch(`http://127.0.0.1:${port}/ask`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

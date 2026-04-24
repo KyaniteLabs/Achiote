@@ -298,7 +298,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
 
   let raw: string;
   try {
-    raw = await readBody(req);
+    raw = await readBody(req, MAX_ASK_BODY_BYTES);
   } catch (err) {
     if (err instanceof Error && err.message === 'Body too large') {
       sendJson(res, 413, { error: 'Body too large' });
@@ -390,6 +390,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
 
 const MAX_IMAGES = 4;
 const MAX_IMAGE_BASE64_CHARS = 700_000; // ~525KB actual image
+const MAX_ASK_BODY_BYTES = (MAX_IMAGES * MAX_IMAGE_BASE64_CHARS) + 100_000;
 const ALLOWED_IMAGE_MIME_TYPES = new Set(['image/jpeg', 'image/png', 'image/gif', 'image/webp']);
 const MAX_HISTORY_ITEMS = 20;
 const MAX_HISTORY_CONTENT_CHARS = 4_000;
