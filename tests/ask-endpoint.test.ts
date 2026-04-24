@@ -60,7 +60,7 @@ describe('/ask endpoint — pre-rate-limit guards', () => {
   });
 
   it('returns 413 for body too large', async () => {
-    const hugeBody = 'x'.repeat(1_100_000);
+    const hugeBody = 'x'.repeat(3_100_000);
     const res = await fetch(`${baseUrl}/ask`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -125,6 +125,20 @@ describe('/ask endpoint — post-rate-limit guards', () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ images: ['data:image/jpeg;base64,/9j/4AAQ'] }),
+      });
+      expect(res.status).toBe(200);
+    } finally { server.kill('SIGINT'); }
+  });
+
+  it('accepts multiple images that are below the advertised per-image limit', async () => {
+    const port = await getFreePort();
+    const server = await spawnServer(port, 'false', { ACHIOTE_ALLOW_ANON_ASK: 'true' });
+    try {
+      const image = `data:image/jpeg;base64,${'A'.repeat(300_000)}`;
+      const res = await fetch(`http://127.0.0.1:${port}/ask`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ images: [image, image, image, image] }),
       });
       expect(res.status).toBe(200);
     } finally { server.kill('SIGINT'); }
