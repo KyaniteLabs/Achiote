@@ -45,4 +45,30 @@ describe('P1 launch hardening guardrails', () => {
     expect(server).toContain('throw new Error(`[validation]');
     expect(server).toContain("send('error', { message: 'Tool failed'");
   });
+
+  it('keeps the product ask prompt aligned with the MCP follow-up workflow', () => {
+    const server = fs.readFileSync('src/http-server.ts', 'utf8');
+
+    expect(server).toContain('Ask 1-3 specific, high-value follow-up questions');
+    expect(server).toContain('quote or adapt the tool-generated nextQuestions');
+    expect(server).not.toContain('NEVER ask follow-up questions');
+    expect(server).not.toContain('The cue IS the answer');
+  });
+
+  it('does not silently drop chat history updates in the frontend SSE parser', () => {
+    const app = fs.readFileSync('docs/landing/app.js', 'utf8');
+
+    expect(app).toContain('streamResponse(res, aiEl, val)');
+    expect(app).toContain('chatHistory.push({ role: \'user\', content: userMessage })');
+    expect(app).toContain('console.warn');
+    expect(app).not.toContain('content: val');
+    expect(app).not.toContain('catch { /* skip */ }');
+  });
+
+  it('does not stream a plain first model response when the tool workflow was skipped', () => {
+    const server = fs.readFileSync('src/http-server.ts', 'utf8');
+
+    expect(server).toContain('tool_workflow_skipped');
+    expect(server).toContain('model skipped required Achiote tool workflow');
+  });
 });

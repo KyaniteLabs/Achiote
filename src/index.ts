@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+try { process.loadEnvFile(); } catch { /* no .env file present */ }
+
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { runAchioteStdioServer } from './cli.js';

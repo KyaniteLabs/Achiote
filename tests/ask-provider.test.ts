@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { anthropicTools } from '../src/tools/tool-registry.js';
-import { createOpenAICompatibleAskSession, openAICompatibleProviderReady, openAIBaseUrlFromEnv, openAiToolsFromAnthropic, resolveAskProviderKind, anthropicBaseUrlFromEnv } from '../src/lib/ask-provider.js';
+import Anthropic from '@anthropic-ai/sdk';
+import { createAnthropicAskSession, createOpenAICompatibleAskSession, openAICompatibleProviderReady, openAIBaseUrlFromEnv, openAiToolsFromAnthropic, resolveAskModel, resolveAskProviderKind, anthropicBaseUrlFromEnv } from '../src/lib/ask-provider.js';
 
 describe('ask provider compatibility', () => {
   it('maps Anthropic tool definitions into OpenAI-compatible function tools', () => {
@@ -40,6 +41,12 @@ describe('ask provider compatibility', () => {
     expect(anthropicBaseUrlFromEnv({ GLM_BASE_URL: 'https://custom.z.ai/api/anthropic' })).toBe('https://custom.z.ai/api/anthropic');
     expect(anthropicBaseUrlFromEnv({ ANTHROPIC_BASE_URL: 'https://api.anthropic.com' })).toBe('https://api.anthropic.com');
     expect(anthropicBaseUrlFromEnv({})).toBeUndefined();
+  });
+
+  it('does not default normal Anthropic sessions to a GLM model', () => {
+    expect(resolveAskModel({ ANTHROPIC_API_KEY: 'test-key' })).not.toBe('glm-5v-turbo');
+    expect(resolveAskModel({ ACHIOTE_ASK_PROVIDER: 'anthropic', ANTHROPIC_MODEL: 'claude-test' })).toBe('claude-test');
+    expect(resolveAskModel({ ACHIOTE_ASK_PROVIDER: 'glm' })).toBe('glm-5v-turbo');
   });
 
 
@@ -102,6 +109,70 @@ describe('ask provider compatibility', () => {
       messages: expect.arrayContaining([
         expect.objectContaining({ role: 'tool', tool_call_id: 'call_1', content: '{"ok":true}' }),
       ]),
+    });
+  });
+
+  it('embeds images as Anthropic content blocks', async () => {
+    const captured: { messages?: unknown[] }[] = [];
+    const fakeClient = {
+      messages: {
+        create: async (params: { messages?: unknown[] }) => {
+          captured.push(params);
+          return {
+            content: [{ type: 'text', text: 'ok' }],
+            stop_reason: 'end_turn',
+          } as unknown as Anthropic.Messages.Message;
+        },
+      },
+    } as unknown as Anthropic;
+
+    const session = createAnthropicAskSession({
+      client: fakeClient,
+      model: 'test-model',
+      systemPrompt: 'sys',
+      userMessage: 'What is this dish?',
+      tools: [],
+      images: [{ base64: 'abc123', mediaType: 'image/jpeg' }],
+    });
+
+    await session.create(128);
+    const lastMessage = (captured[0].messages as Array<{ role: string; content: unknown }>).at(-1);
+    expect(lastMessage).toMatchObject({
+      role: 'user',
+      content: [
+        { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: 'abc123' } },
+        { type: 'text', text: 'What is this dish?' },
+      ],
+    });
+  });
+
+  it('embeds images as OpenAI-compatible vision content', async () => {
+    const requests: unknown[] = [];
+    const session = createOpenAICompatibleAskSession({
+      model: 'local-model',
+      systemPrompt: 'sys',
+      userMessage: 'What is this dish?',
+      tools: [],
+      baseUrl: 'http://local.test/v1',
+      timeoutMs: 30_000,
+      images: [{ base64: 'abc123', mediaType: 'image/png' }],
+      fetchImpl: async (_url, init) => {
+        requests.push(JSON.parse(String(init?.body)));
+        return new Response(JSON.stringify({
+          choices: [{ message: { role: 'assistant', content: 'ok' }, finish_reason: 'stop' }],
+        }), { status: 200, headers: { 'content-type': 'application/json' } });
+      },
+    });
+
+    await session.create(128);
+    const payload = requests[0] as { messages: Array<{ role: string; content: unknown }> };
+    const userMessage = payload.messages.find((m) => m.role === 'user');
+    expect(userMessage).toMatchObject({
+      role: 'user',
+      content: [
+        { type: 'image_url', image_url: { url: 'data:image/png;base64,abc123' } },
+        { type: 'text', text: 'What is this dish?' },
+      ],
     });
   });
 });

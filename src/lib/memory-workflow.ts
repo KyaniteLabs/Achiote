@@ -196,26 +196,26 @@ function buildNextQuestions(input: {
 export function formatCollectedFoodMemory(memory: CollectedFoodMemory): string {
   const names = memory.extractedClues.possibleDishNames.length > 0
     ? memory.extractedClues.possibleDishNames.join(', ')
-    : 'not yet known';
+    : 'still figuring this out';
   const regions = memory.extractedClues.culturalOrRegionalHints.length > 0
     ? memory.extractedClues.culturalOrRegionalHints.join(', ')
-    : 'not yet known';
+    : 'not sure yet — every clue helps';
   const ingredients = memory.extractedClues.rememberedIngredients.length > 0
     ? memory.extractedClues.rememberedIngredients.join(', ')
-    : 'not yet known';
+    : 'nothing specific yet';
   const sensory = memory.extractedClues.sensoryClues.length > 0
     ? memory.extractedClues.sensoryClues.join(', ')
-    : 'not yet known';
+    : 'open to whatever comes to mind';
 
   return [
-    'Food memory captured.',
+    "Here's what I'm picking up from your memory:",
     '',
-    `- Possible name: ${names}`,
-    `- Region/culture clue: ${regions}`,
-    `- Ingredient clue: ${ingredients}`,
-    `- Sensory clue: ${sensory}`,
+    `- Dish name: ${names}`,
+    `- Region or culture: ${regions}`,
+    `- Ingredients you mentioned: ${ingredients}`,
+    `- Textures, smells, or flavors: ${sensory}`,
     '',
-    'Ask next:',
+    memory.nextQuestions.length > 0 ? 'A few questions that might jog something:' : '',
     ...memory.nextQuestions.map((question, index) => `${index + 1}. ${question}`),
     '',
     memory.reassurance,
@@ -279,6 +279,7 @@ export function collectFoodMemory(input: FoodMemoryInput): CollectedFoodMemory {
     includesAny(lower, ['smoky', 'smoke', 'wood-fired']) ? 'smoky' : '',
     includesAny(lower, ['fermented', 'funk', 'pungent', 'stinky', 'aged']) ? 'fermented/pungent' : '',
     includesAny(lower, ['umami', 'savory', 'meaty', 'mushroom']) ? 'umami/savory' : '',
+    includesAny(lower, ['numb', 'numbing', 'tingling', 'buzzing', 'má', 'ma la', 'mala']) ? 'numbing/tingling (Sichuan peppercorn)' : '',
     includesAny(lower, ['caramel', 'cajeta', 'dulce de leche', 'manjar']) ? 'caramel/dulce de leche' : '',
     includesAny(lower, ['sandy', 'grainy', 'fudge', 'crystalline']) ? 'grainy/crystalline texture' : '',
     includesAny(lower, ['custard', 'pudding', 'flan', 'creme caramel']) ? 'custard/pudding' : '',
@@ -517,13 +518,15 @@ function buildDescriptiveHypothesis(memory: CollectedFoodMemory): DishHypothesis
   const flavorPhrase = flavorWords.length > 0 ? `, ${flavorWords.slice(0, 2).join('/')} in flavor` : '';
   const ingredientPhrase = ingredients.length > 0 ? ` made with ${ingredients.slice(0, 2).join(' and ')}` : '';
 
-  const name = `A${texturePhrase} ${descriptor}${ingredientPhrase}${flavorPhrase} from ${regionPhrase}`;
+  const name = ingredients.length > 0
+    ? `Unidentified ${descriptor} with ${ingredients.slice(0, 2).join(' and ')}`
+    : `Unidentified ${descriptor}`;
 
   return {
     name,
     whyPossible: [
-      `User described: ${sensory.slice(0, 3).join(', ')}${ingredients.length > 0 ? '; ingredients: ' + ingredients.slice(0, 2).join(', ') : ''}`,
-      'No exact dish name was given, but the sensory and regional clues are specific enough to form a testable hypothesis.',
+      `You mentioned: ${ingredients.slice(0, 2).join(' and ')}${sensory.length > 0 ? ' and described it as ' + sensory.slice(0, 2).join(', ') : ''}`,
+      'Not enough detail to name the dish yet, but we can still test the memory with a small sensory cue.',
     ],
     whatWouldConfirm: ['exact dish name or local nickname', 'how it was made or served', 'who made it or on what occasion'],
     confidence: sensory.length >= 2 && region ? 'Medium' : 'Low',
@@ -1265,10 +1268,23 @@ export function generateMinimumViableNostalgiaCue(input: MinimumViableNostalgiaI
   const totalWords = wordCount(input.dossier.evidenceLedger.userSaid)
     + wordCount(input.dossier.evidenceLedger.researched)
     + wordCount(input.dossier.evidenceLedger.inferred);
-  const hasDishName = input.dossier.hypotheses.some((h) => h.confidence !== 'Low' && !h.researchRequired);
 
-  // Force the memory-probe cue when information is too sparse to justify a specific test.
-  const forceProbe = confidence === 'Low' && totalWords < 10 && !hasDishName;
+  // A "concrete dish" is one we actually identified — not a generic descriptive fallback.
+  const isGenericFallback = (name: string) =>
+    name.startsWith('Unidentified ') ||
+    name === 'unknown food memory';
+  const hasConcreteDish = input.dossier.hypotheses.some(
+    (h) => h.confidence !== 'Low' && !isGenericFallback(h.name),
+  );
+
+  // Only force a memory-probe when there are literally no food-related signals at all.
+  // We check whether the signals match any component role (protein, starch, sauce, etc.).
+  const components = decomposeIntoComponents(signals, input.userLocation, confidence);
+  const hasAnyFoodClue = components.length > 1 || components[0].role !== 'overall';
+
+  // Force the memory-probe cue only when information is truly too sparse to justify any test.
+  // totalWords < 5 catches "I remember food"-level vagueness; hasAnyFoodClue catches ingredient-only inputs like "chicken".
+  const forceProbe = confidence === 'Low' && !hasConcreteDish && !hasAnyFoodClue && totalWords < 5;
 
   const profile = applyConstraintsToProfile(
     foodScienceCueProfile(signals, input.userLocation, confidence, forceProbe),

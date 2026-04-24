@@ -1,10 +1,13 @@
+try { process.loadEnvFile(); } catch { /* no .env file present */ }
+
 import { randomUUID } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
 import { dirname, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import Anthropic from '@anthropic-ai/sdk';
-import { createAnthropicAskSession, createOpenAICompatibleAskSession, openAIBaseUrlFromEnv, openAICompatibleProviderReady, resolveAskProviderKind, anthropicBaseUrlFromEnv } from './lib/ask-provider.js';
+import { createAnthropicAskSession, createOpenAICompatibleAskSession, openAIBaseUrlFromEnv, openAICompatibleProviderReady, resolveAskModel, resolveAskProviderKind, anthropicBaseUrlFromEnv } from './lib/ask-provider.js';
+import type { AskHistoryItem, AskImage } from './lib/ask-provider.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { isInitializeRequest } from '@modelcontextprotocol/sdk/types.js';
 import { createAchioteServer } from './server.js';
@@ -33,9 +36,7 @@ const ALLOW_ANON_ASK = process.env.ACHIOTE_ALLOW_ANON_ASK === 'true';
 
 const PORT = parseInt(process.env.PORT || '3000', 10);
 const ASK_PROVIDER_KIND = resolveAskProviderKind();
-const ASK_MODEL = ASK_PROVIDER_KIND === 'openai'
-  ? process.env.ACHIOTE_ASK_MODEL || process.env.OPENAI_MODEL || process.env.LMSTUDIO_MODEL || process.env.LM_STUDIO_MODEL || process.env.ANTHROPIC_DEFAULT_SONNET_MODEL || 'gpt-4o-mini'
-  : process.env.ACHIOTE_ASK_MODEL || process.env.GLM_MODEL || process.env.ZHIPU_MODEL || process.env.ANTHROPIC_DEFAULT_SONNET_MODEL || 'claude-sonnet-4-5-20250929';
+const ASK_MODEL = resolveAskModel();
 const ANTHROPIC_TIMEOUT_MS = parseInt(process.env.ANTHROPIC_TIMEOUT_MS || process.env.API_TIMEOUT_MS || '120000', 10);
 const OPENAI_TIMEOUT_MS = parseInt(process.env.OPENAI_TIMEOUT_MS || process.env.LMSTUDIO_TIMEOUT_MS || process.env.GLM_TIMEOUT_MS || process.env.ZHIPU_TIMEOUT_MS || process.env.API_TIMEOUT_MS || '180000', 10);
 const OPENAI_BASE_URL = openAIBaseUrlFromEnv();
@@ -107,7 +108,7 @@ function isGlm4Model(model: string): boolean {
   return model.startsWith('glm-4');
 }
 
-function createAskSession(userMessage: string) {
+function createAskSession(userMessage: string, history?: AskHistoryItem[], images?: AskImage[]) {
   // GLM 4.x models on Z.ai use OpenAI-compatible endpoint; honor explicit openai provider
   const provider = process.env.ACHIOTE_ASK_PROVIDER?.trim().toLowerCase() ?? '';
   if ((provider === 'glm' || provider === 'zhipu') && isGlm4Model(ASK_MODEL)) {
@@ -119,6 +120,8 @@ function createAskSession(userMessage: string) {
       baseUrl: process.env.GLM_OPENAI_BASE_URL?.trim() || 'https://api.z.ai/api/coding/paas/v4',
       apiKey: process.env.GLM_API_KEY || process.env.ZHIPU_API_KEY || null,
       timeoutMs: OPENAI_TIMEOUT_MS,
+      history,
+      images,
     });
   }
 
@@ -131,6 +134,8 @@ function createAskSession(userMessage: string) {
       baseUrl: OPENAI_BASE_URL,
       apiKey: process.env.OPENAI_API_KEY || process.env.LMSTUDIO_API_KEY || process.env.LM_STUDIO_API_KEY || null,
       timeoutMs: OPENAI_TIMEOUT_MS,
+      history,
+      images,
     });
   }
 
@@ -140,45 +145,54 @@ function createAskSession(userMessage: string) {
     systemPrompt: SYSTEM_PROMPT,
     userMessage,
     tools: TOOLS,
+    history,
+    images,
   });
 }
 
 const SYSTEM_PROMPT = `You are a food memory assistant built into Achiote. You MUST use the provided tools — never answer from memory alone.
 
-## MANDATORY WORKFLOW
+## TOOL WORKFLOW
 
-When a user shares a food memory, you MUST call tools in this exact sequence. Do NOT respond with plain text until you have completed the tool chain.
+When a user shares a food memory, start with tools before writing any user-facing answer.
 
-Step 1: Call \`collect_food_memory\` with the user's text.
-Step 2: Pass the result into \`plan_dish_research\`.
-Step 3: Call \`resolve_dish_name\` with the \`input\` parameter set to the \`name\` field of the first hypothesis from the research plan. NEVER skip this step.
-Step 4: Call \`build_reconstruction_dossier\` with the memory, research plan, and any researchedFacts from the research plan output.
-Step 5: Call \`generate_minimum_viable_nostalgia\` with the dossier.
+1. \`collect_food_memory\` — parse the user's text.
+2. \`plan_dish_research\` — build hypotheses from the parsed memory.
+3. Look at the structured \`nextQuestions\`, \`questionsForUser\`, hypotheses, confidence, and missing-information fields.
+4. If the memory is still sparse or the next best move is clarification, stop tool calling and ask targeted questions.
+5. If there is enough signal for a sensory test, continue:
+   - \`resolve_dish_name\` with the top non-generic hypothesis name.
+   - \`search_web\` only when a specific named dish needs external confirmation or the match is Low/Unknown.
+   - \`build_reconstruction_dossier\` with the memory, research plan, and any researched facts.
+   - \`generate_minimum_viable_nostalgia\` with the dossier.
 
-Only AFTER step 5 should you write a text response. Present the results warmly and conversationally.
-- LEAD with the specific dish name if researchedFacts identified one. Example: "This sounds like arroz con dulce, a Puerto Rican Christmas rice pudding made with coconut milk, cinnamon, and raisins."
-- If the user provided a region or country, ALWAYS anchor your response to that region. NEVER suggest "different cultures" or ask if it could be from somewhere else.
-- If the user already provided rich sensory details (texture, flavor, appearance, wrapper, temperature), do NOT ask for more sensory details. Present the minimum viable nostalgia cue directly.
-- Cite 1–2 sources from researchedFacts.
-- Then present the minimum viable nostalgia cue.
-- If no dish was identified, say so clearly before giving the cue. Do NOT apologize for not knowing; instead, present the cue as a way to test what the memory might be.
-- When the dossier confidence is Low BUT the user provided rich sensory details, still LEAD with your best hypothesis. Example: "This sounds like a grainy caramel milk confection from Panama — possibly a dulce de leche-style candy." Then present the cue. Do NOT hedge with "I don't know" or ask for more clues.
+## HOW TO WRITE YOUR RESPONSE
 
-## OPTIONAL TOOLS (use when relevant)
-- \`search_web\` to find current recipes, blogs, or sources about a dish or ingredient
-- \`analyze_nostalgic_dish\` for sensory breakdown
-- \`find_sensory_substitutes\` for ingredient swaps
-- \`source_ingredients\` for where to buy things
-- \`discover_regional_similars\` for related dishes in neighboring cultures
-- \`generate_family_followup_questions\` for questions the user can ask family
-- \`generate_recipe\` only if the user explicitly asks for a full recipe
+Your job is to SYNTHESIZE the tool outputs into useful analysis. Do NOT just repeat the user's words.
 
-## RULES
-- ALWAYS call collect_food_memory FIRST. Never skip it.
-- NEVER respond with plain text before Step 5 is complete — even if earlier steps return uncertain or low-confidence results. Always finish the tool chain.
-- Never invent dish names or ingredients — trust the tool output.
-- Keep final text responses under 200 words.
-- Be warm, not clinical.`;
+**If the memory is sparse, ambiguous, or missing decisive clues:**
+Ask 1-3 specific, high-value follow-up questions before offering a reconstruction. Prefer questions about dish name/sound-alike, region/community, cooking method, sensory trigger, serving format, or occasion. Whenever possible, quote or adapt the tool-generated nextQuestions instead of inventing generic questions. Explain in one short sentence why those answers matter.
+
+**If a specific dish was identified with Medium or High confidence and the user gave enough sensory clues:**
+Lead with the dish and a one-sentence explanation. Then give the minimum viable nostalgia cue.
+
+**If no specific dish was identified but there are enough sensory clues for a useful test:**
+- Analyze the actual clues the user gave (region, ingredients, textures, aromas, cooking method).
+- Explain what those clues point to using food science (Maillard browning, fat-soluble aromatics, starch gelatinization, acid/salt/sugar balance, Sichuan peppercorn numbing, etc.).
+- Present the minimum viable nostalgia cue as a concrete thing to try.
+Then include one targeted follow-up that would most reduce uncertainty if they want to continue.
+
+**Critical rules:**
+- Do not just echo the user's phrases back to them.
+- Do not ask generic "tell me more" questions.
+- NEVER say "There are many dishes that fit this pattern" or list generic possibilities.
+- NEVER apologize for not knowing the exact dish.
+- NEVER string the user's keywords together as a fake dish name (e.g., "fried Szechuan rice with Szechuan spices").
+- ALWAYS anchor to the specific region the user mentioned. If they said Sichuan, talk about Sichuan — not "Asia."
+- If you give a cue, make it cheap, accessible, and food-science grounded.
+- Keep responses under 220 words.
+- Be warm and direct, like a knowledgeable friend who wants to help them taste the memory again.
+- If the user shares a photo, describe what you see in the image and combine it with any text description they provide before calling tools.`;
 
 // ── Tool execution ──────────────────────────────────────────────────────────
 
@@ -292,11 +306,16 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
     }
     return;
   }
-  let parsed: { message?: string };
+  let parsed: { message?: string; history?: AskHistoryItem[]; images?: unknown };
   try { parsed = JSON.parse(raw); } catch { sendJson(res, 400, { error: 'Invalid JSON' }); return; }
 
-  const userMessage = parsed.message?.trim();
-  if (!userMessage) { sendJson(res, 400, { error: 'message is required' }); return; }
+  const images = parseImages(parsed.images);
+  if (images.error) { sendJson(res, 400, { error: images.error }); return; }
+
+  const userMessage = parsed.message?.trim() ?? '';
+  if (!userMessage && images.value.length === 0) { sendJson(res, 400, { error: 'message or images is required' }); return; }
+
+  const history = parseHistory(parsed.history);
 
   if (shouldApplyRateLimit({ contentType, parsedBody: parsed })) {
     const limitResult = rateLimiter.checkWebLimit(authed.tier, authed.keyId);
@@ -314,9 +333,17 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
   };
 
   try {
-    const askSession = createAskSession(userMessage);
+    const askSession = createAskSession(userMessage, history, images.value);
     let modelResponse = await askSession.create(4096);
     console.log(`[ask] provider=${ASK_PROVIDER_KIND} content=text:${modelResponse.textBlocks.length},tools:${modelResponse.toolCalls.length}`);
+    if (modelResponse.toolCalls.length === 0) {
+      console.warn('[ask] model skipped required Achiote tool workflow');
+      send('error', {
+        message: 'The model skipped Achiote\'s structured memory workflow. Try again, or use a provider/model with tool-calling support.',
+        code: 'tool_workflow_skipped',
+      });
+      return;
+    }
 
     let iterations = 0;
     while (modelResponse.toolCalls.length > 0 && iterations < 15) {
@@ -360,6 +387,48 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
 }
 
 // ── Helpers ─────────────────────────────────────────────────────────────────
+
+const MAX_IMAGES = 4;
+const MAX_IMAGE_BASE64_CHARS = 700_000; // ~525KB actual image
+const ALLOWED_IMAGE_MIME_TYPES = new Set(['image/jpeg', 'image/png', 'image/gif', 'image/webp']);
+const MAX_HISTORY_ITEMS = 20;
+const MAX_HISTORY_CONTENT_CHARS = 4_000;
+
+function parseHistory(raw: unknown): AskHistoryItem[] | undefined {
+  if (!Array.isArray(raw)) return undefined;
+  const history = raw
+    .filter((h): h is AskHistoryItem =>
+      typeof h === 'object' && h !== null &&
+      (h.role === 'user' || h.role === 'assistant') &&
+      typeof h.content === 'string',
+    )
+    .map((h) => ({
+      role: h.role,
+      content: h.content.trim().slice(0, MAX_HISTORY_CONTENT_CHARS),
+    }))
+    .filter((h) => h.content.length > 0);
+  return history.slice(-MAX_HISTORY_ITEMS);
+}
+
+function parseImages(raw: unknown): { value: AskImage[]; error?: string } {
+  if (raw === undefined) return { value: [] };
+  if (!Array.isArray(raw)) return { value: [], error: 'images must be an array' };
+  if (raw.length > MAX_IMAGES) return { value: [], error: `maximum ${MAX_IMAGES} images allowed` };
+  const result: AskImage[] = [];
+  for (let i = 0; i < raw.length; i++) {
+    const item = raw[i];
+    if (typeof item !== 'string') return { value: [], error: `image[${i}] must be a string` };
+    if (item.length > MAX_IMAGE_BASE64_CHARS) return { value: [], error: `image[${i}] exceeds maximum size` };
+    const match = item.match(/^data:([a-zA-Z0-9+/-]+);base64,([A-Za-z0-9+/=]+)$/);
+    if (!match) return { value: [], error: `image[${i}] must be a data URI (data:image/...;base64,...)` };
+    const mediaType = match[1];
+    if (!ALLOWED_IMAGE_MIME_TYPES.has(mediaType)) {
+      return { value: [], error: `image[${i}] has unsupported MIME type: ${mediaType}` };
+    }
+    result.push({ base64: match[2], mediaType: mediaType as AskImage['mediaType'] });
+  }
+  return { value: result };
+}
 
 function readBody(req: IncomingMessage, maxBytes = 1_000_000): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -452,6 +521,8 @@ const server = createServer(async (req, res) => {
     const readiness = getHttpReadiness({
       authEnabled: AUTH_ENABLED,
       apiKeyCount: configuredApiKeys.length,
+      demoPasswordConfigured: Boolean(DEMO_PASSWORD),
+      billingEnabled: Boolean(billingConfig),
       anthropicApiKey: ASK_PROVIDER_KIND === 'openai' && openAICompatibleProviderReady(OPENAI_BASE_URL, process.env.OPENAI_API_KEY || process.env.LMSTUDIO_API_KEY || process.env.LM_STUDIO_API_KEY) ? 'openai-compatible-provider' : ASK_PROVIDER_KIND === 'openai' ? undefined : (process.env.ANTHROPIC_API_KEY || process.env.GLM_API_KEY || process.env.ZHIPU_API_KEY || undefined),
       anthropicAuthToken: ASK_PROVIDER_KIND === 'openai' ? undefined : process.env.ANTHROPIC_AUTH_TOKEN,
       cacheAvailable: cache !== null && !cacheState.fallbackUsed,

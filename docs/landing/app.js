@@ -3,6 +3,7 @@ const btn = document.getElementById('send-btn');
 const welcome = document.getElementById('welcome');
 const messages = document.getElementById('messages');
 let busy = false;
+let chatHistory = [];
 
 // Add event listeners for suggestion buttons
 document.querySelectorAll('.suggestion').forEach(button => {
@@ -42,11 +43,11 @@ function send(text) {
   fetch('/ask', {
     method: 'POST',
     headers,
-    body: JSON.stringify({ message: val }),
+    body: JSON.stringify({ message: val, history: chatHistory }),
   })
   .then(async res => {
     if (!res.ok) throw new Error(await explainHttpError(res));
-    return streamResponse(res, aiEl);
+    return streamResponse(res, aiEl, val);
   })
   .catch(err => {
     aiEl.textContent = err.message.includes('fetch')
@@ -65,7 +66,7 @@ async function explainHttpError(res) {
     detail = 'Could not parse server response';
   }
 
-  if (res.status === 401) return `Authentication required. Enter the demo password. ${detail}`.trim();
+  if (res.status === 401) return `Authentication required. Enter your API key or demo password. ${detail}`.trim();
   if (res.status === 429) return `Rate limit exceeded. ${detail}`.trim();
   if (res.status === 413) return `Message is too large. ${detail}`.trim();
   if (res.status === 415) return `Server expected JSON but received a different content type. ${detail}`.trim();
@@ -139,7 +140,7 @@ function summarizeResult(name, result) {
   return 'done';
 }
 
-async function streamResponse(res, el) {
+async function streamResponse(res, el, userMessage) {
   const reader = res.body.getReader();
   const decoder = new TextDecoder();
   let pending = '';
@@ -169,6 +170,13 @@ async function streamResponse(res, el) {
           } else if (eventType === 'text') {
             if (typeof d === 'string') text += d;
             else text += d.message || d.text || JSON.stringify(d);
+          } else if (eventType === 'done') {
+            if (text) {
+              chatHistory.push({ role: 'user', content: userMessage });
+              chatHistory.push({ role: 'assistant', content: text });
+              // Keep history bounded to last 10 turns to avoid token bloat
+              if (chatHistory.length > 20) chatHistory = chatHistory.slice(-20);
+            }
           } else if (eventType === 'tool_call') {
             if (!trace) trace = createTracePanel(el);
             addTraceItem(trace, 'tool_call', d);
@@ -179,7 +187,10 @@ async function streamResponse(res, el) {
             if (!trace) trace = createTracePanel(el);
             addTraceItem(trace, 'status', d);
           }
-        } catch { /* skip */ }
+        } catch (err) {
+          console.warn('Skipping malformed SSE event', err);
+          if (trace) addTraceItem(trace, 'error', { message: 'Skipped malformed server event' });
+        }
       }
     }
     if (text) el.innerHTML = formatMd(text);

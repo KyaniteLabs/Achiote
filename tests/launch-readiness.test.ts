@@ -14,10 +14,18 @@ describe('P0 launch readiness guards', () => {
     expect(shouldApplyRateLimit({ contentType: 'application/json', parsedBody: { message: 'hello' } })).toBe(true);
   });
 
+  it('applies rate limit for image-only requests without a text message', () => {
+    expect(shouldApplyRateLimit({ contentType: 'application/json', parsedBody: { images: ['data:image/jpeg;base64,/9j/4AAQ'] } })).toBe(true);
+    expect(shouldApplyRateLimit({ contentType: 'application/json', parsedBody: { message: '', images: ['data:image/jpeg;base64,/9j/4AAQ'] } })).toBe(true);
+    expect(shouldApplyRateLimit({ contentType: 'application/json', parsedBody: { images: [] } })).toBe(false);
+  });
+
   it('marks HTTP readiness degraded when launch-critical config is missing', () => {
     const readiness = getHttpReadiness({
       authEnabled: true,
       apiKeyCount: 0,
+      demoPasswordConfigured: false,
+      billingEnabled: false,
       anthropicApiKey: undefined,
       cacheAvailable: true,
       rateLimitPersistenceConfigured: false,
@@ -36,6 +44,8 @@ describe('P0 launch readiness guards', () => {
     const readiness = getHttpReadiness({
       authEnabled: false,
       apiKeyCount: 0,
+      demoPasswordConfigured: false,
+      billingEnabled: false,
       anthropicAuthToken: 'token-for-compatible-provider',
       cacheAvailable: true,
       rateLimitPersistenceConfigured: true,

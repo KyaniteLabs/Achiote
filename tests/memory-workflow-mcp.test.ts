@@ -84,8 +84,8 @@ describe('memory workflow MCP tools', () => {
       });
 
       const displayText = collected.content[0].type === 'text' ? collected.content[0].text : '';
-      expect(displayText).toContain('Food memory captured.');
-      expect(displayText).toContain('Ingredient clue: shark');
+      expect(displayText).toContain("Here's what I'm picking up from your memory:");
+      expect(displayText).toContain('Ingredients you mentioned: shark');
       expect(displayText).toContain('How was the shark served');
       expect(() => JSON.parse(displayText)).toThrow();
       expect(collected.structuredContent).toMatchObject({

@@ -43,6 +43,8 @@ export type ReadinessCheck = {
 export type HttpReadinessInput = {
   authEnabled: boolean;
   apiKeyCount: number;
+  demoPasswordConfigured: boolean;
+  billingEnabled: boolean;
   anthropicApiKey?: string;
   anthropicAuthToken?: string;
   cacheAvailable: boolean;
@@ -116,8 +118,10 @@ export function shouldApplyRateLimit(input: RateLimitGateInput): boolean {
   const contentType = input.contentType ?? '';
   if (!contentType.includes('application/json')) return false;
   if (typeof input.parsedBody !== 'object' || input.parsedBody === null) return false;
-  const message = (input.parsedBody as { message?: unknown }).message;
-  return typeof message === 'string' && message.trim().length > 0;
+  const body = input.parsedBody as { message?: unknown; images?: unknown };
+  const hasMessage = typeof body.message === 'string' && body.message.trim().length > 0;
+  const hasImages = Array.isArray(body.images) && body.images.length > 0;
+  return hasMessage || hasImages;
 }
 
 export function getHttpReadiness(input: HttpReadinessInput): HttpReadiness {
@@ -125,11 +129,15 @@ export function getHttpReadiness(input: HttpReadinessInput): HttpReadiness {
   const checks: ReadinessCheck[] = [
     {
       name: 'apiKeys',
-      ok: !input.authEnabled || input.apiKeyCount > 0,
+      ok: !input.authEnabled || input.apiKeyCount > 0 || input.demoPasswordConfigured || input.billingEnabled,
       message: input.authEnabled
         ? input.apiKeyCount > 0
           ? 'authentication is enabled and API keys are configured'
-          : 'authentication is enabled but ACHIOTE_API_KEYS is empty or invalid'
+          : input.demoPasswordConfigured
+            ? 'authentication is enabled via demo password'
+            : input.billingEnabled
+              ? 'authentication is enabled via Stripe billing'
+              : 'authentication is enabled but ACHIOTE_API_KEYS is empty or invalid'
         : 'authentication is disabled for local/demo use',
     },
     {
