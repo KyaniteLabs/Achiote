@@ -101,7 +101,7 @@ describe('bundled data validation', () => {
 
     const issues = validateBundledData(data);
 
-    expectIssue(issues, 'memoryHints.ingredients[29]', 'duplicate');
+    expectIssue(issues, `memoryHints.ingredients[${data.memoryHints.ingredients.length - 1}]`, 'duplicate');
     expectIssue(issues, 'memoryHints.cookingMethods[14].label', 'non-empty string');
     expectIssue(issues, 'memoryHints.cookingMethods[14].regexSource', 'valid regular expression');
     expectIssue(issues, 'memoryHints.regionPatterns[94].label', 'duplicate');

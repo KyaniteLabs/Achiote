@@ -10,8 +10,13 @@ type OpenAITool = {
   };
 };
 
+type OpenAITextContent = { type: 'text'; text: string };
+type OpenAIImageContent = { type: 'image_url'; image_url: { url: string } };
+type OpenAIUserContent = string | Array<OpenAITextContent | OpenAIImageContent>;
+
 type OpenAIMessage =
-  | { role: 'system' | 'user'; content: string }
+  | { role: 'system'; content: string }
+  | { role: 'user'; content: OpenAIUserContent }
   | { role: 'assistant'; content: string | null; tool_calls?: OpenAIToolCall[] }
   | { role: 'tool'; tool_call_id: string; content: string };
 
@@ -52,6 +57,32 @@ export function resolveAskProviderKind(env: Record<string, string | undefined> =
   if (explicit === 'openai' || explicit === 'openai-compatible' || explicit === 'lmstudio' || explicit === 'lm-studio') return 'openai';
   if (explicit === 'anthropic' || explicit === 'anthropic-compatible' || explicit === 'glm' || explicit === 'zhipu') return 'anthropic';
   return 'anthropic';
+}
+
+export function resolveAskModel(env: Record<string, string | undefined> = process.env): string {
+  const provider = env.ACHIOTE_ASK_PROVIDER?.trim().toLowerCase();
+  const providerKind = resolveAskProviderKind(env);
+  if (providerKind === 'openai') {
+    return env.ACHIOTE_ASK_MODEL?.trim()
+      || env.OPENAI_MODEL?.trim()
+      || env.LMSTUDIO_MODEL?.trim()
+      || env.LM_STUDIO_MODEL?.trim()
+      || env.ANTHROPIC_DEFAULT_SONNET_MODEL?.trim()
+      || 'gpt-4o-mini';
+  }
+
+  if (provider === 'glm' || provider === 'zhipu') {
+    return env.ACHIOTE_ASK_MODEL?.trim()
+      || env.GLM_MODEL?.trim()
+      || env.ZHIPU_MODEL?.trim()
+      || 'glm-5v-turbo';
+  }
+
+  return env.ACHIOTE_ASK_MODEL?.trim()
+    || env.ANTHROPIC_MODEL?.trim()
+    || env.CLAUDE_MODEL?.trim()
+    || env.ANTHROPIC_DEFAULT_SONNET_MODEL?.trim()
+    || 'claude-sonnet-4-5-20250929';
 }
 
 
@@ -103,14 +134,30 @@ function parseJsonObject(value: string | undefined): unknown {
   }
 }
 
+export type AskHistoryItem = { role: 'user' | 'assistant'; content: string };
+export type AskImage = { base64: string; mediaType: 'image/jpeg' | 'image/png' | 'image/gif' | 'image/webp' };
+
 export function createAnthropicAskSession(input: {
   client: Anthropic;
   model: string;
   systemPrompt: string;
   userMessage: string;
   tools: AnthropicTool[];
+  history?: AskHistoryItem[];
+  images?: AskImage[];
 }): AskSession {
-  const messages: Anthropic.MessageParam[] = [{ role: 'user', content: input.userMessage }];
+  const userContent: Anthropic.ContentBlockParam[] = [
+    ...(input.images ?? []).map((img): Anthropic.ImageBlockParam => ({
+      type: 'image',
+      source: { type: 'base64', media_type: img.mediaType, data: img.base64 },
+    })),
+    { type: 'text', text: input.userMessage },
+  ];
+
+  const messages: Anthropic.MessageParam[] = [
+    ...(input.history ?? []).map((h): Anthropic.MessageParam => ({ role: h.role, content: h.content })),
+    { role: 'user', content: userContent },
+  ];
 
   return {
     async create(maxTokens: number): Promise<AskModelResponse> {
@@ -152,11 +199,22 @@ export function createOpenAICompatibleAskSession(input: {
   apiKey?: string | null;
   timeoutMs: number;
   fetchImpl?: FetchLike;
+  history?: AskHistoryItem[];
+  images?: AskImage[];
 }): AskSession {
   const fetchImpl = input.fetchImpl ?? fetch;
+  const historyMessages: OpenAIMessage[] = (input.history ?? []).map((h): OpenAIMessage => ({ role: h.role, content: h.content }));
+  const userContent: OpenAIUserContent = [
+    ...(input.images ?? []).map((img): OpenAIImageContent => ({
+      type: 'image_url',
+      image_url: { url: `data:${img.mediaType};base64,${img.base64}` },
+    })),
+    { type: 'text', text: input.userMessage },
+  ];
   const messages: OpenAIMessage[] = [
     { role: 'system', content: input.systemPrompt },
-    { role: 'user', content: input.userMessage },
+    ...historyMessages,
+    { role: 'user', content: userContent },
   ];
 
   return {

@@ -1,3 +1,5 @@
+try { process.loadEnvFile(); } catch { /* no .env file present */ }
+
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { createAchioteServer } from './server.js';
 

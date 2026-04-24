@@ -82,18 +82,21 @@ describe('package distribution metadata', () => {
 
   it('allows the /ask model to be overridden for Anthropic-compatible providers', () => {
     const httpServer = fs.readFileSync('src/http-server.ts', 'utf8');
+    const askProvider = fs.readFileSync('src/lib/ask-provider.ts', 'utf8');
 
     expect(httpServer).toContain('const ASK_MODEL');
-    expect(httpServer).toContain('ANTHROPIC_DEFAULT_SONNET_MODEL');
+    expect(httpServer).toContain('resolveAskModel()');
+    expect(askProvider).toContain('ANTHROPIC_DEFAULT_SONNET_MODEL');
+    expect(askProvider).toContain('ANTHROPIC_MODEL');
     expect(httpServer).toContain('ANTHROPIC_TIMEOUT_MS');
     expect(httpServer).toContain('API_TIMEOUT_MS');
     expect(httpServer).toContain('anthropicClientOptions');
     expect(httpServer).toContain('authToken');
     expect(httpServer).toContain('createOpenAICompatibleAskSession');
-    expect(httpServer).toContain('OPENAI_BASE_URL');
-    expect(httpServer).toContain('LM_STUDIO_MODEL');
-    expect(httpServer).toContain('claude-sonnet-4-5-20250929');
-    expect(httpServer).not.toContain("model: 'claude-sonnet-4-5-20250929'");
+    expect(askProvider).toContain('OPENAI_BASE_URL');
+    expect(askProvider).toContain('LM_STUDIO_MODEL');
+    expect(askProvider).toContain('glm-5v-turbo');
+    expect(httpServer).not.toContain("model: 'glm-5v-turbo'");
   });
 
 });

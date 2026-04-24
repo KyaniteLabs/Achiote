@@ -116,6 +116,65 @@ describe('/ask endpoint — post-rate-limit guards', () => {
       expect(body.error).toContain('message');
     } finally { server.kill('SIGINT'); }
   });
+
+  it('accepts images without a text message', async () => {
+    const port = await getFreePort();
+    const server = await spawnServer(port, 'false', { ACHIOTE_ALLOW_ANON_ASK: 'true' });
+    try {
+      const res = await fetch(`http://127.0.0.1:${port}/ask`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ images: ['data:image/jpeg;base64,/9j/4AAQ'] }),
+      });
+      expect(res.status).toBe(200);
+    } finally { server.kill('SIGINT'); }
+  });
+
+  it('returns 400 for invalid image format', async () => {
+    const port = await getFreePort();
+    const server = await spawnServer(port, 'false', { ACHIOTE_ALLOW_ANON_ASK: 'true' });
+    try {
+      const res = await fetch(`http://127.0.0.1:${port}/ask`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: 'hello', images: ['not-a-data-uri'] }),
+      });
+      expect(res.status).toBe(400);
+      const body = await res.json();
+      expect(body.error).toContain('data URI');
+    } finally { server.kill('SIGINT'); }
+  });
+
+  it('returns 400 for unsupported image MIME type', async () => {
+    const port = await getFreePort();
+    const server = await spawnServer(port, 'false', { ACHIOTE_ALLOW_ANON_ASK: 'true' });
+    try {
+      const res = await fetch(`http://127.0.0.1:${port}/ask`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: 'hello', images: ['data:image/svg+xml;base64,PHN2Zz4='] }),
+      });
+      expect(res.status).toBe(400);
+      const body = await res.json();
+      expect(body.error).toContain('unsupported MIME type');
+    } finally { server.kill('SIGINT'); }
+  });
+
+  it('returns 400 for too many images', async () => {
+    const port = await getFreePort();
+    const server = await spawnServer(port, 'false', { ACHIOTE_ALLOW_ANON_ASK: 'true' });
+    try {
+      const images = Array.from({ length: 5 }, () => 'data:image/jpeg;base64,/9j/4AAQ');
+      const res = await fetch(`http://127.0.0.1:${port}/ask`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: 'hello', images }),
+      });
+      expect(res.status).toBe(400);
+      const body = await res.json();
+      expect(body.error).toContain('maximum 4 images');
+    } finally { server.kill('SIGINT'); }
+  });
 });
 
 describe('/ask endpoint with auth enabled', () => {
