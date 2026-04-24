@@ -4,4 +4,4 @@ Disallow: /mcp
 Disallow: /ask
 Disallow: /health
 
-Sitemap: https://github.com/Pastorsimon1798/Achiote/blob/master/docs/landing/sitemap.xml
+Sitemap: https://achiote.kyanitelabs.tech/sitemap.xml

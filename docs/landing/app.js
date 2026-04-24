@@ -5,6 +5,22 @@ const messages = document.getElementById('messages');
 let busy = false;
 let chatHistory = [];
 
+function trackEvent(event) {
+  if (!event || typeof event !== 'string') return;
+  const body = JSON.stringify({ event, at: new Date().toISOString() });
+  try {
+    if (navigator.sendBeacon) {
+      navigator.sendBeacon('/events', new Blob([body], { type: 'application/json' }));
+      return;
+    }
+    fetch('/events', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body, keepalive: true }).catch(() => {});
+  } catch {
+    // Telemetry must never interrupt reconstruction.
+  }
+}
+
+trackEvent('app_opened');
+
 // Add event listeners for suggestion buttons
 document.querySelectorAll('.suggestion').forEach(button => {
   button.addEventListener('click', () => send(button.dataset.suggestion));
@@ -18,6 +34,7 @@ input.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !busy) send(
 function send(text) {
   const val = (text || input.value).trim();
   if (!val || busy) return;
+  trackEvent('ask_started');
   input.value = '';
 
   welcome.classList.add('hide');
@@ -50,6 +67,7 @@ function send(text) {
     return streamResponse(res, aiEl, val);
   })
   .catch(err => {
+    trackEvent('ask_failed');
     aiEl.textContent = err.message.includes('fetch')
       ? 'Server not running. Start it with node dist/http-server.js.'
       : err.message;
@@ -176,6 +194,12 @@ async function streamResponse(res, el, userMessage) {
               chatHistory.push({ role: 'assistant', content: text });
               // Keep history bounded to last 10 turns to avoid token bloat
               if (chatHistory.length > 20) chatHistory = chatHistory.slice(-20);
+              if (hasError) {
+                trackEvent('ask_failed');
+              } else {
+                trackEvent('ask_succeeded');
+                addFeedback(el);
+              }
             }
           } else if (eventType === 'tool_call') {
             if (!trace) trace = createTracePanel(el);
@@ -197,6 +221,30 @@ async function streamResponse(res, el, userMessage) {
     el.closest('main').scrollTop = 1e6;
   }
   if (!text && !trace) el.textContent = 'No response. Try rephrasing.';
+}
+
+function addFeedback(el) {
+  if (el.querySelector('.feedback')) return;
+  const feedback = document.createElement('div');
+  feedback.className = 'feedback';
+  feedback.setAttribute('aria-label', 'Rate this answer');
+  feedback.innerHTML = [
+    '<button type="button" data-feedback="feedback_helpful">Helpful</button>',
+    '<button type="button" data-feedback="feedback_generic">Too generic</button>',
+    '<button type="button" data-feedback="feedback_wrong_region">Wrong region</button>',
+    '<button type="button" data-feedback="feedback_unsafe">Safety issue</button>',
+  ].join('');
+  feedback.addEventListener('click', (event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLButtonElement)) return;
+    sendFeedback(target.dataset.feedback || '');
+    feedback.textContent = 'Feedback recorded. Thank you.';
+  });
+  el.appendChild(feedback);
+}
+
+function sendFeedback(eventName) {
+  trackEvent(eventName);
 }
 
 function escapeHtml(s) {
