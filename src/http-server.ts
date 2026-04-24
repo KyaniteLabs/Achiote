@@ -338,6 +338,8 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
 
   try {
     const askSession = createAskSession(userMessage, history, images.value);
+    const calledTools = new Set<string>();
+    const toolPayloads: Record<string, unknown> = {};
     let modelResponse = await askSession.create(4096);
     console.log(`[ask] provider=${ASK_PROVIDER_KIND} content=text:${modelResponse.textBlocks.length},tools:${modelResponse.toolCalls.length}`);
     if (modelResponse.toolCalls.length === 0) {
@@ -363,6 +365,8 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
         try {
           const result = await executeToolDefinition(call.name, call.input, toolContext);
           validateToolOutput(call.name, result.payload);
+          calledTools.add(call.name);
+          toolPayloads[call.name] = result.payload;
           const content = JSON.stringify(result.payload);
           toolResults.push({ id: call.id, content });
           send('tool_result', { name: call.name, result: result.payload });
@@ -379,6 +383,13 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       modelResponse = await askSession.create(2048);
     }
 
+    if (!calledTools.has('generate_minimum_viable_nostalgia') && containsConcreteFoodCue(modelResponse.textBlocks.join('\n\n'))) {
+      console.warn('[ask] suppressed concrete cue before minimum viable nostalgia tool');
+      send('text', buildClarificationOnlyResponse(toolPayloads));
+      send('done', { guarded: 'premature_concrete_cue' });
+      return;
+    }
+
     for (const text of modelResponse.textBlocks) {
       send('text', text);
     }
@@ -388,6 +399,36 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
   } finally {
     res.end();
   }
+}
+
+function containsConcreteFoodCue(text: string): boolean {
+  return /\b(?:smallest safe cue|tasting cue|concrete food cue|recipe move|try this|try it tonight)\b/i.test(text)
+    || /\b(?:teaspoons?|tablespoons?|cups?|pinch)\b/i.test(text)
+    || /\b(?:heat|stir|sip|bite|steep|mix)\b[\s\S]{0,80}\b(?:dill|broth|buttermilk|vinegar|lemon|salt|sour cream|yogurt|potato)\b/i.test(text);
+}
+
+function getStringArray(value: unknown, key: string): string[] {
+  if (!value || typeof value !== 'object') return [];
+  const item = (value as Record<string, unknown>)[key];
+  return Array.isArray(item) ? item.filter((entry): entry is string => typeof entry === 'string' && entry.trim().length > 0) : [];
+}
+
+function buildClarificationOnlyResponse(toolPayloads: Record<string, unknown>): string {
+  const memoryQuestions = getStringArray(toolPayloads.collect_food_memory, 'nextQuestions');
+  const planQuestions = getStringArray(toolPayloads.plan_dish_research, 'questionsForUser');
+  const questions = [...new Set([...planQuestions, ...memoryQuestions])].slice(0, 3);
+  const selectedQuestions = questions.length > 0 ? questions : [
+    'Where did you eat this, or where was it from? Even a country, region, city, or community helps.',
+    'Do you remember anything about the name, even a rough sound-alike?',
+  ];
+
+  return [
+    'Before I give you a tasting cue, I need one or two details so I do not fake certainty.',
+    '',
+    ...selectedQuestions.map((question, index) => `${index + 1}. ${question}`),
+    '',
+    'Those answers decide the dish family and keep the first test cheap, specific, and tied to the memory instead of a guess.',
+  ].join('\n');
 }
 
 // ── Helpers ─────────────────────────────────────────────────────────────────
