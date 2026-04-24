@@ -73,10 +73,92 @@ describe('HTTP server integration', () => {
     expect(res.headers.get('content-type')).toContain('text/html');
   });
 
+  it('serves trust and launch-support routes with security headers', async () => {
+    for (const path of ['/privacy', '/privacy/', '/terms', '/terms/', '/support', '/support/', '/safety', '/safety/']) {
+      const res = await fetch(`${baseUrl}${path}`);
+      expect(res.status).toBe(200);
+      expect(res.headers.get('content-type')).toContain('text/html');
+      expect(res.headers.get('content-security-policy')).toContain("object-src 'none'");
+      expect(res.headers.get('content-security-policy')).toContain("frame-ancestors 'none'");
+      expect(res.headers.get('x-content-type-options')).toBe('nosniff');
+      expect(res.headers.get('referrer-policy')).toBe('strict-origin-when-cross-origin');
+    }
+  });
+
   it('serves static JS with correct MIME type', async () => {
     const res = await fetch(`${baseUrl}/app.js`);
     expect(res.status).toBe(200);
     expect(res.headers.get('content-type')).toContain('text/javascript');
+  });
+
+  it('accepts only same-origin allowlisted telemetry events and keeps counters private', async () => {
+    const accepted = await fetch(`${baseUrl}/events`, {
+      method: 'POST',
+      headers: { Origin: baseUrl, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ event: 'ask_started', prompt_text: 'should_not_be_stored' }),
+    });
+    expect(accepted.status).toBe(202);
+    expect(await accepted.json()).toEqual({ ok: true });
+
+    const rejectedOrigin = await fetch(`${baseUrl}/events`, {
+      method: 'POST',
+      headers: { Origin: 'https://evil.example.com', 'Content-Type': 'application/json' },
+      body: JSON.stringify({ event: 'ask_started' }),
+    });
+    expect(rejectedOrigin.status).toBe(403);
+
+    const rejectedEvent = await fetch(`${baseUrl}/events`, {
+      method: 'POST',
+      headers: { Origin: baseUrl, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ event: 'prompt_text' }),
+    });
+    expect(rejectedEvent.status).toBe(400);
+
+    const counters = await fetch(`${baseUrl}/events`);
+    expect(counters.status).toBe(404);
+  });
+
+  it('exposes telemetry counters only with the operator token', async () => {
+    server.kill('SIGINT');
+    await new Promise((resolve) => server.once('exit', resolve));
+
+    port = await getFreePort();
+    baseUrl = `http://127.0.0.1:${port}`;
+
+    server = spawn('node', [resolve(ROOT, 'dist/http-server.js')], {
+      env: { ...process.env, PORT: String(port), ACHIOTE_AUTH_ENABLED: 'false', ACHIOTE_EVENTS_ADMIN_TOKEN: 'operator-test-token' },
+      stdio: ['pipe', 'pipe', 'pipe'],
+    });
+
+    await new Promise<void>((resolve, reject) => {
+      const timeout = setTimeout(() => reject(new Error('Server restart timeout')), 10000);
+      server.stdout!.on('data', (data: Buffer) => {
+        if (data.toString().includes(`localhost:${port}`)) {
+          clearTimeout(timeout);
+          resolve();
+        }
+      });
+      server.on('error', (err) => {
+        clearTimeout(timeout);
+        reject(err);
+      });
+    });
+
+    const event = await fetch(`${baseUrl}/events`, {
+      method: 'POST',
+      headers: { Origin: baseUrl, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ event: 'feedback_helpful' }),
+    });
+    expect(event.status).toBe(202);
+
+    const publicRead = await fetch(`${baseUrl}/events`);
+    expect(publicRead.status).toBe(404);
+
+    const operatorRead = await fetch(`${baseUrl}/events`, {
+      headers: { Authorization: 'Bearer operator-test-token' },
+    });
+    expect(operatorRead.status).toBe(200);
+    expect(await operatorRead.json()).toEqual({ counters: { feedback_helpful: 1 } });
   });
 
   it('returns 404 for unknown paths', async () => {

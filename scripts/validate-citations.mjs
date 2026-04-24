@@ -46,6 +46,35 @@ function similarity(a, b) {
   return (maxLen - levenshtein(a.toLowerCase(), b.toLowerCase())) / maxLen;
 }
 
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function fetchCrossrefWork(doi) {
+  const retryableStatuses = new Set([429, 500, 502, 503, 504]);
+  let lastStatus = 0;
+
+  for (let attempt = 0; attempt < 4; attempt++) {
+    if (attempt > 0) {
+      await sleep(500 * attempt);
+    }
+
+    const res = await fetch(`https://api.crossref.org/works/${doi}`, {
+      headers: {
+        "User-Agent": "Achiote-CitationValidator/1.0 (mailto:hello@achiote.dev)",
+        Accept: "application/json",
+      },
+    });
+    lastStatus = res.status;
+    if (res.ok) return res.json();
+    if (!retryableStatuses.has(res.status)) {
+      throw new Error(`Crossref API returned ${res.status}`);
+    }
+  }
+
+  throw new Error(`Crossref API returned ${lastStatus} after retries`);
+}
+
 /* ── extraction ──────────────────────────────────────────────────────── */
 
 function extractCitations(html) {
@@ -104,12 +133,7 @@ async function validateDOI(citation) {
 
   // 2. Crossref metadata
   try {
-    const res = await fetch(`https://api.crossref.org/works/${citation.doi}`);
-    if (!res.ok) {
-      errors.push(`Crossref API returned ${res.status}`);
-      return errors;
-    }
-    const { message: work } = await res.json();
+    const { message: work } = await fetchCrossrefWork(citation.doi);
 
     const crossrefTitle = work.title?.[0] ?? "";
     const crossrefYear =

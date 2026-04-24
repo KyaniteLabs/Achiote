@@ -139,10 +139,16 @@ async function assertPackagedHttpServerStarts(installDir, tempRoot) {
 
   try {
     await withTimeout(waitForServer(child, port), 12_000, 'packaged HTTP startup');
-    for (const pathPart of ['/health', '/about']) {
+    for (const pathPart of ['/health', '/about', '/privacy', '/privacy/', '/terms', '/support', '/safety', '/sitemap.xml', '/robots.txt']) {
       const res = await withTimeout(fetch(`http://127.0.0.1:${port}${pathPart}`), 5_000, `GET ${pathPart}`);
       if (!res.ok) throw new Error(`GET ${pathPart} returned ${res.status}`);
+      if (pathPart !== '/health' && !res.headers.get('x-content-type-options')) {
+        throw new Error(`GET ${pathPart} did not return static security headers`);
+      }
     }
+
+    const privateEvents = await withTimeout(fetch(`http://127.0.0.1:${port}/events`), 5_000, 'GET /events');
+    if (privateEvents.status !== 404) throw new Error(`GET /events returned ${privateEvents.status}; expected private 404`);
   } finally {
     const exited = new Promise((resolve) => child.once('exit', resolve));
     child.kill('SIGTERM');
@@ -222,7 +228,7 @@ async function main() {
     console.log('Checking packaged helper scripts');
     assertPackagedHelperScripts(installDir);
 
-    console.log('Checking packaged HTTP server /health and /about responses');
+    console.log('Checking packaged HTTP server health, trust, and launch metadata responses');
     await assertPackagedHttpServerStarts(installDir, tempRoot);
 
     console.log(`Package smoke passed: installed tarball CLI listed ${expectedTools.length} MCP tools and HTTP smoke responded.`);

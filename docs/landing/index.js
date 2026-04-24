@@ -1,5 +1,21 @@
 document.documentElement.classList.add('js');
 
+function trackEvent(event) {
+  if (!event || typeof event !== 'string') return;
+  const body = JSON.stringify({ event, at: new Date().toISOString() });
+  try {
+    if (navigator.sendBeacon) {
+      navigator.sendBeacon('/events', new Blob([body], { type: 'application/json' }));
+      return;
+    }
+    fetch('/events', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body, keepalive: true }).catch(() => {});
+  } catch {
+    // Telemetry should never interrupt the marketing page.
+  }
+}
+
+trackEvent('page_view');
+
 // Dark mode
 const themeToggle = document.getElementById('theme-toggle');
 const html = document.documentElement;
@@ -73,6 +89,7 @@ if (tryitInput) {
 // ── Checkout ────────────────────────────────────────────────────────────────
 
 async function startCheckout(tier, mode) {
+  trackEvent('checkout_started');
   const btn = event.target;
   const original = btn.textContent;
   btn.textContent = 'Redirecting…';

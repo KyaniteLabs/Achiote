@@ -42,7 +42,12 @@ const OPENAI_TIMEOUT_MS = parseInt(process.env.OPENAI_TIMEOUT_MS || process.env.
 const OPENAI_BASE_URL = openAIBaseUrlFromEnv();
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const STATIC_DIR = resolve(__dirname, '..', 'docs', 'landing');
-const ALLOWED_ORIGINS = (process.env.ACHIOTE_ALLOWED_ORIGINS || 'http://localhost:3000').split(',');
+const ALLOWED_ORIGINS = (process.env.ACHIOTE_ALLOWED_ORIGINS || 'http://localhost:3000,http://127.0.0.1:3000,https://achiote.kyanitelabs.tech')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+const TELEMETRY_LIMIT_PER_MINUTE = parseInt(process.env.ACHIOTE_TELEMETRY_LIMIT_PER_MINUTE || '120', 10);
+const EVENTS_ADMIN_TOKEN = process.env.ACHIOTE_EVENTS_ADMIN_TOKEN?.trim();
 
 const MIME: Record<string, string> = {
   '.html': 'text/html',
@@ -103,6 +108,30 @@ const billingStripe = billingConfig ? new BillingStripe(billingConfig) : null;
 
 const AUTH_ENABLED = process.env.ACHIOTE_AUTH_ENABLED !== 'false';
 const DEMO_PASSWORD = process.env.ACHIOTE_DEMO_PASSWORD?.trim();
+const allowedTelemetryEvents = new Set([
+  'page_view',
+  'app_opened',
+  'ask_started',
+  'ask_succeeded',
+  'ask_failed',
+  'checkout_started',
+  'feedback_helpful',
+  'feedback_generic',
+  'feedback_wrong_region',
+  'feedback_unsafe',
+]);
+const telemetryCounters = new Map<string, number>();
+const telemetryBuckets = new Map<string, { count: number; resetAt: number }>();
+
+function isSameHostOrigin(req: IncomingMessage, origin: string | undefined): boolean {
+  if (!origin) return false;
+  try {
+    const parsed = new URL(origin);
+    return (parsed.protocol === 'http:' || parsed.protocol === 'https:') && parsed.host === req.headers.host;
+  } catch {
+    return false;
+  }
+}
 
 function isGlm4Model(model: string): boolean {
   return model.startsWith('glm-4');
@@ -281,6 +310,41 @@ function sendRateLimitHeaders(res: ServerResponse, limitResult: { remaining: num
   res.setHeader('X-RateLimit-Remaining', String(limitResult.remaining));
   res.setHeader('X-RateLimit-Limit', String(limitResult.limit));
   res.setHeader('X-RateLimit-Reset', String(Math.ceil(limitResult.resetAt / 1000)));
+}
+
+function telemetryClientKey(req: IncomingMessage): string {
+  const identity = getRequestRateLimitIdentity({
+    authEnabled: false,
+    headers: req.headers,
+    remoteAddress: req.socket.remoteAddress,
+    trustProxy: TRUST_PROXY,
+    trustedProxyIps: TRUSTED_PROXY_IPS,
+  });
+  return identity?.keyId ?? 'anon:ip:unknown';
+}
+
+function checkTelemetryLimit(key: string): { allowed: boolean; remaining: number; limit: number; resetAt: number } {
+  const limit = Math.max(1, TELEMETRY_LIMIT_PER_MINUTE);
+  const now = Date.now();
+  const windowMs = 60_000;
+  let bucket = telemetryBuckets.get(key);
+
+  if (!bucket || now >= bucket.resetAt) {
+    bucket = { count: 0, resetAt: now + windowMs };
+    telemetryBuckets.set(key, bucket);
+  }
+
+  if (bucket.count >= limit) {
+    return { allowed: false, remaining: 0, limit, resetAt: bucket.resetAt };
+  }
+
+  bucket.count++;
+  return { allowed: true, remaining: Math.max(0, limit - bucket.count), limit, resetAt: bucket.resetAt };
+}
+
+function hasEventsAdminAccess(req: IncomingMessage): boolean {
+  if (!EVENTS_ADMIN_TOKEN) return false;
+  return extractBearer(req) === EVENTS_ADMIN_TOKEN;
 }
 
 // ── AI agent endpoint ───────────────────────────────────────────────────────
@@ -507,8 +571,18 @@ function sendMethodNotAllowed(res: ServerResponse, allowed: string[]): void {
 }
 
 async function serveStatic(req: IncomingMessage, res: ServerResponse): Promise<boolean> {
-  const raw = req.url?.split('?')[0] ?? '/';
-  const assetPath = raw === '/' ? 'index.html' : raw === '/app' ? 'app.html' : raw === '/about' ? 'about.html' : raw.replace(/^\//, '');
+  const rawPath = req.url?.split('?')[0] ?? '/';
+  const raw = rawPath === '/' ? '/' : rawPath.replace(/\/$/, '');
+  const routeMap: Record<string, string> = {
+    '/': 'index.html',
+    '/app': 'app.html',
+    '/about': 'about.html',
+    '/privacy': 'privacy.html',
+    '/terms': 'terms.html',
+    '/support': 'support.html',
+    '/safety': 'safety.html',
+  };
+  const assetPath = routeMap[raw] ?? raw.replace(/^\//, '');
   const filePath = resolve(STATIC_DIR, assetPath);
 
   if (!filePath.startsWith(resolve(STATIC_DIR) + sep)) return false;
@@ -517,9 +591,21 @@ async function serveStatic(req: IncomingMessage, res: ServerResponse): Promise<b
     const data = await readFile(filePath);
     const ext = assetPath.slice(assetPath.lastIndexOf('.'));
     const contentType = MIME[ext] || 'application/octet-stream';
+    const scriptSrc = assetPath === 'billing-success.html' ? "script-src 'self' 'unsafe-inline'" : "script-src 'self'";
     res.writeHead(200, {
       'Content-Type': contentType,
-      'Content-Security-Policy': "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;",
+      'Content-Security-Policy': [
+        "default-src 'self'",
+        scriptSrc,
+        "style-src 'self' 'unsafe-inline'",
+        "img-src 'self' data:",
+        "object-src 'none'",
+        "base-uri 'self'",
+        "frame-ancestors 'none'",
+        "connect-src 'self'",
+      ].join('; '),
+      'X-Content-Type-Options': 'nosniff',
+      'Referrer-Policy': 'strict-origin-when-cross-origin',
     });
     res.end(data);
     return true;
@@ -557,6 +643,44 @@ const server = createServer(async (req, res) => {
   }
 
   const pathname = req.url?.split('?')[0].replace(/\/$/, '') ?? '';
+
+  if (pathname === '/events' && req.method === 'POST') {
+    if (!origin || (!isOriginAllowed && !isSameHostOrigin(req, origin))) {
+      sendJson(res, 403, { error: 'Forbidden origin' });
+      return;
+    }
+
+    const telemetryLimit = checkTelemetryLimit(telemetryClientKey(req));
+    sendRateLimitHeaders(res, telemetryLimit);
+    if (!telemetryLimit.allowed) {
+      sendJson(res, 429, { error: 'Telemetry rate limit exceeded' });
+      return;
+    }
+
+    try {
+      const raw = await readBody(req, 1_024);
+      const parsed = JSON.parse(raw) as { event?: unknown };
+      const eventName = typeof parsed.event === 'string' ? parsed.event : '';
+      if (!allowedTelemetryEvents.has(eventName)) {
+        sendJson(res, 400, { error: 'Unsupported telemetry event' });
+        return;
+      }
+      telemetryCounters.set(eventName, (telemetryCounters.get(eventName) ?? 0) + 1);
+      sendJson(res, 202, { ok: true });
+    } catch (err) {
+      sendJson(res, err instanceof Error && err.message === 'Body too large' ? 413 : 400, { error: 'Invalid telemetry event' });
+    }
+    return;
+  }
+
+  if (pathname === '/events' && req.method === 'GET') {
+    if (!hasEventsAdminAccess(req)) {
+      sendJson(res, 404, { error: 'Not found' });
+      return;
+    }
+    sendJson(res, 200, { counters: Object.fromEntries(telemetryCounters) });
+    return;
+  }
 
   if ((pathname === '/health' || pathname === '/ready') && req.method !== 'GET' && req.method !== 'HEAD') {
     sendMethodNotAllowed(res, ['GET', 'HEAD']);

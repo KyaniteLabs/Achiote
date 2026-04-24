@@ -31,6 +31,7 @@ describe('package distribution metadata', () => {
       'skill/',
       'scripts/',
       'docs/ARCHITECTURE.md',
+      'docs/LAUNCH_RUNBOOK.md',
       'docs/ROADMAP.md',
       'docs/SELF_HOSTED_RUNNER.md',
       'docs/landing/',
