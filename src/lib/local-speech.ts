@@ -31,6 +31,20 @@ export type LocalSpeechConfig = {
   tts: LocalTtsConfig;
 };
 
+export type LocalTranscriptionResult = {
+  text: string;
+  language: string;
+  provider: 'whispercpp';
+};
+
+export type LocalSynthesisResult = {
+  audioBase64: string;
+  mediaType: string;
+  voice?: string;
+  language?: string;
+  provider: 'kokoro';
+};
+
 type Env = Record<string, string | undefined>;
 
 const DEFAULT_STT_LANGUAGES = ['auto'];
@@ -45,6 +59,15 @@ const ALLOWED_SPEECH_AUDIO_MEDIA_TYPES = new Set([
   'audio/mpeg',
   'audio/mp4',
 ]);
+const SPEECH_AUDIO_EXTENSIONS: Record<string, string> = {
+  'audio/wav': '.wav',
+  'audio/x-wav': '.wav',
+  'audio/webm': '.webm',
+  'audio/ogg': '.ogg',
+  'audio/mpeg': '.mp3',
+  'audio/mp4': '.m4a',
+};
+const SPEECH_COMMAND_TIMEOUT_MS = 120_000;
 
 function parseCsv(value: string | undefined, fallback: string[]): string[] {
   const values = value
@@ -246,3 +269,81 @@ export function validateSpeechTextPayload(raw: unknown): { ok: true; text: strin
     language: typeof body.language === 'string' && body.language.trim() ? body.language.trim() : undefined,
   };
 }
+
+function runCommand(command: string, args: string[], timeoutMs = SPEECH_COMMAND_TIMEOUT_MS): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const child = spawn(command, args, { stdio: ['ignore', 'pipe', 'pipe'] });
+    let stderr = '';
+    const timeout = setTimeout(() => {
+      child.kill('SIGTERM');
+      reject(new Error(`Speech command timed out after ${timeoutMs}ms`));
+    }, timeoutMs);
+
+    child.stderr.on('data', (chunk: Buffer) => {
+      stderr += chunk.toString('utf8').slice(0, 2_000);
+    });
+    child.on('error', (error) => {
+      clearTimeout(timeout);
+      reject(error);
+    });
+    child.on('close', (code) => {
+      clearTimeout(timeout);
+      if (code === 0) {
+        resolve();
+        return;
+      }
+      reject(new Error(`Speech command exited with ${code}: ${stderr.trim() || 'no stderr'}`));
+    });
+  });
+}
+
+export async function transcribeWithLocalSpeech(config: LocalSpeechConfig, payload: { audioBase64: string; mediaType: string; language?: string }): Promise<LocalTranscriptionResult> {
+  if (config.stt.provider !== 'whispercpp' || !config.stt.ready || !config.stt.binary || !config.stt.model) {
+    throw new Error(config.stt.reason || 'speech-to-text is not ready');
+  }
+
+  const dir = await mkdtemp(join(tmpdir(), 'achiote-stt-'));
+  try {
+    const inputPath = join(dir, `input${SPEECH_AUDIO_EXTENSIONS[payload.mediaType] || '.audio'}`);
+    const outputBase = join(dir, 'transcript');
+    const outputPath = `${outputBase}.txt`;
+    await writeFile(inputPath, Buffer.from(payload.audioBase64, 'base64'));
+    const language = payload.language || config.stt.language || 'auto';
+    const args = ['-m', config.stt.model, '-f', inputPath, '-otxt', '-of', outputBase];
+    if (language && language !== 'auto') args.push('-l', language);
+    await runCommand(config.stt.binary, args);
+    const text = (await readFile(outputPath, 'utf8')).trim();
+    return { text, language, provider: 'whispercpp' };
+  } finally {
+    await rm(dir, { recursive: true, force: true });
+  }
+}
+
+export async function synthesizeWithLocalSpeech(config: LocalSpeechConfig, payload: { text: string; voice?: string; language?: string }): Promise<LocalSynthesisResult> {
+  if (config.tts.provider !== 'kokoro' || !config.tts.ready || !config.tts.command) {
+    throw new Error(config.tts.reason || 'text-to-speech is not ready');
+  }
+
+  const dir = await mkdtemp(join(tmpdir(), 'achiote-tts-'));
+  try {
+    const outputPath = join(dir, config.tts.mediaType === 'audio/mpeg' ? 'speech.mp3' : 'speech.wav');
+    const voice = payload.voice || config.tts.defaultVoice || '';
+    const language = payload.language || config.tts.voices.find((candidate) => candidate.id === voice)?.language || '';
+    const [command, ...args] = expandCommandTemplate(config.tts.command, {
+      text: payload.text,
+      output: outputPath,
+      voice,
+      language,
+    });
+    if (!command) throw new Error('Kokoro command is empty');
+    await runCommand(command, args);
+    const audioBase64 = (await readFile(outputPath)).toString('base64');
+    return { audioBase64, mediaType: config.tts.mediaType, voice: voice || undefined, language: language || undefined, provider: 'kokoro' };
+  } finally {
+    await rm(dir, { recursive: true, force: true });
+  }
+}
+import { spawn } from 'node:child_process';
+import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';

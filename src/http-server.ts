@@ -17,6 +17,7 @@ import { createRateLimiter } from './lib/rate-limit.js';
 import { BillingDb, defaultBillingDbPath } from './lib/billing-db.js';
 import { BillingStripe, loadBillingConfigFromEnv } from './lib/billing-stripe.js';
 import { getHttpReadiness, getRequestRateLimitIdentity, isAnonymousAskAllowed, shouldApplyRateLimit } from './lib/http-runtime.js';
+import { resolveLocalSpeechConfig, synthesizeWithLocalSpeech, transcribeWithLocalSpeech, validateSpeechAudioPayload, validateSpeechTextPayload } from './lib/local-speech.js';
 import type { Tier } from './lib/auth.js';
 import {
   anthropicTools as TOOLS,
@@ -107,6 +108,7 @@ const billingDb = billingConfig
   ? new BillingDb(process.env.ACHIOTE_BILLING_DB ? resolve(process.env.ACHIOTE_BILLING_DB) : defaultBillingDbPath())
   : null;
 const billingStripe = billingConfig ? new BillingStripe(billingConfig) : null;
+const localSpeechConfig = resolveLocalSpeechConfig();
 
 const AUTH_ENABLED = process.env.ACHIOTE_AUTH_ENABLED !== 'false';
 const DEMO_PASSWORD = process.env.ACHIOTE_DEMO_PASSWORD?.trim();
@@ -511,6 +513,66 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
   }
 }
 
+function authenticateVoiceRequest(req: IncomingMessage, res: ServerResponse): AuthedRequest {
+  const authed = authenticateRequest(req);
+  if (!authed) {
+    sendJson(res, 401, { error: DEMO_PASSWORD ? 'Unauthorized. Provide the demo password via x-demo-password header.' : 'Unauthorized. Provide a valid API key via x-api-key header or Authorization bearer token.' });
+    return null;
+  }
+  if (!isAnonymousAskAllowed({ authEnabled: AUTH_ENABLED, allowAnonymousAsk: ALLOW_ANON_ASK })) {
+    sendJson(res, 401, { error: 'Anonymous voice access is disabled. Enable ACHIOTE_ALLOW_ANON_ASK=true only for local demos, or provide a valid API key.' });
+    return null;
+  }
+  return authed;
+}
+
+async function readJsonBody(req: IncomingMessage, res: ServerResponse, maxBytes = 1_000_000): Promise<unknown | null> {
+  const contentType = req.headers['content-type'];
+  if (!contentType || !contentType.includes('application/json')) {
+    sendJson(res, 415, { error: 'Unsupported Media Type: Content-Type must be application/json' });
+    return null;
+  }
+
+  try {
+    return JSON.parse(await readBody(req, maxBytes));
+  } catch (err) {
+    sendJson(res, err instanceof Error && err.message === 'Body too large' ? 413 : 400, { error: err instanceof Error && err.message === 'Body too large' ? 'Body too large' : 'Invalid JSON' });
+    return null;
+  }
+}
+
+async function handleVoiceTranscribe(req: IncomingMessage, res: ServerResponse): Promise<void> {
+  if (!authenticateVoiceRequest(req, res)) return;
+  const parsed = await readJsonBody(req, res, MAX_SPEECH_REQUEST_BYTES);
+  if (parsed === null) return;
+  const payload = validateSpeechAudioPayload(parsed);
+  if (!payload.ok) { sendJson(res, 400, { error: payload.error }); return; }
+  if (!localSpeechConfig.stt.ready) { sendJson(res, 503, { error: localSpeechConfig.stt.reason || 'speech-to-text is not ready' }); return; }
+
+  try {
+    const transcript = await transcribeWithLocalSpeech(localSpeechConfig, payload);
+    sendJson(res, 200, transcript);
+  } catch (err) {
+    sendJson(res, 502, { error: err instanceof Error ? err.message : 'Local transcription failed' });
+  }
+}
+
+async function handleVoiceSynthesize(req: IncomingMessage, res: ServerResponse): Promise<void> {
+  if (!authenticateVoiceRequest(req, res)) return;
+  const parsed = await readJsonBody(req, res, 32_000);
+  if (parsed === null) return;
+  const payload = validateSpeechTextPayload(parsed);
+  if (!payload.ok) { sendJson(res, 400, { error: payload.error }); return; }
+  if (!localSpeechConfig.tts.ready) { sendJson(res, 503, { error: localSpeechConfig.tts.reason || 'text-to-speech is not ready' }); return; }
+
+  try {
+    const speech = await synthesizeWithLocalSpeech(localSpeechConfig, payload);
+    sendJson(res, 200, speech);
+  } catch (err) {
+    sendJson(res, 502, { error: err instanceof Error ? err.message : 'Local speech synthesis failed' });
+  }
+}
+
 function containsConcreteFoodCue(text: string): boolean {
   return /\b(?:smallest safe cue|tasting cue|concrete food cue|recipe move|try this|try it tonight)\b/i.test(text)
     || /\b(?:teaspoons?|tablespoons?|cups?|pinch)\b/i.test(text)
@@ -549,6 +611,7 @@ const MAX_ASK_BODY_BYTES = (MAX_IMAGES * MAX_IMAGE_BASE64_CHARS) + 100_000;
 const ALLOWED_IMAGE_MIME_TYPES = new Set(['image/jpeg', 'image/png', 'image/gif', 'image/webp']);
 const MAX_HISTORY_ITEMS = 20;
 const MAX_HISTORY_CONTENT_CHARS = 4_000;
+const MAX_SPEECH_REQUEST_BYTES = 12_500_000;
 
 function parseHistory(raw: unknown): AskHistoryItem[] | undefined {
   if (!Array.isArray(raw)) return undefined;
@@ -769,6 +832,36 @@ const server = createServer(async (req, res) => {
 
   if (pathname === '/ask' && req.method === 'POST') {
     await handleAsk(req, res);
+    return;
+  }
+
+  if (pathname === '/voice/status' && req.method !== 'GET' && req.method !== 'HEAD') {
+    sendMethodNotAllowed(res, ['GET', 'HEAD']);
+    return;
+  }
+
+  if (pathname === '/voice/status') {
+    sendJson(res, 200, localSpeechConfig);
+    return;
+  }
+
+  if (pathname === '/voice/transcribe' && req.method !== 'POST') {
+    sendMethodNotAllowed(res, ['POST']);
+    return;
+  }
+
+  if (pathname === '/voice/transcribe') {
+    await handleVoiceTranscribe(req, res);
+    return;
+  }
+
+  if (pathname === '/voice/synthesize' && req.method !== 'POST') {
+    sendMethodNotAllowed(res, ['POST']);
+    return;
+  }
+
+  if (pathname === '/voice/synthesize') {
+    await handleVoiceSynthesize(req, res);
     return;
   }
 
