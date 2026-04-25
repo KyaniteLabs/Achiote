@@ -59,6 +59,99 @@ describe('HTTP server integration', () => {
     expect(body.memory).toHaveProperty('heapUsed');
   });
 
+  it('GET /voice/status reports local OSS speech readiness without requiring auth', async () => {
+    const res = await fetch(`${baseUrl}/voice/status`);
+    expect(res.status).toBe(200);
+    const body = await res.json();
+    expect(body).toMatchObject({
+      stt: { provider: 'disabled', ready: false, reason: 'speech-to-text is disabled', language: 'auto', languages: ['auto'] },
+      tts: { provider: 'disabled', ready: false, reason: 'text-to-speech is disabled', mediaType: 'audio/wav' },
+    });
+  });
+
+  it('requires the ask auth gate before accepting voice audio uploads', async () => {
+    const res = await fetch(`${baseUrl}/voice/transcribe`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        audioBase64: Buffer.from('tiny').toString('base64'),
+        mediaType: 'audio/wav',
+        language: 'auto',
+      }),
+    });
+    expect(res.status).toBe(401);
+    const body = await res.json();
+    expect(body.error).toContain('ACHIOTE_ALLOW_ANON_ASK');
+  });
+
+  it('returns 503 for local transcription until a ready OSS backend is configured', async () => {
+    server.kill('SIGINT');
+    await new Promise((resolve) => server.once('exit', resolve));
+
+    port = await getFreePort();
+    baseUrl = `http://127.0.0.1:${port}`;
+
+    server = spawn('node', [resolve(ROOT, 'dist/http-server.js')], {
+      env: { ...process.env, PORT: String(port), ACHIOTE_AUTH_ENABLED: 'false', ACHIOTE_ALLOW_ANON_ASK: 'true' },
+      stdio: ['pipe', 'pipe', 'pipe'],
+    });
+
+    await new Promise<void>((resolve, reject) => {
+      const timeout = setTimeout(() => reject(new Error('Server restart timeout')), 10000);
+      server.stdout!.on('data', (data: Buffer) => {
+        if (data.toString().includes(`localhost:${port}`)) {
+          clearTimeout(timeout);
+          resolve();
+        }
+      });
+      server.on('error', (err) => {
+        clearTimeout(timeout);
+        reject(err);
+      });
+    });
+
+    const res = await fetch(`${baseUrl}/voice/transcribe`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        audioBase64: Buffer.from('tiny').toString('base64'),
+        mediaType: 'audio/wav',
+        language: 'es',
+      }),
+    });
+    expect(res.status).toBe(503);
+    const body = await res.json();
+    expect(body.error).toContain('speech-to-text is disabled');
+  });
+
+  it('rejects unsupported voice audio payloads before invoking a backend', async () => {
+    const res = await fetch(`${baseUrl}/voice/transcribe`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        audioBase64: Buffer.from('tiny').toString('base64'),
+        mediaType: 'video/mp4',
+      }),
+    });
+    expect(res.status).toBe(400);
+    const body = await res.json();
+    expect(body.error).toContain('Unsupported audio media type');
+  });
+
+  it('returns 503 for local speech synthesis until a ready OSS backend is configured', async () => {
+    const res = await fetch(`${baseUrl}/voice/synthesize`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        text: 'Read this cue back in the family language.',
+        language: 'es',
+      }),
+    });
+    expect(res.status).toBe(503);
+    const body = await res.json();
+    expect(body.error).toContain('text-to-speech is disabled');
+  });
+
   it('GET / returns app.html', async () => {
     const res = await fetch(`${baseUrl}/`);
     expect(res.status).toBe(200);
@@ -79,6 +172,7 @@ describe('HTTP server integration', () => {
       expect(res.status).toBe(200);
       expect(res.headers.get('content-type')).toContain('text/html');
       expect(res.headers.get('content-security-policy')).toContain("object-src 'none'");
+      expect(res.headers.get('content-security-policy')).toContain("media-src 'self' data:");
       expect(res.headers.get('content-security-policy')).toContain("frame-ancestors 'none'");
       expect(res.headers.get('x-content-type-options')).toBe('nosniff');
       expect(res.headers.get('referrer-policy')).toBe('strict-origin-when-cross-origin');

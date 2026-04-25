@@ -35,6 +35,9 @@ src/http-server.ts
       GET  /           → docs/landing/app.html (web UI)
       GET  /about      → docs/landing/index.html (landing page)
       GET  /health     → JSON status with memory/uptime metrics
+      GET  /voice/status → local OSS speech readiness
+      POST /voice/transcribe → local speech-to-text through configured OSS binaries/models
+      POST /voice/synthesize → local text-to-speech through configured OSS binaries/models
       POST /ask        → SSE streaming AI agent (auth + rate limited)
       POST /mcp        → Streamable HTTP MCP transport
       GET  /static/*   → JS/CSS assets
@@ -60,6 +63,12 @@ The server currently performs a research-first workflow:
 - returns bounded prompts for host-model sensory analysis, sourcing, regional comparison, and optional recipe generation
 
 The server does not browse the web itself. It can structure and validate source facts that a host AI supplies after using its own search/browsing tools, and future optional food-data providers can add structured lookups. Final natural-language recipe writing remains a host-model step and should happen only after the minimum viable nostalgia cue unless the user explicitly asks otherwise.
+
+## Local OSS speech boundary
+
+Speech is an optional HTTP-mode input/output layer, not part of the MCP reasoning core. It is disabled by default and only runs when the operator configures local OSS speech engines. The intended production stack is `whisper.cpp` for multilingual speech-to-text and Kokoro-82M for read-aloud. STT defaults to `auto` language detection and accepts language hints so accented, code-switched, transliterated, or immigrant-family memories can be captured without forcing users to spell dish names correctly.
+
+`GET /voice/status` exposes readiness and configured language/voice options. `POST /voice/transcribe` and `POST /voice/synthesize` follow the same auth and anonymous-demo policy as `/ask`; recorded voices and family memories are sensitive user data. The server passes audio/text to local subprocesses with argv arrays, not shell interpolation. No hosted speech API is called by this layer.
 
 ## Data assets
 

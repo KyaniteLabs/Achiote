@@ -2,10 +2,19 @@ const input = document.getElementById('input');
 const btn = document.getElementById('send-btn');
 const welcome = document.getElementById('welcome');
 const messages = document.getElementById('messages');
+const voiceStrip = document.getElementById('voice-strip');
+const voiceStatusEl = document.getElementById('voice-status');
+const voiceLanguage = document.getElementById('voice-language');
+const micBtn = document.getElementById('mic-btn');
+const readBtn = document.getElementById('read-btn');
 let busy = false;
 let chatHistory = [];
 let currentAskSource = 'typed';
 let currentAskCategory = 'none';
+let voiceConfig = null;
+let recorder = null;
+let recordedChunks = [];
+let lastAssistantText = '';
 
 function trackEvent(event, properties = {}) {
   if (!event || typeof event !== 'string') return;
@@ -27,6 +36,7 @@ function trackEvent(event, properties = {}) {
 }
 
 trackEvent('app_opened', { route: '/app' });
+initVoice();
 
 // Add event listeners for suggestion buttons
 document.querySelectorAll('.suggestion').forEach(button => {
@@ -40,6 +50,8 @@ document.querySelectorAll('.suggestion').forEach(button => {
 
 // Add event listener for send button
 btn.addEventListener('click', () => send());
+micBtn?.addEventListener('click', () => toggleRecording());
+readBtn?.addEventListener('click', () => readLatestAnswer());
 
 input.addEventListener('keydown', (e) => {
   if (e.key === 'Enter' && !e.shiftKey && !busy) {
@@ -67,16 +79,7 @@ function send(text, metadata = {}) {
   busy = true;
   btn.disabled = true;
 
-  const demoPassword = document.getElementById('demo-password')?.value || localStorage.getItem('achiote-demo-password') || '';
-  const apiKey = document.getElementById('api-key')?.value || localStorage.getItem('achiote-api-key') || '';
-  const headers = { 'Content-Type': 'application/json' };
-  if (apiKey) {
-    headers['x-api-key'] = apiKey;
-    localStorage.setItem('achiote-api-key', apiKey);
-  } else if (demoPassword) {
-    headers['x-demo-password'] = demoPassword;
-    localStorage.setItem('achiote-demo-password', demoPassword);
-  }
+  const headers = authHeaders();
 
   fetch('/ask', {
     method: 'POST',
@@ -96,6 +99,134 @@ function send(text, metadata = {}) {
   })
   .finally(() => { busy = false; btn.disabled = false; input.focus(); });
   return true;
+}
+
+function authHeaders() {
+  const demoPassword = document.getElementById('demo-password')?.value || localStorage.getItem('achiote-demo-password') || '';
+  const apiKey = document.getElementById('api-key')?.value || localStorage.getItem('achiote-api-key') || '';
+  const headers = { 'Content-Type': 'application/json' };
+  if (apiKey) {
+    headers['x-api-key'] = apiKey;
+    localStorage.setItem('achiote-api-key', apiKey);
+  } else if (demoPassword) {
+    headers['x-demo-password'] = demoPassword;
+    localStorage.setItem('achiote-demo-password', demoPassword);
+  }
+  return headers;
+}
+
+async function initVoice() {
+  if (!voiceStrip || !voiceStatusEl || !voiceLanguage || !micBtn || !readBtn) return;
+  try {
+    const res = await fetch('/voice/status');
+    if (!res.ok) return;
+    voiceConfig = await res.json();
+    const sttReady = Boolean(voiceConfig?.stt?.ready);
+    const ttsReady = Boolean(voiceConfig?.tts?.ready);
+    if (!sttReady && !ttsReady) return;
+
+    voiceStrip.hidden = false;
+    const languages = Array.isArray(voiceConfig.stt?.languages) && voiceConfig.stt.languages.length > 0
+      ? voiceConfig.stt.languages
+      : ['auto'];
+    voiceLanguage.innerHTML = languages
+      .map((language) => `<option value="${escapeHtml(language)}">${language === 'auto' ? 'Auto-detect' : escapeHtml(language)}</option>`)
+      .join('');
+    voiceLanguage.value = voiceConfig.stt?.language || 'auto';
+    micBtn.disabled = !sttReady || !navigator.mediaDevices?.getUserMedia || typeof MediaRecorder === 'undefined';
+    readBtn.disabled = !ttsReady;
+    voiceStatusEl.textContent = sttReady
+      ? 'Local OSS speech ready. Auto-detect is best for accents and code-switching; pick a hint only when you know the family language.'
+      : 'Local OSS read-aloud ready. Speech input needs a configured local transcription engine.';
+  } catch {
+    // Voice is progressive enhancement; chat must stay usable.
+  }
+}
+
+async function toggleRecording() {
+  if (!micBtn || !voiceStatusEl) return;
+  if (recorder && recorder.state === 'recording') {
+    recorder.stop();
+    return;
+  }
+
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    recordedChunks = [];
+    recorder = new MediaRecorder(stream);
+    recorder.addEventListener('dataavailable', (event) => {
+      if (event.data.size > 0) recordedChunks.push(event.data);
+    });
+    recorder.addEventListener('stop', async () => {
+      stream.getTracks().forEach((track) => track.stop());
+      micBtn.classList.remove('recording');
+      micBtn.textContent = '●';
+      await transcribeRecording(new Blob(recordedChunks, { type: recorder.mimeType || 'audio/webm' }));
+    });
+    micBtn.classList.add('recording');
+    micBtn.textContent = '■';
+    voiceStatusEl.textContent = 'Listening locally... stop when the memory is out.';
+    recorder.start();
+  } catch (err) {
+    voiceStatusEl.textContent = err instanceof Error ? err.message : 'Microphone permission failed.';
+  }
+}
+
+async function transcribeRecording(blob) {
+  if (!voiceStatusEl) return;
+  try {
+    const audioBase64 = await blobToBase64(blob);
+    const res = await fetch('/voice/transcribe', {
+      method: 'POST',
+      headers: authHeaders(),
+      body: JSON.stringify({
+        audioBase64,
+        mediaType: blob.type || 'audio/webm',
+        language: voiceLanguage?.value || 'auto',
+      }),
+    });
+    if (!res.ok) throw new Error(await explainHttpError(res));
+    const body = await res.json();
+    input.value = body.text || '';
+    input.focus();
+    voiceStatusEl.textContent = 'Transcript ready. Edit the spelling if family names or dish names need it.';
+  } catch (err) {
+    voiceStatusEl.textContent = err instanceof Error ? err.message : 'Transcription failed.';
+  }
+}
+
+async function readLatestAnswer() {
+  if (!lastAssistantText || !voiceStatusEl || !readBtn) return;
+  try {
+    readBtn.disabled = true;
+    voiceStatusEl.textContent = 'Preparing local read-aloud...';
+    const res = await fetch('/voice/synthesize', {
+      method: 'POST',
+      headers: authHeaders(),
+      body: JSON.stringify({
+        text: lastAssistantText,
+        language: voiceLanguage?.value || 'auto',
+      }),
+    });
+    if (!res.ok) throw new Error(await explainHttpError(res));
+    const body = await res.json();
+    const audio = new Audio(`data:${body.mediaType};base64,${body.audioBase64}`);
+    await audio.play();
+    voiceStatusEl.textContent = 'Playing the latest answer with local OSS speech.';
+  } catch (err) {
+    voiceStatusEl.textContent = err instanceof Error ? err.message : 'Read-aloud failed.';
+  } finally {
+    readBtn.disabled = !voiceConfig?.tts?.ready;
+  }
+}
+
+function blobToBase64(blob) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result || '').split(',')[1] || '');
+    reader.onerror = () => reject(new Error('Could not read recorded audio.'));
+    reader.readAsDataURL(blob);
+  });
 }
 
 async function explainHttpError(res) {
@@ -213,6 +344,7 @@ async function streamResponse(res, el, userMessage) {
             else text += d.message || d.text || JSON.stringify(d);
           } else if (eventType === 'done') {
             if (text) {
+              lastAssistantText = text;
               chatHistory.push({ role: 'user', content: userMessage });
               chatHistory.push({ role: 'assistant', content: text });
               // Keep history bounded to last 10 turns to avoid token bloat

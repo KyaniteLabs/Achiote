@@ -103,6 +103,21 @@ describe('P2 product trust improvements', () => {
     expect(landing).toContain('Illustrative demo');
   });
 
+  it('describes local OSS voice as multilingual and immigrant-family friendly without hosted speech claims', () => {
+    const app = fs.readFileSync('docs/landing/app.html', 'utf8');
+    const script = fs.readFileSync('docs/landing/app.js', 'utf8');
+    const architecture = fs.readFileSync('docs/ARCHITECTURE.md', 'utf8');
+    const readme = fs.readFileSync('README.md', 'utf8');
+    const combined = `${app}\n${script}\n${architecture}\n${readme}`.toLowerCase();
+
+    expect(combined).toContain('local oss speech');
+    expect(combined).toContain('auto-detect');
+    expect(combined).toContain('accents');
+    expect(combined).toContain('immigrant');
+    expect(combined).not.toContain('elevenlabs');
+    expect(combined).not.toContain('openai speech');
+  });
+
   it('requires the /ask prompt to gate concrete food cues behind the cue tool', () => {
     const server = fs.readFileSync('src/http-server.ts', 'utf8');
 
