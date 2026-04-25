@@ -112,18 +112,57 @@ const AUTH_ENABLED = process.env.ACHIOTE_AUTH_ENABLED !== 'false';
 const DEMO_PASSWORD = process.env.ACHIOTE_DEMO_PASSWORD?.trim();
 const allowedTelemetryEvents = new Set([
   'page_view',
+  'pricing_viewed',
   'app_opened',
+  'onboarding_prompt_selected',
   'ask_started',
   'ask_succeeded',
   'ask_failed',
   'checkout_started',
+  'checkout_failed',
   'feedback_helpful',
   'feedback_generic',
   'feedback_wrong_region',
   'feedback_unsafe',
 ]);
+const allowedTelemetryProperties = new Set(['route', 'source', 'category', 'tier', 'mode', 'reason', 'hasHistory']);
 const telemetryCounters = new Map<string, number>();
+const telemetryBreakdowns = new Map<string, Map<string, Map<string, number>>>();
 const telemetryBuckets = new Map<string, { count: number; resetAt: number }>();
+
+function sanitizeTelemetryProperties(raw: unknown): Record<string, string> {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return {};
+  const sanitized: Record<string, string> = {};
+  for (const [key, value] of Object.entries(raw as Record<string, unknown>)) {
+    if (!allowedTelemetryProperties.has(key)) continue;
+    if (!['string', 'number', 'boolean'].includes(typeof value)) continue;
+    const normalized = String(value).trim().slice(0, 80);
+    if (!/^[a-zA-Z0-9_./:-]+$/.test(normalized)) continue;
+    sanitized[key] = normalized;
+  }
+  return sanitized;
+}
+
+function incrementTelemetryBreakdowns(eventName: string, properties: Record<string, string>): void {
+  if (!telemetryBreakdowns.has(eventName)) telemetryBreakdowns.set(eventName, new Map());
+  const eventBreakdown = telemetryBreakdowns.get(eventName)!;
+  for (const [property, value] of Object.entries(properties)) {
+    if (!eventBreakdown.has(property)) eventBreakdown.set(property, new Map());
+    const values = eventBreakdown.get(property)!;
+    values.set(value, (values.get(value) ?? 0) + 1);
+  }
+}
+
+function serializeTelemetryBreakdowns(): Record<string, Record<string, Record<string, number>>> {
+  const serialized: Record<string, Record<string, Record<string, number>>> = {};
+  for (const [eventName, properties] of telemetryBreakdowns.entries()) {
+    serialized[eventName] = {};
+    for (const [property, values] of properties.entries()) {
+      serialized[eventName][property] = Object.fromEntries(values);
+    }
+  }
+  return serialized;
+}
 
 function isSameHostOrigin(req: IncomingMessage, origin: string | undefined): boolean {
   if (!origin) return false;
@@ -662,13 +701,15 @@ const server = createServer(async (req, res) => {
 
     try {
       const raw = await readBody(req, 1_024);
-      const parsed = JSON.parse(raw) as { event?: unknown };
+      const parsed = JSON.parse(raw) as { event?: unknown; properties?: unknown };
       const eventName = typeof parsed.event === 'string' ? parsed.event : '';
       if (!allowedTelemetryEvents.has(eventName)) {
         sendJson(res, 400, { error: 'Unsupported telemetry event' });
         return;
       }
+      const properties = sanitizeTelemetryProperties(parsed.properties);
       telemetryCounters.set(eventName, (telemetryCounters.get(eventName) ?? 0) + 1);
+      incrementTelemetryBreakdowns(eventName, properties);
       sendJson(res, 202, { ok: true });
     } catch (err) {
       sendJson(res, err instanceof Error && err.message === 'Body too large' ? 413 : 400, { error: 'Invalid telemetry event' });
@@ -681,7 +722,10 @@ const server = createServer(async (req, res) => {
       sendJson(res, 404, { error: 'Not found' });
       return;
     }
-    sendJson(res, 200, { counters: Object.fromEntries(telemetryCounters) });
+    sendJson(res, 200, {
+      counters: Object.fromEntries(telemetryCounters),
+      breakdowns: serializeTelemetryBreakdowns(),
+    });
     return;
   }
 

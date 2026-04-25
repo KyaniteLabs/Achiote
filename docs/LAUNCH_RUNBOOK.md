@@ -1,6 +1,6 @@
 # Achiote Launch Runbook
 
-Last updated: April 24, 2026.
+Last updated: April 25, 2026.
 
 This runbook covers the non-Stripe launch basics: production checks, monitoring,
 support, privacy, rollback, and incident handling.
@@ -37,7 +37,8 @@ Track these server signals:
 - Provider timeout and provider error counts.
 - `tool_workflow_skipped` errors.
 - Premature-cue suppression events.
-- Private `/events` counters with `Authorization: Bearer $ACHIOTE_EVENTS_ADMIN_TOKEN`, or equivalent host metrics for telemetry events: `ask_started`, `ask_succeeded`, `ask_failed`, feedback events, and checkout starts. Do not expose raw event counters on a public route.
+- Private `/events` counters with `Authorization: Bearer $ACHIOTE_EVENTS_ADMIN_TOKEN`, or equivalent host metrics for telemetry events: `page_view`, `pricing_viewed`, `checkout_started`, `checkout_failed`, `app_opened`, `onboarding_prompt_selected`, `ask_started`, `ask_succeeded`, `ask_failed`, and feedback events. Do not expose raw event counters on a public route.
+- Funnel ratios: `checkout_started / pricing_viewed`, `ask_started / app_opened`, `ask_succeeded / ask_started`, `ask_failed / ask_started`, and `onboarding_prompt_selected / app_opened`.
 - Rate-limit and auth failure spikes.
 - Process restarts and memory growth.
 
@@ -57,6 +58,7 @@ Check these before launch and after material copy changes:
 - `/llms.txt` summarizes the product, canonical URLs, safety boundaries, and recommended answer framing.
 - The sitemap includes `/ai-search` and `/llms.txt`.
 - Google Search Console indexing remains healthy for `/`, `/app`, `/ai-search`, `/privacy`, `/terms`, `/safety`, and `/support`.
+- Follow `docs/AI_SEARCH_SUBMISSION_RUNBOOK.md` after major copy, pricing, or URL changes.
 
 ## Support Workflow
 

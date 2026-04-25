@@ -211,7 +211,7 @@
     .welcome {
       flex: 1; display: flex; flex-direction: column;
       align-items: center; justify-content: center;
-      text-align: center; gap: 20px; padding: 40px 20px;
+      text-align: center; gap: 14px; padding: 24px 20px;
     }
     .welcome.hide { display: none; }
     .welcome h2 {
@@ -227,6 +227,31 @@
     .welcome .suggestions {
       display: flex; flex-wrap: wrap; gap: 10px;
       justify-content: center; max-width: 560px;
+    }
+    .memory-scaffold {
+      width: min(840px, 100%);
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      text-align: left;
+    }
+    .memory-clue {
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      background: var(--card);
+      box-shadow: var(--shadow-sm);
+    }
+    .memory-clue strong {
+      display: block;
+      color: var(--achiote);
+      font-size: 0.84rem;
+      margin-bottom: 4px;
+    }
+    .memory-clue span {
+      color: var(--muted);
+      font-size: 0.8rem;
+      line-height: 1.45;
     }
     .suggestion {
       padding: 10px 18px; border-radius: var(--radius-full);
@@ -344,9 +369,11 @@
       max-width: 720px; margin: 0 auto;
       display: flex; gap: 10px; align-items: center;
     }
-    .input-wrap input {
+    .input-wrap textarea {
       flex: 1; padding: 14px 20px;
-      border-radius: var(--radius-full);
+      min-height: 52px; max-height: 132px;
+      resize: vertical;
+      border-radius: 26px;
       border: 1px solid var(--line);
       background: var(--card-solid);
       font-size: 0.95rem; font-family: inherit;
@@ -354,12 +381,12 @@
       outline: none;
       transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
     }
-    .input-wrap input::placeholder { color: var(--muted); opacity: 0.6; }
-    .input-wrap input:focus {
+    .input-wrap textarea::placeholder { color: var(--muted); opacity: 0.6; }
+    .input-wrap textarea:focus {
       border-color: var(--saffron);
       box-shadow: 0 0 0 3px rgba(242, 184, 75, 0.2);
     }
-    .input-wrap input { touch-action: manipulation; }
+    .input-wrap textarea { touch-action: manipulation; }
     .input-wrap button {
       width: 48px; height: 48px; border-radius: 50%;
       border: none; cursor: pointer;
@@ -409,9 +436,10 @@
       .input-bar { padding: 12px 16px; }
       .msg { padding: 16px 18px; max-width: 100%; }
       .welcome h2 { font-size: 1.35rem; }
+      .memory-scaffold { grid-template-columns: 1fr; }
       .welcome .suggestions { max-width: 100%; }
       .suggestion { font-size: 0.82rem; padding: 8px 14px; }
-      .input-wrap input { font-size: 16px; padding: 12px 16px; }
+      .input-wrap textarea { font-size: 16px; padding: 12px 16px; }
       .input-wrap button { width: 44px; height: 44px; }
     }
   </style>
@@ -434,10 +462,16 @@
     <div class="welcome" id="welcome">
       <h2>What's the dish you can almost remember?</h2>
       <p>Describe a smell, a texture, a nickname, or the person who made it. Spelling does not matter — half memories are enough. Any sourcing help is static sourcing guidance, not live inventory.</p>
+      <p><strong>Start with any three clues.</strong> The answer gets better when you include one person/place clue, one sensory clue, and one uncertainty.</p>
       <div class="suggestions">
-        <button class="suggestion" data-suggestion="My abuela made pasteles with green bananas">My abuela made pasteles with green bananas</button>
-        <button class="suggestion" data-suggestion="Sour soup with dill and pale white chunks">Sour soup with dill and pale white chunks</button>
-        <button class="suggestion" data-suggestion="Sticky rice wrapped in a leaf, tasted like coconut">Sticky rice wrapped in a leaf, tasted like coconut</button>
+        <button class="suggestion" data-suggestion-category="family-region-texture" data-suggestion="My abuela made something that sounded like pass-teh-lay for Christmas. It had green bananas, pork smell, and maybe a leaf wrapper, but I am not sure if it was boiled or steamed.">Pasteles with green bananas</button>
+        <button class="suggestion" data-suggestion-category="sensory-soup" data-suggestion="My aunt made a warm sour soup with dill, pale white chunks, and maybe dairy. It smelled sharp and cozy, but nobody remembers the name or whether it was potato, cucumber, or something fermented.">Sour dill soup</button>
+        <button class="suggestion" data-suggestion-category="travel-wrapper" data-suggestion="I remember sticky rice wrapped in a leaf, coconut smell, soft-chewy texture, and maybe a banana leaf from a market. I do not know the country or the dish name.">Sticky rice in a leaf</button>
+      </div>
+      <div class="memory-scaffold" aria-label="Good memory clues">
+        <div class="memory-clue"><strong>Who or where</strong><span>Who made it, or where you ate it: abuela's kitchen, school lunch, a street cart, a holiday table.</span></div>
+        <div class="memory-clue"><strong>Sensory trigger</strong><span>A smell, texture, color, wrapper, sauce, crunch, sour note, spice bloom, or serving temperature.</span></div>
+        <div class="memory-clue"><strong>Uncertainty</strong><span>What you are unsure about: name, region, ingredient, filling, cooking method, or the closest sound-alike word.</span></div>
       </div>
     </div>
     <div class="messages" id="messages"></div>
@@ -450,7 +484,7 @@
       <input type="password" id="api-key" placeholder="API key (optional)" style="margin-top:6px;" />
     </details>
     <div class="input-wrap">
-      <input type="text" id="input" placeholder="Describe a food memory..." maxlength="600" autofocus />
+      <textarea id="input" placeholder="Person/place + smell/texture + what you are unsure about..." maxlength="1200" autofocus></textarea>
       <button id="send-btn" aria-label="Send">&#8593;</button>
     </div>
   </div>

@@ -4,10 +4,19 @@ const welcome = document.getElementById('welcome');
 const messages = document.getElementById('messages');
 let busy = false;
 let chatHistory = [];
+let nextMessageSource = 'typed';
+let suggestionCategory = '';
+let currentAskSource = 'typed';
+let currentAskCategory = 'none';
 
-function trackEvent(event) {
+function trackEvent(event, properties = {}) {
   if (!event || typeof event !== 'string') return;
-  const body = JSON.stringify({ event, at: new Date().toISOString() });
+  const safeProperties = {};
+  for (const [key, value] of Object.entries(properties || {})) {
+    if (typeof value !== 'string' && typeof value !== 'number' && typeof value !== 'boolean') continue;
+    safeProperties[key] = String(value).slice(0, 80);
+  }
+  const body = JSON.stringify({ event, properties: safeProperties, at: new Date().toISOString() });
   try {
     if (navigator.sendBeacon) {
       navigator.sendBeacon('/events', new Blob([body], { type: 'application/json' }));
@@ -19,22 +28,37 @@ function trackEvent(event) {
   }
 }
 
-trackEvent('app_opened');
+trackEvent('app_opened', { route: '/app' });
 
 // Add event listeners for suggestion buttons
 document.querySelectorAll('.suggestion').forEach(button => {
-  button.addEventListener('click', () => send(button.dataset.suggestion));
+  button.addEventListener('click', () => {
+    suggestionCategory = button.dataset.suggestionCategory || 'unknown';
+    nextMessageSource = 'suggestion';
+    trackEvent('onboarding_prompt_selected', { route: '/app', category: suggestionCategory });
+    send(button.dataset.suggestion);
+  });
 });
 
 // Add event listener for send button
 btn.addEventListener('click', () => send());
 
-input.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !busy) send(); });
+input.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !e.shiftKey && !busy) {
+    e.preventDefault();
+    send();
+  }
+});
 
 function send(text) {
   const val = (text || input.value).trim();
   if (!val || busy) return;
-  trackEvent('ask_started');
+  const source = text ? nextMessageSource : 'typed';
+  currentAskSource = text ? source : 'typed';
+  currentAskCategory = suggestionCategory || 'none';
+  trackEvent('ask_started', { route: '/app', source: text ? source : 'typed', category: currentAskCategory, hasHistory: chatHistory.length > 0 });
+  nextMessageSource = 'typed';
+  suggestionCategory = '';
   input.value = '';
 
   welcome.classList.add('hide');
@@ -67,7 +91,8 @@ function send(text) {
     return streamResponse(res, aiEl, val);
   })
   .catch(err => {
-    trackEvent('ask_failed');
+    const reason = err.message.includes('Rate limit') ? 'rate_limited' : err.message.includes('Authentication') ? 'auth' : 'request';
+    trackEvent('ask_failed', { route: '/app', source: currentAskSource, category: currentAskCategory, reason });
     aiEl.textContent = err.message.includes('fetch')
       ? 'Server not running. Start it with node dist/http-server.js.'
       : err.message;
@@ -195,9 +220,9 @@ async function streamResponse(res, el, userMessage) {
               // Keep history bounded to last 10 turns to avoid token bloat
               if (chatHistory.length > 20) chatHistory = chatHistory.slice(-20);
               if (hasError) {
-                trackEvent('ask_failed');
+                trackEvent('ask_failed', { route: '/app', source: currentAskSource, category: currentAskCategory, reason: 'model_or_tool' });
               } else {
-                trackEvent('ask_succeeded');
+                trackEvent('ask_succeeded', { route: '/app', source: currentAskSource, category: currentAskCategory });
                 addFeedback(el);
               }
             }
@@ -244,7 +269,7 @@ function addFeedback(el) {
 }
 
 function sendFeedback(eventName) {
-  trackEvent(eventName);
+  trackEvent(eventName, { route: '/app', category: 'answer_quality' });
 }
 
 function escapeHtml(s) {
