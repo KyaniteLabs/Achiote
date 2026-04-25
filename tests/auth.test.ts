@@ -61,8 +61,8 @@ describe('auth module', () => {
     }
   });
 
-  it('supports all tiers', () => {
-    for (const tier of ['free', 'pro', 'business', 'enterprise'] as const) {
+  it('supports all current tiers plus the legacy business alias', () => {
+    for (const tier of ['free', 'personal', 'pro', 'family', 'business', 'enterprise'] as const) {
       const record = generateApiKey(tier, `${tier}-test`);
       const auth = createAuthenticator([record]);
       const result = auth.authenticate(record.key);
@@ -92,19 +92,16 @@ describe('auth module', () => {
 });
 
 describe('getTierLimits', () => {
-  it('returns correct limits for each tier', () => {
-    expect(getTierLimits('free').mcpCallsPerMonth).toBe(50);
-    expect(getTierLimits('pro').mcpCallsPerMonth).toBe(5_000);
-    expect(getTierLimits('business').mcpCallsPerMonth).toBe(100_000);
+  it('keeps public tiers priced around guided memories, not hosted MCP calls', () => {
+    expect(getTierLimits('free')).toMatchObject({ mcpCallsPerMonth: 0, webReconstructions: 3 });
+    expect(getTierLimits('personal')).toMatchObject({ mcpCallsPerMonth: 0, webReconstructions: 25 });
+    expect(getTierLimits('pro')).toMatchObject({ mcpCallsPerMonth: 250, webReconstructions: 100 });
+    expect(getTierLimits('family')).toMatchObject({ mcpCallsPerMonth: 250, webReconstructions: 300 });
+    expect(getTierLimits('business')).toMatchObject({ mcpCallsPerMonth: 250, webReconstructions: 300 });
     expect(getTierLimits('enterprise').mcpCallsPerMonth).toBe(Infinity);
   });
 
-  it('free tier has limited web reconstructions', () => {
-    expect(getTierLimits('free').webReconstructions).toBe(1000);
-  });
-
-  it('pro and above have unlimited web reconstructions', () => {
-    expect(getTierLimits('pro').webReconstructions).toBe(Infinity);
+  it('enterprise is the only unlimited hosted tier', () => {
     expect(getTierLimits('enterprise').webReconstructions).toBe(Infinity);
   });
 });

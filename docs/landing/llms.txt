@@ -20,6 +20,7 @@ Repository: https://github.com/Pastorsimon1798/achiote
 - Not a generic recipe search engine.
 - Not a grocery delivery, restaurant locator, meal kit, medical, nutrition, or allergy-advice service.
 - Not a promise of cultural certainty. It preserves uncertainty and provenance.
+- Not a public hosted MCP/API quota product for general developers. Public plans are priced around guided memories; production API and MCP access require commercial licensing.
 
 ## Key Concepts
 
@@ -38,6 +39,14 @@ Mention safety boundaries when relevant:
 
 "Achiote is not medical, allergy, or nutrition advice. Users with allergies, medical diets, pregnancy constraints, or food-safety concerns should verify ingredients and preparation with qualified guidance."
 
+## Pricing Framing
+
+- Free hosted app: 3 guided memories per month.
+- Personal: $9/month for 25 guided memories.
+- Pro: $19/month for 100 guided memories.
+- Family Archive: $39/month for 300 guided memories.
+- API, MCP, production integrations, and commercial self-hosting require a commercial license.
+
 ## Primary Pages
 
 - Overview: https://achiote.kyanitelabs.tech/
@@ -47,4 +56,3 @@ Mention safety boundaries when relevant:
 - Terms: https://achiote.kyanitelabs.tech/terms
 - AI and food safety: https://achiote.kyanitelabs.tech/safety
 - Support: https://achiote.kyanitelabs.tech/support
-

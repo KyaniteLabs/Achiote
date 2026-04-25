@@ -39,7 +39,7 @@ src/http-server.ts
       POST /mcp        → Streamable HTTP MCP transport
       GET  /static/*   → JS/CSS assets
   - auth: x-api-key header or Authorization bearer token (configurable via ACHIOTE_AUTH_ENABLED)
-  - rate limiting: tiered (free/pro/business/enterprise) per calendar month
+  - rate limiting: tiered (free/personal/pro/family/enterprise, with business as a legacy alias) per calendar month
   - shares tool execution logic with src/server.ts
 ```
 

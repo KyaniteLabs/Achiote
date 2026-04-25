@@ -426,7 +426,7 @@
     .install .card { background: var(--card-solid); }
 
     /* FAQ / AEO */
-    .pricing-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; align-items: start; }
+    .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 20px; align-items: start; }
     .pricing-card { position: relative; }
     .pricing-card.popular { border-color: var(--achiote); box-shadow: 0 0 0 1px var(--achiote), var(--shadow); }
     .pricing-card.popular::before { content: 'Most Popular'; position: absolute; top: -11px; left: 50%; transform: translateX(-50%); background: var(--achiote); color: white; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding: 4px 14px; border-radius: 20px; }
@@ -578,8 +578,8 @@
       { "@type": "Question", "name": "How does food memory reconstruction work?", "acceptedAnswer": { "@type": "Answer", "text": "Achiote follows a 5-step workflow: collect the memory fragment, plan research hypotheses, build an evidence-separated dossier, generate the smallest sensory cue to test, and help source ingredients. Your AI does the live research; Achiote keeps it structured, honest, and organized." } },
       { "@type": "Question", "name": "What is a minimum viable nostalgia cue?", "acceptedAnswer": { "@type": "Answer", "text": "The smallest practical aroma, bite, sip, or condiment that tests whether a reconstructed memory is on the right track. It uses grocery-store ingredients and takes under 15 minutes — before anyone commits to a full recipe or shops for specialty items." } },
       { "@type": "Question", "name": "What are other names for achiote?", "acceptedAnswer": { "@type": "Answer", "text": "Achiote is known as annatto (English), urucum (Portuguese/Brazil), roucou (French/Caribbean), atsuete (Tagalog/Philippines), bija (Carib/Andes), onoto (Venezuela), kesumba (Indonesian), beninoki (Japanese), latkan (Hindi), and achiotl (Nahuatl) — among dozens of others across every continent." } },
-      { "@type": "Question", "name": "Can I use Achiote with ChatGPT, Claude, or other AI agents?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Achiote runs as an MCP server that any AI agent can connect to. It works with Claude Code, OpenAI Codex, Cursor, and any agent that supports the Model Context Protocol. A hosted HTTP API is also available." } },
-      { "@type": "Question", "name": "Is Achiote free?", "acceptedAnswer": { "@type": "Answer", "text": "Achiote is source-available under the Business Source License 1.1. The hosted API has a free tier of 50 MCP calls per month. Self-hosting is available for non-production use under the BSL; production self-hosting requires following the BSL terms or a commercial license." } }
+      { "@type": "Question", "name": "Can I use Achiote with ChatGPT, Claude, or other AI agents?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Achiote runs as an MCP server that AI agents can connect to. It works with Claude Code, OpenAI Codex, Cursor, and any agent that supports the Model Context Protocol. Hosted API and MCP production access require a commercial license." } },
+      { "@type": "Question", "name": "Is Achiote free?", "acceptedAnswer": { "@type": "Answer", "text": "Achiote is source-available under the Business Source License 1.1. The hosted app includes 3 guided memories per month. Hosted API and MCP access require a commercial license. Self-hosting is available for non-production use under the BSL; production self-hosting requires following the BSL terms or a commercial license." } }
     ]
   }
   </script>
@@ -827,7 +827,7 @@
         <div class="container install">
           <div class="card reveal">
             <h2>Connect Achiote to your AI</h2>
-            <p>Works with Claude Code, OpenAI Codex, Cursor, and any MCP-compatible agent. Use the hosted API free tier, or self-host for non-production use under the BSL.</p>
+            <p>Works with Claude Code, OpenAI Codex, Cursor, and any MCP-compatible agent. Self-host for non-production use under the BSL; hosted API and MCP production access require a commercial license.</p>
             <div class="cta-row"><a class="button primary" href="../../README.md">Read the docs</a><a class="button secondary" href="/app">Use the web demo</a></div>
           </div>
           <div class="terminal reveal" aria-label="Installation commands">
@@ -876,8 +876,8 @@ startup_timeout_sec = <span class="tk-num">10</span></pre>
       <section id="pricing">
         <div class="container">
           <div class="section-head reveal">
-            <h2>Simple pricing for every appetite</h2>
-            <p>Start free. Upgrade when you need more. No contracts, no surprise fees.</p>
+            <h2>Simple pricing for memory work</h2>
+            <p>Start with a few guided memories. Upgrade when the archive gets bigger.</p>
           </div>
           <div class="pricing-grid">
             <div class="card pricing-card reveal">
@@ -885,53 +885,65 @@ startup_timeout_sec = <span class="tk-num">10</span></pre>
               <div class="price">$0</div>
               <div class="price-period">Forever</div>
               <ul class="feature-list">
-                <li>50 MCP calls / month</li>
-                <li>1,000 web reconstructions</li>
-                <li>All 12 research tools</li>
+                <li>3 guided memories / month</li>
+                <li>Food-science cue generation</li>
+                <li>Evidence-separated notes</li>
                 <li>Community support</li>
               </ul>
               <a href="/app" class="checkout-btn secondary">Start free</a>
             </div>
             <div class="card pricing-card popular reveal">
-              <h3>Pro</h3>
+              <h3>Personal</h3>
               <div class="price">$9<span style="font-size:1rem;font-weight:500;color:var(--muted)">/mo</span></div>
               <div class="price-period">Billed monthly</div>
               <ul class="feature-list">
-                <li>5,000 MCP calls / month</li>
-                <li>Unlimited web reconstructions</li>
-                <li>All 12 research tools</li>
-                <li>Priority support</li>
+                <li>25 guided memories / month</li>
+                <li>Saved dossiers and cue history</li>
+                <li>Ingredient substitution prompts</li>
+                <li>Email support</li>
+              </ul>
+              <button class="checkout-btn" data-checkout-tier="personal" data-checkout-mode="subscription">Get Personal</button>
+            </div>
+            <div class="card pricing-card reveal">
+              <h3>Pro</h3>
+              <div class="price">$19<span style="font-size:1rem;font-weight:500;color:var(--muted)">/mo</span></div>
+              <div class="price-period">Billed monthly</div>
+              <ul class="feature-list">
+                <li>100 guided memories / month</li>
+                <li>Image memory support</li>
+                <li>Exportable reconstruction notes</li>
+                <li>Light API/MCP experimentation</li>
               </ul>
               <button class="checkout-btn" data-checkout-tier="pro" data-checkout-mode="subscription">Get Pro</button>
             </div>
             <div class="card pricing-card reveal">
-              <h3>Business</h3>
-              <div class="price">$49<span style="font-size:1rem;font-weight:500;color:var(--muted)">/mo</span></div>
+              <h3>Family Archive</h3>
+              <div class="price">$39<span style="font-size:1rem;font-weight:500;color:var(--muted)">/mo</span></div>
               <div class="price-period">Billed monthly</div>
               <ul class="feature-list">
-                <li>100,000 MCP calls / month</li>
-                <li>Unlimited web reconstructions</li>
-                <li>All 12 research tools</li>
-                <li>Dedicated support</li>
+                <li>300 guided memories / month</li>
+                <li>Shared collection workflow</li>
+                <li>Archive exports</li>
+                <li>Priority support</li>
               </ul>
-              <button class="checkout-btn" data-checkout-tier="business" data-checkout-mode="subscription">Get Business</button>
+              <button class="checkout-btn" data-checkout-tier="family" data-checkout-mode="subscription">Get Family</button>
             </div>
             <div class="card pricing-card reveal">
-              <h3>Enterprise</h3>
+              <h3>Commercial</h3>
               <div class="price">Custom</div>
-              <div class="price-period">Tailored to your team</div>
+              <div class="price-period">For products and teams</div>
               <ul class="feature-list">
-                <li>Unlimited MCP calls</li>
-                <li>Unlimited web reconstructions</li>
-                <li>Custom integrations</li>
-                <li>SLA & dedicated support</li>
+                <li>API and MCP access require a commercial license</li>
+                <li>Production integrations</li>
+                <li>Commercial self-hosting terms</li>
+                <li>SLA and onboarding</li>
               </ul>
               <a href="mailto:hello@kyanitelabs.tech" class="checkout-btn secondary">Contact us</a>
             </div>
           </div>
           <div style="margin-top: 24px; text-align: center;">
             <p style="font-size: 0.9rem; color: var(--muted);">
-              Need a one-time boost? <a href="#" id="credit-pack-link" style="color: var(--achiote); text-decoration: underline;">Buy a credit pack</a> — $5 for 1,000 extra calls, never expire.
+              Need a one-time boost? <a href="#" id="credit-pack-link" style="color: var(--achiote); text-decoration: underline;">Buy a memory pack</a> — $9 for 25 extra guided memories, never expire.
             </p>
           </div>
         </div>
@@ -962,11 +974,11 @@ startup_timeout_sec = <span class="tk-num">10</span></pre>
             </div>
             <div class="faq-item reveal">
               <h3>Can I use Achiote with ChatGPT or Claude?</h3>
-              <p>Yes. Achiote runs as an MCP server. Add it to Claude Code via .mcp.json, to OpenAI Codex via config.toml, or to any agent that supports the Model Context Protocol. A hosted HTTP API is also available.</p>
+              <p>Yes. Achiote runs as an MCP server. Add it to Claude Code via .mcp.json, to OpenAI Codex via config.toml, or to any agent that supports the Model Context Protocol. Hosted API and MCP production access require a commercial license.</p>
             </div>
             <div class="faq-item reveal">
               <h3>Is Achiote free?</h3>
-              <p>Achiote is source-available under the Business Source License 1.1. The hosted API has a free tier of 50 MCP calls per month. Self-hosting is available for non-production use under the BSL; production self-hosting requires following the BSL terms or a commercial license.</p>
+              <p>Achiote is source-available under the Business Source License 1.1. The hosted app includes 3 guided memories per month. Hosted API and MCP access require a commercial license. Self-hosting is available for non-production use under the BSL; production self-hosting requires following the BSL terms or a commercial license.</p>
             </div>
           </div>
         </div>

@@ -5,19 +5,16 @@ import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 
 describe('rate limiter', () => {
-  it('allows requests under the limit', () => {
+  it('keeps hosted MCP closed on the free tier', () => {
     const limiter = createRateLimiter();
     const result = limiter.checkMcpLimit('free', 'key1');
-    expect(result.allowed).toBe(true);
-    expect(result.remaining).toBe(49);
-    expect(result.limit).toBe(50);
+    expect(result.allowed).toBe(false);
+    expect(result.remaining).toBe(0);
+    expect(result.limit).toBe(0);
   });
 
-  it('blocks requests over the limit for free tier', () => {
+  it('blocks free MCP immediately', () => {
     const limiter = createRateLimiter();
-    for (let i = 0; i < 50; i++) {
-      limiter.checkMcpLimit('free', 'key2');
-    }
     const result = limiter.checkMcpLimit('free', 'key2');
     expect(result.allowed).toBe(false);
     expect(result.remaining).toBe(0);
@@ -25,20 +22,20 @@ describe('rate limiter', () => {
 
   it('tracks usage per key independently', () => {
     const limiter = createRateLimiter();
-    for (let i = 0; i < 50; i++) {
-      limiter.checkMcpLimit('free', 'key-a');
+    for (let i = 0; i < 250; i++) {
+      limiter.checkMcpLimit('pro', 'key-a');
     }
-    const resultA = limiter.checkMcpLimit('free', 'key-a');
+    const resultA = limiter.checkMcpLimit('pro', 'key-a');
     expect(resultA.allowed).toBe(false);
 
-    const resultB = limiter.checkMcpLimit('free', 'key-b');
+    const resultB = limiter.checkMcpLimit('pro', 'key-b');
     expect(resultB.allowed).toBe(true);
   });
 
-  it('pro tier allows 5000 calls', () => {
+  it('pro tier allows a small developer integration allowance', () => {
     const limiter = createRateLimiter();
     const result = limiter.checkMcpLimit('pro', 'pro-key');
-    expect(result.limit).toBe(5_000);
+    expect(result.limit).toBe(250);
   });
 
   it('enterprise tier has infinite MCP limit with monthly reset metadata', () => {
@@ -57,30 +54,30 @@ describe('rate limiter', () => {
 
   it('resets usage for a key', () => {
     const limiter = createRateLimiter();
-    for (let i = 0; i < 50; i++) {
-      limiter.checkMcpLimit('free', 'reset-key');
+    for (let i = 0; i < 250; i++) {
+      limiter.checkMcpLimit('pro', 'reset-key');
     }
-    expect(limiter.checkMcpLimit('free', 'reset-key').allowed).toBe(false);
+    expect(limiter.checkMcpLimit('pro', 'reset-key').allowed).toBe(false);
 
     limiter.resetUsage('reset-key');
-    expect(limiter.checkMcpLimit('free', 'reset-key').allowed).toBe(true);
+    expect(limiter.checkMcpLimit('pro', 'reset-key').allowed).toBe(true);
   });
 
   describe('web limits', () => {
-    it('free tier allows 1000 reconstructions', () => {
+    it('free tier allows 3 guided memories', () => {
       const limiter = createRateLimiter();
-      for (let i = 0; i < 1000; i++) {
+      for (let i = 0; i < 3; i++) {
         expect(limiter.checkWebLimit('free', 'session-1').allowed).toBe(true);
       }
       expect(limiter.checkWebLimit('free', 'session-1').allowed).toBe(false);
     });
 
-    it('pro tier has unlimited web reconstructions', () => {
+    it('paid consumer tiers cap guided memories instead of promising unlimited AI usage', () => {
       const limiter = createRateLimiter();
-      for (let i = 0; i < 100; i++) {
-        limiter.checkWebLimit('pro', 'session-2');
-      }
-      expect(limiter.checkWebLimit('pro', 'session-2').allowed).toBe(true);
+      expect(limiter.checkWebLimit('personal', 'personal-key').limit).toBe(25);
+      expect(limiter.checkWebLimit('pro', 'pro-key').limit).toBe(100);
+      expect(limiter.checkWebLimit('family', 'family-key').limit).toBe(300);
+      expect(limiter.checkWebLimit('enterprise', 'enterprise-key').limit).toBe(Infinity);
     });
   });
 
@@ -117,16 +114,16 @@ describe('rate limiter', () => {
     it('counts down correctly', () => {
       const limiter = createRateLimiter();
       const r1 = limiter.checkMcpLimit('free', 'count-key');
-      expect(r1.remaining).toBe(49);
+      expect(r1.remaining).toBe(0);
       const r2 = limiter.checkMcpLimit('free', 'count-key');
-      expect(r2.remaining).toBe(48);
+      expect(r2.remaining).toBe(0);
       const r3 = limiter.checkMcpLimit('free', 'count-key');
-      expect(r3.remaining).toBe(47);
+      expect(r3.remaining).toBe(0);
     });
 
     it('remaining stays at 0 after limit reached', () => {
       const limiter = createRateLimiter();
-      for (let i = 0; i < 50; i++) {
+      for (let i = 0; i < 3; i++) {
         limiter.checkMcpLimit('free', 'floor-key');
       }
       const result = limiter.checkMcpLimit('free', 'floor-key');
@@ -146,29 +143,29 @@ describe('rate limiter with SQLite persistence', () => {
   it('persists usage across instances', () => {
     const dbPath = join(tmpDir, 'persist.db');
     const limiter1 = createRateLimiter(dbPath);
-    limiter1.checkMcpLimit('free', 'persist-key');
-    limiter1.checkMcpLimit('free', 'persist-key');
+    limiter1.checkMcpLimit('pro', 'persist-key');
+    limiter1.checkMcpLimit('pro', 'persist-key');
     limiter1.close();
 
     const limiter2 = createRateLimiter(dbPath);
-    const result = limiter2.checkMcpLimit('free', 'persist-key');
-    expect(result.remaining).toBe(47);
+    const result = limiter2.checkMcpLimit('pro', 'persist-key');
+    expect(result.remaining).toBe(247);
     limiter2.close();
   });
 
   it('survives reset and reopen', () => {
     const dbPath = join(tmpDir, 'reset.db');
     const limiter1 = createRateLimiter(dbPath);
-    for (let i = 0; i < 50; i++) {
-      limiter1.checkMcpLimit('free', 'reset-persist-key');
+    for (let i = 0; i < 250; i++) {
+      limiter1.checkMcpLimit('pro', 'reset-persist-key');
     }
-    expect(limiter1.checkMcpLimit('free', 'reset-persist-key').allowed).toBe(false);
+    expect(limiter1.checkMcpLimit('pro', 'reset-persist-key').allowed).toBe(false);
     limiter1.close();
 
     const limiter2 = createRateLimiter(dbPath);
-    expect(limiter2.checkMcpLimit('free', 'reset-persist-key').allowed).toBe(false);
+    expect(limiter2.checkMcpLimit('pro', 'reset-persist-key').allowed).toBe(false);
     limiter2.resetUsage('reset-persist-key');
-    expect(limiter2.checkMcpLimit('free', 'reset-persist-key').allowed).toBe(true);
+    expect(limiter2.checkMcpLimit('pro', 'reset-persist-key').allowed).toBe(true);
     limiter2.close();
   });
 
@@ -176,7 +173,7 @@ describe('rate limiter with SQLite persistence', () => {
     const nestedDir = join(tmpDir, 'nested', 'deep');
     const nestedDb = join(nestedDir, 'rl.db');
     const limiter = createRateLimiter(nestedDb);
-    const result = limiter.checkMcpLimit('free', 'nested-key');
+    const result = limiter.checkMcpLimit('pro', 'nested-key');
     expect(result.allowed).toBe(true);
     limiter.close();
   });
@@ -186,7 +183,7 @@ describe('rate limiter with SQLite persistence', () => {
     const limiter = createRateLimiter(dbPath);
     const mcpResult = limiter.checkMcpLimit('free', 'dual-key');
     const webResult = limiter.checkWebLimit('free', 'dual-key');
-    expect(mcpResult.allowed).toBe(true);
+    expect(mcpResult.allowed).toBe(false);
     expect(webResult.allowed).toBe(true);
     limiter.close();
   });
@@ -202,13 +199,13 @@ describe('rate limiter with SQLite persistence', () => {
     const limiterB = createRateLimiter(dbPath);
 
     try {
-      for (let i = 0; i < 25; i++) {
-        expect(limiterA.checkMcpLimit('free', 'shared-key').allowed).toBe(true);
-        expect(limiterB.checkMcpLimit('free', 'shared-key').allowed).toBe(true);
+      for (let i = 0; i < 125; i++) {
+        expect(limiterA.checkMcpLimit('pro', 'shared-key').allowed).toBe(true);
+        expect(limiterB.checkMcpLimit('pro', 'shared-key').allowed).toBe(true);
       }
 
-      expect(limiterA.checkMcpLimit('free', 'shared-key')).toMatchObject({ allowed: false, remaining: 0 });
-      expect(limiterB.checkMcpLimit('free', 'shared-key')).toMatchObject({ allowed: false, remaining: 0 });
+      expect(limiterA.checkMcpLimit('pro', 'shared-key')).toMatchObject({ allowed: false, remaining: 0 });
+      expect(limiterB.checkMcpLimit('pro', 'shared-key')).toMatchObject({ allowed: false, remaining: 0 });
     } finally {
       limiterA.close();
       limiterB.close();
@@ -221,11 +218,12 @@ describe('rate limiter with SQLite persistence', () => {
     const limiterB = createRateLimiter(dbPath);
 
     try {
-      for (let i = 0; i < 500; i++) {
+      for (let i = 0; i < 1; i++) {
         expect(limiterA.checkWebLimit('free', 'shared-web').allowed).toBe(true);
         expect(limiterB.checkWebLimit('free', 'shared-web').allowed).toBe(true);
       }
-      expect(limiterA.checkWebLimit('free', 'shared-web')).toMatchObject({ allowed: false, remaining: 0 });
+      expect(limiterA.checkWebLimit('free', 'shared-web')).toMatchObject({ allowed: true, remaining: 0 });
+      expect(limiterB.checkWebLimit('free', 'shared-web')).toMatchObject({ allowed: false, remaining: 0 });
     } finally {
       limiterA.close();
       limiterB.close();
@@ -239,7 +237,7 @@ describe('rate limiter with SQLite persistence', () => {
     try {
       const results = await Promise.all(
         limiters.map((limiter) => new Promise((resolve) => {
-          setImmediate(() => resolve(limiter.checkMcpLimit('free', 'contended-key')));
+          setImmediate(() => resolve(limiter.checkMcpLimit('pro', 'contended-key')));
         })),
       );
 

@@ -29,8 +29,8 @@ function storageKey(windowKey: string): string {
 }
 
 function unlimitedWebResult(): RateLimitResult {
-  // Preserve the existing web unlimited-tier response shape for API compatibility.
-  return { allowed: true, remaining: Number.MAX_SAFE_INTEGER, limit: Number.MAX_SAFE_INTEGER, resetAt: Date.now() + 60_000 };
+  const { periodEnd } = monthWindow(Date.now());
+  return { allowed: true, remaining: Infinity, limit: Infinity, resetAt: periodEnd };
 }
 
 export function createRateLimiter(dbPath?: string) {

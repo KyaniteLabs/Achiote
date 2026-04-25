@@ -1,6 +1,6 @@
 import { createHash, randomBytes, timingSafeEqual } from 'node:crypto';
 
-export type Tier = 'free' | 'pro' | 'business' | 'enterprise';
+export type Tier = 'free' | 'personal' | 'pro' | 'family' | 'business' | 'enterprise';
 
 export interface ApiKeyRecord {
   key?: string;
@@ -39,12 +39,15 @@ export interface AuthFailure {
 
 export type AuthOutcome = AuthResult | AuthFailure;
 
-const VALID_TIERS = new Set<string>(['free', 'pro', 'business', 'enterprise']);
+const VALID_TIERS = new Set<string>(['free', 'personal', 'pro', 'family', 'business', 'enterprise']);
 
 const TIER_LIMITS: Record<Tier, { mcpCallsPerMonth: number; webReconstructions: number }> = {
-  free: { mcpCallsPerMonth: 50, webReconstructions: 1_000 },
-  pro: { mcpCallsPerMonth: 5_000, webReconstructions: Infinity },
-  business: { mcpCallsPerMonth: 100_000, webReconstructions: Infinity },
+  free: { mcpCallsPerMonth: 0, webReconstructions: 3 },
+  personal: { mcpCallsPerMonth: 0, webReconstructions: 25 },
+  pro: { mcpCallsPerMonth: 250, webReconstructions: 100 },
+  family: { mcpCallsPerMonth: 250, webReconstructions: 300 },
+  // Legacy alias for pre-family billing/API records. Keep this out of new public checkout.
+  business: { mcpCallsPerMonth: 250, webReconstructions: 300 },
   enterprise: { mcpCallsPerMonth: Infinity, webReconstructions: Infinity },
 };
 
