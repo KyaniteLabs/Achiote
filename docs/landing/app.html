@@ -365,6 +365,47 @@
       background: rgba(22, 16, 20, 0.85);
     }
 
+    .voice-strip {
+      max-width: 720px;
+      margin: 0 auto 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+    .voice-strip[hidden] { display: none; }
+    .voice-status { flex: 1 1 260px; }
+    .voice-select {
+      min-height: 36px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      background: var(--card-solid);
+      color: var(--ink);
+      padding: 0 10px;
+      font: inherit;
+    }
+    .voice-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--line);
+      background: var(--card-solid);
+      color: var(--achiote);
+      cursor: pointer;
+      display: inline-grid;
+      place-items: center;
+      font-size: 0.92rem;
+    }
+    .voice-btn:hover { box-shadow: var(--shadow-sm); transform: translateY(-1px); }
+    .voice-btn:disabled { opacity: 0.45; cursor: default; transform: none; box-shadow: none; }
+    .voice-btn.recording {
+      background: var(--achiote);
+      color: #fff;
+      border-color: var(--achiote);
+    }
+
     .input-wrap {
       max-width: 720px; margin: 0 auto;
       display: flex; gap: 10px; align-items: center;
@@ -483,6 +524,12 @@
       <input type="password" id="demo-password" placeholder="Demo password (optional)" />
       <input type="password" id="api-key" placeholder="API key (optional)" style="margin-top:6px;" />
     </details>
+    <div class="voice-strip" id="voice-strip" hidden>
+      <span class="voice-status" id="voice-status">Local OSS speech is optional; auto-detect helps accents, code-switching, and immigrant-family memories.</span>
+      <select class="voice-select" id="voice-language" aria-label="Speech language hint"></select>
+      <button class="voice-btn" id="mic-btn" type="button" aria-label="Record voice memory" title="Record voice memory">●</button>
+      <button class="voice-btn" id="read-btn" type="button" aria-label="Read latest answer aloud" title="Read latest answer aloud">▶</button>
+    </div>
     <div class="input-wrap">
       <textarea id="input" placeholder="Person/place + smell/texture + what you are unsure about..." maxlength="1200" autofocus></textarea>
       <button id="send-btn" aria-label="Send">&#8593;</button>

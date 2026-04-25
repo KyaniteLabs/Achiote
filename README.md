@@ -130,10 +130,34 @@ node dist/http-server.js
 | `GET /` | Web UI (`app.html`) |
 | `GET /about` | Landing page (`index.html`) |
 | `GET /health` | JSON status with memory/uptime metrics |
+| `GET /voice/status` | Local OSS speech readiness for optional voice input/read-aloud |
+| `POST /voice/transcribe` | Local speech-to-text through a configured OSS engine |
+| `POST /voice/synthesize` | Local text-to-speech through a configured OSS engine |
 | `POST /ask` | SSE streaming AI agent (auth + rate limited) |
 | `POST /mcp` | Streamable HTTP MCP transport |
 
-Authentication is enabled by default for the HTTP server. Configure `ACHIOTE_API_KEYS` for `/ask` and `/mcp`. Setting `ACHIOTE_AUTH_ENABLED=false` does not by itself expose anonymous `/ask`; set `ACHIOTE_ALLOW_ANON_ASK=true` only for local demos. Generate a self-hosted key with `npm run keygen -- --tier pro --name admin`; put the printed `envRecord` inside the `ACHIOTE_API_KEYS` JSON array, not the one-time raw key. Port defaults to 3000, configurable via `PORT` env var.
+Authentication is enabled by default for the HTTP server. Configure `ACHIOTE_API_KEYS` for `/ask`, `/mcp`, and voice upload endpoints. Setting `ACHIOTE_AUTH_ENABLED=false` does not by itself expose anonymous `/ask` or voice processing; set `ACHIOTE_ALLOW_ANON_ASK=true` only for local demos. Generate a self-hosted key with `npm run keygen -- --tier pro --name admin`; put the printed `envRecord` inside the `ACHIOTE_API_KEYS` JSON array, not the one-time raw key. Port defaults to 3000, configurable via `PORT` env var.
+
+### Local OSS speech
+
+Voice is disabled by default and uses only local OSS speech engines when configured. The recommended stack is `whisper.cpp` for multilingual speech-to-text and Kokoro-82M for local read-aloud. This path is aimed at immigrant families and children of immigrants: speech input defaults to `auto` language detection so accents, transliterated dish names, and code-switching can reach the same food-memory workflow as typed text. Exact language and accent quality depends on the local model you install.
+
+Example environment:
+
+```bash
+ACHIOTE_STT_PROVIDER=whispercpp
+ACHIOTE_WHISPER_CPP_BINARY=/usr/local/bin/whisper-cli
+ACHIOTE_WHISPER_CPP_MODEL=/models/ggml-large-v3-turbo.bin
+ACHIOTE_STT_LANGUAGE=auto
+ACHIOTE_STT_LANGUAGES=auto,es,hi,zh,ar,fr,pt,tl
+
+ACHIOTE_TTS_PROVIDER=kokoro
+ACHIOTE_KOKORO_COMMAND='["python","/opt/kokoro/speak.py","--text","{text}","--output","{output}","--voice","{voice}","--language","{language}"]'
+ACHIOTE_KOKORO_VOICE='af_heart'
+ACHIOTE_KOKORO_VOICES='[{"id":"af_heart","label":"Warm English","language":"en"},{"id":"ef_dora","label":"Spanish voice","language":"es"}]'
+```
+
+`/voice/status` is public readiness discovery. `/voice/transcribe` and `/voice/synthesize` use the same auth and anonymous-demo policy as `/ask`, because recorded family memories are sensitive.
 
 ## Cache and privacy
 
