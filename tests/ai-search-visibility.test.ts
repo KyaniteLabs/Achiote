@@ -7,15 +7,20 @@ describe('AI search visibility', () => {
   it('publishes an AI-readable summary and answer page', () => {
     const llms = read('docs/landing/llms.txt');
     const page = read('docs/landing/ai-search.html');
+    const landing = read('docs/landing/index.html');
 
-    expect(llms).toContain('Achiote is an open-source food-memory reconstruction system');
+    expect(llms).toContain('Achiote is a source-available food-memory reconstruction system');
+    expect(llms).toContain('License: Business Source License 1.1 (BUSL-1.1)');
     expect(llms).toContain('https://achiote.kyanitelabs.tech/ai-search');
     expect(llms).toContain('Not a generic recipe search engine');
     expect(llms).toContain('not medical, allergy, or nutrition advice');
 
     expect(page).toContain('Achiote is food-memory reconstruction for AI agents');
+    expect(page).toContain('Business Source License 1.1 (BUSL-1.1)');
     expect(page).toContain('How is Achiote different from recipe search?');
     expect(page).toContain('/llms.txt');
+    expect(landing).toContain('Business Source License 1.1');
+    expect(landing).not.toContain('Open-Source MCP Server');
   });
 
   it('keeps AI-search structured data parseable and aligned with visible facts', () => {

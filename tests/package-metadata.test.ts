@@ -4,7 +4,7 @@ import pkg from '../package.json' with { type: 'json' };
 
 describe('package distribution metadata', () => {
   it('declares install, type, executable, and source-control metadata', () => {
-    expect(pkg.license).toBe('MIT');
+    expect(pkg.license).toBe('BUSL-1.1');
     expect(pkg.types).toBe('dist/index.d.ts');
     expect(pkg.bin).toEqual({ achiote: 'bin/achiote.mjs' });
     expect(pkg.exports).toEqual({
@@ -22,6 +22,16 @@ describe('package distribution metadata', () => {
     });
     expect(pkg.homepage).toBe('https://github.com/Pastorsimon1798/achiote#readme');
     expect(pkg.engines.node).toBe('>=22.0.0');
+  });
+
+  it('ships Business Source License 1.1 terms', () => {
+    const license = fs.readFileSync('LICENSE', 'utf8');
+
+    expect(license).toContain('Business Source License 1.1');
+    expect(license).toContain('Additional Use Grant: None');
+    expect(license).toContain('Change Date: 2030-04-25');
+    expect(license).toContain('Change License: GNU General Public License version 2.0 or later');
+    expect(license).not.toContain('MIT License');
   });
 
   it('publishes only intentional package files', () => {

@@ -1,12 +1,12 @@
 # Achiote
 
-> Achiote is an open-source food-memory reconstruction system for AI agents. It helps people recover half-remembered childhood, family, regional, restaurant, or travel foods by turning memory fragments into structured research, provenance, sensory hypotheses, ingredient substitutions, and a minimum viable nostalgia cue.
+> Achiote is a source-available food-memory reconstruction system for AI agents. It helps people recover half-remembered childhood, family, regional, restaurant, or travel foods by turning memory fragments into structured research, provenance, sensory hypotheses, ingredient substitutions, and a minimum viable nostalgia cue.
 
 Canonical URL: https://achiote.kyanitelabs.tech/
 AI search summary URL: https://achiote.kyanitelabs.tech/ai-search
 Live app URL: https://achiote.kyanitelabs.tech/app
 Support: support@kyanitelabs.tech
-License: MIT
+License: Business Source License 1.1 (BUSL-1.1)
 Repository: https://github.com/Pastorsimon1798/achiote
 
 ## What Achiote Is

@@ -141,16 +141,16 @@ The current Achiote landing page (`achiote.kyanitelabs.tech`) has solid bones bu
 ### 1. Title Tag Optimization
 **Current:** `Achiote — Turn half-remembered food stories into the taste that brings them back` (78 chars — truncated in SERPs)
 
-**Proposed:** `Achiote — AI Food Memory Reconstruction | Open-Source MCP Server` (62 chars)
+**Proposed:** `Achiote — AI Food Memory Reconstruction | Source-Available MCP` (64 chars)
 - Lead with the brand
 - Include "AI" (high-intent 2026 keyword)
 - Include "food memory reconstruction" (core long-tail)
-- Include "open-source MCP server" (developer anchor)
+- Include "source-available MCP server" (developer anchor)
 
 ### 2. Meta Description
-**Current:** `Achiote is an open-source MCP server that helps AI agents turn half-remembered food stories into structured research, sensory tests, and the smallest taste that brings a dish back.` (197 chars — too long)
+**Current:** `Achiote is a source-available MCP server that helps AI agents turn half-remembered food stories into structured research, sensory tests, and the smallest taste that brings a dish back.` (197 chars — too long)
 
-**Proposed:** `Open-source MCP server for AI-powered food memory reconstruction. Turn half-remembered dishes into structured research, sensory cues, and the one bite that proves you found it.` (156 chars)
+**Proposed:** `Source-available MCP server for AI-powered food memory reconstruction. Turn half-remembered dishes into structured research, sensory cues, and the one bite that proves you found it.` (156 chars)
 
 ### 3. Canonical & OG URLs
 **Current:** All point to `https://github.com/Pastorsimon1798/Achiote`
@@ -204,7 +204,7 @@ To get cited by ChatGPT, Perplexity, Claude, etc.:
 - "MCP server food"
 - "Claude Code MCP"
 - "AI agent food tool"
-- "open source MCP"
+- "source-available MCP"
 
 ---
 
@@ -220,15 +220,15 @@ To get cited by ChatGPT, Perplexity, Claude, etc.:
 
 **Option A (Developer-focused):**
 > **Turn food memory fragments into the one bite that proves it.**
-> *Open-source MCP server for AI agents*
+> *Source-available MCP server for AI agents*
 
 **Option B (Emotional + Technical):**
 > **Your AI can now reconstruct the dishes you thought were lost.**
-> *Achiote is an open-source MCP server that turns half-remembered food stories into sensory cues, provenance-backed research, and the smallest taste that brings them back.*
+> *Achiote is a source-available MCP server that turns half-remembered food stories into sensory cues, provenance-backed research, and the smallest taste that brings them back.*
 
 **Option C (The user's concept integrated):**
 > **One seed. A hundred names. The taste that proves you found it.**
-> *Achiote — open-source AI tools for food-memory reconstruction*
+> *Achiote — source-available AI tools for food-memory reconstruction*
 
 **Proposed CTA swap:**
 - Primary: **"Try the live demo"** (lower friction, higher conversion)
@@ -298,7 +298,7 @@ This is honest and accurate per the AGENTS.md constraints.
 
 **Proposed:**
 > **Connect Achiote to your AI**
-> Works with Claude Code, OpenAI Codex, Cursor, and any MCP-compatible agent. Self-host for free, or use the hosted API.
+> Works with Claude Code, OpenAI Codex, Cursor, and any MCP-compatible agent. Use the hosted API free tier, or self-host for non-production use under the BSL.
 
 **Add a third CTA:** "Use the web demo" (links to `/app`)
 
@@ -324,7 +324,7 @@ This is honest and accurate per the AGENTS.md constraints.
 **Sample Q&A:**
 
 > **What is Achiote?**
-> Achiote is an open-source Model Context Protocol (MCP) server that helps AI agents reconstruct nostalgic dishes from fragmented food memories. It provides 15 deterministic tools for memory collection, research planning, provenance tracking, sensory analysis, and generating minimum viable nostalgia cues.
+> Achiote is a source-available Model Context Protocol (MCP) server that helps AI agents reconstruct nostalgic dishes from fragmented food memories. It provides 15 deterministic tools for memory collection, research planning, provenance tracking, sensory analysis, and generating minimum viable nostalgia cues.
 
 > **How does food memory reconstruction work?**
 > Achiote follows a 5-step workflow: collect the memory fragment, plan research hypotheses, build an evidence-separated dossier, generate the smallest sensory cue to test, and help source ingredients. Your AI does the live research; Achiote keeps it structured, honest, and organized.
@@ -339,7 +339,7 @@ This is honest and accurate per the AGENTS.md constraints.
 > Yes. Achiote runs as an MCP server. Add it to Claude Code via `.mcp.json`, to OpenAI Codex via `config.toml`, or to any agent that supports the Model Context Protocol. A hosted HTTP API is also available.
 
 > **Is Achiote free?**
-> Yes. Achiote is open source under the MIT License. Self-host it for free, or use the hosted API with a free tier of 50 MCP calls per month.
+> Achiote is source-available under the Business Source License 1.1. The hosted API has a free tier of 50 MCP calls per month. Self-hosting is available for non-production use under the BSL; production self-hosting requires following the BSL terms or a commercial license.
 
 ---
 
