@@ -48,6 +48,16 @@ Alert when:
 - Provider latency exceeds the configured timeout window.
 - Billing webhook failures appear after Stripe is enabled.
 
+## AI Search Visibility
+
+Check these before launch and after material copy changes:
+
+- `/robots.txt` allows search/retrieval crawlers for public pages while blocking `/ask`, `/mcp`, `/health`, `/ready`, and `/events`.
+- `/ai-search` gives ChatGPT, Claude, Gemini, and Google AI features a concise answer page with visible facts and matching JSON-LD.
+- `/llms.txt` summarizes the product, canonical URLs, safety boundaries, and recommended answer framing.
+- The sitemap includes `/ai-search` and `/llms.txt`.
+- Google Search Console indexing remains healthy for `/`, `/app`, `/ai-search`, `/privacy`, `/terms`, `/safety`, and `/support`.
+
 ## Support Workflow
 
 Primary support channel: `support@kyanitelabs.tech`.

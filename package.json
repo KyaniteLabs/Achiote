@@ -37,7 +37,7 @@
     "vite": "^8.0.9",
     "vitest": "^3.0.0"
   },
-  "license": "MIT",
+  "license": "BUSL-1.1",
   "types": "dist/index.d.ts",
   "bin": {
     "achiote": "bin/achiote.mjs"

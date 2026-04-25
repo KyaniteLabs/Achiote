@@ -54,6 +54,8 @@ const MIME: Record<string, string> = {
   '.css': 'text/css',
   '.js': 'text/javascript',
   '.json': 'application/json',
+  '.txt': 'text/plain',
+  '.xml': 'application/xml',
   '.png': 'image/png',
   '.jpg': 'image/jpeg',
   '.svg': 'image/svg+xml',
@@ -581,6 +583,7 @@ async function serveStatic(req: IncomingMessage, res: ServerResponse): Promise<b
     '/terms': 'terms.html',
     '/support': 'support.html',
     '/safety': 'safety.html',
+    '/ai-search': 'ai-search.html',
   };
   const assetPath = routeMap[raw] ?? raw.replace(/^\//, '');
   const filePath = resolve(STATIC_DIR, assetPath);

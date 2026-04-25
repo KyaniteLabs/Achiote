@@ -192,4 +192,4 @@ The bundled food-science references in `src/data/food-science-references.json` o
 
 ## License
 
-MIT
+Business Source License 1.1 (BUSL-1.1). See [LICENSE](LICENSE).
