@@ -279,6 +279,9 @@ function runCommand(command: string, args: string[], timeoutMs = SPEECH_COMMAND_
       reject(new Error(`Speech command timed out after ${timeoutMs}ms`));
     }, timeoutMs);
 
+    child.stdout.on('data', () => {
+      // Keep verbose speech engines from blocking on a full stdout pipe.
+    });
     child.stderr.on('data', (chunk: Buffer) => {
       stderr += chunk.toString('utf8').slice(0, 2_000);
     });

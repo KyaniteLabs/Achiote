@@ -172,6 +172,7 @@ describe('HTTP server integration', () => {
       expect(res.status).toBe(200);
       expect(res.headers.get('content-type')).toContain('text/html');
       expect(res.headers.get('content-security-policy')).toContain("object-src 'none'");
+      expect(res.headers.get('content-security-policy')).toContain("media-src 'self' data:");
       expect(res.headers.get('content-security-policy')).toContain("frame-ancestors 'none'");
       expect(res.headers.get('x-content-type-options')).toBe('nosniff');
       expect(res.headers.get('referrer-policy')).toBe('strict-origin-when-cross-origin');

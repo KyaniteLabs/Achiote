@@ -709,6 +709,7 @@ async function serveStatic(req: IncomingMessage, res: ServerResponse): Promise<b
         scriptSrc,
         "style-src 'self' 'unsafe-inline'",
         "img-src 'self' data:",
+        "media-src 'self' data:",
         "object-src 'none'",
         "base-uri 'self'",
         "frame-ancestors 'none'",
