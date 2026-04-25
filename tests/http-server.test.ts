@@ -102,7 +102,11 @@ describe('HTTP server integration', () => {
     const accepted = await fetch(`${baseUrl}/events`, {
       method: 'POST',
       headers: { Origin: baseUrl, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ event: 'ask_started', prompt_text: 'should_not_be_stored' }),
+      body: JSON.stringify({
+        event: 'ask_started',
+        properties: { route: '/app', source: 'typed', prompt_text: 'should_not_be_stored', tier: 'personal' },
+        prompt_text: 'should_not_be_stored',
+      }),
     });
     expect(accepted.status).toBe(202);
     expect(await accepted.json()).toEqual({ ok: true });
@@ -154,7 +158,7 @@ describe('HTTP server integration', () => {
     const event = await fetch(`${baseUrl}/events`, {
       method: 'POST',
       headers: { Origin: baseUrl, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ event: 'feedback_helpful' }),
+      body: JSON.stringify({ event: 'feedback_helpful', properties: { route: '/app', category: 'answer_quality' } }),
     });
     expect(event.status).toBe(202);
 
@@ -165,7 +169,27 @@ describe('HTTP server integration', () => {
       headers: { Authorization: 'Bearer operator-test-token' },
     });
     expect(operatorRead.status).toBe(200);
-    expect(await operatorRead.json()).toEqual({ counters: { feedback_helpful: 1 } });
+    expect(await operatorRead.json()).toEqual({
+      counters: { feedback_helpful: 1 },
+      breakdowns: { feedback_helpful: { route: { '/app': 1 }, category: { answer_quality: 1 } } },
+    });
+
+    for (let i = 0; i < 30; i += 1) {
+      const cardinalityEvent = await fetch(`${baseUrl}/events`, {
+        method: 'POST',
+        headers: { Origin: baseUrl, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ event: 'feedback_generic', properties: { route: '/app', category: `segment-${i}` } }),
+      });
+      expect(cardinalityEvent.status).toBe(202);
+    }
+
+    const boundedRead = await fetch(`${baseUrl}/events`, {
+      headers: { Authorization: 'Bearer operator-test-token' },
+    });
+    const boundedBody = await boundedRead.json();
+    expect(Object.keys(boundedBody.breakdowns.feedback_generic.category)).toHaveLength(25);
+    expect(boundedBody.breakdowns.feedback_generic.category.other).toBe(6);
+    expect(boundedBody.breakdowns.feedback_generic.route).toEqual({ '/app': 30 });
   });
 
   it('returns 404 for unknown paths', async () => {

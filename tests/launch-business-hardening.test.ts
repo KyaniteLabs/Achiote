@@ -39,6 +39,7 @@ describe('launch business hardening', () => {
     expect(appJs()).toContain("trackEvent('ask_started'");
     expect(appJs()).toContain("trackEvent('ask_succeeded'");
     expect(appJs()).toContain("trackEvent('ask_failed'");
+    expect(appJs()).toContain("trackEvent('onboarding_prompt_selected'");
     expect(appJs()).toContain("sendFeedback(");
     expect(appJs()).toContain("navigator.sendBeacon('/events'");
     expect(appJs()).not.toContain("prompt_text");
@@ -47,15 +48,31 @@ describe('launch business hardening', () => {
     expect(server()).toContain('Telemetry rate limit exceeded');
     expect(server()).toContain("pathname === '/events'");
     expect(server()).toContain('allowedTelemetryEvents');
+    expect(server()).toContain('allowedTelemetryProperties');
+    expect(server()).toContain('telemetryBreakdowns');
     expect(server()).toContain('telemetryCounters');
     expect(server()).toContain("sendJson(res, 404, { error: 'Not found' })");
     expect(server()).not.toContain('event.payload');
+  });
+
+  it('gives first-time users a concrete memory prompt scaffold', () => {
+    const page = app();
+    const js = appJs();
+
+    expect(page).toContain('Start with any three clues');
+    expect(page).toContain('Who made it, or where you ate it');
+    expect(page).toContain('What you are unsure about');
+    expect(page).toContain('data-suggestion-category="family-region-texture"');
+    expect(page).toContain('data-suggestion-category="sensory-soup"');
+    expect(js).toContain('suggestionCategory');
+    expect(js).toContain('source: text ?');
   });
 
   it('keeps SEO and launch metadata current for trust pages', () => {
     const sitemap = fs.readFileSync('docs/landing/sitemap.xml', 'utf8');
     const robots = fs.readFileSync('docs/landing/robots.txt', 'utf8');
     const manifest = fs.readFileSync('docs/landing/manifest.json', 'utf8');
+    const aiRunbook = fs.readFileSync('docs/AI_SEARCH_SUBMISSION_RUNBOOK.md', 'utf8');
 
     expect(landing()).toContain('application/ld+json');
     expect(landing()).toContain('ContactPoint');
@@ -68,20 +85,38 @@ describe('launch business hardening', () => {
     expect(sitemap).toContain('/terms');
     expect(sitemap).toContain('/support');
     expect(sitemap).toContain('/safety');
+    expect(sitemap).toContain('<lastmod>2026-04-25</lastmod>');
     expect(robots).toContain('Sitemap: https://achiote.kyanitelabs.tech/sitemap.xml');
+    expect(robots).toContain('User-agent: PerplexityBot');
+    expect(robots).toContain('User-agent: Perplexity-User');
     expect(manifest).toContain('Achiote');
+    expect(aiRunbook).toContain('Google Search Console');
+    expect(aiRunbook).toContain('Bing Webmaster Tools');
+    expect(aiRunbook).toContain('IndexNow');
+    expect(aiRunbook).toContain('ChatGPT');
+    expect(aiRunbook).toContain('Claude');
+    expect(aiRunbook).toContain('Gemini');
   });
 
   it('documents launch operations, monitoring, support, rollback, and deletion workflow', () => {
     const runbook = fs.readFileSync('docs/LAUNCH_RUNBOOK.md', 'utf8');
+    const support = fs.readFileSync('docs/landing/support.html', 'utf8');
+    const privacy = fs.readFileSync('docs/landing/privacy.html', 'utf8');
+    const terms = fs.readFileSync('docs/landing/terms.html', 'utf8');
 
     expect(runbook).toContain('npm run check');
     expect(runbook).toContain('ask_failed / ask_started');
+    expect(runbook).toContain('checkout_started / pricing_viewed');
+    expect(runbook).toContain('onboarding_prompt_selected');
     expect(runbook).toContain('support@kyanitelabs.tech');
     expect(runbook).toContain('90 days');
     expect(runbook).toContain('Rollback');
     expect(runbook).toContain('deletion/export/correction');
     expect(runbook).toContain('Do not expose raw event counters on a public route');
+    expect(support).toContain('What happens next');
+    expect(support).toContain('Data request checklist');
+    expect(privacy).toContain('privacy-preserving event dimensions');
+    expect(terms).toContain('Guided-memory subscriptions');
   });
 
   it('sells guided memories publicly and keeps hosted MCP/API commercial', () => {

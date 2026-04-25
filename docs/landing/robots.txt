@@ -44,6 +44,23 @@ Disallow: /health
 Disallow: /ready
 Disallow: /events
 
+# Perplexity answer-engine crawling and user-triggered retrieval.
+User-agent: PerplexityBot
+Allow: /
+Disallow: /mcp
+Disallow: /ask
+Disallow: /health
+Disallow: /ready
+Disallow: /events
+
+User-agent: Perplexity-User
+Allow: /
+Disallow: /mcp
+Disallow: /ask
+Disallow: /health
+Disallow: /ready
+Disallow: /events
+
 # Do not opt public pages into Anthropic training crawls by default.
 User-agent: ClaudeBot
 Disallow: /

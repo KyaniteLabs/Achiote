@@ -1,8 +1,13 @@
 document.documentElement.classList.add('js');
 
-function trackEvent(event) {
+function trackEvent(event, properties = {}) {
   if (!event || typeof event !== 'string') return;
-  const body = JSON.stringify({ event, at: new Date().toISOString() });
+  const safeProperties = {};
+  for (const [key, value] of Object.entries(properties || {})) {
+    if (typeof value !== 'string' && typeof value !== 'number' && typeof value !== 'boolean') continue;
+    safeProperties[key] = String(value).slice(0, 80);
+  }
+  const body = JSON.stringify({ event, properties: safeProperties, at: new Date().toISOString() });
   try {
     if (navigator.sendBeacon) {
       navigator.sendBeacon('/events', new Blob([body], { type: 'application/json' }));
@@ -14,7 +19,7 @@ function trackEvent(event) {
   }
 }
 
-trackEvent('page_view');
+trackEvent('page_view', { route: '/' });
 
 // Dark mode
 const themeToggle = document.getElementById('theme-toggle');
@@ -40,6 +45,20 @@ const observer = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 reveals.forEach(el => observer.observe(el));
+
+const pricing = document.getElementById('pricing');
+if (pricing) {
+  let pricingTracked = false;
+  const pricingObserver = new IntersectionObserver((entries) => {
+    if (pricingTracked) return;
+    if (entries.some(entry => entry.isIntersecting)) {
+      pricingTracked = true;
+      trackEvent('pricing_viewed', { route: '/' });
+      pricingObserver.disconnect();
+    }
+  }, { threshold: 0.35 });
+  pricingObserver.observe(pricing);
+}
 
 // Copy terminal
 async function copyTerminal(btn) {
@@ -89,7 +108,7 @@ if (tryitInput) {
 // ── Checkout ────────────────────────────────────────────────────────────────
 
 async function startCheckout(tier, mode) {
-  trackEvent('checkout_started');
+  trackEvent('checkout_started', { route: '/', tier, mode });
   const btn = event.target;
   const original = btn.textContent;
   btn.textContent = 'Redirecting…';
@@ -107,6 +126,7 @@ async function startCheckout(tier, mode) {
       throw new Error(data.error || 'Checkout failed');
     }
   } catch (err) {
+    trackEvent('checkout_failed', { route: '/', tier, mode });
     alert('Checkout error: ' + err.message);
     btn.textContent = original;
     btn.disabled = false;
