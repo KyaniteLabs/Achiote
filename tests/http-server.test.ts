@@ -73,8 +73,8 @@ describe('HTTP server integration', () => {
     expect(res.headers.get('content-type')).toContain('text/html');
   });
 
-  it('serves trust and launch-support routes with security headers', async () => {
-    for (const path of ['/privacy', '/privacy/', '/terms', '/terms/', '/support', '/support/', '/safety', '/safety/']) {
+  it('serves trust, launch-support, and AI-search routes with security headers', async () => {
+    for (const path of ['/privacy', '/privacy/', '/terms', '/terms/', '/support', '/support/', '/safety', '/safety/', '/ai-search', '/ai-search/']) {
       const res = await fetch(`${baseUrl}${path}`);
       expect(res.status).toBe(200);
       expect(res.headers.get('content-type')).toContain('text/html');
@@ -83,6 +83,13 @@ describe('HTTP server integration', () => {
       expect(res.headers.get('x-content-type-options')).toBe('nosniff');
       expect(res.headers.get('referrer-policy')).toBe('strict-origin-when-cross-origin');
     }
+  });
+
+  it('serves llms.txt as text/plain for AI retrieval', async () => {
+    const res = await fetch(`${baseUrl}/llms.txt`);
+    expect(res.status).toBe(200);
+    expect(res.headers.get('content-type')).toContain('text/plain');
+    expect(await res.text()).toContain('food-memory reconstruction');
   });
 
   it('serves static JS with correct MIME type', async () => {

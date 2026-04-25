@@ -8,7 +8,7 @@ const server = () => fs.readFileSync('src/http-server.ts', 'utf8');
 
 describe('launch business hardening', () => {
   it('publishes trust, legal, safety, and support pages linked from public surfaces', () => {
-    for (const page of ['privacy.html', 'terms.html', 'support.html', 'safety.html']) {
+    for (const page of ['privacy.html', 'terms.html', 'support.html', 'safety.html', 'ai-search.html', 'llms.txt']) {
       expect(fs.existsSync(`docs/landing/${page}`)).toBe(true);
     }
 
@@ -17,6 +17,7 @@ describe('launch business hardening', () => {
     expect(publicSurfaces).toContain('/terms');
     expect(publicSurfaces).toContain('/support');
     expect(publicSurfaces).toContain('/safety');
+    expect(publicSurfaces).toContain('/ai-search');
     expect(publicSurfaces).toContain('support@kyanitelabs.tech');
   });
 

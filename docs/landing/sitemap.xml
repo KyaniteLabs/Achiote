@@ -16,6 +16,16 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://achiote.kyanitelabs.tech/ai-search</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://achiote.kyanitelabs.tech/llms.txt</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://achiote.kyanitelabs.tech/privacy</loc>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>

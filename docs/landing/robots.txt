@@ -3,5 +3,66 @@ Allow: /
 Disallow: /mcp
 Disallow: /ask
 Disallow: /health
+Disallow: /ready
+Disallow: /events
+
+# ChatGPT search and user-triggered retrieval.
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /mcp
+Disallow: /ask
+Disallow: /health
+Disallow: /ready
+Disallow: /events
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /mcp
+Disallow: /ask
+Disallow: /health
+Disallow: /ready
+Disallow: /events
+
+# Do not opt public pages into OpenAI training crawls by default.
+User-agent: GPTBot
+Disallow: /
+
+# Claude search and user-triggered retrieval.
+User-agent: Claude-SearchBot
+Allow: /
+Disallow: /mcp
+Disallow: /ask
+Disallow: /health
+Disallow: /ready
+Disallow: /events
+
+User-agent: Claude-User
+Allow: /
+Disallow: /mcp
+Disallow: /ask
+Disallow: /health
+Disallow: /ready
+Disallow: /events
+
+# Do not opt public pages into Anthropic training crawls by default.
+User-agent: ClaudeBot
+Disallow: /
+
+# Gemini and AI Overviews visibility depends on normal Google indexing.
+User-agent: Googlebot
+Allow: /
+Disallow: /mcp
+Disallow: /ask
+Disallow: /health
+Disallow: /ready
+Disallow: /events
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /mcp
+Disallow: /ask
+Disallow: /health
+Disallow: /ready
+Disallow: /events
 
 Sitemap: https://achiote.kyanitelabs.tech/sitemap.xml
