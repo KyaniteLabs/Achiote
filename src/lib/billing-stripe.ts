@@ -5,8 +5,10 @@ import type { BillingDb } from './billing-db.js';
 export interface BillingConfig {
   secretKey: string;
   webhookSecret: string;
+  personalPriceId: string;
   proPriceId: string;
-  businessPriceId: string;
+  familyPriceId: string;
+  legacyBusinessPriceId: string;
   creditPackPriceId: string;
   baseUrl: string;
 }
@@ -14,30 +16,30 @@ export interface BillingConfig {
 export function loadBillingConfigFromEnv(): BillingConfig | null {
   const secretKey = process.env.STRIPE_SECRET_KEY?.trim();
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET?.trim();
+  const personalPriceId = process.env.STRIPE_PERSONAL_PRICE_ID?.trim();
   const proPriceId = process.env.STRIPE_PRO_PRICE_ID?.trim();
-  const businessPriceId = process.env.STRIPE_BUSINESS_PRICE_ID?.trim();
+  const configuredFamilyPriceId = process.env.STRIPE_FAMILY_PRICE_ID?.trim();
+  const legacyBusinessPriceId = process.env.STRIPE_BUSINESS_PRICE_ID?.trim();
+  const familyPriceId = configuredFamilyPriceId || legacyBusinessPriceId;
   const creditPackPriceId = process.env.STRIPE_CREDIT_PACK_PRICE_ID?.trim();
   const baseUrl = process.env.STRIPE_BASE_URL?.trim() || process.env.ACHIOTE_BASE_URL?.trim();
 
   if (!secretKey || !webhookSecret) return null;
-  if (!proPriceId && !businessPriceId && !creditPackPriceId) return null;
+  if (!personalPriceId && !proPriceId && !familyPriceId && !legacyBusinessPriceId && !creditPackPriceId) return null;
 
   return {
     secretKey,
     webhookSecret,
+    personalPriceId: personalPriceId ?? '',
     proPriceId: proPriceId ?? '',
-    businessPriceId: businessPriceId ?? '',
+    familyPriceId: familyPriceId ?? '',
+    legacyBusinessPriceId: legacyBusinessPriceId ?? '',
     creditPackPriceId: creditPackPriceId ?? '',
     baseUrl: baseUrl || 'http://localhost:3000',
   };
 }
 
-const TIER_PRICE_MAP: Record<string, Tier> = {
-  pro: 'pro',
-  business: 'business',
-};
-
-const CREDITS_PER_PACK = { mcp: 1000, web: 1000 };
+const CREDITS_PER_PACK = { mcp: 0, web: 25 };
 
 export class BillingStripe {
   private stripe: Stripe;
@@ -133,7 +135,7 @@ export class BillingStripe {
     const customerId = typeof session.customer === 'string' ? session.customer : null;
     if (!customerId) return;
 
-    const tier = (session.metadata?.tier as Tier) || 'pro';
+    const tier = (session.metadata?.tier as Tier) || 'personal';
     const mode = (session.metadata?.mode as 'subscription' | 'payment') || 'subscription';
 
     // Fetch customer email
@@ -178,7 +180,7 @@ export class BillingStripe {
 
     // Determine tier from the subscription items
     const priceId = subscription.items.data[0]?.price.id ?? '';
-    const tier = this.tierForPriceId(priceId) || 'pro';
+    const tier = this.tierForPriceId(priceId) || 'personal';
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const subAny = subscription as any;
 
@@ -217,14 +219,18 @@ export class BillingStripe {
 
   private priceIdForTier(tier: Tier, mode: 'subscription' | 'payment'): string | null {
     if (mode === 'payment') return this.config.creditPackPriceId || null;
+    if (tier === 'personal') return this.config.personalPriceId || null;
     if (tier === 'pro') return this.config.proPriceId || null;
-    if (tier === 'business') return this.config.businessPriceId || null;
+    if (tier === 'family') return this.config.familyPriceId || this.config.legacyBusinessPriceId || null;
+    if (tier === 'business') return this.config.legacyBusinessPriceId || this.config.familyPriceId || null;
     return null;
   }
 
   private tierForPriceId(priceId: string): Tier | null {
+    if (priceId === this.config.personalPriceId) return 'personal';
     if (priceId === this.config.proPriceId) return 'pro';
-    if (priceId === this.config.businessPriceId) return 'business';
+    if (priceId === this.config.legacyBusinessPriceId) return 'business';
+    if (priceId === this.config.familyPriceId) return 'family';
     return null;
   }
 }

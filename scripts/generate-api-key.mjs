@@ -8,7 +8,7 @@ for (let i = 2; i < process.argv.length; i += 2) {
 
 const tier = args.get('--tier') ?? 'free';
 const name = args.get('--name') ?? 'local-admin';
-const validTiers = new Set(['free', 'pro', 'business', 'enterprise']);
+const validTiers = new Set(['free', 'personal', 'pro', 'family', 'business', 'enterprise']);
 if (!validTiers.has(tier)) {
   console.error(`Invalid --tier ${tier}. Use one of: ${[...validTiers].join(', ')}`);
   process.exit(1);

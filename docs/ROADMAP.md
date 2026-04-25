@@ -18,7 +18,7 @@ This roadmap is scoped to the MCP server, HTTP server, and skill behavior.
 - Optional HTTP server with web UI, landing page, and `/ask` SSE streaming endpoint
 - Streamable HTTP MCP transport at `/mcp`
 - Tiered API key authentication (`ACHIOTE_AUTH_ENABLED`, `ACHIOTE_API_KEYS`)
-- Monthly calendar-window rate limiting (free/pro/business/enterprise)
+- Monthly calendar-window rate limiting (free/personal/pro/family/enterprise, with business as a legacy alias)
 - SQLite-backed persistent rate limits (`ACHIOTE_RATE_LIMIT_DB`) with SHA-256 hashed keys
 - `sanitizeForPrompt()` security — strips `<user_input>` tags, control characters, and JSON-wraps user values as inert data literals
 - Body size limits (1MB) with proper 413 handling across `/ask` and `/mcp`

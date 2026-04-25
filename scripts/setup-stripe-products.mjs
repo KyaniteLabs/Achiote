@@ -6,13 +6,15 @@
  *   STRIPE_SECRET_KEY=sk_test_... node scripts/setup-stripe-products.mjs
  *
  * This creates:
- *   - Achiote Pro (subscription, $9/month)
- *   - Achiote Business (subscription, $49/month)
- *   - Achiote Credit Pack (one-time, $5)
+ *   - Achiote Personal (subscription, $9/month, 25 guided memories)
+ *   - Achiote Pro (subscription, $19/month, 100 guided memories)
+ *   - Achiote Family Archive (subscription, $39/month, 300 guided memories)
+ *   - Achiote Memory Pack (one-time, $9, 25 guided memories)
  *
  * After running, add the printed price IDs to your .env:
+ *   STRIPE_PERSONAL_PRICE_ID=price_...
  *   STRIPE_PRO_PRICE_ID=price_...
- *   STRIPE_BUSINESS_PRICE_ID=price_...
+ *   STRIPE_FAMILY_PRICE_ID=price_...
  *   STRIPE_CREDIT_PACK_PRICE_ID=price_...
  */
 
@@ -72,28 +74,34 @@ async function createPrice(productId, unitAmount, currency, recurring = null) {
 async function main() {
   console.log('Setting up Stripe products for Achiote...\n');
 
+  const personalProduct = await createProduct(
+    'Achiote Personal',
+    'Personal tier: 25 guided memories per month'
+  );
   const proProduct = await createProduct(
     'Achiote Pro',
-    'Pro tier: 5,000 MCP calls per month, unlimited web reconstructions'
+    'Pro tier: 100 guided memories per month, image memories, and light MCP/API experimentation'
   );
-  const businessProduct = await createProduct(
-    'Achiote Business',
-    'Business tier: 100,000 MCP calls per month, unlimited web reconstructions'
+  const familyProduct = await createProduct(
+    'Achiote Family Archive',
+    'Family Archive tier: 300 guided memories per month for collections and shared projects'
   );
   const creditProduct = await createProduct(
-    'Achiote Credit Pack',
-    'One-time credit pack: 1,000 extra MCP calls + 1,000 web reconstructions, never expire'
+    'Achiote Memory Pack',
+    'One-time pack: 25 guided memories, no hosted MCP/API access'
   );
 
   console.log('');
 
-  const proPrice = await createPrice(proProduct.id, 900, 'usd', { interval: 'month' });
-  const businessPrice = await createPrice(businessProduct.id, 4900, 'usd', { interval: 'month' });
-  const creditPrice = await createPrice(creditProduct.id, 500, 'usd');
+  const personalPrice = await createPrice(personalProduct.id, 900, 'usd', { interval: 'month' });
+  const proPrice = await createPrice(proProduct.id, 1900, 'usd', { interval: 'month' });
+  const familyPrice = await createPrice(familyProduct.id, 3900, 'usd', { interval: 'month' });
+  const creditPrice = await createPrice(creditProduct.id, 900, 'usd');
 
   console.log('\n✅ Setup complete! Add these to your .env:\n');
+  console.log(`STRIPE_PERSONAL_PRICE_ID=${personalPrice.id}`);
   console.log(`STRIPE_PRO_PRICE_ID=${proPrice.id}`);
-  console.log(`STRIPE_BUSINESS_PRICE_ID=${businessPrice.id}`);
+  console.log(`STRIPE_FAMILY_PRICE_ID=${familyPrice.id}`);
   console.log(`STRIPE_CREDIT_PACK_PRICE_ID=${creditPrice.id}`);
   console.log('\nThen set up your webhook endpoint in the Stripe Dashboard:');
   console.log('  Endpoint URL: https://achiote.kyanitelabs.tech/billing/webhook');

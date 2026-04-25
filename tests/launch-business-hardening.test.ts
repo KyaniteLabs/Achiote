@@ -83,4 +83,40 @@ describe('launch business hardening', () => {
     expect(runbook).toContain('deletion/export/correction');
     expect(runbook).toContain('Do not expose raw event counters on a public route');
   });
+
+  it('sells guided memories publicly and keeps hosted MCP/API commercial', () => {
+    const page = landing();
+    const setupScript = fs.readFileSync('scripts/setup-stripe-products.mjs', 'utf8');
+    const httpServer = server();
+
+    for (const copy of ['3 guided memories', '25 guided memories', '100 guided memories', '300 guided memories']) {
+      expect(page).toContain(copy);
+    }
+
+    for (const copy of ['25 guided memories', '100 guided memories', '300 guided memories']) {
+      expect(setupScript).toContain(copy);
+    }
+
+    expect(page).toContain('$9');
+    expect(page).toContain('$19');
+    expect(page).toContain('$39');
+    expect(page).toContain('API and MCP access require a commercial license');
+    expect(page).toContain('data-checkout-tier="personal"');
+    expect(page).toContain('data-checkout-tier="family"');
+    expect(httpServer).toContain("tier !== 'personal' && tier !== 'pro' && tier !== 'family'");
+    expect(httpServer).toContain('Use personal, pro, or family.');
+
+    for (const stale of [
+      '50 MCP calls / month',
+      '5,000 MCP calls / month',
+      '100,000 MCP calls / month',
+      'Unlimited web reconstructions',
+      '1,000 extra calls',
+      'hosted API free tier',
+      'A hosted HTTP API is also available',
+    ]) {
+      expect(page).not.toContain(stale);
+      expect(setupScript).not.toContain(stale);
+    }
+  });
 });

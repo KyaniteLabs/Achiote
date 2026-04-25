@@ -3,7 +3,7 @@ import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { BillingDb } from '../src/lib/billing-db.js';
-import { loadBillingConfigFromEnv } from '../src/lib/billing-stripe.js';
+import { BillingStripe, loadBillingConfigFromEnv } from '../src/lib/billing-stripe.js';
 
 describe('billing-db', () => {
   let dbPath: string;
@@ -143,7 +143,9 @@ describe('billing-stripe config', () => {
     process.env = { ...originalEnv };
     delete process.env.STRIPE_SECRET_KEY;
     delete process.env.STRIPE_WEBHOOK_SECRET;
+    delete process.env.STRIPE_PERSONAL_PRICE_ID;
     delete process.env.STRIPE_PRO_PRICE_ID;
+    delete process.env.STRIPE_FAMILY_PRICE_ID;
     delete process.env.STRIPE_BUSINESS_PRICE_ID;
     delete process.env.STRIPE_CREDIT_PACK_PRICE_ID;
   });
@@ -167,21 +169,72 @@ describe('billing-stripe config', () => {
     expect(loadBillingConfigFromEnv()).toBeNull();
   });
 
-  it('returns config when all required fields are present', () => {
+  it('returns config for personal, pro, family, and memory-pack prices', () => {
     process.env.STRIPE_SECRET_KEY = 'sk_test_123';
     process.env.STRIPE_WEBHOOK_SECRET = 'whsec_123';
-    process.env.STRIPE_PRO_PRICE_ID = 'price_123';
+    process.env.STRIPE_PERSONAL_PRICE_ID = 'price_personal';
+    process.env.STRIPE_PRO_PRICE_ID = 'price_pro';
+    process.env.STRIPE_FAMILY_PRICE_ID = 'price_family';
+    process.env.STRIPE_CREDIT_PACK_PRICE_ID = 'price_memory_pack';
     const config = loadBillingConfigFromEnv();
     expect(config).not.toBeNull();
     expect(config!.secretKey).toBe('sk_test_123');
-    expect(config!.proPriceId).toBe('price_123');
+    expect(config!.personalPriceId).toBe('price_personal');
+    expect(config!.proPriceId).toBe('price_pro');
+    expect(config!.familyPriceId).toBe('price_family');
+    expect(config!.legacyBusinessPriceId).toBe('');
+    expect(config!.creditPackPriceId).toBe('price_memory_pack');
     expect(config!.baseUrl).toBe('http://localhost:3000');
+  });
+
+  it('keeps the old business price ID as a family fallback during migration', () => {
+    process.env.STRIPE_SECRET_KEY = 'sk_test_123';
+    process.env.STRIPE_WEBHOOK_SECRET = 'whsec_123';
+    process.env.STRIPE_BUSINESS_PRICE_ID = 'price_legacy_business';
+    const config = loadBillingConfigFromEnv();
+    expect(config).not.toBeNull();
+    expect(config!.familyPriceId).toBe('price_legacy_business');
+    expect(config!.legacyBusinessPriceId).toBe('price_legacy_business');
+  });
+
+  it('maps new family and legacy business Stripe prices without silently downgrading old subscriptions', () => {
+    const billing = new BillingStripe({
+      secretKey: 'sk_test_123',
+      webhookSecret: 'whsec_123',
+      personalPriceId: 'price_personal',
+      proPriceId: 'price_pro',
+      familyPriceId: 'price_family',
+      legacyBusinessPriceId: 'price_legacy_business',
+      creditPackPriceId: 'price_memory_pack',
+      baseUrl: 'http://localhost:3000',
+    });
+    const tierForPriceId = (billing as unknown as { tierForPriceId(priceId: string): string | null }).tierForPriceId.bind(billing);
+
+    expect(tierForPriceId('price_family')).toBe('family');
+    expect(tierForPriceId('price_legacy_business')).toBe('business');
+    expect(tierForPriceId('price_unknown')).toBeNull();
+  });
+
+  it('treats a business-only family fallback as the legacy business tier on Stripe updates', () => {
+    const billing = new BillingStripe({
+      secretKey: 'sk_test_123',
+      webhookSecret: 'whsec_123',
+      personalPriceId: '',
+      proPriceId: '',
+      familyPriceId: 'price_legacy_business',
+      legacyBusinessPriceId: 'price_legacy_business',
+      creditPackPriceId: '',
+      baseUrl: 'http://localhost:3000',
+    });
+    const tierForPriceId = (billing as unknown as { tierForPriceId(priceId: string): string | null }).tierForPriceId.bind(billing);
+
+    expect(tierForPriceId('price_legacy_business')).toBe('business');
   });
 
   it('uses STRIPE_BASE_URL when set', () => {
     process.env.STRIPE_SECRET_KEY = 'sk_test_123';
     process.env.STRIPE_WEBHOOK_SECRET = 'whsec_123';
-    process.env.STRIPE_PRO_PRICE_ID = 'price_123';
+    process.env.STRIPE_PERSONAL_PRICE_ID = 'price_123';
     process.env.STRIPE_BASE_URL = 'https://example.com';
     const config = loadBillingConfigFromEnv();
     expect(config!.baseUrl).toBe('https://example.com');

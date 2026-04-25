@@ -298,7 +298,7 @@ This is honest and accurate per the AGENTS.md constraints.
 
 **Proposed:**
 > **Connect Achiote to your AI**
-> Works with Claude Code, OpenAI Codex, Cursor, and any MCP-compatible agent. Use the hosted API free tier, or self-host for non-production use under the BSL.
+> Works with Claude Code, OpenAI Codex, Cursor, and any MCP-compatible agent. Self-host for non-production use under the BSL; hosted API and MCP production access require a commercial license.
 
 **Add a third CTA:** "Use the web demo" (links to `/app`)
 
@@ -336,10 +336,10 @@ This is honest and accurate per the AGENTS.md constraints.
 > Achiote is known as annatto (English), urucum (Portuguese/Brazil), roucou (French/Caribbean), atsuete (Tagalog/Filippines), bija (Carib/Andes), onoto (Venezuela), kesumba (Indonesian), beninoki (Japanese), latkan (Hindi), and achiotl (Nahuatl) — among dozens of others across every continent.
 
 > **Can I use Achiote with ChatGPT or Claude?**
-> Yes. Achiote runs as an MCP server. Add it to Claude Code via `.mcp.json`, to OpenAI Codex via `config.toml`, or to any agent that supports the Model Context Protocol. A hosted HTTP API is also available.
+> Yes. Achiote runs as an MCP server. Add it to Claude Code via `.mcp.json`, to OpenAI Codex via `config.toml`, or to any agent that supports the Model Context Protocol. Hosted API and MCP production access require a commercial license.
 
 > **Is Achiote free?**
-> Achiote is source-available under the Business Source License 1.1. The hosted API has a free tier of 50 MCP calls per month. Self-hosting is available for non-production use under the BSL; production self-hosting requires following the BSL terms or a commercial license.
+> Achiote is source-available under the Business Source License 1.1. The hosted app includes 3 guided memories per month. Hosted API and MCP access require a commercial license. Self-hosting is available for non-production use under the BSL; production self-hosting requires following the BSL terms or a commercial license.
 
 ---
 

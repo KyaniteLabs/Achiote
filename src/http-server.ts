@@ -811,10 +811,10 @@ const server = createServer(async (req, res) => {
     try { raw = await readBody(req); } catch { sendJson(res, 413, { error: 'Body too large' }); return; }
     let parsed: { tier?: Tier; mode?: 'subscription' | 'payment'; email?: string };
     try { parsed = JSON.parse(raw); } catch { sendJson(res, 400, { error: 'Invalid JSON' }); return; }
-    const tier = parsed.tier ?? 'pro';
+    const tier = parsed.tier ?? 'personal';
     const mode = parsed.mode ?? 'subscription';
-    if (mode === 'subscription' && tier !== 'pro' && tier !== 'business') {
-      sendJson(res, 400, { error: 'Invalid tier for subscription. Use pro or business.' });
+    if (mode === 'subscription' && tier !== 'personal' && tier !== 'pro' && tier !== 'family') {
+      sendJson(res, 400, { error: 'Invalid tier for subscription. Use personal, pro, or family.' });
       return;
     }
     try {
