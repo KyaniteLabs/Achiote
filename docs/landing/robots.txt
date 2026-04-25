@@ -57,12 +57,9 @@ Disallow: /health
 Disallow: /ready
 Disallow: /events
 
+# Keep Google product-improvement/training usage closed by default without
+# blocking normal Googlebot indexing for Search, Gemini, or AI Overviews.
 User-agent: Google-Extended
-Allow: /
-Disallow: /mcp
-Disallow: /ask
-Disallow: /health
-Disallow: /ready
-Disallow: /events
+Disallow: /
 
 Sitemap: https://achiote.kyanitelabs.tech/sitemap.xml

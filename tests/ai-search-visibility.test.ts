@@ -37,7 +37,7 @@ describe('AI search visibility', () => {
   it('allows search/retrieval crawlers while keeping API endpoints and training crawlers closed', () => {
     const robots = read('docs/landing/robots.txt');
 
-    for (const agent of ['OAI-SearchBot', 'ChatGPT-User', 'Claude-SearchBot', 'Claude-User', 'Googlebot', 'Google-Extended']) {
+    for (const agent of ['OAI-SearchBot', 'ChatGPT-User', 'Claude-SearchBot', 'Claude-User', 'Googlebot']) {
       expect(robots).toContain(`User-agent: ${agent}`);
       expect(robots).toMatch(new RegExp(`User-agent: ${agent}[\\s\\S]*?Allow: /`));
       expect(robots).toMatch(new RegExp(`User-agent: ${agent}[\\s\\S]*?Disallow: /ask`));
@@ -46,6 +46,7 @@ describe('AI search visibility', () => {
 
     expect(robots).toMatch(/User-agent: GPTBot\s+Disallow: \//);
     expect(robots).toMatch(/User-agent: ClaudeBot\s+Disallow: \//);
+    expect(robots).toMatch(/User-agent: Google-Extended\s+Disallow: \//);
   });
 
   it('links AI search assets from the public surfaces and sitemap', () => {
