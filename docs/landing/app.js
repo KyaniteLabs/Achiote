@@ -4,8 +4,6 @@ const welcome = document.getElementById('welcome');
 const messages = document.getElementById('messages');
 let busy = false;
 let chatHistory = [];
-let nextMessageSource = 'typed';
-let suggestionCategory = '';
 let currentAskSource = 'typed';
 let currentAskCategory = 'none';
 
@@ -33,10 +31,10 @@ trackEvent('app_opened', { route: '/app' });
 // Add event listeners for suggestion buttons
 document.querySelectorAll('.suggestion').forEach(button => {
   button.addEventListener('click', () => {
-    suggestionCategory = button.dataset.suggestionCategory || 'unknown';
-    nextMessageSource = 'suggestion';
-    trackEvent('onboarding_prompt_selected', { route: '/app', category: suggestionCategory });
-    send(button.dataset.suggestion);
+    const suggestionCategory = button.dataset.suggestionCategory || 'unknown';
+    if (send(button.dataset.suggestion, { source: 'suggestion', category: suggestionCategory })) {
+      trackEvent('onboarding_prompt_selected', { route: '/app', category: suggestionCategory });
+    }
   });
 });
 
@@ -50,15 +48,14 @@ input.addEventListener('keydown', (e) => {
   }
 });
 
-function send(text) {
+function send(text, metadata = {}) {
   const val = (text || input.value).trim();
-  if (!val || busy) return;
-  const source = text ? nextMessageSource : 'typed';
+  if (!val || busy) return false;
+  const source = typeof metadata.source === 'string' ? metadata.source : 'typed';
+  const category = typeof metadata.category === 'string' ? metadata.category : 'none';
   currentAskSource = text ? source : 'typed';
-  currentAskCategory = suggestionCategory || 'none';
+  currentAskCategory = text ? category : 'none';
   trackEvent('ask_started', { route: '/app', source: text ? source : 'typed', category: currentAskCategory, hasHistory: chatHistory.length > 0 });
-  nextMessageSource = 'typed';
-  suggestionCategory = '';
   input.value = '';
 
   welcome.classList.add('hide');
@@ -98,6 +95,7 @@ function send(text) {
       : err.message;
   })
   .finally(() => { busy = false; btn.disabled = false; input.focus(); });
+  return true;
 }
 
 async function explainHttpError(res) {

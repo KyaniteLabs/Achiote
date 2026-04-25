@@ -126,6 +126,8 @@ const allowedTelemetryEvents = new Set([
   'feedback_unsafe',
 ]);
 const allowedTelemetryProperties = new Set(['route', 'source', 'category', 'tier', 'mode', 'reason', 'hasHistory']);
+const MAX_TELEMETRY_VALUES_PER_PROPERTY = 25;
+const OTHER_TELEMETRY_VALUE = 'other';
 const telemetryCounters = new Map<string, number>();
 const telemetryBreakdowns = new Map<string, Map<string, Map<string, number>>>();
 const telemetryBuckets = new Map<string, { count: number; resetAt: number }>();
@@ -149,7 +151,10 @@ function incrementTelemetryBreakdowns(eventName: string, properties: Record<stri
   for (const [property, value] of Object.entries(properties)) {
     if (!eventBreakdown.has(property)) eventBreakdown.set(property, new Map());
     const values = eventBreakdown.get(property)!;
-    values.set(value, (values.get(value) ?? 0) + 1);
+    const bucket = values.has(value) || values.size < MAX_TELEMETRY_VALUES_PER_PROPERTY - 1
+      ? value
+      : OTHER_TELEMETRY_VALUE;
+    values.set(bucket, (values.get(bucket) ?? 0) + 1);
   }
 }
 
