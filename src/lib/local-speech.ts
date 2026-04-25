@@ -222,15 +222,11 @@ export function resolveLocalSpeechConfig(env: Env = process.env): LocalSpeechCon
 }
 
 export function expandCommandTemplate(template: string[], values: Record<string, string | undefined>): string[] {
-  const expanded = template.map((part) => part.replace(/\{([a-zA-Z0-9_]+)\}/g, (match, key: string) => {
+  return template.map((part) => part.replace(/\{([a-zA-Z0-9_]+)\}/g, (match, key: string) => {
     const value = values[key];
-    if (value === undefined) return match;
+    if (value === undefined) throw new Error(`Unresolved command placeholder in argument: ${match}`);
     return value;
   }));
-
-  const unresolved = expanded.find((part) => /\{[a-zA-Z0-9_]+\}/.test(part));
-  if (unresolved) throw new Error(`Unresolved command placeholder in argument: ${unresolved}`);
-  return expanded;
 }
 
 export function validateSpeechAudioPayload(raw: unknown): { ok: true; audioBase64: string; mediaType: string; language?: string } | { ok: false; error: string } {
@@ -242,7 +238,8 @@ export function validateSpeechAudioPayload(raw: unknown): { ok: true; audioBase6
   if (body.audioBase64.length > MAX_SPEECH_AUDIO_BASE64_CHARS) {
     return { ok: false, error: 'audioBase64 is too large' };
   }
-  if (typeof body.mediaType !== 'string' || !ALLOWED_SPEECH_AUDIO_MEDIA_TYPES.has(body.mediaType)) {
+  const mediaType = typeof body.mediaType === 'string' ? body.mediaType.split(';', 1)[0].trim().toLowerCase() : '';
+  if (!ALLOWED_SPEECH_AUDIO_MEDIA_TYPES.has(mediaType)) {
     return { ok: false, error: `Unsupported audio media type: ${String(body.mediaType || 'missing')}` };
   }
   if (!/^[A-Za-z0-9+/=\s]+$/.test(body.audioBase64)) {
@@ -251,7 +248,7 @@ export function validateSpeechAudioPayload(raw: unknown): { ok: true; audioBase6
   return {
     ok: true,
     audioBase64: body.audioBase64.replace(/\s/g, ''),
-    mediaType: body.mediaType,
+    mediaType,
     language: typeof body.language === 'string' && body.language.trim() ? body.language.trim() : undefined,
   };
 }

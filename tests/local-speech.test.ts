@@ -81,11 +81,11 @@ describe('local speech runtime config', () => {
   it('expands command templates without invoking a shell', () => {
     expect(expandCommandTemplate(
       ['python', 'tts.py', '--text={text}', '--out', '{output}', '--voice', '{voice}'],
-      { text: 'grandma soup; rm -rf /', output: '/tmp/out.wav', voice: 'af_heart' },
+      { text: 'grandma soup; rm -rf / {keep these braces}', output: '/tmp/out.wav', voice: 'af_heart' },
     )).toEqual([
       'python',
       'tts.py',
-      '--text=grandma soup; rm -rf /',
+      '--text=grandma soup; rm -rf / {keep these braces}',
       '--out',
       '/tmp/out.wav',
       '--voice',
@@ -106,8 +106,8 @@ describe('local speech payload guards', () => {
 
     expect(validateSpeechAudioPayload({
       audioBase64: Buffer.from('tiny webm').toString('base64'),
-      mediaType: 'audio/webm',
-    })).toMatchObject({ ok: true });
+      mediaType: 'audio/webm;codecs=opus',
+    })).toMatchObject({ ok: true, mediaType: 'audio/webm' });
   });
 
   it('rejects missing, unsupported, or oversized audio payloads', () => {
