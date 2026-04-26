@@ -452,8 +452,9 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
     const askSession = createAskSession(userMessage, history, images.value);
     const calledTools = new Set<string>();
     const toolPayloads: Record<string, unknown> = {};
+    send('status', { stage: 'model', provider: ASK_PROVIDER_KIND, model: ASK_MODEL });
     let modelResponse = await askSession.create(4096);
-    console.log(`[ask] provider=${ASK_PROVIDER_KIND} content=text:${modelResponse.textBlocks.length},tools:${modelResponse.toolCalls.length}`);
+    console.log(`[ask] provider=${ASK_PROVIDER_KIND} model=${ASK_MODEL} content=text:${modelResponse.textBlocks.length},tools:${modelResponse.toolCalls.length}`);
     if (modelResponse.toolCalls.length === 0) {
       console.warn('[ask] model skipped required Achiote tool workflow');
       send('error', {
