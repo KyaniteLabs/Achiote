@@ -17,7 +17,7 @@ const RESEARCH_STOPWORDS = new Set([
   // English
   'my', 'mom', 'grandma', 'grandmother', 'auntie', 'friend',
   'said', 'sounded', 'mentioned', 'called', 'something', 'like',
-  'with', 'from', 'and', 'the', 'that', 'a', 'of', 'in', 'it',
+  'with', 'from', 'and', 'or', 'the', 'that', 'a', 'of', 'in', 'it',
   // Spanish
   'de', 'la', 'el', 'en', 'con', 'del', 'por', 'para', 'que', 'un', 'una',
   // French
@@ -48,6 +48,15 @@ function escapeRegExp(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
+function normalizeForLooseMatch(value: string): string {
+  return value
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '')
+    .replace(/[^\p{L}\p{N}]+/gu, ' ')
+    .trim();
+}
+
 function matchesWordOrPhrase(text: string, hint: string): boolean {
   const pattern = escapeRegExp(hint).replace(/\s+/g, '\\s+');
   return new RegExp(`(?:^|\\b)${pattern}(?:$|\\b)`, 'i').test(text);
@@ -58,6 +67,7 @@ function likelyDishPhrases(text: string): string[] {
   const patterns = [
     /(?:mentioned|called|named)\s+([\p{L}\p{M}-]+(?:\s+[\p{L}\p{M}-]+){0,2})/giu,
     /(?:sounded like|something like)\s+([\p{L}\p{M}-]+(?:\s+[\p{L}\p{M}-]+){0,2})/giu,
+    /(?:made|ate|had|miss|remember)\s+(?:a|an|some|the\s+)?([\p{L}\p{M}-]+)(?=[\s,.;!?]|$)/giu,
   ];
   const phrases = patterns.flatMap((pattern) => [...lower.matchAll(pattern)].map((match) => match[1].trim()));
 
@@ -232,6 +242,12 @@ const GEOGRAPHIC_CONTEXT_PATTERN_SOURCES = [
   { source: '(?<![.!?]\\s)(?:in|at)\\s+([A-Z][a-zA-Z\\s]{1,28})\\s+(?:and|where|when|that|which|who|every|during|after|before)', flags: 'g' },
 ];
 
+function trimGeographicContext(place: string): string {
+  return place
+    .replace(/\s+(?:made|ate|had|with|called|named|mentioned|sounded|served|cooked|fried|baked|for|during|when|where|that|which|who|every|after|before)\b.*$/i, '')
+    .trim();
+}
+
 function extractRegionHints(lowerText: string, originalText: string): string[] {
   const hints: string[] = [];
 
@@ -245,7 +261,7 @@ function extractRegionHints(lowerText: string, originalText: string): string[] {
     const pattern = new RegExp(source, flags);
     const matches = [...originalText.matchAll(pattern)];
     for (const match of matches) {
-      const place = match[1]?.trim();
+      const place = match[1] ? trimGeographicContext(match[1]) : '';
       if (place && place.length > 1 && !/^(the|a|an|my|his|her|our|their|this|that|it|we|they|she|he)\s/i.test(place)) {
         hints.push(place);
       }
@@ -480,6 +496,102 @@ function inferredHypotheses(memory: CollectedFoodMemory): DishHypothesis[] {
   }));
 }
 
+type CorrectedResearchTarget = {
+  canonicalName: string;
+  aliases: string[];
+  regions: string[];
+  ingredients: string[];
+  sensory: string[];
+  why: string;
+  whatWouldConfirm: string[];
+  confidence: Confidence;
+};
+
+const CORRECTED_RESEARCH_TARGETS: CorrectedResearchTarget[] = [
+  {
+    canonicalName: 'Carimañola',
+    aliases: ['carimanola', 'carimanolas', 'carimañola', 'carimañolas', 'caribañola'],
+    regions: ['panama', 'colombia', 'central america', 'latin america'],
+    ingredients: ['yuca', 'cassava', 'meat', 'beef', 'pork'],
+    sensory: ['fried', 'crispy', 'savory', 'starch'],
+    why: 'corrected likely spelling from a remembered fragment; Panamanian/Colombian fried yuca fritter filled with meat',
+    whatWouldConfirm: ['yuca or cassava dough', 'fried oval/croquette shape', 'meat filling', 'Panama or Colombia family context'],
+    confidence: 'High',
+  },
+  {
+    canonicalName: 'Peanut Chikki',
+    aliases: ['chikki', 'chiki', 'chicky', 'cheeky', 'chikee', 'chickee'],
+    regions: ['india', 'south asia'],
+    ingredients: ['peanut', 'jaggery', 'sugar', 'caramel'],
+    sensory: ['sweet', 'crunchy', 'sandy', 'grainy', 'caramel'],
+    why: 'sound-alike correction from the remembered name plus peanut, caramel, and Indian context',
+    whatWouldConfirm: ['peanuts set in jaggery or caramelized sugar', 'brittle or sandy snap', 'Indian/South Asian sweet context'],
+    confidence: 'High',
+  },
+  {
+    canonicalName: 'Cocada',
+    aliases: ['cocada', 'cocadas', 'kokada', 'cocoda', 'coconut candy'],
+    regions: ['latin america', 'central america', 'caribbean', 'panama', 'colombia', 'mexico'],
+    ingredients: ['coconut', 'sugar', 'milk'],
+    sensory: ['sweet', 'chewy', 'grainy'],
+    why: 'corrected likely coconut-candy spelling from ingredient and regional clues',
+    whatWouldConfirm: ['shredded coconut', 'sugar syrup or milk', 'chewy or grainy candy texture', 'Latin American or Caribbean context'],
+    confidence: 'Medium',
+  },
+  {
+    canonicalName: 'Barfi / Pedha',
+    aliases: ['barfi', 'burfi', 'barfee', 'pedha', 'peda'],
+    regions: ['india', 'south asia'],
+    ingredients: ['milk', 'sugar', 'coconut'],
+    sensory: ['sweet', 'grainy', 'fudge', 'sandy'],
+    why: 'corrected likely Indian milk-sweet spelling from a remembered fragment and fudge-like texture',
+    whatWouldConfirm: ['milk solids or coconut', 'grainy fudge texture', 'cardamom or nut garnish', 'Indian/South Asian context'],
+    confidence: 'Medium',
+  },
+];
+
+function correctedNameHypotheses(memory: CollectedFoodMemory): DishHypothesis[] {
+  const text = normalizeForLooseMatch(memory.normalizedMemory);
+  const possibleNames = memory.extractedClues.possibleDishNames.map(normalizeForLooseMatch);
+  const regions = memory.extractedClues.culturalOrRegionalHints.map(normalizeForLooseMatch);
+  const ingredients = memory.extractedClues.rememberedIngredients.map(normalizeForLooseMatch);
+  const sensory = memory.extractedClues.sensoryClues.map(normalizeForLooseMatch);
+
+  const matches = CORRECTED_RESEARCH_TARGETS.filter((target) => {
+    const aliases = target.aliases.map(normalizeForLooseMatch);
+    const aliasMatch = aliases.some((alias) =>
+      text.includes(alias) || possibleNames.some((name) => name.includes(alias) || alias.includes(name)),
+    );
+    if (!aliasMatch) return false;
+
+    const targetRegions = target.regions.map(normalizeForLooseMatch);
+    const targetIngredients = target.ingredients.map(normalizeForLooseMatch);
+    const targetSensory = target.sensory.map(normalizeForLooseMatch);
+    const regionMatch = regions.length === 0 || targetRegions.some((targetRegion) =>
+      regions.some((region) => region.includes(targetRegion) || targetRegion.includes(region)),
+    );
+    const ingredientMatch = targetIngredients.some((targetIngredient) =>
+      text.includes(targetIngredient) || ingredients.some((ingredient) => ingredient.includes(targetIngredient) || targetIngredient.includes(ingredient)),
+    );
+    const sensoryMatch = targetSensory.some((targetSense) =>
+      text.includes(targetSense) || sensory.some((sense) => sense.includes(targetSense) || targetSense.includes(sense)),
+    );
+
+    return regionMatch && (ingredientMatch || sensoryMatch || regions.length > 0);
+  });
+
+  return matches.map((match) => ({
+    name: match.canonicalName,
+    whyPossible: [
+      match.why,
+      'research should start from the corrected candidate while keeping the original user wording as evidence',
+    ],
+    whatWouldConfirm: match.whatWouldConfirm,
+    confidence: match.confidence,
+    researchRequired: true,
+  }));
+}
+
 function buildDescriptiveHypothesis(memory: CollectedFoodMemory): DishHypothesis | null {
   const region = memory.extractedClues.culturalOrRegionalHints[0];
   const sensory = memory.extractedClues.sensoryClues;
@@ -536,6 +648,17 @@ function buildDescriptiveHypothesis(memory: CollectedFoodMemory): DishHypothesis
 
 function genericHypotheses(memory: CollectedFoodMemory): DishHypothesis[] {
   const names = memory.extractedClues.possibleDishNames;
+
+  const corrected = correctedNameHypotheses(memory);
+  if (corrected.length > 0) {
+    return corrected.slice(0, 3);
+  }
+
+  const inferred = inferredHypotheses(memory);
+  if (inferred.length > 0) {
+    return inferred.slice(0, 3);
+  }
+
   if (names.length > 0) {
     return names.slice(0, 3).map((name) => ({
       name,
@@ -544,12 +667,6 @@ function genericHypotheses(memory: CollectedFoodMemory): DishHypothesis[] {
       confidence: memory.extractedClues.culturalOrRegionalHints.length > 0 ? 'Medium' : 'Low',
       researchRequired: true,
     }));
-  }
-
-  // Try inferred hypotheses first
-  const inferred = inferredHypotheses(memory);
-  if (inferred.length > 0) {
-    return inferred.slice(0, 3);
   }
 
   // Build a descriptive hypothesis from the user's actual clues instead of saying "unknown"
@@ -572,7 +689,13 @@ function genericHypotheses(memory: CollectedFoodMemory): DishHypothesis[] {
 export function planDishResearch(memory: CollectedFoodMemory): DishResearchPlan {
   const hypotheses = dataDrivenHypotheses(memory);
   const finalHypotheses = hypotheses.length > 0 ? hypotheses : genericHypotheses(memory);
+  const contextTerms = unique([
+    ...memory.extractedClues.culturalOrRegionalHints,
+    ...memory.extractedClues.rememberedIngredients,
+    ...memory.extractedClues.sensoryClues,
+  ]).slice(0, 4).join(' ');
   const nameQueries = finalHypotheses.flatMap((hypothesis) => [
+    `"${hypothesis.name}" ${contextTerms} spelling regional name`.trim(),
     `"${hypothesis.name}" traditional dish ingredients technique`,
     `"${hypothesis.name}" regional variations family recipe`,
   ]);
@@ -583,7 +706,7 @@ export function planDishResearch(memory: CollectedFoodMemory): DishResearchPlan 
   return {
     researchRequired: true,
     hypotheses: finalHypotheses,
-    searchQueries: unique([...fragmentQueries, ...nameQueries]).slice(0, 8),
+    searchQueries: unique([...nameQueries, ...fragmentQueries]).slice(0, 8),
     preferredSourceTypes: [
       'family/community recipe sources',
       'bilingual or regional food writing',

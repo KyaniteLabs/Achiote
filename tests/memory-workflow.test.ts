@@ -139,6 +139,43 @@ describe('general research planning', () => {
     expect(plan.searchQueries.join(' ')).toContain('Nigeria');
   });
 
+  it('corrects likely typo fragments before planning research', () => {
+    const memory = collectFoodMemory({
+      memoryText: 'My aunt from Panama made carimanola, fried yuca with meat inside.',
+      knownRegion: 'Panama',
+      userLocation: 'Long Beach, CA',
+    });
+    const plan = planDishResearch(memory);
+    const topHypothesis = plan.hypotheses[0];
+    const joinedQueries = plan.searchQueries.join(' ').toLowerCase();
+
+    expect(memory.extractedClues.possibleDishNames).toContain('carimanola');
+    expect(memory.extractedClues.culturalOrRegionalHints).not.toContain('Panama made carimanola');
+    expect(topHypothesis.name).toBe('Carimañola');
+    expect(topHypothesis.whyPossible.join(' ').toLowerCase()).toContain('corrected likely spelling');
+    expect(joinedQueries.indexOf('carimañola')).toBeGreaterThanOrEqual(0);
+    expect(joinedQueries.indexOf('carimanola')).toBeGreaterThan(joinedQueries.indexOf('carimañola'));
+    expect(joinedQueries).toContain('yuca');
+  });
+
+  it('treats sound-alike names as research clues instead of literal answers', () => {
+    const memory = collectFoodMemory({
+      memoryText: 'It sounded like chicky or cheeky, a brown peanut candy from India with sandy caramel texture.',
+      knownRegion: 'India',
+      userLocation: 'Denver, CO',
+    });
+    const plan = planDishResearch(memory);
+    const names = plan.hypotheses.map((hypothesis) => hypothesis.name);
+    const joinedQueries = plan.searchQueries.join(' ').toLowerCase();
+
+    expect(memory.extractedClues.culturalOrRegionalHints).not.toContain('India with sandy caramel textu');
+    expect(names[0]).toBe('Peanut Chikki');
+    expect(plan.hypotheses[0].whyPossible.join(' ').toLowerCase()).toContain('sound-alike');
+    expect(joinedQueries.indexOf('peanut chikki')).toBeGreaterThanOrEqual(0);
+    expect(joinedQueries.indexOf('chicky')).toBeGreaterThan(joinedQueries.indexOf('peanut chikki'));
+    expect(joinedQueries).toContain('india');
+  });
+
   it('extracts quoted multi-word dish fragments without a closed demo list', () => {
     const memory = collectFoodMemory({ memoryText: 'She called it "momo achar" and said it was from Nepal.' });
     const plan = planDishResearch(memory);
