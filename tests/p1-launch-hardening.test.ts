@@ -71,4 +71,15 @@ describe('P1 launch hardening guardrails', () => {
     expect(server).toContain('tool_workflow_skipped');
     expect(server).toContain('model skipped required Achiote tool workflow');
   });
+
+  it('streams provider and model identity into the visible ask trace', () => {
+    const server = fs.readFileSync('src/http-server.ts', 'utf8');
+    const app = fs.readFileSync('docs/landing/app.js', 'utf8');
+
+    expect(server).toContain("send('status', { stage: 'model'");
+    expect(server).toContain('provider: ASK_PROVIDER_KIND');
+    expect(server).toContain('model: ASK_MODEL');
+    expect(app).toContain('model-label');
+    expect(app).toContain('trace-provider');
+  });
 });

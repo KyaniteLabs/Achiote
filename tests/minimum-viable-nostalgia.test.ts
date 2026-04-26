@@ -61,6 +61,36 @@ function spicedSausageMashDossier() {
   });
 }
 
+function sesameCandyDossier() {
+  const memory = collectFoodMemory({
+    memoryText: 'I remember a tan candy that tasted like sesame and crumbled into powder. I had it as a kid outside the US.',
+  });
+  const researchPlan = planDishResearch(memory);
+  return buildReconstructionDossier({
+    memory,
+    researchPlan,
+    researchedFacts: [
+      'Dulce de ajonjolí is a sesame candy that can be brittle, crumbly, and sugar-forward.',
+      'The likely memory is driven by toasted sesame aroma and sugar crystallization texture.',
+    ],
+    inferredFacts: [
+      'The first test should be built from cheap local pantry ingredients, not buying the exact suspected candy.',
+    ],
+  });
+}
+
+function confectioneryDossier(memoryText: string, researchedFacts: string[] = [], inferredFacts: string[] = []) {
+  const memory = collectFoodMemory({ memoryText });
+  const researchPlan = planDishResearch(memory);
+  return buildReconstructionDossier({
+    memory,
+    researchPlan,
+    researchedFacts,
+    inferredFacts: inferredFacts.length > 0
+      ? inferredFacts
+      : ['The first test should isolate sweetness, aroma, and texture from local pantry ingredients before sourcing exact sweets.'],
+  });
+}
 
 function cueRecommendationText(cue: ReturnType<typeof generateMinimumViableNostalgiaCue>) {
   return [
@@ -71,6 +101,16 @@ function cueRecommendationText(cue: ReturnType<typeof generateMinimumViableNosta
       component.localTestWith,
       component.substitutionReason,
     ]),
+  ].join(' ').toLowerCase();
+}
+
+function fullCueText(cue: ReturnType<typeof generateMinimumViableNostalgiaCue>) {
+  return [
+    cueRecommendationText(cue),
+    ...cue.steps,
+    ...cue.accessibilityPrinciples,
+    ...cue.substituteLogic,
+    cue.whyThisIsMinimum,
   ].join(' ').toLowerCase();
 }
 
@@ -174,6 +214,80 @@ describe('minimum viable nostalgia cue', () => {
       expect(comp.flavorProfile.length).toBeGreaterThan(0);
       expect(comp.substitutionReason.length).toBeGreaterThan(0);
     }
+  });
+
+  it('builds confectionery tests from local pantry proxies instead of buying the suspected candy', () => {
+    const cue = generateMinimumViableNostalgiaCue({
+      dossier: sesameCandyDossier(),
+      researchFindings: {
+        researchedFacts: [
+          'Dulce de ajonjolí is made around sesame aroma and sugar texture.',
+          'Sesame candies can be brittle, crumbly, or crystalline depending on syrup and seed ratio.',
+        ],
+        inferredFacts: ['The first cue should recreate toasted seed aroma plus sugar crystallization from local ingredients.'],
+        unknowns: ['exact country and family brand'],
+        sourceCount: 2,
+        confidence: 'Medium',
+      },
+      userLocation: 'Cleveland, Ohio',
+      maxEffortMinutes: 10,
+    });
+    const recommendationText = fullCueText(cue);
+
+    expect(cue.title).toContain('sweet-texture');
+    expect(cue.effortMinutes).toBeLessThanOrEqual(10);
+    expect(recommendationText).toMatch(/granulated sugar|plain sugar/);
+    expect(recommendationText).toMatch(/sesame|seed|coconut|oat|cracker/);
+    expect(recommendationText).toContain('do not buy the exact');
+    expect(recommendationText).not.toMatch(/buy .*dulce de ajonjol[ií]|latin grocery|international aisle|grocery-store sweet matching/);
+  });
+
+  it.each([
+    {
+      label: 'unnamed sesame crumble',
+      memoryText: 'A tan sesame sweet from another country turned powdery on my tongue, but I do not know the name.',
+      researchedFacts: ['Several sesame sweets use sugar crystallization and toasted seed aroma.'],
+      banned: /buy .*sesame sweet|sesame candy store|asian market|international aisle/,
+    },
+    {
+      label: 'coconut festival sweet',
+      memoryText: 'A white coconut dessert from a school festival abroad was grainy and melted into sugar crystals.',
+      researchedFacts: ['Cocada and other coconut sweets can be grainy, fibrous, and sugar-forward.'],
+      banned: /buy .*cocada|latin grocery|caribbean market|international aisle/,
+    },
+    {
+      label: 'grainy milk candy',
+      memoryText: 'I miss a pale milk candy from my childhood trip that was crumbly, sweet, and a little buttery.',
+      researchedFacts: ['Milk sweets such as pastillas, barfi, or milk fudge can be grainy from sugar or milk solids.'],
+      banned: /buy .*pastillas|buy .*barfi|indian sweets shop|filipino store|international aisle/,
+    },
+    {
+      label: 'peanut jaggery brittle',
+      memoryText: 'A brown peanut candy overseas shattered first, then went sandy and caramel-like.',
+      researchedFacts: ['Peanut chikki and related brittle sweets use roasted nuts and cooked sugar or jaggery.'],
+      banned: /buy .*chikki|buy .*peanut candy|indian grocery|international aisle/,
+    },
+  ])('keeps first confectionery cue local and mechanism-first for $label', ({ memoryText, researchedFacts, banned }) => {
+    const cue = generateMinimumViableNostalgiaCue({
+      dossier: confectioneryDossier(memoryText, researchedFacts),
+      researchFindings: {
+        researchedFacts,
+        inferredFacts: ['The cue should test crystallized sweetness, aroma release, and mouthfeel from local ingredients first.'],
+        unknowns: ['exact country', 'exact family brand'],
+        sourceCount: researchedFacts.length,
+        confidence: 'Low',
+      },
+      userLocation: 'Madison, Wisconsin',
+      maxEffortMinutes: 10,
+    });
+    const recommendationText = fullCueText(cue);
+
+    expect(cue.title).toContain('sweet-texture');
+    expect(cue.effortMinutes).toBeLessThanOrEqual(10);
+    expect(recommendationText).toMatch(/granulated sugar|plain sugar|crushed sugar cube/);
+    expect(recommendationText).toMatch(/local pantry|ordinary grocery|one spoon|one teaspoon/);
+    expect(recommendationText).toContain('do not buy the exact');
+    expect(recommendationText).not.toMatch(banned);
   });
 
   it('uses the soup cue for unresolved sour soup memories', () => {

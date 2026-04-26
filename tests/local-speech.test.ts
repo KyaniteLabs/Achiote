@@ -1,7 +1,12 @@
+import { chmodSync, readFileSync, writeFileSync } from 'node:fs';
+import { mkdtemp, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
   expandCommandTemplate,
   resolveLocalSpeechConfig,
+  transcribeWithLocalSpeech,
   validateSpeechAudioPayload,
   validateSpeechTextPayload,
 } from '../src/lib/local-speech.js';
@@ -49,6 +54,71 @@ describe('local speech runtime config', () => {
       language: 'auto',
       languages: ['auto', 'es', 'hi', 'zh', 'ar', 'fr', 'pt', 'tl'],
     });
+  });
+
+  it('transcodes browser-recorded audio before sending it to whisper.cpp', async () => {
+    const dir = await mkdtemp(join(tmpdir(), 'achiote-speech-test-'));
+    try {
+      const ffmpegLog = join(dir, 'ffmpeg.log');
+      const whisperLog = join(dir, 'whisper.log');
+      const ffmpeg = join(dir, 'ffmpeg');
+      const whisper = join(dir, 'whisper-cli');
+
+      writeFileSync(ffmpeg, [
+        '#!/bin/sh',
+        `printf '%s\\n' "$@" > ${JSON.stringify(ffmpegLog)}`,
+        'input=""',
+        'output=""',
+        'while [ "$#" -gt 0 ]; do',
+        '  case "$1" in',
+        '    -i) shift; input="$1" ;;',
+        '    *) output="$1" ;;',
+        '  esac',
+        '  shift',
+        'done',
+        'test -n "$input"',
+        'test -n "$output"',
+        'printf converted > "$output"',
+      ].join('\n'));
+      writeFileSync(whisper, [
+        '#!/bin/sh',
+        `printf '%s\\n' "$@" > ${JSON.stringify(whisperLog)}`,
+        'output=""',
+        'while [ "$#" -gt 0 ]; do',
+        '  case "$1" in',
+        '    -of) shift; output="$1" ;;',
+        '  esac',
+        '  shift',
+        'done',
+        'test -n "$output"',
+        'printf "browser transcript" > "$output.txt"',
+      ].join('\n'));
+      chmodSync(ffmpeg, 0o755);
+      chmodSync(whisper, 0o755);
+
+      const result = await transcribeWithLocalSpeech({
+        stt: {
+          provider: 'whispercpp',
+          ready: true,
+          binary: whisper,
+          model: join(dir, 'model.bin'),
+          language: 'auto',
+          languages: ['auto'],
+          ffmpegBinary: ffmpeg,
+        },
+        tts: { provider: 'disabled', ready: false, mediaType: 'audio/wav', voices: [] },
+      }, {
+        audioBase64: Buffer.from('browser webm bytes').toString('base64'),
+        mediaType: 'audio/webm',
+        language: 'auto',
+      });
+
+      expect(result.text).toBe('browser transcript');
+      expect(readFileSync(ffmpegLog, 'utf8')).toContain('-i');
+      expect(readFileSync(whisperLog, 'utf8')).toContain('.wav');
+    } finally {
+      await rm(dir, { recursive: true, force: true });
+    }
   });
 
   it('requires a Kokoro argv template with text and output placeholders before reporting TTS ready', () => {

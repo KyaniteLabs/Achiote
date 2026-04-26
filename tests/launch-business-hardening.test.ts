@@ -68,6 +68,19 @@ describe('launch business hardening', () => {
     expect(js).toContain('source: text ?');
   });
 
+  it('keeps the live tool trace readable for preview users', () => {
+    const page = app();
+    const js = appJs();
+
+    expect(page).toContain('.trace-panel');
+    expect(page).toContain('font-size: 0.92rem');
+    expect(page).toContain('.trace-tool-name');
+    expect(js).toContain('assistant-content');
+    expect(js).toContain("item.className = `trace-item ${type}`");
+    expect(js).not.toContain('font-size:12px');
+    expect(js).not.toContain('font-size:11px');
+  });
+
   it('keeps SEO and launch metadata current for trust pages', () => {
     const sitemap = fs.readFileSync('docs/landing/sitemap.xml', 'utf8');
     const robots = fs.readFileSync('docs/landing/robots.txt', 'utf8');

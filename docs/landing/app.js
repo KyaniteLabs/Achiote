@@ -260,30 +260,72 @@ function addMsg(role, html) {
 }
 
 function createTracePanel(aiEl) {
+  let content = aiEl.querySelector('.assistant-content');
+  if (!content) {
+    content = document.createElement('div');
+    content.className = 'assistant-content';
+    content.innerHTML = aiEl.innerHTML;
+    aiEl.innerHTML = '';
+    aiEl.appendChild(content);
+  }
+
   const trace = document.createElement('div');
   trace.className = 'trace-panel';
-  trace.style.cssText = 'margin-top:8px;padding:10px 12px;background:#f6f3ef;border-radius:8px;font-size:12px;color:#6b5e51;border:1px solid #e8e0d8;max-height:200px;overflow-y:auto;';
   aiEl.appendChild(trace);
   return trace;
 }
 
+function renderTraceLine(item, time, contentNodes) {
+  item.replaceChildren();
+  const timeEl = document.createElement('span');
+  timeEl.className = 'trace-time';
+  timeEl.textContent = `[${time}]`;
+  const textEl = document.createElement('span');
+  textEl.className = 'trace-text';
+  for (const node of contentNodes) textEl.appendChild(node);
+  item.append(timeEl, textEl);
+}
+
+function traceText(text, className) {
+  const span = document.createElement('span');
+  if (className) span.className = className;
+  span.textContent = text;
+  return span;
+}
+
 function addTraceItem(trace, type, data) {
   const item = document.createElement('div');
-  item.style.cssText = 'margin-bottom:6px;padding:4px 0;border-bottom:1px dashed #e8e0d8;';
+  item.className = `trace-item ${type}`;
   const time = new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
   if (type === 'status') {
-    const stageLabel = data.stage === 'calling_tools' ? `Step ${data.iteration}: calling tools` : `Step ${data.iteration}: thinking...`;
-    const tools = data.tools ? ` (${data.tools.join(', ')})` : '';
-    item.innerHTML = `<span style="color:#b5451b;font-weight:600;">[${time}]</span> ${stageLabel}${tools}`;
+    if (data.stage === 'model') {
+      renderTraceLine(item, time, [
+        traceText('Model: '),
+        traceText(data.model || 'unknown', 'model-label'),
+        traceText(` via ${data.provider || 'provider'}`, 'trace-provider'),
+      ]);
+    } else {
+      const stageLabel = data.stage === 'calling_tools' ? `Step ${data.iteration}: calling tools` : `Step ${data.iteration}: thinking...`;
+      const tools = data.tools ? ` (${data.tools.join(', ')})` : '';
+      renderTraceLine(item, time, [traceText(`${stageLabel}${tools}`)]);
+    }
   } else if (type === 'tool_call') {
     const inputSummary = summarizeInput(data.input);
-    item.innerHTML = `<span style="color:#b5451b;font-weight:600;">[${time}]</span> → <strong>${data.name}</strong> <span style="color:#888;font-size:11px;">${inputSummary}</span>`;
+    renderTraceLine(item, time, [
+      traceText('Calling '),
+      traceText(data.name, 'trace-tool-name'),
+      traceText(inputSummary ? ` ${inputSummary}` : '', 'trace-summary'),
+    ]);
   } else if (type === 'tool_result') {
     const resultSummary = summarizeResult(data.name, data.result);
-    item.innerHTML = `<span style="color:#2a8a3e;font-weight:600;">[${time}]</span> ← <strong>${data.name}</strong> <span style="color:#888;font-size:11px;">${resultSummary}</span>`;
+    renderTraceLine(item, time, [
+      traceText('Finished '),
+      traceText(data.name, 'trace-tool-name'),
+      traceText(` ${resultSummary}`, 'trace-summary'),
+    ]);
   } else if (type === 'error') {
-    item.innerHTML = `<span style="color:#c0392b;font-weight:600;">[${time}]</span> ⚠️ ${data.message || data}`;
+    renderTraceLine(item, time, [traceText(`Warning: ${data.message || data}`)]);
   }
 
   trace.appendChild(item);
@@ -319,6 +361,21 @@ async function streamResponse(res, el, userMessage) {
   let text = '';
   let hasError = false;
   let trace = null;
+  let contentEl = null;
+
+  function ensureContentEl() {
+    if (!contentEl) {
+      contentEl = el.querySelector('.assistant-content');
+      if (!contentEl) {
+        contentEl = document.createElement('div');
+        contentEl.className = 'assistant-content';
+        contentEl.innerHTML = el.innerHTML;
+        el.innerHTML = '';
+        el.appendChild(contentEl);
+      }
+    }
+    return contentEl;
+  }
 
   while (true) {
     const { done, value } = await reader.read();
@@ -372,7 +429,7 @@ async function streamResponse(res, el, userMessage) {
         }
       }
     }
-    if (text) el.innerHTML = formatMd(text);
+    if (text) ensureContentEl().innerHTML = formatMd(text);
     el.closest('main').scrollTop = 1e6;
   }
   if (!text && !trace) el.textContent = 'No response. Try rephrasing.';

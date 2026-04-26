@@ -117,6 +117,62 @@ describe('/ask OpenAI-compatible provider mode', () => {
 });
 
 describe('/ask premature cue guard', () => {
+  it('forces a local minimum cue when the model stalls on an explicit test request', async () => {
+    const fakePort = await getFreePort();
+    let requestCount = 0;
+    const fakeOpenAi = createServer(async (req, res) => {
+      if (req.url !== '/v1/chat/completions' || req.method !== 'POST') {
+        res.writeHead(404).end();
+        return;
+      }
+      requestCount++;
+      await readBody(req);
+      const toolCallsByTurn = [
+        [{ id: 'call_1', type: 'function', function: { name: 'collect_food_memory', arguments: JSON.stringify({ memoryText: 'White coconut sweet, grainy sugar crystals, school festival abroad.', userLocation: 'Madison, WI' }) } }],
+        [{ id: 'call_2', type: 'function', function: { name: 'plan_dish_research', arguments: JSON.stringify({}) } }],
+      ];
+      const toolCalls = toolCallsByTurn[requestCount - 1];
+      res.setHeader('content-type', 'application/json');
+      res.end(JSON.stringify({
+        choices: [{
+          finish_reason: toolCalls ? 'tool_calls' : 'stop',
+          message: toolCalls
+            ? { role: 'assistant', content: '', tool_calls: toolCalls }
+            : { role: 'assistant', content: 'Before I give you a tasting cue, tell me the name first.' },
+        }],
+      }));
+    });
+    await new Promise<void>((resolveListen) => fakeOpenAi.listen(fakePort, '127.0.0.1', resolveListen));
+
+    const achiotePort = await getFreePort();
+    const achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`);
+    try {
+      const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: 'White coconut sweet, grainy sugar crystals, school festival abroad. What is the smallest local test?' }),
+      });
+
+      expect(response.status).toBe(200);
+      const events = parseSse(await response.text());
+      const toolNames = events
+        .filter((event) => event.event === 'tool_call')
+        .map((event) => JSON.parse(event.data).name);
+      const text = events.filter((event) => event.event === 'text').map((event) => JSON.parse(event.data)).join('');
+
+      expect(toolNames).toContain('generate_minimum_viable_nostalgia');
+      expect(text).toContain('Minimum viable');
+      expect(text).toContain('granulated sugar');
+      expect(text).toContain('Do not buy the exact');
+      expect(text).not.toContain('tell me the name first');
+      expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'explicit_minimum_cue_fallback' });
+      expect(requestCount).toBe(3);
+    } finally {
+      achiote.kill('SIGINT');
+      await new Promise<void>((resolveClose) => fakeOpenAi.close(() => resolveClose()));
+    }
+  }, 20_000);
+
   it('does not stream concrete food cues before the minimum viable nostalgia tool runs', async () => {
     const fakePort = await getFreePort();
     let requestCount = 0;
@@ -155,11 +211,16 @@ describe('/ask premature cue guard', () => {
 
       expect(response.status).toBe(200);
       const events = parseSse(await response.text());
+      const toolNames = events
+        .filter((event) => event.event === 'tool_call')
+        .map((event) => JSON.parse(event.data).name);
       const text = events.filter((event) => event.event === 'text').map((event) => JSON.parse(event.data)).join('');
-      expect(text).toContain('Before I give you a tasting cue');
-      expect(text).toContain('Where did you eat this');
+
+      expect(toolNames).toContain('generate_minimum_viable_nostalgia');
+      expect(text).toContain('Minimum viable');
       expect(text).not.toContain('warm dill with buttermilk');
       expect(events.at(-1)?.event).toBe('done');
+      expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'explicit_minimum_cue_fallback' });
       expect(requestCount).toBe(3);
     } finally {
       achiote.kill('SIGINT');

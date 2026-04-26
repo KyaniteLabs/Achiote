@@ -19,6 +19,7 @@ import { BillingStripe, loadBillingConfigFromEnv } from './lib/billing-stripe.js
 import { getHttpReadiness, getRequestRateLimitIdentity, isAnonymousAskAllowed, shouldApplyRateLimit } from './lib/http-runtime.js';
 import { resolveLocalSpeechConfig, synthesizeWithLocalSpeech, transcribeWithLocalSpeech, validateSpeechAudioPayload, validateSpeechTextPayload } from './lib/local-speech.js';
 import type { Tier } from './lib/auth.js';
+import type { CollectedFoodMemory, DishResearchPlan, MinimumViableNostalgiaCue, ReconstructionDossier } from './lib/types.js';
 import {
   anthropicTools as TOOLS,
   defaultToolExecutionContext,
@@ -243,6 +244,10 @@ When a user shares a food memory, start with tools before writing any user-facin
    - \`build_reconstruction_dossier\` with the memory, research plan, and any researched facts.
    - \`generate_minimum_viable_nostalgia\` with the dossier.
 
+If the user explicitly asks for a minimum test and provides a sensory clue such as ingredient, texture, aroma,
+temperature, color, or mouthfeel, call generate_minimum_viable_nostalgia even when dish identity is Low or Unknown.
+The final answer can include one narrowing question, but it must still give the cheap local proxy cue.
+
 Do not give a concrete food cue, tasting test, substitute, recipe move, or reconstruction until after
 \`generate_minimum_viable_nostalgia\` has returned. If the right move is a clarification-only response,
 ask the targeted questions and stop; do not sneak in a cue.
@@ -251,7 +256,7 @@ ask the targeted questions and stop; do not sneak in a cue.
 
 Your job is to SYNTHESIZE the tool outputs into useful analysis. Do NOT just repeat the user's words.
 
-**If the memory is sparse, ambiguous, or missing decisive clues:**
+**If the memory is sparse, ambiguous, or missing decisive clues and the user did not explicitly ask for a minimum test:**
 Ask 1-3 specific, high-value follow-up questions before offering a reconstruction. Prefer questions about dish name/sound-alike, region/community, cooking method, sensory trigger, serving format, or occasion. Whenever possible, quote or adapt the tool-generated nextQuestions instead of inventing generic questions. Explain in one short sentence why those answers matter.
 
 **If a specific dish was identified with Medium or High confidence and the user gave enough sensory clues:**
@@ -271,6 +276,8 @@ Then include one targeted follow-up that would most reduce uncertainty if they w
 - NEVER string the user's keywords together as a fake dish name (e.g., "fried Szechuan rice with Szechuan spices").
 - ALWAYS anchor to the specific region the user mentioned. If they said Sichuan, talk about Sichuan — not "Asia."
 - If you give a cue, make it cheap, accessible, and food-science grounded.
+- Do not tell the user to buy the exact suspected dish, candy, snack, brand, or imported specialty item as the minimum test.
+- Build the cue from cheap local pantry or ordinary grocery ingredients first; exact sourcing belongs only after a proxy cue works.
 - Keep responses under 220 words.
 - Be warm and direct, like a knowledgeable friend who wants to help them taste the memory again.
 - If the user shares a photo, describe what you see in the image and combine it with any text description they provide before calling tools.`;
@@ -452,8 +459,9 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
     const askSession = createAskSession(userMessage, history, images.value);
     const calledTools = new Set<string>();
     const toolPayloads: Record<string, unknown> = {};
+    send('status', { stage: 'model', provider: ASK_PROVIDER_KIND, model: ASK_MODEL });
     let modelResponse = await askSession.create(4096);
-    console.log(`[ask] provider=${ASK_PROVIDER_KIND} content=text:${modelResponse.textBlocks.length},tools:${modelResponse.toolCalls.length}`);
+    console.log(`[ask] provider=${ASK_PROVIDER_KIND} model=${ASK_MODEL} content=text:${modelResponse.textBlocks.length},tools:${modelResponse.toolCalls.length}`);
     if (modelResponse.toolCalls.length === 0) {
       console.warn('[ask] model skipped required Achiote tool workflow');
       send('error', {
@@ -473,15 +481,10 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       const toolResults: Array<{ id: string; content: string }> = [];
 
       for (const call of modelResponse.toolCalls) {
-        send('tool_call', { name: call.name, input: call.input });
         try {
-          const result = await executeToolDefinition(call.name, call.input, toolContext);
-          validateToolOutput(call.name, result.payload);
-          calledTools.add(call.name);
-          toolPayloads[call.name] = result.payload;
-          const content = JSON.stringify(result.payload);
+          const payload = await executeAndStreamTool(call.name, call.input, send, calledTools, toolPayloads);
+          const content = JSON.stringify(payload);
           toolResults.push({ id: call.id, content });
-          send('tool_result', { name: call.name, result: result.payload });
         } catch (err) {
           const detail = err instanceof Error ? err.message : String(err);
           const code = err instanceof ToolExecutionError ? err.code : 'tool_failed';
@@ -493,6 +496,10 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       askSession.appendToolResults(modelResponse, toolResults);
       send('status', { iteration: iterations, stage: 'thinking' });
       modelResponse = await askSession.create(2048);
+    }
+
+    if (await maybeSendForcedMinimumCue({ userMessage, toolPayloads, calledTools, send })) {
+      return;
     }
 
     if (!calledTools.has('generate_minimum_viable_nostalgia') && containsConcreteFoodCue(modelResponse.textBlocks.join('\n\n'))) {
@@ -511,6 +518,138 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
   } finally {
     res.end();
   }
+}
+
+type SseSender = (event: string, data: unknown) => void;
+
+async function executeAndStreamTool(
+  toolName: string,
+  input: unknown,
+  send: SseSender,
+  calledTools: Set<string>,
+  toolPayloads: Record<string, unknown>,
+): Promise<unknown> {
+  const normalizedInput = normalizeDependentToolInput(toolName, input, toolPayloads);
+  send('tool_call', { name: toolName, input: normalizedInput });
+  const result = await executeToolDefinition(toolName, normalizedInput, toolContext);
+  validateToolOutput(toolName, result.payload);
+  calledTools.add(toolName);
+  toolPayloads[toolName] = result.payload;
+  send('tool_result', { name: toolName, result: result.payload });
+  return result.payload;
+}
+
+function normalizeDependentToolInput(toolName: string, input: unknown, toolPayloads: Record<string, unknown>): unknown {
+  const record = isRecord(input) ? input : {};
+  if (toolName === 'plan_dish_research' && !isRecord(record.memory) && toolPayloads.collect_food_memory) {
+    return { ...record, memory: toolPayloads.collect_food_memory };
+  }
+  if (toolName === 'build_reconstruction_dossier') {
+    return {
+      ...record,
+      ...(!isRecord(record.memory) && toolPayloads.collect_food_memory ? { memory: toolPayloads.collect_food_memory } : {}),
+      ...(!isRecord(record.researchPlan) && toolPayloads.plan_dish_research ? { researchPlan: toolPayloads.plan_dish_research } : {}),
+    };
+  }
+  if (toolName === 'generate_minimum_viable_nostalgia' && !isRecord(record.dossier) && toolPayloads.build_reconstruction_dossier) {
+    return { ...record, dossier: toolPayloads.build_reconstruction_dossier };
+  }
+  return input;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
+}
+
+async function maybeSendForcedMinimumCue({
+  userMessage,
+  toolPayloads,
+  calledTools,
+  send,
+}: {
+  userMessage: string;
+  toolPayloads: Record<string, unknown>;
+  calledTools: Set<string>;
+  send: SseSender;
+}): Promise<boolean> {
+  if (calledTools.has('generate_minimum_viable_nostalgia')) return false;
+  if (!shouldForceMinimumCue(userMessage, toolPayloads)) return false;
+
+  const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
+  const researchPlan = toolPayloads.plan_dish_research as DishResearchPlan | undefined;
+  if (!memory || !researchPlan) return false;
+
+  console.warn('[ask] forcing minimum viable cue after explicit test request stalled before cue tool');
+  send('status', { stage: 'calling_tools', tools: ['build_reconstruction_dossier', 'generate_minimum_viable_nostalgia'], guarded: 'explicit_minimum_cue_fallback' });
+
+  let dossier = toolPayloads.build_reconstruction_dossier as ReconstructionDossier | undefined;
+  if (!dossier) {
+    dossier = await executeAndStreamTool('build_reconstruction_dossier', {
+      memory,
+      researchPlan,
+      inferredFacts: [
+        'The user explicitly asked for a minimum test, so the first response should give a cheap local proxy before exact dish sourcing.',
+        'The cue should isolate remembered sensory mechanisms from pantry or ordinary grocery ingredients.',
+      ],
+    }, send, calledTools, toolPayloads) as ReconstructionDossier;
+  }
+
+  const cue = await executeAndStreamTool('generate_minimum_viable_nostalgia', {
+    dossier,
+    userLocation: memory.userLocation,
+    maxEffortMinutes: 10,
+  }, send, calledTools, toolPayloads) as MinimumViableNostalgiaCue;
+
+  send('text', formatMinimumCueFallback(cue));
+  send('done', { guarded: 'explicit_minimum_cue_fallback' });
+  return true;
+}
+
+function shouldForceMinimumCue(userMessage: string, toolPayloads: Record<string, unknown>): boolean {
+  if (!isExplicitMinimumTestRequest(userMessage)) return false;
+  if (!toolPayloads.collect_food_memory || !toolPayloads.plan_dish_research) return false;
+  return hasSensorySignal(userMessage, toolPayloads.collect_food_memory);
+}
+
+function isExplicitMinimumTestRequest(text: string): boolean {
+  return /\b(?:minimum viable|minimum|smallest|smallest safe|smallest local|first|local)\b[\s\S]{0,40}\b(?:test|cue|try|taste|nostalgia)\b/i.test(text)
+    || /\b(?:test|cue|try|taste)\b[\s\S]{0,40}\b(?:minimum viable|minimum|smallest|first|local)\b/i.test(text);
+}
+
+function hasSensorySignal(userMessage: string, collectedMemory: unknown): boolean {
+  const clues = collectedMemory && typeof collectedMemory === 'object'
+    ? (collectedMemory as { extractedClues?: { rememberedIngredients?: unknown; sensoryClues?: unknown } }).extractedClues
+    : undefined;
+  const rememberedIngredients = Array.isArray(clues?.rememberedIngredients) ? clues.rememberedIngredients : [];
+  const sensoryClues = Array.isArray(clues?.sensoryClues) ? clues.sensoryClues : [];
+  if (rememberedIngredients.length > 0 || sensoryClues.length > 0) return true;
+
+  return /\b(?:sweet|sour|salty|bitter|spicy|hot|cold|warm|crispy|crunchy|crumbly|grainy|powdery|chewy|creamy|sticky|aroma|smell|texture|color|mouth|tongue|sesame|coconut|peanut|dill|garlic|onion|sauce|gravy|relish)\b/i.test(userMessage);
+}
+
+function formatMinimumCueFallback(cue: MinimumViableNostalgiaCue): string {
+  const ingredientLines = cue.ingredients
+    .slice(0, 4)
+    .map((ingredient) => `- ${ingredient.amount} ${ingredient.item}${ingredient.optional ? ' (optional)' : ''}`);
+  const stepLines = cue.steps
+    .slice(0, 4)
+    .map((step, index) => `${index + 1}. ${step}`);
+  const followUp = cue.followUpIfItWorks[0];
+
+  return [
+    `${cue.title} (${cue.effortMinutes} min)`,
+    '',
+    cue.goal,
+    '',
+    'Use:',
+    ...ingredientLines,
+    '',
+    'Try:',
+    ...stepLines,
+    '',
+    `Why this is minimum: ${cue.whyThisIsMinimum}`,
+    followUp ? `If it works: ${followUp}` : '',
+  ].filter((line) => line.length > 0).join('\n');
 }
 
 function authenticateVoiceRequest(req: IncomingMessage, res: ServerResponse): AuthedRequest {
