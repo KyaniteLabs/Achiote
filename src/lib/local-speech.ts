@@ -5,6 +5,7 @@ export type LocalSttConfig = {
   ready: boolean;
   reason?: string;
   binary?: string;
+  ffmpegBinary?: string;
   model?: string;
   language?: string;
   languages: string[];
@@ -109,6 +110,7 @@ function parseVoices(value: string | undefined): LocalTtsVoice[] {
 function resolveWhisperConfig(env: Env): LocalSttConfig {
   const model = env.ACHIOTE_WHISPER_CPP_MODEL?.trim();
   const binary = env.ACHIOTE_WHISPER_CPP_BINARY?.trim() || 'whisper-cli';
+  const ffmpegBinary = env.ACHIOTE_FFMPEG_BINARY?.trim() || 'ffmpeg';
   const language = env.ACHIOTE_STT_LANGUAGE?.trim() || 'auto';
   const languages = parseCsv(env.ACHIOTE_STT_LANGUAGES, DEFAULT_STT_LANGUAGES);
 
@@ -118,6 +120,7 @@ function resolveWhisperConfig(env: Env): LocalSttConfig {
       ready: false,
       reason: 'ACHIOTE_WHISPER_CPP_MODEL is required',
       binary,
+      ffmpegBinary,
       language,
       languages,
     };
@@ -127,6 +130,7 @@ function resolveWhisperConfig(env: Env): LocalSttConfig {
     provider: 'whispercpp',
     ready: true,
     binary,
+    ffmpegBinary,
     model,
     language,
     languages,
@@ -297,6 +301,10 @@ function runCommand(command: string, args: string[], timeoutMs = SPEECH_COMMAND_
   });
 }
 
+function isWhisperWavInput(mediaType: string): boolean {
+  return mediaType === 'audio/wav' || mediaType === 'audio/x-wav';
+}
+
 export async function transcribeWithLocalSpeech(config: LocalSpeechConfig, payload: { audioBase64: string; mediaType: string; language?: string }): Promise<LocalTranscriptionResult> {
   if (config.stt.provider !== 'whispercpp' || !config.stt.ready || !config.stt.binary || !config.stt.model) {
     throw new Error(config.stt.reason || 'speech-to-text is not ready');
@@ -308,8 +316,23 @@ export async function transcribeWithLocalSpeech(config: LocalSpeechConfig, paylo
     const outputBase = join(dir, 'transcript');
     const outputPath = `${outputBase}.txt`;
     await writeFile(inputPath, Buffer.from(payload.audioBase64, 'base64'));
+    const whisperInputPath = isWhisperWavInput(payload.mediaType) ? inputPath : join(dir, 'input.wav');
+    if (whisperInputPath !== inputPath) {
+      await runCommand(config.stt.ffmpegBinary || 'ffmpeg', [
+        '-y',
+        '-i',
+        inputPath,
+        '-ar',
+        '16000',
+        '-ac',
+        '1',
+        '-c:a',
+        'pcm_s16le',
+        whisperInputPath,
+      ]);
+    }
     const language = payload.language || config.stt.language || 'auto';
-    const args = ['-m', config.stt.model, '-f', inputPath, '-otxt', '-of', outputBase];
+    const args = ['-m', config.stt.model, '-f', whisperInputPath, '-otxt', '-of', outputBase];
     if (language && language !== 'auto') args.push('-l', language);
     await runCommand(config.stt.binary, args);
     const text = (await readFile(outputPath, 'utf8')).trim();
