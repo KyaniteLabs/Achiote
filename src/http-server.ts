@@ -19,6 +19,7 @@ import { BillingStripe, loadBillingConfigFromEnv } from './lib/billing-stripe.js
 import { getHttpReadiness, getRequestRateLimitIdentity, isAnonymousAskAllowed, shouldApplyRateLimit } from './lib/http-runtime.js';
 import { resolveLocalSpeechConfig, synthesizeWithLocalSpeech, transcribeWithLocalSpeech, validateSpeechAudioPayload, validateSpeechTextPayload } from './lib/local-speech.js';
 import type { Tier } from './lib/auth.js';
+import type { CollectedFoodMemory, DishResearchPlan, MinimumViableNostalgiaCue, ReconstructionDossier } from './lib/types.js';
 import {
   anthropicTools as TOOLS,
   defaultToolExecutionContext,
@@ -480,15 +481,10 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       const toolResults: Array<{ id: string; content: string }> = [];
 
       for (const call of modelResponse.toolCalls) {
-        send('tool_call', { name: call.name, input: call.input });
         try {
-          const result = await executeToolDefinition(call.name, call.input, toolContext);
-          validateToolOutput(call.name, result.payload);
-          calledTools.add(call.name);
-          toolPayloads[call.name] = result.payload;
-          const content = JSON.stringify(result.payload);
+          const payload = await executeAndStreamTool(call.name, call.input, send, calledTools, toolPayloads);
+          const content = JSON.stringify(payload);
           toolResults.push({ id: call.id, content });
-          send('tool_result', { name: call.name, result: result.payload });
         } catch (err) {
           const detail = err instanceof Error ? err.message : String(err);
           const code = err instanceof ToolExecutionError ? err.code : 'tool_failed';
@@ -500,6 +496,10 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       askSession.appendToolResults(modelResponse, toolResults);
       send('status', { iteration: iterations, stage: 'thinking' });
       modelResponse = await askSession.create(2048);
+    }
+
+    if (await maybeSendForcedMinimumCue({ userMessage, toolPayloads, calledTools, send })) {
+      return;
     }
 
     if (!calledTools.has('generate_minimum_viable_nostalgia') && containsConcreteFoodCue(modelResponse.textBlocks.join('\n\n'))) {
@@ -518,6 +518,138 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
   } finally {
     res.end();
   }
+}
+
+type SseSender = (event: string, data: unknown) => void;
+
+async function executeAndStreamTool(
+  toolName: string,
+  input: unknown,
+  send: SseSender,
+  calledTools: Set<string>,
+  toolPayloads: Record<string, unknown>,
+): Promise<unknown> {
+  const normalizedInput = normalizeDependentToolInput(toolName, input, toolPayloads);
+  send('tool_call', { name: toolName, input: normalizedInput });
+  const result = await executeToolDefinition(toolName, normalizedInput, toolContext);
+  validateToolOutput(toolName, result.payload);
+  calledTools.add(toolName);
+  toolPayloads[toolName] = result.payload;
+  send('tool_result', { name: toolName, result: result.payload });
+  return result.payload;
+}
+
+function normalizeDependentToolInput(toolName: string, input: unknown, toolPayloads: Record<string, unknown>): unknown {
+  const record = isRecord(input) ? input : {};
+  if (toolName === 'plan_dish_research' && !isRecord(record.memory) && toolPayloads.collect_food_memory) {
+    return { ...record, memory: toolPayloads.collect_food_memory };
+  }
+  if (toolName === 'build_reconstruction_dossier') {
+    return {
+      ...record,
+      ...(!isRecord(record.memory) && toolPayloads.collect_food_memory ? { memory: toolPayloads.collect_food_memory } : {}),
+      ...(!isRecord(record.researchPlan) && toolPayloads.plan_dish_research ? { researchPlan: toolPayloads.plan_dish_research } : {}),
+    };
+  }
+  if (toolName === 'generate_minimum_viable_nostalgia' && !isRecord(record.dossier) && toolPayloads.build_reconstruction_dossier) {
+    return { ...record, dossier: toolPayloads.build_reconstruction_dossier };
+  }
+  return input;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return Boolean(value) && typeof value === 'object' && !Array.isArray(value);
+}
+
+async function maybeSendForcedMinimumCue({
+  userMessage,
+  toolPayloads,
+  calledTools,
+  send,
+}: {
+  userMessage: string;
+  toolPayloads: Record<string, unknown>;
+  calledTools: Set<string>;
+  send: SseSender;
+}): Promise<boolean> {
+  if (calledTools.has('generate_minimum_viable_nostalgia')) return false;
+  if (!shouldForceMinimumCue(userMessage, toolPayloads)) return false;
+
+  const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
+  const researchPlan = toolPayloads.plan_dish_research as DishResearchPlan | undefined;
+  if (!memory || !researchPlan) return false;
+
+  console.warn('[ask] forcing minimum viable cue after explicit test request stalled before cue tool');
+  send('status', { stage: 'calling_tools', tools: ['build_reconstruction_dossier', 'generate_minimum_viable_nostalgia'], guarded: 'explicit_minimum_cue_fallback' });
+
+  let dossier = toolPayloads.build_reconstruction_dossier as ReconstructionDossier | undefined;
+  if (!dossier) {
+    dossier = await executeAndStreamTool('build_reconstruction_dossier', {
+      memory,
+      researchPlan,
+      inferredFacts: [
+        'The user explicitly asked for a minimum test, so the first response should give a cheap local proxy before exact dish sourcing.',
+        'The cue should isolate remembered sensory mechanisms from pantry or ordinary grocery ingredients.',
+      ],
+    }, send, calledTools, toolPayloads) as ReconstructionDossier;
+  }
+
+  const cue = await executeAndStreamTool('generate_minimum_viable_nostalgia', {
+    dossier,
+    userLocation: memory.userLocation,
+    maxEffortMinutes: 10,
+  }, send, calledTools, toolPayloads) as MinimumViableNostalgiaCue;
+
+  send('text', formatMinimumCueFallback(cue));
+  send('done', { guarded: 'explicit_minimum_cue_fallback' });
+  return true;
+}
+
+function shouldForceMinimumCue(userMessage: string, toolPayloads: Record<string, unknown>): boolean {
+  if (!isExplicitMinimumTestRequest(userMessage)) return false;
+  if (!toolPayloads.collect_food_memory || !toolPayloads.plan_dish_research) return false;
+  return hasSensorySignal(userMessage, toolPayloads.collect_food_memory);
+}
+
+function isExplicitMinimumTestRequest(text: string): boolean {
+  return /\b(?:minimum viable|minimum|smallest|smallest safe|smallest local|first|local)\b[\s\S]{0,40}\b(?:test|cue|try|taste|nostalgia)\b/i.test(text)
+    || /\b(?:test|cue|try|taste)\b[\s\S]{0,40}\b(?:minimum viable|minimum|smallest|first|local)\b/i.test(text);
+}
+
+function hasSensorySignal(userMessage: string, collectedMemory: unknown): boolean {
+  const clues = collectedMemory && typeof collectedMemory === 'object'
+    ? (collectedMemory as { extractedClues?: { rememberedIngredients?: unknown; sensoryClues?: unknown } }).extractedClues
+    : undefined;
+  const rememberedIngredients = Array.isArray(clues?.rememberedIngredients) ? clues.rememberedIngredients : [];
+  const sensoryClues = Array.isArray(clues?.sensoryClues) ? clues.sensoryClues : [];
+  if (rememberedIngredients.length > 0 || sensoryClues.length > 0) return true;
+
+  return /\b(?:sweet|sour|salty|bitter|spicy|hot|cold|warm|crispy|crunchy|crumbly|grainy|powdery|chewy|creamy|sticky|aroma|smell|texture|color|mouth|tongue|sesame|coconut|peanut|dill|garlic|onion|sauce|gravy|relish)\b/i.test(userMessage);
+}
+
+function formatMinimumCueFallback(cue: MinimumViableNostalgiaCue): string {
+  const ingredientLines = cue.ingredients
+    .slice(0, 4)
+    .map((ingredient) => `- ${ingredient.amount} ${ingredient.item}${ingredient.optional ? ' (optional)' : ''}`);
+  const stepLines = cue.steps
+    .slice(0, 4)
+    .map((step, index) => `${index + 1}. ${step}`);
+  const followUp = cue.followUpIfItWorks[0];
+
+  return [
+    `${cue.title} (${cue.effortMinutes} min)`,
+    '',
+    cue.goal,
+    '',
+    'Use:',
+    ...ingredientLines,
+    '',
+    'Try:',
+    ...stepLines,
+    '',
+    `Why this is minimum: ${cue.whyThisIsMinimum}`,
+    followUp ? `If it works: ${followUp}` : '',
+  ].filter((line) => line.length > 0).join('\n');
 }
 
 function authenticateVoiceRequest(req: IncomingMessage, res: ServerResponse): AuthedRequest {
