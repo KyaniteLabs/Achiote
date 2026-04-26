@@ -126,6 +126,13 @@ describe('P2 product trust improvements', () => {
     expect(server).toContain('clarification-only response');
   });
 
+  it('requires /ask cue prose to use local proxy ingredients instead of buying the suspected food', () => {
+    const server = fs.readFileSync('src/http-server.ts', 'utf8');
+
+    expect(server).toContain('Do not tell the user to buy the exact suspected dish, candy, snack, brand, or imported specialty item as the minimum test');
+    expect(server).toContain('Build the cue from cheap local pantry or ordinary grocery ingredients first');
+  });
+
   it('adds self-hosted key generation and Docker smoke runbooks', () => {
     const pkg = fs.readFileSync('package.json', 'utf8');
     const keygen = fs.readFileSync('scripts/generate-api-key.mjs', 'utf8');

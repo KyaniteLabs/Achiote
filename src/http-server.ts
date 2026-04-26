@@ -271,6 +271,8 @@ Then include one targeted follow-up that would most reduce uncertainty if they w
 - NEVER string the user's keywords together as a fake dish name (e.g., "fried Szechuan rice with Szechuan spices").
 - ALWAYS anchor to the specific region the user mentioned. If they said Sichuan, talk about Sichuan — not "Asia."
 - If you give a cue, make it cheap, accessible, and food-science grounded.
+- Do not tell the user to buy the exact suspected dish, candy, snack, brand, or imported specialty item as the minimum test.
+- Build the cue from cheap local pantry or ordinary grocery ingredients first; exact sourcing belongs only after a proxy cue works.
 - Keep responses under 220 words.
 - Be warm and direct, like a knowledgeable friend who wants to help them taste the memory again.
 - If the user shares a photo, describe what you see in the image and combine it with any text description they provide before calling tools.`;
