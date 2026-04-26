@@ -133,6 +133,13 @@ describe('P2 product trust improvements', () => {
     expect(server).toContain('Build the cue from cheap local pantry or ordinary grocery ingredients first');
   });
 
+  it('requires /ask to honor explicit minimum-test requests with sensory clues', () => {
+    const server = fs.readFileSync('src/http-server.ts', 'utf8');
+
+    expect(server).toContain('If the user explicitly asks for a minimum test');
+    expect(server).toContain('generate_minimum_viable_nostalgia even when dish identity is Low or Unknown');
+  });
+
   it('adds self-hosted key generation and Docker smoke runbooks', () => {
     const pkg = fs.readFileSync('package.json', 'utf8');
     const keygen = fs.readFileSync('scripts/generate-api-key.mjs', 'utf8');
