@@ -137,8 +137,8 @@ export function createRateLimiter(dbPath?: string) {
       return checkLimit('mcp', keyId, limit);
     },
 
-    checkWebLimit(tier: Tier, sessionId: string): RateLimitResult {
-      const limit = getTierLimits(tier).webReconstructions;
+    checkWebLimit(tier: Tier, sessionId: string, limitOverride?: number): RateLimitResult {
+      const limit = limitOverride ?? getTierLimits(tier).webReconstructions;
       if (!isFinite(limit)) {
         return unlimitedWebResult();
       }

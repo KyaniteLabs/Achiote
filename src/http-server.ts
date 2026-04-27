@@ -35,6 +35,7 @@ const TRUSTED_PROXY_IPS = (process.env.ACHIOTE_TRUSTED_PROXY_IPS || '')
   .map((value) => value.trim())
   .filter(Boolean);
 const ALLOW_ANON_ASK = process.env.ACHIOTE_ALLOW_ANON_ASK === 'true';
+const ANON_WEB_RECONSTRUCTIONS = parsePositiveInteger(process.env.ACHIOTE_ANON_WEB_RECONSTRUCTIONS);
 
 const PORT = parseInt(process.env.PORT || '3000', 10);
 const ASK_PROVIDER_KIND = resolveAskProviderKind();
@@ -441,7 +442,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
   const history = parseHistory(parsed.history);
 
   if (shouldApplyRateLimit({ contentType, parsedBody: parsed })) {
-    const limitResult = rateLimiter.checkWebLimit(authed.tier, authed.keyId);
+    const limitResult = rateLimiter.checkWebLimit(authed.tier, authed.keyId, anonymousWebLimitOverride(authed));
     sendRateLimitHeaders(res, limitResult);
     if (!limitResult.allowed && !checkCreditsForAuthed(authed, 'web')) {
       sendJson(res, 429, { error: 'Rate limit exceeded. Upgrade your plan for more reconstructions.' });
@@ -576,6 +577,17 @@ function inferUserLocation(userMessage: string): string | undefined {
     .trim();
   if (location.length < 2 || /^(the|a|an|this|that|it|there)$/i.test(location)) return undefined;
   return location.slice(0, 80);
+}
+
+function anonymousWebLimitOverride(authed: AuthedRequest): number | undefined {
+  if (!authed || AUTH_ENABLED || !ALLOW_ANON_ASK) return undefined;
+  return ANON_WEB_RECONSTRUCTIONS;
+}
+
+function parsePositiveInteger(value: string | undefined): number | undefined {
+  if (!value) return undefined;
+  const parsed = Number.parseInt(value, 10);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : undefined;
 }
 
 function escapeRegExp(value: string): string {
