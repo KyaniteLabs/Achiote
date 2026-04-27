@@ -177,15 +177,32 @@
     .assistant-content + .trace-panel { margin-top: 14px; }
     .trace-panel {
       width: min(100%, 680px);
-      padding: 12px 14px;
+      padding: 14px 16px;
       background: var(--card-solid);
       border-radius: var(--radius-sm);
-      font-size: 0.92rem;
-      line-height: 1.45;
+      font-size: 1rem;
+      line-height: 1.5;
       color: var(--muted);
       border: 1px solid var(--line);
       max-height: 280px;
       overflow-y: auto;
+    }
+    .trace-heading {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+      padding-bottom: 8px;
+      margin-bottom: 2px;
+      border-bottom: 1px solid var(--line);
+      color: var(--ink);
+      font-weight: 850;
+      letter-spacing: 0;
+    }
+    .trace-debug {
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 650;
     }
     .trace-item {
       display: grid;
@@ -202,6 +219,10 @@
       white-space: nowrap;
     }
     .trace-text { min-width: 0; }
+    .trace-phase {
+      color: var(--ink);
+      font-weight: 850;
+    }
     .trace-provider {
       color: var(--sofrito);
       font-weight: 800;
@@ -217,7 +238,7 @@
     .trace-summary {
       display: block;
       color: var(--muted);
-      font-size: 0.86rem;
+      font-size: 0.92rem;
       margin-top: 2px;
       overflow-wrap: anywhere;
     }

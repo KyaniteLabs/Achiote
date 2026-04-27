@@ -271,8 +271,14 @@ function createTracePanel(aiEl) {
 
   const trace = document.createElement('div');
   trace.className = 'trace-panel';
+  const heading = document.createElement('div');
+  heading.className = 'trace-heading';
+  heading.innerHTML = '<span>What Achiote is doing</span><span class="trace-debug">runtime appears here</span>';
+  const list = document.createElement('div');
+  list.className = 'trace-list';
+  trace.append(heading, list);
   aiEl.appendChild(trace);
-  return trace;
+  return list;
 }
 
 function renderTraceLine(item, time, contentNodes) {
@@ -300,15 +306,20 @@ function addTraceItem(trace, type, data) {
 
   if (type === 'status') {
     if (data.stage === 'model') {
+      const heading = trace.closest('.trace-panel')?.querySelector('.trace-debug');
+      if (heading) heading.textContent = `${data.model || 'unknown model'} via ${data.provider || 'provider'}`;
       renderTraceLine(item, time, [
-        traceText('Model: '),
+        traceText('Preparing runtime: ', 'trace-phase'),
         traceText(data.model || 'unknown', 'model-label'),
         traceText(` via ${data.provider || 'provider'}`, 'trace-provider'),
       ]);
     } else {
-      const stageLabel = data.stage === 'calling_tools' ? `Step ${data.iteration}: calling tools` : `Step ${data.iteration}: thinking...`;
+      const stageLabel = phaseForStatus(data);
       const tools = data.tools ? ` (${data.tools.join(', ')})` : '';
-      renderTraceLine(item, time, [traceText(`${stageLabel}${tools}`)]);
+      renderTraceLine(item, time, [
+        traceText(stageLabel, 'trace-phase'),
+        traceText(tools),
+      ]);
     }
   } else if (type === 'tool_call') {
     const inputSummary = summarizeInput(data.input);
@@ -329,7 +340,19 @@ function addTraceItem(trace, type, data) {
   }
 
   trace.appendChild(item);
-  trace.scrollTop = 1e6;
+  const panel = trace.closest('.trace-panel') || trace;
+  panel.scrollTop = 1e6;
+}
+
+function phaseForStatus(data) {
+  const tools = Array.isArray(data.tools) ? data.tools : [];
+  if (data.stage === 'thinking') return `Step ${data.iteration}: Weighing evidence`;
+  if (tools.includes('collect_food_memory')) return `Step ${data.iteration}: Reading memory`;
+  if (tools.includes('resolve_dish_name')) return `Step ${data.iteration}: Correcting likely name`;
+  if (tools.includes('search_web') || tools.includes('build_research_record') || tools.includes('extract_research_findings')) return `Step ${data.iteration}: Researching`;
+  if (tools.includes('build_reconstruction_dossier')) return `Step ${data.iteration}: Separating evidence`;
+  if (tools.includes('generate_minimum_viable_nostalgia')) return `Step ${data.iteration}: Building first test`;
+  return data.stage === 'calling_tools' ? `Step ${data.iteration}: Checking tools` : `Step ${data.iteration}: Working`;
 }
 
 function summarizeInput(input) {
@@ -441,10 +464,10 @@ function addFeedback(el) {
   feedback.className = 'feedback';
   feedback.setAttribute('aria-label', 'Rate this answer');
   feedback.innerHTML = [
-    '<button type="button" data-feedback="feedback_helpful">Helpful</button>',
-    '<button type="button" data-feedback="feedback_generic">Too generic</button>',
+    '<button type="button" data-feedback="feedback_close">Feels close</button>',
     '<button type="button" data-feedback="feedback_wrong_region">Wrong region</button>',
-    '<button type="button" data-feedback="feedback_unsafe">Safety issue</button>',
+    '<button type="button" data-feedback="feedback_too_hard">Too hard to make</button>',
+    '<button type="button" data-feedback="feedback_missed_correction">Did not correct my wording</button>',
   ].join('');
   feedback.addEventListener('click', (event) => {
     const target = event.target;
