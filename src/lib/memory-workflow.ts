@@ -875,9 +875,9 @@ function decomposeIntoComponents(signals: string, userLocation?: string, overall
 
     components.push({
       role,
-      criticalElement: def.criticalElement,
-      flavorProfile: def.flavorProfile,
-      localTestWith: `${def.localTestWith} ${locationPhrase}`,
+      criticalElement: specificCriticalElement(role, signals, def.criticalElement),
+      flavorProfile: specificFlavorProfile(role, signals, def.flavorProfile),
+      localTestWith: `${specificLocalTestWith(role, signals, def.localTestWith)} ${locationPhrase}`,
       substitutionReason: def.substitutionReason,
       confidence: overallConfidence ?? 'Low',
     });
@@ -904,6 +904,105 @@ function hasAnySignal(text: string, patterns: RegExp[]): boolean {
 function wordSignal(words: string): RegExp {
   const escaped = words.split('|').map(w => escapeRegExp(w)).join('|');
   return new RegExp(`\\b(${escaped})\\b`, 'i');
+}
+
+function signalIncludes(signals: string, words: string): boolean {
+  return hasAnySignal(signals, [wordSignal(words)]);
+}
+
+function specificCriticalElement(role: ComponentRole, signals: string, fallback: string): string {
+  if (role === 'starch' && signalIncludes(signals, 'yuca|cassava|tapioca')) {
+    return 'cassava-family chew, gelatinized starch body, and crisp fried surface';
+  }
+  if (role === 'protein' && signalIncludes(signals, 'fish|shark')) {
+    return 'fried fish richness, browned edge aroma, and sauce-carrying fat';
+  }
+  if (role === 'sauce' && signalIncludes(signals, 'orange|hot|pepper|chile|lime|vinegar|acid|sharp')) {
+    return 'hot-acid sauce contrast: chile heat, citrus/vinegar brightness, salt, and orange color cue';
+  }
+  if (role === 'confectionery' && signalIncludes(signals, 'peanut|jaggery|brittle|chikki')) {
+    return 'roasted peanut aroma, hard sugar snap, and sandy caramel finish';
+  }
+  return fallback;
+}
+
+function specificFlavorProfile(role: ComponentRole, signals: string, fallback: string): string {
+  if (role === 'starch' && signalIncludes(signals, 'yuca|cassava|tapioca')) {
+    return 'neutral-sweet cassava chew with a crisp exterior and soft starchy middle';
+  }
+  if (role === 'protein' && signalIncludes(signals, 'fish|shark')) {
+    return 'savory white-fish richness, browned oil aroma, salt, and a clean surface for sharp sauce';
+  }
+  if (role === 'sauce' && signalIncludes(signals, 'orange|hot|pepper|chile|lime|vinegar|acid|sharp')) {
+    return 'sharp, salty, chile-hot, citrusy or vinegar-bright, with mustard/paprika/turmeric color and garlic-herb aroma';
+  }
+  if (role === 'confectionery' && signalIncludes(signals, 'peanut|jaggery|brittle|chikki')) {
+    return 'roasted peanut, brown sugar or jaggery caramel, hard snap, then sandy melt';
+  }
+  return fallback;
+}
+
+function specificLocalTestWith(role: ComponentRole, signals: string, fallback: string): string {
+  if (role === 'starch' && signalIncludes(signals, 'yuca|cassava|tapioca')) {
+    return 'frozen yuca/cassava, canned yuca, tapioca-starch paste, or plantain crisped in oil';
+  }
+  if (role === 'protein' && signalIncludes(signals, 'fish|shark')) {
+    return 'a small piece of white fish, canned fish, or firm tofu pan-seared in oil';
+  }
+  if (role === 'sauce' && signalIncludes(signals, 'orange|hot|pepper|chile|lime|vinegar|acid|sharp')) {
+    return 'one spoon of lime or vinegar plus hot sauce/chile, mustard, paprika or turmeric, garlic, and cilantro or another green herb';
+  }
+  if (role === 'confectionery' && signalIncludes(signals, 'peanut|jaggery|brittle|chikki')) {
+    return 'one spoon of roasted peanuts or peanut butter with brown sugar, syrup, or jaggery-style caramel if available';
+  }
+  return fallback;
+}
+
+function composedCarrierIngredient(signals: string): string {
+  if (signalIncludes(signals, 'yuca|cassava|tapioca')) {
+    return 'cassava-family carrier matching the remembered base: frozen yuca/cassava, canned yuca, tapioca-starch paste, or plantain crisped in oil';
+  }
+  return 'cheap grocery-store carrier matching the remembered base: starch, bread, potato, rice, bean, noodle, or cooked vegetable';
+}
+
+function composedProteinIngredient(signals: string): string {
+  if (signalIncludes(signals, 'fish|shark')) {
+    return 'small piece of white fish, canned fish, or firm tofu pan-seared in oil';
+  }
+  return 'small amount of accessible protein, fat, dairy, mushroom, bean, or plant-based substitute if relevant';
+}
+
+function composedBalanceIngredient(signals: string): string {
+  if (signalIncludes(signals, 'orange|hot|pepper|chile|lime|vinegar|acid|sharp|sauce')) {
+    return 'sharp sauce proxy: lime or vinegar, hot sauce or chile, mustard, paprika or turmeric, garlic, salt, and cilantro or another green herb';
+  }
+  return 'acid/sweet/salt/fat adjustment';
+}
+
+function composedBiteSteps(signals: string): string[] {
+  const steps = [
+    'Prepare only the carrier and one small aroma/fat/protein element.',
+    'Use browning, toasting, frying, warming, or chilling only if that process is part of the remembered texture/aroma.',
+    'Add the researched spice/aromatic direction to the fat or protein so aroma compounds bloom.',
+    'Taste one composed bite and ask which mechanism hits: aroma, Maillard browning, fat richness, starch texture, acid/sweet balance, or contrast.',
+  ];
+  if (signalIncludes(signals, 'fish|shark') && signalIncludes(signals, 'orange|hot|pepper|chile|lime|vinegar|acid|sharp|sauce')) {
+    return [
+      'Pan-sear only one small bite of white fish or the safest local protein substitute.',
+      'Stir a teaspoon sauce from lime or vinegar, hot sauce/chile, mustard, paprika or turmeric, garlic, salt, and cilantro or another green herb.',
+      'Taste the fish with one dot of sauce and judge the contrast: fried richness, sharp acid, chile heat, orange-color cue, and green-herb aroma.',
+      'Change one variable at a time before chasing exact peppers, herbs, or restaurant-style sauce.',
+    ];
+  }
+  if (signalIncludes(signals, 'yuca|cassava|tapioca')) {
+    return [
+      'Crisp one tiny bite of frozen yuca/cassava, canned yuca, tapioca-starch paste, or plantain in oil.',
+      'Brown one spoon of the filling/fat/protein cue separately so the aroma blooms.',
+      'Taste them together and judge the cassava-family chew, crisp edge, and savory browned aroma.',
+      'If the chew is wrong, fix the starch proxy before buying exact regional ingredients.',
+    ];
+  }
+  return steps;
 }
 
 function foodScienceCueProfile(signals: string, userLocation?: string, overallConfidence?: Confidence, forceProbe?: boolean): FoodScienceCueProfile {
@@ -951,8 +1050,8 @@ function foodScienceCueProfile(signals: string, userLocation?: string, overallCo
       effortMinutes: 8,
       format: 'bite',
       ingredients: [
-        { item: 'plain granulated sugar or crushed sugar cube', amount: '1/2 teaspoon', purpose: 'tests crystalline sweetness and powdery crumble without buying the suspected candy' },
-        { item: 'safe local aroma/texture cue such as toasted sesame seeds, coconut flakes, toasted oats, or crushed plain cracker', amount: '1/2 teaspoon', purpose: 'tests seed, coconut, grain, or crumbly matrix aroma with ordinary local ingredients' },
+        { item: signalIncludes(signals, 'peanut|jaggery|brittle|chikki') ? 'plain granulated or brown sugar, syrup, or jaggery-style sugar if already available' : 'plain granulated sugar or crushed sugar cube', amount: '1/2 teaspoon', purpose: 'tests crystalline sweetness, caramel direction, and powdery crumble without buying the suspected candy' },
+        { item: signalIncludes(signals, 'peanut|jaggery|brittle|chikki') ? 'roasted peanuts, crushed peanut, or peanut butter if safe' : 'safe local aroma/texture cue such as toasted sesame seeds, coconut flakes, toasted oats, or crushed plain cracker', amount: '1/2 teaspoon', purpose: 'tests the remembered nut, seed, coconut, grain, or crumbly matrix aroma with ordinary local ingredients' },
         { item: 'tiny fat or binder if needed: butter, neutral oil, tahini, peanut butter, honey, or syrup only if safe and already available', amount: 'drop or smear', purpose: 'tests mouth-coating fat or sticky matrix without making a batch', optional: true },
         { item: 'pantry adjustment for flavor direction: cinnamon, vanilla extract, or pinch of salt', amount: 'pinch or drop', purpose: 'aroma and flavor tuning', optional: true },
         { item: 'warm water or black coffee as a palate cleanser', amount: 'sip', purpose: 'resets sweetness perception between tests', optional: true },
@@ -960,7 +1059,9 @@ function foodScienceCueProfile(signals: string, userLocation?: string, overallCo
       steps: [
         'Do not buy the exact suspected candy for the first test; build one teaspoon of a local proxy instead.',
         'Put the sugar with the safe aroma/texture cue on a spoon or tiny neutral cracker and let it sit on the tongue before chewing.',
-        'Notice whether the trigger is powdery sugar crystallization, toasted seed/coconut/grain aroma, sticky fat, or crumbly fracture.',
+        signalIncludes(signals, 'peanut|jaggery|brittle|chikki')
+          ? 'Notice whether the trigger is roasted peanut aroma, hard sugar snap or shatter, brown-sugar caramel, sticky fat, or sandy crumble.'
+          : 'Notice whether the trigger is powdery sugar crystallization, toasted seed/coconut/grain aroma, sticky fat, or crumbly fracture.',
         'Change one local variable at a time: more sugar for powder, more toasted seed/coconut/oat for aroma, or a tiny fat/binder for mouthfeel.',
       ],
       preserves: ['sugar crystallization texture', 'toasted aroma direction', 'crumbly or sticky mouthfeel', 'spice aroma direction'],
@@ -1019,17 +1120,12 @@ function foodScienceCueProfile(signals: string, userLocation?: string, overallCo
       effortMinutes: 15,
       format: 'bite',
       ingredients: [
-        { item: 'cheap grocery-store carrier matching the remembered base: starch, bread, potato, rice, bean, noodle, or cooked vegetable', amount: '1-2 bites', purpose: 'texture and sauce carrier' },
-        { item: 'small amount of accessible protein, fat, dairy, mushroom, bean, or plant-based substitute if relevant', amount: '1-2 tablespoons', purpose: 'fat/protein/umami carrier' },
+        { item: composedCarrierIngredient(signals), amount: '1-2 bites', purpose: 'texture and sauce carrier' },
+        { item: composedProteinIngredient(signals), amount: '1-2 tablespoons', purpose: 'fat/protein/umami carrier' },
         { item: 'researched aromatic or spice direction using pantry spices/aromatics', amount: 'pinch to 1 teaspoon', purpose: 'volatile memory trigger', optional: true },
-        { item: 'acid/sweet/salt/fat adjustment', amount: 'drops or pinches', purpose: 'balance and mouthfeel control', optional: true },
+        { item: composedBalanceIngredient(signals), amount: 'drops, pinches, or 1 teaspoon', purpose: 'balance and mouthfeel control', optional: true },
       ],
-      steps: [
-        'Prepare only the carrier and one small aroma/fat/protein element.',
-        'Use browning, toasting, frying, warming, or chilling only if that process is part of the remembered texture/aroma.',
-        'Add the researched spice/aromatic direction to the fat or protein so aroma compounds bloom.',
-        'Taste one composed bite and ask which mechanism hits: aroma, Maillard browning, fat richness, starch texture, acid/sweet balance, or contrast.',
-      ],
+      steps: composedBiteSteps(signals),
       preserves: ['carrier texture', 'fat/aroma delivery', 'one-bite ritual', 'core balance signal'],
       doesNotPreserve: ['exact specialty ingredient', 'full plating', 'full recipe process', 'family-specific proportions'],
       accessibilityPrinciples: ['use grocery-store carriers and proteins first', 'test in one or two bites', 'use pantry aromatics before specialty sourcing', 'buy exact items only after the mechanism works'],
@@ -1228,6 +1324,10 @@ function rewriteIngredientForConstraints(item: string, classes: Set<ConstraintCl
 
   if (classes.has('gluten-free')) {
     rewritten = replaceConstraintText(rewritten, [
+      [
+        'cassava-family carrier matching the remembered base: frozen yuca/cassava, canned yuca, tapioca-starch paste, or plantain crisped in oil',
+        'certified gluten-free cassava-family carrier matching the remembered base: frozen yuca/cassava, canned yuca, tapioca-starch paste, or plantain crisped in oil',
+      ],
       [
         'starch, bread, potato, rice, bean, noodle, or cooked vegetable',
         'certified gluten-free carrier: rice, potato, corn, bean, or cooked vegetable',
