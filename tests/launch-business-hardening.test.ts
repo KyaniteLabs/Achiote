@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import fs from 'node:fs';
+import { spawn } from 'node:child_process';
+import http from 'node:http';
 
 const landing = () => fs.readFileSync('docs/landing/index.html', 'utf8');
 const app = () => fs.readFileSync('docs/landing/app.html', 'utf8');
@@ -109,6 +111,92 @@ describe('launch business hardening', () => {
     expect(previewSmoke).toContain('correct_mistakes_not_literal');
     expect(previewSmoke).toContain('buyExactDishPatterns');
     expect(previewSmoke).toContain('All preview /ask quality cases passed');
+  });
+
+  it('keeps preview ask smoke friendly to copied URLs and negated buy guidance', async () => {
+    const requests: string[] = [];
+    const safeText = [
+      'carimañola carimanola yuca cassava meat beef savory first tiny minimum verification.',
+      'Chikki peanut sugar jaggery caramel snap sticky brittle.',
+      'Trinidadian bake and shark fish lime vinegar acid tang chile pepper hot heat right track.',
+      'coconut sugar grainy crystal crystalline chewy Ohio local grocery pantry.',
+      'Your pastelay spelling is likely pasteles; correct your pastelay mistake with achiote annatto sazón orange pork first-pass tiny check.',
+      "Don't buy the exact chikki candy; make a local proxy instead.",
+    ].join(' ');
+    let responseText = safeText;
+    const server = http.createServer((request, response) => {
+      requests.push(request.url ?? '');
+      response.writeHead(200, { 'Content-Type': 'text/event-stream' });
+      response.end([
+        'event: status',
+        'data: {"stage":"model","provider":"mock","model":"mock"}',
+        '',
+        'event: tool_call',
+        'data: {"name":"collect_food_memory"}',
+        '',
+        'event: text',
+        `data: ${JSON.stringify(responseText)}`,
+        '',
+        'event: done',
+        'data: {}',
+        '',
+      ].join('\n'));
+    });
+
+    await new Promise<void>((resolve) => server.listen(0, '127.0.0.1', resolve));
+    try {
+      const address = server.address();
+      if (!address || typeof address === 'string') throw new Error('test server did not bind to a port');
+      const runSmoke = () => new Promise<{ status: number | null; stdout: string; stderr: string }>((resolve) => {
+        const child = spawn(process.execPath, ['scripts/preview-ask-smoke.mjs'], {
+          stdio: ['ignore', 'pipe', 'pipe'],
+          env: {
+            ...process.env,
+            ACHIOTE_PREVIEW_URL: `http://127.0.0.1:${address.port}/ask/`,
+            ACHIOTE_PREVIEW_TIMEOUT_MS: '5000',
+          },
+        });
+        let stdout = '';
+        let stderr = '';
+        child.stdout.setEncoding('utf8');
+        child.stderr.setEncoding('utf8');
+        child.stdout.on('data', (chunk) => {
+          stdout += chunk;
+        });
+        child.stderr.on('data', (chunk) => {
+          stderr += chunk;
+        });
+        child.on('close', (status) => resolve({ status, stdout, stderr }));
+      });
+
+      const result = await runSmoke();
+      expect(result.status, result.stderr).toBe(0);
+      expect(result.stdout).toContain(`Preview /ask smoke target: http://127.0.0.1:${address.port}/ask`);
+      expect(result.stdout).toContain('All preview /ask quality cases passed');
+      expect(requests).toHaveLength(5);
+      expect(requests.every((url) => url === '/ask')).toBe(true);
+
+      requests.length = 0;
+      responseText = safeText.replace("Don't buy the exact chikki candy", 'Don\u2019t buy the exact chikki candy');
+      const curlyApostropheResult = await runSmoke();
+      expect(curlyApostropheResult.status, curlyApostropheResult.stderr).toBe(0);
+      expect(curlyApostropheResult.stdout).toContain('All preview /ask quality cases passed');
+      expect(requests).toHaveLength(5);
+      expect(requests.every((url) => url === '/ask')).toBe(true);
+
+      requests.length = 0;
+      responseText = safeText.replace("Don't buy the exact chikki candy", 'why not buy the exact chikki candy');
+      const rejectedResult = await runSmoke();
+      expect(rejectedResult.status).toBe(1);
+      expect(rejectedResult.stderr).toContain('preview /ask quality case(s) failed');
+      expect(rejectedResult.stdout).toContain('buy (?:a|the)');
+      expect(requests).toHaveLength(5);
+      expect(requests.every((url) => url === '/ask')).toBe(true);
+    } finally {
+      await new Promise<void>((resolve, reject) => {
+        server.close((error) => (error ? reject(error) : resolve()));
+      });
+    }
   });
 
   it('keeps SEO and launch metadata current for trust pages', () => {
