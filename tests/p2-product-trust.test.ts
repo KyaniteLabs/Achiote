@@ -133,6 +133,15 @@ describe('P2 product trust improvements', () => {
     expect(server).toContain('Build the cue from cheap local pantry or ordinary grocery ingredients first');
   });
 
+  it('preserves current user location for local proxy cue generation', () => {
+    const server = fs.readFileSync('src/http-server.ts', 'utf8');
+
+    expect(server).toContain('inferUserLocation');
+    expect(server).toContain("toolName === 'collect_food_memory'");
+    expect(server).toContain("toolName === 'generate_minimum_viable_nostalgia'");
+    expect(server).toContain('ensureLocalCueLanguage');
+  });
+
   it('requires /ask to honor explicit minimum-test requests with sensory clues', () => {
     const server = fs.readFileSync('src/http-server.ts', 'utf8');
 

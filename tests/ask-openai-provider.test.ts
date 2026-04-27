@@ -173,6 +173,60 @@ describe('/ask premature cue guard', () => {
     }
   }, 20_000);
 
+  it('infers current user location for local minimum cue tools when the model omits it', async () => {
+    const fakePort = await getFreePort();
+    let requestCount = 0;
+    const fakeOpenAi = createServer(async (req, res) => {
+      if (req.url !== '/v1/chat/completions' || req.method !== 'POST') {
+        res.writeHead(404).end();
+        return;
+      }
+      requestCount++;
+      await readBody(req);
+      const toolCallsByTurn = [
+        [{ id: 'call_1', type: 'function', function: { name: 'collect_food_memory', arguments: JSON.stringify({ memoryText: 'Hot fried fish sandwich with sharp orange sauce from Trinidad.' }) } }],
+        [{ id: 'call_2', type: 'function', function: { name: 'plan_dish_research', arguments: JSON.stringify({}) } }],
+      ];
+      const toolCalls = toolCallsByTurn[requestCount - 1];
+      res.setHeader('content-type', 'application/json');
+      res.end(JSON.stringify({
+        choices: [{
+          finish_reason: toolCalls ? 'tool_calls' : 'stop',
+          message: toolCalls
+            ? { role: 'assistant', content: '', tool_calls: toolCalls }
+            : { role: 'assistant', content: 'Try fried fish on a bun with orange sauce.' },
+        }],
+      }));
+    });
+    await new Promise<void>((resolveListen) => fakeOpenAi.listen(fakePort, '127.0.0.1', resolveListen));
+
+    const achiotePort = await getFreePort();
+    const achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`);
+    try {
+      const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: 'I do not know the name. It was a hot fried fish sandwich with sharp orange sauce from Trinidad. I live in Portland now. What is the smallest local test?' }),
+      });
+
+      expect(response.status).toBe(200);
+      const events = parseSse(await response.text());
+      const collectCall = events.find((event) => event.event === 'tool_call' && JSON.parse(event.data).name === 'collect_food_memory');
+      const collectResult = events.find((event) => event.event === 'tool_result' && JSON.parse(event.data).name === 'collect_food_memory');
+      const cueCall = events.find((event) => event.event === 'tool_call' && JSON.parse(event.data).name === 'generate_minimum_viable_nostalgia');
+      const text = events.filter((event) => event.event === 'text').map((event) => JSON.parse(event.data)).join('');
+
+      expect(JSON.parse(collectCall!.data).input.userLocation).toBe('Portland');
+      expect(JSON.parse(collectResult!.data).result.userLocation).toBe('Portland');
+      expect(JSON.parse(cueCall!.data).input.userLocation).toBe('Portland');
+      expect(text).toContain('near Portland');
+      expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'explicit_minimum_cue_fallback' });
+    } finally {
+      achiote.kill('SIGINT');
+      await new Promise<void>((resolveClose) => fakeOpenAi.close(() => resolveClose()));
+    }
+  }, 20_000);
+
   it('does not stream concrete food cues before the minimum viable nostalgia tool runs', async () => {
     const fakePort = await getFreePort();
     let requestCount = 0;
