@@ -227,6 +227,65 @@ describe('/ask premature cue guard', () => {
     }
   }, 20_000);
 
+  it('builds a dossier before a direct minimum cue call when the model skips that dependency', async () => {
+    const fakePort = await getFreePort();
+    let requestCount = 0;
+    const fakeOpenAi = createServer(async (req, res) => {
+      if (req.url !== '/v1/chat/completions' || req.method !== 'POST') {
+        res.writeHead(404).end();
+        return;
+      }
+      requestCount++;
+      await readBody(req);
+      const toolCallsByTurn = [
+        [{ id: 'call_1', type: 'function', function: { name: 'collect_food_memory', arguments: JSON.stringify({ memoryText: 'Hot fried fish sandwich with sharp orange sauce from Trinidad.' }) } }],
+        [{ id: 'call_2', type: 'function', function: { name: 'plan_dish_research', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_3', type: 'function', function: { name: 'generate_minimum_viable_nostalgia', arguments: JSON.stringify({ maxEffortMinutes: 10 }) } }],
+      ];
+      const toolCalls = toolCallsByTurn[requestCount - 1];
+      res.setHeader('content-type', 'application/json');
+      res.end(JSON.stringify({
+        choices: [{
+          finish_reason: toolCalls ? 'tool_calls' : 'stop',
+          message: toolCalls
+            ? { role: 'assistant', content: '', tool_calls: toolCalls }
+            : { role: 'assistant', content: 'Minimum cue final.' },
+        }],
+      }));
+    });
+    await new Promise<void>((resolveListen) => fakeOpenAi.listen(fakePort, '127.0.0.1', resolveListen));
+
+    const achiotePort = await getFreePort();
+    const achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`);
+    try {
+      const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: 'Hot fried fish sandwich with sharp orange sauce from Trinidad. I live in Portland now. Give me the smallest local test.' }),
+      });
+
+      expect(response.status).toBe(200);
+      const events = parseSse(await response.text());
+      const toolNames = events
+        .filter((event) => event.event === 'tool_call')
+        .map((event) => JSON.parse(event.data).name);
+      const cueCall = events.find((event) => event.event === 'tool_call' && JSON.parse(event.data).name === 'generate_minimum_viable_nostalgia');
+
+      expect(toolNames).toEqual(expect.arrayContaining([
+        'collect_food_memory',
+        'plan_dish_research',
+        'build_reconstruction_dossier',
+        'generate_minimum_viable_nostalgia',
+      ]));
+      expect(JSON.parse(cueCall!.data).input.dossier.evidenceLedger.userSaid[0]).toContain('Hot fried fish sandwich');
+      expect(JSON.parse(cueCall!.data).input.userLocation).toBe('Portland');
+      expect(events.at(-1)!.event).toBe('done');
+    } finally {
+      achiote.kill('SIGINT');
+      await new Promise<void>((resolveClose) => fakeOpenAi.close(() => resolveClose()));
+    }
+  }, 20_000);
+
   it('does not stream concrete food cues before the minimum viable nostalgia tool runs', async () => {
     const fakePort = await getFreePort();
     let requestCount = 0;

@@ -531,6 +531,15 @@ async function executeAndStreamTool(
   calledTools: Set<string>,
   toolPayloads: Record<string, unknown>,
 ): Promise<unknown> {
+  if (toolName === 'generate_minimum_viable_nostalgia' && shouldBuildMissingDossier(input, toolPayloads)) {
+    await executeAndStreamTool('build_reconstruction_dossier', {
+      memory: toolPayloads.collect_food_memory,
+      researchPlan: toolPayloads.plan_dish_research,
+      inferredFacts: [
+        'The model requested a minimum viable cue before building a dossier, so the server built the evidence boundary first.',
+      ],
+    }, userMessage, send, calledTools, toolPayloads);
+  }
   const normalizedInput = normalizeDependentToolInput(toolName, input, userMessage, toolPayloads);
   send('tool_call', { name: toolName, input: normalizedInput });
   const result = await executeToolDefinition(toolName, normalizedInput, toolContext);
@@ -539,6 +548,14 @@ async function executeAndStreamTool(
   toolPayloads[toolName] = result.payload;
   send('tool_result', { name: toolName, result: result.payload });
   return result.payload;
+}
+
+function shouldBuildMissingDossier(toolInput: unknown, toolPayloads: Record<string, unknown>): boolean {
+  const record = isRecord(toolInput) ? toolInput : {};
+  return !isRecord(record.dossier)
+    && !toolPayloads.build_reconstruction_dossier
+    && Boolean(toolPayloads.collect_food_memory)
+    && Boolean(toolPayloads.plan_dish_research);
 }
 
 function normalizeDependentToolInput(toolName: string, input: unknown, userMessage: string, toolPayloads: Record<string, unknown>): unknown {
