@@ -482,7 +482,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
 
       for (const call of modelResponse.toolCalls) {
         try {
-          const payload = await executeAndStreamTool(call.name, call.input, send, calledTools, toolPayloads);
+          const payload = await executeAndStreamTool(call.name, call.input, userMessage, send, calledTools, toolPayloads);
           const content = JSON.stringify(payload);
           toolResults.push({ id: call.id, content });
         } catch (err) {
@@ -510,7 +510,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
     }
 
     for (const text of modelResponse.textBlocks) {
-      send('text', text);
+      send('text', ensureLocalCueLanguage(text, toolPayloads, calledTools));
     }
     send('done', {});
   } catch (err) {
@@ -525,11 +525,12 @@ type SseSender = (event: string, data: unknown) => void;
 async function executeAndStreamTool(
   toolName: string,
   input: unknown,
+  userMessage: string,
   send: SseSender,
   calledTools: Set<string>,
   toolPayloads: Record<string, unknown>,
 ): Promise<unknown> {
-  const normalizedInput = normalizeDependentToolInput(toolName, input, toolPayloads);
+  const normalizedInput = normalizeDependentToolInput(toolName, input, userMessage, toolPayloads);
   send('tool_call', { name: toolName, input: normalizedInput });
   const result = await executeToolDefinition(toolName, normalizedInput, toolContext);
   validateToolOutput(toolName, result.payload);
@@ -539,8 +540,12 @@ async function executeAndStreamTool(
   return result.payload;
 }
 
-function normalizeDependentToolInput(toolName: string, input: unknown, toolPayloads: Record<string, unknown>): unknown {
+function normalizeDependentToolInput(toolName: string, input: unknown, userMessage: string, toolPayloads: Record<string, unknown>): unknown {
   const record = isRecord(input) ? input : {};
+  if (toolName === 'collect_food_memory' && typeof record.userLocation !== 'string') {
+    const userLocation = inferUserLocation(userMessage);
+    return userLocation ? { ...record, userLocation } : input;
+  }
   if (toolName === 'plan_dish_research' && !isRecord(record.memory) && toolPayloads.collect_food_memory) {
     return { ...record, memory: toolPayloads.collect_food_memory };
   }
@@ -552,9 +557,29 @@ function normalizeDependentToolInput(toolName: string, input: unknown, toolPaylo
     };
   }
   if (toolName === 'generate_minimum_viable_nostalgia' && !isRecord(record.dossier) && toolPayloads.build_reconstruction_dossier) {
-    return { ...record, dossier: toolPayloads.build_reconstruction_dossier };
+    const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
+    return {
+      ...record,
+      dossier: toolPayloads.build_reconstruction_dossier,
+      ...(typeof record.userLocation === 'string' || !memory?.userLocation ? {} : { userLocation: memory.userLocation }),
+    };
   }
   return input;
+}
+
+function inferUserLocation(userMessage: string): string | undefined {
+  const match = userMessage.match(/\b(?:i\s+(?:live|am|currently\s+live|currently\s+am)|i['’]?m|im|we\s+(?:live|are)|based|located)\s+in\s+([^.!?;,]{2,80})/i);
+  if (!match?.[1]) return undefined;
+  const location = match[1]
+    .replace(/\s+(?:now|currently|these days|at the moment)\b.*$/i, '')
+    .replace(/\s+(?:and|but|so|because|while)\b.*$/i, '')
+    .trim();
+  if (location.length < 2 || /^(the|a|an|this|that|it|there)$/i.test(location)) return undefined;
+  return location.slice(0, 80);
+}
+
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -591,16 +616,16 @@ async function maybeSendForcedMinimumCue({
         'The user explicitly asked for a minimum test, so the first response should give a cheap local proxy before exact dish sourcing.',
         'The cue should isolate remembered sensory mechanisms from pantry or ordinary grocery ingredients.',
       ],
-    }, send, calledTools, toolPayloads) as ReconstructionDossier;
+    }, userMessage, send, calledTools, toolPayloads) as ReconstructionDossier;
   }
 
   const cue = await executeAndStreamTool('generate_minimum_viable_nostalgia', {
     dossier,
     userLocation: memory.userLocation,
     maxEffortMinutes: 10,
-  }, send, calledTools, toolPayloads) as MinimumViableNostalgiaCue;
+  }, userMessage, send, calledTools, toolPayloads) as MinimumViableNostalgiaCue;
 
-  send('text', formatMinimumCueFallback(cue));
+  send('text', formatMinimumCueFallback(cue, memory.userLocation));
   send('done', { guarded: 'explicit_minimum_cue_fallback' });
   return true;
 }
@@ -627,7 +652,7 @@ function hasSensorySignal(userMessage: string, collectedMemory: unknown): boolea
   return /\b(?:sweet|sour|salty|bitter|spicy|hot|cold|warm|crispy|crunchy|crumbly|grainy|powdery|chewy|creamy|sticky|aroma|smell|texture|color|mouth|tongue|sesame|coconut|peanut|dill|garlic|onion|sauce|gravy|relish)\b/i.test(userMessage);
 }
 
-function formatMinimumCueFallback(cue: MinimumViableNostalgiaCue): string {
+function formatMinimumCueFallback(cue: MinimumViableNostalgiaCue, userLocation?: string): string {
   const ingredientLines = cue.ingredients
     .slice(0, 4)
     .map((ingredient) => `- ${ingredient.amount} ${ingredient.item}${ingredient.optional ? ' (optional)' : ''}`);
@@ -635,6 +660,9 @@ function formatMinimumCueFallback(cue: MinimumViableNostalgiaCue): string {
     .slice(0, 4)
     .map((step, index) => `${index + 1}. ${step}`);
   const followUp = cue.followUpIfItWorks[0];
+  const localLine = userLocation
+    ? `Local sourcing: use ordinary grocery or pantry ingredients near ${userLocation}; do not buy the exact suspected dish for this first test.`
+    : '';
 
   return [
     `${cue.title} (${cue.effortMinutes} min)`,
@@ -648,8 +676,20 @@ function formatMinimumCueFallback(cue: MinimumViableNostalgiaCue): string {
     ...stepLines,
     '',
     `Why this is minimum: ${cue.whyThisIsMinimum}`,
+    localLine,
     followUp ? `If it works: ${followUp}` : '',
   ].filter((line) => line.length > 0).join('\n');
+}
+
+function ensureLocalCueLanguage(text: string, toolPayloads: Record<string, unknown>, calledTools: Set<string>): string {
+  if (!calledTools.has('generate_minimum_viable_nostalgia')) return text;
+  const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
+  const location = memory?.userLocation;
+  if (!location) return text;
+  const mentionsLocality = new RegExp(`\\b${escapeRegExp(location)}\\b`, 'i').test(text)
+    || /\b(?:local|nearby|ordinary grocery|grocery-store|grocery store|pantry|available near)\b/i.test(text);
+  if (mentionsLocality) return text;
+  return `${text.trim()}\n\nUse ordinary grocery or pantry ingredients near ${location}; do not buy the exact suspected dish for this first test.`;
 }
 
 function authenticateVoiceRequest(req: IncomingMessage, res: ServerResponse): AuthedRequest {
