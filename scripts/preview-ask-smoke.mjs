@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 
 const rawBaseUrl = process.env.ACHIOTE_PREVIEW_URL || 'http://127.0.0.1:3000';
-const askUrl = rawBaseUrl.endsWith('/ask') ? rawBaseUrl : `${rawBaseUrl.replace(/\/$/, '')}/ask`;
+const askUrl = normalizeAskUrl(rawBaseUrl);
 const timeoutMs = Number.parseInt(process.env.ACHIOTE_PREVIEW_TIMEOUT_MS || '180000', 10);
 
 const buyExactDishPatterns = [
-  /buy (?:a|the)\s+.{0,40}(?:carima[nñ]ola|chikki|bake and shark|fried fish sandwich|coconut sweet|candy|dulce|masa real|pastel(?:es)?)/i,
-  /go (?:find|get|purchase)\s+.{0,40}(?:carima[nñ]ola|chikki|bake and shark|coconut sweet|pastel(?:es)?)/i,
+  /buy (?:a|the)\s+.{0,40}(?:carima[nñ]ola|chikki|bake and shark|fried fish sandwich|coconut sweet|candy|dulce|masa real|pastel(?:es)?)/gi,
+  /go (?:find|get|purchase)\s+.{0,40}(?:carima[nñ]ola|chikki|bake and shark|coconut sweet|pastel(?:es)?)/gi,
 ];
 
 const cases = [
@@ -55,6 +55,30 @@ function parseData(event) {
   }
 }
 
+function normalizeAskUrl(value) {
+  const normalized = value.trim().replace(/\/+$/, '');
+  return normalized.endsWith('/ask') ? normalized : `${normalized}/ask`;
+}
+
+function isNegatedPurchase(text, matchIndex) {
+  const before = text.slice(Math.max(0, matchIndex - 42), matchIndex);
+  return /(?:do not|don(?:['\u2019])?t|never|avoid|instead of|rather than)\s+$/i.test(before);
+}
+
+function rejectedExactDishPurchases(text) {
+  const rejected = [];
+  for (const pattern of buyExactDishPatterns) {
+    pattern.lastIndex = 0;
+    for (const match of text.matchAll(pattern)) {
+      if (!isNegatedPurchase(text, match.index ?? 0)) {
+        rejected.push(pattern);
+        break;
+      }
+    }
+  }
+  return rejected;
+}
+
 function headers() {
   const result = { 'Content-Type': 'application/json' };
   if (process.env.ACHIOTE_API_KEY) result['x-api-key'] = process.env.ACHIOTE_API_KEY;
@@ -81,7 +105,7 @@ async function ask(testCase) {
     const done = [...events].reverse().find((event) => event.event === 'done');
     const runtime = statuses.find((status) => status.stage === 'model') ?? {};
     const missing = testCase.expect.filter((pattern) => !pattern.test(text));
-    const rejected = buyExactDishPatterns.filter((pattern) => pattern.test(text));
+    const rejected = rejectedExactDishPurchases(text);
     const pass = response.ok && errors.length === 0 && Boolean(done) && missing.length === 0 && rejected.length === 0;
     return {
       id: testCase.id,
