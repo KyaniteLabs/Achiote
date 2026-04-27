@@ -289,6 +289,64 @@ describe('/ask premature cue guard', () => {
     }
   }, 20_000);
 
+  it('keeps composed starch-and-protein cue responses from collapsing to starch only', async () => {
+    const fakePort = await getFreePort();
+    let requestCount = 0;
+    const fakeOpenAi = createServer(async (req, res) => {
+      if (req.url !== '/v1/chat/completions' || req.method !== 'POST') {
+        res.writeHead(404).end();
+        return;
+      }
+      requestCount++;
+      await readBody(req);
+      const toolCallsByTurn = [
+        [{ id: 'call_1', type: 'function', function: { name: 'collect_food_memory', arguments: JSON.stringify({ memoryText: 'Puerto Rican pastelay sound-alike, porky and wrapped.', userLocation: 'Florida' }) } }],
+        [{ id: 'call_2', type: 'function', function: { name: 'plan_dish_research', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_3', type: 'function', function: { name: 'build_reconstruction_dossier', arguments: JSON.stringify({
+          researchedFacts: [
+            'Pasteles use green banana masa.',
+            'Pasteles often include pork filling and sofrito aroma.',
+          ],
+        }) } }],
+        [{ id: 'call_4', type: 'function', function: { name: 'generate_minimum_viable_nostalgia', arguments: JSON.stringify({ maxEffortMinutes: 10 }) } }],
+      ];
+      const toolCalls = toolCallsByTurn[requestCount - 1];
+      res.setHeader('content-type', 'application/json');
+      res.end(JSON.stringify({
+        choices: [{
+          finish_reason: toolCalls ? 'tool_calls' : 'stop',
+          message: toolCalls
+            ? { role: 'assistant', content: '', tool_calls: toolCalls }
+            : { role: 'assistant', content: 'For a first-pass verification bite, boil a small piece of green plantain, mash it with salt, and taste the starchy texture.' },
+        }],
+      }));
+    });
+    await new Promise<void>((resolveListen) => fakeOpenAi.listen(fakePort, '127.0.0.1', resolveListen));
+
+    const achiotePort = await getFreePort();
+    const achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`);
+    try {
+      const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: 'My family said pastelay in Puerto Rico, porky and wrapped. I live in Florida now. Give me the first cheap local verification bite.' }),
+      });
+
+      expect(response.status).toBe(200);
+      const events = parseSse(await response.text());
+      const text = events.filter((event) => event.event === 'text').map((event) => JSON.parse(event.data)).join('');
+
+      expect(text).toContain('green plantain');
+      expect(text).toContain('starch and browned fat/protein together');
+      expect(text).toContain('first-pass verification bite');
+      expect(text).not.toContain('first-pass first-pass verification bite');
+      expect(events.at(-1)?.event).toBe('done');
+    } finally {
+      achiote.kill('SIGINT');
+      await new Promise<void>((resolveClose) => fakeOpenAi.close(() => resolveClose()));
+    }
+  }, 20_000);
+
   it('normalizes raw web search results before building research records', async () => {
     const fakePort = await getFreePort();
     let requestCount = 0;
