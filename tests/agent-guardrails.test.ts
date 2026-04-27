@@ -96,6 +96,14 @@ describe('agent guardrails', () => {
     expect(readme).toContain('minimum viable nostalgia cue');
   });
 
+  it('tells host models to make typo and sound-alike corrections visible', () => {
+    const server = read('src/http-server.ts');
+
+    expect(server).toContain('likely corrected spelling');
+    expect(server).toContain('original user fragment');
+    expect(server).toContain('do not silently treat the typo as literal');
+  });
+
   it('preserves the host-AI-does-research boundary', () => {
     const architecture = read('docs/ARCHITECTURE.md');
     const roadmap = read('docs/ROADMAP.md');
