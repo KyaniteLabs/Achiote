@@ -790,10 +790,28 @@ function ensureLocalCueLanguage(text: string, toolPayloads: Record<string, unkno
 function ensureCueQualityLanguage(text: string, toolPayloads: Record<string, unknown>, calledTools: Set<string>): string {
   let revised = ensureLocalCueLanguage(text, toolPayloads, calledTools);
   if (!calledTools.has('generate_minimum_viable_nostalgia')) return revised;
+  revised = ensureComposedCueCoverage(revised, toolPayloads);
   revised = revised.replace(/\bnarrow,\s*research-bounded proxy test\b/gi, 'first-pass verification bite');
-  if (/\b(?:verify|verification|narrow|proxy|first[-\s]?pass|tiny check|rule out|revise)\b/i.test(revised)) return revised;
+  if (!/\bfirst[-\s]?pass verification bite\b/i.test(revised)) {
+    revised = revised.replace(/\b(?:cheap local\s+)?verification bite\b/i, 'first-pass verification bite');
+  }
+  if (/\b(?:verify|verification|narrow|first[-\s]?pass|tiny check|rule out|revise)\b/i.test(revised)) return revised;
   revised = `${revised.trim()}\n\nThis is only a first-pass verification bite: if the aroma, texture, or aftertaste is wrong, we should revise the guess before chasing exact ingredients.`;
   return revised;
+}
+
+function ensureComposedCueCoverage(text: string, toolPayloads: Record<string, unknown>): string {
+  const cue = toolPayloads.generate_minimum_viable_nostalgia as MinimumViableNostalgiaCue | undefined;
+  const roles = new Set(cue?.components?.map((component) => component.role) ?? []);
+  if (!roles.has('starch') || !roles.has('protein')) return text;
+
+  const cueStart = text.search(/\b(?:try|test|bite|take|mix|boil|pan[-\s]?sear|sear|fry|crisp|taste)\b/i);
+  const cueText = cueStart >= 0 ? text.slice(cueStart) : text;
+  const mentionsStarch = /\b(?:plantain|banana|starch|masa|yuca|cassava|tapioca|potato|rice|dough|carrier)\b/i.test(cueText);
+  const mentionsProtein = /\b(?:pork|meat|protein|fish|chicken|beef|tofu|fat|sofrito|brown|browned|sear|filling|umami)\b/i.test(cueText);
+  if (mentionsStarch && mentionsProtein) return text;
+
+  return `${text.trim()}\n\nFor the test itself, keep the starch and browned fat/protein together; the memory may live in that contrast, not either piece alone.`;
 }
 
 function authenticateVoiceRequest(req: IncomingMessage, res: ServerResponse): AuthedRequest {
