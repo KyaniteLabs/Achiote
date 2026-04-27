@@ -793,7 +793,11 @@ function ensureCueQualityLanguage(text: string, toolPayloads: Record<string, unk
   revised = ensureComposedCueCoverage(revised, toolPayloads);
   revised = revised.replace(/\bnarrow,\s*research-bounded proxy test\b/gi, 'first-pass verification bite');
   if (!/\bfirst[-\s]?pass verification bite\b/i.test(revised)) {
-    revised = revised.replace(/\b(?:cheap local\s+)?verification bite\b/i, 'first-pass verification bite');
+    if (/\bfirst\s+(?:cheap local\s+)?verification bite\b/i.test(revised)) {
+      revised = revised.replace(/\bfirst\s+(?:cheap local\s+)?verification bite\b/i, 'first-pass verification bite');
+    } else {
+      revised = revised.replace(/\b(?:cheap local\s+)?verification bite\b/i, 'first-pass verification bite');
+    }
   }
   if (/\b(?:verify|verification|narrow|first[-\s]?pass|tiny check|rule out|revise)\b/i.test(revised)) return revised;
   revised = `${revised.trim()}\n\nThis is only a first-pass verification bite: if the aroma, texture, or aftertaste is wrong, we should revise the guess before chasing exact ingredients.`;
