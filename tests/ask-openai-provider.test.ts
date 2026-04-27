@@ -112,7 +112,8 @@ describe('/ask OpenAI-compatible provider mode', () => {
     expect(eventNames.at(-1)).toBe('done');
     const text = JSON.parse(events.find((e) => e.event === 'text')!.data);
     expect(text).toContain('OpenAI-compatible final minimum cue.');
-    expect(text).toContain('narrow, research-bounded proxy test');
+    expect(text).toContain('first-pass verification bite');
+    expect(text).not.toContain('research-bounded proxy test');
     expect(requestCount).toBe(5);
     expect(seenAuthHeaders.every((header) => header === 'Bearer test-openai-key')).toBe(true);
   });

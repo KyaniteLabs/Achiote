@@ -279,6 +279,9 @@ Then include one targeted follow-up that would most reduce uncertainty if they w
 - If you give a cue, make it cheap, accessible, and food-science grounded.
 - Do not tell the user to buy the exact suspected dish, candy, snack, brand, or imported specialty item as the minimum test.
 - Build the cue from cheap local pantry or ordinary grocery ingredients first; exact sourcing belongs only after a proxy cue works.
+- Use the strongest remembered ingredient family when choosing the ordinary-grocery proxy: peanut memories should test peanut plus sugar/caramel, yuca/cassava memories should test cassava-family chew before potato fallback, fish memories should test a small fish bite unless constraints say otherwise, and hot-orange sauce memories should test acid + chile heat + color/aroma rather than generic salsa.
+- Make the answer sensory and concrete: name what the user should smell, feel, or notice first, then say what a wrong result would rule out.
+- Avoid clinical labels like "research-bounded proxy test" in user-facing prose. Say "first-pass verification bite" or "first tiny check" instead.
 - Keep responses under 220 words.
 - Be warm and direct, like a knowledgeable friend who wants to help them taste the memory again.
 - If the user shares a photo, describe what you see in the image and combine it with any text description they provide before calling tools.`;
@@ -787,8 +790,9 @@ function ensureLocalCueLanguage(text: string, toolPayloads: Record<string, unkno
 function ensureCueQualityLanguage(text: string, toolPayloads: Record<string, unknown>, calledTools: Set<string>): string {
   let revised = ensureLocalCueLanguage(text, toolPayloads, calledTools);
   if (!calledTools.has('generate_minimum_viable_nostalgia')) return revised;
-  if (/\b(?:minimum viable|research|researched|verify|narrow|proxy)\b/i.test(revised)) return revised;
-  revised = `${revised.trim()}\n\nTreat this as a narrow, research-bounded proxy test: if the aroma, texture, or aftertaste is wrong, we should revise the hypothesis before chasing exact ingredients.`;
+  revised = revised.replace(/\bnarrow,\s*research-bounded proxy test\b/gi, 'first-pass verification bite');
+  if (/\b(?:verify|verification|narrow|proxy|first[-\s]?pass|tiny check|rule out|revise)\b/i.test(revised)) return revised;
+  revised = `${revised.trim()}\n\nThis is only a first-pass verification bite: if the aroma, texture, or aftertaste is wrong, we should revise the guess before chasing exact ingredients.`;
   return revised;
 }
 

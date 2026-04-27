@@ -79,6 +79,38 @@ function sesameCandyDossier() {
   });
 }
 
+function peanutBrittleDossier() {
+  const memory = collectFoodMemory({
+    memoryText: 'A hard brown peanut candy from India sounded like chicky. It shattered, then went sandy and caramel-like.',
+  });
+  const researchPlan = planDishResearch(memory);
+  return buildReconstructionDossier({
+    memory,
+    researchPlan,
+    researchedFacts: [
+      'Peanut chikki is a brittle sweet made from roasted peanuts and cooked sugar or jaggery.',
+      'The remembered mechanism is roasted peanut aroma plus hard sugar fracture and sandy caramel finish.',
+    ],
+    inferredFacts: ['The first local test should use peanuts and cooked sugar logic directly, not unrelated seed or cereal texture.'],
+  });
+}
+
+function trinidadFishSauceDossier() {
+  const memory = collectFoodMemory({
+    memoryText: 'Hot fried fish with a sharp orange sauce from Trinidad. I do not know the name.',
+  });
+  const researchPlan = planDishResearch(memory);
+  return buildReconstructionDossier({
+    memory,
+    researchPlan,
+    researchedFacts: [
+      'The likely sensory target is fried fish richness cut by a hot, acidic orange-colored pepper sauce.',
+      'Common accessible proxy mechanisms include white fish, lime or vinegar, chile heat, mustard or turmeric/paprika color, garlic, and a green herb aroma.',
+    ],
+    inferredFacts: ['The cue should test hot-acid-orange sauce contrast on fish before naming the exact dish.'],
+  });
+}
+
 function confectioneryDossier(memoryText: string, researchedFacts: string[] = [], inferredFacts: string[] = []) {
   const memory = collectFoodMemory({ memoryText });
   const researchPlan = planDishResearch(memory);
@@ -180,6 +212,29 @@ describe('minimum viable nostalgia cue', () => {
     expect(starch.confidence).toBe('High');
   });
 
+  it('prefers cassava-family local proxies for fried yuca memories instead of generic potato fallback', () => {
+    const cue = generateMinimumViableNostalgiaCue({
+      dossier: carimanolaDossier(),
+      researchFindings: {
+        researchedFacts: [
+          'Carimañolas are fried yuca rolls with beef picadillo.',
+          'The texture contrast is crispy fried yuca outside and chewy cassava starch inside.',
+        ],
+        inferredFacts: ['The first cue should test cassava-family chew plus browned filling aroma.'],
+        unknowns: ['family-specific filling'],
+        sourceCount: 2,
+        confidence: 'High',
+      },
+      userLocation: 'Seattle',
+      maxEffortMinutes: 20,
+    });
+    const recommendationText = fullCueText(cue);
+
+    expect(recommendationText).toMatch(/frozen yuca|cassava|tapioca|plantain/);
+    expect(recommendationText).toMatch(/crisp|fried|chewy/);
+    expect(recommendationText).not.toMatch(/potato.*as the first|first.*potato/);
+  });
+
   it('uses accessible food-science proxy logic for protein, starch, gravy, and sauce memories', () => {
     const cue = generateMinimumViableNostalgiaCue({
       dossier: spicedSausageMashDossier(),
@@ -240,6 +295,56 @@ describe('minimum viable nostalgia cue', () => {
     expect(recommendationText).toMatch(/sesame|seed|coconut|oat|cracker/);
     expect(recommendationText).toContain('do not buy the exact');
     expect(recommendationText).not.toMatch(/buy .*dulce de ajonjol[ií]|latin grocery|international aisle|grocery-store sweet matching/);
+  });
+
+  it('makes peanut brittle/chikki tests peanut-and-caramel specific instead of generic seed texture only', () => {
+    const cue = generateMinimumViableNostalgiaCue({
+      dossier: peanutBrittleDossier(),
+      researchFindings: {
+        researchedFacts: [
+          'Peanut chikki and related brittles use roasted peanuts with cooked sugar or jaggery.',
+          'The sensory target is roasted peanut aroma, hard snap, and caramelized sugar.',
+        ],
+        inferredFacts: ['The local proxy should test peanut plus sugar fracture directly.'],
+        unknowns: ['exact jaggery depth'],
+        sourceCount: 2,
+        confidence: 'Medium',
+      },
+      userLocation: 'Denver',
+      maxEffortMinutes: 10,
+    });
+    const recommendationText = fullCueText(cue);
+
+    expect(recommendationText).toMatch(/peanut/);
+    expect(recommendationText).toMatch(/brown sugar|jaggery|caramel|syrup/);
+    expect(recommendationText).toMatch(/snap|shatter|fracture|brittle/);
+    expect(recommendationText).toContain('do not buy the exact');
+  });
+
+  it('makes sharp orange fish sauce cues hot-acid-herb specific with ordinary groceries', () => {
+    const cue = generateMinimumViableNostalgiaCue({
+      dossier: trinidadFishSauceDossier(),
+      researchFindings: {
+        researchedFacts: [
+          'The memory points to fried fish with hot, acidic orange pepper sauce.',
+          'Ordinary grocery proxies can use lime or vinegar, hot sauce or chile, mustard, paprika or turmeric, garlic, and cilantro.',
+        ],
+        inferredFacts: ['The sauce contrast should be tested on a small piece of white fish.'],
+        unknowns: ['exact pepper and herb'],
+        sourceCount: 2,
+        confidence: 'Low',
+      },
+      userLocation: 'Portland',
+      maxEffortMinutes: 15,
+    });
+    const recommendationText = fullCueText(cue);
+
+    expect(recommendationText).toMatch(/fish|white fish/);
+    expect(recommendationText).toMatch(/lime|vinegar/);
+    expect(recommendationText).toMatch(/hot sauce|chile|pepper/);
+    expect(recommendationText).toMatch(/mustard|paprika|turmeric|orange/);
+    expect(recommendationText).toMatch(/cilantro|green herb/);
+    expect(recommendationText).not.toMatch(/mango salsa/);
   });
 
   it.each([
