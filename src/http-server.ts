@@ -552,10 +552,17 @@ async function executeAndStreamTool(
 
 function shouldBuildMissingDossier(toolInput: unknown, toolPayloads: Record<string, unknown>): boolean {
   const record = isRecord(toolInput) ? toolInput : {};
-  return !isRecord(record.dossier)
+  return !hasUsableDossier(record.dossier)
     && !toolPayloads.build_reconstruction_dossier
     && Boolean(toolPayloads.collect_food_memory)
     && Boolean(toolPayloads.plan_dish_research);
+}
+
+function hasUsableDossier(value: unknown): boolean {
+  if (!isRecord(value)) return false;
+  const ledger = value.evidenceLedger;
+  if (!isRecord(ledger)) return false;
+  return Array.isArray(ledger.userSaid) && ledger.userSaid.some((entry) => typeof entry === 'string' && entry.trim().length > 0);
 }
 
 function normalizeDependentToolInput(toolName: string, input: unknown, userMessage: string, toolPayloads: Record<string, unknown>): unknown {
@@ -577,7 +584,7 @@ function normalizeDependentToolInput(toolName: string, input: unknown, userMessa
       ...(!isRecord(record.researchPlan) && toolPayloads.plan_dish_research ? { researchPlan: toolPayloads.plan_dish_research } : {}),
     };
   }
-  if (toolName === 'generate_minimum_viable_nostalgia' && !isRecord(record.dossier) && toolPayloads.build_reconstruction_dossier) {
+  if (toolName === 'generate_minimum_viable_nostalgia' && !hasUsableDossier(record.dossier) && toolPayloads.build_reconstruction_dossier) {
     const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
     return {
       ...record,
