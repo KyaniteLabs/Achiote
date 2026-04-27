@@ -240,7 +240,7 @@ describe('/ask premature cue guard', () => {
       const toolCallsByTurn = [
         [{ id: 'call_1', type: 'function', function: { name: 'collect_food_memory', arguments: JSON.stringify({ memoryText: 'Hot fried fish sandwich with sharp orange sauce from Trinidad.' }) } }],
         [{ id: 'call_2', type: 'function', function: { name: 'plan_dish_research', arguments: JSON.stringify({}) } }],
-        [{ id: 'call_3', type: 'function', function: { name: 'generate_minimum_viable_nostalgia', arguments: JSON.stringify({ maxEffortMinutes: 10 }) } }],
+        [{ id: 'call_3', type: 'function', function: { name: 'generate_minimum_viable_nostalgia', arguments: JSON.stringify({ dossier: {}, maxEffortMinutes: 10 }) } }],
       ];
       const toolCalls = toolCallsByTurn[requestCount - 1];
       res.setHeader('content-type', 'application/json');
