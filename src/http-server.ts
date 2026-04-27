@@ -511,7 +511,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
     }
 
     for (const text of modelResponse.textBlocks) {
-      send('text', ensureLocalCueLanguage(text, toolPayloads, calledTools));
+      send('text', ensureCueQualityLanguage(text, toolPayloads, calledTools));
     }
     send('done', {});
   } catch (err) {
@@ -782,6 +782,14 @@ function ensureLocalCueLanguage(text: string, toolPayloads: Record<string, unkno
     || /\b(?:local|nearby|ordinary grocery|grocery-store|grocery store|pantry|available near)\b/i.test(text);
   if (mentionsLocality) return text;
   return `${text.trim()}\n\nUse ordinary grocery or pantry ingredients near ${location}; do not buy the exact suspected dish for this first test.`;
+}
+
+function ensureCueQualityLanguage(text: string, toolPayloads: Record<string, unknown>, calledTools: Set<string>): string {
+  let revised = ensureLocalCueLanguage(text, toolPayloads, calledTools);
+  if (!calledTools.has('generate_minimum_viable_nostalgia')) return revised;
+  if (/\b(?:minimum viable|research|researched|verify|narrow|proxy)\b/i.test(revised)) return revised;
+  revised = `${revised.trim()}\n\nTreat this as a narrow, research-bounded proxy test: if the aroma, texture, or aftertaste is wrong, we should revise the hypothesis before chasing exact ingredients.`;
+  return revised;
 }
 
 function authenticateVoiceRequest(req: IncomingMessage, res: ServerResponse): AuthedRequest {
