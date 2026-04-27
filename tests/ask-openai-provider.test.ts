@@ -317,7 +317,7 @@ describe('/ask premature cue guard', () => {
           finish_reason: toolCalls ? 'tool_calls' : 'stop',
           message: toolCalls
             ? { role: 'assistant', content: '', tool_calls: toolCalls }
-            : { role: 'assistant', content: 'For a first-pass verification bite, boil a small piece of green plantain, mash it with salt, and taste the starchy texture.' },
+            : { role: 'assistant', content: 'For your first verification bite, boil a small piece of green plantain, mash it with salt, and taste the starchy texture.' },
         }],
       }));
     });
@@ -340,6 +340,7 @@ describe('/ask premature cue guard', () => {
       expect(text).toContain('starch and browned fat/protein together');
       expect(text).toContain('first-pass verification bite');
       expect(text).not.toContain('first-pass first-pass verification bite');
+      expect(text).not.toContain('first first-pass verification bite');
       expect(events.at(-1)?.event).toBe('done');
     } finally {
       achiote.kill('SIGINT');
