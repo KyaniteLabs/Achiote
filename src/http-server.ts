@@ -128,6 +128,9 @@ const allowedTelemetryEvents = new Set([
   'feedback_generic',
   'feedback_wrong_region',
   'feedback_unsafe',
+  'feedback_close',
+  'feedback_too_hard',
+  'feedback_missed_correction',
 ]);
 const allowedTelemetryProperties = new Set(['route', 'source', 'category', 'tier', 'mode', 'reason', 'hasHistory']);
 const MAX_TELEMETRY_VALUES_PER_PROPERTY = 25;

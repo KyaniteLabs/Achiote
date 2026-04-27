@@ -59,6 +59,7 @@ describe('package distribution metadata', () => {
     expect(pkg.scripts.keygen).toBe('node scripts/generate-api-key.mjs');
     expect(pkg.scripts['docker:smoke']).toBe('node scripts/docker-smoke.mjs');
     expect(pkg.scripts['live:ask']).toBe('node scripts/live-ask-smoke.mjs');
+    expect(pkg.scripts['preview:smoke']).toBe('node scripts/preview-ask-smoke.mjs');
     expect(pkg.scripts['pack:check']).toBe('npm run check && npm run package:smoke && npm pack --dry-run');
     expect(pkg.scripts['package:smoke']).toBe('node scripts/package-smoke.mjs');
   });
@@ -119,5 +120,6 @@ describe('packaged helper scripts', () => {
     expect(fs.existsSync('scripts/generate-api-key.mjs')).toBe(true);
     expect(fs.existsSync('scripts/docker-smoke.mjs')).toBe(true);
     expect(fs.existsSync('scripts/live-ask-smoke.mjs')).toBe(true);
+    expect(fs.existsSync('scripts/preview-ask-smoke.mjs')).toBe(true);
   });
 });

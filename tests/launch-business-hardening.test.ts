@@ -41,6 +41,9 @@ describe('launch business hardening', () => {
     expect(appJs()).toContain("trackEvent('ask_failed'");
     expect(appJs()).toContain("trackEvent('onboarding_prompt_selected'");
     expect(appJs()).toContain("sendFeedback(");
+    expect(appJs()).toContain('feedback_close');
+    expect(appJs()).toContain('feedback_too_hard');
+    expect(appJs()).toContain('feedback_missed_correction');
     expect(appJs()).toContain("navigator.sendBeacon('/events'");
     expect(appJs()).not.toContain("prompt_text");
 
@@ -49,6 +52,9 @@ describe('launch business hardening', () => {
     expect(server()).toContain("pathname === '/events'");
     expect(server()).toContain('allowedTelemetryEvents');
     expect(server()).toContain('allowedTelemetryProperties');
+    expect(server()).toContain("'feedback_close'");
+    expect(server()).toContain("'feedback_too_hard'");
+    expect(server()).toContain("'feedback_missed_correction'");
     expect(server()).toContain('telemetryBreakdowns');
     expect(server()).toContain('telemetryCounters');
     expect(server()).toContain("sendJson(res, 404, { error: 'Not found' })");
@@ -73,12 +79,36 @@ describe('launch business hardening', () => {
     const js = appJs();
 
     expect(page).toContain('.trace-panel');
-    expect(page).toContain('font-size: 0.92rem');
+    expect(page).toContain('font-size: 1rem');
+    expect(page).toContain('.trace-heading');
+    expect(page).toContain('.trace-phase');
     expect(page).toContain('.trace-tool-name');
     expect(js).toContain('assistant-content');
+    expect(js).toContain('phaseForStatus');
+    expect(js).toContain('Reading memory');
+    expect(js).toContain('Correcting likely name');
+    expect(js).toContain('Researching');
+    expect(js).toContain('Building first test');
     expect(js).toContain("item.className = `trace-item ${type}`");
+    expect(js).toContain('Feels close');
+    expect(js).toContain('Too hard to make');
+    expect(js).toContain('Did not correct my wording');
     expect(js).not.toContain('font-size:12px');
     expect(js).not.toContain('font-size:11px');
+  });
+
+  it('ships a repeatable preview ask smoke for demo-quality regressions', () => {
+    const previewSmoke = fs.readFileSync('scripts/preview-ask-smoke.mjs', 'utf8');
+    const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8')) as { scripts: Record<string, string> };
+
+    expect(pkg.scripts['preview:smoke']).toBe('node scripts/preview-ask-smoke.mjs');
+    expect(previewSmoke).toContain('ACHIOTE_PREVIEW_URL');
+    expect(previewSmoke).toContain('typo_carimanola');
+    expect(previewSmoke).toContain('soundalike_chikki');
+    expect(previewSmoke).toContain('explicit_minimum_cue_abroad');
+    expect(previewSmoke).toContain('correct_mistakes_not_literal');
+    expect(previewSmoke).toContain('buyExactDishPatterns');
+    expect(previewSmoke).toContain('All preview /ask quality cases passed');
   });
 
   it('keeps SEO and launch metadata current for trust pages', () => {
@@ -118,7 +148,10 @@ describe('launch business hardening', () => {
     const terms = fs.readFileSync('docs/landing/terms.html', 'utf8');
 
     expect(runbook).toContain('npm run check');
+    expect(runbook).toContain('npm run preview:smoke');
     expect(runbook).toContain('ask_failed / ask_started');
+    expect(runbook).toContain('feedback_close');
+    expect(runbook).toContain('feedback_missed_correction');
     expect(runbook).toContain('checkout_started / pricing_viewed');
     expect(runbook).toContain('onboarding_prompt_selected');
     expect(runbook).toContain('support@kyanitelabs.tech');

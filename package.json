@@ -20,7 +20,8 @@
     "docker:smoke": "node scripts/docker-smoke.mjs",
     "lint": "node scripts/static-checks.mjs",
     "coverage:guard": "node scripts/coverage-threshold.mjs",
-    "live:ask": "node scripts/live-ask-smoke.mjs"
+    "live:ask": "node scripts/live-ask-smoke.mjs",
+    "preview:smoke": "node scripts/preview-ask-smoke.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.90.0",

@@ -12,12 +12,19 @@ Run these before publishing or changing the hosted service:
 ```bash
 npm run check
 npm run package:smoke
+npm run preview:smoke
 npm audit --audit-level=moderate
 npm pack --dry-run
 ```
 
 For UI changes, open `/`, `/app`, `/about`, `/privacy`, `/terms`, `/safety`,
 and `/support` in a browser-sized mobile and desktop viewport.
+
+For hosted preview demos, run the preview smoke against the public URL:
+
+```bash
+ACHIOTE_PREVIEW_URL=https://achiote.kyanitelabs.tech npm run preview:smoke
+```
 
 ## Required Environment
 
@@ -37,7 +44,7 @@ Track these server signals:
 - Provider timeout and provider error counts.
 - `tool_workflow_skipped` errors.
 - Premature-cue suppression events.
-- Private `/events` counters with `Authorization: Bearer $ACHIOTE_EVENTS_ADMIN_TOKEN`, or equivalent host metrics for telemetry events: `page_view`, `pricing_viewed`, `checkout_started`, `checkout_failed`, `app_opened`, `onboarding_prompt_selected`, `ask_started`, `ask_succeeded`, `ask_failed`, and feedback events. Do not expose raw event counters on a public route.
+- Private `/events` counters with `Authorization: Bearer $ACHIOTE_EVENTS_ADMIN_TOKEN`, or equivalent host metrics for telemetry events: `page_view`, `pricing_viewed`, `checkout_started`, `checkout_failed`, `app_opened`, `onboarding_prompt_selected`, `ask_started`, `ask_succeeded`, `ask_failed`, and preview feedback events such as `feedback_close`, `feedback_wrong_region`, `feedback_too_hard`, and `feedback_missed_correction`. Do not expose raw event counters on a public route.
 - Funnel ratios: `checkout_started / pricing_viewed`, `ask_started / app_opened`, `ask_succeeded / ask_started`, `ask_failed / ask_started`, and `onboarding_prompt_selected / app_opened`.
 - Rate-limit and auth failure spikes.
 - Process restarts and memory growth.

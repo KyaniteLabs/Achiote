@@ -252,7 +252,7 @@ describe('HTTP server integration', () => {
     const event = await fetch(`${baseUrl}/events`, {
       method: 'POST',
       headers: { Origin: baseUrl, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ event: 'feedback_helpful', properties: { route: '/app', category: 'answer_quality' } }),
+      body: JSON.stringify({ event: 'feedback_close', properties: { route: '/app', category: 'answer_quality' } }),
     });
     expect(event.status).toBe(202);
 
@@ -264,15 +264,15 @@ describe('HTTP server integration', () => {
     });
     expect(operatorRead.status).toBe(200);
     expect(await operatorRead.json()).toEqual({
-      counters: { feedback_helpful: 1 },
-      breakdowns: { feedback_helpful: { route: { '/app': 1 }, category: { answer_quality: 1 } } },
+      counters: { feedback_close: 1 },
+      breakdowns: { feedback_close: { route: { '/app': 1 }, category: { answer_quality: 1 } } },
     });
 
     for (let i = 0; i < 30; i += 1) {
       const cardinalityEvent = await fetch(`${baseUrl}/events`, {
         method: 'POST',
         headers: { Origin: baseUrl, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ event: 'feedback_generic', properties: { route: '/app', category: `segment-${i}` } }),
+        body: JSON.stringify({ event: 'feedback_too_hard', properties: { route: '/app', category: `segment-${i}` } }),
       });
       expect(cardinalityEvent.status).toBe(202);
     }
@@ -281,9 +281,9 @@ describe('HTTP server integration', () => {
       headers: { Authorization: 'Bearer operator-test-token' },
     });
     const boundedBody = await boundedRead.json();
-    expect(Object.keys(boundedBody.breakdowns.feedback_generic.category)).toHaveLength(25);
-    expect(boundedBody.breakdowns.feedback_generic.category.other).toBe(6);
-    expect(boundedBody.breakdowns.feedback_generic.route).toEqual({ '/app': 30 });
+    expect(Object.keys(boundedBody.breakdowns.feedback_too_hard.category)).toHaveLength(25);
+    expect(boundedBody.breakdowns.feedback_too_hard.category.other).toBe(6);
+    expect(boundedBody.breakdowns.feedback_too_hard.route).toEqual({ '/app': 30 });
   });
 
   it('returns 404 for unknown paths', async () => {
