@@ -286,6 +286,69 @@ describe('/ask premature cue guard', () => {
     }
   }, 20_000);
 
+  it('normalizes raw web search results before building research records', async () => {
+    const fakePort = await getFreePort();
+    let requestCount = 0;
+    const fakeOpenAi = createServer(async (req, res) => {
+      if (req.url !== '/v1/chat/completions' || req.method !== 'POST') {
+        res.writeHead(404).end();
+        return;
+      }
+      requestCount++;
+      await readBody(req);
+      const toolCallsByTurn = [
+        [{ id: 'call_1', type: 'function', function: { name: 'collect_food_memory', arguments: JSON.stringify({ memoryText: 'Brown peanut candy from India sounded like chicky.' }) } }],
+        [{ id: 'call_2', type: 'function', function: { name: 'plan_dish_research', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_3', type: 'function', function: { name: 'build_research_record', arguments: JSON.stringify({
+          dishName: 'Peanut Chikki',
+          query: 'peanut chikki India candy',
+          sources: [
+            { title: 'Peanut Chikki Recipe', link: 'https://example.org/chikki', snippet: 'Chikki is peanut candy made with jaggery.' },
+          ],
+        }) } }],
+      ];
+      const toolCalls = toolCallsByTurn[requestCount - 1];
+      res.setHeader('content-type', 'application/json');
+      res.end(JSON.stringify({
+        choices: [{
+          finish_reason: toolCalls ? 'tool_calls' : 'stop',
+          message: toolCalls
+            ? { role: 'assistant', content: '', tool_calls: toolCalls }
+            : { role: 'assistant', content: 'Research record built.' },
+        }],
+      }));
+    });
+    await new Promise<void>((resolveListen) => fakeOpenAi.listen(fakePort, '127.0.0.1', resolveListen));
+
+    const achiotePort = await getFreePort();
+    const achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`);
+    try {
+      const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: 'Brown peanut candy from India sounded like chicky. What should we research first?' }),
+      });
+
+      expect(response.status).toBe(200);
+      const events = parseSse(await response.text());
+      const recordCall = events.find((event) => event.event === 'tool_call' && JSON.parse(event.data).name === 'build_research_record');
+      const recordResult = events.find((event) => event.event === 'tool_result' && JSON.parse(event.data).name === 'build_research_record');
+
+      expect(JSON.parse(recordCall!.data).input.sources[0]).toMatchObject({
+        url: 'https://example.org/chikki',
+        sourceType: 'recipe',
+        reliability: 'Medium',
+        extractedFacts: ['Chikki is peanut candy made with jaggery.'],
+      });
+      expect(JSON.parse(recordCall!.data).input.sources[0].accessedAt).toEqual(expect.any(String));
+      expect(JSON.parse(recordResult!.data).result.sources[0].quotedFacts).toContain('Chikki is peanut candy made with jaggery.');
+      expect(events.at(-1)!.event).toBe('done');
+    } finally {
+      achiote.kill('SIGINT');
+      await new Promise<void>((resolveClose) => fakeOpenAi.close(() => resolveClose()));
+    }
+  }, 20_000);
+
   it('does not stream concrete food cues before the minimum viable nostalgia tool runs', async () => {
     const fakePort = await getFreePort();
     let requestCount = 0;

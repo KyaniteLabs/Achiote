@@ -564,6 +564,9 @@ function normalizeDependentToolInput(toolName: string, input: unknown, userMessa
     const userLocation = inferUserLocation(userMessage);
     return userLocation ? { ...record, userLocation } : input;
   }
+  if (toolName === 'build_research_record') {
+    return normalizeResearchRecordInput(record, toolPayloads);
+  }
   if (toolName === 'plan_dish_research' && !isRecord(record.memory) && toolPayloads.collect_food_memory) {
     return { ...record, memory: toolPayloads.collect_food_memory };
   }
@@ -583,6 +586,59 @@ function normalizeDependentToolInput(toolName: string, input: unknown, userMessa
     };
   }
   return input;
+}
+
+function normalizeResearchRecordInput(record: Record<string, unknown>, toolPayloads: Record<string, unknown>): unknown {
+  const researchPlan = toolPayloads.plan_dish_research as DishResearchPlan | undefined;
+  const searchResult = toolPayloads.search_web as { query?: string; results?: unknown[] } | undefined;
+  const topHypothesis = researchPlan?.hypotheses?.[0]?.name;
+  const sources = Array.isArray(record.sources) ? record.sources : searchResult?.results;
+
+  return {
+    ...record,
+    dishName: typeof record.dishName === 'string' ? record.dishName : topHypothesis ?? 'unknown food memory',
+    query: typeof record.query === 'string' ? record.query : searchResult?.query ?? researchPlan?.searchQueries?.[0] ?? 'unknown food memory research',
+    sources: Array.isArray(sources) ? sources.map(normalizeResearchSource) : [],
+  };
+}
+
+function normalizeResearchSource(source: unknown): Record<string, unknown> {
+  const record = isRecord(source) ? source : {};
+  const title = typeof record.title === 'string' && record.title.trim() ? record.title : 'Untitled source';
+  const url = typeof record.url === 'string'
+    ? record.url
+    : typeof record.link === 'string'
+      ? record.link
+      : '';
+  const extractedFacts = Array.isArray(record.extractedFacts)
+    ? record.extractedFacts.filter((fact): fact is string => typeof fact === 'string' && fact.trim().length > 0)
+    : typeof record.snippet === 'string' && record.snippet.trim()
+      ? [record.snippet]
+      : [];
+
+  return {
+    title,
+    url,
+    sourceType: normalizeSourceType(record.sourceType, title, url),
+    accessedAt: typeof record.accessedAt === 'string' && record.accessedAt.trim() ? record.accessedAt : new Date().toISOString(),
+    reliability: normalizeConfidence(record.reliability),
+    author: typeof record.author === 'string' ? record.author : undefined,
+    extractedFacts,
+  };
+}
+
+function normalizeSourceType(value: unknown, title: string, url: string): string {
+  const normalized = typeof value === 'string' ? value.toLowerCase().replace(/[-_\s]+/g, '_') : '';
+  if (['recipe', 'video', 'article', 'book', 'oral_history', 'market', 'other'].includes(normalized)) return normalized;
+  const combined = `${title} ${url}`.toLowerCase();
+  if (combined.includes('youtube') || combined.includes('video')) return 'video';
+  if (combined.includes('recipe')) return 'recipe';
+  if (combined.includes('market') || combined.includes('shop') || combined.includes('store')) return 'market';
+  return 'article';
+}
+
+function normalizeConfidence(value: unknown): 'High' | 'Medium' | 'Low' {
+  return value === 'High' || value === 'Medium' || value === 'Low' ? value : 'Medium';
 }
 
 function inferUserLocation(userMessage: string): string | undefined {
