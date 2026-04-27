@@ -72,6 +72,22 @@ describe('rate limiter', () => {
       expect(limiter.checkWebLimit('free', 'session-1').allowed).toBe(false);
     });
 
+    it('can override web reconstruction limits for anonymous preview demos', () => {
+      const limiter = createRateLimiter();
+      for (let i = 0; i < 5; i++) {
+        expect(limiter.checkWebLimit('free', 'preview-session', 5)).toMatchObject({
+          allowed: true,
+          limit: 5,
+          remaining: 4 - i,
+        });
+      }
+      expect(limiter.checkWebLimit('free', 'preview-session', 5)).toMatchObject({
+        allowed: false,
+        limit: 5,
+        remaining: 0,
+      });
+    });
+
     it('paid consumer tiers cap guided memories instead of promising unlimited AI usage', () => {
       const limiter = createRateLimiter();
       expect(limiter.checkWebLimit('personal', 'personal-key').limit).toBe(25);
