@@ -568,8 +568,23 @@ function hasUsableDossier(value: unknown): boolean {
   return Array.isArray(ledger.userSaid) && ledger.userSaid.some((entry) => typeof entry === 'string' && entry.trim().length > 0);
 }
 
+function hasUsableCollectedMemory(value: unknown): boolean {
+  return outputSchemas.collect_food_memory.safeParse(value).success;
+}
+
+function hasUsableResearchPlan(value: unknown): boolean {
+  return outputSchemas.plan_dish_research.safeParse(value).success;
+}
+
 function normalizeDependentToolInput(toolName: string, input: unknown, userMessage: string, toolPayloads: Record<string, unknown>): unknown {
   const record = isRecord(input) ? input : {};
+  const collectedMemory = hasUsableCollectedMemory(toolPayloads.collect_food_memory)
+    ? toolPayloads.collect_food_memory
+    : undefined;
+  const researchPlan = hasUsableResearchPlan(toolPayloads.plan_dish_research)
+    ? toolPayloads.plan_dish_research
+    : undefined;
+
   if (toolName === 'collect_food_memory' && typeof record.userLocation !== 'string') {
     const userLocation = inferUserLocation(userMessage);
     return userLocation ? { ...record, userLocation } : input;
@@ -577,14 +592,14 @@ function normalizeDependentToolInput(toolName: string, input: unknown, userMessa
   if (toolName === 'build_research_record') {
     return normalizeResearchRecordInput(record, toolPayloads);
   }
-  if (toolName === 'plan_dish_research' && !isRecord(record.memory) && toolPayloads.collect_food_memory) {
-    return { ...record, memory: toolPayloads.collect_food_memory };
+  if (toolName === 'plan_dish_research' && !hasUsableCollectedMemory(record.memory) && collectedMemory) {
+    return { ...record, memory: collectedMemory };
   }
   if (toolName === 'build_reconstruction_dossier') {
     return {
       ...record,
-      ...(!isRecord(record.memory) && toolPayloads.collect_food_memory ? { memory: toolPayloads.collect_food_memory } : {}),
-      ...(!isRecord(record.researchPlan) && toolPayloads.plan_dish_research ? { researchPlan: toolPayloads.plan_dish_research } : {}),
+      ...(!hasUsableCollectedMemory(record.memory) && collectedMemory ? { memory: collectedMemory } : {}),
+      ...(!hasUsableResearchPlan(record.researchPlan) && researchPlan ? { researchPlan } : {}),
     };
   }
   if (toolName === 'generate_minimum_viable_nostalgia' && !hasUsableDossier(record.dossier) && toolPayloads.build_reconstruction_dossier) {
