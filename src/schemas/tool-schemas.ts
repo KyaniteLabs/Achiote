@@ -338,6 +338,8 @@ export const minimumViableNostalgiaOutputSchema = z.object({
 
 export const webSearchOutputSchema = z.object({
   query: z.string(),
+  /** 'ok' | 'unconfigured' | 'error' | 'timeout' — lets the model distinguish silence from failure */
+  searchStatus: z.enum(['ok', 'unconfigured', 'error', 'timeout']).default('ok'),
   results: z.array(
     z.object({
       title: z.string(),
