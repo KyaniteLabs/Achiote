@@ -1,0 +1,42 @@
+services:
+  achiote:
+    image: achiote:latest
+    container_name: achiote
+    restart: unless-stopped
+    build:
+      context: ../..
+      dockerfile: Dockerfile
+    env_file:
+      - ./env.hostinger
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+    extra_hosts:
+      # Required for local inference via Tailscale: maps host.docker.internal
+      # to the VPS host gateway so the container can reach the Tailscale daemon
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - achiote_data:/app/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.achiote.entrypoints=websecure"
+      - "traefik.http.routers.achiote.rule=Host(`${ACHIOTE_PUBLIC_HOST}`)"
+      - "traefik.http.routers.achiote.tls=true"
+      - "traefik.http.routers.achiote.tls.certresolver=letsencrypt"
+      - "traefik.http.services.achiote.loadbalancer.server.port=3000"
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - "node -e \"fetch('http://127.0.0.1:3000/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))\""
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 512M
+
+volumes:
+  achiote_data:
