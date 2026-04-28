@@ -100,7 +100,7 @@ describe('P2 product trust improvements', () => {
     const readme = fs.readFileSync('README.md', 'utf8');
 
     expect(`${landing}\n${app}\n${readme}`).toContain('static sourcing guidance, not live inventory');
-    expect(landing).toContain('Illustrative demo');
+    expect(landing).toContain('No guesses pretending to be facts.');
   });
 
   it('describes local OSS voice as multilingual and immigrant-family friendly without hosted speech claims', () => {
