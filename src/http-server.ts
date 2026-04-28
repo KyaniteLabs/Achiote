@@ -7,7 +7,7 @@ import { dirname, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import Anthropic from '@anthropic-ai/sdk';
 import { createAnthropicAskSession, createOpenAICompatibleAskSession, openAIBaseUrlFromEnv, openAICompatibleProviderReady, resolveAskModel, resolveAskProviderKind, anthropicBaseUrlFromEnv } from './lib/ask-provider.js';
-import type { AskHistoryItem, AskImage } from './lib/ask-provider.js';
+import type { AskHistoryItem, AskImage, AskModelResponse } from './lib/ask-provider.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { isInitializeRequest } from '@modelcontextprotocol/sdk/types.js';
 import { createAchioteServer } from './server.js';
@@ -545,23 +545,45 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
           providerMessage: modelResponse.providerMessage ?? null,
         };
         // When the loop detector emptied the batch but we have enough research
-        // data, inject build_reconstruction_dossier so the model can progress
-        // to generate_minimum_viable_nostalgia instead of stalling.
+        // data, execute build_reconstruction_dossier directly and feed the
+        // result back to the model so it can progress to
+        // generate_minimum_viable_nostalgia in the next iteration.
         if (modelResponse.toolCalls.length === 0
           && !calledTools.has('build_reconstruction_dossier')
           && toolPayloads.collect_food_memory
           && toolPayloads.plan_dish_research) {
-          console.log('[ask] injecting build_reconstruction_dossier after loop detector emptied batch');
+          console.log('[ask] auto-building dossier after loop detector emptied batch');
           const searchResults = toolPayloads.search_web as { results?: Array<{ title?: string; snippet?: string }> } | undefined;
           const researchedFacts = searchResults?.results
             ?.filter((r) => r.snippet)
             .map((r) => `${r.title}: ${r.snippet}`)
             .slice(0, 5) ?? [];
-          modelResponse = {
-            textBlocks: [`I've gathered enough information. Let me synthesize what we've found.`],
-            toolCalls: [{ id: `injected_dossier_${iterations}`, name: 'build_reconstruction_dossier', input: { memory: toolPayloads.collect_food_memory, researchPlan: toolPayloads.plan_dish_research, researchedFacts } }],
-            providerMessage: null,
-          };
+          try {
+            const dossierPayload = await executeAndStreamTool('build_reconstruction_dossier', {
+              memory: toolPayloads.collect_food_memory,
+              researchPlan: toolPayloads.plan_dish_research,
+              researchedFacts,
+            }, userMessage, send, calledTools, toolPayloads);
+            // Feed dossier result back as a synthetic tool result so the
+            // model session stays valid and the model can call MVN next.
+            const dossierResult: Array<{ id: string; content: string }> = [{
+              id: `injected_dossier_${iterations}`,
+              content: JSON.stringify(dossierPayload),
+            }];
+            toolCallHistory.push({ name: 'build_reconstruction_dossier', input: {} });
+            const syntheticResponse: AskModelResponse = {
+              textBlocks: [`I've gathered enough research. Let me synthesize what we found and create a first test.`],
+              toolCalls: [{ id: `injected_dossier_${iterations}`, name: 'build_reconstruction_dossier', input: { memory: toolPayloads.collect_food_memory, researchPlan: toolPayloads.plan_dish_research } }],
+              providerMessage: modelResponse.providerMessage,
+            };
+            askSession.appendToolResults(syntheticResponse, dossierResult);
+            send('status', { iteration: iterations, stage: 'thinking' });
+            modelResponse = await askSession.create(2048);
+          } catch (err) {
+            const detail = err instanceof Error ? err.message : String(err);
+            console.warn(`[ask] auto-dossier failed: ${detail}, falling back to forced cue`);
+          }
+          continue;
         }
       }
 
