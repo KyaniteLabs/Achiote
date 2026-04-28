@@ -699,11 +699,17 @@ async function executeAndStreamTool(
   toolPayloads: Record<string, unknown>,
 ): Promise<unknown> {
   if (toolName === 'generate_minimum_viable_nostalgia' && shouldBuildMissingDossier(input, toolPayloads)) {
+    const searchResults = toolPayloads.search_web as { results?: Array<{ title?: string; snippet?: string }> } | undefined;
+    const researchedFacts = searchResults?.results
+      ?.filter((r) => r.snippet)
+      .map((r) => `${r.title}: ${r.snippet}`)
+      .slice(0, 5) ?? [];
     await executeAndStreamTool('build_reconstruction_dossier', {
       memory: toolPayloads.collect_food_memory,
       researchPlan: toolPayloads.plan_dish_research,
+      researchedFacts,
       inferredFacts: [
-        'The model requested a minimum viable cue before building a dossier, so the server built the evidence boundary first.',
+        'The model requested a minimum viable cue before building a dossier, so the server built the evidence boundary from available research.',
       ],
     }, userMessage, send, calledTools, toolPayloads);
   }
@@ -891,12 +897,17 @@ async function maybeSendForcedMinimumCue({
 
   let dossier = toolPayloads.build_reconstruction_dossier as ReconstructionDossier | undefined;
   if (!dossier) {
+    const searchResults = toolPayloads.search_web as { results?: Array<{ title?: string; snippet?: string }> } | undefined;
+    const researchedFacts = searchResults?.results
+      ?.filter((r) => r.snippet)
+      .map((r) => `${r.title}: ${r.snippet}`)
+      .slice(0, 5) ?? [];
     dossier = await executeAndStreamTool('build_reconstruction_dossier', {
       memory,
       researchPlan,
+      researchedFacts,
       inferredFacts: [
-        'The user explicitly asked for a minimum test, so the first response should give a cheap local proxy before exact dish sourcing.',
-        'The cue should isolate remembered sensory mechanisms from pantry or ordinary grocery ingredients.',
+        'The model stalled before building a dossier, so the server assembled the evidence boundary from available research.',
       ],
     }, userMessage, send, calledTools, toolPayloads) as ReconstructionDossier;
   }
