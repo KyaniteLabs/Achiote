@@ -339,8 +339,12 @@ type AuthedRequest = { tier: Tier; name: string; keyId: string } | null;
 
 function authenticateRequest(req: IncomingMessage): AuthedRequest {
   const demo = extractDemoPassword(req);
-  if (DEMO_PASSWORD && demo && demo.length === DEMO_PASSWORD.length && timingSafeEqual(Buffer.from(demo), Buffer.from(DEMO_PASSWORD))) {
-    return { tier: 'pro', name: 'demo-user', keyId: 'demo' };
+  if (DEMO_PASSWORD && demo) {
+    const demoBuf = Buffer.from(demo);
+    const passBuf = Buffer.from(DEMO_PASSWORD);
+    if (demoBuf.length === passBuf.length && timingSafeEqual(demoBuf, passBuf)) {
+      return { tier: 'pro', name: 'demo-user', keyId: 'demo' };
+    }
   }
   const rawKey = extractApiKey(req) ?? extractBearer(req);
   const result = AUTH_ENABLED ? authenticator.authenticate(rawKey) : { authenticated: false as const, error: 'auth disabled' };
@@ -429,8 +433,10 @@ function checkTelemetryLimit(key: string): { allowed: boolean; remaining: number
 function hasEventsAdminAccess(req: IncomingMessage): boolean {
   if (!EVENTS_ADMIN_TOKEN) return false;
   const token = extractBearer(req);
-  if (!token || token.length !== EVENTS_ADMIN_TOKEN.length) return false;
-  return timingSafeEqual(Buffer.from(token), Buffer.from(EVENTS_ADMIN_TOKEN));
+  if (!token) return false;
+  const tokenBuf = Buffer.from(token);
+  const adminBuf = Buffer.from(EVENTS_ADMIN_TOKEN);
+  return tokenBuf.length === adminBuf.length && timingSafeEqual(tokenBuf, adminBuf);
 }
 
 // ── AI agent endpoint ───────────────────────────────────────────────────────
@@ -1624,7 +1630,11 @@ const server = createServer(async (req, res) => {
       sendJson(res, 404, { error: 'Session not found' });
       return;
     }
-    if (session.stripeCustomerId && email) {
+    if (session.stripeCustomerId) {
+      if (!email) {
+        sendJson(res, 400, { error: 'Email verification required. Include your checkout email as the ?email= parameter.' });
+        return;
+      }
       const customer = billingDb.getCustomer(session.stripeCustomerId);
       if (!customer?.email || customer.email.toLowerCase() !== email) {
         logSecurityEvent('billing_session_email_mismatch', { sessionId: sessionId.slice(0, 20), path: pathname });

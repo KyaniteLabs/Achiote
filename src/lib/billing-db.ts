@@ -75,7 +75,7 @@ function getEncryptionKey(): Buffer | null {
 
 function encryptKey(plaintext: string): string {
   const key = getEncryptionKey();
-  if (!key) return plaintext;
+  if (!key) throw new Error(`${ENCRYPTION_KEY_ENV} is required for key encryption`);
   const iv = randomBytes(12);
   const cipher = createCipheriv('aes-256-gcm', key, iv);
   const encrypted = Buffer.concat([cipher.update(plaintext, 'utf8'), cipher.final()]);
@@ -158,6 +158,7 @@ export class BillingDb {
         created_at TEXT NOT NULL DEFAULT (datetime('now'))
       );
 
+      CREATE INDEX IF NOT EXISTS idx_billing_keys_hash ON billing_api_keys(key_hash);
       CREATE INDEX IF NOT EXISTS idx_billing_keys_customer ON billing_api_keys(stripe_customer_id);
       CREATE INDEX IF NOT EXISTS idx_billing_keys_subscription ON billing_api_keys(stripe_subscription_id);
       CREATE INDEX IF NOT EXISTS idx_checkout_sessions_customer ON checkout_sessions(stripe_customer_id);
@@ -282,13 +283,13 @@ export class BillingDb {
   authenticateApiKey(rawKey: string): { tier: Tier; name: string; keyId: string } | null {
     const keyHash = hashKey(rawKey);
     const hashBuf = Buffer.from(keyHash);
-    const rows = this.db.prepare('SELECT key_id, tier, name, key_hash FROM billing_api_keys').all() as
-      Array<{ key_id: string; tier: Tier; name: string; key_hash: string }>;
-    for (const row of rows) {
-      const rowBuf = Buffer.from(row.key_hash);
-      if (rowBuf.length === hashBuf.length && timingSafeEqual(rowBuf, hashBuf)) {
-        return { tier: row.tier, name: row.name, keyId: row.key_id };
-      }
+    const row = this.db.prepare('SELECT key_id, tier, name, key_hash FROM billing_api_keys WHERE key_hash = ?').get(keyHash) as
+      | { key_id: string; tier: Tier; name: string; key_hash: string }
+      | undefined;
+    if (!row) return null;
+    const rowBuf = Buffer.from(row.key_hash);
+    if (rowBuf.length === hashBuf.length && timingSafeEqual(rowBuf, hashBuf)) {
+      return { tier: row.tier, name: row.name, keyId: row.key_id };
     }
     return null;
   }
@@ -456,10 +457,10 @@ export class BillingDb {
     const session = this.getCheckoutSession(stripeSessionId);
     if (!session || session.status !== 'completed' || !session.keyPlaintext) return session;
     const decrypted = decryptKey(session.keyPlaintext);
+    if (!decrypted) return null;
     this.db
       .prepare('UPDATE checkout_sessions SET key_plaintext = NULL WHERE stripe_session_id = ?')
       .run(stripeSessionId);
-    if (!decrypted) return null;
     return { ...session, keyPlaintext: decrypted };
   }
 
