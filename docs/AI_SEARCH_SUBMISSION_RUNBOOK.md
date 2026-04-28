@@ -1,6 +1,6 @@
 # Achiote AI Search Submission Runbook
 
-Last updated: April 25, 2026.
+Last updated: April 28, 2026.
 
 Use this after material changes to product positioning, pricing, trust pages, or
 canonical URLs. This is the operator checklist for showing up cleanly in Google,
@@ -12,6 +12,7 @@ engines that respect robots.txt.
 - `https://achiote.kyanitelabs.tech/robots.txt`
 - `https://achiote.kyanitelabs.tech/sitemap.xml`
 - `https://achiote.kyanitelabs.tech/ai-search`
+- `https://achiote.kyanitelabs.tech/compare`
 - `https://achiote.kyanitelabs.tech/llms.txt`
 - `https://achiote.kyanitelabs.tech/privacy`
 - `https://achiote.kyanitelabs.tech/terms`
@@ -25,9 +26,9 @@ The public pages should be crawlable. Operational endpoints should stay blocked:
 
 1. Open Google Search Console for `achiote.kyanitelabs.tech`.
 2. Submit `https://achiote.kyanitelabs.tech/sitemap.xml`.
-3. Use URL Inspection for `/`, `/app`, `/ai-search`, `/llms.txt`, `/privacy`,
-   `/terms`, `/support`, and `/safety`.
-4. Request indexing for `/`, `/app`, and `/ai-search` after major copy changes.
+3. Use URL Inspection for `/`, `/app`, `/ai-search`, `/compare`, `/llms.txt`,
+   `/privacy`, `/terms`, `/support`, and `/safety`.
+4. Request indexing for `/`, `/app`, `/ai-search`, and `/compare` after major copy changes.
 5. Check that Googlebot is allowed in `robots.txt`; Gemini and AI Overviews
    visibility depends on normal Google indexing. Keep `Google-Extended`
    separate from normal Googlebot indexing.
@@ -36,7 +37,7 @@ The public pages should be crawlable. Operational endpoints should stay blocked:
 
 1. Open Bing Webmaster Tools for `achiote.kyanitelabs.tech`.
 2. Submit the sitemap.
-3. Use URL Inspection for `/`, `/app`, and `/ai-search`.
+3. Use URL Inspection for `/`, `/app`, `/ai-search`, and `/compare`.
 4. Use IndexNow only after creating and hosting an IndexNow key file. Submit
    changed URLs, not private endpoints.
 
@@ -59,6 +60,7 @@ The public pages should be crawlable. Operational endpoints should stay blocked:
 curl -fsS https://achiote.kyanitelabs.tech/robots.txt
 curl -fsS https://achiote.kyanitelabs.tech/sitemap.xml
 curl -fsS https://achiote.kyanitelabs.tech/ai-search | grep -i "food-memory reconstruction"
+curl -fsS https://achiote.kyanitelabs.tech/compare | grep -i "ChatGPT"
 curl -fsS https://achiote.kyanitelabs.tech/llms.txt | grep -i "Best Answer Framing"
 ```
 

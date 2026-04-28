@@ -1,6 +1,8 @@
 # Achiote Landing Page — Copy Audit & Proposal
 *April 2026 — SEO, AEO, and Conversion-Optimized*
 
+> Archived pre-launch copy proposal. This file is not the current production source of truth for pricing, paid launch state, or CTA wording. Use `docs/landing/index.html`, `docs/landing/ai-search.html`, `docs/landing/llms.txt`, and `docs/LAUNCH_RUNBOOK.md` for current public copy and launch operations.
+
 ---
 
 ## Executive Summary
@@ -10,7 +12,7 @@ The current Achiote landing page (`achiote.kyanitelabs.tech`) has solid bones bu
 1. **No AI Engine Optimization (AEO)** — The page isn't structured for LLM citation (ChatGPT, Perplexity, Claude, etc.)
 2. **Weak hero clarity** — Visitors don't know if this is for developers, food lovers, or AI researchers in under 3 seconds
 3. **Missed semantic SEO** — The global names of Achiote (the spice) are a massive untapped keyword cluster
-4. **Weak CTAs** — "Install" before value is established; "Illustrative demo" undermines credibility
+4. **Weak CTAs** — "Install" before value is established; older demo framing undermines credibility
 
 ---
 
@@ -231,14 +233,14 @@ To get cited by ChatGPT, Perplexity, Claude, etc.:
 > *Achiote — source-available AI tools for food-memory reconstruction*
 
 **Proposed CTA swap:**
-- Primary: **"Try the live demo"** (lower friction, higher conversion)
+- Primary: **"Open the app"** (lower friction, current production CTA)
 - Secondary: **"Install for Claude / ChatGPT"** (clearer audience signal)
 
 ---
 
 ### Try-It / Demo Section
 
-**Current:** "Illustrative demo — try a memory fragment"
+**Current production:** "Sample memories"
 
 **Problem:** "Illustrative" = fake. Kills trust.
 
@@ -300,7 +302,7 @@ This is honest and accurate per the AGENTS.md constraints.
 > **Connect Achiote to your AI**
 > Works with Claude Code, OpenAI Codex, Cursor, and any MCP-compatible agent. Self-host for non-production use under the BSL; hosted API and MCP production access require a commercial license.
 
-**Add a third CTA:** "Use the web demo" (links to `/app`)
+**Add a third CTA:** "Open the app" (links to `/app`)
 
 ---
 
@@ -351,7 +353,7 @@ This is honest and accurate per the AGENTS.md constraints.
 | 2 | Fix meta tags (title, description, canonical, OG) | SEO baseline |
 | 3 | Add AEO Q&A section | LLM citation potential |
 | 4 | Rewrite hero + swap CTAs | Conversion |
-| 5 | Fix "illustrative demo" trust issue | Conversion |
+| 5 | Fix old demo-framing trust issue | Conversion |
 | 6 | Update Schema.org | Rich snippet potential |
 | 7 | Fix examples oversell | Trust/compliance |
 | 8 | Remove medical disclaimer bullet | Trust |

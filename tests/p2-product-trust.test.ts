@@ -94,13 +94,27 @@ describe('P2 product trust improvements', () => {
     }
   });
 
-  it('labels static sourcing and illustrative demos clearly in product surfaces', () => {
+  it('labels static sourcing and sample memories clearly in product surfaces', () => {
     const landing = fs.readFileSync('docs/landing/index.html', 'utf8');
     const app = fs.readFileSync('docs/landing/app.html', 'utf8');
     const readme = fs.readFileSync('README.md', 'utf8');
+    const success = fs.readFileSync('docs/landing/billing-success.html', 'utf8');
+    const privacy = fs.readFileSync('docs/landing/privacy.html', 'utf8');
+    const terms = fs.readFileSync('docs/landing/terms.html', 'utf8');
+    const copyProposal = fs.readFileSync('docs/landing/copy-proposal.md', 'utf8');
 
     expect(`${landing}\n${app}\n${readme}`).toContain('static sourcing guidance, not live inventory');
+    expect(landing).toContain('Sample memories');
     expect(landing).toContain('No guesses pretending to be facts.');
+    expect(`${landing}\n${success}\n${privacy}\n${terms}`).not.toContain('Illustrative demo');
+    expect(`${landing}\n${success}\n${privacy}\n${terms}`).not.toContain('Try the live demo');
+    expect(`${landing}\n${success}\n${privacy}\n${terms}`).not.toContain('Use the web demo');
+    expect(privacy).toContain('Stripe billing records');
+    expect(privacy).not.toContain('billing records after Stripe is configured');
+    expect(terms).toContain('payment failure');
+    expect(terms).not.toContain('payment failure after billing is enabled');
+    expect(copyProposal).toContain('Archived pre-launch copy proposal');
+    expect(copyProposal).toContain('not the current production source of truth');
   });
 
   it('describes local OSS voice as multilingual and immigrant-family friendly without hosted speech claims', () => {
