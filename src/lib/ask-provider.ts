@@ -124,6 +124,7 @@ export function isLocalInferenceUrl(baseUrl: string): boolean {
     return parsed.hostname === '127.0.0.1'
       || parsed.hostname === 'localhost'
       || parsed.hostname === '::1'
+      || parsed.hostname === '[::1]'
       || parsed.hostname === 'host.docker.internal'
       || parsed.hostname.startsWith('100.');
   } catch {
