@@ -1376,6 +1376,7 @@ const server = createServer(async (req, res) => {
       billingEnabled: Boolean(billingConfig),
       anthropicApiKey: ASK_PROVIDER_KIND === 'openai' && openAICompatibleProviderReady(OPENAI_BASE_URL, process.env.LOCAL_INFERENCE_API_KEY || process.env.OPENAI_API_KEY || process.env.LMSTUDIO_API_KEY || process.env.LM_STUDIO_API_KEY) ? 'openai-compatible-provider' : ASK_PROVIDER_KIND === 'openai' ? undefined : (process.env.ANTHROPIC_API_KEY || process.env.GLM_API_KEY || process.env.ZHIPU_API_KEY || undefined),
       anthropicAuthToken: ASK_PROVIDER_KIND === 'openai' ? undefined : process.env.ANTHROPIC_AUTH_TOKEN,
+      openaiProviderReady: ASK_PROVIDER_KIND === 'openai' && openAICompatibleProviderReady(OPENAI_BASE_URL, process.env.LOCAL_INFERENCE_API_KEY || process.env.OPENAI_API_KEY || process.env.LMSTUDIO_API_KEY || process.env.LM_STUDIO_API_KEY),
       cacheAvailable: cache !== null && !cacheState.fallbackUsed,
       rateLimitPersistenceConfigured: Boolean(process.env.ACHIOTE_RATE_LIMIT_DB),
     });
@@ -1384,6 +1385,7 @@ const server = createServer(async (req, res) => {
       version: '0.2.0',
       authEnabled: AUTH_ENABLED,
       billingEnabled: Boolean(billingConfig),
+      readiness,
       uptime: process.uptime(),
     });
     return;
