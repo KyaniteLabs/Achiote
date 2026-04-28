@@ -5,11 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Achiote — Food Memory Detective</title>
   <meta name="description" content="Turn half-remembered family dishes into a Memory Receipt and one cheap taste test. Food-memory forensics powered by AI." />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'unsafe-inline'; style-src-elem 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; object-src 'none'; base-uri 'self';" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'unsafe-inline'; img-src 'self' data:; object-src 'none'; base-uri 'self';" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&display=swap" rel="stylesheet" />
+  <!-- Self-hosted Fraunces variable font -->
+  <link rel="preload" href="fonts/Fraunces-Variable.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="fonts/Fraunces-Variable-Italic.woff2" as="font" type="font/woff2" crossorigin />
 
   <!-- PWA manifest -->
   <link rel="manifest" href="manifest.json" />
@@ -34,6 +34,21 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='35' cy='55' r='22' fill='%23b5451b'/%3E%3Ccircle cx='65' cy='45' r='26' fill='%23d4653a'/%3E%3Ccircle cx='50' cy='30' r='18' fill='%23f2b84b'/%3E%3C/svg%3E" />
 
   <style>
+    @font-face {
+      font-family: 'Fraunces';
+      src: url('fonts/Fraunces-Variable.woff2') format('woff2-variations');
+      font-weight: 300 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Fraunces';
+      src: url('fonts/Fraunces-Variable-Italic.woff2') format('woff2-variations');
+      font-weight: 300 900;
+      font-style: italic;
+      font-display: swap;
+    }
+
     :root {
       --cream: #fff8f0;
       --cream-2: #f8e8d4;
@@ -1089,15 +1104,15 @@
           </div>
           <div class="social-proof-grid reveal">
             <div class="stat-card">
-              <span class="stat-number count-up" data-target="7">0</span>
+              <span class="stat-number count-up" data-target="7">7</span>
               <span class="stat-label">Peer-reviewed food science principles</span>
             </div>
             <div class="stat-card">
-              <span class="stat-number count-up" data-target="15">0</span>
+              <span class="stat-number count-up" data-target="15">15</span>
               <span class="stat-label">Structured tools for AI agents</span>
             </div>
             <div class="stat-card">
-              <span class="stat-number count-up" data-target="12">0</span>
+              <span class="stat-number count-up" data-target="12">12</span>
               <span class="stat-label">Languages of food-memory naming</span>
             </div>
           </div>
