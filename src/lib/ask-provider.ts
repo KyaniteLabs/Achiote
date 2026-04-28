@@ -54,7 +54,7 @@ export interface AskSession {
 
 export function resolveAskProviderKind(env: Record<string, string | undefined> = process.env): AskProviderKind {
   const explicit = env.ACHIOTE_ASK_PROVIDER?.trim().toLowerCase();
-  if (explicit === 'openai' || explicit === 'openai-compatible' || explicit === 'lmstudio' || explicit === 'lm-studio') return 'openai';
+  if (explicit === 'openai' || explicit === 'openai-compatible' || explicit === 'lmstudio' || explicit === 'lm-studio' || explicit === 'local') return 'openai';
   if (explicit === 'anthropic' || explicit === 'anthropic-compatible' || explicit === 'glm' || explicit === 'zhipu') return 'anthropic';
   return 'anthropic';
 }
@@ -63,7 +63,8 @@ export function resolveAskModel(env: Record<string, string | undefined> = proces
   const provider = env.ACHIOTE_ASK_PROVIDER?.trim().toLowerCase();
   const providerKind = resolveAskProviderKind(env);
   if (providerKind === 'openai') {
-    return env.ACHIOTE_ASK_MODEL?.trim()
+    return env.LOCAL_INFERENCE_MODEL?.trim()
+      || env.ACHIOTE_ASK_MODEL?.trim()
       || env.OPENAI_MODEL?.trim()
       || env.LMSTUDIO_MODEL?.trim()
       || env.LM_STUDIO_MODEL?.trim()
@@ -88,11 +89,20 @@ export function resolveAskModel(env: Record<string, string | undefined> = proces
 
 export function openAIBaseUrlFromEnv(env: Record<string, string | undefined> = process.env): string {
   const provider = env.ACHIOTE_ASK_PROVIDER?.trim().toLowerCase();
+  const isLocalInference = provider === 'local' || provider === 'lmstudio' || provider === 'lm-studio';
+  // LOCAL_INFERENCE_BASE_URL is only consulted when the provider is explicitly set to a local
+  // inference variant. This prevents it from silently overriding cloud routing for openai/anthropic.
+  if (isLocalInference) {
+    return env.LOCAL_INFERENCE_BASE_URL?.trim()
+      || env.OPENAI_BASE_URL?.trim()
+      || env.LMSTUDIO_BASE_URL?.trim()
+      || env.LM_STUDIO_BASE_URL?.trim()
+      || 'http://127.0.0.1:1234/v1';
+  }
   return env.OPENAI_BASE_URL?.trim()
     || env.LMSTUDIO_BASE_URL?.trim()
     || env.LM_STUDIO_BASE_URL?.trim()
-    || (provider === 'lmstudio' || provider === 'lm-studio' ? 'http://127.0.0.1:1234/v1'
-      : 'https://api.openai.com/v1');
+    || 'https://api.openai.com/v1';
 }
 
 export function anthropicBaseUrlFromEnv(env: Record<string, string | undefined> = process.env): string | undefined {
@@ -104,12 +114,56 @@ export function anthropicBaseUrlFromEnv(env: Record<string, string | undefined> 
 }
 
 export function openAICompatibleProviderReady(baseUrl: string, apiKey?: string | null): boolean {
-  if (apiKey?.trim()) return true;
+  return isLocalInferenceUrl(baseUrl) || Boolean(apiKey?.trim());
+}
+
+/** Returns true when the URL looks like a local or Tailscale inference endpoint. */
+export function isLocalInferenceUrl(baseUrl: string): boolean {
   try {
     const parsed = new URL(baseUrl);
-    return parsed.hostname === '127.0.0.1' || parsed.hostname === 'localhost' || parsed.hostname === '::1';
+    return parsed.hostname === '127.0.0.1'
+      || parsed.hostname === 'localhost'
+      || parsed.hostname === '::1'
+      || parsed.hostname === '[::1]'
+      || parsed.hostname === 'host.docker.internal'
+      || parsed.hostname.startsWith('100.');
   } catch {
     return false;
+  }
+}
+
+/**
+ * Fires a minimal single-token completion against the local inference endpoint.
+ * Returns true if the endpoint is up and responding, false on any error or timeout.
+ * Used to make the fallback decision before committing to a provider for a request.
+ */
+export async function pingLocalInference(
+  baseUrl: string,
+  model: string,
+  apiKey: string | null | undefined,
+  timeoutMs: number,
+  fetchImpl: typeof fetch = fetch,
+): Promise<boolean> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    if (apiKey?.trim()) headers.Authorization = `Bearer ${apiKey.trim()}`;
+    const response = await fetchImpl(`${baseUrl.replace(/\/$/, '')}/chat/completions`, {
+      method: 'POST',
+      headers,
+      signal: controller.signal,
+      body: JSON.stringify({
+        model,
+        messages: [{ role: 'user', content: 'ping' }],
+        max_tokens: 1,
+      }),
+    });
+    return response.ok;
+  } catch {
+    return false;
+  } finally {
+    clearTimeout(timer);
   }
 }
 
@@ -239,14 +293,26 @@ export function createOpenAICompatibleAskSession(input: {
         const body = await response.text();
         if (!response.ok) throw new Error(`OpenAI-compatible provider returned ${response.status}: ${body.slice(0, 1000)}`);
         const parsed = JSON.parse(body) as { choices?: Array<{ message?: OpenAIMessage; finish_reason?: string }> };
-        const message = parsed.choices?.[0]?.message;
+        const choice = parsed.choices?.[0];
+        const message = choice?.message;
         if (!message || message.role !== 'assistant') throw new Error('OpenAI-compatible provider returned no assistant message');
+        // Detect context-window overflow — treat as a hard error so the client
+        // gets a meaningful signal rather than a silent empty response.
+        if (choice?.finish_reason === 'length') {
+          throw new Error('Model hit context length limit (finish_reason: length). Message history is too long for this model.');
+        }
         const toolCalls = (message.tool_calls ?? []).map((call) => ({
           id: call.id,
           name: call.function.name,
           input: parseJsonObject(call.function.arguments),
         }));
-        const textBlocks = typeof message.content === 'string' && message.content.length > 0 ? [message.content] : [];
+        // Strip <think>…</think> reasoning blocks that some models (e.g. Qwen3)
+        // embed in message.content. Without stripping, thinking prose can trigger
+        // guard regexes on measurement or candidate-list patterns and suppress
+        // valid model output.
+        const rawContent = typeof message.content === 'string' ? message.content : '';
+        const strippedContent = rawContent.replace(/<think>[\s\S]*?<\/think>/gi, '').trim();
+        const textBlocks = strippedContent.length > 0 ? [strippedContent] : [];
         return { textBlocks, toolCalls, providerMessage: message };
       } finally {
         clearTimeout(timeout);

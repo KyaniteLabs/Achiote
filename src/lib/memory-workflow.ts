@@ -184,8 +184,8 @@ function buildNextQuestions(input: {
       clue.canSeedQuestions && clue.label === 'Spanish-speaking family context',
     );
     questions.push(inferredFamilyContext
-      ? 'Where was your abuela from? Even a country, island, city, or "I had it in ___" is enough.'
-      : 'Where did you eat this, or where was it from? Even a country, island, city, or "I had it in ___" is enough.');
+      ? 'Where was your abuela from? Even a country, region, island, city, or "I had it in ___" is enough.'
+      : 'Where did you eat this, or where was it from? Even a country, region, island, city, or "I had it in ___" is enough.');
   }
 
   if (input.possibleNames.length === 0) {

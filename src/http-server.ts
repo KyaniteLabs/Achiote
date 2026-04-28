@@ -1,6 +1,6 @@
 try { process.loadEnvFile(); } catch { /* no .env file present */ }
 
-import { randomUUID } from 'node:crypto';
+import { randomUUID, timingSafeEqual } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
 import { dirname, resolve, sep } from 'node:path';
@@ -42,7 +42,7 @@ const PORT = parseInt(process.env.PORT || '3000', 10);
 const ASK_PROVIDER_KIND = resolveAskProviderKind();
 const ASK_MODEL = resolveAskModel();
 const ANTHROPIC_TIMEOUT_MS = parseInt(process.env.ANTHROPIC_TIMEOUT_MS || process.env.API_TIMEOUT_MS || '120000', 10);
-const OPENAI_TIMEOUT_MS = parseInt(process.env.OPENAI_TIMEOUT_MS || process.env.LMSTUDIO_TIMEOUT_MS || process.env.GLM_TIMEOUT_MS || process.env.ZHIPU_TIMEOUT_MS || process.env.API_TIMEOUT_MS || '180000', 10);
+const OPENAI_TIMEOUT_MS = parseInt(process.env.LOCAL_INFERENCE_TIMEOUT_MS || process.env.OPENAI_TIMEOUT_MS || process.env.LMSTUDIO_TIMEOUT_MS || process.env.GLM_TIMEOUT_MS || process.env.ZHIPU_TIMEOUT_MS || process.env.API_TIMEOUT_MS || '180000', 10);
 const OPENAI_BASE_URL = openAIBaseUrlFromEnv();
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const STATIC_DIR = resolve(__dirname, '..', 'docs', 'landing');
@@ -182,6 +182,10 @@ function serializeTelemetryBreakdowns(): Record<string, Record<string, Record<st
   return serialized;
 }
 
+function logSecurityEvent(event: string, details: Record<string, string> = {}): void {
+  console.warn(JSON.stringify({ event, ...details, ts: new Date().toISOString() }));
+}
+
 function isSameHostOrigin(req: IncomingMessage, origin: string | undefined): boolean {
   if (!origin) return false;
   try {
@@ -220,7 +224,7 @@ function createAskSession(userMessage: string, history?: AskHistoryItem[], image
       userMessage,
       tools: TOOLS,
       baseUrl: OPENAI_BASE_URL,
-      apiKey: process.env.OPENAI_API_KEY || process.env.LMSTUDIO_API_KEY || process.env.LM_STUDIO_API_KEY || null,
+      apiKey: process.env.LOCAL_INFERENCE_API_KEY || process.env.OPENAI_API_KEY || process.env.LMSTUDIO_API_KEY || process.env.LM_STUDIO_API_KEY || null,
       timeoutMs: OPENAI_TIMEOUT_MS,
       history,
       images,
@@ -335,8 +339,12 @@ type AuthedRequest = { tier: Tier; name: string; keyId: string } | null;
 
 function authenticateRequest(req: IncomingMessage): AuthedRequest {
   const demo = extractDemoPassword(req);
-  if (DEMO_PASSWORD && demo === DEMO_PASSWORD) {
-    return { tier: 'pro', name: 'demo-user', keyId: 'demo' };
+  if (DEMO_PASSWORD && demo) {
+    const demoBuf = Buffer.from(demo);
+    const passBuf = Buffer.from(DEMO_PASSWORD);
+    if (demoBuf.length === passBuf.length && timingSafeEqual(demoBuf, passBuf)) {
+      return { tier: 'pro', name: 'demo-user', keyId: 'demo' };
+    }
   }
   const rawKey = extractApiKey(req) ?? extractBearer(req);
   const result = AUTH_ENABLED ? authenticator.authenticate(rawKey) : { authenticated: false as const, error: 'auth disabled' };
@@ -424,7 +432,11 @@ function checkTelemetryLimit(key: string): { allowed: boolean; remaining: number
 
 function hasEventsAdminAccess(req: IncomingMessage): boolean {
   if (!EVENTS_ADMIN_TOKEN) return false;
-  return extractBearer(req) === EVENTS_ADMIN_TOKEN;
+  const token = extractBearer(req);
+  if (!token) return false;
+  const tokenBuf = Buffer.from(token);
+  const adminBuf = Buffer.from(EVENTS_ADMIN_TOKEN);
+  return tokenBuf.length === adminBuf.length && timingSafeEqual(tokenBuf, adminBuf);
 }
 
 // ── AI agent endpoint ───────────────────────────────────────────────────────
@@ -438,7 +450,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
   }
 
   const authed = authenticateRequest(req);
-  if (!authed) { sendJson(res, 401, { error: DEMO_PASSWORD ? 'Unauthorized. Provide the demo password via x-demo-password header.' : 'Unauthorized. Provide a valid API key via x-api-key header or Authorization bearer token.' }); return; }
+  if (!authed) { logSecurityEvent('auth_failure', { path: '/ask' }); sendJson(res, 401, { error: DEMO_PASSWORD ? 'Unauthorized. Provide the demo password via x-demo-password header.' : 'Unauthorized. Provide a valid API key via x-api-key header or Authorization bearer token.' }); return; }
   if (!isAnonymousAskAllowed({ authEnabled: AUTH_ENABLED, allowAnonymousAsk: ALLOW_ANON_ASK })) {
     sendJson(res, 401, { error: 'Anonymous /ask access is disabled. Enable ACHIOTE_ALLOW_ANON_ASK=true only for local demos, or provide a valid API key.' });
     return;
@@ -469,6 +481,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
     const limitResult = rateLimiter.checkWebLimit(authed.tier, authed.keyId, anonymousWebLimitOverride(authed));
     sendRateLimitHeaders(res, limitResult);
     if (!limitResult.allowed && !checkCreditsForAuthed(authed, 'web')) {
+      logSecurityEvent('rate_limit', { keyId: authed.keyId, path: '/ask' });
       sendJson(res, 429, { error: 'Rate limit exceeded. Upgrade your plan for more reconstructions.' });
       return;
     }
@@ -497,11 +510,32 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
     }
 
     let iterations = 0;
+    const toolCallHistory: Array<{ name: string; input: unknown }> = [];
+    const MAX_DUPLICATE_CALLS = 2;
+
     while (modelResponse.toolCalls.length > 0 && iterations < 15) {
       if (res.writableEnded) return;
       iterations++;
       const toolNames = modelResponse.toolCalls.map((call) => call.name);
       console.log(`[ask] iteration=${iterations} calling tools: ${toolNames.join(', ')}`);
+
+      // Detect tool loops: same tool called repeatedly without progress
+      for (const call of modelResponse.toolCalls) {
+        const previousCalls = toolCallHistory.filter((h) => h.name === call.name);
+        if (previousCalls.length >= MAX_DUPLICATE_CALLS) {
+          console.warn(`[ask] tool loop detected: ${call.name} called ${previousCalls.length + 1} times, stopping tool calls`);
+          send('status', { iteration: iterations, stage: 'tool_loop_detected', tool: call.name, count: previousCalls.length + 1 });
+          modelResponse = {
+            textBlocks: modelResponse.textBlocks.length > 0 ? modelResponse.textBlocks : [`I've gathered enough information so far. Let me work with what we have.`],
+            toolCalls: [],
+            providerMessage: modelResponse.providerMessage ?? null,
+          };
+          break;
+        }
+      }
+
+      if (modelResponse.toolCalls.length === 0) break;
+
       send('status', { iteration: iterations, stage: 'calling_tools', tools: toolNames });
       const toolResults: Array<{ id: string; content: string }> = [];
 
@@ -510,6 +544,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
           const payload = await executeAndStreamTool(call.name, call.input, userMessage, send, calledTools, toolPayloads);
           const content = JSON.stringify(payload);
           toolResults.push({ id: call.id, content });
+          toolCallHistory.push({ name: call.name, input: call.input });
         } catch (err) {
           const detail = err instanceof Error ? err.message : String(err);
           const code = err instanceof ToolExecutionError ? err.code : 'tool_failed';
@@ -528,12 +563,20 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
     }
 
     if (calledTools.has('collect_food_memory') && !calledTools.has('plan_dish_research') && !calledTools.has('generate_minimum_viable_nostalgia')) {
-      console.warn('[ask] replaced response that skipped research planning with structured clarification');
-      const responseText = buildClarificationOnlyResponse(toolPayloads);
-      send('text', responseText);
-      maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
-      send('done', { guarded: 'missing_research_plan_clarification' });
-      return;
+      // In a follow-up turn the user answered the previous clarification question. If the
+      // collected memory now has substantive anchors (location, cultural hint, or ≥2 ingredients)
+      // let the model's natural response through instead of looping back to clarification.
+      const isFollowUp = history !== undefined && history.length > 0;
+      if (isFollowUp && hasSubstantialMemoryAnchors(toolPayloads.collect_food_memory)) {
+        console.log('[ask] follow-up with substantive anchors — skipping missing_research_plan_clarification guard');
+      } else {
+        console.warn('[ask] replaced response that skipped research planning with structured clarification');
+        const responseText = buildClarificationOnlyResponse(toolPayloads);
+        send('text', responseText);
+        maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
+        send('done', { guarded: 'missing_research_plan_clarification' });
+        return;
+      }
     }
 
     if (!calledTools.has('generate_minimum_viable_nostalgia') && containsConcreteFoodCue(modelResponse.textBlocks.join('\n\n'))) {
@@ -566,6 +609,20 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
     const responseText = modelResponse.textBlocks
       .map((text) => ensureCueQualityLanguage(text, toolPayloads, calledTools))
       .join('\n\n');
+
+    if (calledTools.has('generate_minimum_viable_nostalgia') && containsRecipeMeasurementLanguage(responseText)) {
+      console.warn('[ask] suppressed recipe-style measurements in cue response');
+      const sanitized = responseText
+        // Only replace explicit numeric quantities (e.g. "2 tablespoons", "1/2 cup"); bare unit words in prose are fine.
+        .replace(/\b\d+(?:\s*\/\s*\d+)?\s*(?:teaspoons?|tablespoons?|cups?|ounces?|pounds?|grams?|ml|liters?|quarts?|gallons?|sticks?|cloves?|heads?|bunches?)\b/gi, 'a small amount of')
+        .replace(/\b(preheat|bake|roast|simmer|boil)\b[\s\S]*?\b(?:minutes?|hours?|degrees?|°|oven)\b/gi, 'prepare briefly')
+        .replace(/\bserves?\s+\d+\b/gi, 'a small portion');
+      send('text', sanitized);
+      maybeSendMemoryReceipt({ toolPayloads, assistantText: sanitized, send });
+      send('done', { guarded: 'recipe_measurement_sanitized' });
+      return;
+    }
+
     if (responseText) send('text', responseText);
     maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
     send('done', {});
@@ -592,7 +649,33 @@ function maybeSendMemoryReceipt(input: {
     researchPlan: parsedResearchPlan.success ? parsedResearchPlan.data as DishResearchPlan : undefined,
     cue: parsedCue.success ? parsedCue.data as MinimumViableNostalgiaCue : undefined,
     assistantText: input.assistantText,
+    researchedFacts: deriveResearchedFactsForReceipt(input.toolPayloads),
   }));
+}
+
+/** Extract a compact set of sourced facts from search_web and resolve_dish_name payloads. */
+function deriveResearchedFactsForReceipt(toolPayloads: Record<string, unknown>): string[] {
+  const facts: string[] = [];
+
+  // resolve_dish_name: emit canonical name + region when a real match was found
+  const resolved = toolPayloads.resolve_dish_name as
+    | { dishName?: string; canonicalName?: string; region?: string; confidence?: string; aliases?: string[] }
+    | undefined;
+  if (resolved?.canonicalName && !/^Unknown$/i.test(resolved.canonicalName)) {
+    facts.push(`Dish resolved: "${resolved.canonicalName}" (confidence: ${resolved.confidence ?? 'unknown'}, region: ${resolved.region ?? 'unknown'})`);
+    const aliases = (resolved.aliases ?? []).filter(Boolean).slice(0, 3);
+    if (aliases.length) facts.push(`Also known as: ${aliases.join(', ')}`);
+  }
+
+  // search_web: emit the snippet from each top result (up to 3)
+  const searched = toolPayloads.search_web as
+    | { results?: Array<{ title?: string; snippet?: string }> }
+    | undefined;
+  for (const result of (searched?.results ?? []).slice(0, 3)) {
+    if (result.snippet?.trim()) facts.push(result.snippet.trim());
+  }
+
+  return facts;
 }
 
 async function executeAndStreamTool(
@@ -785,7 +868,7 @@ async function maybeSendForcedMinimumCue({
   send: SseSender;
 }): Promise<boolean> {
   if (calledTools.has('generate_minimum_viable_nostalgia')) return false;
-  if (!shouldForceMinimumCue(userMessage, toolPayloads)) return false;
+  if (!shouldForceMinimumCue(userMessage, toolPayloads, calledTools)) return false;
 
   const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
   const researchPlan = toolPayloads.plan_dish_research as DishResearchPlan | undefined;
@@ -819,10 +902,31 @@ async function maybeSendForcedMinimumCue({
   return true;
 }
 
-function shouldForceMinimumCue(userMessage: string, toolPayloads: Record<string, unknown>): boolean {
-  if (!isExplicitMinimumTestRequest(userMessage)) return false;
+function shouldForceMinimumCue(userMessage: string, toolPayloads: Record<string, unknown>, calledTools: Set<string>): boolean {
   if (!toolPayloads.collect_food_memory || !toolPayloads.plan_dish_research) return false;
-  return hasSensorySignal(userMessage, toolPayloads.collect_food_memory);
+
+  // Explicit minimum-cue request — force whenever we have memory + plan + any sensory signal
+  if (isExplicitMinimumTestRequest(userMessage)) {
+    return hasSensorySignal(userMessage, toolPayloads.collect_food_memory);
+  }
+
+  // Full research pipeline ran but model stalled without calling generate_minimum_viable_nostalgia.
+  // Once plan_dish_research + any search-type tool have run we have enough to produce a cue.
+  const didSearch = calledTools.has('search_web') || calledTools.has('resolve_dish_name');
+  if (didSearch) {
+    // Only force when the research produced something usable (a canonical match or result snippets).
+    const resolved = toolPayloads.resolve_dish_name as
+      | { canonicalName?: string; confidence?: string }
+      | undefined;
+    const searched = toolPayloads.search_web as { results?: unknown[] } | undefined;
+    const hasResearchProduct =
+      (resolved?.canonicalName && !/^Unknown$/i.test(resolved.canonicalName)) ||
+      (searched?.results?.length ?? 0) > 0 ||
+      ((toolPayloads.plan_dish_research as { hypotheses?: unknown[] } | undefined)?.hypotheses?.length ?? 0) > 0;
+    if (hasResearchProduct) return true;
+  }
+
+  return false;
 }
 
 function isExplicitMinimumTestRequest(text: string): boolean {
@@ -978,6 +1082,14 @@ function containsConcreteFoodCue(text: string): boolean {
     || /\b(?:heat|stir|sip|bite|steep|mix)\b[\s\S]{0,80}\b(?:dill|broth|buttermilk|vinegar|lemon|salt|sour cream|yogurt|potato)\b/i.test(text);
 }
 
+function containsRecipeMeasurementLanguage(text: string): boolean {
+  // Require an explicit numeric quantity before the unit so prose like "a pinch of dill"
+  // or "a tablespoon of broth" does not fire. Only "2 tablespoons", "1/2 cup", etc. match.
+  return /\b\d+(?:\s*\/\s*\d+)?\s*(?:teaspoons?|tablespoons?|cups?|ounces?|pounds?|grams?|ml|liters?|quarts?|gallons?|sticks?|cloves?|heads?|bunches?)\b/i.test(text)
+    || /\bpreheat\b.*\b(?:oven|to)\b/i.test(text)
+    || /\b(?:bake|roast|simmer|boil)\b.*\b(?:minutes?|hours?|degrees?|°)\b/i.test(text);
+}
+
 function containsGenericUncertaintyWaffle(text: string): boolean {
   return /\b(?:fits|matches|could\s+be|might\s+be|applies\s+to)\s+(?:dozens|many|lots|a\s+lot)\s+of\s+dishes\b/i.test(text)
     || /\bcould\s+point\s+to\s+(?:so\s+)?(?:many|lots|dozens|different)[\s\S]{0,60}\bdishes\b/i.test(text)
@@ -995,6 +1107,16 @@ function containsPrematureCandidateSpeculation(text: string, toolPayloads: Recor
   return /\bcould\s+be\s+(?:a|an|the)?\s*[\s\S]{0,120}\b(?:or\s+even|,\s*(?:a|an|the)?\s*[\p{L}\p{M}])/iu.test(text)
     || /\bmight\s+be\s+(?:a|an|the)?\s*[\s\S]{0,120}\b(?:or\s+even|,\s*(?:a|an|the)?\s*[\p{L}\p{M}])/iu.test(text)
     || /\bfrom\s+(?:a|an|the)?\s*[\s\S]{0,160}\bto\s+(?:a|an|the)?\s*[\s\S]{0,160}\bto\b/iu.test(text);
+}
+
+function hasSubstantialMemoryAnchors(memory: unknown): boolean {
+  // Returns true when a follow-up message has given enough new anchors to proceed without
+  // another clarification round: a location, a cultural/regional hint, or multiple ingredients.
+  const m = memory as CollectedFoodMemory | undefined;
+  if (!m) return false;
+  return Boolean(m.userLocation?.trim())
+    || (m.extractedClues?.culturalOrRegionalHints?.length ?? 0) > 0
+    || (m.extractedClues?.rememberedIngredients?.length ?? 0) >= 2;
 }
 
 function isBroadRegionalHint(hint: string): boolean {
@@ -1016,8 +1138,27 @@ function buildClarificationOnlyResponse(toolPayloads: Record<string, unknown>): 
     'Do you remember anything about the name, even a rough sound-alike?',
   ];
 
+  // Build a context-aware preamble based on what signals are already present
+  const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
+  const sensoryClues = memory?.extractedClues?.sensoryClues ?? [];
+  const ingredients = memory?.extractedClues?.rememberedIngredients ?? [];
+  const inferred = memory?.inferredContext?.culturalOrRegional ?? [];
+  const nonBroadInferred = inferred.filter((c) => !isBroadRegionalHint(c.label));
+
+  let preamble: string;
+  if (nonBroadInferred.length > 0) {
+    // Acknowledge the cultural inference so the user knows we heard them
+    const context = nonBroadInferred[0].label.replace(/\s+context$/i, '').toLowerCase();
+    preamble = `Your description already points toward a ${context} tradition — I just need one more anchor to give you a real test instead of a guess.`;
+  } else if (sensoryClues.length > 0 || ingredients.length > 0) {
+    const anchor = [...sensoryClues, ...ingredients].slice(0, 2).join(' and ');
+    preamble = `The ${anchor} you mentioned is a real anchor. One more detail will keep the first test specific rather than generic.`;
+  } else {
+    preamble = 'Before I give you a tasting cue, I need one or two details so I do not fake certainty.';
+  }
+
   return [
-    'Before I give you a tasting cue, I need one or two details so I do not fake certainty.',
+    preamble,
     '',
     ...selectedQuestions.map((question, index) => `${index + 1}. ${question}`),
     '',
@@ -1140,6 +1281,7 @@ async function serveStatic(req: IncomingMessage, res: ServerResponse): Promise<b
       ].join('; '),
       'X-Content-Type-Options': 'nosniff',
       'Referrer-Policy': 'strict-origin-when-cross-origin',
+      'Strict-Transport-Security': 'max-age=63072000; includeSubDomains; preload',
     });
     res.end(data);
     return true;
@@ -1232,8 +1374,9 @@ const server = createServer(async (req, res) => {
       apiKeyCount: configuredApiKeys.length,
       demoPasswordConfigured: Boolean(DEMO_PASSWORD),
       billingEnabled: Boolean(billingConfig),
-      anthropicApiKey: ASK_PROVIDER_KIND === 'openai' && openAICompatibleProviderReady(OPENAI_BASE_URL, process.env.OPENAI_API_KEY || process.env.LMSTUDIO_API_KEY || process.env.LM_STUDIO_API_KEY) ? 'openai-compatible-provider' : ASK_PROVIDER_KIND === 'openai' ? undefined : (process.env.ANTHROPIC_API_KEY || process.env.GLM_API_KEY || process.env.ZHIPU_API_KEY || undefined),
+      anthropicApiKey: ASK_PROVIDER_KIND === 'openai' && openAICompatibleProviderReady(OPENAI_BASE_URL, process.env.LOCAL_INFERENCE_API_KEY || process.env.OPENAI_API_KEY || process.env.LMSTUDIO_API_KEY || process.env.LM_STUDIO_API_KEY) ? 'openai-compatible-provider' : ASK_PROVIDER_KIND === 'openai' ? undefined : (process.env.ANTHROPIC_API_KEY || process.env.GLM_API_KEY || process.env.ZHIPU_API_KEY || undefined),
       anthropicAuthToken: ASK_PROVIDER_KIND === 'openai' ? undefined : process.env.ANTHROPIC_AUTH_TOKEN,
+      openaiProviderReady: ASK_PROVIDER_KIND === 'openai' && openAICompatibleProviderReady(OPENAI_BASE_URL, process.env.LOCAL_INFERENCE_API_KEY || process.env.OPENAI_API_KEY || process.env.LMSTUDIO_API_KEY || process.env.LM_STUDIO_API_KEY),
       cacheAvailable: cache !== null && !cacheState.fallbackUsed,
       rateLimitPersistenceConfigured: Boolean(process.env.ACHIOTE_RATE_LIMIT_DB),
     });
@@ -1241,9 +1384,8 @@ const server = createServer(async (req, res) => {
       status: pathname === '/health' ? 'ok' : readiness.status,
       version: '0.2.0',
       authEnabled: AUTH_ENABLED,
-      activeSessions: transports.size,
+      billingEnabled: Boolean(billingConfig),
       readiness,
-      memory: process.memoryUsage(),
       uptime: process.uptime(),
     });
     return;
@@ -1296,11 +1438,12 @@ const server = createServer(async (req, res) => {
 
   if (pathname === '/mcp') {
     const authed = authenticateRequest(req);
-    if (!authed) { sendJson(res, 401, { jsonrpc: '2.0', error: { code: -32001, message: DEMO_PASSWORD ? 'Unauthorized: provide the demo password via x-demo-password header' : 'Unauthorized: valid API key required' }, id: null }); return; }
+    if (!authed) { logSecurityEvent('auth_failure', { path: '/mcp' }); sendJson(res, 401, { jsonrpc: '2.0', error: { code: -32001, message: DEMO_PASSWORD ? 'Unauthorized: provide the demo password via x-demo-password header' : 'Unauthorized: valid API key required' }, id: null }); return; }
 
     const limitResult = rateLimiter.checkMcpLimit(authed.tier, authed.keyId);
     sendRateLimitHeaders(res, limitResult);
     if (!limitResult.allowed && !checkCreditsForAuthed(authed, 'mcp')) {
+      logSecurityEvent('rate_limit', { keyId: authed.keyId, path: '/mcp' });
       sendJson(res, 429, { jsonrpc: '2.0', error: { code: -32002, message: 'Rate limit exceeded' }, id: null });
       return;
     }
@@ -1374,7 +1517,7 @@ const server = createServer(async (req, res) => {
       return;
     }
     let raw: string;
-    try { raw = await readBody(req); } catch { sendJson(res, 413, { error: 'Body too large' }); return; }
+    try { raw = await readBody(req, 10_000); } catch { sendJson(res, 413, { error: 'Body too large' }); return; }
     let parsed: { tier?: string; mode?: string; billing?: string; email?: string };
     try { parsed = JSON.parse(raw); } catch { sendJson(res, 400, { error: 'Invalid JSON' }); return; }
     if (parsed.mode && parsed.mode !== 'subscription' && parsed.mode !== 'payment') {
@@ -1483,21 +1626,39 @@ const server = createServer(async (req, res) => {
       sendJson(res, 400, { error: 'session_id is required' });
       return;
     }
-    const session = billingDb.consumeCheckoutSessionApiKey(sessionId);
+    const email = query.get('email')?.trim().toLowerCase();
+    const session = billingDb.getCheckoutSession(sessionId);
     if (!session) {
       sendJson(res, 404, { error: 'Session not found' });
       return;
     }
-    if (session.status === 'pending') {
+    if (session.stripeCustomerId) {
+      if (!email) {
+        sendJson(res, 400, { error: 'Email verification required. Include your checkout email as the ?email= parameter.' });
+        return;
+      }
+      const customer = billingDb.getCustomer(session.stripeCustomerId);
+      if (!customer?.email || customer.email.toLowerCase() !== email) {
+        logSecurityEvent('billing_session_email_mismatch', { sessionId: sessionId.slice(0, 20), path: pathname });
+        sendJson(res, 403, { error: 'Email verification required. Include your checkout email as the ?email= parameter.' });
+        return;
+      }
+    }
+    const consumed = billingDb.consumeCheckoutSessionApiKey(sessionId);
+    if (!consumed) {
+      sendJson(res, 404, { error: 'Session not found or key already consumed' });
+      return;
+    }
+    if (consumed.status === 'pending') {
       sendJson(res, 202, { status: 'pending', message: 'Payment is being processed. Please wait.' });
       return;
     }
     sendJson(res, 200, {
       status: 'completed',
-      tier: session.tier,
-      apiKey: session.keyPlaintext,
-      keyId: session.keyId,
-      apiKeyAvailable: Boolean(session.keyPlaintext),
+      tier: consumed.tier,
+      apiKey: consumed.keyPlaintext,
+      keyId: consumed.keyId,
+      apiKeyAvailable: Boolean(consumed.keyPlaintext),
     });
     return;
   }

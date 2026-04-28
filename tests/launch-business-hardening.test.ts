@@ -27,11 +27,11 @@ describe('launch business hardening', () => {
     const page = landing();
     const appPage = app();
 
-    expect(page).toContain('Recover the taste of a half-remembered family dish');
+    expect(page).toContain('Remember the dish.');
     expect(page).toContain('food-memory forensics');
     expect(page).toContain('Memory Receipt');
     expect(page).toContain('one cheap taste test before a full recipe');
-    expect(page.indexOf('Recover the taste of a half-remembered family dish')).toBeLessThan(page.indexOf('MCP'));
+    expect(page.indexOf('Remember the dish.')).toBeLessThan(page.indexOf('MCP'));
     expect(appPage).toContain('Food Memory Detective');
     expect(page).not.toContain('AI Food Memory Reconstruction | Source-Available MCP Server');
   });

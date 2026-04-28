@@ -1,4 +1,4 @@
-import { createHash, randomBytes } from 'node:crypto';
+import { createCipheriv, createDecipheriv, createHash, randomBytes, timingSafeEqual } from 'node:crypto';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -64,6 +64,43 @@ function generateKey(tier: Tier, name: string): { key: string; keyId: string; ke
   return { key, keyId, keyHash: hashKey(key) };
 }
 
+const ENCRYPTION_KEY_ENV = 'ACHIOTE_KEY_ENCRYPTION_KEY';
+
+function getEncryptionKey(): Buffer | null {
+  const hex = process.env[ENCRYPTION_KEY_ENV]?.trim();
+  if (!hex) return null;
+  const buf = Buffer.from(hex, 'hex');
+  return buf.length === 32 ? buf : null;
+}
+
+function encryptKey(plaintext: string): string {
+  const key = getEncryptionKey();
+  if (!key) throw new Error(`${ENCRYPTION_KEY_ENV} is required for key encryption`);
+  const iv = randomBytes(12);
+  const cipher = createCipheriv('aes-256-gcm', key, iv);
+  const encrypted = Buffer.concat([cipher.update(plaintext, 'utf8'), cipher.final()]);
+  const tag = cipher.getAuthTag();
+  return Buffer.concat([iv, tag, encrypted]).toString('base64');
+}
+
+function decryptKey(stored: string): string | null {
+  const key = getEncryptionKey();
+  if (!key) return stored;
+  try {
+    const buf = Buffer.from(stored, 'base64');
+    const iv = buf.subarray(0, 12);
+    const tag = buf.subarray(12, 28);
+    const encrypted = buf.subarray(28);
+    const decipher = createDecipheriv('aes-256-gcm', key, iv);
+    decipher.setAuthTag(tag);
+    return decipher.update(encrypted) + decipher.final('utf8');
+  } catch {
+    return null;
+  }
+}
+
+const CHECKOUT_SESSION_TTL_MS = 24 * 60 * 60 * 1000;
+
 export class BillingDb {
   private db: Database.Database;
 
@@ -121,6 +158,7 @@ export class BillingDb {
         created_at TEXT NOT NULL DEFAULT (datetime('now'))
       );
 
+      CREATE INDEX IF NOT EXISTS idx_billing_keys_hash ON billing_api_keys(key_hash);
       CREATE INDEX IF NOT EXISTS idx_billing_keys_customer ON billing_api_keys(stripe_customer_id);
       CREATE INDEX IF NOT EXISTS idx_billing_keys_subscription ON billing_api_keys(stripe_subscription_id);
       CREATE INDEX IF NOT EXISTS idx_checkout_sessions_customer ON checkout_sessions(stripe_customer_id);
@@ -244,11 +282,16 @@ export class BillingDb {
 
   authenticateApiKey(rawKey: string): { tier: Tier; name: string; keyId: string } | null {
     const keyHash = hashKey(rawKey);
-    const row = this.db.prepare('SELECT key_id, tier, name FROM billing_api_keys WHERE key_hash = ?').get(keyHash) as
-      | { key_id: string; tier: Tier; name: string }
+    const hashBuf = Buffer.from(keyHash);
+    const row = this.db.prepare('SELECT key_id, tier, name, key_hash FROM billing_api_keys WHERE key_hash = ?').get(keyHash) as
+      | { key_id: string; tier: Tier; name: string; key_hash: string }
       | undefined;
     if (!row) return null;
-    return { tier: row.tier, name: row.name, keyId: row.key_id };
+    const rowBuf = Buffer.from(row.key_hash);
+    if (rowBuf.length === hashBuf.length && timingSafeEqual(rowBuf, hashBuf)) {
+      return { tier: row.tier, name: row.name, keyId: row.key_id };
+    }
+    return null;
   }
 
   getApiKeyById(keyId: string): BillingApiKey | null {
@@ -376,11 +419,12 @@ export class BillingDb {
     keyPlaintext: string,
     tier: Tier
   ): void {
+    const encrypted = encryptKey(keyPlaintext);
     this.db.prepare(
       `UPDATE checkout_sessions
        SET stripe_customer_id = ?, key_id = ?, key_plaintext = ?, tier = ?, status = 'completed'
        WHERE stripe_session_id = ?`
-    ).run(stripeCustomerId, keyId, keyPlaintext, tier, stripeSessionId);
+    ).run(stripeCustomerId, keyId, encrypted, tier, stripeSessionId);
   }
 
   getCheckoutSession(stripeSessionId: string): CheckoutSessionRecord | null {
@@ -412,10 +456,23 @@ export class BillingDb {
   consumeCheckoutSessionApiKey(stripeSessionId: string): CheckoutSessionRecord | null {
     const session = this.getCheckoutSession(stripeSessionId);
     if (!session || session.status !== 'completed' || !session.keyPlaintext) return session;
+    const decrypted = decryptKey(session.keyPlaintext);
+    if (!decrypted) return null;
     this.db
       .prepare('UPDATE checkout_sessions SET key_plaintext = NULL WHERE stripe_session_id = ?')
       .run(stripeSessionId);
-    return session;
+    return { ...session, keyPlaintext: decrypted };
+  }
+
+  purgeExpiredCheckoutSessions(): number {
+    const cutoff = new Date(Date.now() - CHECKOUT_SESSION_TTL_MS).toISOString();
+    const result = this.db.prepare(
+      `DELETE FROM checkout_sessions WHERE created_at < ? AND status = 'pending'`
+    ).run(cutoff);
+    this.db.prepare(
+      `UPDATE checkout_sessions SET key_plaintext = NULL WHERE created_at < ? AND key_plaintext IS NOT NULL`
+    ).run(cutoff);
+    return result.changes;
   }
 
   // ── Cleanup ────────────────────────────────────────────────────────────────

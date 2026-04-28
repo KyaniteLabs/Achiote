@@ -105,6 +105,7 @@ describe('P2 product trust improvements', () => {
 
     expect(`${landing}\n${app}\n${readme}`).toContain('static sourcing guidance, not live inventory');
     expect(landing).toContain('Sample memories');
+    expect(landing).toContain('No guesses pretending to be facts.');
     expect(`${landing}\n${success}\n${privacy}\n${terms}`).not.toContain('Illustrative demo');
     expect(`${landing}\n${success}\n${privacy}\n${terms}`).not.toContain('Try the live demo');
     expect(`${landing}\n${success}\n${privacy}\n${terms}`).not.toContain('Use the web demo');

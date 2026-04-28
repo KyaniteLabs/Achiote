@@ -47,6 +47,7 @@ export type HttpReadinessInput = {
   billingEnabled: boolean;
   anthropicApiKey?: string;
   anthropicAuthToken?: string;
+  openaiProviderReady?: boolean;
   cacheAvailable: boolean;
   rateLimitPersistenceConfigured: boolean;
 };
@@ -126,6 +127,7 @@ export function shouldApplyRateLimit(input: RateLimitGateInput): boolean {
 
 export function getHttpReadiness(input: HttpReadinessInput): HttpReadiness {
   const hasAnthropicCredential = Boolean(input.anthropicApiKey?.trim() || input.anthropicAuthToken?.trim());
+  const hasModelProvider = hasAnthropicCredential || Boolean(input.openaiProviderReady);
   const checks: ReadinessCheck[] = [
     {
       name: 'apiKeys',
@@ -142,10 +144,10 @@ export function getHttpReadiness(input: HttpReadinessInput): HttpReadiness {
     },
     {
       name: 'anthropicApiKey',
-      ok: hasAnthropicCredential,
-      message: hasAnthropicCredential
-        ? 'Anthropic-compatible credential is configured for /ask'
-        : 'ANTHROPIC_API_KEY or ANTHROPIC_AUTH_TOKEN is missing; /ask cannot call the model',
+      ok: hasModelProvider,
+      message: hasModelProvider
+        ? 'Model provider is configured for /ask'
+        : 'ANTHROPIC_API_KEY, ANTHROPIC_AUTH_TOKEN, or local inference is missing; /ask cannot call the model',
     },
     {
       name: 'cache',

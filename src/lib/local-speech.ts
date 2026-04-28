@@ -70,6 +70,15 @@ const SPEECH_AUDIO_EXTENSIONS: Record<string, string> = {
 };
 const SPEECH_COMMAND_TIMEOUT_MS = 120_000;
 
+function isValidBinaryPath(binaryPath: string): boolean {
+  if (!binaryPath || binaryPath.includes('..')) return false;
+  if (binaryPath.includes('/') || binaryPath.includes('\\')) {
+    const resolved = binaryPath.replace(/\\/g, '/');
+    if (!/^\/(usr|opt|home|nix|tmp|private|var|Users|etc)\//.test(resolved) && !/^\/[^/]+$/.test(resolved)) return false;
+  }
+  return true;
+}
+
 function parseCsv(value: string | undefined, fallback: string[]): string[] {
   const values = value
     ?.split(',')
@@ -272,6 +281,9 @@ export function validateSpeechTextPayload(raw: unknown): { ok: true; text: strin
 }
 
 function runCommand(command: string, args: string[], timeoutMs = SPEECH_COMMAND_TIMEOUT_MS): Promise<void> {
+  if (!isValidBinaryPath(command)) {
+    return Promise.reject(new Error(`Binary path rejected: ${command}`));
+  }
   return new Promise((resolve, reject) => {
     const child = spawn(command, args, { stdio: ['ignore', 'pipe', 'pipe'] });
     let stderr = '';
