@@ -122,6 +122,54 @@ describe('general research planning', () => {
     expect(memory.extractedClues.possibleDishNames).not.toContain('something sounded');
   });
 
+  it('does not split something into a fake dish called thing', () => {
+    const memory = collectFoodMemory({
+      memoryText: 'My abuela made something sour and herby.',
+    });
+    const plan = planDishResearch(memory);
+    const joinedQueries = plan.searchQueries.join(' ').toLowerCase();
+
+    expect(memory.extractedClues.possibleDishNames).not.toContain('thing');
+    expect(plan.hypotheses.map((hypothesis) => hypothesis.name)).not.toContain('thing');
+    expect(joinedQueries).not.toContain('"thing"');
+    expect(plan.hypotheses[0].name).toContain('Unidentified');
+  });
+
+  it('does not infer a named dish from broad region and one sensory clue alone', () => {
+    const memory = collectFoodMemory({
+      memoryText: 'My abuela made something sour and herby.',
+      knownRegion: 'Latin America / Hispanic',
+    });
+    const plan = planDishResearch(memory);
+    const hypothesisNames = plan.hypotheses.map((hypothesis) => hypothesis.name);
+
+    expect(hypothesisNames).not.toContain('Pozole Verde');
+    expect(plan.hypotheses[0]).toMatchObject({
+      name: 'Unidentified traditional dish',
+      confidence: 'Low',
+    });
+  });
+
+  it('keeps abuela as inferred context rather than user-said region evidence', () => {
+    const memory = collectFoodMemory({
+      memoryText: 'My abuela made something sour and herby.',
+    });
+    const plan = planDishResearch(memory);
+
+    expect(memory.extractedClues.culturalOrRegionalHints).toEqual([]);
+    expect(memory.inferredContext.culturalOrRegional).toEqual([
+      expect.objectContaining({
+        label: 'Spanish-speaking family context',
+        confidence: 'Low',
+        evidenceKind: 'model_inferred',
+        canSeedQuestions: true,
+        canSeedCandidateDishes: false,
+      }),
+    ]);
+    expect(plan.hypotheses.map((hypothesis) => hypothesis.name)).not.toContain('Pozole Verde');
+    expect(plan.questionsForUser.join(' ')).toMatch(/abuela|where/i);
+  });
+
   it('plans useful research for non-Puerto-Rican named fragments', () => {
     const memory = collectFoodMemory({
       memoryText: 'My Nigerian auntie mentioned egusi soup with melon seeds and bitter greens.',

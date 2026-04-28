@@ -11,13 +11,15 @@ import type {
   MinimumViableNostalgiaInput,
   MinimumViableNostalgiaCue,
   CueComponent,
+  InferredContextClue,
+  InferredMemoryContext,
 } from './types.js';
 
 const RESEARCH_STOPWORDS = new Set([
   // English
   'my', 'mom', 'grandma', 'grandmother', 'auntie', 'friend',
   'said', 'sounded', 'mentioned', 'called', 'something', 'like',
-  'with', 'from', 'and', 'or', 'the', 'that', 'a', 'of', 'in', 'it',
+  'thing', 'with', 'from', 'and', 'or', 'the', 'that', 'a', 'of', 'in', 'it',
   // Spanish
   'de', 'la', 'el', 'en', 'con', 'del', 'por', 'para', 'que', 'un', 'una',
   // French
@@ -67,7 +69,7 @@ function likelyDishPhrases(text: string): string[] {
   const patterns = [
     /(?:mentioned|called|named)\s+([\p{L}\p{M}-]+(?:\s+[\p{L}\p{M}-]+){0,2})/giu,
     /(?:sounded like|something like)\s+([\p{L}\p{M}-]+(?:\s+[\p{L}\p{M}-]+){0,2})/giu,
-    /(?:made|ate|had|miss|remember)\s+(?:a|an|some|the\s+)?([\p{L}\p{M}-]+)(?=[\s,.;!?]|$)/giu,
+    /(?:made|ate|had|miss|remember)\s+(?:(?:a|an|some|the)\s+)?([\p{L}\p{M}-]+)(?=[\s,.;!?]|$)/giu,
   ];
   const phrases = patterns.flatMap((pattern) => [...lower.matchAll(pattern)].map((match) => match[1].trim()));
 
@@ -158,6 +160,7 @@ function buildNextQuestions(input: {
   cookingMethodHints: string[];
   sensoryClues: string[];
   occasions: string[];
+  inferredContext?: InferredMemoryContext;
 }): string[] {
   const sufficiency = memorySufficiencyScore(input);
   if (sufficiency.sufficient) {
@@ -177,7 +180,12 @@ function buildNextQuestions(input: {
   const questions: string[] = [];
 
   if (input.culturalOrRegionalHints.length === 0) {
-    questions.push('Where did you eat this, or where was it from? Even a country, island, city, or "I had it in ___" is enough.');
+    const inferredFamilyContext = input.inferredContext?.culturalOrRegional.find((clue) =>
+      clue.canSeedQuestions && clue.label === 'Spanish-speaking family context',
+    );
+    questions.push(inferredFamilyContext
+      ? 'Where was your abuela from? Even a country, island, city, or "I had it in ___" is enough.'
+      : 'Where did you eat this, or where was it from? Even a country, island, city, or "I had it in ___" is enough.');
   }
 
   if (input.possibleNames.length === 0) {
@@ -271,10 +279,48 @@ function extractRegionHints(lowerText: string, originalText: string): string[] {
   return unique(hints);
 }
 
+function inferContextFromFamilyWords(lowerText: string): InferredMemoryContext {
+  const culturalOrRegional: InferredContextClue[] = [];
+  const language: InferredContextClue[] = [];
+
+  if (includesAny(lowerText, ['abuela', 'abuelo'])) {
+    culturalOrRegional.push({
+      label: 'Spanish-speaking family context',
+      basis: 'User used the family word "abuela" or "abuelo".',
+      confidence: 'Low',
+      evidenceKind: 'model_inferred',
+      canSeedQuestions: true,
+      canSeedCandidateDishes: false,
+    });
+    language.push({
+      label: 'Spanish language clue',
+      basis: 'The family word is Spanish, but it does not identify a country or dish.',
+      confidence: 'Low',
+      evidenceKind: 'model_inferred',
+      canSeedQuestions: true,
+      canSeedCandidateDishes: false,
+    });
+  }
+
+  if (includesAny(lowerText, ['nonna', 'nonno'])) {
+    culturalOrRegional.push({
+      label: 'Italian-speaking family context',
+      basis: 'User used the family word "nonna" or "nonno".',
+      confidence: 'Low',
+      evidenceKind: 'model_inferred',
+      canSeedQuestions: true,
+      canSeedCandidateDishes: false,
+    });
+  }
+
+  return { culturalOrRegional, language };
+}
+
 export function collectFoodMemory(input: FoodMemoryInput): CollectedFoodMemory {
   const normalized = input.memoryText.trim();
   const lower = normalized.toLowerCase();
   const possibleDishNames = extractPossibleNames(normalized);
+  const inferredContext = inferContextFromFamilyWords(lower);
   const culturalOrRegionalHints = unique([
     input.knownRegion,
     ...extractRegionHints(lower, normalized),
@@ -326,6 +372,7 @@ export function collectFoodMemory(input: FoodMemoryInput): CollectedFoodMemory {
     cookingMethodHints,
     sensoryClues,
     occasions,
+    inferredContext,
   });
 
   return {
@@ -339,6 +386,7 @@ export function collectFoodMemory(input: FoodMemoryInput): CollectedFoodMemory {
       sensoryClues,
       occasions,
     },
+    inferredContext,
     missingInformation: buildMissingInformation({
       possibleNames: possibleDishNames,
       culturalOrRegionalHints,
@@ -484,7 +532,7 @@ function inferredHypotheses(memory: CollectedFoodMemory): DishHypothesis[] {
     const regionMatch = pattern.regions.some((r) => regions.some((region) => region.includes(r) || r.includes(region)));
     const ingredientMatch = pattern.ingredients.some((i) => ingredients.some((ing) => ing.includes(i) || i.includes(ing)) || text.includes(i));
     const sensoryMatch = pattern.sensory.some((s) => sensory.some((sen) => sen.includes(s) || s.includes(sen)) || text.includes(s));
-    return regionMatch && (ingredientMatch || sensoryMatch);
+    return regionMatch && ingredientMatch && sensoryMatch;
   });
 
   return matches.map((match) => ({
@@ -625,6 +673,11 @@ function buildDescriptiveHypothesis(memory: CollectedFoodMemory): DishHypothesis
 
   const textureWords = sensory.filter((s) => s.includes('texture') || s.includes('soft') || s.includes('crispy') || s.includes('chewy') || s.includes('grainy') || s.includes('creamy'));
   const flavorWords = sensory.filter((s) => s.includes('sweet') || s.includes('sour') || s.includes('spicy') || s.includes('bitter') || s.includes('rich') || s.includes('smoky') || s.includes('umami'));
+  const clueSummary = unique([
+    ingredients.length > 0 ? ingredients.slice(0, 2).join(' and ') : '',
+    sensory.length > 0 ? sensory.slice(0, 2).join(', ') : '',
+    memory.extractedClues.occasions.length > 0 ? memory.extractedClues.occasions.slice(0, 1).join(', ') : '',
+  ]).filter(Boolean).join('; ');
 
   const texturePhrase = textureWords.length > 0 ? ` with ${textureWords.slice(0, 2).join(', ').replace(/,([^,]*)$/, ' and$1')}` : '';
   const flavorPhrase = flavorWords.length > 0 ? `, ${flavorWords.slice(0, 2).join('/')} in flavor` : '';
@@ -637,7 +690,7 @@ function buildDescriptiveHypothesis(memory: CollectedFoodMemory): DishHypothesis
   return {
     name,
     whyPossible: [
-      `You mentioned: ${ingredients.slice(0, 2).join(' and ')}${sensory.length > 0 ? ' and described it as ' + sensory.slice(0, 2).join(', ') : ''}`,
+      clueSummary ? `You mentioned: ${clueSummary}` : 'The memory has a few sensory or context clues but no stable dish name yet.',
       'Not enough detail to name the dish yet, but we can still test the memory with a small sensory cue.',
     ],
     whatWouldConfirm: ['exact dish name or local nickname', 'how it was made or served', 'who made it or on what occasion'],

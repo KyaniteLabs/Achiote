@@ -185,6 +185,17 @@
             return;
           }
 
+          if (res.ok && data.apiKeyAvailable === false) {
+            content.innerHTML = `
+              <div class="card">
+                <h1 style="color: var(--success)">Payment successful!</h1>
+                <p>Your API key was already displayed once and is no longer available on this page. If you missed it, contact support from the checkout email so we can rotate it safely.</p>
+                <a href="/support" class="btn">Contact support</a>
+              </div>
+            `;
+            return;
+          }
+
           throw new Error(data.error || 'Failed to retrieve session');
         } catch (err) {
           content.innerHTML = `

@@ -2,8 +2,8 @@
 
 Last updated: April 25, 2026.
 
-This runbook covers the non-Stripe launch basics: production checks, monitoring,
-support, privacy, rollback, and incident handling.
+This runbook covers production checks, paid-launch checks, monitoring, support,
+privacy, rollback, and incident handling.
 
 ## Prelaunch Gate
 
@@ -26,6 +26,8 @@ For hosted preview demos, run the preview smoke against the public URL:
 ACHIOTE_PREVIEW_URL=https://achiote.kyanitelabs.tech npm run preview:smoke
 ```
 
+Before broad launch or paid acquisition, run `docs/VIABILITY_EXPERIMENT.md` and record the outcome.
+
 ## Required Environment
 
 - `ACHIOTE_AUTH_ENABLED=true` for public deployment.
@@ -36,6 +38,23 @@ ACHIOTE_PREVIEW_URL=https://achiote.kyanitelabs.tech npm run preview:smoke
 - Provider credentials for `/ask`.
 - Stripe credentials only when billing is intentionally live.
 
+If /ready reports "authEnabled": false, do not treat the deployment as paid-launch ready. That state is acceptable only for bounded public demos with explicit anonymous quota controls.
+
+## Paid Launch Checklist
+
+Before selling guided memories:
+
+- `ACHIOTE_AUTH_ENABLED=true`.
+- `ACHIOTE_ALLOWED_ORIGINS set to exact HTTPS origins`.
+- `ACHIOTE_RATE_LIMIT_DB` and `ACHIOTE_BILLING_DB` are on persistent storage.
+- `STRIPE_WEBHOOK_SECRET` is configured and the Stripe webhook endpoint receives `checkout.session.completed`, `customer.subscription.updated`, `customer.subscription.deleted`, and `invoice.payment_failed`.
+- Stripe price IDs are configured for Personal monthly, Personal annual, Family Archive, Memory Pack, and Family Archive Sprint.
+- The billing portal/cancellation path is tested through Stripe Customer Portal or a documented support fallback.
+- A checkout smoke is tested in Stripe test mode for Personal monthly, Personal annual, Memory Pack, Family Archive, and Family Archive Sprint.
+- no anonymous paid traffic: anonymous `/ask` is disabled for paid launch, or explicitly limited to the free/demo allowance with no paid entitlement bypass.
+- Confirm success-page API key display is one-time only; refresh should not reveal plaintext API keys again.
+- Verify `/`, `/app`, `/pricing` section, `/billing/success`, `/privacy`, `/terms`, `/safety`, and `/support` in mobile and desktop viewports.
+
 ## Monitoring
 
 Track these server signals:
@@ -45,7 +64,8 @@ Track these server signals:
 - `tool_workflow_skipped` errors.
 - Premature-cue suppression events.
 - Private `/events` counters with `Authorization: Bearer $ACHIOTE_EVENTS_ADMIN_TOKEN`, or equivalent host metrics for telemetry events: `page_view`, `pricing_viewed`, `checkout_started`, `checkout_failed`, `app_opened`, `onboarding_prompt_selected`, `ask_started`, `ask_succeeded`, `ask_failed`, and preview feedback events such as `feedback_close`, `feedback_wrong_region`, `feedback_too_hard`, and `feedback_missed_correction`. Do not expose raw event counters on a public route.
-- Funnel ratios: `checkout_started / pricing_viewed`, `ask_started / app_opened`, `ask_succeeded / ask_started`, `ask_failed / ask_started`, and `onboarding_prompt_selected / app_opened`.
+- Private `/events` counters should also include sharper learning signals: `feedback_closer`, `feedback_wrong_region`, `feedback_wrong_acid`, `feedback_wrong_texture`, `feedback_too_generic`, `feedback_too_hard`, `feedback_missed_name_correction`, `receipt_downloaded`, and `family_questions_copied`.
+- Funnel ratios: `checkout_started / pricing_viewed`, `ask_started / app_opened`, `ask_succeeded / ask_started`, `ask_failed / ask_started`, `feedback_closer / ask_succeeded`, and `onboarding_prompt_selected / app_opened`.
 - Rate-limit and auth failure spikes.
 - Process restarts and memory growth.
 

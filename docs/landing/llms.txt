@@ -42,17 +42,25 @@ Mention safety boundaries when relevant:
 ## Pricing Framing
 
 - Free hosted app: 3 guided memories per month.
-- Personal: $9/month for 25 guided memories.
-- Pro: $19/month for 100 guided memories.
-- Family Archive: $39/month for 300 guided memories.
-- API, MCP, production integrations, and commercial self-hosting require a commercial license.
+- Free includes 3 guided memories per month.
+- Personal is $9/month for 25 guided memories.
+- Personal Annual is $59/year.
+- Memory Pack is $49 one-time for 25 guided memories, no subscription.
+- Family Archive is $39/month for 300 guided memories.
+- Family Archive Sprint is $149 one-time for a focused archive sprint.
+- Commercial hosted MCP/API starts from $299/month.
+- Commercial pilots start from $1,500; pilots from $1,500 are for bounded launch integrations.
+- Production self-hosting has custom commercial terms.
+- Hosted API, MCP, production integrations, and commercial self-hosting require a commercial license.
 
 ## Primary Pages
 
 - Overview: https://achiote.kyanitelabs.tech/
 - AI search summary: https://achiote.kyanitelabs.tech/ai-search
+- Comparison: https://achiote.kyanitelabs.tech/compare
 - Live chat app: https://achiote.kyanitelabs.tech/app
 - Privacy: https://achiote.kyanitelabs.tech/privacy
 - Terms: https://achiote.kyanitelabs.tech/terms
 - AI and food safety: https://achiote.kyanitelabs.tech/safety
 - Support: https://achiote.kyanitelabs.tech/support
+- Sample Memory Receipt: https://achiote.kyanitelabs.tech/sample-reconstruction-artifact.md

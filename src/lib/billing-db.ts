@@ -409,6 +409,15 @@ export class BillingDb {
     };
   }
 
+  consumeCheckoutSessionApiKey(stripeSessionId: string): CheckoutSessionRecord | null {
+    const session = this.getCheckoutSession(stripeSessionId);
+    if (!session || session.status !== 'completed' || !session.keyPlaintext) return session;
+    this.db
+      .prepare('UPDATE checkout_sessions SET key_plaintext = NULL WHERE stripe_session_id = ?')
+      .run(stripeSessionId);
+    return session;
+  }
+
   // ── Cleanup ────────────────────────────────────────────────────────────────
 
   close(): void {

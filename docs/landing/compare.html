@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Why Not Just Use ChatGPT Or Google? | Achiote</title>
+  <meta name="description" content="Achiote compared with generic AI and recipe search for evidence-bounded food-memory reconstruction." />
+  <link rel="canonical" href="https://achiote.kyanitelabs.tech/compare" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #2a1a0e; background: #fff8f0; line-height: 1.65; }
+    nav, main, footer { width: calc(100% - 32px); max-width: 1040px; margin: 0 auto; }
+    nav, footer { padding: 20px 0; }
+    main { padding: 36px 0 72px; }
+    a { color: #8b3210; font-weight: 700; }
+    h1 { font-size: clamp(2.2rem, 8vw, 4.4rem); line-height: 1; margin: 24px 0; max-width: 820px; }
+    h2 { margin-top: 0; }
+    p, li { font-size: 1.03rem; }
+    .lede { font-size: clamp(1.15rem, 3vw, 1.45rem); max-width: 780px; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin: 28px 0; }
+    .panel { background: #fffdfc; border: 1px solid rgba(181, 69, 27, .18); border-radius: 12px; padding: 20px; }
+    .receipt { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 18px; }
+    .receipt div { border: 1px solid rgba(181, 69, 27, .18); border-radius: 10px; padding: 14px; background: rgba(242, 184, 75, .08); }
+    strong { color: #8b3210; }
+    footer { color: #6b5744; }
+    @media (max-width: 760px) {
+      .grid, .receipt { grid-template-columns: 1fr; }
+      h1 { font-size: 2.4rem; }
+    }
+  </style>
+</head>
+<body>
+  <nav><a href="/">Achiote</a> / Compare</nav>
+  <main>
+    <h1>Why not just use ChatGPT or Google?</h1>
+    <p class="lede">Generic AI is good at plausible answers. Search is good when you already know the name. Achiote is built for evidence-bounded food-memory reconstruction when the memory is fragile, partial, misspelled, or family-specific.</p>
+
+    <div class="grid">
+      <section class="panel">
+        <h2>Generic AI or recipe search</h2>
+        <ul>
+          <li>Often jumps from a few clues to a confident dish guess.</li>
+          <li>Can blur what the user said, what was inferred, and what was researched.</li>
+          <li>Usually optimizes for a complete answer or recipe.</li>
+          <li>May miss the smallest useful sensory test.</li>
+        </ul>
+      </section>
+      <section class="panel">
+        <h2>Achiote</h2>
+        <ul>
+          <li>Keeps User-said, Inferred, Researched, and Unknown evidence separate.</li>
+          <li>Produces a Memory Receipt that can be corrected by the user or family.</li>
+          <li>Prioritizes a First tiny taste test before a full recipe.</li>
+          <li>Uses feedback signals to learn whether the region, acid, texture, or difficulty was wrong.</li>
+        </ul>
+      </section>
+    </div>
+
+    <section class="panel">
+      <h2>What the Memory Receipt protects</h2>
+      <p>A Memory Receipt makes the answer inspectable. The point is not to claim cultural certainty. The point is to show the trail, keep the uncertainty visible, and make the next question or bite smaller.</p>
+      <div class="receipt" aria-label="Memory Receipt evidence categories">
+        <div><strong>User-said</strong><br />Words and sensory details the user actually gave.</div>
+        <div><strong>Inferred</strong><br />Low-confidence context that can seed questions, not conclusions.</div>
+        <div><strong>Researched</strong><br />Source-backed facts the host assistant found.</div>
+        <div><strong>Unknown</strong><br />Gaps that should stay unresolved until someone checks them.</div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>When Achiote wins</h2>
+      <p>Use Achiote when the dish name is missing, the memory comes through family language, the strongest clue is sensory, or the user needs one cheap proof bite before cooking a full recipe. Use ordinary search when you already know the dish and just need a recipe.</p>
+    </section>
+  </main>
+  <footer>
+    <a href="/app">Try the memory detective</a> · <a href="/sample-reconstruction-artifact.md">Sample Memory Receipt</a> · <a href="/ai-search">AI search summary</a>
+  </footer>
+</body>
+</html>

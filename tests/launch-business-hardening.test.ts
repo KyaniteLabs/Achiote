@@ -23,6 +23,19 @@ describe('launch business hardening', () => {
     expect(publicSurfaces).toContain('support@kyanitelabs.tech');
   });
 
+  it('positions Achiote as food-memory forensics before technical MCP framing', () => {
+    const page = landing();
+    const appPage = app();
+
+    expect(page).toContain('Recover the taste of a half-remembered family dish');
+    expect(page).toContain('food-memory forensics');
+    expect(page).toContain('Memory Receipt');
+    expect(page).toContain('one cheap taste test before a full recipe');
+    expect(page.indexOf('Recover the taste of a half-remembered family dish')).toBeLessThan(page.indexOf('MCP'));
+    expect(appPage).toContain('Food Memory Detective');
+    expect(page).not.toContain('AI Food Memory Reconstruction | Source-Available MCP Server');
+  });
+
   it('documents privacy controls, retention, deletion, and AI food-safety limits', () => {
     const privacy = fs.readFileSync('docs/landing/privacy.html', 'utf8');
     const safety = fs.readFileSync('docs/landing/safety.html', 'utf8');
@@ -43,9 +56,22 @@ describe('launch business hardening', () => {
     expect(appJs()).toContain("trackEvent('ask_failed'");
     expect(appJs()).toContain("trackEvent('onboarding_prompt_selected'");
     expect(appJs()).toContain("sendFeedback(");
-    expect(appJs()).toContain('feedback_close');
-    expect(appJs()).toContain('feedback_too_hard');
-    expect(appJs()).toContain('feedback_missed_correction');
+    for (const eventName of [
+      'feedback_closer',
+      'feedback_wrong_region',
+      'feedback_wrong_acid',
+      'feedback_wrong_texture',
+      'feedback_too_generic',
+      'feedback_too_hard',
+      'feedback_missed_name_correction',
+    ]) {
+      expect(appJs()).toContain(eventName);
+      expect(server()).toContain(`'${eventName}'`);
+    }
+    expect(appJs()).not.toContain('feedback_helpful');
+    expect(appJs()).not.toContain('feedback_generic');
+    expect(server()).toContain("'receipt_downloaded'");
+    expect(server()).toContain("'family_questions_copied'");
     expect(appJs()).toContain("navigator.sendBeacon('/events'");
     expect(appJs()).not.toContain("prompt_text");
 
@@ -97,6 +123,31 @@ describe('launch business hardening', () => {
     expect(js).toContain('Did not correct my wording');
     expect(js).not.toContain('font-size:12px');
     expect(js).not.toContain('font-size:11px');
+  });
+
+  it('lets users keep the memory receipt after a successful answer', () => {
+    const page = app();
+    const js = appJs();
+
+    expect(page).toContain('.receipt-actions');
+    expect(js).toContain("eventType === 'receipt'");
+    expect(js).toContain('downloadMemoryReceipt');
+    expect(js).toContain('copyFamilyQuestions');
+    expect(js).toContain('Achiote Memory Receipt');
+    expect(js).toContain('URL.createObjectURL');
+    expect(js).not.toContain("localStorage.setItem('achiote-last-memory");
+  });
+
+  it('ships a viability transcript smoke for moat regressions', () => {
+    const script = fs.readFileSync('scripts/viability-transcript-smoke.mjs', 'utf8');
+    const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8')) as { scripts: Record<string, string> };
+
+    expect(pkg.scripts['viability:smoke']).toBe('node scripts/viability-transcript-smoke.mjs');
+    expect(script).toContain('My abuela made something sour and herby');
+    expect(script).toContain('thing');
+    expect(script).toContain('Memory Receipt');
+    expect(script).toContain('event: receipt');
+    expect(script).toContain('forbiddenPatterns');
   });
 
   it('ships a repeatable preview ask smoke for demo-quality regressions', () => {
@@ -253,29 +304,50 @@ describe('launch business hardening', () => {
     expect(terms).toContain('Guided-memory subscriptions');
   });
 
-  it('sells guided memories publicly and keeps hosted MCP/API commercial', () => {
+  it('sells paid-launch guided memories publicly and keeps hosted MCP/API commercial', () => {
     const page = landing();
+    const aiSearch = fs.readFileSync('docs/landing/ai-search.html', 'utf8');
+    const llms = fs.readFileSync('docs/landing/llms.txt', 'utf8');
+    const envExample = fs.readFileSync('.env.example', 'utf8');
     const setupScript = fs.readFileSync('scripts/setup-stripe-products.mjs', 'utf8');
     const httpServer = server();
 
-    for (const copy of ['3 guided memories', '25 guided memories', '100 guided memories', '300 guided memories']) {
+    for (const copy of ['3 guided memories', '25 guided memories', '25 guided memories, no subscription', 'Family Archive Sprint', 'from $299/month', 'pilots from $1,500']) {
       expect(page).toContain(copy);
+      expect(aiSearch).toContain(copy);
+      expect(llms).toContain(copy);
     }
 
-    for (const copy of ['25 guided memories', '100 guided memories', '300 guided memories']) {
+    for (const copy of ['25 guided memories per month', 'Personal annual', '25 guided memories, no subscription', '$49', '$149']) {
       expect(setupScript).toContain(copy);
     }
 
     expect(page).toContain('$9');
-    expect(page).toContain('$19');
+    expect(page).toContain('$59/year');
+    expect(page).toContain('$49');
     expect(page).toContain('$39');
-    expect(page).toContain('API and MCP access require a commercial license');
+    expect(page).toContain('Hosted API and MCP access require a commercial license');
     expect(page).toContain('data-checkout-tier="personal"');
+    expect(page).toContain('data-checkout-billing="annual"');
+    expect(page).toContain('data-checkout-tier="memory-pack"');
+    expect(page).toContain('data-checkout-tier="family-sprint"');
     expect(page).toContain('data-checkout-tier="family"');
-    expect(httpServer).toContain("tier !== 'personal' && tier !== 'pro' && tier !== 'family'");
-    expect(httpServer).toContain('Use personal, pro, or family.');
+    expect(httpServer).toContain("billing === 'annual'");
+    expect(httpServer).toContain('isSubscriptionCheckoutTier(requestedTier)');
+    expect(httpServer).toContain('Use personal or family.');
+    expect(httpServer).toContain('billingDb.authenticateApiKey(rawBillingKey)');
+    expect(httpServer).toContain('billingDb.getCustomerIdByKeyId(billingAuth.keyId)');
+    expect(httpServer).not.toContain("mode === 'payment' ? 'personal'");
+    expect(httpServer).not.toContain('customerId is required');
+    expect(envExample).toContain('STRIPE_PERSONAL_ANNUAL_PRICE_ID');
+    expect(envExample).toContain('STRIPE_MEMORY_PACK_PRICE_ID');
+    expect(envExample).toContain('STRIPE_FAMILY_SPRINT_PRICE_ID');
+    expect(envExample).toContain('STRIPE_CREDIT_PACK_PRICE_ID');
 
     for (const stale of [
+      'Achiote Pro',
+      'Get Pro',
+      'Pro: $19/month',
       '50 MCP calls / month',
       '5,000 MCP calls / month',
       '100,000 MCP calls / month',
@@ -283,9 +355,25 @@ describe('launch business hardening', () => {
       '1,000 extra calls',
       'hosted API free tier',
       'A hosted HTTP API is also available',
+      '$19',
+      '$9 for 25 extra guided memories',
     ]) {
       expect(page).not.toContain(stale);
       expect(setupScript).not.toContain(stale);
+      expect(llms).not.toContain(stale);
     }
+  });
+
+  it('ships an invented evidence-bounded sample reconstruction artifact', () => {
+    const sample = fs.readFileSync('docs/landing/sample-reconstruction-artifact.md', 'utf8');
+
+    for (const heading of ['User Fragment', 'User Said', 'Researched Facts', 'Inferred Facts', 'Unknowns', 'Minimum Viable Nostalgia Cue']) {
+      expect(sample).toContain(heading);
+    }
+    expect(sample).toContain('invented sample');
+    expect(sample).toContain('The memory may belong near');
+    expect(sample).toContain('the exact dish is not proven');
+    expect(sample).not.toContain('pastelay');
+    expect(sample).not.toContain('carimanolla');
   });
 });

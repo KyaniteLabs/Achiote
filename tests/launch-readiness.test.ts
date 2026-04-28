@@ -77,4 +77,21 @@ describe('P0 launch readiness guards', () => {
     expect(envExample).toContain('OPENAI_BASE_URL=');
     expect(envExample).toContain('OPENAI_MODEL=');
   });
+
+  it('documents paid-launch production safety checks and auth-disabled warning', () => {
+    const runbook = fs.readFileSync('docs/LAUNCH_RUNBOOK.md', 'utf8');
+
+    for (const copy of [
+      'Paid Launch Checklist',
+      'ACHIOTE_AUTH_ENABLED=true',
+      'ACHIOTE_ALLOWED_ORIGINS set to exact HTTPS origins',
+      'STRIPE_WEBHOOK_SECRET',
+      'billing portal',
+      'checkout smoke',
+      'no anonymous paid traffic',
+      'If /ready reports "authEnabled": false, do not treat the deployment as paid-launch ready',
+    ]) {
+      expect(runbook).toContain(copy);
+    }
+  });
 });

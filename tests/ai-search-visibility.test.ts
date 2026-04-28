@@ -32,6 +32,17 @@ describe('AI search visibility', () => {
     expect(parsed.map((block) => block['@type'])).toEqual(['WebPage', 'FAQPage']);
     expect(parsed[0].about?.name).toBe('Achiote');
     expect(parsed[1].mainEntity?.length).toBeGreaterThanOrEqual(5);
+    expect(page).toContain('Free includes 3 guided memories per month');
+    expect(page).toContain('Personal is $9/month for 25 guided memories');
+    expect(page).toContain('Personal Annual is $59/year');
+    expect(page).toContain('Memory Pack is $49 one-time');
+    expect(page).toContain('Memory Pack is $49 one-time for 25 guided memories');
+    expect(page).toContain('Family Archive is $39/month for 300 guided memories');
+    expect(page).toContain('Family Archive Sprint is $149 one-time');
+    expect(page).toContain('Commercial hosted MCP/API starts from $299/month');
+    expect(page).toContain('Commercial pilots start from $1,500');
+    expect(page).not.toContain('Pro is $19/month');
+    expect(page).not.toContain('$9 memory pack');
   });
 
   it('allows search/retrieval crawlers while keeping API endpoints and training crawlers closed', () => {
@@ -57,9 +68,11 @@ describe('AI search visibility', () => {
 
     expect(landing).toContain('/ai-search');
     expect(landing).toContain('/llms.txt');
+    expect(landing).toContain('/compare');
     expect(app).toContain('/ai-search');
     expect(sitemap).toContain('https://achiote.kyanitelabs.tech/ai-search');
     expect(sitemap).toContain('https://achiote.kyanitelabs.tech/llms.txt');
+    expect(sitemap).toContain('https://achiote.kyanitelabs.tech/compare');
     expect(runbook).toContain('AI Search Visibility');
   });
 });

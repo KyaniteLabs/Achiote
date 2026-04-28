@@ -134,6 +134,30 @@ describe('billing-db', () => {
     expect(session!.status).toBe('completed');
     expect(session!.keyPlaintext).toBe('ach_testkey');
   });
+
+  it('reveals checkout API keys once and clears plaintext after display', () => {
+    billingDb.createCheckoutSession('cs_once', 'subscription', 'cus_123', 'personal');
+    billingDb.completeCheckoutSession('cs_once', 'cus_123', 'ak_once', 'ach_oncekey', 'personal');
+
+    const first = billingDb.consumeCheckoutSessionApiKey('cs_once');
+    expect(first).toMatchObject({
+      status: 'completed',
+      tier: 'personal',
+      keyId: 'ak_once',
+      keyPlaintext: 'ach_oncekey',
+    });
+
+    const stored = billingDb.getCheckoutSession('cs_once');
+    expect(stored!.keyPlaintext).toBeNull();
+
+    const second = billingDb.consumeCheckoutSessionApiKey('cs_once');
+    expect(second).toMatchObject({
+      status: 'completed',
+      tier: 'personal',
+      keyId: 'ak_once',
+      keyPlaintext: null,
+    });
+  });
 });
 
 describe('billing-stripe config', () => {
@@ -146,6 +170,9 @@ describe('billing-stripe config', () => {
     delete process.env.STRIPE_PERSONAL_PRICE_ID;
     delete process.env.STRIPE_PRO_PRICE_ID;
     delete process.env.STRIPE_FAMILY_PRICE_ID;
+    delete process.env.STRIPE_PERSONAL_ANNUAL_PRICE_ID;
+    delete process.env.STRIPE_MEMORY_PACK_PRICE_ID;
+    delete process.env.STRIPE_FAMILY_SPRINT_PRICE_ID;
     delete process.env.STRIPE_BUSINESS_PRICE_ID;
     delete process.env.STRIPE_CREDIT_PACK_PRICE_ID;
   });
@@ -169,22 +196,35 @@ describe('billing-stripe config', () => {
     expect(loadBillingConfigFromEnv()).toBeNull();
   });
 
-  it('returns config for personal, pro, family, and memory-pack prices', () => {
+  it('returns config for personal, annual personal, family, and memory-pack prices', () => {
     process.env.STRIPE_SECRET_KEY = 'sk_test_123';
     process.env.STRIPE_WEBHOOK_SECRET = 'whsec_123';
     process.env.STRIPE_PERSONAL_PRICE_ID = 'price_personal';
+    process.env.STRIPE_PERSONAL_ANNUAL_PRICE_ID = 'price_personal_annual';
     process.env.STRIPE_PRO_PRICE_ID = 'price_pro';
     process.env.STRIPE_FAMILY_PRICE_ID = 'price_family';
-    process.env.STRIPE_CREDIT_PACK_PRICE_ID = 'price_memory_pack';
+    process.env.STRIPE_MEMORY_PACK_PRICE_ID = 'price_memory_pack';
+    process.env.STRIPE_FAMILY_SPRINT_PRICE_ID = 'price_family_sprint';
     const config = loadBillingConfigFromEnv();
     expect(config).not.toBeNull();
     expect(config!.secretKey).toBe('sk_test_123');
     expect(config!.personalPriceId).toBe('price_personal');
+    expect(config!.personalAnnualPriceId).toBe('price_personal_annual');
     expect(config!.proPriceId).toBe('price_pro');
     expect(config!.familyPriceId).toBe('price_family');
     expect(config!.legacyBusinessPriceId).toBe('');
     expect(config!.creditPackPriceId).toBe('price_memory_pack');
+    expect(config!.familySprintPriceId).toBe('price_family_sprint');
     expect(config!.baseUrl).toBe('http://localhost:3000');
+  });
+
+  it('keeps STRIPE_CREDIT_PACK_PRICE_ID as a memory-pack fallback during migration', () => {
+    process.env.STRIPE_SECRET_KEY = 'sk_test_123';
+    process.env.STRIPE_WEBHOOK_SECRET = 'whsec_123';
+    process.env.STRIPE_CREDIT_PACK_PRICE_ID = 'price_legacy_pack';
+    const config = loadBillingConfigFromEnv();
+    expect(config).not.toBeNull();
+    expect(config!.creditPackPriceId).toBe('price_legacy_pack');
   });
 
   it('keeps the old business price ID as a family fallback during migration', () => {
@@ -202,17 +242,45 @@ describe('billing-stripe config', () => {
       secretKey: 'sk_test_123',
       webhookSecret: 'whsec_123',
       personalPriceId: 'price_personal',
+      personalAnnualPriceId: 'price_personal_annual',
       proPriceId: 'price_pro',
       familyPriceId: 'price_family',
       legacyBusinessPriceId: 'price_legacy_business',
       creditPackPriceId: 'price_memory_pack',
+      familySprintPriceId: 'price_family_sprint',
       baseUrl: 'http://localhost:3000',
     });
     const tierForPriceId = (billing as unknown as { tierForPriceId(priceId: string): string | null }).tierForPriceId.bind(billing);
 
     expect(tierForPriceId('price_family')).toBe('family');
+    expect(tierForPriceId('price_personal_annual')).toBe('personal');
     expect(tierForPriceId('price_legacy_business')).toBe('business');
     expect(tierForPriceId('price_unknown')).toBeNull();
+  });
+
+  it('selects explicit paid-launch checkout prices for monthly, annual, and one-time offers', () => {
+    const billing = new BillingStripe({
+      secretKey: 'sk_test_123',
+      webhookSecret: 'whsec_123',
+      personalPriceId: 'price_personal',
+      personalAnnualPriceId: 'price_personal_annual',
+      proPriceId: 'price_pro',
+      familyPriceId: 'price_family',
+      legacyBusinessPriceId: 'price_legacy_business',
+      creditPackPriceId: 'price_memory_pack',
+      familySprintPriceId: 'price_family_sprint',
+      baseUrl: 'http://localhost:3000',
+    });
+    const priceIdForTier = (billing as unknown as {
+      priceIdForTier(tier: string, mode: 'subscription' | 'payment', billingCycle?: 'monthly' | 'annual'): string | null;
+    }).priceIdForTier.bind(billing);
+
+    expect(priceIdForTier('personal', 'subscription', 'monthly')).toBe('price_personal');
+    expect(priceIdForTier('personal', 'subscription', 'annual')).toBe('price_personal_annual');
+    expect(priceIdForTier('family', 'subscription', 'monthly')).toBe('price_family');
+    expect(priceIdForTier('memory-pack', 'payment')).toBe('price_memory_pack');
+    expect(priceIdForTier('family-sprint', 'payment')).toBe('price_family_sprint');
+    expect(priceIdForTier('personal', 'payment')).toBeNull();
   });
 
   it('treats a business-only family fallback as the legacy business tier on Stripe updates', () => {
@@ -220,10 +288,12 @@ describe('billing-stripe config', () => {
       secretKey: 'sk_test_123',
       webhookSecret: 'whsec_123',
       personalPriceId: '',
+      personalAnnualPriceId: '',
       proPriceId: '',
       familyPriceId: 'price_legacy_business',
       legacyBusinessPriceId: 'price_legacy_business',
       creditPackPriceId: '',
+      familySprintPriceId: '',
       baseUrl: 'http://localhost:3000',
     });
     const tierForPriceId = (billing as unknown as { tierForPriceId(priceId: string): string | null }).tierForPriceId.bind(billing);

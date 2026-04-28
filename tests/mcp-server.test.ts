@@ -16,6 +16,7 @@ describe('Achiote MCP server', () => {
       const { tools } = await client.listTools();
       expect(tools.map((tool) => tool.name).sort()).toEqual([
         'analyze_nostalgic_dish',
+        'build_memory_receipt',
         'build_reconstruction_dossier',
         'build_research_record',
         'collect_food_memory',

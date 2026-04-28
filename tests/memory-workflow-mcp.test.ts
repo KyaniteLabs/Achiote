@@ -24,6 +24,10 @@ describe('memory workflow MCP tools', () => {
         },
       });
       expect(collected.structuredContent).toMatchObject({
+        inferredContext: {
+          culturalOrRegional: expect.any(Array),
+          language: expect.any(Array),
+        },
         extractedClues: {
           culturalOrRegionalHints: expect.arrayContaining(['Puerto Rican']),
           rememberedIngredients: expect.arrayContaining(['plantains', 'pork']),
@@ -89,9 +93,38 @@ describe('memory workflow MCP tools', () => {
       expect(displayText).toContain('How was the shark served');
       expect(() => JSON.parse(displayText)).toThrow();
       expect(collected.structuredContent).toMatchObject({
+        inferredContext: {
+          culturalOrRegional: expect.any(Array),
+          language: expect.any(Array),
+        },
         extractedClues: {
           culturalOrRegionalHints: expect.arrayContaining(['Trinidad and Tobago']),
           rememberedIngredients: expect.arrayContaining(['shark']),
+        },
+      });
+    });
+  });
+
+  it('exposes family-word context as inference through MCP structured content', async () => {
+    await withClient(async (client) => {
+      const collected = await client.callTool({
+        name: 'collect_food_memory',
+        arguments: {
+          memoryText: 'My abuela made something sour and herby.',
+        },
+      });
+
+      expect(collected.structuredContent).toMatchObject({
+        extractedClues: {
+          culturalOrRegionalHints: [],
+        },
+        inferredContext: {
+          culturalOrRegional: [
+            expect.objectContaining({
+              label: 'Spanish-speaking family context',
+              canSeedCandidateDishes: false,
+            }),
+          ],
         },
       });
     });

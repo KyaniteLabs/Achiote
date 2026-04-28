@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Achiote — AI Food Memory Reconstruction | Source-Available MCP Server</title>
-  <meta name="description" content="Source-available MCP server for AI-powered food memory reconstruction. Turn half-remembered dishes into structured research, sensory cues, and the one bite that proves you found it." />
+  <title>Achiote — Food Memory Detective</title>
+  <meta name="description" content="Food-memory forensics for recovering half-remembered family dishes. Turn fragile clues into evidence, a Memory Receipt, and one cheap taste test before a full recipe." />
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'unsafe-inline'; img-src 'self' data:; object-src 'none'; base-uri 'self';" />
 
   <!-- PWA manifest -->
@@ -14,16 +14,16 @@
   <link rel="canonical" href="https://achiote.kyanitelabs.tech" />
 
   <!-- Open Graph -->
-  <meta property="og:title" content="Achiote — AI Food Memory Reconstruction | Source-Available MCP Server" />
-  <meta property="og:description" content="Source-available MCP server for AI-powered food memory reconstruction. Turn half-remembered dishes into structured research, sensory cues, and the one bite that proves you found it." />
+  <meta property="og:title" content="Achiote — Food Memory Detective" />
+  <meta property="og:description" content="Food-memory forensics for recovering half-remembered family dishes. Turn fragile clues into evidence, a Memory Receipt, and one cheap taste test before a full recipe." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://achiote.kyanitelabs.tech" />
   <meta property="og:image" content="https://achiote.kyanitelabs.tech/og-image.jpg" />
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Achiote — AI Food Memory Reconstruction | Source-Available MCP Server" />
-  <meta name="twitter:description" content="Source-available MCP server for AI-powered food memory reconstruction. Turn half-remembered dishes into structured research, sensory cues, and the one bite that proves you found it." />
+  <meta name="twitter:title" content="Achiote — Food Memory Detective" />
+  <meta name="twitter:description" content="Food-memory forensics for recovering half-remembered family dishes. Turn fragile clues into evidence, a Memory Receipt, and one cheap taste test before a full recipe." />
   <meta name="twitter:image" content="https://achiote.kyanitelabs.tech/og-image.jpg" />
 
   <!-- Favicon -->
@@ -558,11 +558,19 @@
     "@context": "https://schema.org",
     "@type": "WebApplication",
     "name": "Achiote",
-    "description": "Source-available MCP server for food-memory reconstruction. Turns half-remembered food stories into structured research, sensory tests, and the smallest taste that brings a dish back.",
+    "description": "Food-memory forensics for recovering half-remembered family dishes. Turns fragile clues into structured evidence, Memory Receipts, sensory tests, and the smallest taste that brings a dish back.",
     "url": "https://achiote.kyanitelabs.tech",
     "applicationCategory": "DeveloperApplication",
     "operatingSystem": "Any",
-    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "offers": [
+      { "@type": "Offer", "name": "Free", "price": "0", "priceCurrency": "USD", "description": "3 guided memories per month" },
+      { "@type": "Offer", "name": "Personal monthly", "price": "9", "priceCurrency": "USD", "description": "25 guided memories per month" },
+      { "@type": "Offer", "name": "Personal annual", "price": "59", "priceCurrency": "USD", "description": "25 guided memories per month, billed yearly" },
+      { "@type": "Offer", "name": "Memory Pack", "price": "49", "priceCurrency": "USD", "description": "25 guided memories, no subscription" },
+      { "@type": "Offer", "name": "Family Archive", "price": "39", "priceCurrency": "USD", "description": "300 guided memories per month" },
+      { "@type": "Offer", "name": "Family Archive Sprint", "price": "149", "priceCurrency": "USD", "description": "Focused one-time archive sprint" },
+      { "@type": "Offer", "name": "Commercial", "price": "299", "priceCurrency": "USD", "description": "Commercial plans start from $299/month; pilots from $1,500" }
+    ],
     "featureList": "Memory collection, research planning, provenance tracking, sensory analysis, ingredient sourcing, minimum viable nostalgia cue generation",
     "softwareVersion": "1.0.0",
     "author": { "@type": "Organization", "name": "Achiote contributors", "url": "https://achiote.kyanitelabs.tech" },
@@ -585,12 +593,12 @@
     "@context": "https://schema.org",
     "@type": "FAQPage",
     "mainEntity": [
-      { "@type": "Question", "name": "What is Achiote?", "acceptedAnswer": { "@type": "Answer", "text": "Achiote is a source-available Model Context Protocol (MCP) server that helps AI agents reconstruct nostalgic dishes from fragmented food memories. It provides 15 deterministic tools for memory collection, research planning, provenance tracking, sensory analysis, and generating minimum viable nostalgia cues." } },
+      { "@type": "Question", "name": "What is Achiote?", "acceptedAnswer": { "@type": "Answer", "text": "Achiote is food-memory forensics for recovering half-remembered family dishes. It separates user-said evidence, inferred context, researched facts, and unknowns, then produces a Memory Receipt and first tiny taste test before a full recipe." } },
       { "@type": "Question", "name": "How does food memory reconstruction work?", "acceptedAnswer": { "@type": "Answer", "text": "Achiote follows a 5-step workflow: collect the memory fragment, plan research hypotheses, build an evidence-separated dossier, generate the smallest sensory cue to test, and help source ingredients. Your AI does the live research; Achiote keeps it structured, honest, and organized." } },
       { "@type": "Question", "name": "What is a minimum viable nostalgia cue?", "acceptedAnswer": { "@type": "Answer", "text": "The smallest practical aroma, bite, sip, or condiment that tests whether a reconstructed memory is on the right track. It uses grocery-store ingredients and takes under 15 minutes — before anyone commits to a full recipe or shops for specialty items." } },
       { "@type": "Question", "name": "What are other names for achiote?", "acceptedAnswer": { "@type": "Answer", "text": "Achiote is known as annatto (English), urucum (Portuguese/Brazil), roucou (French/Caribbean), atsuete (Tagalog/Philippines), bija (Carib/Andes), onoto (Venezuela), kesumba (Indonesian), beninoki (Japanese), latkan (Hindi), and achiotl (Nahuatl) — among dozens of others across every continent." } },
-      { "@type": "Question", "name": "Can I use Achiote with ChatGPT, Claude, or other AI agents?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Achiote runs as an MCP server that AI agents can connect to. It works with Claude Code, OpenAI Codex, Cursor, and any agent that supports the Model Context Protocol. Hosted API and MCP production access require a commercial license." } },
-      { "@type": "Question", "name": "Is Achiote free?", "acceptedAnswer": { "@type": "Answer", "text": "Achiote is source-available under the Business Source License 1.1. The hosted app includes 3 guided memories per month. Hosted API and MCP access require a commercial license. Self-hosting is available for non-production use under the BSL; production self-hosting requires following the BSL terms or a commercial license." } }
+      { "@type": "Question", "name": "Can I use Achiote with ChatGPT, Claude, or other AI agents?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Achiote can run as a structured tool server that AI agents connect to. It works with Claude Code, OpenAI Codex, Cursor, and compatible assistants. Hosted API and production agent access require a commercial license." } },
+      { "@type": "Question", "name": "Is Achiote free?", "acceptedAnswer": { "@type": "Answer", "text": "Achiote is source-available under the Business Source License 1.1. The hosted app includes 3 guided memories per month. Personal is $9/month or $59/year, Memory Pack is $49 one-time for 25 guided memories with no subscription, Family Archive is $39/month, and Commercial starts from $299/month with pilots from $1,500." } }
     ]
   }
   </script>
@@ -612,6 +620,7 @@
           <nav aria-label="Page sections">
             <ul>
               <li><a href="#workflow">How it works</a></li>
+              <li><a href="#different">Different</a></li>
               <li><a href="#science">Food science</a></li>
               <li><a href="#examples">Examples</a></li>
               <li><a href="#install">Install</a></li>
@@ -631,12 +640,12 @@
       <section class="hero" id="top">
         <div class="container hero-grid">
           <div>
-            <div class="eyebrow">Source-available <span>MCP server</span></div>
-            <h1>One seed. A hundred names. <span class="accent">The taste that proves you found it.</span></h1>
-            <p>Achiote is a source-available MCP server that helps AI agents reconstruct nostalgic dishes from half-remembered fragments — a smell, a nickname, a texture, the wrong name in the right language. It turns those clues into structured research, sensory tests, and the one bite that proves the memory is real.</p>
+            <div class="eyebrow">Food-memory forensics <span>Memory Receipt included</span></div>
+            <h1>Recover the taste of a half-remembered family dish. <span class="accent">Then test one bite.</span></h1>
+            <p>Achiote is the food memory detective for people who remember the smell, texture, person, place, or wrong-sounding name before they remember the recipe. It turns fragile clues into evidence, a Memory Receipt, and one cheap taste test before a full recipe.</p>
             <div class="cta-row">
-              <a class="button primary" href="/app">Try the live demo</a>
-              <a class="button secondary" href="#install">Add to Claude or ChatGPT</a>
+              <a class="button primary" href="/app">Try the memory detective</a>
+              <a class="button secondary" href="/sample-reconstruction-artifact.md">See a Memory Receipt</a>
             </div>
           </div>
           <aside class="memory-card" aria-label="Example food memory card">
@@ -749,6 +758,20 @@
             <article class="card reveal"><span class="number">1</span><h3>The name may be wrong — or in another language</h3><p>Misspellings, phonetic fragments, family nicknames, and borrowed-language names are normal inputs. Achiote resolves names across languages and cultures.</p></article>
             <article class="card reveal"><span class="number">2</span><h3>The trigger may be tiny</h3><p>The thing that matters may be one browned edge, one spice bloom, one sour note, one chewy bite, or one table ritual.</p></article>
             <article class="card reveal"><span class="number">3</span><h3>Guesses stay labeled</h3><p>What someone remembers, what research found, what the AI guessed, and what nobody knows — kept separate so nothing pretends to be certain.</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section id="different">
+        <div class="container">
+          <div class="section-head reveal">
+            <h2>Not recipe search. A forensic workflow for fragile memories.</h2>
+            <p>Generic AI is good at plausible answers. Achiote is built for evidence-bounded food-memory reconstruction: user-said facts, inferred context, researched facts, unknowns, and the first tiny taste test stay visible.</p>
+          </div>
+          <div class="grid-3">
+            <article class="card reveal"><span class="tag">Evidence first</span><h3>Memory Receipt</h3><p>Every answer can leave behind a receipt separating User-said, Inferred, Researched, and Unknown evidence so the family can correct it.</p></article>
+            <article class="card reveal"><span class="tag">Smallest proof</span><h3>First tiny taste test</h3><p>Before a full recipe, Achiote asks what tiny bite, aroma, sauce, starch, acid, or texture would prove the trail is worth following.</p></article>
+            <article class="card reveal"><span class="tag">Comparison</span><h3>Why not just use ChatGPT or Google?</h3><p><a href="/compare" style="color: var(--achiote); text-decoration: underline;">See the product comparison</a> for where Achiote adds structure, receipts, and feedback loops.</p></article>
           </div>
         </div>
       </section>
@@ -906,26 +929,27 @@ startup_timeout_sec = <span class="tk-num">10</span></pre>
             <div class="card pricing-card popular reveal">
               <h3>Personal</h3>
               <div class="price">$9<span style="font-size:1rem;font-weight:500;color:var(--muted)">/mo</span></div>
-              <div class="price-period">Billed monthly</div>
+              <div class="price-period">$59/year available</div>
               <ul class="feature-list">
                 <li>25 guided memories / month</li>
                 <li>Saved dossiers and cue history</li>
                 <li>Ingredient substitution prompts</li>
                 <li>Email support</li>
               </ul>
-              <button class="checkout-btn" data-checkout-tier="personal" data-checkout-mode="subscription">Get Personal</button>
+              <button class="checkout-btn" data-checkout-tier="personal" data-checkout-mode="subscription">Get Personal monthly</button>
+              <button class="checkout-btn secondary" data-checkout-tier="personal" data-checkout-mode="subscription" data-checkout-billing="annual">Get Personal annual</button>
             </div>
             <div class="card pricing-card reveal">
-              <h3>Pro</h3>
-              <div class="price">$19<span style="font-size:1rem;font-weight:500;color:var(--muted)">/mo</span></div>
-              <div class="price-period">Billed monthly</div>
+              <h3>Memory Pack</h3>
+              <div class="price">$49</div>
+              <div class="price-period">One-time, no subscription</div>
               <ul class="feature-list">
-                <li>100 guided memories / month</li>
-                <li>Image memory support</li>
-                <li>Exportable reconstruction notes</li>
-                <li>Light API/MCP experimentation</li>
+                <li>25 guided memories, no subscription</li>
+                <li>Good for one archive sprint or gift</li>
+                <li>Same evidence-separated dossiers</li>
+                <li>No hosted MCP/API access</li>
               </ul>
-              <button class="checkout-btn" data-checkout-tier="pro" data-checkout-mode="subscription">Get Pro</button>
+              <button class="checkout-btn" data-checkout-tier="memory-pack" data-checkout-mode="payment">Buy Memory Pack</button>
             </div>
             <div class="card pricing-card reveal">
               <h3>Family Archive</h3>
@@ -935,26 +959,29 @@ startup_timeout_sec = <span class="tk-num">10</span></pre>
                 <li>300 guided memories / month</li>
                 <li>Shared collection workflow</li>
                 <li>Archive exports</li>
+                <li>Optional Family Archive Sprint: $149 one-time</li>
                 <li>Priority support</li>
               </ul>
               <button class="checkout-btn" data-checkout-tier="family" data-checkout-mode="subscription">Get Family</button>
+              <button class="checkout-btn secondary" data-checkout-tier="family-sprint" data-checkout-mode="payment">Buy Family Sprint</button>
             </div>
             <div class="card pricing-card reveal">
               <h3>Commercial</h3>
-              <div class="price">Custom</div>
-              <div class="price-period">For products and teams</div>
+              <div class="price">from $299<span style="font-size:1rem;font-weight:500;color:var(--muted)">/mo</span></div>
+              <div class="price-period">Pilots from $1,500</div>
               <ul class="feature-list">
-                <li>API and MCP access require a commercial license</li>
+                <li>Hosted API and MCP access require a commercial license</li>
                 <li>Production integrations</li>
                 <li>Commercial self-hosting terms</li>
-                <li>SLA and onboarding</li>
+                <li>Custom terms, SLA, and onboarding available</li>
               </ul>
               <a href="mailto:hello@kyanitelabs.tech" class="checkout-btn secondary">Contact us</a>
             </div>
           </div>
           <div style="margin-top: 24px; text-align: center;">
             <p style="font-size: 0.9rem; color: var(--muted);">
-              Need a one-time boost? <a href="#" id="credit-pack-link" style="color: var(--achiote); text-decoration: underline;">Buy a memory pack</a> — $9 for 25 extra guided memories, never expire.
+              Prefer not to subscribe? <a href="#" id="credit-pack-link" style="color: var(--achiote); text-decoration: underline;">Buy a Memory Pack</a> — $49 for 25 guided memories, no subscription.
+              See a <a href="/sample-reconstruction-artifact.md" style="color: var(--achiote); text-decoration: underline;">sample Memory Receipt</a>.
             </p>
           </div>
         </div>
@@ -969,7 +996,7 @@ startup_timeout_sec = <span class="tk-num">10</span></pre>
           <div class="faq-grid">
             <div class="faq-item reveal">
               <h3>What is Achiote?</h3>
-              <p>Achiote is a source-available Model Context Protocol (MCP) server that helps AI agents reconstruct nostalgic dishes from fragmented food memories. It provides 15 deterministic tools for memory collection, research planning, provenance tracking, sensory analysis, and generating minimum viable nostalgia cues.</p>
+              <p>Achiote is food-memory forensics for recovering half-remembered family dishes. It separates user-said evidence, inferred context, researched facts, and unknowns, then produces a Memory Receipt and first tiny taste test before a full recipe. Developers can also run it as a source-available Model Context Protocol (MCP) server.</p>
             </div>
             <div class="faq-item reveal">
               <h3>How does food memory reconstruction work?</h3>
@@ -989,7 +1016,7 @@ startup_timeout_sec = <span class="tk-num">10</span></pre>
             </div>
             <div class="faq-item reveal">
               <h3>Is Achiote free?</h3>
-              <p>Achiote is source-available under the Business Source License 1.1. The hosted app includes 3 guided memories per month. Hosted API and MCP access require a commercial license. Self-hosting is available for non-production use under the BSL; production self-hosting requires following the BSL terms or a commercial license.</p>
+              <p>Achiote is source-available under the Business Source License 1.1. The hosted app includes 3 guided memories per month. Personal is $9/month or $59/year, Memory Pack is $49 one-time for 25 guided memories with no subscription, Family Archive is $39/month, and Commercial starts from $299/month with pilots from $1,500. Hosted API and MCP access require a commercial license.</p>
             </div>
           </div>
         </div>
@@ -1010,6 +1037,7 @@ startup_timeout_sec = <span class="tk-num">10</span></pre>
           <h4>Product</h4>
           <ul>
             <li><a href="#workflow">How it works</a></li>
+            <li><a href="#different">Different</a></li>
             <li><a href="#science">Food science</a></li>
             <li><a href="#examples">Examples</a></li>
             <li><a href="#install">Install</a></li>
@@ -1024,6 +1052,7 @@ startup_timeout_sec = <span class="tk-num">10</span></pre>
             <li><a href="../../CONTRIBUTING.md">Contributing</a></li>
             <li><a href="../../SECURITY.md">Security</a></li>
             <li><a href="/ai-search">AI search summary</a></li>
+            <li><a href="/compare">Compare</a></li>
             <li><a href="/llms.txt">llms.txt</a></li>
             <li><a href="mailto:support@kyanitelabs.tech">support@kyanitelabs.tech</a></li>
           </ul>
