@@ -497,11 +497,32 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
     }
 
     let iterations = 0;
+    const toolCallHistory: Array<{ name: string; input: unknown }> = [];
+    const MAX_DUPLICATE_CALLS = 2;
+
     while (modelResponse.toolCalls.length > 0 && iterations < 15) {
       if (res.writableEnded) return;
       iterations++;
       const toolNames = modelResponse.toolCalls.map((call) => call.name);
       console.log(`[ask] iteration=${iterations} calling tools: ${toolNames.join(', ')}`);
+
+      // Detect tool loops: same tool called repeatedly without progress
+      for (const call of modelResponse.toolCalls) {
+        const previousCalls = toolCallHistory.filter((h) => h.name === call.name);
+        if (previousCalls.length >= MAX_DUPLICATE_CALLS) {
+          console.warn(`[ask] tool loop detected: ${call.name} called ${previousCalls.length + 1} times, stopping tool calls`);
+          send('status', { iteration: iterations, stage: 'tool_loop_detected', tool: call.name, count: previousCalls.length + 1 });
+          modelResponse = {
+            textBlocks: modelResponse.textBlocks.length > 0 ? modelResponse.textBlocks : [`I've gathered enough information so far. Let me work with what we have.`],
+            toolCalls: [],
+            providerMessage: modelResponse.providerMessage ?? null,
+          };
+          break;
+        }
+      }
+
+      if (modelResponse.toolCalls.length === 0) break;
+
       send('status', { iteration: iterations, stage: 'calling_tools', tools: toolNames });
       const toolResults: Array<{ id: string; content: string }> = [];
 
@@ -510,6 +531,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
           const payload = await executeAndStreamTool(call.name, call.input, userMessage, send, calledTools, toolPayloads);
           const content = JSON.stringify(payload);
           toolResults.push({ id: call.id, content });
+          toolCallHistory.push({ name: call.name, input: call.input });
         } catch (err) {
           const detail = err instanceof Error ? err.message : String(err);
           const code = err instanceof ToolExecutionError ? err.code : 'tool_failed';
@@ -528,12 +550,20 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
     }
 
     if (calledTools.has('collect_food_memory') && !calledTools.has('plan_dish_research') && !calledTools.has('generate_minimum_viable_nostalgia')) {
-      console.warn('[ask] replaced response that skipped research planning with structured clarification');
-      const responseText = buildClarificationOnlyResponse(toolPayloads);
-      send('text', responseText);
-      maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
-      send('done', { guarded: 'missing_research_plan_clarification' });
-      return;
+      // In a follow-up turn the user answered the previous clarification question. If the
+      // collected memory now has substantive anchors (location, cultural hint, or ≥2 ingredients)
+      // let the model's natural response through instead of looping back to clarification.
+      const isFollowUp = history !== undefined && history.length > 0;
+      if (isFollowUp && hasSubstantialMemoryAnchors(toolPayloads.collect_food_memory)) {
+        console.log('[ask] follow-up with substantive anchors — skipping missing_research_plan_clarification guard');
+      } else {
+        console.warn('[ask] replaced response that skipped research planning with structured clarification');
+        const responseText = buildClarificationOnlyResponse(toolPayloads);
+        send('text', responseText);
+        maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
+        send('done', { guarded: 'missing_research_plan_clarification' });
+        return;
+      }
     }
 
     if (!calledTools.has('generate_minimum_viable_nostalgia') && containsConcreteFoodCue(modelResponse.textBlocks.join('\n\n'))) {
@@ -566,6 +596,20 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
     const responseText = modelResponse.textBlocks
       .map((text) => ensureCueQualityLanguage(text, toolPayloads, calledTools))
       .join('\n\n');
+
+    if (calledTools.has('generate_minimum_viable_nostalgia') && containsRecipeMeasurementLanguage(responseText)) {
+      console.warn('[ask] suppressed recipe-style measurements in cue response');
+      const sanitized = responseText
+        // Only replace explicit numeric quantities (e.g. "2 tablespoons", "1/2 cup"); bare unit words in prose are fine.
+        .replace(/\b\d+(?:\s*\/\s*\d+)?\s*(?:teaspoons?|tablespoons?|cups?|ounces?|pounds?|grams?|ml|liters?|quarts?|gallons?|sticks?|cloves?|heads?|bunches?)\b/gi, 'a small amount of')
+        .replace(/\b(preheat|bake|roast|simmer|boil)\b[\s\S]*?\b(?:minutes?|hours?|degrees?|°|oven)\b/gi, 'prepare briefly')
+        .replace(/\bserves?\s+\d+\b/gi, 'a small portion');
+      send('text', sanitized);
+      maybeSendMemoryReceipt({ toolPayloads, assistantText: sanitized, send });
+      send('done', { guarded: 'recipe_measurement_sanitized' });
+      return;
+    }
+
     if (responseText) send('text', responseText);
     maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
     send('done', {});
@@ -592,7 +636,33 @@ function maybeSendMemoryReceipt(input: {
     researchPlan: parsedResearchPlan.success ? parsedResearchPlan.data as DishResearchPlan : undefined,
     cue: parsedCue.success ? parsedCue.data as MinimumViableNostalgiaCue : undefined,
     assistantText: input.assistantText,
+    researchedFacts: deriveResearchedFactsForReceipt(input.toolPayloads),
   }));
+}
+
+/** Extract a compact set of sourced facts from search_web and resolve_dish_name payloads. */
+function deriveResearchedFactsForReceipt(toolPayloads: Record<string, unknown>): string[] {
+  const facts: string[] = [];
+
+  // resolve_dish_name: emit canonical name + region when a real match was found
+  const resolved = toolPayloads.resolve_dish_name as
+    | { dishName?: string; canonicalName?: string; region?: string; confidence?: string; aliases?: string[] }
+    | undefined;
+  if (resolved?.canonicalName && !/^Unknown$/i.test(resolved.canonicalName)) {
+    facts.push(`Dish resolved: "${resolved.canonicalName}" (confidence: ${resolved.confidence ?? 'unknown'}, region: ${resolved.region ?? 'unknown'})`);
+    const aliases = (resolved.aliases ?? []).filter(Boolean).slice(0, 3);
+    if (aliases.length) facts.push(`Also known as: ${aliases.join(', ')}`);
+  }
+
+  // search_web: emit the snippet from each top result (up to 3)
+  const searched = toolPayloads.search_web as
+    | { results?: Array<{ title?: string; snippet?: string }> }
+    | undefined;
+  for (const result of (searched?.results ?? []).slice(0, 3)) {
+    if (result.snippet?.trim()) facts.push(result.snippet.trim());
+  }
+
+  return facts;
 }
 
 async function executeAndStreamTool(
@@ -785,7 +855,7 @@ async function maybeSendForcedMinimumCue({
   send: SseSender;
 }): Promise<boolean> {
   if (calledTools.has('generate_minimum_viable_nostalgia')) return false;
-  if (!shouldForceMinimumCue(userMessage, toolPayloads)) return false;
+  if (!shouldForceMinimumCue(userMessage, toolPayloads, calledTools)) return false;
 
   const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
   const researchPlan = toolPayloads.plan_dish_research as DishResearchPlan | undefined;
@@ -819,10 +889,31 @@ async function maybeSendForcedMinimumCue({
   return true;
 }
 
-function shouldForceMinimumCue(userMessage: string, toolPayloads: Record<string, unknown>): boolean {
-  if (!isExplicitMinimumTestRequest(userMessage)) return false;
+function shouldForceMinimumCue(userMessage: string, toolPayloads: Record<string, unknown>, calledTools: Set<string>): boolean {
   if (!toolPayloads.collect_food_memory || !toolPayloads.plan_dish_research) return false;
-  return hasSensorySignal(userMessage, toolPayloads.collect_food_memory);
+
+  // Explicit minimum-cue request — force whenever we have memory + plan + any sensory signal
+  if (isExplicitMinimumTestRequest(userMessage)) {
+    return hasSensorySignal(userMessage, toolPayloads.collect_food_memory);
+  }
+
+  // Full research pipeline ran but model stalled without calling generate_minimum_viable_nostalgia.
+  // Once plan_dish_research + any search-type tool have run we have enough to produce a cue.
+  const didSearch = calledTools.has('search_web') || calledTools.has('resolve_dish_name');
+  if (didSearch) {
+    // Only force when the research produced something usable (a canonical match or result snippets).
+    const resolved = toolPayloads.resolve_dish_name as
+      | { canonicalName?: string; confidence?: string }
+      | undefined;
+    const searched = toolPayloads.search_web as { results?: unknown[] } | undefined;
+    const hasResearchProduct =
+      (resolved?.canonicalName && !/^Unknown$/i.test(resolved.canonicalName)) ||
+      (searched?.results?.length ?? 0) > 0 ||
+      ((toolPayloads.plan_dish_research as { hypotheses?: unknown[] } | undefined)?.hypotheses?.length ?? 0) > 0;
+    if (hasResearchProduct) return true;
+  }
+
+  return false;
 }
 
 function isExplicitMinimumTestRequest(text: string): boolean {
@@ -978,6 +1069,14 @@ function containsConcreteFoodCue(text: string): boolean {
     || /\b(?:heat|stir|sip|bite|steep|mix)\b[\s\S]{0,80}\b(?:dill|broth|buttermilk|vinegar|lemon|salt|sour cream|yogurt|potato)\b/i.test(text);
 }
 
+function containsRecipeMeasurementLanguage(text: string): boolean {
+  // Require an explicit numeric quantity before the unit so prose like "a pinch of dill"
+  // or "a tablespoon of broth" does not fire. Only "2 tablespoons", "1/2 cup", etc. match.
+  return /\b\d+(?:\s*\/\s*\d+)?\s*(?:teaspoons?|tablespoons?|cups?|ounces?|pounds?|grams?|ml|liters?|quarts?|gallons?|sticks?|cloves?|heads?|bunches?)\b/i.test(text)
+    || /\bpreheat\b.*\b(?:oven|to)\b/i.test(text)
+    || /\b(?:bake|roast|simmer|boil)\b.*\b(?:minutes?|hours?|degrees?|°)\b/i.test(text);
+}
+
 function containsGenericUncertaintyWaffle(text: string): boolean {
   return /\b(?:fits|matches|could\s+be|might\s+be|applies\s+to)\s+(?:dozens|many|lots|a\s+lot)\s+of\s+dishes\b/i.test(text)
     || /\bcould\s+point\s+to\s+(?:so\s+)?(?:many|lots|dozens|different)[\s\S]{0,60}\bdishes\b/i.test(text)
@@ -995,6 +1094,16 @@ function containsPrematureCandidateSpeculation(text: string, toolPayloads: Recor
   return /\bcould\s+be\s+(?:a|an|the)?\s*[\s\S]{0,120}\b(?:or\s+even|,\s*(?:a|an|the)?\s*[\p{L}\p{M}])/iu.test(text)
     || /\bmight\s+be\s+(?:a|an|the)?\s*[\s\S]{0,120}\b(?:or\s+even|,\s*(?:a|an|the)?\s*[\p{L}\p{M}])/iu.test(text)
     || /\bfrom\s+(?:a|an|the)?\s*[\s\S]{0,160}\bto\s+(?:a|an|the)?\s*[\s\S]{0,160}\bto\b/iu.test(text);
+}
+
+function hasSubstantialMemoryAnchors(memory: unknown): boolean {
+  // Returns true when a follow-up message has given enough new anchors to proceed without
+  // another clarification round: a location, a cultural/regional hint, or multiple ingredients.
+  const m = memory as CollectedFoodMemory | undefined;
+  if (!m) return false;
+  return Boolean(m.userLocation?.trim())
+    || (m.extractedClues?.culturalOrRegionalHints?.length ?? 0) > 0
+    || (m.extractedClues?.rememberedIngredients?.length ?? 0) >= 2;
 }
 
 function isBroadRegionalHint(hint: string): boolean {
@@ -1016,8 +1125,27 @@ function buildClarificationOnlyResponse(toolPayloads: Record<string, unknown>): 
     'Do you remember anything about the name, even a rough sound-alike?',
   ];
 
+  // Build a context-aware preamble based on what signals are already present
+  const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
+  const sensoryClues = memory?.extractedClues?.sensoryClues ?? [];
+  const ingredients = memory?.extractedClues?.rememberedIngredients ?? [];
+  const inferred = memory?.inferredContext?.culturalOrRegional ?? [];
+  const nonBroadInferred = inferred.filter((c) => !isBroadRegionalHint(c.label));
+
+  let preamble: string;
+  if (nonBroadInferred.length > 0) {
+    // Acknowledge the cultural inference so the user knows we heard them
+    const context = nonBroadInferred[0].label.replace(/\s+context$/i, '').toLowerCase();
+    preamble = `Your description already points toward a ${context} tradition — I just need one more anchor to give you a real test instead of a guess.`;
+  } else if (sensoryClues.length > 0 || ingredients.length > 0) {
+    const anchor = [...sensoryClues, ...ingredients].slice(0, 2).join(' and ');
+    preamble = `The ${anchor} you mentioned is a real anchor. One more detail will keep the first test specific rather than generic.`;
+  } else {
+    preamble = 'Before I give you a tasting cue, I need one or two details so I do not fake certainty.';
+  }
+
   return [
-    'Before I give you a tasting cue, I need one or two details so I do not fake certainty.',
+    preamble,
     '',
     ...selectedQuestions.map((question, index) => `${index + 1}. ${question}`),
     '',

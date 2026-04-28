@@ -89,12 +89,20 @@ export function resolveAskModel(env: Record<string, string | undefined> = proces
 
 export function openAIBaseUrlFromEnv(env: Record<string, string | undefined> = process.env): string {
   const provider = env.ACHIOTE_ASK_PROVIDER?.trim().toLowerCase();
-  return env.LOCAL_INFERENCE_BASE_URL?.trim()
-    || env.OPENAI_BASE_URL?.trim()
+  const isLocalInference = provider === 'local' || provider === 'lmstudio' || provider === 'lm-studio';
+  // LOCAL_INFERENCE_BASE_URL is only consulted when the provider is explicitly set to a local
+  // inference variant. This prevents it from silently overriding cloud routing for openai/anthropic.
+  if (isLocalInference) {
+    return env.LOCAL_INFERENCE_BASE_URL?.trim()
+      || env.OPENAI_BASE_URL?.trim()
+      || env.LMSTUDIO_BASE_URL?.trim()
+      || env.LM_STUDIO_BASE_URL?.trim()
+      || 'http://127.0.0.1:1234/v1';
+  }
+  return env.OPENAI_BASE_URL?.trim()
     || env.LMSTUDIO_BASE_URL?.trim()
     || env.LM_STUDIO_BASE_URL?.trim()
-    || (provider === 'lmstudio' || provider === 'lm-studio' || provider === 'local' ? 'http://127.0.0.1:1234/v1'
-      : 'https://api.openai.com/v1');
+    || 'https://api.openai.com/v1';
 }
 
 export function anthropicBaseUrlFromEnv(env: Record<string, string | undefined> = process.env): string | undefined {
