@@ -1,6 +1,6 @@
 # Achiote Launch Runbook
 
-Last updated: April 25, 2026.
+Last updated: April 28, 2026.
 
 This runbook covers production checks, paid-launch checks, monitoring, support,
 privacy, rollback, and incident handling.
@@ -20,13 +20,26 @@ npm pack --dry-run
 For UI changes, open `/`, `/app`, `/about`, `/privacy`, `/terms`, `/safety`,
 and `/support` in a browser-sized mobile and desktop viewport.
 
-For hosted preview demos, run the preview smoke against the public URL:
+For hosted preview demos or paid production, run the preview smoke against the public URL. In paid mode, provide a real API key or the configured demo password:
 
 ```bash
-ACHIOTE_PREVIEW_URL=https://achiote.kyanitelabs.tech npm run preview:smoke
+ACHIOTE_PREVIEW_URL=https://achiote.kyanitelabs.tech ACHIOTE_API_KEY=ach_... npm run preview:smoke
+ACHIOTE_PREVIEW_URL=https://achiote.kyanitelabs.tech ACHIOTE_API_KEY=ach_... npm run viability:smoke
 ```
 
 Before broad launch or paid acquisition, run `docs/VIABILITY_EXPERIMENT.md` and record the outcome.
+
+## Current Production State
+
+As of April 28, 2026, the public production host is `https://achiote.kyanitelabs.tech`. It runs from `/docker/achiote` on the Kyanite VPS behind Traefik.
+
+- Public auth is enabled with `ACHIOTE_AUTH_ENABLED=true`.
+- Anonymous `/ask` is disabled with `ACHIOTE_ALLOW_ANON_ASK=false`; anonymous `/ask` should return 401.
+- `/ready` reports auth enabled and should not be treated as paid-launch ready if auth is false.
+- Stripe live checkout is configured for Personal monthly, Personal annual, Family Archive monthly, Memory Pack, and Family Archive Sprint.
+- The Stripe webhook endpoint is `https://achiote.kyanitelabs.tech/billing/webhook` and must receive `checkout.session.completed`, `customer.subscription.updated`, `customer.subscription.deleted`, and `invoice.payment_failed`.
+- Checkout session creation has been smoke-tested live for each paid offer, without completing a real card payment.
+- Actual card payment completion and webhook-issued API key delivery still need one real transaction test before scaling paid traffic.
 
 ## Required Environment
 
@@ -50,8 +63,9 @@ Before selling guided memories:
 - `STRIPE_WEBHOOK_SECRET` is configured and the Stripe webhook endpoint receives `checkout.session.completed`, `customer.subscription.updated`, `customer.subscription.deleted`, and `invoice.payment_failed`.
 - Stripe price IDs are configured for Personal monthly, Personal annual, Family Archive, Memory Pack, and Family Archive Sprint.
 - The billing portal/cancellation path is tested through Stripe Customer Portal or a documented support fallback.
-- A checkout smoke is tested in Stripe test mode for Personal monthly, Personal annual, Memory Pack, Family Archive, and Family Archive Sprint.
-- no anonymous paid traffic: anonymous `/ask` is disabled for paid launch, or explicitly limited to the free/demo allowance with no paid entitlement bypass.
+- A checkout smoke is tested for Personal monthly, Personal annual, Memory Pack, Family Archive, and Family Archive Sprint. In live mode, create sessions without completing card payment unless intentionally running a real transaction test.
+- No anonymous paid traffic: anonymous `/ask` is disabled for paid launch, or explicitly limited to the free/demo allowance with no paid entitlement bypass.
+- Before paid acquisition, complete one controlled live payment and confirm the webhook-created API key works against `/ask`.
 - Confirm success-page API key display is one-time only; refresh should not reveal plaintext API keys again.
 - Verify `/`, `/app`, `/pricing` section, `/billing/success`, `/privacy`, `/terms`, `/safety`, and `/support` in mobile and desktop viewports.
 

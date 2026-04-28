@@ -88,7 +88,11 @@ describe('P0 launch readiness guards', () => {
       'STRIPE_WEBHOOK_SECRET',
       'billing portal',
       'checkout smoke',
-      'no anonymous paid traffic',
+      'No anonymous paid traffic',
+      'Current Production State',
+      'ACHIOTE_ALLOW_ANON_ASK=false',
+      'Checkout session creation has been smoke-tested live',
+      'Actual card payment completion and webhook-issued API key delivery still need one real transaction test',
       'If /ready reports "authEnabled": false, do not treat the deployment as paid-launch ready',
     ]) {
       expect(runbook).toContain(copy);
