@@ -52,11 +52,9 @@ describe('HTTP server integration', () => {
     const body = await res.json();
     expect(body).toMatchObject({ status: 'ok', version: '0.2.0' });
     expect(body).toHaveProperty('authEnabled');
-    expect(body).toHaveProperty('activeSessions');
-    expect(body).toHaveProperty('memory');
+    expect(body).toHaveProperty('billingEnabled');
     expect(body).toHaveProperty('uptime');
     expect(typeof body.uptime).toBe('number');
-    expect(body.memory).toHaveProperty('heapUsed');
   });
 
   it('GET /voice/status reports local OSS speech readiness without requiring auth', async () => {
