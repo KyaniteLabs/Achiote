@@ -544,6 +544,25 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
           toolCalls: filteredCalls,
           providerMessage: modelResponse.providerMessage ?? null,
         };
+        // When the loop detector emptied the batch but we have enough research
+        // data, inject build_reconstruction_dossier so the model can progress
+        // to generate_minimum_viable_nostalgia instead of stalling.
+        if (modelResponse.toolCalls.length === 0
+          && !calledTools.has('build_reconstruction_dossier')
+          && toolPayloads.collect_food_memory
+          && toolPayloads.plan_dish_research) {
+          console.log('[ask] injecting build_reconstruction_dossier after loop detector emptied batch');
+          const searchResults = toolPayloads.search_web as { results?: Array<{ title?: string; snippet?: string }> } | undefined;
+          const researchedFacts = searchResults?.results
+            ?.filter((r) => r.snippet)
+            .map((r) => `${r.title}: ${r.snippet}`)
+            .slice(0, 5) ?? [];
+          modelResponse = {
+            textBlocks: [`I've gathered enough information. Let me synthesize what we've found.`],
+            toolCalls: [{ id: `injected_dossier_${iterations}`, name: 'build_reconstruction_dossier', input: { memory: toolPayloads.collect_food_memory, researchPlan: toolPayloads.plan_dish_research, researchedFacts } }],
+            providerMessage: null,
+          };
+        }
       }
 
       if (modelResponse.toolCalls.length === 0) break;
