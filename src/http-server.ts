@@ -519,19 +519,31 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       const toolNames = modelResponse.toolCalls.map((call) => call.name);
       console.log(`[ask] iteration=${iterations} calling tools: ${toolNames.join(', ')}`);
 
-      // Detect tool loops: same tool called repeatedly without progress
-      for (const call of modelResponse.toolCalls) {
+      // Detect tool loops: filter out tools called too many times,
+      // but allow other new tools in the same batch to proceed.
+      const loopedTools: string[] = [];
+      const filteredCalls = modelResponse.toolCalls.filter((call) => {
         const previousCalls = toolCallHistory.filter((h) => h.name === call.name);
         if (previousCalls.length >= MAX_DUPLICATE_CALLS) {
-          console.warn(`[ask] tool loop detected: ${call.name} called ${previousCalls.length + 1} times, stopping tool calls`);
-          send('status', { iteration: iterations, stage: 'tool_loop_detected', tool: call.name, count: previousCalls.length + 1 });
-          modelResponse = {
-            textBlocks: modelResponse.textBlocks.length > 0 ? modelResponse.textBlocks : [`I've gathered enough information so far. Let me work with what we have.`],
-            toolCalls: [],
-            providerMessage: modelResponse.providerMessage ?? null,
-          };
-          break;
+          loopedTools.push(call.name);
+          return false;
         }
+        return true;
+      });
+
+      if (loopedTools.length > 0) {
+        for (const tool of loopedTools) {
+          const count = toolCallHistory.filter((h) => h.name === tool).length + 1;
+          console.warn(`[ask] tool loop detected: ${tool} called ${count} times, skipping duplicate`);
+          send('status', { iteration: iterations, stage: 'tool_loop_detected', tool, count });
+        }
+        modelResponse = {
+          textBlocks: filteredCalls.length > 0
+            ? modelResponse.textBlocks
+            : (modelResponse.textBlocks.length > 0 ? modelResponse.textBlocks : [`I've gathered enough information so far. Let me work with what we have.`]),
+          toolCalls: filteredCalls,
+          providerMessage: modelResponse.providerMessage ?? null,
+        };
       }
 
       if (modelResponse.toolCalls.length === 0) break;
