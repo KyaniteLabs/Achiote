@@ -108,7 +108,10 @@ function memoryFromModelInput(rawMemory: unknown): Parameters<typeof planDishRes
     });
   }
 
-  return rawMemory as Parameters<typeof planDishResearch>[0];
+  throw new ToolExecutionError(
+    'Could not extract a valid food memory from the model input. Pass a proper collect_food_memory output object.',
+    'memory_input_invalid',
+  );
 }
 
 
@@ -309,7 +312,17 @@ function discoverRegionalSimilars(input: Input, context: AchioteToolExecutionCon
 }
 
 function generateRecipe(input: Input): AchioteToolExecutionResult {
-  const ensureObject = (value: unknown): unknown => (typeof value === 'string' ? JSON.parse(value) : value);
+  const ensureObject = (value: unknown): unknown => {
+    if (typeof value !== 'string') return value;
+    try {
+      return JSON.parse(value);
+    } catch (err) {
+      throw new ToolExecutionError(
+        `generate_recipe received malformed JSON in a field argument: ${err instanceof Error ? err.message : String(err)}`,
+        'invalid_json_argument',
+      );
+    }
+  };
   const sensoryAnalysis = ensureObject(input.sensoryAnalysis);
   const substitutions = ensureObject(input.substitutions);
   const sourcing = ensureObject(input.sourcing);
