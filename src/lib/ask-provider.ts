@@ -54,7 +54,7 @@ export interface AskSession {
 
 export function resolveAskProviderKind(env: Record<string, string | undefined> = process.env): AskProviderKind {
   const explicit = env.ACHIOTE_ASK_PROVIDER?.trim().toLowerCase();
-  if (explicit === 'openai' || explicit === 'openai-compatible' || explicit === 'lmstudio' || explicit === 'lm-studio') return 'openai';
+  if (explicit === 'openai' || explicit === 'openai-compatible' || explicit === 'lmstudio' || explicit === 'lm-studio' || explicit === 'local') return 'openai';
   if (explicit === 'anthropic' || explicit === 'anthropic-compatible' || explicit === 'glm' || explicit === 'zhipu') return 'anthropic';
   return 'anthropic';
 }
@@ -63,7 +63,8 @@ export function resolveAskModel(env: Record<string, string | undefined> = proces
   const provider = env.ACHIOTE_ASK_PROVIDER?.trim().toLowerCase();
   const providerKind = resolveAskProviderKind(env);
   if (providerKind === 'openai') {
-    return env.ACHIOTE_ASK_MODEL?.trim()
+    return env.LOCAL_INFERENCE_MODEL?.trim()
+      || env.ACHIOTE_ASK_MODEL?.trim()
       || env.OPENAI_MODEL?.trim()
       || env.LMSTUDIO_MODEL?.trim()
       || env.LM_STUDIO_MODEL?.trim()
@@ -88,10 +89,11 @@ export function resolveAskModel(env: Record<string, string | undefined> = proces
 
 export function openAIBaseUrlFromEnv(env: Record<string, string | undefined> = process.env): string {
   const provider = env.ACHIOTE_ASK_PROVIDER?.trim().toLowerCase();
-  return env.OPENAI_BASE_URL?.trim()
+  return env.LOCAL_INFERENCE_BASE_URL?.trim()
+    || env.OPENAI_BASE_URL?.trim()
     || env.LMSTUDIO_BASE_URL?.trim()
     || env.LM_STUDIO_BASE_URL?.trim()
-    || (provider === 'lmstudio' || provider === 'lm-studio' ? 'http://127.0.0.1:1234/v1'
+    || (provider === 'lmstudio' || provider === 'lm-studio' || provider === 'local' ? 'http://127.0.0.1:1234/v1'
       : 'https://api.openai.com/v1');
 }
 
@@ -107,7 +109,11 @@ export function openAICompatibleProviderReady(baseUrl: string, apiKey?: string |
   if (apiKey?.trim()) return true;
   try {
     const parsed = new URL(baseUrl);
-    return parsed.hostname === '127.0.0.1' || parsed.hostname === 'localhost' || parsed.hostname === '::1';
+    return parsed.hostname === '127.0.0.1'
+      || parsed.hostname === 'localhost'
+      || parsed.hostname === '::1'
+      || parsed.hostname === 'host.docker.internal'
+      || parsed.hostname.startsWith('100.');
   } catch {
     return false;
   }
