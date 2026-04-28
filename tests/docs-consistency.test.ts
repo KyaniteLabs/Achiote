@@ -31,4 +31,43 @@ describe('release documentation consistency', () => {
     expect(roadmap).not.toContain('Add dietary/allergen/religious constraints to substitutions');
     expect(roadmap).not.toMatch(/validate_recipe_output.*future/i);
   });
+
+  it('keeps public pricing surfaces aligned', () => {
+    const surfaces = [
+      fs.readFileSync('docs/landing/index.html', 'utf8'),
+      fs.readFileSync('docs/landing/ai-search.html', 'utf8'),
+      fs.readFileSync('docs/landing/llms.txt', 'utf8'),
+    ].join('\n');
+
+    for (const required of [
+      '$9/month',
+      '$59/year',
+      '$49 one-time',
+      '$39/month',
+      '$149 one-time',
+      '$299/month',
+      '$1,500',
+    ]) {
+      expect(surfaces).toContain(required);
+    }
+    expect(surfaces).not.toMatch(/\bPro\b[^.\n]*\$19/i);
+  });
+
+  it('documents the 30-day viability experiment gates', () => {
+    const experiment = fs.readFileSync('docs/VIABILITY_EXPERIMENT.md', 'utf8');
+    const runbook = fs.readFileSync('docs/LAUNCH_RUNBOOK.md', 'utf8');
+
+    for (const required of [
+      '30-Day Viability Experiment',
+      '30 strangers',
+      'under 3 minutes',
+      '40% say it feels more useful than generic AI',
+      '10% pay',
+      'feedback_closer / ask_succeeded',
+      'do not scale paid acquisition',
+    ]) {
+      expect(experiment).toContain(required);
+    }
+    expect(runbook).toContain('docs/VIABILITY_EXPERIMENT.md');
+  });
 });

@@ -107,9 +107,9 @@ if (tryitInput) {
 
 // ── Checkout ────────────────────────────────────────────────────────────────
 
-async function startCheckout(tier, mode) {
-  trackEvent('checkout_started', { route: '/', tier, mode });
-  const btn = event.target;
+async function startCheckout(tier, mode, billing = 'monthly', trigger) {
+  trackEvent('checkout_started', { route: '/', tier, mode, billing });
+  const btn = trigger;
   const original = btn.textContent;
   btn.textContent = 'Redirecting…';
   btn.disabled = true;
@@ -117,7 +117,7 @@ async function startCheckout(tier, mode) {
     const res = await fetch('/billing/checkout', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ tier, mode }),
+      body: JSON.stringify({ tier, mode, billing }),
     });
     const data = await res.json();
     if (res.ok && data.url) {
@@ -126,7 +126,7 @@ async function startCheckout(tier, mode) {
       throw new Error(data.error || 'Checkout failed');
     }
   } catch (err) {
-    trackEvent('checkout_failed', { route: '/', tier, mode });
+    trackEvent('checkout_failed', { route: '/', tier, mode, billing });
     alert('Checkout error: ' + err.message);
     btn.textContent = original;
     btn.disabled = false;
@@ -137,13 +137,14 @@ async function startCheckout(tier, mode) {
 document.querySelectorAll('[data-checkout-tier]').forEach(btn => {
   const tier = btn.dataset.checkoutTier;
   const mode = btn.dataset.checkoutMode || 'subscription';
-  btn.addEventListener('click', () => startCheckout(tier, mode));
+  const billing = btn.dataset.checkoutBilling || 'monthly';
+  btn.addEventListener('click', () => startCheckout(tier, mode, billing, btn));
 });
 
 const creditPackLink = document.getElementById('credit-pack-link');
 if (creditPackLink) {
   creditPackLink.addEventListener('click', (e) => {
     e.preventDefault();
-    startCheckout('pro', 'payment');
+    startCheckout('memory-pack', 'payment', 'monthly', creditPackLink);
   });
 }

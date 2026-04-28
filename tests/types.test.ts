@@ -10,6 +10,7 @@ import type {
   RegionalSimilar,
   DishNameResolution,
   ResearchCacheEntry,
+  CollectedFoodMemory,
 } from '../src/lib/types.js';
 
 describe('type definitions exist and are valid', () => {
@@ -72,5 +73,36 @@ describe('type definitions exist and are valid', () => {
       whatsDifferent: 'Using butter-based pie dough instead of manteca',
     };
     expect(recipe.steps.length).toBeGreaterThan(0);
+  });
+
+  it('CollectedFoodMemory separates inferred context from user-said region hints', () => {
+    const memory: CollectedFoodMemory = {
+      rawMemory: 'My abuela made something sour and herby.',
+      normalizedMemory: 'My abuela made something sour and herby.',
+      extractedClues: {
+        possibleDishNames: [],
+        culturalOrRegionalHints: [],
+        rememberedIngredients: [],
+        sensoryClues: ['sour/tangy'],
+        occasions: ['grandmother/family context'],
+      },
+      inferredContext: {
+        culturalOrRegional: [{
+          label: 'Spanish-speaking family context',
+          basis: 'User used the family word "abuela".',
+          confidence: 'Low',
+          evidenceKind: 'model_inferred',
+          canSeedQuestions: true,
+          canSeedCandidateDishes: false,
+        }],
+        language: [],
+      },
+      missingInformation: ['country, island, region, town, or community'],
+      nextQuestions: ['Where was your abuela from?'],
+      reassurance: "You don't need to spell it correctly or know the original language; sound-alikes and tiny clues are enough to start.",
+    };
+
+    expect(memory.extractedClues.culturalOrRegionalHints).toEqual([]);
+    expect(memory.inferredContext.culturalOrRegional[0].canSeedCandidateDishes).toBe(false);
   });
 });

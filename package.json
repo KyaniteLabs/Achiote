@@ -21,7 +21,8 @@
     "lint": "node scripts/static-checks.mjs",
     "coverage:guard": "node scripts/coverage-threshold.mjs",
     "live:ask": "node scripts/live-ask-smoke.mjs",
-    "preview:smoke": "node scripts/preview-ask-smoke.mjs"
+    "preview:smoke": "node scripts/preview-ask-smoke.mjs",
+    "viability:smoke": "node scripts/viability-transcript-smoke.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.90.0",

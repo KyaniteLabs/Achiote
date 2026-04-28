@@ -6,40 +6,58 @@ export interface BillingConfig {
   secretKey: string;
   webhookSecret: string;
   personalPriceId: string;
+  personalAnnualPriceId: string;
   proPriceId: string;
   familyPriceId: string;
   legacyBusinessPriceId: string;
   creditPackPriceId: string;
+  familySprintPriceId: string;
   baseUrl: string;
 }
+
+export type CheckoutPaymentOffer = 'memory-pack' | 'family-sprint';
+export type CheckoutTier = Tier | CheckoutPaymentOffer;
+export type BillingCycle = 'monthly' | 'annual';
 
 export function loadBillingConfigFromEnv(): BillingConfig | null {
   const secretKey = process.env.STRIPE_SECRET_KEY?.trim();
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET?.trim();
   const personalPriceId = process.env.STRIPE_PERSONAL_PRICE_ID?.trim();
+  const personalAnnualPriceId = process.env.STRIPE_PERSONAL_ANNUAL_PRICE_ID?.trim();
   const proPriceId = process.env.STRIPE_PRO_PRICE_ID?.trim();
   const configuredFamilyPriceId = process.env.STRIPE_FAMILY_PRICE_ID?.trim();
   const legacyBusinessPriceId = process.env.STRIPE_BUSINESS_PRICE_ID?.trim();
   const familyPriceId = configuredFamilyPriceId || legacyBusinessPriceId;
-  const creditPackPriceId = process.env.STRIPE_CREDIT_PACK_PRICE_ID?.trim();
+  const creditPackPriceId = process.env.STRIPE_MEMORY_PACK_PRICE_ID?.trim() || process.env.STRIPE_CREDIT_PACK_PRICE_ID?.trim();
+  const familySprintPriceId = process.env.STRIPE_FAMILY_SPRINT_PRICE_ID?.trim();
   const baseUrl = process.env.STRIPE_BASE_URL?.trim() || process.env.ACHIOTE_BASE_URL?.trim();
 
   if (!secretKey || !webhookSecret) return null;
-  if (!personalPriceId && !proPriceId && !familyPriceId && !legacyBusinessPriceId && !creditPackPriceId) return null;
+  if (!personalPriceId && !personalAnnualPriceId && !proPriceId && !familyPriceId && !legacyBusinessPriceId && !creditPackPriceId && !familySprintPriceId) return null;
 
   return {
     secretKey,
     webhookSecret,
     personalPriceId: personalPriceId ?? '',
+    personalAnnualPriceId: personalAnnualPriceId ?? '',
     proPriceId: proPriceId ?? '',
     familyPriceId: familyPriceId ?? '',
     legacyBusinessPriceId: legacyBusinessPriceId ?? '',
     creditPackPriceId: creditPackPriceId ?? '',
+    familySprintPriceId: familySprintPriceId ?? '',
     baseUrl: baseUrl || 'http://localhost:3000',
   };
 }
 
-const CREDITS_PER_PACK = { mcp: 0, web: 25 };
+const PAYMENT_OFFER_CREDITS: Record<CheckoutPaymentOffer, { mcp: number; web: number }> = {
+  'memory-pack': { mcp: 0, web: 25 },
+  'family-sprint': { mcp: 0, web: 10 },
+};
+
+const PAYMENT_OFFER_KEY_NAMES: Record<CheckoutPaymentOffer, string> = {
+  'memory-pack': 'Memory Pack',
+  'family-sprint': 'Family Archive Sprint',
+};
 
 export class BillingStripe {
   private stripe: Stripe;
@@ -61,12 +79,13 @@ export class BillingStripe {
   // ── Checkout ───────────────────────────────────────────────────────────────
 
   async createCheckoutSession(params: {
-    tier: Tier;
+    tier: CheckoutTier;
     mode: 'subscription' | 'payment';
+    billingCycle?: BillingCycle;
     customerEmail?: string;
   }): Promise<{ url: string; sessionId: string }> {
-    const { tier, mode, customerEmail } = params;
-    const priceId = this.priceIdForTier(tier, mode);
+    const { tier, mode, billingCycle, customerEmail } = params;
+    const priceId = this.priceIdForTier(tier, mode, billingCycle);
     if (!priceId) {
       throw new Error(`No Stripe price configured for tier=${tier} mode=${mode}`);
     }
@@ -80,6 +99,7 @@ export class BillingStripe {
       metadata: {
         tier,
         mode,
+        billingCycle: billingCycle ?? 'monthly',
       },
     });
 
@@ -135,7 +155,7 @@ export class BillingStripe {
     const customerId = typeof session.customer === 'string' ? session.customer : null;
     if (!customerId) return;
 
-    const tier = (session.metadata?.tier as Tier) || 'personal';
+    const rawTier = session.metadata?.tier;
     const mode = (session.metadata?.mode as 'subscription' | 'payment') || 'subscription';
 
     // Fetch customer email
@@ -144,6 +164,7 @@ export class BillingStripe {
     billingDb.upsertCustomer(customerId, email);
 
     if (mode === 'subscription') {
+      const tier = this.tierFromMetadata(rawTier);
       // For subscriptions, the subscription ID is in the session
       const subscriptionId = typeof session.subscription === 'string' ? session.subscription : null;
       if (subscriptionId) {
@@ -165,11 +186,12 @@ export class BillingStripe {
         billingDb.completeCheckoutSession(session.id, customerId, keyId, key, tier);
       }
     } else {
-      // One-time payment (credit pack)
-      billingDb.addCredits(customerId, CREDITS_PER_PACK.mcp, CREDITS_PER_PACK.web);
+      const offer = this.paymentOfferFromMetadata(rawTier);
+      const credits = PAYMENT_OFFER_CREDITS[offer];
+      billingDb.addCredits(customerId, credits.mcp, credits.web);
 
-      // Generate a credit-pack API key (free tier, but with credits)
-      const { key, keyId } = billingDb.generateAndStoreApiKey('free', 'Credit Pack', customerId);
+      // One-time packs remain free-tier keys backed by purchased web credits.
+      const { key, keyId } = billingDb.generateAndStoreApiKey('free', PAYMENT_OFFER_KEY_NAMES[offer], customerId);
       billingDb.completeCheckoutSession(session.id, customerId, keyId, key, 'free');
     }
   }
@@ -217,8 +239,14 @@ export class BillingStripe {
 
   // ── Helpers ────────────────────────────────────────────────────────────────
 
-  private priceIdForTier(tier: Tier, mode: 'subscription' | 'payment'): string | null {
-    if (mode === 'payment') return this.config.creditPackPriceId || null;
+  private priceIdForTier(tier: string, mode: 'subscription' | 'payment', billingCycle: BillingCycle = 'monthly'): string | null {
+    if (mode === 'payment') {
+      if (tier === 'memory-pack') return this.config.creditPackPriceId || null;
+      if (tier === 'family-sprint') return this.config.familySprintPriceId || null;
+      return null;
+    }
+    if (billingCycle === 'annual' && tier !== 'personal') return null;
+    if (tier === 'personal' && billingCycle === 'annual') return this.config.personalAnnualPriceId || null;
     if (tier === 'personal') return this.config.personalPriceId || null;
     if (tier === 'pro') return this.config.proPriceId || null;
     if (tier === 'family') return this.config.familyPriceId || this.config.legacyBusinessPriceId || null;
@@ -228,9 +256,28 @@ export class BillingStripe {
 
   private tierForPriceId(priceId: string): Tier | null {
     if (priceId === this.config.personalPriceId) return 'personal';
+    if (priceId === this.config.personalAnnualPriceId) return 'personal';
     if (priceId === this.config.proPriceId) return 'pro';
     if (priceId === this.config.legacyBusinessPriceId) return 'business';
     if (priceId === this.config.familyPriceId) return 'family';
     return null;
+  }
+
+  private tierFromMetadata(value: unknown): Tier {
+    if (
+      value === 'free' ||
+      value === 'personal' ||
+      value === 'pro' ||
+      value === 'family' ||
+      value === 'business' ||
+      value === 'enterprise'
+    ) {
+      return value;
+    }
+    return 'personal';
+  }
+
+  private paymentOfferFromMetadata(value: unknown): CheckoutPaymentOffer {
+    return value === 'family-sprint' ? 'family-sprint' : 'memory-pack';
   }
 }

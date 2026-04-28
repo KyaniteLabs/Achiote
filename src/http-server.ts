@@ -15,9 +15,10 @@ import { createCacheWithStatus } from './lib/cache-path.js';
 import { createAuthenticator, loadKeysFromEnv } from './lib/auth.js';
 import { createRateLimiter } from './lib/rate-limit.js';
 import { BillingDb, defaultBillingDbPath } from './lib/billing-db.js';
-import { BillingStripe, loadBillingConfigFromEnv } from './lib/billing-stripe.js';
+import { BillingStripe, loadBillingConfigFromEnv, type CheckoutTier } from './lib/billing-stripe.js';
 import { getHttpReadiness, getRequestRateLimitIdentity, isAnonymousAskAllowed, shouldApplyRateLimit } from './lib/http-runtime.js';
 import { resolveLocalSpeechConfig, synthesizeWithLocalSpeech, transcribeWithLocalSpeech, validateSpeechAudioPayload, validateSpeechTextPayload } from './lib/local-speech.js';
+import { buildMemoryReceipt } from './lib/memory-receipt.js';
 import type { Tier } from './lib/auth.js';
 import type { CollectedFoodMemory, DishResearchPlan, MinimumViableNostalgiaCue, ReconstructionDossier } from './lib/types.js';
 import {
@@ -58,6 +59,7 @@ const MIME: Record<string, string> = {
   '.js': 'text/javascript',
   '.json': 'application/json',
   '.txt': 'text/plain',
+  '.md': 'text/markdown',
   '.xml': 'application/xml',
   '.png': 'image/png',
   '.jpg': 'image/jpeg',
@@ -124,15 +126,19 @@ const allowedTelemetryEvents = new Set([
   'ask_failed',
   'checkout_started',
   'checkout_failed',
-  'feedback_helpful',
-  'feedback_generic',
-  'feedback_wrong_region',
-  'feedback_unsafe',
   'feedback_close',
+  'feedback_closer',
+  'feedback_wrong_region',
+  'feedback_wrong_acid',
+  'feedback_wrong_texture',
+  'feedback_too_generic',
   'feedback_too_hard',
   'feedback_missed_correction',
+  'feedback_missed_name_correction',
+  'receipt_downloaded',
+  'family_questions_copied',
 ]);
-const allowedTelemetryProperties = new Set(['route', 'source', 'category', 'tier', 'mode', 'reason', 'hasHistory']);
+const allowedTelemetryProperties = new Set(['route', 'source', 'category', 'tier', 'mode', 'billing', 'reason', 'hasHistory']);
 const MAX_TELEMETRY_VALUES_PER_PROPERTY = 25;
 const OTHER_TELEMETRY_VALUE = 'other';
 const telemetryCounters = new Map<string, number>();
@@ -277,7 +283,10 @@ Then include one targeted follow-up that would most reduce uncertainty if they w
 - Do not just echo the user's phrases back to them.
 - Do not ask generic "tell me more" questions.
 - NEVER say "There are many dishes that fit this pattern" or list generic possibilities.
+- NEVER say a clue "fits dozens of dishes" or "could be many dishes"; ask the specific next question instead.
+- If the tools have no dish name and no region, do not list candidate dishes. Ask the highest-value missing detail.
 - NEVER apologize for not knowing the exact dish.
+- Do not use emoji.
 - NEVER string the user's keywords together as a fake dish name (e.g., "fried Szechuan rice with Szechuan spices").
 - ALWAYS anchor to the specific region the user mentioned. If they said Sichuan, talk about Sichuan — not "Asia."
 - If you give a cue, make it cheap, accessible, and food-science grounded.
@@ -367,6 +376,14 @@ function checkCreditsForAuthed(authed: AuthedRequest, scope: 'mcp' | 'web'): boo
   if (!customerId) return false;
   if (scope === 'mcp') return billingDb.deductMcpCredit(customerId);
   return billingDb.deductWebCredit(customerId);
+}
+
+function isSubscriptionCheckoutTier(tier: string): tier is Extract<Tier, 'personal' | 'family'> {
+  return tier === 'personal' || tier === 'family';
+}
+
+function isPaymentCheckoutTier(tier: string): tier is Extract<CheckoutTier, 'memory-pack' | 'family-sprint'> {
+  return tier === 'memory-pack' || tier === 'family-sprint';
 }
 
 function sendRateLimitHeaders(res: ServerResponse, limitResult: { remaining: number; limit: number; resetAt: number }): void {
@@ -510,16 +527,47 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       return;
     }
 
+    if (calledTools.has('collect_food_memory') && !calledTools.has('plan_dish_research') && !calledTools.has('generate_minimum_viable_nostalgia')) {
+      console.warn('[ask] replaced response that skipped research planning with structured clarification');
+      const responseText = buildClarificationOnlyResponse(toolPayloads);
+      send('text', responseText);
+      maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
+      send('done', { guarded: 'missing_research_plan_clarification' });
+      return;
+    }
+
     if (!calledTools.has('generate_minimum_viable_nostalgia') && containsConcreteFoodCue(modelResponse.textBlocks.join('\n\n'))) {
       console.warn('[ask] suppressed concrete cue before minimum viable nostalgia tool');
-      send('text', buildClarificationOnlyResponse(toolPayloads));
+      const responseText = buildClarificationOnlyResponse(toolPayloads);
+      send('text', responseText);
+      maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
       send('done', { guarded: 'premature_concrete_cue' });
       return;
     }
 
-    for (const text of modelResponse.textBlocks) {
-      send('text', ensureCueQualityLanguage(text, toolPayloads, calledTools));
+    if (!calledTools.has('generate_minimum_viable_nostalgia') && containsGenericUncertaintyWaffle(modelResponse.textBlocks.join('\n\n'))) {
+      console.warn('[ask] replaced generic uncertainty prose with structured clarification');
+      const responseText = buildClarificationOnlyResponse(toolPayloads);
+      send('text', responseText);
+      maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
+      send('done', { guarded: 'generic_uncertainty_clarification' });
+      return;
     }
+
+    if (!calledTools.has('generate_minimum_viable_nostalgia') && containsPrematureCandidateSpeculation(modelResponse.textBlocks.join('\n\n'), toolPayloads)) {
+      console.warn('[ask] replaced premature candidate list with structured clarification');
+      const responseText = buildClarificationOnlyResponse(toolPayloads);
+      send('text', responseText);
+      maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
+      send('done', { guarded: 'premature_candidate_speculation' });
+      return;
+    }
+
+    const responseText = modelResponse.textBlocks
+      .map((text) => ensureCueQualityLanguage(text, toolPayloads, calledTools))
+      .join('\n\n');
+    if (responseText) send('text', responseText);
+    maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
     send('done', {});
   } catch (err) {
     send('error', { message: err instanceof Error ? err.message : 'Unknown error' });
@@ -529,6 +577,23 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
 }
 
 type SseSender = (event: string, data: unknown) => void;
+
+function maybeSendMemoryReceipt(input: {
+  toolPayloads: Record<string, unknown>;
+  assistantText: string;
+  send: SseSender;
+}): void {
+  const parsedMemory = outputSchemas.collect_food_memory.safeParse(input.toolPayloads.collect_food_memory);
+  if (!parsedMemory.success) return;
+  const parsedResearchPlan = outputSchemas.plan_dish_research.safeParse(input.toolPayloads.plan_dish_research);
+  const parsedCue = outputSchemas.generate_minimum_viable_nostalgia.safeParse(input.toolPayloads.generate_minimum_viable_nostalgia);
+  input.send('receipt', buildMemoryReceipt({
+    memory: parsedMemory.data as CollectedFoodMemory,
+    researchPlan: parsedResearchPlan.success ? parsedResearchPlan.data as DishResearchPlan : undefined,
+    cue: parsedCue.success ? parsedCue.data as MinimumViableNostalgiaCue : undefined,
+    assistantText: input.assistantText,
+  }));
+}
 
 async function executeAndStreamTool(
   toolName: string,
@@ -589,9 +654,17 @@ function normalizeDependentToolInput(toolName: string, input: unknown, userMessa
     ? toolPayloads.plan_dish_research
     : undefined;
 
-  if (toolName === 'collect_food_memory' && typeof record.userLocation !== 'string') {
+  if (toolName === 'collect_food_memory') {
+    const memoryText = typeof record.memoryText === 'string' && record.memoryText.trim()
+      ? record.memoryText
+      : userMessage;
+    const normalizedRecord: Record<string, unknown> = { ...record, memoryText };
+    delete normalizedRecord.knownRegion;
+    delete normalizedRecord.knownLanguage;
     const userLocation = inferUserLocation(userMessage);
-    return userLocation ? { ...record, userLocation } : input;
+    return typeof normalizedRecord.userLocation === 'string' || !userLocation
+      ? normalizedRecord
+      : { ...normalizedRecord, userLocation };
   }
   if (toolName === 'build_research_record') {
     return normalizeResearchRecordInput(record, toolPayloads);
@@ -739,7 +812,9 @@ async function maybeSendForcedMinimumCue({
     maxEffortMinutes: 10,
   }, userMessage, send, calledTools, toolPayloads) as MinimumViableNostalgiaCue;
 
-  send('text', formatMinimumCueFallback(cue, memory.userLocation));
+  const responseText = formatMinimumCueFallback(cue, memory.userLocation);
+  send('text', responseText);
+  maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
   send('done', { guarded: 'explicit_minimum_cue_fallback' });
   return true;
 }
@@ -903,6 +978,29 @@ function containsConcreteFoodCue(text: string): boolean {
     || /\b(?:heat|stir|sip|bite|steep|mix)\b[\s\S]{0,80}\b(?:dill|broth|buttermilk|vinegar|lemon|salt|sour cream|yogurt|potato)\b/i.test(text);
 }
 
+function containsGenericUncertaintyWaffle(text: string): boolean {
+  return /\b(?:fits|matches|could\s+be|might\s+be|applies\s+to)\s+(?:dozens|many|lots|a\s+lot)\s+of\s+dishes\b/i.test(text)
+    || /\bcould\s+point\s+to\s+(?:so\s+)?(?:many|lots|dozens|different)[\s\S]{0,60}\bdishes\b/i.test(text)
+    || /\bcould\s+point\s+in\s+(?:quite\s+)?a\s+few\s+directions\b/i.test(text)
+    || /\b(?:there\s+are\s+)?(?:dozens|many|lots|so\s+many\s+different)\s+(?:different\s+)?dishes\b[\s\S]{0,80}\b(?:fit|match|could|might|similar|point)\b/i.test(text);
+}
+
+function containsPrematureCandidateSpeculation(text: string, toolPayloads: Record<string, unknown>): boolean {
+  const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
+  const hasStableAnchor = Boolean(
+    memory?.extractedClues.possibleDishNames.length ||
+    memory?.extractedClues.culturalOrRegionalHints.some((hint) => !isBroadRegionalHint(hint)),
+  );
+  if (hasStableAnchor) return false;
+  return /\bcould\s+be\s+(?:a|an|the)?\s*[\s\S]{0,120}\b(?:or\s+even|,\s*(?:a|an|the)?\s*[\p{L}\p{M}])/iu.test(text)
+    || /\bmight\s+be\s+(?:a|an|the)?\s*[\s\S]{0,120}\b(?:or\s+even|,\s*(?:a|an|the)?\s*[\p{L}\p{M}])/iu.test(text)
+    || /\bfrom\s+(?:a|an|the)?\s*[\s\S]{0,160}\bto\s+(?:a|an|the)?\s*[\s\S]{0,160}\bto\b/iu.test(text);
+}
+
+function isBroadRegionalHint(hint: string): boolean {
+  return /\b(?:latin\s+america|hispanic|spanish-speaking|asia|europe|africa|middle\s+east|mediterranean|caribbean|south\s+america|central\s+america)\b/i.test(hint);
+}
+
 function getStringArray(value: unknown, key: string): string[] {
   if (!value || typeof value !== 'object') return [];
   const item = (value as Record<string, unknown>)[key];
@@ -1015,6 +1113,7 @@ async function serveStatic(req: IncomingMessage, res: ServerResponse): Promise<b
     '/support': 'support.html',
     '/safety': 'safety.html',
     '/ai-search': 'ai-search.html',
+    '/compare': 'compare.html',
   };
   const assetPath = routeMap[raw] ?? raw.replace(/^\//, '');
   const filePath = resolve(STATIC_DIR, assetPath);
@@ -1276,17 +1375,38 @@ const server = createServer(async (req, res) => {
     }
     let raw: string;
     try { raw = await readBody(req); } catch { sendJson(res, 413, { error: 'Body too large' }); return; }
-    let parsed: { tier?: Tier; mode?: 'subscription' | 'payment'; email?: string };
+    let parsed: { tier?: string; mode?: string; billing?: string; email?: string };
     try { parsed = JSON.parse(raw); } catch { sendJson(res, 400, { error: 'Invalid JSON' }); return; }
-    const tier = parsed.tier ?? 'personal';
-    const mode = parsed.mode ?? 'subscription';
-    if (mode === 'subscription' && tier !== 'personal' && tier !== 'pro' && tier !== 'family') {
-      sendJson(res, 400, { error: 'Invalid tier for subscription. Use personal, pro, or family.' });
+    if (parsed.mode && parsed.mode !== 'subscription' && parsed.mode !== 'payment') {
+      sendJson(res, 400, { error: 'Invalid checkout mode. Use subscription or payment.' });
       return;
     }
+    const mode: 'subscription' | 'payment' = parsed.mode === 'payment' ? 'payment' : 'subscription';
+    const billing = parsed.billing === 'annual' ? 'annual' : 'monthly';
+    const requestedTier = parsed.tier ?? (mode === 'payment' ? 'memory-pack' : 'personal');
     try {
-      const session = await billingStripe.createCheckoutSession({ tier, mode, customerEmail: parsed.email });
-      billingDb.createCheckoutSession(session.sessionId, mode, undefined, tier);
+      if (mode === 'subscription') {
+        if (!isSubscriptionCheckoutTier(requestedTier)) {
+          sendJson(res, 400, { error: 'Invalid tier for subscription. Use personal or family.' });
+          return;
+        }
+        if (billing === 'annual' && requestedTier !== 'personal') {
+          sendJson(res, 400, { error: 'Annual billing is available for personal only.' });
+          return;
+        }
+        const session = await billingStripe.createCheckoutSession({ tier: requestedTier, mode, billingCycle: billing, customerEmail: parsed.email });
+        billingDb.createCheckoutSession(session.sessionId, mode, undefined, requestedTier);
+        sendJson(res, 200, { url: session.url });
+        return;
+      }
+
+      if (!isPaymentCheckoutTier(requestedTier)) {
+        sendJson(res, 400, { error: 'Invalid tier for one-time payment. Use memory-pack or family-sprint.' });
+        return;
+      }
+      const tier: CheckoutTier = requestedTier;
+      const session = await billingStripe.createCheckoutSession({ tier, mode, billingCycle: billing, customerEmail: parsed.email });
+      billingDb.createCheckoutSession(session.sessionId, mode);
       sendJson(res, 200, { url: session.url });
     } catch (err) {
       sendJson(res, 500, { error: err instanceof Error ? err.message : 'Checkout failed' });
@@ -1299,13 +1419,19 @@ const server = createServer(async (req, res) => {
       sendJson(res, 503, { error: 'Billing is not configured' });
       return;
     }
-    let raw: string;
-    try { raw = await readBody(req); } catch { sendJson(res, 413, { error: 'Body too large' }); return; }
-    let parsed: { customerId?: string };
-    try { parsed = JSON.parse(raw); } catch { sendJson(res, 400, { error: 'Invalid JSON' }); return; }
-    const customerId = parsed.customerId;
+    const rawBillingKey = extractApiKey(req) ?? extractBearer(req);
+    if (!rawBillingKey) {
+      sendJson(res, 401, { error: 'Billing API key is required.' });
+      return;
+    }
+    const billingAuth = billingDb.authenticateApiKey(rawBillingKey);
+    if (!billingAuth) {
+      sendJson(res, 401, { error: 'Invalid billing API key.' });
+      return;
+    }
+    const customerId = billingDb.getCustomerIdByKeyId(billingAuth.keyId);
     if (!customerId) {
-      sendJson(res, 400, { error: 'customerId is required' });
+      sendJson(res, 403, { error: 'No Stripe billing customer is attached to this API key.' });
       return;
     }
     try {
@@ -1357,7 +1483,7 @@ const server = createServer(async (req, res) => {
       sendJson(res, 400, { error: 'session_id is required' });
       return;
     }
-    const session = billingDb.getCheckoutSession(sessionId);
+    const session = billingDb.consumeCheckoutSessionApiKey(sessionId);
     if (!session) {
       sendJson(res, 404, { error: 'Session not found' });
       return;
@@ -1371,6 +1497,7 @@ const server = createServer(async (req, res) => {
       tier: session.tier,
       apiKey: session.keyPlaintext,
       keyId: session.keyId,
+      apiKeyAvailable: Boolean(session.keyPlaintext),
     });
     return;
   }

@@ -13,6 +13,7 @@ import {
   generateMinimumViableNostalgiaCue,
   planDishResearch,
 } from '../lib/memory-workflow.js';
+import { buildMemoryReceipt, formatMemoryReceiptMarkdown } from '../lib/memory-receipt.js';
 import { buildResearchRecord, extractResearchFindings, validateResearchRecord } from '../lib/research-provenance.js';
 import { assembleRecipePrompt, validateRecipeOutput } from '../lib/recipe-generator.js';
 import { sanitizeForPrompt, type ToolPayload } from './results.js';
@@ -28,6 +29,7 @@ import {
   generateRecipeOutputSchema,
   minimumViableNostalgiaInputSchema,
   minimumViableNostalgiaOutputSchema,
+  memoryReceiptOutputSchema,
   dishResearchPlanSchema,
   planDishResearchOutputSchema,
   recipeValidationOutputSchema,
@@ -50,6 +52,7 @@ export type AchioteToolExecutionContext = {
 export type AchioteToolExecutionResult = {
   payload: ToolPayload;
   displayText?: string;
+  content?: Array<{ type: 'text'; text: string }>;
 };
 
 export type AchioteToolDefinition = {
@@ -85,7 +88,11 @@ function text(value: unknown): string {
 }
 
 function output(payload: ToolPayload, displayText?: string): AchioteToolExecutionResult {
-  return { payload, displayText };
+  return {
+    payload,
+    displayText,
+    content: displayText ? [{ type: 'text', text: displayText }] : undefined,
+  };
 }
 
 function memoryFromModelInput(rawMemory: unknown): Parameters<typeof planDishResearch>[0] {
@@ -501,6 +508,40 @@ export const toolRegistry = [
     },
   }),
   createTool({
+    name: 'build_memory_receipt',
+    mcp: {
+      title: 'Build Memory Receipt',
+      description: 'Create a portable evidence-bounded receipt for a food-memory reconstruction session.',
+      inputSchema: {
+        memory: collectedFoodMemorySchema.describe('Structured output from collect_food_memory'),
+        researchPlan: dishResearchPlanSchema.optional().describe('Structured output from plan_dish_research'),
+        assistantText: z.string().optional().describe('Final assistant-facing summary to include in the receipt'),
+      },
+      outputSchema: memoryReceiptOutputSchema,
+    },
+    outputSchema: memoryReceiptOutputSchema,
+    anthropicInputSchema: {
+      type: 'object' as const,
+      required: ['memory'],
+      properties: {
+        memory: { type: 'object' as const, description: 'Structured output from collect_food_memory' },
+        researchPlan: { type: 'object' as const, description: 'Structured output from plan_dish_research' },
+        assistantText: { type: 'string' as const, description: 'Final assistant-facing summary to include in the receipt' },
+      },
+    },
+    execute: (raw) => {
+      const input = asInput(raw);
+      const receipt = buildMemoryReceipt({
+        memory: memoryFromModelInput(input.memory),
+        researchPlan: dishResearchPlanSchema.safeParse(input.researchPlan).success
+          ? dishResearchPlanSchema.parse(input.researchPlan)
+          : undefined,
+        assistantText: typeof input.assistantText === 'string' ? input.assistantText : undefined,
+      });
+      return output({ ...receipt }, formatMemoryReceiptMarkdown(receipt));
+    },
+  }),
+  createTool({
     name: 'generate_family_followup_questions',
     mcp: {
       title: 'Generate Family Follow-up Questions',
@@ -792,6 +833,7 @@ const anthropicWorkflowToolOrder = [
   'collect_food_memory',
   'plan_dish_research',
   'build_reconstruction_dossier',
+  'build_memory_receipt',
   'generate_family_followup_questions',
   'resolve_dish_name',
   'analyze_nostalgic_dish',

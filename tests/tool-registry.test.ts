@@ -4,6 +4,7 @@ import { anthropicTools, toolRegistry, toolNames, outputSchemas, findToolDefinit
 
 const expectedToolNames = [
   'analyze_nostalgic_dish',
+  'build_memory_receipt',
   'build_reconstruction_dossier',
   'build_research_record',
   'collect_food_memory',
@@ -123,6 +124,22 @@ describe('shared tool registry', () => {
     expect(dossier.payload.hypotheses.every((hypothesis: { researchRequired?: unknown }) => typeof hypothesis.researchRequired === 'boolean')).toBe(true);
   });
 
+  it('builds a portable memory receipt from collected memory and research plan', async () => {
+    const memory = (await executeToolDefinition('collect_food_memory', {
+      memoryText: 'My abuela made something sour and herby.',
+    }, defaultToolExecutionContext)).payload;
+    const researchPlan = (await executeToolDefinition('plan_dish_research', { memory }, defaultToolExecutionContext)).payload;
+    const receipt = await executeToolDefinition('build_memory_receipt', {
+      memory,
+      researchPlan,
+      assistantText: 'Before I give you a tasting cue, I need one or two details.',
+    }, defaultToolExecutionContext);
+
+    expect(outputSchemas.build_memory_receipt.safeParse(receipt.payload).success).toBe(true);
+    expect(receipt.payload.title).toBe('Achiote Memory Receipt');
+    expect(receipt.content[0].type === 'text' ? receipt.content[0].text : '').toContain('# Achiote Memory Receipt');
+  });
+
   it('keeps protocol wrappers and package smoke wired to the registry', () => {
     const serverSource = fs.readFileSync('src/server.ts', 'utf8');
     const httpSource = fs.readFileSync('src/http-server.ts', 'utf8');
@@ -138,10 +155,11 @@ describe('shared tool registry', () => {
   });
 
   it('keeps Anthropic tools in workflow-first order for /ask model behavior', () => {
-    expect(anthropicTools.map((tool) => tool.name).slice(0, 5)).toEqual([
+    expect(anthropicTools.map((tool) => tool.name).slice(0, 6)).toEqual([
       'collect_food_memory',
       'plan_dish_research',
       'build_reconstruction_dossier',
+      'build_memory_receipt',
       'generate_family_followup_questions',
       'resolve_dish_name',
     ]);

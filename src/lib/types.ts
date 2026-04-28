@@ -124,6 +124,22 @@ export interface FoodMemoryInput {
   userLocation?: string;
 }
 
+export type EvidenceKind = 'user_said' | 'model_inferred' | 'source_researched' | 'unknown';
+
+export interface InferredContextClue {
+  label: string;
+  basis: string;
+  confidence: Confidence;
+  evidenceKind: Extract<EvidenceKind, 'model_inferred'>;
+  canSeedQuestions: boolean;
+  canSeedCandidateDishes: boolean;
+}
+
+export interface InferredMemoryContext {
+  culturalOrRegional: InferredContextClue[];
+  language: InferredContextClue[];
+}
+
 export interface CollectedFoodMemory {
   rawMemory: string;
   normalizedMemory: string;
@@ -135,6 +151,7 @@ export interface CollectedFoodMemory {
     sensoryClues: string[];
     occasions: string[];
   };
+  inferredContext: InferredMemoryContext;
   missingInformation: string[];
   nextQuestions: string[];
   reassurance: string;
@@ -175,6 +192,28 @@ export interface ReconstructionDossier {
 export interface FamilyFollowupQuestions {
   questions: string[];
   toneGuidance: string;
+}
+
+export type MemoryReceiptStatus = 'needs_more_clues' | 'first_test_ready' | 'recipe_handoff_ready';
+
+export interface MemoryReceipt {
+  title: 'Achiote Memory Receipt';
+  createdAt: string;
+  status: MemoryReceiptStatus;
+  evidence: {
+    userSaid: string[];
+    inferred: string[];
+    researched: string[];
+    unknown: string[];
+  };
+  hypotheses: DishHypothesis[];
+  nextBestQuestions: string[];
+  firstTinyTasteTest?: {
+    title: string;
+    cue: string;
+    estimatedTime: string;
+  };
+  assistantSummary: string;
 }
 
 

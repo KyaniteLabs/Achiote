@@ -15,6 +15,7 @@ let voiceConfig = null;
 let recorder = null;
 let recordedChunks = [];
 let lastAssistantText = '';
+let lastReceipt = null;
 
 function trackEvent(event, properties = {}) {
   if (!event || typeof event !== 'string') return;
@@ -434,8 +435,11 @@ async function streamResponse(res, el, userMessage) {
               } else {
                 trackEvent('ask_succeeded', { route: '/app', source: currentAskSource, category: currentAskCategory });
                 addFeedback(el);
+                addReceiptActions(el);
               }
             }
+          } else if (eventType === 'receipt') {
+            lastReceipt = d;
           } else if (eventType === 'tool_call') {
             if (!trace) trace = createTracePanel(el);
             addTraceItem(trace, 'tool_call', d);
@@ -464,10 +468,13 @@ function addFeedback(el) {
   feedback.className = 'feedback';
   feedback.setAttribute('aria-label', 'Rate this answer');
   feedback.innerHTML = [
-    '<button type="button" data-feedback="feedback_close">Feels close</button>',
+    '<button type="button" data-feedback="feedback_closer">Feels close</button>',
     '<button type="button" data-feedback="feedback_wrong_region">Wrong region</button>',
+    '<button type="button" data-feedback="feedback_wrong_acid">Wrong acid</button>',
+    '<button type="button" data-feedback="feedback_wrong_texture">Wrong texture</button>',
+    '<button type="button" data-feedback="feedback_too_generic">Too generic</button>',
     '<button type="button" data-feedback="feedback_too_hard">Too hard to make</button>',
-    '<button type="button" data-feedback="feedback_missed_correction">Did not correct my wording</button>',
+    '<button type="button" data-feedback="feedback_missed_name_correction">Did not correct my wording</button>',
   ].join('');
   feedback.addEventListener('click', (event) => {
     const target = event.target;
@@ -480,6 +487,79 @@ function addFeedback(el) {
 
 function sendFeedback(eventName) {
   trackEvent(eventName, { route: '/app', category: 'answer_quality' });
+}
+
+function addReceiptActions(el) {
+  if (!lastReceipt || el.querySelector('.receipt-actions')) return;
+  const actions = document.createElement('div');
+  actions.className = 'receipt-actions';
+  actions.innerHTML = [
+    '<button type="button" data-receipt-action="download">Download Memory Receipt</button>',
+    '<button type="button" data-receipt-action="questions">Copy Family Questions</button>',
+  ].join('');
+  actions.addEventListener('click', async (event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLButtonElement)) return;
+    if (target.dataset.receiptAction === 'download') downloadMemoryReceipt(lastReceipt);
+    if (target.dataset.receiptAction === 'questions') await copyFamilyQuestions(lastReceipt, target);
+  });
+  el.appendChild(actions);
+}
+
+function formatReceiptMarkdown(receipt) {
+  const list = (items) => Array.isArray(items) && items.length
+    ? items.map((item) => `- ${item}`).join('\n')
+    : '- None recorded yet.';
+  return [
+    '# Achiote Memory Receipt',
+    '',
+    `Created: ${receipt.createdAt || new Date().toISOString()}`,
+    `Status: ${receipt.status || 'unknown'}`,
+    '',
+    '## User-Said Evidence',
+    list(receipt.evidence?.userSaid),
+    '',
+    '## Inferred Context',
+    list(receipt.evidence?.inferred),
+    '',
+    '## Researched Or Source-Backed Facts',
+    list(receipt.evidence?.researched),
+    '',
+    '## Unknowns',
+    list(receipt.evidence?.unknown),
+    '',
+    '## Family Questions',
+    list(receipt.nextBestQuestions),
+    '',
+    '## First Tiny Taste Test',
+    receipt.firstTinyTasteTest
+      ? `- ${receipt.firstTinyTasteTest.title}: ${receipt.firstTinyTasteTest.cue} (${receipt.firstTinyTasteTest.estimatedTime})`
+      : '- Not ready yet. Answer the family questions first.',
+    '',
+    '## Assistant Summary',
+    receipt.assistantSummary || '- No final summary recorded.',
+    '',
+  ].join('\n');
+}
+
+function downloadMemoryReceipt(receipt) {
+  const blob = new Blob([formatReceiptMarkdown(receipt)], { type: 'text/markdown' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'achiote-memory-receipt.md';
+  link.click();
+  URL.revokeObjectURL(url);
+  trackEvent('receipt_downloaded', { route: '/app' });
+}
+
+async function copyFamilyQuestions(receipt, button) {
+  const questions = Array.isArray(receipt?.nextBestQuestions) ? receipt.nextBestQuestions : [];
+  const text = questions.map((question, index) => `${index + 1}. ${question}`).join('\n');
+  if (!text) return;
+  await navigator.clipboard.writeText(text);
+  button.textContent = 'Questions copied';
+  trackEvent('family_questions_copied', { route: '/app' });
 }
 
 function escapeHtml(s) {

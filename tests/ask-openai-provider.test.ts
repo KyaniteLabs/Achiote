@@ -108,7 +108,8 @@ describe('/ask OpenAI-compatible provider mode', () => {
     const events = parseSse(await response.text());
     const eventNames = events.map((event) => event.event);
     expect(eventNames[0]).toBe('status');
-    expect(eventNames.at(-2)).toBe('text');
+    expect(eventNames.at(-3)).toBe('text');
+    expect(eventNames.at(-2)).toBe('receipt');
     expect(eventNames.at(-1)).toBe('done');
     const text = JSON.parse(events.find((e) => e.event === 'text')!.data);
     expect(text).toContain('OpenAI-compatible final minimum cue.');
@@ -120,6 +121,59 @@ describe('/ask OpenAI-compatible provider mode', () => {
 });
 
 describe('/ask premature cue guard', () => {
+  it('emits a memory receipt before done', async () => {
+    const fakePort = await getFreePort();
+    let requestCount = 0;
+    const fakeOpenAi = createServer(async (req, res) => {
+      if (req.url !== '/v1/chat/completions' || req.method !== 'POST') {
+        res.writeHead(404).end();
+        return;
+      }
+      requestCount++;
+      await readBody(req);
+      const toolCallsByTurn = [
+        [{ id: 'call_1', type: 'function', function: { name: 'collect_food_memory', arguments: JSON.stringify({ memoryText: 'My abuela made something sour and herby.' }) } }],
+        [{ id: 'call_2', type: 'function', function: { name: 'plan_dish_research', arguments: JSON.stringify({}) } }],
+      ];
+      const toolCalls = toolCallsByTurn[requestCount - 1];
+      res.setHeader('content-type', 'application/json');
+      res.end(JSON.stringify({
+        choices: [{
+          finish_reason: toolCalls ? 'tool_calls' : 'stop',
+          message: toolCalls
+            ? { role: 'assistant', content: '', tool_calls: toolCalls }
+            : { role: 'assistant', content: 'Before I give you a tasting cue, I need one or two details.' },
+        }],
+      }));
+    });
+    await new Promise<void>((resolveListen) => fakeOpenAi.listen(fakePort, '127.0.0.1', resolveListen));
+
+    const achiotePort = await getFreePort();
+    const achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`);
+    try {
+      const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: 'My abuela made something sour and herby.' }),
+      });
+
+      expect(response.status).toBe(200);
+      const events = parseSse(await response.text());
+      const receipt = events.find((event) => event.event === 'receipt');
+
+      expect(receipt).toBeDefined();
+      expect(JSON.parse(receipt!.data)).toMatchObject({
+        title: 'Achiote Memory Receipt',
+        status: 'needs_more_clues',
+      });
+      expect(events.map((event) => event.event).lastIndexOf('receipt')).toBeLessThan(events.map((event) => event.event).lastIndexOf('done'));
+      expect(requestCount).toBe(3);
+    } finally {
+      achiote.kill('SIGINT');
+      await new Promise<void>((resolveClose) => fakeOpenAi.close(() => resolveClose()));
+    }
+  });
+
   it('forces a local minimum cue when the model stalls on an explicit test request', async () => {
     const fakePort = await getFreePort();
     let requestCount = 0;
@@ -519,6 +573,219 @@ describe('/ask premature cue guard', () => {
       expect(events.at(-1)?.event).toBe('done');
       expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'explicit_minimum_cue_fallback' });
       expect(requestCount).toBe(3);
+    } finally {
+      achiote.kill('SIGINT');
+      await new Promise<void>((resolveClose) => fakeOpenAi.close(() => resolveClose()));
+    }
+  });
+
+  it('replaces generic many-dishes answers with the structured clarification path', async () => {
+    const fakePort = await getFreePort();
+    let requestCount = 0;
+    const fakeOpenAi = createServer(async (req, res) => {
+      if (req.url !== '/v1/chat/completions' || req.method !== 'POST') {
+        res.writeHead(404).end();
+        return;
+      }
+      requestCount++;
+      await readBody(req);
+      const toolCallsByTurn = [
+        [{ id: 'call_1', type: 'function', function: { name: 'collect_food_memory', arguments: JSON.stringify({ memoryText: 'My abuela made something sour and herby.', knownRegion: 'Latin America / Hispanic' }) } }],
+        [{ id: 'call_2', type: 'function', function: { name: 'plan_dish_research', arguments: JSON.stringify({}) } }],
+      ];
+      const toolCalls = toolCallsByTurn[requestCount - 1];
+      res.setHeader('content-type', 'application/json');
+      res.end(JSON.stringify({
+        choices: [{
+          finish_reason: toolCalls ? 'tool_calls' : 'stop',
+          message: toolCalls
+            ? { role: 'assistant', content: '', tool_calls: toolCalls }
+            : { role: 'assistant', content: '"Abuela" is a wonderful clue, but sour and herby could point to so many different dishes across Latin America. Tell me more.' },
+        }],
+      }));
+    });
+    await new Promise<void>((resolveListen) => fakeOpenAi.listen(fakePort, '127.0.0.1', resolveListen));
+
+    const achiotePort = await getFreePort();
+    const achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`);
+    try {
+      const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: 'My abuela made something sour and herby.' }),
+      });
+
+      expect(response.status).toBe(200);
+      const events = parseSse(await response.text());
+      const collectResult = events.find((event) => event.event === 'tool_result' && JSON.parse(event.data).name === 'collect_food_memory');
+      const text = events.filter((event) => event.event === 'text').map((event) => JSON.parse(event.data)).join('');
+      const clues = JSON.parse(collectResult!.data).result.extractedClues;
+
+      expect(clues.possibleDishNames).not.toContain('thing');
+      expect(clues.culturalOrRegionalHints).not.toContain('Latin America / Hispanic');
+      expect(text).toContain('Before I give you a tasting cue');
+      expect(text).toContain('Where was your abuela from?');
+      expect(text).not.toContain('so many different dishes');
+      expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'generic_uncertainty_clarification' });
+      expect(requestCount).toBe(3);
+    } finally {
+      achiote.kill('SIGINT');
+      await new Promise<void>((resolveClose) => fakeOpenAi.close(() => resolveClose()));
+    }
+  });
+
+  it('replaces premature candidate lists when sparse memories have no region or name', async () => {
+    const fakePort = await getFreePort();
+    let requestCount = 0;
+    const fakeOpenAi = createServer(async (req, res) => {
+      if (req.url !== '/v1/chat/completions' || req.method !== 'POST') {
+        res.writeHead(404).end();
+        return;
+      }
+      requestCount++;
+      await readBody(req);
+      const toolCallsByTurn = [
+        [{ id: 'call_1', type: 'function', function: { name: 'collect_food_memory', arguments: JSON.stringify({ memoryText: 'My abuela made something sour and herby.' }) } }],
+        [{ id: 'call_2', type: 'function', function: { name: 'plan_dish_research', arguments: JSON.stringify({}) } }],
+      ];
+      const toolCalls = toolCallsByTurn[requestCount - 1];
+      res.setHeader('content-type', 'application/json');
+      res.end(JSON.stringify({
+        choices: [{
+          finish_reason: toolCalls ? 'tool_calls' : 'stop',
+          message: toolCalls
+            ? { role: 'assistant', content: '', tool_calls: toolCalls }
+            : { role: 'assistant', content: 'Sour + herbs could be a *recado*, a *chimichurri*, an *aguachile*, or even a pickled dish. 🌿' },
+        }],
+      }));
+    });
+    await new Promise<void>((resolveListen) => fakeOpenAi.listen(fakePort, '127.0.0.1', resolveListen));
+
+    const achiotePort = await getFreePort();
+    const achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`);
+    try {
+      const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: 'My abuela made something sour and herby.' }),
+      });
+
+      expect(response.status).toBe(200);
+      const events = parseSse(await response.text());
+      const text = events.filter((event) => event.event === 'text').map((event) => JSON.parse(event.data)).join('');
+
+      expect(text).toContain('Before I give you a tasting cue');
+      expect(text).not.toContain('recado');
+      expect(text).not.toContain('chimichurri');
+      expect(text).not.toContain('🌿');
+      expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'premature_candidate_speculation' });
+      expect(requestCount).toBe(3);
+    } finally {
+      achiote.kill('SIGINT');
+      await new Promise<void>((resolveClose) => fakeOpenAi.close(() => resolveClose()));
+    }
+  });
+
+  it('replaces broad region candidate sweeps when the model infers culture from family wording', async () => {
+    const fakePort = await getFreePort();
+    let requestCount = 0;
+    const fakeOpenAi = createServer(async (req, res) => {
+      if (req.url !== '/v1/chat/completions' || req.method !== 'POST') {
+        res.writeHead(404).end();
+        return;
+      }
+      requestCount++;
+      await readBody(req);
+      const toolCallsByTurn = [
+        [{ id: 'call_1', type: 'function', function: { name: 'collect_food_memory', arguments: JSON.stringify({ memoryText: 'My abuela made something sour and herby.', knownRegion: 'Latin America / Hispanic' }) } }],
+        [{ id: 'call_2', type: 'function', function: { name: 'plan_dish_research', arguments: JSON.stringify({}) } }],
+      ];
+      const toolCalls = toolCallsByTurn[requestCount - 1];
+      res.setHeader('content-type', 'application/json');
+      res.end(JSON.stringify({
+        choices: [{
+          finish_reason: toolCalls ? 'tool_calls' : 'stop',
+          message: toolCalls
+            ? { role: 'assistant', content: '', tool_calls: toolCalls }
+            : { role: 'assistant', content: 'That word "abuela" tells me we are likely in Latin American or Hispanic territory, but "sour and herby" could point in quite a few directions — from a bright green Mexican caldo to a Dominican sancocho to a Peruvian ceviche-style preparation.' },
+        }],
+      }));
+    });
+    await new Promise<void>((resolveListen) => fakeOpenAi.listen(fakePort, '127.0.0.1', resolveListen));
+
+    const achiotePort = await getFreePort();
+    const achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`);
+    try {
+      const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: 'My abuela made something sour and herby.' }),
+      });
+
+      expect(response.status).toBe(200);
+      const events = parseSse(await response.text());
+      const collectResult = events.find((event) => event.event === 'tool_result' && JSON.parse(event.data).name === 'collect_food_memory');
+      const planResult = events.find((event) => event.event === 'tool_result' && JSON.parse(event.data).name === 'plan_dish_research');
+      const text = events.filter((event) => event.event === 'text').map((event) => JSON.parse(event.data)).join('');
+
+      expect(JSON.parse(collectResult!.data).result.extractedClues.culturalOrRegionalHints).not.toContain('Latin America / Hispanic');
+      expect(JSON.parse(planResult!.data).result.hypotheses.map((hypothesis: { name: string }) => hypothesis.name)).not.toContain('Pozole Verde');
+      expect(text).toContain('Before I give you a tasting cue');
+      expect(text).not.toContain('caldo');
+      expect(text).not.toContain('sancocho');
+      expect(text).not.toContain('ceviche');
+      expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'generic_uncertainty_clarification' });
+      expect(requestCount).toBe(3);
+    } finally {
+      achiote.kill('SIGINT');
+      await new Promise<void>((resolveClose) => fakeOpenAi.close(() => resolveClose()));
+    }
+  });
+
+  it('uses structured clarification when the model stops after memory collection', async () => {
+    const fakePort = await getFreePort();
+    let requestCount = 0;
+    const fakeOpenAi = createServer(async (req, res) => {
+      if (req.url !== '/v1/chat/completions' || req.method !== 'POST') {
+        res.writeHead(404).end();
+        return;
+      }
+      requestCount++;
+      await readBody(req);
+      const toolCalls = requestCount === 1
+        ? [{ id: 'call_1', type: 'function', function: { name: 'collect_food_memory', arguments: JSON.stringify({ memoryText: 'My abuela made something sour and herby.' }) } }]
+        : undefined;
+      res.setHeader('content-type', 'application/json');
+      res.end(JSON.stringify({
+        choices: [{
+          finish_reason: toolCalls ? 'tool_calls' : 'stop',
+          message: toolCalls
+            ? { role: 'assistant', content: '', tool_calls: toolCalls }
+            : { role: 'assistant', content: 'Sour and herby means very different things in a Mexican, Cuban, Dominican, Puerto Rican, or Peruvian kitchen, for example escabeche, chimichurri, salsa verde, ceviche, or pique.' },
+        }],
+      }));
+    });
+    await new Promise<void>((resolveListen) => fakeOpenAi.listen(fakePort, '127.0.0.1', resolveListen));
+
+    const achiotePort = await getFreePort();
+    const achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`);
+    try {
+      const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: 'My abuela made something sour and herby.' }),
+      });
+
+      expect(response.status).toBe(200);
+      const events = parseSse(await response.text());
+      const text = events.filter((event) => event.event === 'text').map((event) => JSON.parse(event.data)).join('');
+
+      expect(text).toContain('Before I give you a tasting cue');
+      expect(text).toContain('Where was your abuela from?');
+      expect(text).not.toContain('chimichurri');
+      expect(text).not.toContain('ceviche');
+      expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'missing_research_plan_clarification' });
+      expect(requestCount).toBe(2);
     } finally {
       achiote.kill('SIGINT');
       await new Promise<void>((resolveClose) => fakeOpenAi.close(() => resolveClose()));

@@ -144,6 +144,19 @@ export const generateRecipeOutputSchema = z.object({
   promptForAgent: z.string(),
 });
 
+const inferredContextClueSchema = z.object({
+  label: z.string(),
+  basis: z.string(),
+  confidence: confidenceSchema,
+  evidenceKind: z.literal('model_inferred'),
+  canSeedQuestions: z.boolean(),
+  canSeedCandidateDishes: z.boolean(),
+});
+
+const inferredMemoryContextSchema = z.object({
+  culturalOrRegional: z.array(inferredContextClueSchema),
+  language: z.array(inferredContextClueSchema),
+});
 
 export const collectedFoodMemorySchema = z.object({
   rawMemory: z.string(),
@@ -156,6 +169,7 @@ export const collectedFoodMemorySchema = z.object({
     sensoryClues: z.array(z.string()),
     occasions: z.array(z.string()),
   }),
+  inferredContext: inferredMemoryContextSchema,
   missingInformation: z.array(z.string()),
   nextQuestions: z.array(z.string()),
   reassurance: z.string(),
@@ -198,6 +212,26 @@ export const buildReconstructionDossierOutputSchema = z.object({
 export const generateFamilyFollowupQuestionsOutputSchema = z.object({
   questions: z.array(z.string()),
   toneGuidance: z.string(),
+});
+
+export const memoryReceiptOutputSchema = z.object({
+  title: z.literal('Achiote Memory Receipt'),
+  createdAt: z.string(),
+  status: z.enum(['needs_more_clues', 'first_test_ready', 'recipe_handoff_ready']),
+  evidence: z.object({
+    userSaid: z.array(z.string()),
+    inferred: z.array(z.string()),
+    researched: z.array(z.string()),
+    unknown: z.array(z.string()),
+  }),
+  hypotheses: z.array(dishHypothesisSchema),
+  nextBestQuestions: z.array(z.string()),
+  firstTinyTasteTest: z.object({
+    title: z.string(),
+    cue: z.string(),
+    estimatedTime: z.string(),
+  }).optional(),
+  assistantSummary: z.string(),
 });
 
 
