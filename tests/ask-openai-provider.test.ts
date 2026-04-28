@@ -623,7 +623,7 @@ describe('/ask premature cue guard', () => {
 
       expect(clues.possibleDishNames).not.toContain('thing');
       expect(clues.culturalOrRegionalHints).not.toContain('Latin America / Hispanic');
-      expect(text).toContain('Before I give you a tasting cue');
+      expect(text).toContain('Those answers decide the dish family');
       expect(text).toContain('Where was your abuela from?');
       expect(text).not.toContain('so many different dishes');
       expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'generic_uncertainty_clarification' });
@@ -674,7 +674,7 @@ describe('/ask premature cue guard', () => {
       const events = parseSse(await response.text());
       const text = events.filter((event) => event.event === 'text').map((event) => JSON.parse(event.data)).join('');
 
-      expect(text).toContain('Before I give you a tasting cue');
+      expect(text).toContain('Those answers decide the dish family');
       expect(text).not.toContain('recado');
       expect(text).not.toContain('chimichurri');
       expect(text).not.toContain('🌿');
@@ -730,7 +730,7 @@ describe('/ask premature cue guard', () => {
 
       expect(JSON.parse(collectResult!.data).result.extractedClues.culturalOrRegionalHints).not.toContain('Latin America / Hispanic');
       expect(JSON.parse(planResult!.data).result.hypotheses.map((hypothesis: { name: string }) => hypothesis.name)).not.toContain('Pozole Verde');
-      expect(text).toContain('Before I give you a tasting cue');
+      expect(text).toContain('Those answers decide the dish family');
       expect(text).not.toContain('caldo');
       expect(text).not.toContain('sancocho');
       expect(text).not.toContain('ceviche');
@@ -780,7 +780,7 @@ describe('/ask premature cue guard', () => {
       const events = parseSse(await response.text());
       const text = events.filter((event) => event.event === 'text').map((event) => JSON.parse(event.data)).join('');
 
-      expect(text).toContain('Before I give you a tasting cue');
+      expect(text).toContain('Those answers decide the dish family');
       expect(text).toContain('Where was your abuela from?');
       expect(text).not.toContain('chimichurri');
       expect(text).not.toContain('ceviche');

@@ -10,6 +10,7 @@ export function buildMemoryReceipt(input: {
   cue?: MinimumViableNostalgiaCue;
   assistantText?: string;
   createdAt?: string;
+  researchedFacts?: string[];
 }): MemoryReceipt {
   const inferred = [
     ...input.memory.inferredContext.culturalOrRegional,
@@ -28,7 +29,7 @@ export function buildMemoryReceipt(input: {
     evidence: {
       userSaid: [input.memory.rawMemory],
       inferred,
-      researched: [],
+      researched: input.researchedFacts ?? [],
       unknown,
     },
     hypotheses: input.researchPlan?.hypotheses ?? [],

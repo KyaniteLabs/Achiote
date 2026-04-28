@@ -58,18 +58,30 @@ describe('local inference provider resolution', () => {
   });
 
   describe('openAIBaseUrlFromEnv', () => {
-    it('prioritizes LOCAL_INFERENCE_BASE_URL', () => {
+    it('prioritizes LOCAL_INFERENCE_BASE_URL when provider is local', () => {
       expect(
         openAIBaseUrlFromEnv({
+          ACHIOTE_ASK_PROVIDER: 'local',
           LOCAL_INFERENCE_BASE_URL: 'http://host.docker.internal:1234/v1',
           OPENAI_BASE_URL: 'https://api.openai.com/v1',
         }),
       ).toBe('http://host.docker.internal:1234/v1');
     });
 
-    it('resolves Tailscale IP URLs', () => {
+    it('does NOT use LOCAL_INFERENCE_BASE_URL when provider is openai', () => {
       expect(
         openAIBaseUrlFromEnv({
+          ACHIOTE_ASK_PROVIDER: 'openai',
+          LOCAL_INFERENCE_BASE_URL: 'http://host.docker.internal:1234/v1',
+          OPENAI_BASE_URL: 'https://api.openai.com/v1',
+        }),
+      ).toBe('https://api.openai.com/v1');
+    });
+
+    it('resolves Tailscale IP URLs when provider is local', () => {
+      expect(
+        openAIBaseUrlFromEnv({
+          ACHIOTE_ASK_PROVIDER: 'local',
           LOCAL_INFERENCE_BASE_URL: 'http://100.92.68.103:1234/v1',
         }),
       ).toBe('http://100.92.68.103:1234/v1');
