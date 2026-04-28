@@ -60,6 +60,35 @@ if (pricing) {
   pricingObserver.observe(pricing);
 }
 
+// Animated counters — animate when scrolled into view
+let countersAnimated = false;
+function animateCounters() {
+  if (countersAnimated) return;
+  const socialSection = document.querySelector('.social-proof-grid');
+  if (!socialSection) return;
+  const counterObserver = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
+      countersAnimated = true;
+      document.querySelectorAll('.count-up').forEach(el => {
+        const target = parseInt(el.dataset.target, 10);
+        const duration = 1200;
+        const start = performance.now();
+        function update(now) {
+          const elapsed = now - start;
+          const progress = Math.min(elapsed / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          el.textContent = Math.round(eased * target);
+          if (progress < 1) requestAnimationFrame(update);
+        }
+        requestAnimationFrame(update);
+      });
+      counterObserver.disconnect();
+    }
+  }, { threshold: 0.4 });
+  counterObserver.observe(socialSection);
+}
+animateCounters();
+
 // Copy terminal
 async function copyTerminal(btn) {
   const pre = btn.nextElementSibling;
@@ -80,30 +109,6 @@ async function copyTerminal(btn) {
 document.querySelectorAll('.copy-btn').forEach(btn => {
   btn.addEventListener('click', () => copyTerminal(btn));
 });
-
-// Try-it widget
-function runTryIt() {
-  const input = document.getElementById('tryit-input');
-  const output = document.getElementById('tryit-output');
-  const val = input.value.trim();
-  if (!val) return;
-  const responses = [
-    `<p><strong>Memory fragment captured.</strong></p><p>Possible clues: region (family recipe), texture (wrapped/fried), phonetic similarity to "pasteles." Next step: ask about the leaf, the masa texture, and whether it was boiled or steamed.</p>`,
-    `<p><strong>Sensory decomposition:</strong></p><p>Smell → toast/herb/sesame. Texture → soft interior, maybe starchy carrier. Sound → "everyone got quiet" suggests ritual significance. Recommended first test: one bite of toasted sesame oil on warm rice.</p>`,
-    `<p><strong>Pattern match:</strong></p><p>Input matches "sour + pale + dill + dairy" profile. Likely Eastern European or Central Asian soup family. Acid source unknown — could be fermented dairy, vinegar, or lemon. Test: a warm sip with dill and a spoonful of yogurt.</p>`
-  ];
-  const pick = responses[Math.floor(Math.random() * responses.length)];
-  output.innerHTML = '';
-  const parsed = new DOMParser().parseFromString(pick, 'text/html');
-  output.replaceChildren(...parsed.body.childNodes);
-  output.classList.add('active');
-}
-const tryitInput = document.getElementById('tryit-input');
-if (tryitInput) {
-  tryitInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') runTryIt();
-  });
-}
 
 // ── Checkout ────────────────────────────────────────────────────────────────
 

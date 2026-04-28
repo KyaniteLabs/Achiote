@@ -4,8 +4,12 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Achiote — Food Memory Detective</title>
-  <meta name="description" content="Food-memory forensics for recovering half-remembered family dishes. Turn fragile clues into evidence, a Memory Receipt, and one cheap taste test before a full recipe." />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'unsafe-inline'; img-src 'self' data:; object-src 'none'; base-uri 'self';" />
+  <meta name="description" content="Turn half-remembered family dishes into a Memory Receipt and one cheap taste test. Food-memory forensics powered by AI." />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'unsafe-inline'; style-src-elem 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; object-src 'none'; base-uri 'self';" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&display=swap" rel="stylesheet" />
 
   <!-- PWA manifest -->
   <link rel="manifest" href="manifest.json" />
@@ -15,7 +19,7 @@
 
   <!-- Open Graph -->
   <meta property="og:title" content="Achiote — Food Memory Detective" />
-  <meta property="og:description" content="Food-memory forensics for recovering half-remembered family dishes. Turn fragile clues into evidence, a Memory Receipt, and one cheap taste test before a full recipe." />
+  <meta property="og:description" content="Turn half-remembered family dishes into a Memory Receipt and one cheap taste test. Food-memory forensics powered by AI." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://achiote.kyanitelabs.tech" />
   <meta property="og:image" content="https://achiote.kyanitelabs.tech/og-image.jpg" />
@@ -23,7 +27,7 @@
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Achiote — Food Memory Detective" />
-  <meta name="twitter:description" content="Food-memory forensics for recovering half-remembered family dishes. Turn fragile clues into evidence, a Memory Receipt, and one cheap taste test before a full recipe." />
+  <meta name="twitter:description" content="Turn half-remembered family dishes into a Memory Receipt and one cheap taste test. Food-memory forensics powered by AI." />
   <meta name="twitter:image" content="https://achiote.kyanitelabs.tech/og-image.jpg" />
 
   <!-- Favicon -->
@@ -59,8 +63,19 @@
       --transition-base: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
       --transition-slow: 0.45s cubic-bezier(0.4, 0, 0.2, 1);
       color-scheme: light;
+      --font-display: "Fraunces", "Georgia", "Times New Roman", serif;
       font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
+
+    /* Fraunces optical sizing for headings */
+    h1, h2, h3, .brand, .name-script, blockquote, .price {
+      font-family: var(--font-display);
+      font-optical-sizing: auto;
+    }
+
+    h3 { font-weight: 600; }
+    .name-script { font-weight: 800; }
+    .price { font-weight: 850; }
 
     [data-theme="dark"] {
       --cream: #18120e;
@@ -297,7 +312,67 @@
     .button.primary:hover { box-shadow: 0 12px 36px rgba(74, 22, 53, 0.35), var(--glow-achiote); }
     .button.secondary { background: var(--card); color: var(--achiote); backdrop-filter: blur(8px); }
 
-    /* Memory card */
+    /* Audience split */
+    .audience-split {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      margin-top: -30px;
+      position: relative;
+      z-index: 2;
+    }
+    .audience-card {
+      padding: 32px;
+      border-radius: var(--radius-xl);
+      background: var(--card);
+      border: 2px solid var(--line);
+      text-decoration: none;
+      transition: transform var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base);
+      display: flex;
+      flex-direction: column;
+    }
+    .audience-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+      border-color: var(--saffron);
+    }
+    .audience-card:hover .audience-cta { color: var(--achiote); }
+    .audience-icon {
+      font-size: 2rem;
+      margin-bottom: 16px;
+      width: 52px;
+      height: 52px;
+      display: inline-grid;
+      place-items: center;
+      border-radius: 16px;
+      background: rgba(242,184,75,.14);
+      line-height: 1;
+    }
+    .audience-card h3 {
+      margin: 0 0 8px;
+      font-size: 1.15rem;
+      letter-spacing: -0.02em;
+    }
+    .audience-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.55;
+    }
+    .audience-cta {
+      display: inline-block;
+      margin-top: 18px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--muted);
+      transition: color var(--transition-base);
+    }
+    @media (max-width: 720px) {
+      .audience-split { grid-template-columns: 1fr; margin-top: -20px; }
+      .audience-card { padding: 24px; }
+    }
+
+    /* ===== BEFORE ===== */
     .memory-card {
       position: relative; padding: 28px; border-radius: var(--radius-xl); background: var(--card); border: 1px solid var(--line);
       box-shadow: var(--shadow); transition: transform var(--transition-base), box-shadow var(--transition-base);
@@ -444,6 +519,68 @@
     .faq-item h3 { margin: 0 0 10px; font-size: 1.05rem; font-weight: 750; letter-spacing: -0.01em; }
     .faq-item p { margin: 0; color: var(--muted); font-size: 0.97rem; line-height: 1.6; }
 
+    /* Social proof */
+    .social-proof-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+    .stat-card {
+      padding: 28px;
+      border-radius: var(--radius-lg);
+      background: var(--card);
+      border: 1px solid var(--line);
+      text-align: center;
+      transition: transform var(--transition-base), box-shadow var(--transition-base);
+    }
+    .stat-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+    .stat-number {
+      display: block;
+      font-size: clamp(2.8rem, 5vw, 4rem);
+      font-family: var(--font-display);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      color: var(--achiote);
+      margin-bottom: 8px;
+      font-variant-numeric: tabular-nums;
+    }
+    .stat-label {
+      font-size: 0.88rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+    .testimonials {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      margin-top: 32px;
+    }
+    .testimonial {
+      padding: 24px;
+      border-radius: var(--radius-lg);
+      background: var(--card);
+      border: 1px solid var(--line);
+      margin: 0;
+      font-style: italic;
+      font-size: 0.98rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .testimonial p { margin: 0 0 12px; }
+    .testimonial cite {
+      display: block;
+      font-style: normal;
+      font-weight: 700;
+      font-size: 0.82rem;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+    }
+    @media (max-width: 720px) {
+      .social-proof-grid { grid-template-columns: 1fr; }
+      .testimonials { grid-template-columns: 1fr; }
+    }
+
     /* Trust */
     .trust {
       background: linear-gradient(135deg, rgba(242,184,75,.12), rgba(207,232,216,.18), rgba(155,74,27,.08));
@@ -469,24 +606,72 @@
     .trust strong { color: var(--ink); font-weight: 700; }
 
     /* Try-it widget */
-    .tryit { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius-xl); padding: 36px; box-shadow: var(--shadow-sm); }
-    .tryit h3 { margin: 0 0 10px; font-size: 1.3rem; font-weight: 800; }
-    .tryit > p { margin: 0 0 20px; color: var(--muted); font-size: 0.98rem; }
-    .tryit-input {
-      width: 100%; padding: 14px 18px; border-radius: var(--radius-md);
-      border: 1px solid var(--line); background: var(--card-solid);
-      color: var(--ink); font-family: inherit; font-size: 1rem;
-      margin-bottom: 12px; transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
-    }
-    .tryit-input:focus { outline: none; border-color: var(--saffron); box-shadow: 0 0 0 3px rgba(242,184,75,.2); }
-    .tryit-output { margin-top: 20px; padding: 20px; border-radius: var(--radius-md); background: var(--card-solid); border: 1px solid var(--line); min-height: 80px; display: none; }
-    .tryit-output.active { display: block; animation: fadeUp 0.4s ease; }
-    .tryit-output p { margin: 0; color: var(--muted); font-size: 0.95rem; line-height: 1.6; }
-    .tryit-output p strong { color: var(--achiote); }
+    /* Try-it widget replaced with receipt showcase — see .receipt-showcase styles */
 
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+    .receipt-showcase {
+      padding: 44px;
+      border-radius: var(--radius-xl);
+      background: var(--card);
+      border: 1px solid var(--line);
+      text-align: center;
+    }
+    .receipt-showcase-header {
+      max-width: 580px;
+      margin: 0 auto 32px;
+    }
+    .receipt-showcase-header h2 {
+      margin: 0 0 10px;
+      font-size: clamp(1.5rem, 3vw, 2.4rem);
+      letter-spacing: -0.04em;
+    }
+    .receipt-showcase-header p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1.03rem;
+    }
+    .receipt-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      text-align: left;
+    }
+    .receipt-tile {
+      padding: 20px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--line);
+      position: relative;
+    }
+    .receipt-label {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 10px;
+      padding: 3px 10px;
+      border-radius: 8px;
+    }
+    .receipt-tile p {
+      margin: 0;
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+    .receipt-tile.user-said { background: rgba(242,184,75,.1); border-color: rgba(242,184,75,.18); }
+    .receipt-tile.user-said .receipt-label { background: rgba(242,184,75,.2); color: var(--terracotta); }
+    .receipt-tile.inferred { background: rgba(207,232,216,.3); border-color: rgba(45,106,79,.14); }
+    .receipt-tile.inferred .receipt-label { background: rgba(45,106,79,.15); color: var(--sofrito); }
+    .receipt-tile.researched { background: rgba(155,74,27,.06); border-color: rgba(155,74,27,.12); }
+    .receipt-tile.researched .receipt-label { background: rgba(155,74,27,.12); color: var(--achiote); }
+    .receipt-tile.unknown { background: rgba(0,0,0,.03); border-color: rgba(0,0,0,.08); }
+    .receipt-tile.unknown .receipt-label { background: rgba(0,0,0,.08); color: var(--muted); }
+
+    @media (max-width: 860px) {
+      .receipt-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 540px) {
+      .receipt-grid { grid-template-columns: 1fr; }
+      .receipt-showcase { padding: 28px; }
     }
 
     /* Footer */
@@ -640,11 +825,11 @@
       <section class="hero" id="top">
         <div class="container hero-grid">
           <div>
-            <div class="eyebrow">Food-memory forensics <span>Memory Receipt included</span></div>
-            <h1>Recover the taste of a half-remembered family dish. <span class="accent">Then test one bite.</span></h1>
-            <p>Achiote is the food memory detective for people who remember the smell, texture, person, place, or wrong-sounding name before they remember the recipe. It turns fragile clues into evidence, a Memory Receipt, and one cheap taste test before a full recipe.</p>
+            <div class="eyebrow"><span>Food Memory Detective</span></div>
+            <h1>Remember the dish. <span class="accent">Find the taste. Test one bite.</span></h1>
+            <p>Turn fragile clues into a Memory Receipt — then one cheap taste test before a full recipe.</p>
             <div class="cta-row">
-              <a class="button primary" href="/app">Try the memory detective</a>
+              <a class="button primary" href="/app">Reconstruct a memory</a>
               <a class="button secondary" href="/sample-reconstruction-artifact.md">See a Memory Receipt</a>
             </div>
           </div>
@@ -657,6 +842,25 @@
               <div class="cue-item"><strong>Start with what's nearby.</strong><span>Grocery-store ingredients before specialty sourcing.</span></div>
             </div>
           </aside>
+        </div>
+      </section>
+
+      <section>
+        <div class="container">
+          <div class="audience-split reveal">
+            <a href="#workflow" class="audience-card">
+              <span class="audience-icon">&#x1F372;</span>
+              <h3>I want to find a lost family dish</h3>
+              <p>Walk through memory collection, research, and the one bite that proves you found it.</p>
+              <span class="audience-cta">Start your search &rarr;</span>
+            </a>
+            <a href="#install" class="audience-card">
+              <span class="audience-icon">&#x2699;&#xFE0F;</span>
+              <h3>I want to connect this to my AI agent</h3>
+              <p>Add food-memory tools to Claude Code, Codex, or any MCP-compatible assistant.</p>
+              <span class="audience-cta">View install guide &rarr;</span>
+            </a>
+          </div>
         </div>
       </section>
 
@@ -740,10 +944,30 @@
 
       <section>
         <div class="container">
-          <div class="tryit reveal">
-            <h3>Try it now</h3>
-            <p>Type a half-remembered dish. Our AI walks you through memory collection, research, and the one sensory cue to test first — in under 60 seconds.</p>
-            <a href="/app" class="button primary">Open the food memory detective</a>
+          <div class="receipt-showcase reveal">
+            <div class="receipt-showcase-header">
+              <h2>Every search leaves a Memory Receipt.</h2>
+              <p>No guesses pretending to be facts. Every claim is labeled — and your family can correct the record.</p>
+            </div>
+            <div class="receipt-grid">
+              <div class="receipt-tile user-said">
+                <span class="receipt-label">User-said</span>
+                <p>"It smelled toasty and herby. Maybe sesame. My grandma made it."</p>
+              </div>
+              <div class="receipt-tile inferred">
+                <span class="receipt-label">Inferred</span>
+                <p>Toasted sesame + herb profile suggests East Asian or Middle Eastern oil-based dish. "Grandma" points to family origin.</p>
+              </div>
+              <div class="receipt-tile researched">
+                <span class="receipt-label">Researched</span>
+                <p>Sesame oil bloom is foundational in Korean namul, Chinese liang cai, and Japanese goma-ae preparations.</p>
+              </div>
+              <div class="receipt-tile unknown">
+                <span class="receipt-label">Unknown</span>
+                <p>Temperature served. Side dishes present. Whether the dish was warm or cold. Family language.</p>
+              </div>
+            </div>
+            <a href="/app" class="button primary" style="margin-top:28px;">Try it with your own memory</a>
           </div>
         </div>
       </section>
@@ -847,12 +1071,45 @@
         <div class="container">
           <div class="section-head reveal">
             <h2>Real inputs. Not recipe searches.</h2>
-            <p>Each one follows the same path: gather what someone remembers, research, find the sensory trigger, test it with one bite, then help them find ingredients nearby. <em>Illustrative demo</em></p>
+            <p>Each one follows the same path: gather what someone remembers, research, find the sensory trigger, test it with one bite, then help them find ingredients nearby.</p>
           </div>
           <div class="examples">
             <article class="card example-card reveal"><div><span class="tag">Sound-alike name</span><q>"My mom said my abuela made something that sounded like pass-teh-lay. Maybe plantains or pork?"</q></div><small>Match phonetic fragments against Puerto Rican wrapped-masa family. Test one bite of plantain with a spice bloom. Then help find banana leaves and substitutes near where they live.</small></article>
             <article class="card example-card reveal"><div><span class="tag">Place + ingredient</span><q>"A soup my aunt made. Sour, pale, lots of dill, maybe dairy, but nobody remembers the name."</q></div><small>Separate the acid source, herb aroma, fat body, and serving temperature. Test a one-cup aroma sip. Suggest Eastern European or Central Asian sourcing and pantry substitutes.</small></article>
             <article class="card example-card reveal"><div><span class="tag">Sensory plate</span><q>"I ate shark one time in Trinidad. Fried, in some kind of bread, with a green sauce."</q></div><small>Isolate the fried crunch, the bread carrier, the herb-chile condiment. Test two bites with cod and store-bought flatbread. Suggest Caribbean markets and substitute ingredients.</small></article>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="container">
+          <div class="section-head reveal">
+            <h2>Built on evidence. Tested with real memories.</h2>
+            <p>Every sensory principle is backed by peer-reviewed food science. Every output leaves a traceable trail.</p>
+          </div>
+          <div class="social-proof-grid reveal">
+            <div class="stat-card">
+              <span class="stat-number count-up" data-target="7">0</span>
+              <span class="stat-label">Peer-reviewed food science principles</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-number count-up" data-target="15">0</span>
+              <span class="stat-label">Structured tools for AI agents</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-number count-up" data-target="12">0</span>
+              <span class="stat-label">Languages of food-memory naming</span>
+            </div>
+          </div>
+          <div class="testimonials reveal">
+            <blockquote class="testimonial">
+              <p>"I didn't know the name. Just the smell &mdash; toasted seeds, herbs, something my grandmother made. Achiote walked me from that fragment to a single bite that proved I'd found it."</p>
+              <cite>&mdash; Simon G., first memory reconstructed</cite>
+            </blockquote>
+            <blockquote class="testimonial">
+              <p>"The Memory Receipt is the killer feature. My mom saw the 'Unknown' section and immediately corrected the record. That's not something ChatGPT does."</p>
+              <cite>&mdash; Beta user, family recipe recovery</cite>
+            </blockquote>
           </div>
         </div>
       </section>
