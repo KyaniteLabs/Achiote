@@ -1,6 +1,6 @@
 try { process.loadEnvFile(); } catch { /* no .env file present */ }
 
-import { randomUUID } from 'node:crypto';
+import { randomUUID, timingSafeEqual } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
 import { dirname, resolve, sep } from 'node:path';
@@ -182,6 +182,10 @@ function serializeTelemetryBreakdowns(): Record<string, Record<string, Record<st
   return serialized;
 }
 
+function logSecurityEvent(event: string, details: Record<string, string> = {}): void {
+  console.warn(JSON.stringify({ event, ...details, ts: new Date().toISOString() }));
+}
+
 function isSameHostOrigin(req: IncomingMessage, origin: string | undefined): boolean {
   if (!origin) return false;
   try {
@@ -335,8 +339,12 @@ type AuthedRequest = { tier: Tier; name: string; keyId: string } | null;
 
 function authenticateRequest(req: IncomingMessage): AuthedRequest {
   const demo = extractDemoPassword(req);
-  if (DEMO_PASSWORD && demo === DEMO_PASSWORD) {
-    return { tier: 'pro', name: 'demo-user', keyId: 'demo' };
+  if (DEMO_PASSWORD && demo) {
+    const demoBuf = Buffer.from(demo);
+    const passBuf = Buffer.from(DEMO_PASSWORD);
+    if (demoBuf.length === passBuf.length && timingSafeEqual(demoBuf, passBuf)) {
+      return { tier: 'pro', name: 'demo-user', keyId: 'demo' };
+    }
   }
   const rawKey = extractApiKey(req) ?? extractBearer(req);
   const result = AUTH_ENABLED ? authenticator.authenticate(rawKey) : { authenticated: false as const, error: 'auth disabled' };
@@ -424,7 +432,11 @@ function checkTelemetryLimit(key: string): { allowed: boolean; remaining: number
 
 function hasEventsAdminAccess(req: IncomingMessage): boolean {
   if (!EVENTS_ADMIN_TOKEN) return false;
-  return extractBearer(req) === EVENTS_ADMIN_TOKEN;
+  const token = extractBearer(req);
+  if (!token) return false;
+  const tokenBuf = Buffer.from(token);
+  const adminBuf = Buffer.from(EVENTS_ADMIN_TOKEN);
+  return tokenBuf.length === adminBuf.length && timingSafeEqual(tokenBuf, adminBuf);
 }
 
 // ── AI agent endpoint ───────────────────────────────────────────────────────
@@ -438,7 +450,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
   }
 
   const authed = authenticateRequest(req);
-  if (!authed) { sendJson(res, 401, { error: DEMO_PASSWORD ? 'Unauthorized. Provide the demo password via x-demo-password header.' : 'Unauthorized. Provide a valid API key via x-api-key header or Authorization bearer token.' }); return; }
+  if (!authed) { logSecurityEvent('auth_failure', { path: '/ask' }); sendJson(res, 401, { error: DEMO_PASSWORD ? 'Unauthorized. Provide the demo password via x-demo-password header.' : 'Unauthorized. Provide a valid API key via x-api-key header or Authorization bearer token.' }); return; }
   if (!isAnonymousAskAllowed({ authEnabled: AUTH_ENABLED, allowAnonymousAsk: ALLOW_ANON_ASK })) {
     sendJson(res, 401, { error: 'Anonymous /ask access is disabled. Enable ACHIOTE_ALLOW_ANON_ASK=true only for local demos, or provide a valid API key.' });
     return;
@@ -469,6 +481,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
     const limitResult = rateLimiter.checkWebLimit(authed.tier, authed.keyId, anonymousWebLimitOverride(authed));
     sendRateLimitHeaders(res, limitResult);
     if (!limitResult.allowed && !checkCreditsForAuthed(authed, 'web')) {
+      logSecurityEvent('rate_limit', { keyId: authed.keyId, path: '/ask' });
       sendJson(res, 429, { error: 'Rate limit exceeded. Upgrade your plan for more reconstructions.' });
       return;
     }
@@ -1268,6 +1281,7 @@ async function serveStatic(req: IncomingMessage, res: ServerResponse): Promise<b
       ].join('; '),
       'X-Content-Type-Options': 'nosniff',
       'Referrer-Policy': 'strict-origin-when-cross-origin',
+      'Strict-Transport-Security': 'max-age=63072000; includeSubDomains; preload',
     });
     res.end(data);
     return true;
@@ -1369,9 +1383,7 @@ const server = createServer(async (req, res) => {
       status: pathname === '/health' ? 'ok' : readiness.status,
       version: '0.2.0',
       authEnabled: AUTH_ENABLED,
-      activeSessions: transports.size,
-      readiness,
-      memory: process.memoryUsage(),
+      billingEnabled: Boolean(billingConfig),
       uptime: process.uptime(),
     });
     return;
@@ -1424,11 +1436,12 @@ const server = createServer(async (req, res) => {
 
   if (pathname === '/mcp') {
     const authed = authenticateRequest(req);
-    if (!authed) { sendJson(res, 401, { jsonrpc: '2.0', error: { code: -32001, message: DEMO_PASSWORD ? 'Unauthorized: provide the demo password via x-demo-password header' : 'Unauthorized: valid API key required' }, id: null }); return; }
+    if (!authed) { logSecurityEvent('auth_failure', { path: '/mcp' }); sendJson(res, 401, { jsonrpc: '2.0', error: { code: -32001, message: DEMO_PASSWORD ? 'Unauthorized: provide the demo password via x-demo-password header' : 'Unauthorized: valid API key required' }, id: null }); return; }
 
     const limitResult = rateLimiter.checkMcpLimit(authed.tier, authed.keyId);
     sendRateLimitHeaders(res, limitResult);
     if (!limitResult.allowed && !checkCreditsForAuthed(authed, 'mcp')) {
+      logSecurityEvent('rate_limit', { keyId: authed.keyId, path: '/mcp' });
       sendJson(res, 429, { jsonrpc: '2.0', error: { code: -32002, message: 'Rate limit exceeded' }, id: null });
       return;
     }
@@ -1502,7 +1515,7 @@ const server = createServer(async (req, res) => {
       return;
     }
     let raw: string;
-    try { raw = await readBody(req); } catch { sendJson(res, 413, { error: 'Body too large' }); return; }
+    try { raw = await readBody(req, 10_000); } catch { sendJson(res, 413, { error: 'Body too large' }); return; }
     let parsed: { tier?: string; mode?: string; billing?: string; email?: string };
     try { parsed = JSON.parse(raw); } catch { sendJson(res, 400, { error: 'Invalid JSON' }); return; }
     if (parsed.mode && parsed.mode !== 'subscription' && parsed.mode !== 'payment') {
@@ -1611,21 +1624,39 @@ const server = createServer(async (req, res) => {
       sendJson(res, 400, { error: 'session_id is required' });
       return;
     }
-    const session = billingDb.consumeCheckoutSessionApiKey(sessionId);
+    const email = query.get('email')?.trim().toLowerCase();
+    const session = billingDb.getCheckoutSession(sessionId);
     if (!session) {
       sendJson(res, 404, { error: 'Session not found' });
       return;
     }
-    if (session.status === 'pending') {
+    if (session.stripeCustomerId) {
+      if (!email) {
+        sendJson(res, 400, { error: 'Email verification required. Include your checkout email as the ?email= parameter.' });
+        return;
+      }
+      const customer = billingDb.getCustomer(session.stripeCustomerId);
+      if (!customer?.email || customer.email.toLowerCase() !== email) {
+        logSecurityEvent('billing_session_email_mismatch', { sessionId: sessionId.slice(0, 20), path: pathname });
+        sendJson(res, 403, { error: 'Email verification required. Include your checkout email as the ?email= parameter.' });
+        return;
+      }
+    }
+    const consumed = billingDb.consumeCheckoutSessionApiKey(sessionId);
+    if (!consumed) {
+      sendJson(res, 404, { error: 'Session not found or key already consumed' });
+      return;
+    }
+    if (consumed.status === 'pending') {
       sendJson(res, 202, { status: 'pending', message: 'Payment is being processed. Please wait.' });
       return;
     }
     sendJson(res, 200, {
       status: 'completed',
-      tier: session.tier,
-      apiKey: session.keyPlaintext,
-      keyId: session.keyId,
-      apiKeyAvailable: Boolean(session.keyPlaintext),
+      tier: consumed.tier,
+      apiKey: consumed.keyPlaintext,
+      keyId: consumed.keyId,
+      apiKeyAvailable: Boolean(consumed.keyPlaintext),
     });
     return;
   }

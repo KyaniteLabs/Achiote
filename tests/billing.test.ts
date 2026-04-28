@@ -8,8 +8,11 @@ import { BillingStripe, loadBillingConfigFromEnv } from '../src/lib/billing-stri
 describe('billing-db', () => {
   let dbPath: string;
   let billingDb: BillingDb;
+  let origEncryptionKey: string | undefined;
 
   beforeEach(() => {
+    origEncryptionKey = process.env.ACHIOTE_KEY_ENCRYPTION_KEY;
+    process.env.ACHIOTE_KEY_ENCRYPTION_KEY = '0'.repeat(64);
     const dir = mkdtempSync(join(tmpdir(), 'achiote-billing-'));
     dbPath = join(dir, 'billing.db');
     billingDb = new BillingDb(dbPath);
@@ -18,6 +21,11 @@ describe('billing-db', () => {
   afterEach(() => {
     billingDb.close();
     rmSync(join(dbPath, '..'), { recursive: true, force: true });
+    if (origEncryptionKey === undefined) {
+      delete process.env.ACHIOTE_KEY_ENCRYPTION_KEY;
+    } else {
+      process.env.ACHIOTE_KEY_ENCRYPTION_KEY = origEncryptionKey;
+    }
   });
 
   it('creates schema on initialization', () => {
@@ -132,7 +140,8 @@ describe('billing-db', () => {
     billingDb.completeCheckoutSession('cs_123', 'cus_123', 'ak_test', 'ach_testkey', 'pro');
     session = billingDb.getCheckoutSession('cs_123');
     expect(session!.status).toBe('completed');
-    expect(session!.keyPlaintext).toBe('ach_testkey');
+    expect(session!.keyPlaintext).not.toBe('ach_testkey');
+    expect(session!.keyPlaintext).toBeTruthy();
   });
 
   it('reveals checkout API keys once and clears plaintext after display', () => {
