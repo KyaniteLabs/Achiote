@@ -1,0 +1,36 @@
+# Production docker-compose for Hostinger VPS deployment.
+# The Hostinger MCP API resolves GitHub repo URLs to this file.
+# It builds from source (no registry pull needed) and uses env for config.
+services:
+  achiote:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: achiote:latest
+    container_name: achiote
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - /docker/achiote/data:/app/data
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.achiote.entrypoints=websecure
+      - traefik.http.routers.achiote.rule=Host(`achiote.kyanitelabs.tech`)
+      - traefik.http.routers.achiote.tls=true
+      - traefik.http.routers.achiote.tls.certresolver=letsencrypt
+      - traefik.http.routers.achiote.middlewares=security-headers@file,public-indexable@file
+      - traefik.http.services.achiote.loadbalancer.server.port=3000
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - node -e "fetch('http://127.0.0.1:3000/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 512M
