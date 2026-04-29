@@ -933,7 +933,7 @@ const COMPONENT_ROLES = {
     substitutionReason: 'Warm liquid releases volatile aromatics the same way regardless of the stock base; the nostalgia is in the aroma chemistry',
   },
   beverage: {
-    keywords: 'drink|beverage|juice|soda|fizzy|carbonated|sparkling|seltzer|horchata|agua fresca|atole|champurrado|lassi|chai|tea|coffee|espresso|cocoa|mate|milkshake|smoothie|tepache|sorrel|mauby|akasan|pinol|pinole|kombucha|over ice',
+    keywords: 'drink|beverage|juice|soda|fizzy|carbonated|sparkling|seltzer|horchata|agua fresca|agua de cebada|cebada|ceba|barley|atole|champurrado|lassi|chai|tea|coffee|espresso|cocoa|mate|milkshake|smoothie|tepache|sorrel|mauby|akasan|pinol|pinole|kombucha|over ice',
     criticalElement: 'serving temperature, dilution, aroma extraction, dissolved body, and sip ritual',
     flavorProfile: 'balanced sweetness, acid, bitterness or spice, carried by water, dairy, grain starch, fruit, or carbonation',
     localTestWith: 'one small sip from water, milk or plant milk, seltzer, or juice plus a pantry aroma cue',
@@ -1003,7 +1003,8 @@ function wordSignal(words: string): RegExp {
 }
 
 function signalIncludes(signals: string, words: string): boolean {
-  return hasAnySignal(signals, [wordSignal(words)]);
+  const normalizedSignals = signals.normalize('NFD').replace(/\p{Diacritic}/gu, '');
+  return hasAnySignal(normalizedSignals, [wordSignal(words)]);
 }
 
 function specificCriticalElement(role: ComponentRole, signals: string, fallback: string): string {
@@ -1016,7 +1017,7 @@ function specificCriticalElement(role: ComponentRole, signals: string, fallback:
   if (role === 'beverage' && signalIncludes(signals, 'fizzy|carbonated|sparkling|seltzer|soda')) {
     return 'carbonation bite, acid-sugar balance, syrup aroma, cold temperature, and serving ritual';
   }
-  if (role === 'beverage' && signalIncludes(signals, 'rice|horchata|atole|champurrado|pinol|pinole|cinnamon|masa|corn')) {
+  if (role === 'beverage' && signalIncludes(signals, 'rice|horchata|agua de cebada|cebada|ceba|barley|atole|champurrado|pinol|pinole|cinnamon|masa|corn')) {
     return 'grain or starch body, spice extraction, sweetness, dilution, serving temperature, and sip ritual';
   }
   if (role === 'beverage' && signalIncludes(signals, 'tea|chai|coffee|espresso|mate|cocoa')) {
@@ -1041,7 +1042,7 @@ function specificFlavorProfile(role: ComponentRole, signals: string, fallback: s
   if (role === 'beverage' && signalIncludes(signals, 'fizzy|carbonated|sparkling|seltzer|soda')) {
     return 'cold fizz, tart acid, syrupy sweetness, fruit or kola aroma, and a short carbonation prickle';
   }
-  if (role === 'beverage' && signalIncludes(signals, 'rice|horchata|atole|champurrado|pinol|pinole|cinnamon|masa|corn')) {
+  if (role === 'beverage' && signalIncludes(signals, 'rice|horchata|agua de cebada|cebada|ceba|barley|atole|champurrado|pinol|pinole|cinnamon|masa|corn')) {
     return 'milky or grainy body, cinnamon or warm spice, gentle sweetness, and dilution adjusted by ice or heat';
   }
   if (role === 'beverage' && signalIncludes(signals, 'tea|chai|coffee|espresso|mate|cocoa')) {
@@ -1065,6 +1066,9 @@ function specificLocalTestWith(role: ComponentRole, signals: string, fallback: s
   }
   if (role === 'beverage' && signalIncludes(signals, 'fizzy|carbonated|sparkling|seltzer|soda')) {
     return 'chilled plain seltzer with a teaspoon syrup or sugar, a few drops citrus acid, and one fruit, kola, vanilla, or spice aroma';
+  }
+  if (role === 'beverage' && signalIncludes(signals, 'agua de cebada|cebada|ceba|barley')) {
+    return 'barley water, toasted barley tea, or water with a tiny barley/oat/rice-starch slurry, served cold with lime or ice as remembered';
   }
   if (role === 'beverage' && signalIncludes(signals, 'rice|horchata|atole|champurrado|pinol|pinole|cinnamon|masa|corn')) {
     return 'water, milk or plant milk, or a tiny rice/oat/corn-starch slurry with cinnamon and sugar, served cold over ice or warm as remembered';
@@ -1129,12 +1133,15 @@ function composedBiteSteps(signals: string): string[] {
 }
 
 function isBeverageSignal(signals: string): boolean {
-  return signalIncludes(signals, 'drink|beverage|juice|soda|fizzy|carbonated|sparkling|seltzer|horchata|agua fresca|atole|champurrado|lassi|chai|tea|coffee|espresso|cocoa|mate|milkshake|smoothie|tepache|sorrel|mauby|akasan|pinol|pinole|kombucha|over ice');
+  return signalIncludes(signals, 'drink|beverage|juice|soda|fizzy|carbonated|sparkling|seltzer|horchata|agua fresca|agua de cebada|cebada|ceba|barley|atole|champurrado|lassi|chai|tea|coffee|espresso|cocoa|mate|milkshake|smoothie|tepache|sorrel|mauby|akasan|pinol|pinole|kombucha|over ice');
 }
 
 function beverageCarrierIngredient(signals: string): string {
   if (signalIncludes(signals, 'fizzy|carbonated|sparkling|seltzer|soda')) {
     return 'chilled plain seltzer or sparkling water';
+  }
+  if (signalIncludes(signals, 'agua de cebada|cebada|ceba|barley')) {
+    return 'barley water, toasted barley tea, or water with a tiny barley/oat/rice-starch slurry';
   }
   if (signalIncludes(signals, 'rice|horchata|atole|champurrado|pinol|pinole|cinnamon|masa|corn')) {
     return 'water, milk or plant milk, or a tiny rice/oat/corn-starch slurry';
@@ -1149,6 +1156,9 @@ function beverageCarrierIngredient(signals: string): string {
 }
 
 function beverageAromaIngredient(signals: string): string {
+  if (signalIncludes(signals, 'agua de cebada|cebada|ceba|barley')) {
+    return 'toasted barley, lime zest, citrus juice, or another remembered grain/citrus aroma';
+  }
   if (signalIncludes(signals, 'rice|horchata|atole|champurrado|pinol|pinole|cinnamon|masa|corn')) {
     return 'cinnamon, vanilla, cocoa, toasted grain, or another remembered spice/aroma';
   }
@@ -1173,7 +1183,7 @@ function beverageTemperatureIngredient(signals: string): string {
 
 function beverageCueProfile(signals: string, userLocation?: string, overallConfidence?: Confidence): FoodScienceCueProfile {
   const carbonated = signalIncludes(signals, 'fizzy|carbonated|sparkling|seltzer|soda');
-  const grainDrink = signalIncludes(signals, 'rice|horchata|atole|champurrado|pinol|pinole|cinnamon|masa|corn');
+  const grainDrink = signalIncludes(signals, 'rice|horchata|agua de cebada|cebada|ceba|barley|atole|champurrado|pinol|pinole|cinnamon|masa|corn');
   return {
     title: 'Minimum viable beverage-memory cue',
     goal: 'Test the memory as a drink by isolating sip temperature, dilution, body, sweetness, acid, aroma extraction, and serving ritual before buying or making the exact beverage.',

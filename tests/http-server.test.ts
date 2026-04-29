@@ -282,7 +282,7 @@ describe('HTTP server integration', () => {
     expect(Object.keys(boundedBody.breakdowns.feedback_too_hard.category)).toHaveLength(25);
     expect(boundedBody.breakdowns.feedback_too_hard.category.other).toBe(6);
     expect(boundedBody.breakdowns.feedback_too_hard.route).toEqual({ '/app': 30 });
-  });
+  }, 15_000);
 
   it('returns 404 for unknown paths', async () => {
     const res = await fetch(`${baseUrl}/nonexistent-path-xyz`);

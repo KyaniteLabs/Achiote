@@ -392,7 +392,7 @@ export const toolRegistry = [
 
       // ── Dietary restriction detection ──
       const dietaryPatterns: Array<{ pattern: RegExp; label: string }> = [
-        { pattern: /\b(?:anaphylact\w*|anaphylax\w*|tree.?nut|cashew|almond|walnut|pecan|pistachio|hazelnut|macadamia|nut.?allerg)\b/i, label: 'nut_allergy' },
+        { pattern: /\b(?:anaphylact\w*|anaphylax\w*|tree.?nut|peanut|cashew|almond|walnut|pecan|pistachio|hazelnut|macadamia|nut.?allerg|nut.?free)\b/i, label: 'nut_allergy' },
         { pattern: /\b(?:gluten.?free|celiac|coeliac)\b/i, label: 'gluten_free' },
         { pattern: /\b(?:dairy.?free|lactose|milk.?allerg|vegan)\b/i, label: 'dairy_free' },
         { pattern: /\bvegan\b/i, label: 'vegan' },
@@ -412,6 +412,8 @@ export const toolRegistry = [
       const hasSensoryKeywords = /\b(?:taste|smell|aroma|flavor|texture|crispy|creamy|spicy|sweet|sour|salty|crunchy|chewy|soft|hot|cold|warm|bitter|savory|umami|gravy|sauce|broth)\b/i.test(msg);
       const hasSubstitutionKeywords = /\b(?:substitut\w*|instead of|replace|swap|alternative|can't eat|allergic|allergy|intolerance|dietary|restriction|halal|kosher|vegan|gluten.?free|dairy.?free|nut.?free)\b/i.test(msg);
       const wantsAdaptation = /\b(?:substitut\w*|adapt(?:ing|ed|s)?(?:\s+(?:the\s+)?(?:recipe|dish|version))?|make\s+it\s+(?:work|safe|for)|can\s+(?:all\s+)?(?:eat|have)|version\s+(?:that\s+)?work|without\b[\s\S]{0,80}\bbut\s+still|honou?r\b[\s\S]{0,80}\b(?:restrictions?|dietary|allergy|allergies|needs?))\b/i.test(msg);
+      const negatesSubstitutionNeed = /\b(?:do\s+not|don't|does\s+not|doesn't|not|no)\s+(?:need|want|looking\s+for|asking\s+for)?[\s\S]{0,160}\b(?:substitut\w*|adapt(?:ation|ed|ing)?|dietary\s+(?:help|adaptation)|restriction\s+help)\b/i.test(msg)
+        || /\b(?:only|just)\s+(?:want|need)[\s\S]{0,120}\b(?:memory cue|nostalgia cue|sensory cue|smallest memory cue)\b/i.test(msg);
       const hasRecipeKeywords = /\b(?:recipe|how to make|how do i|cook|bake|prepare|instructions|steps|ingredients)\b/i.test(msg);
       const hasRitualKeywords = /\b(?:ceremony|ritual|tradition|festival|holiday|celebration|wedding|funeral|birth|death|coming of age|bar mitzvah|bat mitzvah|quinceañera|diwali|eid|christmas|ramadan|passover|lunar new year|day of the dead)\b/i.test(msg);
       const hasMultilingualKeywords = /[-￿]{3,}/.test(msg) && /[a-z]{3,}/i.test(msg);
@@ -420,7 +422,7 @@ export const toolRegistry = [
       const hasNothingConcrete = msg.length < 40 && !hasSensoryKeywords && !hasDishName;
 
       let detectedIntent: string;
-      const needsSubstitutions = (hasRestrictions || hasSubstitutionKeywords) && wantsAdaptation;
+      const needsSubstitutions = (hasRestrictions || hasSubstitutionKeywords) && wantsAdaptation && !negatesSubstitutionNeed;
       if (needsSubstitutions) {
         detectedIntent = 'dietary_substitution';
       } else if (hasRitualKeywords && hasMemoryKeywords) {
@@ -921,7 +923,7 @@ export const toolRegistry = [
       const query = text(asInput(raw).query);
       const apiKey = process.env.SERPER_API_KEY?.trim();
       if (!apiKey) {
-        return output({ query, results: [], note: 'Web search is not configured. Set SERPER_API_KEY to enable.' });
+        return output({ query, results: [], note: 'Host web search is not configured for this run. Use prior evidence or ask a targeted follow-up question.' });
       }
       try {
         const response = await fetch('https://google.serper.dev/search', {
