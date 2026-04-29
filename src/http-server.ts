@@ -524,7 +524,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       console.warn('[ask] plan_tool_workflow failed, using defaults:', err instanceof Error ? err.message : String(err));
     }
 
-    send('status', { stage: 'model', provider: ASK_PROVIDER_KIND, model: ASK_MODEL });
+    send('status', { stage: 'model' });
     let modelResponse: AskModelResponse;
     try {
       modelResponse = await askSession.create(4096);
@@ -535,11 +535,11 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       }
       throw err;
     }
-    console.log(`[ask] provider=${ASK_PROVIDER_KIND} model=${ASK_MODEL} content=text:${modelResponse.textBlocks.length},tools:${modelResponse.toolCalls.length}`);
+    console.log(`[ask] model_response content=text:${modelResponse.textBlocks.length},tools:${modelResponse.toolCalls.length}`);
     if (modelResponse.toolCalls.length === 0) {
       console.warn('[ask] model skipped required Achiote tool workflow, retrying with explicit tool instruction');
       askSession.pushUserMessage('You did not call any tools. You MUST call collect_food_memory with the user\'s message as the memoryText parameter before responding. Do not answer without using tools.');
-      send('status', { stage: 'model', provider: ASK_PROVIDER_KIND, model: ASK_MODEL, retry: true });
+      send('status', { stage: 'model', retry: true });
       try {
         modelResponse = await askSession.create(4096);
       } catch (err) {
@@ -549,7 +549,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
         }
         throw err;
       }
-      console.log(`[ask] retry provider=${ASK_PROVIDER_KIND} model=${ASK_MODEL} content=text:${modelResponse.textBlocks.length},tools:${modelResponse.toolCalls.length}`);
+      console.log(`[ask] retry model_response content=text:${modelResponse.textBlocks.length},tools:${modelResponse.toolCalls.length}`);
     }
     if (modelResponse.toolCalls.length === 0) {
       console.warn('[ask] model still skipped tool workflow after retry');

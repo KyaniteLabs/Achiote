@@ -180,7 +180,7 @@ describe('launch business hardening', () => {
       response.writeHead(200, { 'Content-Type': 'text/event-stream' });
       response.end([
         'event: status',
-        'data: {"stage":"model","provider":"mock","model":"mock"}',
+        'data: {"stage":"model"}',
         '',
         'event: tool_call',
         'data: {"name":"collect_food_memory"}',
