@@ -50,6 +50,8 @@ export type AskModelResponse = {
 export interface AskSession {
   create(maxTokens: number): Promise<AskModelResponse>;
   appendToolResults(response: AskModelResponse, toolResults: AskToolResult[]): void;
+  injectDeterministicToolResult(toolCallId: string, toolName: string, toolInput: unknown, result: unknown): void;
+  pushUserMessage(text: string): void;
 }
 
 export function resolveAskProviderKind(env: Record<string, string | undefined> = process.env): AskProviderKind {
@@ -188,6 +190,10 @@ function parseJsonObject(value: string | undefined): unknown {
   }
 }
 
+function stringifyToolJson(value: unknown): string {
+  return JSON.stringify(value) ?? 'null';
+}
+
 export type AskHistoryItem = { role: 'user' | 'assistant'; content: string };
 export type AskImage = { base64: string; mediaType: 'image/jpeg' | 'image/png' | 'image/gif' | 'image/webp' };
 
@@ -240,6 +246,28 @@ export function createAnthropicAskSession(input: {
           content: result.content,
         })),
       });
+    },
+    injectDeterministicToolResult(toolCallId: string, toolName: string, toolInput: unknown, result: unknown): void {
+      messages.push({
+        role: 'assistant',
+        content: [{
+          type: 'tool_use',
+          id: toolCallId,
+          name: toolName,
+          input: toolInput,
+        }],
+      });
+      messages.push({
+        role: 'user',
+        content: [{
+          type: 'tool_result',
+          tool_use_id: toolCallId,
+          content: stringifyToolJson(result),
+        }],
+      });
+    },
+    pushUserMessage(text: string): void {
+      messages.push({ role: 'user', content: text });
     },
   };
 }
@@ -323,6 +351,24 @@ export function createOpenAICompatibleAskSession(input: {
       for (const result of toolResults) {
         messages.push({ role: 'tool', tool_call_id: result.id, content: result.content });
       }
+    },
+    injectDeterministicToolResult(toolCallId: string, toolName: string, toolInput: unknown, result: unknown): void {
+      messages.push({
+        role: 'assistant',
+        content: null,
+        tool_calls: [{
+          id: toolCallId,
+          type: 'function',
+          function: {
+            name: toolName,
+            arguments: stringifyToolJson(toolInput),
+          },
+        }],
+      });
+      messages.push({ role: 'tool', tool_call_id: toolCallId, content: stringifyToolJson(result) });
+    },
+    pushUserMessage(text: string): void {
+      messages.push({ role: 'user', content: text });
     },
   };
 }

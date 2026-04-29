@@ -19,6 +19,7 @@ import { BillingStripe, loadBillingConfigFromEnv, type CheckoutTier } from './li
 import { getHttpReadiness, getRequestRateLimitIdentity, isAnonymousAskAllowed, shouldApplyRateLimit } from './lib/http-runtime.js';
 import { resolveLocalSpeechConfig, synthesizeWithLocalSpeech, transcribeWithLocalSpeech, validateSpeechAudioPayload, validateSpeechTextPayload } from './lib/local-speech.js';
 import { buildMemoryReceipt } from './lib/memory-receipt.js';
+import { filterRepeatedToolCalls } from './lib/tool-loop.js';
 import type { Tier } from './lib/auth.js';
 import type { CollectedFoodMemory, DishResearchPlan, MinimumViableNostalgiaCue, ReconstructionDossier } from './lib/types.js';
 import {
@@ -43,6 +44,7 @@ const ASK_PROVIDER_KIND = resolveAskProviderKind();
 const ASK_MODEL = resolveAskModel();
 const ANTHROPIC_TIMEOUT_MS = parseInt(process.env.ANTHROPIC_TIMEOUT_MS || process.env.API_TIMEOUT_MS || '120000', 10);
 const OPENAI_TIMEOUT_MS = parseInt(process.env.LOCAL_INFERENCE_TIMEOUT_MS || process.env.OPENAI_TIMEOUT_MS || process.env.LMSTUDIO_TIMEOUT_MS || process.env.GLM_TIMEOUT_MS || process.env.ZHIPU_TIMEOUT_MS || process.env.API_TIMEOUT_MS || '180000', 10);
+const FINAL_SYNTHESIS_TIMEOUT_MS = parsePositiveInteger(process.env.ACHIOTE_FINAL_SYNTHESIS_TIMEOUT_MS) ?? 20_000;
 const OPENAI_BASE_URL = openAIBaseUrlFromEnv();
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const STATIC_DIR = resolve(__dirname, '..', 'docs', 'landing');
@@ -242,19 +244,26 @@ function createAskSession(userMessage: string, history?: AskHistoryItem[], image
   });
 }
 
-const SYSTEM_PROMPT = `You are a food memory assistant built into Achiote. You MUST use the provided tools — never answer from memory alone.
+const SYSTEM_PROMPT = `You are a food memory assistant built into Achiote. You MUST use the provided tools — never answer from memory alone. This applies to ALL user messages: nostalgic memories, recipe adaptation requests, dietary substitution questions, and cooking guidance.
 
 ## TOOL WORKFLOW
 
-When a user shares a food memory, start with tools before writing any user-facing answer.
+For EVERY user message, you MUST follow this workflow:
 
-1. \`collect_food_memory\` — parse the user's text.
-2. \`plan_dish_research\` — build hypotheses from the parsed memory.
-3. Look at the structured \`nextQuestions\`, \`questionsForUser\`, hypotheses, confidence, and missing-information fields.
-4. If the memory is still sparse or the next best move is clarification, stop tool calling and ask targeted questions.
-5. If there is enough signal for a sensory test, continue:
+1. The server runs \`plan_tool_workflow\` before your first turn and injects its result into your conversation context. Treat that result as already completed; do not call \`plan_tool_workflow\` again.
+2. Follow the injected \`workflowSteps\` from the plan exactly — call the tools in the order listed.
+3. Respect \`maxSearchCalls\` — the server enforces this cap. Do not call \`search_web\` more than the plan allows.
+4. If \`needsSubstitutions\` is true, call \`find_sensory_substitutes\` for each restricted ingredient.
+5. After the tool chain completes, synthesize the results into your response.
+
+### Standard pipeline after plan_tool_workflow:
+- \`collect_food_memory\` — parse the user's text.
+- \`plan_dish_research\` — build hypotheses from the parsed memory.
+- Look at the structured \`nextQuestions\`, \`questionsForUser\`, hypotheses, confidence, and missing-information fields.
+- If the memory is still sparse or the next best move is clarification, stop tool calling and ask targeted questions.
+- If there is enough signal for a sensory test, continue:
    - \`resolve_dish_name\` with the top non-generic hypothesis name.
-   - \`search_web\` only when a specific named dish needs external confirmation or the match is Low/Unknown.
+   - \`search_web\` only when a specific named dish needs external confirmation or the match is Low/Unknown. Call it ONCE only.
    - \`build_reconstruction_dossier\` with the memory, research plan, and any researched facts.
    - \`generate_minimum_viable_nostalgia\` with the dossier.
 
@@ -497,11 +506,36 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
     const askSession = createAskSession(userMessage, history, images.value);
     const calledTools = new Set<string>();
     const toolPayloads: Record<string, unknown> = {};
+    const deterministicPlanInput = { userMessage };
+    let didInjectPlanToolResult = false;
+
+    // Execute plan_tool_workflow deterministically — do not rely on the model to call it.
+    send('status', { stage: 'routing', tool: 'plan_tool_workflow' });
+    try {
+      const planResult = await executeToolDefinition('plan_tool_workflow', deterministicPlanInput, toolContext);
+      calledTools.add('plan_tool_workflow');
+      toolPayloads.plan_tool_workflow = planResult.payload;
+      askSession.injectDeterministicToolResult('deterministic_plan_tool_workflow', 'plan_tool_workflow', deterministicPlanInput, planResult.payload);
+      didInjectPlanToolResult = true;
+      send('tool_call', { name: 'plan_tool_workflow', input: deterministicPlanInput, deterministic: true });
+      send('tool_result', { name: 'plan_tool_workflow', result: planResult.payload, deterministic: true });
+      console.log(`[ask] plan_tool_workflow: intent=${(planResult.payload as Record<string, unknown>)?.detectedIntent} maxSearch=${(planResult.payload as Record<string, unknown>)?.maxSearchCalls}`);
+    } catch (err) {
+      console.warn('[ask] plan_tool_workflow failed, using defaults:', err instanceof Error ? err.message : String(err));
+    }
+
     send('status', { stage: 'model', provider: ASK_PROVIDER_KIND, model: ASK_MODEL });
     let modelResponse = await askSession.create(4096);
     console.log(`[ask] provider=${ASK_PROVIDER_KIND} model=${ASK_MODEL} content=text:${modelResponse.textBlocks.length},tools:${modelResponse.toolCalls.length}`);
     if (modelResponse.toolCalls.length === 0) {
-      console.warn('[ask] model skipped required Achiote tool workflow');
+      console.warn('[ask] model skipped required Achiote tool workflow, retrying with explicit tool instruction');
+      askSession.pushUserMessage('You did not call any tools. You MUST call collect_food_memory with the user\'s message as the memoryText parameter before responding. Do not answer without using tools.');
+      send('status', { stage: 'model', provider: ASK_PROVIDER_KIND, model: ASK_MODEL, retry: true });
+      modelResponse = await askSession.create(4096);
+      console.log(`[ask] retry provider=${ASK_PROVIDER_KIND} model=${ASK_MODEL} content=text:${modelResponse.textBlocks.length},tools:${modelResponse.toolCalls.length}`);
+    }
+    if (modelResponse.toolCalls.length === 0) {
+      console.warn('[ask] model still skipped tool workflow after retry');
       send('error', {
         message: 'The model skipped Achiote\'s structured memory workflow. Try again, or use a provider/model with tool-calling support.',
         code: 'tool_workflow_skipped',
@@ -510,8 +544,16 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
     }
 
     let iterations = 0;
-    const toolCallHistory: Array<{ name: string; input: unknown }> = [];
-    const MAX_DUPLICATE_CALLS = 2;
+    const toolCallHistory: Array<{ name: string; input: unknown }> = didInjectPlanToolResult
+      ? [{ name: 'plan_tool_workflow', input: deterministicPlanInput }]
+      : [];
+    const MAX_TOOL_CALLS_PER_NAME = 5;
+    let searchCallCount = 0;
+
+    function getMaxSearchCalls(): number {
+      const plan = toolPayloads.plan_tool_workflow as { maxSearchCalls?: number } | undefined;
+      return typeof plan?.maxSearchCalls === 'number' ? plan.maxSearchCalls : 1;
+    }
 
     while (modelResponse.toolCalls.length > 0 && iterations < 15) {
       if (res.writableEnded) return;
@@ -521,21 +563,18 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
 
       // Detect tool loops: filter out tools called too many times,
       // but allow other new tools in the same batch to proceed.
-      const loopedTools: string[] = [];
-      const filteredCalls = modelResponse.toolCalls.filter((call) => {
-        const previousCalls = toolCallHistory.filter((h) => h.name === call.name);
-        if (previousCalls.length >= MAX_DUPLICATE_CALLS) {
-          loopedTools.push(call.name);
-          return false;
-        }
-        return true;
-      });
+      const { allowedCalls: filteredCalls, blockedCalls } = filterRepeatedToolCalls(
+        modelResponse.toolCalls,
+        toolCallHistory,
+        MAX_TOOL_CALLS_PER_NAME,
+      );
 
-      if (loopedTools.length > 0) {
-        for (const tool of loopedTools) {
-          const count = toolCallHistory.filter((h) => h.name === tool).length + 1;
-          console.warn(`[ask] tool loop detected: ${tool} called ${count} times, skipping duplicate`);
-          send('status', { iteration: iterations, stage: 'tool_loop_detected', tool, count });
+      if (blockedCalls.length > 0) {
+        for (const blocked of blockedCalls) {
+          const tool = blocked.call.name;
+          const count = blocked.previousCount + 1;
+          console.warn(`[ask] tool loop detected: ${tool} called ${count} times, skipping duplicate (${blocked.reason})`);
+          send('status', { iteration: iterations, stage: 'tool_loop_detected', tool, count, reason: blocked.reason });
         }
         modelResponse = {
           textBlocks: filteredCalls.length > 0
@@ -544,47 +583,6 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
           toolCalls: filteredCalls,
           providerMessage: modelResponse.providerMessage ?? null,
         };
-        // When the loop detector emptied the batch but we have enough research
-        // data, execute build_reconstruction_dossier directly and feed the
-        // result back to the model so it can progress to
-        // generate_minimum_viable_nostalgia in the next iteration.
-        if (modelResponse.toolCalls.length === 0
-          && !calledTools.has('build_reconstruction_dossier')
-          && toolPayloads.collect_food_memory
-          && toolPayloads.plan_dish_research) {
-          console.log('[ask] auto-building dossier after loop detector emptied batch');
-          const searchResults = toolPayloads.search_web as { results?: Array<{ title?: string; snippet?: string }> } | undefined;
-          const researchedFacts = searchResults?.results
-            ?.filter((r) => r.snippet)
-            .map((r) => `${r.title}: ${r.snippet}`)
-            .slice(0, 5) ?? [];
-          try {
-            const dossierPayload = await executeAndStreamTool('build_reconstruction_dossier', {
-              memory: toolPayloads.collect_food_memory,
-              researchPlan: toolPayloads.plan_dish_research,
-              researchedFacts,
-            }, userMessage, send, calledTools, toolPayloads);
-            // Feed dossier result back as a synthetic tool result so the
-            // model session stays valid and the model can call MVN next.
-            const dossierResult: Array<{ id: string; content: string }> = [{
-              id: `injected_dossier_${iterations}`,
-              content: JSON.stringify(dossierPayload),
-            }];
-            toolCallHistory.push({ name: 'build_reconstruction_dossier', input: {} });
-            const syntheticResponse: AskModelResponse = {
-              textBlocks: [`I've gathered enough research. Let me synthesize what we found and create a first test.`],
-              toolCalls: [{ id: `injected_dossier_${iterations}`, name: 'build_reconstruction_dossier', input: { memory: toolPayloads.collect_food_memory, researchPlan: toolPayloads.plan_dish_research } }],
-              providerMessage: modelResponse.providerMessage,
-            };
-            askSession.appendToolResults(syntheticResponse, dossierResult);
-            send('status', { iteration: iterations, stage: 'thinking' });
-            modelResponse = await askSession.create(2048);
-          } catch (err) {
-            const detail = err instanceof Error ? err.message : String(err);
-            console.warn(`[ask] auto-dossier failed: ${detail}, falling back to forced cue`);
-          }
-          continue;
-        }
       }
 
       if (modelResponse.toolCalls.length === 0) break;
@@ -594,7 +592,19 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
 
       for (const call of modelResponse.toolCalls) {
         try {
+          // Enforce search_web call cap — hard block, never falls through
+          if (call.name === 'search_web' && searchCallCount >= getMaxSearchCalls()) {
+            const cached = toolPayloads.search_web;
+            console.warn(`[ask] search_web cap hard-block (${searchCallCount}/${getMaxSearchCalls()}), ${cached ? 'reusing cached' : 'returning cap message'}`);
+            const resultPayload = cached ?? { capReached: true, message: `search_web capped at ${getMaxSearchCalls()} call(s). Use prior research results.` };
+            send('tool_call', { name: 'search_web', input: call.input, blocked: true });
+            send('tool_result', { name: 'search_web', result: resultPayload, blocked: true });
+            toolResults.push({ id: call.id, content: JSON.stringify(resultPayload) });
+            toolCallHistory.push({ name: call.name, input: call.input });
+            continue;
+          }
           const payload = await executeAndStreamTool(call.name, call.input, userMessage, send, calledTools, toolPayloads);
+          if (call.name === 'search_web') searchCallCount++;
           const content = JSON.stringify(payload);
           toolResults.push({ id: call.id, content });
           toolCallHistory.push({ name: call.name, input: call.input });
@@ -608,8 +618,26 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
 
       askSession.appendToolResults(modelResponse, toolResults);
       send('status', { iteration: iterations, stage: 'thinking' });
-      modelResponse = await askSession.create(2048);
+      try {
+        modelResponse = await createWithTimeout(askSession, 2048, FINAL_SYNTHESIS_TIMEOUT_MS);
+      } catch (err) {
+        const detail = err instanceof Error ? err.message : String(err);
+        if (modelResponse.toolCalls.some((call) => call.name === 'generate_minimum_viable_nostalgia')) {
+          console.warn(`[ask] final synthesis unavailable after minimum cue, using deterministic response: ${detail}`);
+          const responseText = buildMinimumCueCompletedResponse(toolPayloads);
+          send('text', responseText);
+          maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
+          send('done', { guarded: 'minimum_cue_deterministic_completion' });
+          return;
+        }
+        console.warn(`[ask] model thinking turn timed out after tools, using deterministic continuation: ${detail}`);
+        modelResponse = { textBlocks: [], toolCalls: [], providerMessage: null };
+        break;
+      }
     }
+
+    await maybeRunMissingResearchPlan({ userMessage, toolPayloads, calledTools, send });
+    await maybeRunPlannedSubstitutions({ userMessage, toolPayloads, calledTools, send });
 
     if (await maybeSendForcedMinimumCue({ userMessage, toolPayloads, calledTools, send })) {
       return;
@@ -624,6 +652,23 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
         console.log('[ask] follow-up with substantive anchors — skipping missing_research_plan_clarification guard');
       } else {
         console.warn('[ask] replaced response that skipped research planning with structured clarification');
+        const responseText = buildClarificationOnlyResponse(toolPayloads);
+        send('text', responseText);
+        maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
+        send('done', { guarded: 'missing_research_plan_clarification' });
+        return;
+      }
+    }
+
+    if (calledTools.has('collect_food_memory')
+      && calledTools.has('plan_dish_research')
+      && !calledTools.has('generate_minimum_viable_nostalgia')
+      && (modelResponse.textBlocks.length === 0 || containsStalledFallbackText(modelResponse.textBlocks.join('\n\n')))) {
+      const isFollowUp = history !== undefined && history.length > 0;
+      if (isFollowUp && hasSubstantialMemoryAnchors(toolPayloads.collect_food_memory)) {
+        console.log('[ask] follow-up with substantive anchors — skipping stalled_planning_clarification guard');
+      } else {
+        console.warn('[ask] replaced stalled post-plan response with structured clarification');
         const responseText = buildClarificationOnlyResponse(toolPayloads);
         send('text', responseText);
         maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
@@ -907,6 +952,24 @@ function parsePositiveInteger(value: string | undefined): number | undefined {
   return Number.isFinite(parsed) && parsed > 0 ? parsed : undefined;
 }
 
+async function createWithTimeout(
+  askSession: ReturnType<typeof createAskSession>,
+  maxTokens: number,
+  timeoutMs: number,
+): Promise<AskModelResponse> {
+  let timeout: NodeJS.Timeout | undefined;
+  try {
+    return await Promise.race([
+      askSession.create(maxTokens),
+      new Promise<AskModelResponse>((_resolve, reject) => {
+        timeout = setTimeout(() => reject(new Error(`final synthesis timed out after ${timeoutMs}ms`)), timeoutMs);
+      }),
+    ]);
+  } finally {
+    if (timeout) clearTimeout(timeout);
+  }
+}
+
 function escapeRegExp(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
@@ -969,6 +1032,9 @@ async function maybeSendForcedMinimumCue({
 function shouldForceMinimumCue(userMessage: string, toolPayloads: Record<string, unknown>, calledTools: Set<string>): boolean {
   if (!toolPayloads.collect_food_memory || !toolPayloads.plan_dish_research) return false;
 
+  const workflowPlan = toolPayloads.plan_tool_workflow as { needsSubstitutions?: boolean } | undefined;
+  if (workflowPlan?.needsSubstitutions && calledTools.has('find_sensory_substitutes')) return true;
+
   // Explicit minimum-cue request — force whenever we have memory + plan + any sensory signal
   if (isExplicitMinimumTestRequest(userMessage)) {
     return hasSensorySignal(userMessage, toolPayloads.collect_food_memory);
@@ -991,6 +1057,97 @@ function shouldForceMinimumCue(userMessage: string, toolPayloads: Record<string,
   }
 
   return false;
+}
+
+async function maybeRunMissingResearchPlan({
+  userMessage,
+  toolPayloads,
+  calledTools,
+  send,
+}: {
+  userMessage: string;
+  toolPayloads: Record<string, unknown>;
+  calledTools: Set<string>;
+  send: SseSender;
+}): Promise<void> {
+  const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
+  if (!memory || calledTools.has('plan_dish_research')) return;
+  send('status', { stage: 'calling_tools', tools: ['plan_dish_research'], deterministic: true });
+  await executeAndStreamTool('plan_dish_research', { memory }, userMessage, send, calledTools, toolPayloads);
+}
+
+async function maybeRunPlannedSubstitutions({
+  userMessage,
+  toolPayloads,
+  calledTools,
+  send,
+}: {
+  userMessage: string;
+  toolPayloads: Record<string, unknown>;
+  calledTools: Set<string>;
+  send: SseSender;
+}): Promise<void> {
+  const plan = toolPayloads.plan_tool_workflow as { needsSubstitutions?: boolean } | undefined;
+  if (!plan?.needsSubstitutions || calledTools.has('find_sensory_substitutes')) return;
+
+  const targets = extractSubstitutionTargets(userMessage, toolPayloads.collect_food_memory);
+  if (targets.length === 0) return;
+
+  const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
+  const location = memory?.userLocation ?? inferUserLocation(userMessage) ?? 'unknown';
+  send('status', { stage: 'calling_tools', tools: ['find_sensory_substitutes'], deterministic: true });
+  for (const ingredient of targets.slice(0, 5)) {
+    await executeAndStreamTool('find_sensory_substitutes', { ingredient, location }, userMessage, send, calledTools, toolPayloads);
+  }
+}
+
+function extractSubstitutionTargets(userMessage: string, collectedMemory: unknown): string[] {
+  const targets = new Set<string>();
+  const clues = collectedMemory && typeof collectedMemory === 'object'
+    ? (collectedMemory as { extractedClues?: { rememberedIngredients?: unknown } }).extractedClues
+    : undefined;
+  const rememberedIngredients = Array.isArray(clues?.rememberedIngredients) ? clues.rememberedIngredients : [];
+  for (const ingredient of rememberedIngredients) {
+    if (typeof ingredient === 'string' && ingredient.trim()) targets.add(normalizeSubstitutionTarget(ingredient));
+  }
+
+  const ingredientPatterns: Array<[RegExp, string]> = [
+    [/\bcashews?\b/i, 'cashews'],
+    [/\btree nuts?\b/i, 'tree nuts'],
+    [/\bbutter\b/i, 'butter'],
+    [/\bcream\b/i, 'cream'],
+    [/\byogurt\b/i, 'yogurt'],
+    [/\bmilk\b/i, 'milk'],
+    [/\bcheese\b/i, 'cheese'],
+    [/\bchicken\b/i, 'chicken'],
+    [/\blamb\b/i, 'lamb'],
+    [/\bbeef\b/i, 'beef'],
+    [/\bpork\b/i, 'pork'],
+    [/\bwhiske?y\b/i, 'whiskey'],
+    [/\balcohol\b/i, 'alcohol'],
+    [/\bnaan\b/i, 'naan'],
+    [/\bwheat\b/i, 'wheat'],
+    [/\bgluten\b/i, 'gluten'],
+    [/\bchickpeas?\b/i, 'chickpeas'],
+    [/\blentils?\b/i, 'lentils'],
+    [/\beggs?\b/i, 'eggs'],
+    [/\bsoy\b/i, 'soy'],
+    [/\bshellfish\b/i, 'shellfish'],
+  ];
+  for (const [pattern, ingredient] of ingredientPatterns) {
+    if (pattern.test(userMessage)) targets.add(ingredient);
+  }
+
+  return [...targets].filter((ingredient) => !/^(incredible|heart|brother-in-law)$/i.test(ingredient));
+}
+
+function normalizeSubstitutionTarget(ingredient: string): string {
+  const normalized = ingredient.trim().toLowerCase();
+  if (normalized === 'cashew') return 'cashews';
+  if (normalized === 'chickpea') return 'chickpeas';
+  if (normalized === 'lentil') return 'lentils';
+  if (normalized === 'egg') return 'eggs';
+  return normalized;
 }
 
 function isExplicitMinimumTestRequest(text: string): boolean {
@@ -1036,6 +1193,15 @@ function formatMinimumCueFallback(cue: MinimumViableNostalgiaCue, userLocation?:
     localLine,
     followUp ? `If it works: ${followUp}` : '',
   ].filter((line) => line.length > 0).join('\n');
+}
+
+function buildMinimumCueCompletedResponse(toolPayloads: Record<string, unknown>): string {
+  const cue = toolPayloads.generate_minimum_viable_nostalgia as MinimumViableNostalgiaCue | undefined;
+  if (!cue) {
+    return 'I completed the structured Achiote tool workflow, but the final synthesis model did not return in time. Try again with a shorter prompt or a faster provider.';
+  }
+  const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
+  return ensureCueQualityLanguage(formatMinimumCueFallback(cue, memory?.userLocation), toolPayloads, new Set(['generate_minimum_viable_nostalgia']));
 }
 
 function ensureLocalCueLanguage(text: string, toolPayloads: Record<string, unknown>, calledTools: Set<string>): string {
@@ -1161,6 +1327,10 @@ function containsGenericUncertaintyWaffle(text: string): boolean {
     || /\b(?:there\s+are\s+)?(?:dozens|many|lots|so\s+many\s+different)\s+(?:different\s+)?dishes\b[\s\S]{0,80}\b(?:fit|match|could|might|similar|point)\b/i.test(text);
 }
 
+function containsStalledFallbackText(text: string): boolean {
+  return /\bI've gathered enough information so far\.?\s+Let me work with what we have\.?\b/i.test(text.trim());
+}
+
 function containsPrematureCandidateSpeculation(text: string, toolPayloads: Record<string, unknown>): boolean {
   const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
   const hasStableAnchor = Boolean(
@@ -1170,7 +1340,8 @@ function containsPrematureCandidateSpeculation(text: string, toolPayloads: Recor
   if (hasStableAnchor) return false;
   return /\bcould\s+be\s+(?:a|an|the)?\s*[\s\S]{0,120}\b(?:or\s+even|,\s*(?:a|an|the)?\s*[\p{L}\p{M}])/iu.test(text)
     || /\bmight\s+be\s+(?:a|an|the)?\s*[\s\S]{0,120}\b(?:or\s+even|,\s*(?:a|an|the)?\s*[\p{L}\p{M}])/iu.test(text)
-    || /\bfrom\s+(?:a|an|the)?\s*[\s\S]{0,160}\bto\s+(?:a|an|the)?\s*[\s\S]{0,160}\bto\b/iu.test(text);
+    || /\bfrom\s+(?:a|an|the)?\s*[\s\S]{0,160}\bto\s+(?:a|an|the)?\s*[\s\S]{0,160}\bto\b/iu.test(text)
+    || /\bfor example\s+[\s\S]{0,160},\s*[\s\S]{0,80}\bor\s+[\s\S]{0,80}\b/iu.test(text);
 }
 
 function hasSubstantialMemoryAnchors(memory: unknown): boolean {

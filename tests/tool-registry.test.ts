@@ -15,6 +15,7 @@ const expectedToolNames = [
   'generate_minimum_viable_nostalgia',
   'generate_recipe',
   'plan_dish_research',
+  'plan_tool_workflow',
   'resolve_dish_name',
   'search_web',
   'source_ingredients',
@@ -53,6 +54,30 @@ describe('shared tool registry', () => {
 
     expect(outputSchemas.plan_dish_research.safeParse(plan.payload).success).toBe(true);
     expect(plan.payload.researchRequired).toBe(true);
+  });
+
+  it('routes dietary substitution only when the user asks for adaptation', async () => {
+    const incidentalRestriction = await executeToolDefinition('plan_tool_workflow', {
+      userMessage: 'My father used to make Syrian lentil soup after his heart attack, no more salt, but I remember the lemon and cumin smell most.',
+    }, defaultToolExecutionContext);
+
+    expect(incidentalRestriction.payload).toMatchObject({
+      detectedIntent: 'nostalgic_memory',
+      needsSubstitutions: false,
+      detectedRestrictions: expect.arrayContaining(['heart_healthy']),
+    });
+    expect(incidentalRestriction.payload.workflowSteps.map((step: { tool: string }) => step.tool)).not.toContain('find_sensory_substitutes');
+
+    const explicitSubstitution = await executeToolDefinition('plan_tool_workflow', {
+      userMessage: 'My grandmother from Punjab made butter chicken. My daughter is anaphylactic to cashews and my niece is celiac. Can you help me find substitutions?',
+    }, defaultToolExecutionContext);
+
+    expect(explicitSubstitution.payload).toMatchObject({
+      detectedIntent: 'dietary_substitution',
+      needsSubstitutions: true,
+      detectedRestrictions: expect.arrayContaining(['nut_allergy', 'gluten_free']),
+    });
+    expect(explicitSubstitution.payload.workflowSteps.map((step: { tool: string }) => step.tool)).toContain('find_sensory_substitutes');
   });
 
   it('recovers research planning when a model passes only normalized memory text', async () => {
@@ -156,12 +181,12 @@ describe('shared tool registry', () => {
 
   it('keeps Anthropic tools in workflow-first order for /ask model behavior', () => {
     expect(anthropicTools.map((tool) => tool.name).slice(0, 6)).toEqual([
+      'plan_tool_workflow',
       'collect_food_memory',
       'plan_dish_research',
       'build_reconstruction_dossier',
       'build_memory_receipt',
       'generate_family_followup_questions',
-      'resolve_dish_name',
     ]);
     expect(anthropicTools.map((tool) => tool.name).sort()).toEqual(expectedToolNames);
   });
