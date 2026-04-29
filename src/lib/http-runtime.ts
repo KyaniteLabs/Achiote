@@ -35,7 +35,7 @@ export type RateLimitGateInput = {
 };
 
 export type ReadinessCheck = {
-  name: 'apiKeys' | 'anthropicApiKey' | 'cache' | 'rateLimitPersistence';
+  name: 'apiKeys' | 'modelProvider' | 'cache' | 'rateLimitPersistence';
   ok: boolean;
   message: string;
 };
@@ -143,11 +143,11 @@ export function getHttpReadiness(input: HttpReadinessInput): HttpReadiness {
         : 'authentication is disabled for local/demo use',
     },
     {
-      name: 'anthropicApiKey',
+      name: 'modelProvider',
       ok: hasModelProvider,
       message: hasModelProvider
         ? 'Model provider is configured for /ask'
-        : 'ANTHROPIC_API_KEY, ANTHROPIC_AUTH_TOKEN, or local inference is missing; /ask cannot call the model',
+        : 'Model provider is not configured; /ask cannot generate responses',
     },
     {
       name: 'cache',
