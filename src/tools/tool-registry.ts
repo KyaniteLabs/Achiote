@@ -39,6 +39,7 @@ import {
   researchValidationOutputSchema,
   sourceIngredientsOutputSchema,
   webSearchOutputSchema,
+  planToolWorkflowOutputSchema,
 } from '../schemas/tool-schemas.js';
 import sensoryProfilesData from '../data/sensory-profiles.json' with { type: 'json' };
 import dishFamiliesData from '../data/dish-families.json' with { type: 'json' };
@@ -367,6 +368,119 @@ export const defaultToolExecutionContext: AchioteToolExecutionContext = {
 };
 
 export const toolRegistry = [
+  createTool({
+    name: 'plan_tool_workflow',
+    mcp: {
+      title: 'Plan Tool Workflow',
+      description: 'Deterministic tool router. The server runs this before the first model turn and injects the result; do not call it again when that result is already present.',
+      inputSchema: {
+        userMessage: z.string().min(1).max(6000).describe('The raw user message to analyze'),
+      },
+      outputSchema: planToolWorkflowOutputSchema,
+    },
+    outputSchema: planToolWorkflowOutputSchema,
+    anthropicInputSchema: {
+      type: 'object' as const,
+      required: ['userMessage'],
+      properties: {
+        userMessage: { type: 'string' as const, description: 'The raw user message to analyze' },
+      },
+    },
+    execute: (raw) => {
+      const input = asInput(raw);
+      const msg = text(input.userMessage).toLowerCase();
+
+      // ── Dietary restriction detection ──
+      const dietaryPatterns: Array<{ pattern: RegExp; label: string }> = [
+        { pattern: /\b(?:anaphylact\w*|anaphylax\w*|tree.?nut|cashew|almond|walnut|pecan|pistachio|hazelnut|macadamia|nut.?allerg)\b/i, label: 'nut_allergy' },
+        { pattern: /\b(?:gluten.?free|celiac|coeliac)\b/i, label: 'gluten_free' },
+        { pattern: /\b(?:dairy.?free|lactose|milk.?allerg|vegan)\b/i, label: 'dairy_free' },
+        { pattern: /\bvegan\b/i, label: 'vegan' },
+        { pattern: /\b(?:halal)\b/i, label: 'halal' },
+        { pattern: /\b(?:kosher)\b/i, label: 'kosher' },
+        { pattern: /\b(?:heart|cardiolog|saturated.?fat|cholesterol|low.?fat)\b/i, label: 'heart_healthy' },
+        { pattern: /\b(?:diabet|sugar.?free|low.?sugar|low.?carb|keto)\b/i, label: 'diabetic' },
+        { pattern: /\b(?:soy.?allerg|soy.?free)\b/i, label: 'soy_free' },
+        { pattern: /\b(?:egg.?allerg|egg.?free)\b/i, label: 'egg_free' },
+        { pattern: /\b(?:shellfish|seafood.?allerg)\b/i, label: 'shellfish_allergy' },
+      ];
+      const detectedRestrictions = dietaryPatterns.filter(p => p.pattern.test(msg)).map(p => p.label);
+      const hasRestrictions = detectedRestrictions.length > 0;
+
+      // ── Intent detection ──
+      const hasMemoryKeywords = /\b(?:grandmother|grandfather|abuela|nonna|oma|yia|grandpa|nana|baba|tata|memo|tita|mami|dad|mom|mother|father|aunt|uncle|cousin|family|childhood|grew up|hometown|home country|village|old country|remember|memory|memories|used to make|tasted|smelled)\b/i.test(msg);
+      const hasSensoryKeywords = /\b(?:taste|smell|aroma|flavor|texture|crispy|creamy|spicy|sweet|sour|salty|crunchy|chewy|soft|hot|cold|warm|bitter|savory|umami|gravy|sauce|broth)\b/i.test(msg);
+      const hasSubstitutionKeywords = /\b(?:substitut\w*|instead of|replace|swap|alternative|can't eat|allergic|allergy|intolerance|dietary|restriction|halal|kosher|vegan|gluten.?free|dairy.?free|nut.?free)\b/i.test(msg);
+      const wantsAdaptation = /\b(?:substitut\w*|adapt(?:ing|ed|s)?(?:\s+(?:the\s+)?(?:recipe|dish|version))?|make\s+it\s+(?:work|safe|for)|can\s+(?:all\s+)?(?:eat|have)|version\s+(?:that\s+)?work|without\b[\s\S]{0,80}\bbut\s+still|honou?r\b[\s\S]{0,80}\b(?:restrictions?|dietary|allergy|allergies|needs?))\b/i.test(msg);
+      const hasRecipeKeywords = /\b(?:recipe|how to make|how do i|cook|bake|prepare|instructions|steps|ingredients)\b/i.test(msg);
+      const hasRitualKeywords = /\b(?:ceremony|ritual|tradition|festival|holiday|celebration|wedding|funeral|birth|death|coming of age|bar mitzvah|bat mitzvah|quinceañera|diwali|eid|christmas|ramadan|passover|lunar new year|day of the dead)\b/i.test(msg);
+      const hasMultilingualKeywords = /[-￿]{3,}/.test(msg) && /[a-z]{3,}/i.test(msg);
+      const hasContradictionKeywords = /\b(?:but also|on the other hand|contradict|conflict|uncertain|not sure if|or was it|maybe it was|i think|actually|wait no)\b/i.test(msg);
+      const hasDishName = /\b(?:curry|stew|soup|rice|bread|pasta|noodle|dumpling|pie|cake|taco|tamale|samosa|tagine|paella|risotto|biryani|ramen|pho|adobo|rendang|mole|gumbo|jambalaya|paella|lasagna|casserole|roast|grill|fry|bake|stew)\b/i.test(msg);
+      const hasNothingConcrete = msg.length < 40 && !hasSensoryKeywords && !hasDishName;
+
+      let detectedIntent: string;
+      const needsSubstitutions = (hasRestrictions || hasSubstitutionKeywords) && wantsAdaptation;
+      if (needsSubstitutions) {
+        detectedIntent = 'dietary_substitution';
+      } else if (hasRitualKeywords && hasMemoryKeywords) {
+        detectedIntent = 'ritual_ceremony';
+      } else if (hasMultilingualKeywords) {
+        detectedIntent = 'multilingual_inquiry';
+      } else if (hasContradictionKeywords && hasMemoryKeywords) {
+        detectedIntent = 'contradictory_memory';
+      } else if (hasRecipeKeywords && !hasMemoryKeywords) {
+        detectedIntent = 'recipe_adaptation';
+      } else if (hasMemoryKeywords || hasSensoryKeywords) {
+        detectedIntent = 'nostalgic_memory';
+      } else if (hasNothingConcrete) {
+        detectedIntent = 'unknown_dish';
+      } else {
+        detectedIntent = 'general_food_inquiry';
+      }
+
+      // ── Workflow construction ──
+      const steps: Array<{ tool: string; reason: string; required: boolean }> = [];
+      steps.push({ tool: 'collect_food_memory', reason: 'Parse user message into structured clues and missing information', required: true });
+      steps.push({ tool: 'plan_dish_research', reason: 'Build hypotheses and identify what to research', required: true });
+
+      let maxSearchCalls = 1;
+
+      if (needsSubstitutions) {
+        steps.push({ tool: 'resolve_dish_name', reason: 'Identify the base dish to substitute for', required: true });
+        steps.push({ tool: 'search_web', reason: 'Find authentic preparation details for the base dish', required: false });
+        steps.push({ tool: 'find_sensory_substitutes', reason: 'Find compound-matched substitutions for restricted ingredients', required: true });
+        steps.push({ tool: 'build_reconstruction_dossier', reason: 'Assemble evidence with substitutions integrated', required: true });
+        steps.push({ tool: 'generate_minimum_viable_nostalgia', reason: 'Create adapted test cue with substitutions', required: true });
+      } else if (detectedIntent === 'recipe_adaptation') {
+        steps.push({ tool: 'resolve_dish_name', reason: 'Identify the target dish', required: true });
+        steps.push({ tool: 'search_web', reason: 'Find current recipe approaches', required: false });
+        steps.push({ tool: 'build_reconstruction_dossier', reason: 'Assemble evidence for adaptation', required: true });
+        steps.push({ tool: 'generate_minimum_viable_nostalgia', reason: 'Create a test cue for the adaptation', required: true });
+      } else if (detectedIntent === 'unknown_dish' || detectedIntent === 'general_food_inquiry') {
+        // Minimal pipeline — collect memory then ask clarifying questions
+        maxSearchCalls = 0;
+      } else {
+        // nostalgic_memory, ritual_ceremony, multilingual_inquiry, contradictory_memory
+        steps.push({ tool: 'resolve_dish_name', reason: 'Match dish name from memory clues', required: false });
+        steps.push({ tool: 'search_web', reason: 'Confirm dish identity or find regional details', required: false });
+        steps.push({ tool: 'build_reconstruction_dossier', reason: 'Assemble evidence boundary', required: true });
+        steps.push({ tool: 'generate_minimum_viable_nostalgia', reason: 'Create first sensory test cue', required: true });
+      }
+
+      const needsResolve = steps.some(s => s.tool === 'resolve_dish_name');
+
+      return output({
+        detectedIntent,
+        workflowSteps: steps,
+        maxSearchCalls,
+        needsSubstitutions,
+        detectedRestrictions,
+        needsResolve,
+        confidenceNote: `Intent: ${detectedIntent}. Dietary restrictions: ${detectedRestrictions.length > 0 ? detectedRestrictions.join(', ') : 'none detected'}. Max search_web calls: ${maxSearchCalls}.`,
+      } as ToolPayload);
+    },
+  }),
   createTool({
     name: 'build_research_record',
     mcp: {
@@ -843,6 +957,7 @@ export const outputSchemas = Object.fromEntries(
 ) as Record<string, ZodTypeAny>;
 
 const anthropicWorkflowToolOrder = [
+  'plan_tool_workflow',
   'collect_food_memory',
   'plan_dish_research',
   'build_reconstruction_dossier',

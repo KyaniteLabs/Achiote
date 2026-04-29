@@ -347,6 +347,29 @@ export const webSearchOutputSchema = z.object({
   ),
 });
 
+export const planToolWorkflowOutputSchema = z.object({
+  detectedIntent: z.enum([
+    'nostalgic_memory',
+    'recipe_adaptation',
+    'dietary_substitution',
+    'ritual_ceremony',
+    'multilingual_inquiry',
+    'contradictory_memory',
+    'unknown_dish',
+    'general_food_inquiry',
+  ]),
+  workflowSteps: z.array(z.object({
+    tool: z.string(),
+    reason: z.string(),
+    required: z.boolean(),
+  })),
+  maxSearchCalls: z.number(),
+  needsSubstitutions: z.boolean(),
+  detectedRestrictions: z.array(z.string()),
+  needsResolve: z.boolean(),
+  confidenceNote: z.string(),
+});
+
 export const readOnlyAnnotations = {
   readOnlyHint: true,
   destructiveHint: false,

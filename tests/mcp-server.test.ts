@@ -27,6 +27,7 @@ describe('Achiote MCP server', () => {
         'generate_minimum_viable_nostalgia',
         'generate_recipe',
         'plan_dish_research',
+        'plan_tool_workflow',
         'resolve_dish_name',
         'search_web',
         'source_ingredients',

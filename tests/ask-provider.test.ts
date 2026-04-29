@@ -10,7 +10,7 @@ describe('ask provider compatibility', () => {
     expect(tools[0]).toMatchObject({
       type: 'function',
       function: {
-        name: 'collect_food_memory',
+        name: 'plan_tool_workflow',
         parameters: expect.objectContaining({ type: 'object' }),
       },
     });
@@ -110,6 +110,103 @@ describe('ask provider compatibility', () => {
         expect.objectContaining({ role: 'tool', tool_call_id: 'call_1', content: '{"ok":true}' }),
       ]),
     });
+  });
+
+  it('injects deterministic tool results into OpenAI-compatible message history before create', async () => {
+    const requests: Array<{ messages: unknown[] }> = [];
+    const session = createOpenAICompatibleAskSession({
+      model: 'local-model',
+      systemPrompt: 'Use tools first.',
+      userMessage: 'memory',
+      tools: anthropicTools.slice(0, 1),
+      baseUrl: 'http://local.test/v1',
+      timeoutMs: 30_000,
+      fetchImpl: async (_url, init) => {
+        requests.push(JSON.parse(String(init?.body)));
+        return new Response(JSON.stringify({
+          choices: [{ message: { role: 'assistant', content: 'ok' }, finish_reason: 'stop' }],
+        }), { status: 200, headers: { 'content-type': 'application/json' } });
+      },
+    });
+
+    session.injectDeterministicToolResult(
+      'deterministic_plan',
+      'plan_tool_workflow',
+      { userMessage: 'memory' },
+      { detectedIntent: 'nostalgic_memory', workflowSteps: [{ tool: 'collect_food_memory' }] },
+    );
+    await session.create(128);
+
+    expect(requests[0].messages).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        role: 'assistant',
+        content: null,
+        tool_calls: [expect.objectContaining({
+          id: 'deterministic_plan',
+          type: 'function',
+          function: {
+            name: 'plan_tool_workflow',
+            arguments: JSON.stringify({ userMessage: 'memory' }),
+          },
+        })],
+      }),
+      expect.objectContaining({
+        role: 'tool',
+        tool_call_id: 'deterministic_plan',
+        content: JSON.stringify({ detectedIntent: 'nostalgic_memory', workflowSteps: [{ tool: 'collect_food_memory' }] }),
+      }),
+    ]));
+  });
+
+  it('injects deterministic tool results into Anthropic message history before create', async () => {
+    const captured: { messages?: unknown[] }[] = [];
+    const fakeClient = {
+      messages: {
+        create: async (params: { messages?: unknown[] }) => {
+          captured.push(params);
+          return {
+            content: [{ type: 'text', text: 'ok' }],
+            stop_reason: 'end_turn',
+          } as unknown as Anthropic.Messages.Message;
+        },
+      },
+    } as unknown as Anthropic;
+
+    const session = createAnthropicAskSession({
+      client: fakeClient,
+      model: 'test-model',
+      systemPrompt: 'sys',
+      userMessage: 'memory',
+      tools: [],
+    });
+
+    session.injectDeterministicToolResult(
+      'deterministic_plan',
+      'plan_tool_workflow',
+      { userMessage: 'memory' },
+      { detectedIntent: 'nostalgic_memory' },
+    );
+    await session.create(128);
+
+    expect(captured[0].messages).toEqual(expect.arrayContaining([
+      {
+        role: 'assistant',
+        content: [{
+          type: 'tool_use',
+          id: 'deterministic_plan',
+          name: 'plan_tool_workflow',
+          input: { userMessage: 'memory' },
+        }],
+      },
+      {
+        role: 'user',
+        content: [{
+          type: 'tool_result',
+          tool_use_id: 'deterministic_plan',
+          content: JSON.stringify({ detectedIntent: 'nostalgic_memory' }),
+        }],
+      },
+    ]));
   });
 
   it('embeds images as Anthropic content blocks', async () => {
