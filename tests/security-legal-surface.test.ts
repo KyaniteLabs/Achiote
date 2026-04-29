@@ -1,0 +1,52 @@
+import { describe, expect, it } from 'vitest';
+import fs from 'node:fs';
+
+function read(path: string): string {
+  return fs.readFileSync(path, 'utf8');
+}
+
+describe('security and legal surface guardrails', () => {
+  it('does not ship archived landing proposal drafts in the npm package', () => {
+    const packageJson = JSON.parse(read('package.json')) as { files?: string[] };
+
+    expect(packageJson.files).not.toContain('docs/landing/');
+    expect(packageJson.files).not.toContain('docs/landing/copy-proposal.md');
+    expect(packageJson.files).not.toContain('docs/landing/audit-proposal-may2026.md');
+  });
+
+  it('keeps public landing copy explicit that host AI does web search, not Achiote itself', () => {
+    const landing = read('docs/landing/index.html');
+    const auditProposal = read('docs/landing/audit-proposal-may2026.md');
+    const copyProposal = read('docs/landing/copy-proposal.md');
+    const readme = read('README.md');
+    const architecture = read('docs/ARCHITECTURE.md');
+
+    expect(landing).toContain('Your host AI can search the web; Achiote plans the research strategy.');
+    expect(copyProposal).toContain('Your host AI can search the web; Achiote plans the research strategy');
+    expect(auditProposal).toContain('Your host AI can search the web; Achiote plans the research strategy');
+    expect(`${landing}\n${auditProposal}\n${copyProposal}\n${readme}\n${architecture}`).not.toMatch(/\bAchiote\s+(?:searches|browses|scrapes)\s+(?:the\s+)?web\b/i);
+    expect(architecture).toContain('The server does not browse the web itself.');
+  });
+
+  it('keeps medical and legal disclaimers visible in public safety and support surfaces', () => {
+    const safety = read('docs/landing/safety.html');
+    const support = read('docs/landing/support.html');
+    const runbook = read('docs/LAUNCH_RUNBOOK.md');
+    const auditProposal = read('docs/landing/audit-proposal-may2026.md');
+    const copyProposal = read('docs/landing/copy-proposal.md');
+
+    expect(safety).toContain('not medical advice, nutrition advice, allergy advice');
+    expect(support).toContain('Do not send card numbers, raw API keys, or sensitive family details');
+    expect(runbook).toContain('Do not ask users to send raw API keys, card numbers, or sensitive family details');
+    expect(runbook).toContain('accounting, or legal obligations');
+    expect(`${auditProposal}\n${copyProposal}`).not.toMatch(/\bremove\b.{0,40}\bmedical disclaimer\b/i);
+  });
+
+  it('keeps /ask error streaming on the sanitized error path', () => {
+    const server = read('src/http-server.ts');
+
+    expect(server).toContain('sanitizeAskError');
+    expect(server).toContain("code: 'model_provider_failed'");
+    expect(server).not.toContain("send('error', { message: err instanceof Error ? err.message : 'Unknown error' });");
+  });
+});

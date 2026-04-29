@@ -275,7 +275,7 @@ To get cited by ChatGPT, Perplexity, Claude, etc.:
 **Proposed edit to step descriptions:**
 
 1. **Collect the memory** — *Achiote structures the input; your AI asks gentle follow-ups*
-2. **Research before guessing** — *Your AI searches the web; Achiote plans the research strategy*
+2. **Research before guessing** — *Your host AI can search the web; Achiote plans the research strategy*
 3. **Keep the picture honest** — *Achiote labels every claim: user memory, research fact, AI inference, unknown*
 4. **Find the smallest taste that proves it** — *Achiote generates a grocery-store cue to test the memory before committing to a full recipe*
 5. **Help them find it nearby** — *Achiote suggests where to source ingredients and what to substitute*
@@ -308,7 +308,7 @@ This is honest and accurate per the AGENTS.md constraints.
 
 ### Trust Section
 
-**Current issue:** "Food-memory work can be deeply meaningful. It is not a medical claim."
+**Current issue:** The safety copy should keep the medical boundary visible without making the disclaimer feel like the main promise.
 
 **Problem:** Defensive copy that plants a doubt.
 
@@ -356,7 +356,7 @@ This is honest and accurate per the AGENTS.md constraints.
 | 5 | Fix old demo-framing trust issue | Conversion |
 | 6 | Update Schema.org | Rich snippet potential |
 | 7 | Fix examples oversell | Trust/compliance |
-| 8 | Remove medical disclaimer bullet | Trust |
+| 8 | Clarify medical disclaimer bullet | Trust/legal |
 
 ---
 
