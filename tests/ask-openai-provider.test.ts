@@ -111,6 +111,15 @@ describe('/ask OpenAI-compatible provider mode', () => {
     const eventNames = events.map((event) => event.event);
     expect(eventNames[0]).toBe('status');
     expect(events.filter((event) => event.event === 'tool_call').map((event) => JSON.parse(event.data).name)).toContain('plan_tool_workflow');
+    const modelStatuses = events
+      .filter((event) => event.event === 'status')
+      .map((event) => JSON.parse(event.data))
+      .filter((event) => event.stage === 'model');
+    expect(modelStatuses.length).toBeGreaterThan(0);
+    for (const status of modelStatuses) {
+      expect(status).not.toHaveProperty('provider');
+      expect(status).not.toHaveProperty('model');
+    }
     expect(eventNames.at(-3)).toBe('text');
     expect(eventNames.at(-2)).toBe('receipt');
     expect(eventNames.at(-1)).toBe('done');

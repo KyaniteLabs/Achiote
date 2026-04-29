@@ -308,11 +308,9 @@ function addTraceItem(trace, type, data) {
   if (type === 'status') {
     if (data.stage === 'model') {
       const heading = trace.closest('.trace-panel')?.querySelector('.trace-debug');
-      if (heading) heading.textContent = `${data.model || 'unknown model'} via ${data.provider || 'provider'}`;
+      if (heading) heading.textContent = 'Runtime trace';
       renderTraceLine(item, time, [
-        traceText('Preparing runtime: ', 'trace-phase'),
-        traceText(data.model || 'unknown', 'model-label'),
-        traceText(` via ${data.provider || 'provider'}`, 'trace-provider'),
+        traceText(data.retry ? 'Retrying model response' : 'Preparing model response', 'trace-phase'),
       ]);
     } else {
       const stageLabel = phaseForStatus(data);
