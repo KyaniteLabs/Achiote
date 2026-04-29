@@ -742,7 +742,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
     maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
     send('done', {});
   } catch (err) {
-    send('error', { message: err instanceof Error ? err.message : 'Unknown error' });
+    send('error', sanitizeAskError(err));
   } finally {
     res.end();
   }
@@ -991,6 +991,23 @@ function isProviderContextLimitError(err: unknown): boolean {
   const message = err instanceof Error ? err.message : String(err);
   return /\b(?:context size|context length|maximum context|token limit|too many tokens)\b/i.test(message)
     && /\b(?:exceeded|limit|too large|too many)\b/i.test(message);
+}
+
+function sanitizeAskError(err: unknown): { message: string; code?: string } {
+  const message = err instanceof Error ? err.message : String(err);
+  if (isModelProviderErrorMessage(message)) {
+    return {
+      message: 'The model provider failed while processing this request. Try again shortly, or ask support to check provider configuration.',
+      code: 'model_provider_failed',
+    };
+  }
+  return { message: message || 'Unknown error' };
+}
+
+function isModelProviderErrorMessage(message: string): boolean {
+  return /\b(?:OpenAI-compatible provider|Anthropic|model provider|provider returned|finish_reason|fetch failed|ECONNREFUSED|ETIMEDOUT|ENOTFOUND)\b/i.test(message)
+    || /\b(?:api[_ -]?key|authorization|bearer|token|credential|secret)\b/i.test(message)
+    || /\b(?:sk|ach|ak|whsec)_[A-Za-z0-9_-]{8,}\b/.test(message);
 }
 
 async function recoverFromInitialProviderFailure({

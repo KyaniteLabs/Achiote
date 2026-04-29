@@ -241,7 +241,7 @@ Link to `/compare` rather than surfacing the comparison on the main page.
 
 ### 5.7 Workflow Section
 
-**Good section. One issue:** Step 2 says "Your AI searches the web; Achiote plans the research strategy." This is accurate per AGENTS.md but might confuse a consumer audience who doesn't think in terms of "your AI."
+**Good section. One issue:** Step 2 should say "Your host AI can search the web; Achiote plans the research strategy." This keeps the browsing boundary clear for a consumer audience.
 
 **Proposal:** Rephrase for B2C audience (keep the agent split on a B2D variant):
 > **2. Research the clues.** Achiote turns your fragments into a research plan — what to search, what to ask family members, what to verify. The AI does the legwork; Achiote keeps the trail.
@@ -270,7 +270,7 @@ Strong section. The terminal with the MVNC JSON is a good visual anchor. Keep.
 
 **Proposal:** Change to: **"Know what you know. See what you don't."**
 
-Remove the defensive-sounding bullet about "not a medical claim" (it plants a doubt). The food-science citation bullet already covers credibility.
+Keep the medical-boundary note concise and link to Safety for details. The food-science citation bullet covers credibility; it does not replace the disclaimer.
 
 ### 5.12 Pricing
 
