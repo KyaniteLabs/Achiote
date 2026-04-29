@@ -525,13 +525,30 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
     }
 
     send('status', { stage: 'model', provider: ASK_PROVIDER_KIND, model: ASK_MODEL });
-    let modelResponse = await askSession.create(4096);
+    let modelResponse: AskModelResponse;
+    try {
+      modelResponse = await askSession.create(4096);
+    } catch (err) {
+      if (isProviderContextLimitError(err)) {
+        console.warn(`[ask] provider context limit before first model turn, using deterministic recovery: ${err instanceof Error ? err.message : String(err)}`);
+        if (await recoverFromInitialProviderFailure({ userMessage, toolPayloads, calledTools, send, guarded: 'provider_context_deterministic_recovery' })) return;
+      }
+      throw err;
+    }
     console.log(`[ask] provider=${ASK_PROVIDER_KIND} model=${ASK_MODEL} content=text:${modelResponse.textBlocks.length},tools:${modelResponse.toolCalls.length}`);
     if (modelResponse.toolCalls.length === 0) {
       console.warn('[ask] model skipped required Achiote tool workflow, retrying with explicit tool instruction');
       askSession.pushUserMessage('You did not call any tools. You MUST call collect_food_memory with the user\'s message as the memoryText parameter before responding. Do not answer without using tools.');
       send('status', { stage: 'model', provider: ASK_PROVIDER_KIND, model: ASK_MODEL, retry: true });
-      modelResponse = await askSession.create(4096);
+      try {
+        modelResponse = await askSession.create(4096);
+      } catch (err) {
+        if (isProviderContextLimitError(err)) {
+          console.warn(`[ask] provider context limit on retry, using deterministic recovery: ${err instanceof Error ? err.message : String(err)}`);
+          if (await recoverFromInitialProviderFailure({ userMessage, toolPayloads, calledTools, send, guarded: 'provider_context_deterministic_recovery' })) return;
+        }
+        throw err;
+      }
       console.log(`[ask] retry provider=${ASK_PROVIDER_KIND} model=${ASK_MODEL} content=text:${modelResponse.textBlocks.length},tools:${modelResponse.toolCalls.length}`);
     }
     if (modelResponse.toolCalls.length === 0) {
@@ -968,6 +985,46 @@ async function createWithTimeout(
   } finally {
     if (timeout) clearTimeout(timeout);
   }
+}
+
+function isProviderContextLimitError(err: unknown): boolean {
+  const message = err instanceof Error ? err.message : String(err);
+  return /\b(?:context size|context length|maximum context|token limit|too many tokens)\b/i.test(message)
+    && /\b(?:exceeded|limit|too large|too many)\b/i.test(message);
+}
+
+async function recoverFromInitialProviderFailure({
+  userMessage,
+  toolPayloads,
+  calledTools,
+  send,
+  guarded,
+}: {
+  userMessage: string;
+  toolPayloads: Record<string, unknown>;
+  calledTools: Set<string>;
+  send: SseSender;
+  guarded: string;
+}): Promise<boolean> {
+  send('status', { stage: 'deterministic_recovery', reason: 'provider_context_limit' });
+
+  if (!calledTools.has('collect_food_memory')) {
+    send('status', { stage: 'calling_tools', tools: ['collect_food_memory'], deterministic: true });
+    await executeAndStreamTool('collect_food_memory', { memoryText: userMessage }, userMessage, send, calledTools, toolPayloads);
+  }
+
+  await maybeRunMissingResearchPlan({ userMessage, toolPayloads, calledTools, send });
+  await maybeRunPlannedSubstitutions({ userMessage, toolPayloads, calledTools, send });
+
+  if (await maybeSendForcedMinimumCue({ userMessage, toolPayloads, calledTools, send })) {
+    return true;
+  }
+
+  const responseText = buildClarificationOnlyResponse(toolPayloads);
+  send('text', responseText);
+  maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
+  send('done', { guarded });
+  return true;
 }
 
 function escapeRegExp(value: string): string {
