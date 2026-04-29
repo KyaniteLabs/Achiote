@@ -497,6 +497,27 @@ describe('minimum viable nostalgia cue', () => {
     expect(recommendationText).toContain('do not buy the exact drink');
   });
 
+  it('does not classify iced baked goods as beverages', () => {
+    const cue = generateMinimumViableNostalgiaCue({
+      dossier: confectioneryDossier(
+        'I remember an iced cake from a neighborhood bakery, soft and sweet with a thin white icing.',
+        ['The memory points to a baked sweet with icing texture.'],
+      ),
+      researchFindings: {
+        researchedFacts: ['Iced cakes are baked goods where crumb texture and icing sweetness carry the memory.'],
+        inferredFacts: ['The cue should test cake crumb and icing sweetness.'],
+        unknowns: ['exact bakery style'],
+        sourceCount: 1,
+        confidence: 'Low',
+      },
+      maxEffortMinutes: 10,
+    });
+
+    expect(cue.title).not.toContain('beverage');
+    expect(cue.format).not.toBe('sip');
+    expect(fullCueText(cue)).toMatch(/cake|starch|sweet|icing|bite/);
+  });
+
   it('rewrites composed-bite ingredients and components for vegan and halal constraints', () => {
     const cue = generateMinimumViableNostalgiaCue({
       dossier: spicedSausageMashDossier(),

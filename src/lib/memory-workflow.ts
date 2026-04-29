@@ -933,7 +933,7 @@ const COMPONENT_ROLES = {
     substitutionReason: 'Warm liquid releases volatile aromatics the same way regardless of the stock base; the nostalgia is in the aroma chemistry',
   },
   beverage: {
-    keywords: 'drink|beverage|juice|soda|fizzy|carbonated|sparkling|seltzer|horchata|agua fresca|atole|champurrado|lassi|chai|tea|coffee|espresso|cocoa|mate|milkshake|smoothie|tepache|sorrel|mauby|akasan|pinol|pinole|kombucha|iced|over ice',
+    keywords: 'drink|beverage|juice|soda|fizzy|carbonated|sparkling|seltzer|horchata|agua fresca|atole|champurrado|lassi|chai|tea|coffee|espresso|cocoa|mate|milkshake|smoothie|tepache|sorrel|mauby|akasan|pinol|pinole|kombucha|over ice',
     criticalElement: 'serving temperature, dilution, aroma extraction, dissolved body, and sip ritual',
     flavorProfile: 'balanced sweetness, acid, bitterness or spice, carried by water, dairy, grain starch, fruit, or carbonation',
     localTestWith: 'one small sip from water, milk or plant milk, seltzer, or juice plus a pantry aroma cue',
@@ -1129,7 +1129,7 @@ function composedBiteSteps(signals: string): string[] {
 }
 
 function isBeverageSignal(signals: string): boolean {
-  return signalIncludes(signals, 'drink|beverage|juice|soda|fizzy|carbonated|sparkling|seltzer|horchata|agua fresca|atole|champurrado|lassi|chai|tea|coffee|espresso|cocoa|mate|milkshake|smoothie|tepache|sorrel|mauby|akasan|pinol|pinole|kombucha|iced|over ice');
+  return signalIncludes(signals, 'drink|beverage|juice|soda|fizzy|carbonated|sparkling|seltzer|horchata|agua fresca|atole|champurrado|lassi|chai|tea|coffee|espresso|cocoa|mate|milkshake|smoothie|tepache|sorrel|mauby|akasan|pinol|pinole|kombucha|over ice');
 }
 
 function beverageCarrierIngredient(signals: string): string {
