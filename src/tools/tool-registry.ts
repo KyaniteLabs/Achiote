@@ -553,7 +553,7 @@ export const toolRegistry = [
     name: 'collect_food_memory',
     mcp: {
       title: 'Collect Food Memory',
-      description: 'Structure a raw food-memory fragment into clues, missing information, and optional follow-up questions. Returns a sufficiency score: when region + sensory details + context are present, the memory is sufficient and no follow-up questions are needed.',
+      description: 'Structure a raw food-or-drink memory fragment into clues, missing information, and optional follow-up questions. Returns a sufficiency score: when region + sensory details + context are present, the memory is sufficient and no follow-up questions are needed.',
       inputSchema: {
         memoryText: z.string().min(1).max(6000).describe('Raw user memory, spelling fragment, family story, or sensory clue'),
         knownRegion: z.string().min(1).max(200).optional().describe('Optional known country, island, region, or community'),
@@ -582,7 +582,7 @@ export const toolRegistry = [
     name: 'plan_dish_research',
     mcp: {
       title: 'Plan Dish Research',
-      description: 'Turn collected memory clues into hypotheses, search queries, source preferences, and facts to verify. This plans research rather than pretending sparse fragments are resolved.',
+      description: 'Turn collected food or drink memory clues into hypotheses, search queries, source preferences, and facts to verify. This plans research rather than pretending sparse fragments are resolved.',
       inputSchema: { memory: collectedFoodMemorySchema.describe('Structured output from collect_food_memory') },
       outputSchema: planDishResearchOutputSchema,
     },
@@ -602,7 +602,7 @@ export const toolRegistry = [
     name: 'build_reconstruction_dossier',
     mcp: {
       title: 'Build Reconstruction Dossier',
-      description: 'Build an evidence-separated food memory dossier from user memory, research plan, and optional researched/inferred facts.',
+      description: 'Build an evidence-separated food or drink memory dossier from user memory, research plan, and optional researched/inferred facts.',
       inputSchema: {
         memory: collectedFoodMemorySchema.describe('Structured output from collect_food_memory'),
         researchPlan: dishResearchPlanSchema.describe('Structured output from plan_dish_research'),
@@ -806,7 +806,7 @@ export const toolRegistry = [
     name: 'generate_minimum_viable_nostalgia',
     mcp: {
       title: 'Generate Minimum Viable Nostalgia Cue',
-      description: 'Default first food output: create the smallest practical aroma, bite, sip, condiment, or ritual that tests the likely memory trigger before any full recipe handoff.',
+      description: 'Default first food-or-drink output: create the smallest practical aroma, bite, sip, condiment, or ritual that tests the likely memory trigger before any full recipe or drink handoff.',
       inputSchema: minimumViableNostalgiaInputSchema.shape,
       outputSchema: minimumViableNostalgiaOutputSchema,
     },

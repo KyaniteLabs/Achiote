@@ -140,11 +140,11 @@ function buildMissingInformation(input: {
   if (sufficiency.sufficient) {
     // Only report missing items that would help confirm, not gather from scratch
     return unique([
-      input.possibleNames.length === 0 ? 'dish name or local nickname (helpful but not required)' : '',
+      input.possibleNames.length === 0 ? 'food or drink name or local nickname (helpful but not required)' : '',
     ]);
   }
   return unique([
-    input.possibleNames.length === 0 ? 'dish name or local nickname' : '',
+    input.possibleNames.length === 0 ? 'food or drink name or local nickname' : '',
     input.culturalOrRegionalHints.length === 0 ? 'country, island, region, town, or community' : '',
     input.cookingMethodHints.length === 0 ? 'cooking method or serving format' : '',
     input.rememberedIngredients.length === 0 ? 'core ingredients' : '',
@@ -167,7 +167,7 @@ function buildNextQuestions(input: {
     // When we have enough detail, only ask high-value confirmation questions
     const questions: string[] = [];
     if (input.possibleNames.length === 0) {
-      questions.push('Do you remember anything about the name, even a rough sound-alike?');
+      questions.push('Do you remember anything about the food or drink name, even a rough sound-alike?');
     }
     if (input.occasions.length === 0) {
       questions.push('Was this street food, home cooking, a restaurant dish, or tied to a holiday or person?');
@@ -190,14 +190,14 @@ function buildNextQuestions(input: {
 
   if (input.possibleNames.length === 0) {
     questions.push(region
-      ? `Do you remember what people in ${region} called it, even roughly or phonetically?`
-      : 'Do you remember anything about the name, even a rough sound-alike?');
+      ? `Do you remember what people in ${region} called this food or drink, even roughly or phonetically?`
+      : 'Do you remember anything about the food or drink name, even a rough sound-alike?');
   }
 
   if (ingredient && input.cookingMethodHints.length === 0) {
     questions.push(`How was the ${ingredient} served: fried/crispy, in bread, in broth or curry, grilled, or with a sauce?`);
   } else if (input.cookingMethodHints.length === 0) {
-    questions.push('Was it fried/crispy, wrapped, layered, served in broth, eaten with bread/rice, or served with a sauce?');
+    questions.push('Was it fried/crispy, wrapped, layered, served in broth, mixed as a drink, eaten with bread/rice, or served with a sauce?');
   }
 
   if (input.sensoryClues.length === 0) {
@@ -767,11 +767,11 @@ export function planDishResearch(memory: CollectedFoodMemory): DishResearchPlan 
       'ingredient/source references',
     ],
     factsToVerify: [
-      'base ingredient or starch',
-      'cooking method',
+      'base ingredient, beverage base, or starch',
+      'cooking, extraction, mixing, or serving method',
       'regional names and spelling variants',
       'holiday or family occasion context',
-      'sensory cues: aroma, texture, flavor, appearance',
+      'sensory cues: aroma, texture, flavor, appearance, temperature, or dilution',
     ],
     questionsForUser: memory.nextQuestions,
   };
@@ -855,7 +855,7 @@ export function generateFamilyFollowupQuestions(input: {
 }): FamilyFollowupQuestions {
   const hypothesisQuestions = input.researchPlan.hypotheses.flatMap((hypothesis) => hypothesis.whatWouldConfirm);
   const questions = unique([
-    'Was it wrapped in leaves, baked in layers, fried, or served in broth?',
+    'Was it wrapped in leaves, baked in layers, fried, served in broth, or mixed/poured as a drink?',
     'What smell do you remember first when it was cooking?',
     'Was this connected to a holiday, a weekday meal, or a specific person?',
     ...hypothesisQuestions.map((question) => `Do you remember anything like: ${question}?`),
@@ -932,6 +932,13 @@ const COMPONENT_ROLES = {
     localTestWith: 'any warm broth or stock with a pinch of the remembered spice',
     substitutionReason: 'Warm liquid releases volatile aromatics the same way regardless of the stock base; the nostalgia is in the aroma chemistry',
   },
+  beverage: {
+    keywords: 'drink|beverage|juice|soda|fizzy|carbonated|sparkling|seltzer|horchata|agua fresca|atole|champurrado|lassi|chai|tea|coffee|espresso|cocoa|mate|milkshake|smoothie|tepache|sorrel|mauby|akasan|pinol|pinole|kombucha|iced|over ice',
+    criticalElement: 'serving temperature, dilution, aroma extraction, dissolved body, and sip ritual',
+    flavorProfile: 'balanced sweetness, acid, bitterness or spice, carried by water, dairy, grain starch, fruit, or carbonation',
+    localTestWith: 'one small sip from water, milk or plant milk, seltzer, or juice plus a pantry aroma cue',
+    substitutionReason: 'Beverage nostalgia is often carried by extraction, dilution, temperature, carbonation, sweetness, acid, and aroma release rather than the exact bottled drink',
+  },
   confectionery: {
     keywords: 'caramel|dulce de leche|manjar|fudge|barfi|halva|baklava|mochi|candy|sweet|dessert|confection|cookie|biscuit|nougat|turrón|taffy|melcocha|cocada|flan|custard|pudding|chocolate|pastillas',
     criticalElement: 'sugar crystallization structure and fat-soluble aroma delivery in a solid or semi-solid matrix',
@@ -943,7 +950,7 @@ const COMPONENT_ROLES = {
 
 type ComponentRole = keyof typeof COMPONENT_ROLES;
 
-const ROLE_ORDER: ComponentRole[] = ['starch', 'protein', 'sauce', 'vegetable', 'broth', 'confectionery'];
+const ROLE_ORDER: ComponentRole[] = ['starch', 'protein', 'sauce', 'vegetable', 'broth', 'beverage', 'confectionery'];
 
 function sanitizeLocation(raw?: string): string {
   if (!raw) return 'at any grocery store';
@@ -1006,6 +1013,15 @@ function specificCriticalElement(role: ComponentRole, signals: string, fallback:
   if (role === 'protein' && signalIncludes(signals, 'fish|shark')) {
     return 'fried fish richness, browned edge aroma, and sauce-carrying fat';
   }
+  if (role === 'beverage' && signalIncludes(signals, 'fizzy|carbonated|sparkling|seltzer|soda')) {
+    return 'carbonation bite, acid-sugar balance, syrup aroma, cold temperature, and serving ritual';
+  }
+  if (role === 'beverage' && signalIncludes(signals, 'rice|horchata|atole|champurrado|pinol|pinole|cinnamon|masa|corn')) {
+    return 'grain or starch body, spice extraction, sweetness, dilution, serving temperature, and sip ritual';
+  }
+  if (role === 'beverage' && signalIncludes(signals, 'tea|chai|coffee|espresso|mate|cocoa')) {
+    return 'steeped extraction strength, tannin or roast bitterness, sweetness, milk/body, temperature, and aroma release';
+  }
   if (role === 'sauce' && signalIncludes(signals, 'orange|hot|pepper|chile|lime|vinegar|acid|sharp')) {
     return 'hot-acid sauce contrast: chile heat, citrus/vinegar brightness, salt, and orange color cue';
   }
@@ -1022,6 +1038,15 @@ function specificFlavorProfile(role: ComponentRole, signals: string, fallback: s
   if (role === 'protein' && signalIncludes(signals, 'fish|shark')) {
     return 'savory white-fish richness, browned oil aroma, salt, and a clean surface for sharp sauce';
   }
+  if (role === 'beverage' && signalIncludes(signals, 'fizzy|carbonated|sparkling|seltzer|soda')) {
+    return 'cold fizz, tart acid, syrupy sweetness, fruit or kola aroma, and a short carbonation prickle';
+  }
+  if (role === 'beverage' && signalIncludes(signals, 'rice|horchata|atole|champurrado|pinol|pinole|cinnamon|masa|corn')) {
+    return 'milky or grainy body, cinnamon or warm spice, gentle sweetness, and dilution adjusted by ice or heat';
+  }
+  if (role === 'beverage' && signalIncludes(signals, 'tea|chai|coffee|espresso|mate|cocoa')) {
+    return 'steeped or brewed bitterness, spice or roast aroma, sweetness, and dairy or plant-milk body if remembered';
+  }
   if (role === 'sauce' && signalIncludes(signals, 'orange|hot|pepper|chile|lime|vinegar|acid|sharp')) {
     return 'sharp, salty, chile-hot, citrusy or vinegar-bright, with mustard/paprika/turmeric color and garlic-herb aroma';
   }
@@ -1037,6 +1062,15 @@ function specificLocalTestWith(role: ComponentRole, signals: string, fallback: s
   }
   if (role === 'protein' && signalIncludes(signals, 'fish|shark')) {
     return 'a small piece of white fish, canned fish, or firm tofu pan-seared in oil';
+  }
+  if (role === 'beverage' && signalIncludes(signals, 'fizzy|carbonated|sparkling|seltzer|soda')) {
+    return 'chilled plain seltzer with a teaspoon syrup or sugar, a few drops citrus acid, and one fruit, kola, vanilla, or spice aroma';
+  }
+  if (role === 'beverage' && signalIncludes(signals, 'rice|horchata|atole|champurrado|pinol|pinole|cinnamon|masa|corn')) {
+    return 'water, milk or plant milk, or a tiny rice/oat/corn-starch slurry with cinnamon and sugar, served cold over ice or warm as remembered';
+  }
+  if (role === 'beverage' && signalIncludes(signals, 'tea|chai|coffee|espresso|mate|cocoa')) {
+    return 'a half-cup water or milk/plant-milk infusion with the remembered tea, coffee, cocoa, or spice direction';
   }
   if (role === 'sauce' && signalIncludes(signals, 'orange|hot|pepper|chile|lime|vinegar|acid|sharp')) {
     return 'one spoon of lime or vinegar plus hot sauce/chile, mustard, paprika or turmeric, garlic, and cilantro or another green herb';
@@ -1094,6 +1128,88 @@ function composedBiteSteps(signals: string): string[] {
   return steps;
 }
 
+function isBeverageSignal(signals: string): boolean {
+  return signalIncludes(signals, 'drink|beverage|juice|soda|fizzy|carbonated|sparkling|seltzer|horchata|agua fresca|atole|champurrado|lassi|chai|tea|coffee|espresso|cocoa|mate|milkshake|smoothie|tepache|sorrel|mauby|akasan|pinol|pinole|kombucha|iced|over ice');
+}
+
+function beverageCarrierIngredient(signals: string): string {
+  if (signalIncludes(signals, 'fizzy|carbonated|sparkling|seltzer|soda')) {
+    return 'chilled plain seltzer or sparkling water';
+  }
+  if (signalIncludes(signals, 'rice|horchata|atole|champurrado|pinol|pinole|cinnamon|masa|corn')) {
+    return 'water, milk or plant milk, or a tiny rice/oat/corn-starch slurry';
+  }
+  if (signalIncludes(signals, 'lassi|yogurt|dairy|milk|milkshake|smoothie')) {
+    return 'milk, plant milk, yogurt-style base, or a small smoothie base if safe';
+  }
+  if (signalIncludes(signals, 'tea|chai|coffee|espresso|mate|cocoa')) {
+    return 'water, milk, or plant milk for a half-cup steeped or brewed infusion';
+  }
+  return 'water, milk or plant milk, juice, or seltzer matching the remembered serving style';
+}
+
+function beverageAromaIngredient(signals: string): string {
+  if (signalIncludes(signals, 'rice|horchata|atole|champurrado|pinol|pinole|cinnamon|masa|corn')) {
+    return 'cinnamon, vanilla, cocoa, toasted grain, or another remembered spice/aroma';
+  }
+  if (signalIncludes(signals, 'fizzy|carbonated|sparkling|seltzer|soda')) {
+    return 'one fruit, kola, vanilla, citrus, or spice aroma from pantry syrup, extract, zest, or juice';
+  }
+  if (signalIncludes(signals, 'tea|chai|coffee|espresso|mate|cocoa')) {
+    return 'the remembered tea, coffee, cocoa, or spice direction';
+  }
+  return 'the strongest remembered aroma: fruit, spice, herb, roast, floral water, or citrus';
+}
+
+function beverageTemperatureIngredient(signals: string): string {
+  if (signalIncludes(signals, 'cold|ice|iced|fizzy|carbonated|sparkling|seltzer|soda|juice|agua fresca')) {
+    return 'ice or a chilled glass';
+  }
+  if (signalIncludes(signals, 'warm|hot|atole|champurrado|chai|tea|coffee|cocoa|mate')) {
+    return 'a warm cup';
+  }
+  return 'ice or gentle warmth, matching the remembered serving temperature';
+}
+
+function beverageCueProfile(signals: string, userLocation?: string, overallConfidence?: Confidence): FoodScienceCueProfile {
+  const carbonated = signalIncludes(signals, 'fizzy|carbonated|sparkling|seltzer|soda');
+  const grainDrink = signalIncludes(signals, 'rice|horchata|atole|champurrado|pinol|pinole|cinnamon|masa|corn');
+  return {
+    title: 'Minimum viable beverage-memory cue',
+    goal: 'Test the memory as a drink by isolating sip temperature, dilution, body, sweetness, acid, aroma extraction, and serving ritual before buying or making the exact beverage.',
+    effortMinutes: carbonated ? 8 : 12,
+    format: 'sip',
+    ingredients: [
+      { item: beverageCarrierIngredient(signals), amount: '1/2 cup', purpose: carbonated ? 'tests carbonation or liquid base without buying the exact drink' : 'tests beverage body, dilution, and liquid base' },
+      { item: beverageAromaIngredient(signals), amount: 'pinch, drop, tea bag, small spoon, or tiny piece', purpose: grainDrink ? 'tests cinnamon/spice extraction and grain-drink aroma' : 'tests the dominant beverage aroma without committing to the full recipe or drink' },
+      { item: 'sugar, syrup, honey, or another safe sweetener', amount: 'pinch to 1 teaspoon', purpose: 'tests sweetness level and syrupy body', optional: true },
+      { item: 'citrus juice, mild vinegar, yogurt tang, or other safe acid cue', amount: 'drop or tiny spoon', purpose: 'tests tartness, fermentation, or brightness', optional: true },
+      { item: beverageTemperatureIngredient(signals), amount: 'as needed', purpose: 'tests temperature, dilution, and serving ritual', optional: true },
+    ],
+    steps: [
+      'Do not buy the exact drink for the first test; build a half-cup local sip instead.',
+      carbonated
+        ? 'Start with chilled seltzer so carbonation and fizz are tested separately from syrup aroma.'
+        : 'Start with the remembered liquid base and keep the portion small enough to adjust one variable at a time.',
+      'Steep, stir, or dissolve the aroma cue just long enough to test extraction strength, then smell before sipping.',
+      'Adjust sweetness, acid, salt if relevant, and dilution in tiny increments; temperature and ice can change the memory as much as flavor.',
+      'Sip once and record whether body, aroma, carbonation, tartness, sweetness, temperature, or serving ritual carried the memory.',
+    ],
+    preserves: ['sip ritual', 'serving temperature', 'dilution/body', 'aroma extraction', carbonated ? 'carbonation bite' : 'sweetness/acid balance'],
+    doesNotPreserve: ['exact bottled brand', 'full batch recipe', 'specialty beverage mix', 'complete regional method'],
+    accessibilityPrinciples: ['test one half-cup sip', 'use pantry liquids, seltzer, spices, sweetener, citrus, or dairy/plant milk first', 'avoid buying rare drink mixes until the sip mechanism works', 'change only one variable at a time'],
+    substituteLogic: [
+      'Beverages are extraction and dilution systems: steeping, stirring, chilling, carbonation, and sweetness can carry the nostalgia as strongly as ingredients.',
+      'Temperature and ice change aroma release, sweetness perception, and body, so they need to be tested directly.',
+      'Carbonated memories should separate fizz from syrup; grain or dairy drinks should separate body from spice aroma and sweetness.',
+    ],
+    whyThisIsMinimum: 'A half-cup sip tests the beverage mechanisms that matter most — extraction, body, sweetness, acid, carbonation, dilution, and temperature — before shopping for the exact drink.',
+    safetyNotes: ['Use only known edible ingredients.', 'Avoid allergens and alcohol unless explicitly intended and safe.', 'Keep caffeine, sugar, acid, and carbonation amounts small.'],
+    followUpIfItWorks: ['Ask whether the original was cold, warm, iced, foamy, carbonated, thick, thin, strained, or served in a specific cup.', 'Ask whether the body came from grain starch, dairy, fruit pulp, syrup, carbonation, or fermentation.', 'Use source_ingredients to help find the exact beverage components near the user only after the sip mechanism works.'],
+    components: decomposeIntoComponents(signals, userLocation, overallConfidence),
+  };
+}
+
 function foodScienceCueProfile(signals: string, userLocation?: string, overallConfidence?: Confidence, forceProbe?: boolean): FoodScienceCueProfile {
   if (forceProbe) {
     return {
@@ -1126,11 +1242,16 @@ function foodScienceCueProfile(signals: string, userLocation?: string, overallCo
   const hasProteinOrFat = hasAnySignal(signals, [wordSignal('meat|sausage|fish|shark|beef|pork|chicken|lamb|cheese|fat|butter|oil|fried')]);
   const hasStarchOrBase = hasAnySignal(signals, [wordSignal('starch|rice|potato|potatoes|mash|masa|dough|bread|yuca|cassava|plantain|dumpling|noodle|bean|beans')]);
   const hasSauceOrCondiment = hasAnySignal(signals, [wordSignal('sauce|gravy|relish|chutney|salsa|condiment|dip|orange|creamy')]);
-  const hasLiquid = hasAnySignal(signals, [wordSignal('soup|stew|broth|sip|drink|porridge')]);
+  const hasBeverage = isBeverageSignal(signals);
+  const hasLiquid = hasAnySignal(signals, [wordSignal('soup|stew|broth|sip|porridge')]);
   const hasAroma = hasAnySignal(signals, [wordSignal('aroma|smell|spice|spiced|seasoned|garlic|onion|herb|pepper|cumin|coriander|clove|nutmeg|cinnamon')]);
   const hasTextureContrast = hasAnySignal(signals, [wordSignal('crispy|crunchy|chewy|creamy|soft|tender|stretchy|crisp|fried|grilled|charred|brown|golden')]);
   const hasAcidOrSweet = hasAnySignal(signals, [wordSignal('sour|tangy|acid|vinegar|citrus|lime|lemon|fermented|sweet|syrup|molasses|sugar')]);
   const hasConfectionery = hasAnySignal(signals, [wordSignal('caramel|dulce de leche|manjar|fudge|barfi|halva|baklava|mochi|candy|sweet|dessert|confection|cookie|biscuit|nougat|turrón|taffy|melcocha|cocada|flan|custard|pudding|chocolate|pastillas|milk candy|grainy/crystalline texture')]);
+
+  if (hasBeverage) {
+    return beverageCueProfile(signals, userLocation, overallConfidence);
+  }
 
   if (hasConfectionery) {
     return {

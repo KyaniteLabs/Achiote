@@ -168,7 +168,7 @@ Bury Memory Pack and Commercial behind a "All plans" toggle or separate page. Co
 
 **Proposal:** Add at minimum:
 - 2–3 named testimonials (even from beta users or personal use)
-- A "reconstructed" counter: "X dish memories mapped and tested"
+- A "reconstructed" counter: "X food/drink memories mapped and tested"
 - If no users yet, use the author's own reconstructed dishes as case studies with specific details
 
 **H. CTAs are inconsistent.** The page uses at least 5 different CTA labels: "Try the memory detective," "Open the food memory detective," "Try it live," "Read the docs," "Use the web demo," "Start free." This is brand-diluting and confusing.
@@ -291,7 +291,7 @@ Keep the medical-boundary note concise and link to Safety for details. The food-
 ### 6.1 Social Proof / Trust Bar
 
 Add a minimal trust section with:
-- A counter: "X dish memories reconstructed" (animated on scroll)
+- A counter: "X food/drink memories reconstructed" (animated on scroll)
 - 2–3 short testimonials with names or initials
 - If no real users yet, use a "Built on" or "Backed by" approach citing the research methodology and food-science grounding
 

@@ -9,6 +9,7 @@ CONTAINER_NAME="achiote-app"  # adjust if your container has a different name
 IMAGE_NAME="achiote:latest"
 REPO_DIR="/root/member-berries"  # adjust to where you clone the repo
 BRANCH="master"
+ENV_FILE="${ACHIOTE_ENV_FILE:-$REPO_DIR/.env}"
 
 # Colors
 GREEN='\033[0;32m'
@@ -27,6 +28,11 @@ git fetch origin
 git reset --hard origin/$BRANCH
 git log -1 --oneline
 
+if [[ ! -f "$ENV_FILE" ]]; then
+  error "Missing env file: $ENV_FILE"
+fi
+chmod 600 "$ENV_FILE"
+
 # 2. Build Docker image
 log "Building Docker image: $IMAGE_NAME"
 docker build -t "$IMAGE_NAME" .
@@ -42,7 +48,7 @@ docker run -d \
   --name "$CONTAINER_NAME" \
   -p 3000:3000 \
   --restart unless-stopped \
-  --env-file "$REPO_DIR/.env" \
+  --env-file "$ENV_FILE" \
   "$IMAGE_NAME"
 
 log "Deploy complete. Container $(docker ps -qf "name=$CONTAINER_NAME") is running."
