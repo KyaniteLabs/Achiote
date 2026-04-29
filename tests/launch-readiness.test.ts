@@ -35,12 +35,13 @@ describe('P0 launch readiness guards', () => {
     expect(readiness.status).toBe('degraded');
     expect(readiness.checks).toEqual(expect.arrayContaining([
       expect.objectContaining({ name: 'apiKeys', ok: false }),
-      expect.objectContaining({ name: 'anthropicApiKey', ok: false }),
+      expect.objectContaining({ name: 'modelProvider', ok: false }),
       expect.objectContaining({ name: 'rateLimitPersistence', ok: false }),
     ]));
+    expect(JSON.stringify(readiness)).not.toMatch(/\b(?:anthropic|openai|glm|zhipu)\b/i);
   });
 
-  it('accepts Anthropic-compatible auth tokens for /ask readiness', () => {
+  it('keeps public readiness provider checks generic', () => {
     const readiness = getHttpReadiness({
       authEnabled: false,
       apiKeyCount: 0,
@@ -53,8 +54,9 @@ describe('P0 launch readiness guards', () => {
 
     expect(readiness.ready).toBe(true);
     expect(readiness.checks).toEqual(expect.arrayContaining([
-      expect.objectContaining({ name: 'anthropicApiKey', ok: true }),
+      expect.objectContaining({ name: 'modelProvider', ok: true }),
     ]));
+    expect(JSON.stringify(readiness)).not.toMatch(/\b(?:anthropic|openai|glm|zhipu)\b/i);
   });
 
   it('does not publish unresolved achiote.app metadata before DNS exists', () => {
