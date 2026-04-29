@@ -49,15 +49,27 @@ const KNOWN_GUARDS = new Set([
 ]);
 
 const BROAD_REGION = /\b(?:latin\s+america|hispanic|spanish-speaking|asia|europe|africa|middle\s+east|mediterranean|caribbean|south\s+america|central\s+america)\b/i;
+const FAMILY_BUCKETS = new Set([
+  'beverage_like',
+  'sweet_like',
+  'soup_sauce_stew',
+  'starch_base',
+  'protein_base',
+  'vegetable_base',
+  'fermented_sour',
+  'dish_like',
+  'unknown',
+]);
 
 export function buildAskQualitySignal(input: AskQualitySignalInput): AskQualitySignal {
   const memory = input.toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
   const plan = input.toolPayloads.plan_dish_research as DishResearchPlan | undefined;
   const cue = input.toolPayloads.generate_minimum_viable_nostalgia as MinimumViableNostalgiaCue | undefined;
+  const memoryType = inferMemoryType(memory, cue);
 
   return {
-    memoryType: inferMemoryType(memory, cue),
-    familyKey: normalizeFamilyKey(plan?.hypotheses?.[0]?.name ?? memory?.extractedClues.possibleDishNames[0] ?? 'unknown'),
+    memoryType,
+    familyKey: inferFamilyBucket(memory, plan, cue, memoryType),
     regionKey: normalizeRegion(memory),
     languageKey: normalizeKey(memory?.inferredContext.language[0]?.label ?? 'unknown'),
     missing: inferMissing(memory),
@@ -92,6 +104,15 @@ export function recordQualitySignal(report: QualitySignalReport, signal: AskQual
 }
 
 function inferMemoryType(memory?: CollectedFoodMemory, cue?: MinimumViableNostalgiaCue): QualityMemoryType {
+  const signals = qualitySignalsText(memory, cue);
+  if (/\b(?:beverage|drink|bebida|sip|horchata|agua|juice|soda|tea|coffee|barley|cebada)\b/i.test(signals)) return 'beverage';
+  if (/\b(?:candy|confection|sweet-texture|brittle|fudge|halva|dessert|cookie)\b/i.test(signals)) return 'confectionery';
+  if (/\b(?:sauce|broth|soup|stew|porridge|gravy|caldo|sour|tangy)\b/i.test(signals)) return 'sauce_broth';
+  if (memory?.extractedClues.possibleDishNames.length || cue) return 'dish';
+  return 'unknown';
+}
+
+function qualitySignalsText(memory?: CollectedFoodMemory, cue?: MinimumViableNostalgiaCue): string {
   const signals = [
     cue?.title,
     cue?.format,
@@ -100,11 +121,30 @@ function inferMemoryType(memory?: CollectedFoodMemory, cue?: MinimumViableNostal
     ...(memory?.extractedClues.sensoryClues ?? []),
     ...(memory?.extractedClues.rememberedIngredients ?? []),
   ].filter(Boolean).join(' ');
-  if (/\b(?:beverage|drink|bebida|sip|horchata|agua|juice|soda|tea|coffee|barley|cebada)\b/i.test(signals)) return 'beverage';
-  if (/\b(?:candy|confection|sweet-texture|brittle|fudge|halva|dessert|cookie)\b/i.test(signals)) return 'confectionery';
-  if (/\b(?:sauce|broth|soup|stew|porridge|gravy|caldo|sour|tangy)\b/i.test(signals)) return 'sauce_broth';
-  if (memory?.extractedClues.possibleDishNames.length || cue) return 'dish';
-  return 'unknown';
+  return signals;
+}
+
+function inferFamilyBucket(
+  memory: CollectedFoodMemory | undefined,
+  plan: DishResearchPlan | undefined,
+  cue: MinimumViableNostalgiaCue | undefined,
+  memoryType: QualityMemoryType,
+): string {
+  const signals = [
+    qualitySignalsText(memory, cue),
+    ...(plan?.hypotheses.flatMap((hypothesis) => hypothesis.whyPossible) ?? []),
+  ].join(' ');
+  const bucket =
+    memoryType === 'beverage' ? 'beverage_like'
+      : memoryType === 'confectionery' ? 'sweet_like'
+        : memoryType === 'sauce_broth' ? 'soup_sauce_stew'
+          : /\b(?:rice|corn|maize|wheat|bread|noodle|dumpling|starch|cassava|yuca|potato|plantain)\b/i.test(signals) ? 'starch_base'
+            : /\b(?:chicken|beef|pork|fish|shrimp|goat|lamb|egg|meat|seafood)\b/i.test(signals) ? 'protein_base'
+              : /\b(?:greens?|leafy|vegetable|bean|lentil|peas?|squash|pepper|tomato)\b/i.test(signals) ? 'vegetable_base'
+                : /\b(?:pickle|ferment|fermented|sour|tangy|vinegar|brine)\b/i.test(signals) ? 'fermented_sour'
+                  : memoryType === 'dish' ? 'dish_like'
+                    : 'unknown';
+  return FAMILY_BUCKETS.has(bucket) ? bucket : 'unknown';
 }
 
 function normalizeRegion(memory?: CollectedFoodMemory): string {
@@ -118,11 +158,15 @@ function normalizeRegion(memory?: CollectedFoodMemory): string {
 function inferMissing(memory?: CollectedFoodMemory): QualityMissingDimension[] {
   const missing = new Set<QualityMissingDimension>();
   const info = (memory?.missingInformation ?? []).join(' ');
-  const normalized = `${info} ${memory?.normalizedMemory ?? ''}`.toLowerCase();
+  const normalized = (memory?.normalizedMemory ?? '').toLowerCase();
   if (!memory?.extractedClues.possibleDishNames.length || /\b(?:dish name|name)\b/.test(info)) missing.add('missing_name');
   if (!normalizeRegion(memory) || normalizeRegion(memory) === 'unknown' || /\b(?:country|island|region|town|community)\b/.test(info)) missing.add('missing_region');
   if (!memory?.extractedClues.rememberedIngredients.length || /\b(?:core ingredient|ingredients?)\b/.test(info)) missing.add('missing_ingredient');
-  if (/\b(?:soup|sauce|stew|format|serving|cooking method)\b/.test(normalized)) missing.add('missing_format');
+  if (/\b(?:format|serving format)\b/i.test(info)
+    || /\b(?:whether|not sure|unsure|unknown|do not know|don't know|maybe|could have been)\b[^.?!]*(?:soup|sauce|stew|porridge|drink|beverage|fried|baked|solid|liquid|format)\b/.test(normalized)
+    || /\b(?:soup|sauce|stew|porridge|drink|beverage|fried|baked|solid|liquid)\b[^.?!]*(?:or|not sure|unsure|unknown|do not know|don't know|maybe|could have been)\b/.test(normalized)) {
+    missing.add('missing_format');
+  }
   return [...missing].sort();
 }
 
@@ -142,11 +186,6 @@ function normalizeCache(value?: string): QualityCacheOutcome {
 function normalizeGuard(value?: string): string {
   const guard = normalizeKey(value || 'none');
   return KNOWN_GUARDS.has(guard) ? guard : 'other';
-}
-
-function normalizeFamilyKey(value: string): string {
-  if (/^(?:unknown|unidentified|generic|possible)[\s_-]/i.test(value)) return 'unknown';
-  return normalizeKey(value);
 }
 
 function normalizeKey(value: string): string {

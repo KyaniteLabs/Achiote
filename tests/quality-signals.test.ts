@@ -43,6 +43,7 @@ describe('ask quality signals', () => {
 
     expect(signal).toMatchObject({
       memoryType: 'beverage',
+      familyKey: 'beverage_like',
       search: 'skipped',
       cache: 'unavailable',
       guarded: 'minimum_cue_deterministic_completion',
@@ -68,7 +69,7 @@ describe('ask quality signals', () => {
     });
 
     expect(signal.memoryType).toBe('sauce_broth');
-    expect(signal.familyKey).toBe('unknown');
+    expect(signal.familyKey).toBe('soup_sauce_stew');
     expect(signal.regionKey).toBe('unknown');
     expect(signal.missing).toEqual(expect.arrayContaining([
       'missing_name',
@@ -77,6 +78,40 @@ describe('ask quality signals', () => {
       'missing_format',
     ]));
     expect(signal.search).toBe('skipped');
+  });
+
+  it('collapses model family names to bounded buckets and only flags ambiguous formats', () => {
+    const clearSoupMemory = collectFoodMemory({
+      memoryText: 'Warm sour dill soup with pale potato chunks from a family dinner.',
+    });
+    const clearSoupPlan = planDishResearch(clearSoupMemory);
+    const clearSoupSignal = buildAskQualitySignal({
+      toolPayloads: {
+        collect_food_memory: clearSoupMemory,
+        plan_dish_research: {
+          ...clearSoupPlan,
+          hypotheses: [{
+            ...clearSoupPlan.hypotheses[0],
+            name: 'Grandma Maria private porch soup in Phoenix',
+          }],
+        },
+      },
+      calledTools: ['collect_food_memory', 'plan_dish_research'],
+    });
+
+    expect(clearSoupSignal.familyKey).toBe('soup_sauce_stew');
+    expect(clearSoupSignal.familyKey).not.toContain('grandma');
+    expect(clearSoupSignal.familyKey).not.toContain('phoenix');
+    expect(clearSoupSignal.missing).not.toContain('missing_format');
+
+    const ambiguousMemory = collectFoodMemory({
+      memoryText: 'Something sour and herby, but I do not know whether it was soup, sauce, or stew.',
+    });
+    const ambiguousSignal = buildAskQualitySignal({
+      toolPayloads: { collect_food_memory: ambiguousMemory },
+      calledTools: ['collect_food_memory'],
+    });
+    expect(ambiguousSignal.missing).toContain('missing_format');
   });
 
   it('bounds search, cache, guard, and aggregate report values', () => {
