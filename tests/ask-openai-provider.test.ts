@@ -138,6 +138,56 @@ describe('/ask OpenAI-compatible provider mode', () => {
 });
 
 describe('/ask deterministic completion after minimum cue', () => {
+  it('recovers deterministically when the provider rejects the initial context', async () => {
+    const fakePort = await getFreePort();
+    let requestCount = 0;
+    const fakeOpenAi = createServer(async (req, res) => {
+      if (req.url !== '/v1/chat/completions' || req.method !== 'POST') {
+        res.writeHead(404).end();
+        return;
+      }
+      requestCount++;
+      await readBody(req);
+      res.writeHead(400, { 'content-type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Context size has been exceeded.' }));
+    });
+    await new Promise<void>((resolveListen) => fakeOpenAi.listen(fakePort, '127.0.0.1', resolveListen));
+
+    const achiotePort = await getFreePort();
+    const achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`);
+    try {
+      const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: 'My grandmother from Punjab made butter chicken with tomato-cashew gravy, butter, cream, whiskey, chicken, and naan. I need nut-free, heart-healthy, halal, vegan, and gluten-free substitutions that keep the soul of the dish. Can you adapt it?',
+        }),
+      });
+
+      expect(response.status).toBe(200);
+      const events = parseSse(await response.text());
+      const toolNames = events.filter((event) => event.event === 'tool_call').map((event) => JSON.parse(event.data).name);
+
+      expect(events.some((event) => event.event === 'error')).toBe(false);
+      expect(events.some((event) => event.event === 'status' && JSON.parse(event.data).stage === 'deterministic_recovery')).toBe(true);
+      expect(toolNames).toEqual(expect.arrayContaining([
+        'collect_food_memory',
+        'plan_dish_research',
+        'find_sensory_substitutes',
+        'build_reconstruction_dossier',
+        'generate_minimum_viable_nostalgia',
+      ]));
+      expect(events.find((event) => event.event === 'receipt')).toBeDefined();
+      expect(events.at(-1)?.event).toBe('done');
+      expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'explicit_minimum_cue_fallback' });
+      expect(requestCount).toBe(1);
+    } finally {
+      achiote.kill('SIGINT');
+      fakeOpenAi.closeAllConnections();
+      await new Promise<void>((resolveClose) => fakeOpenAi.close(() => resolveClose()));
+    }
+  }, 20_000);
+
   it('continues planned substitutions when the provider stalls after early tools', async () => {
     const fakePort = await getFreePort();
     let requestCount = 0;
