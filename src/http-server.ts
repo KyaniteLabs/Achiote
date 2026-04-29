@@ -54,6 +54,11 @@ const ALLOWED_ORIGINS = (process.env.ACHIOTE_ALLOWED_ORIGINS || 'http://localhos
   .filter(Boolean);
 const TELEMETRY_LIMIT_PER_MINUTE = parseInt(process.env.ACHIOTE_TELEMETRY_LIMIT_PER_MINUTE || '120', 10);
 const EVENTS_ADMIN_TOKEN = process.env.ACHIOTE_EVENTS_ADMIN_TOKEN?.trim();
+const KNOWN_TOOL_NAMES = new Set(TOOLS.map((tool) => tool.name));
+const MODEL_TOOL_NAME_ALIASES: Record<string, string> = {
+  find_sensory_subutes: 'find_sensory_substitutes',
+  generate_minimum_viable_nystalgia: 'generate_minimum_viable_nostalgia',
+};
 
 const MIME: Record<string, string> = {
   '.html': 'text/html',
@@ -575,6 +580,14 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
     while (modelResponse.toolCalls.length > 0 && iterations < 15) {
       if (res.writableEnded) return;
       iterations++;
+      const normalizedToolCalls = normalizeModelToolCalls(modelResponse.toolCalls);
+      if (normalizedToolCalls.normalizedAny) {
+        modelResponse = { ...modelResponse, toolCalls: normalizedToolCalls.toolCalls };
+        for (const correction of normalizedToolCalls.corrections) {
+          console.warn(`[ask] normalized model tool name typo: ${correction.from} -> ${correction.to}`);
+          send('status', { iteration: iterations, stage: 'tool_name_normalized', from: correction.from, to: correction.to });
+        }
+      }
       const toolNames = modelResponse.toolCalls.map((call) => call.name);
       console.log(`[ask] iteration=${iterations} calling tools: ${toolNames.join(', ')}`);
 
@@ -609,6 +622,18 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
 
       for (const call of modelResponse.toolCalls) {
         try {
+          if (call.name === 'generate_recipe' || call.name === 'validate_recipe_output') {
+            const resultPayload = {
+              skipped: true,
+              message: 'Recipe tools are outside the /ask minimum-cue flow. Synthesize from the minimum viable nostalgia cue instead.',
+            };
+            console.warn(`[ask] blocked ${call.name} during minimum-cue ask flow`);
+            send('tool_call', { name: call.name, input: call.input, blocked: true });
+            send('tool_result', { name: call.name, result: resultPayload, blocked: true });
+            toolResults.push({ id: call.id, content: JSON.stringify(resultPayload) });
+            toolCallHistory.push({ name: call.name, input: call.input });
+            continue;
+          }
           // Enforce search_web call cap — hard block, never falls through
           if (call.name === 'search_web' && searchCallCount >= getMaxSearchCalls()) {
             const cached = toolPayloads.search_web;
@@ -721,26 +746,34 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       return;
     }
 
+    if (calledTools.has('generate_minimum_viable_nostalgia')
+      && (modelResponse.textBlocks.length === 0 || containsStalledFallbackText(modelResponse.textBlocks.join('\n\n')))) {
+      console.warn('[ask] replaced stalled post-cue response with deterministic minimum cue');
+      const responseText = buildMinimumCueCompletedResponse(toolPayloads);
+      send('text', responseText);
+      maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
+      send('done', { guarded: 'minimum_cue_deterministic_completion' });
+      return;
+    }
+
     const responseText = modelResponse.textBlocks
       .map((text) => ensureCueQualityLanguage(text, toolPayloads, calledTools))
       .join('\n\n');
+    const trustBoundedResponseText = sanitizeFinalAnswerTrustBoundaryLanguage(responseText);
+    const didSanitizeTrustBoundary = trustBoundedResponseText !== responseText;
 
-    if (calledTools.has('generate_minimum_viable_nostalgia') && containsRecipeMeasurementLanguage(responseText)) {
+    if (calledTools.has('generate_minimum_viable_nostalgia') && containsRecipeMeasurementLanguage(trustBoundedResponseText)) {
       console.warn('[ask] suppressed recipe-style measurements in cue response');
-      const sanitized = responseText
-        // Only replace explicit numeric quantities (e.g. "2 tablespoons", "1/2 cup"); bare unit words in prose are fine.
-        .replace(/\b\d+(?:\s*\/\s*\d+)?\s*(?:teaspoons?|tablespoons?|cups?|ounces?|pounds?|grams?|ml|liters?|quarts?|gallons?|sticks?|cloves?|heads?|bunches?)\b/gi, 'a small amount of')
-        .replace(/\b(preheat|bake|roast|simmer|boil)\b[\s\S]*?\b(?:minutes?|hours?|degrees?|°|oven)\b/gi, 'prepare briefly')
-        .replace(/\bserves?\s+\d+\b/gi, 'a small portion');
+      const sanitized = sanitizeRecipeStyleCueLanguage(trustBoundedResponseText);
       send('text', sanitized);
       maybeSendMemoryReceipt({ toolPayloads, assistantText: sanitized, send });
       send('done', { guarded: 'recipe_measurement_sanitized' });
       return;
     }
 
-    if (responseText) send('text', responseText);
-    maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
-    send('done', {});
+    if (trustBoundedResponseText) send('text', trustBoundedResponseText);
+    maybeSendMemoryReceipt({ toolPayloads, assistantText: trustBoundedResponseText, send });
+    send('done', didSanitizeTrustBoundary ? { guarded: 'trust_boundary_sanitized' } : {});
   } catch (err) {
     send('error', sanitizeAskError(err));
   } finally {
@@ -1243,19 +1276,19 @@ function hasSensorySignal(userMessage: string, collectedMemory: unknown): boolea
 function formatMinimumCueFallback(cue: MinimumViableNostalgiaCue, userLocation?: string): string {
   const ingredientLines = cue.ingredients
     .slice(0, 4)
-    .map((ingredient) => `- ${ingredient.amount} ${ingredient.item}${ingredient.optional ? ' (optional)' : ''}`);
+    .map((ingredient) => formatMinimumCueIngredientLine(ingredient));
   const stepLines = cue.steps
     .slice(0, 4)
-    .map((step, index) => `${index + 1}. ${step}`);
-  const followUp = cue.followUpIfItWorks[0];
+    .map((step, index) => `${index + 1}. ${sanitizeMinimumCueFallbackText(step)}`);
+  const followUp = cue.followUpIfItWorks[0] ? sanitizeMinimumCueFallbackText(cue.followUpIfItWorks[0]) : undefined;
   const localLine = userLocation
     ? `Local sourcing: use ordinary grocery or pantry ingredients near ${userLocation}; do not buy the exact suspected dish for this first test.`
     : '';
 
-  return [
-    `${cue.title} (${cue.effortMinutes} min)`,
+  return sanitizeMinimumCueFallbackBlock([
+    cue.title,
     '',
-    cue.goal,
+    sanitizeMinimumCueFallbackText(cue.goal),
     '',
     'Use:',
     ...ingredientLines,
@@ -1263,10 +1296,18 @@ function formatMinimumCueFallback(cue: MinimumViableNostalgiaCue, userLocation?:
     'Try:',
     ...stepLines,
     '',
-    `Why this is minimum: ${cue.whyThisIsMinimum}`,
+    `Why this is minimum: ${sanitizeMinimumCueFallbackText(cue.whyThisIsMinimum)}`,
     localLine,
     followUp ? `If it works: ${followUp}` : '',
-  ].filter((line) => line.length > 0).join('\n');
+  ].filter((line) => line.length > 0).join('\n'));
+}
+
+function formatMinimumCueIngredientLine(ingredient: MinimumViableNostalgiaCue['ingredients'][number]): string {
+  const item = sanitizeMinimumCueFallbackText(ingredient.item)
+    .replace(/^(?:a\s+)?(?:tiny|small)\s+(?:test\s+)?amount\s+of\s+/i, '')
+    .replace(/^tiny\s+/i, '')
+    .trim();
+  return `- a tiny test amount of ${item}${ingredient.optional ? ' (optional)' : ''}`;
 }
 
 function buildMinimumCueCompletedResponse(toolPayloads: Record<string, unknown>): string {
@@ -1387,11 +1428,115 @@ function containsConcreteFoodCue(text: string): boolean {
 }
 
 function containsRecipeMeasurementLanguage(text: string): boolean {
-  // Require an explicit numeric quantity before the unit so prose like "a pinch of dill"
-  // or "a tablespoon of broth" does not fire. Only "2 tablespoons", "1/2 cup", etc. match.
-  return /\b\d+(?:\s*\/\s*\d+)?\s*(?:teaspoons?|tablespoons?|cups?|ounces?|pounds?|grams?|ml|liters?|quarts?|gallons?|sticks?|cloves?|heads?|bunches?)\b/i.test(text)
+  const spelledAmount = String.raw`(?:a|an|half|quarter|one|two|three|four|five|six|seven|eight|nine|ten)`;
+  return /\b\d+(?:\s*[-–]\s*\d+)?(?:\s*\/\s*\d+)?\s*(?:tsp|tbsp|teaspoons?|tablespoons?|cups?|ounces?|oz|pounds?|lbs?|grams?|g|ml|milliliters?|liters?|quarts?|gallons?|sticks?|cloves?|heads?|bunches?)\b/i.test(text)
+    || /\b(?:one|half)[-\s]?cup\b/i.test(text)
+    || new RegExp(String.raw`\b${spelledAmount}\s+(?:of\s+|a\s+)?(?:tsp|tbsp|teaspoons?|tablespoons?|cups?|ounces?|oz|pounds?|lbs?|grams?|milliliters?|liters?|quarts?|gallons?|sticks?|cloves?|heads?|bunches?)\b`, 'i').test(text)
+    || /\b\d+(?:\s*[-–]\s*\d+)?\s*(?:mins?|minutes?|hrs?|hours?)\b/i.test(text)
+    || /\b\d{2,4}\s*°?\s*[FC]\b/i.test(text)
     || /\bpreheat\b.*\b(?:oven|to)\b/i.test(text)
-    || /\b(?:bake|roast|simmer|boil)\b.*\b(?:minutes?|hours?|degrees?|°)\b/i.test(text);
+    || /\b(?:bake|roast|simmer|boil)\b.*\b(?:minutes?|hours?|degrees?|°)\b/i.test(text)
+    || /\b(?:gentle\s+simmer|rolling\s+boil)\b/i.test(text);
+}
+
+function sanitizeRecipeStyleCueLanguage(text: string): string {
+  return text
+    .replace(/\b(?:one|half)[-\s]?cup\b/gi, 'tiny sip')
+    .replace(/\bfull\s+recipe\b/gi, 'full dish')
+    .replace(/\b\d+(?:\s*[-–]\s*\d+)?(?:\s*\/\s*\d+)?\s*(?:tsp|tbsp|teaspoons?|tablespoons?|cups?|ounces?|oz|pounds?|lbs?|grams?|g|ml|milliliters?|liters?|quarts?|gallons?|sticks?|cloves?|heads?|bunches?)\b/gi, 'a small amount of')
+    .replace(/\b(?:a|an|half|quarter|one|two|three|four|five|six|seven|eight|nine|ten)\s+(?:of\s+|a\s+)?(?:tsp|tbsp|teaspoons?|tablespoons?|cups?|ounces?|oz|pounds?|lbs?|grams?|milliliters?|liters?|quarts?|gallons?|sticks?|cloves?|heads?|bunches?)\b/gi, 'a small amount of')
+    .replace(/\b\d+(?:\s*[-–]\s*\d+)?\s*(?:mins?|minutes?|hrs?|hours?)\b/gi, 'briefly')
+    .replace(/\b\d{2,4}\s*°?\s*[FC]\b/gi, 'gentle heat')
+    .replace(/\b(?:gentle\s+simmer|rolling\s+boil)\b/gi, 'gentle heat')
+    .replace(/\bpreheat\b[^.?!]*(?:[.?!]|$)/gi, 'Keep this to a tiny tasting cue, not an oven recipe. ')
+    .replace(/\b(?:serves?|servings?|serving)\s*:?\s*\d+\b/gi, 'a tiny test portion')
+    .replace(/\bexact\s+recipe\s+(?:follows|below|is)\b\.?/gi, 'This is not a full recipe.')
+    .replace(/\ba small amount of\s+of\b/gi, 'a small amount of')
+    .replace(/\babout\s+briefly\b/gi, 'briefly')
+    .replace(/\bfor\s+briefly\b/gi, 'briefly')
+    .replace(/\s{2,}/g, ' ')
+    .trim();
+}
+
+function normalizeModelToolCalls(toolCalls: AskModelResponse['toolCalls']): {
+  toolCalls: AskModelResponse['toolCalls'];
+  corrections: Array<{ from: string; to: string }>;
+  normalizedAny: boolean;
+} {
+  const corrections: Array<{ from: string; to: string }> = [];
+  const normalized = toolCalls.map((call) => {
+    const toolName = normalizeModelToolName(call.name);
+    if (toolName === call.name) return call;
+    corrections.push({ from: call.name, to: toolName });
+    return { ...call, name: toolName };
+  });
+  return { toolCalls: normalized, corrections, normalizedAny: corrections.length > 0 };
+}
+
+function normalizeModelToolName(toolName: string): string {
+  if (KNOWN_TOOL_NAMES.has(toolName)) return toolName;
+  const alias = MODEL_TOOL_NAME_ALIASES[toolName];
+  if (alias && KNOWN_TOOL_NAMES.has(alias)) return alias;
+  const candidates = [...KNOWN_TOOL_NAMES]
+    .map((candidate) => ({ candidate, distance: boundedEditDistance(toolName, candidate, 2) }))
+    .filter((candidate) => candidate.distance <= 2)
+    .sort((a, b) => a.distance - b.distance);
+  if (candidates.length === 1) return candidates[0].candidate;
+  if (candidates.length > 1 && candidates[0].distance < candidates[1].distance) return candidates[0].candidate;
+  return toolName;
+}
+
+function boundedEditDistance(left: string, right: string, maxDistance: number): number {
+  if (Math.abs(left.length - right.length) > maxDistance) return maxDistance + 1;
+  let previous = Array.from({ length: right.length + 1 }, (_, index) => index);
+  for (let leftIndex = 1; leftIndex <= left.length; leftIndex++) {
+    const current = [leftIndex];
+    let rowMin = current[0];
+    for (let rightIndex = 1; rightIndex <= right.length; rightIndex++) {
+      const substitutionCost = left[leftIndex - 1] === right[rightIndex - 1] ? 0 : 1;
+      const value = Math.min(
+        previous[rightIndex] + 1,
+        current[rightIndex - 1] + 1,
+        previous[rightIndex - 1] + substitutionCost,
+      );
+      current[rightIndex] = value;
+      rowMin = Math.min(rowMin, value);
+    }
+    if (rowMin > maxDistance) return maxDistance + 1;
+    previous = current;
+  }
+  return previous[right.length] ?? maxDistance + 1;
+}
+
+function sanitizeMinimumCueFallbackText(text: string): string {
+  return sanitizeRecipeStyleCueLanguage(text)
+    .replace(/\bnot an oven recipe\b/gi, 'not an oven meal')
+    .replace(/\brecipe\b/gi, 'dish')
+    .replace(/\bbriefly\s+min\b/gi, 'briefly')
+    .trim();
+}
+
+function sanitizeMinimumCueFallbackBlock(text: string): string {
+  return text
+    .split('\n')
+    .map((line) => sanitizeMinimumCueFallbackText(line))
+    .join('\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
+function sanitizeFinalAnswerTrustBoundaryLanguage(text: string): string {
+  const revised = text
+    .replace(/(?:^|\n)\s*(?:[-*]\s*)?[^.\n?!]*(?:medical advice|legal advice|professional advice|medically safe|legally safe|heart-healthy|lowers cholesterol|cures?)[^.\n?!]*(?:[.?!]|$)/gim, '\n')
+    .replace(/\bI\s+cannot\s+give\b[^.?!]*(?:medical advice|legal advice|professional advice)[^.?!]*(?:[.?!]|$)/gi, '')
+    .replace(/\b(?:OpenAI|Anthropic|Claude|GPT[-\s]?\d[\w.-]*|gpt[-\s]?\d[\w.-]*|fake-hostile-model|provider(?:\/model)?|model identity)\b[^.?!]*(?:[.?!]|$)/gi, '')
+    .replace(/\b(?:I\s+(?:browsed|searched)|Achiote\s+(?:browsed|searched)|live web|current grocery prices|live search results?|web results?)\b[^.?!]*(?:[.?!]|$)/gi, '')
+    .replace(/\b(?:This\s+)?(?:medically safe|medical(?:ly)?|heart-healthy|cure|cures|lowers cholesterol|(?:treats?|prevents?|diagnoses?)\s+(?:a\s+|an\s+|the\s+)?(?:illness|disease|condition|symptoms?|inflammation|cholesterol|infection|diabetes|heart disease|medical problem))\b[^.?!]*(?:[.?!]|$)/gi, '')
+    .replace(/\b(?:legal(?:ly)? safe|legal advice|medical advice|professional advice)\b[^.?!]*(?:[.?!]|$)/gi, '')
+    .replace(/\bFirst-pass verification bite\b/g, 'first-pass verification bite')
+    .replace(/\s{2,}/g, ' ')
+    .trim();
+  return revised || 'Use this only as a first-pass verification bite; keep the result evidence-bounded and revise if the sensory cue is wrong.';
 }
 
 function containsGenericUncertaintyWaffle(text: string): boolean {

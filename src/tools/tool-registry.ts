@@ -921,7 +921,7 @@ export const toolRegistry = [
       const query = text(asInput(raw).query);
       const apiKey = process.env.SERPER_API_KEY?.trim();
       if (!apiKey) {
-        return output({ query, results: [], note: 'Web search is not configured. Set SERPER_API_KEY to enable.' });
+        return output({ query, results: [], note: 'Host web search is not configured for this run. Use prior evidence or ask a targeted follow-up question.' });
       }
       try {
         const response = await fetch('https://google.serper.dev/search', {

@@ -80,6 +80,8 @@ describe('package distribution metadata', () => {
     expect(pkg.scripts['docker:smoke']).toBe('node scripts/docker-smoke.mjs');
     expect(pkg.scripts['live:ask']).toBe('node scripts/live-ask-smoke.mjs');
     expect(pkg.scripts['preview:smoke']).toBe('node scripts/preview-ask-smoke.mjs');
+    expect(pkg.scripts['canary:local']).toBe('npm run build && node scripts/local-canary-qa.mjs');
+    expect(pkg.scripts['torture:fake']).toBe('npm run build && node scripts/torture-smoke.mjs');
     expect(pkg.scripts['viability:smoke']).toBe('node scripts/viability-transcript-smoke.mjs');
     expect(pkg.scripts['pack:check']).toBe('npm run check && npm run package:smoke && npm pack --dry-run');
     expect(pkg.scripts['package:smoke']).toBe('node scripts/package-smoke.mjs');
@@ -113,6 +115,18 @@ describe('package distribution metadata', () => {
     expect(liveSmokeScript).toContain('ACHIOTE_ASK_PROVIDER');
   });
 
+  it('keeps local canary QA gentle and qwen3.5-0.8b focused', () => {
+    const canaryScript = fs.readFileSync('scripts/local-canary-qa.mjs', 'utf8');
+
+    expect(canaryScript).toContain("const DEFAULT_MODEL = 'qwen3.5-0.8b';");
+    expect(canaryScript).toContain('Stopping early after');
+    expect(canaryScript).toContain('provider/runtime failure');
+    expect(canaryScript).toContain('LOCAL_CANARY_PACE_MS');
+    expect(canaryScript).toContain('LOCAL_CANARY_CASES');
+    expect(canaryScript).toContain('LOCAL_CANARY_PROFILE');
+    expect(canaryScript).toContain('LOCAL_CANARY_SUMMARY_JSON');
+  });
+
 
   it('allows the /ask model to be overridden for Anthropic-compatible providers', () => {
     const httpServer = fs.readFileSync('src/http-server.ts', 'utf8');
@@ -142,6 +156,8 @@ describe('packaged helper scripts', () => {
     expect(fs.existsSync('scripts/docker-smoke.mjs')).toBe(true);
     expect(fs.existsSync('scripts/live-ask-smoke.mjs')).toBe(true);
     expect(fs.existsSync('scripts/preview-ask-smoke.mjs')).toBe(true);
+    expect(fs.existsSync('scripts/local-canary-qa.mjs')).toBe(true);
+    expect(fs.existsSync('scripts/torture-smoke.mjs')).toBe(true);
     expect(fs.existsSync('scripts/viability-transcript-smoke.mjs')).toBe(true);
   });
 });

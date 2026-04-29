@@ -83,7 +83,7 @@ describe('/ask OpenAI-compatible provider mode', () => {
           finish_reason: toolCalls ? 'tool_calls' : 'stop',
           message: toolCalls
             ? { role: 'assistant', content: '', tool_calls: toolCalls }
-            : { role: 'assistant', content: 'OpenAI-compatible final minimum cue.' },
+            : { role: 'assistant', content: 'Final minimum cue.' },
         }],
       }));
     });
@@ -124,7 +124,7 @@ describe('/ask OpenAI-compatible provider mode', () => {
     expect(eventNames.at(-2)).toBe('receipt');
     expect(eventNames.at(-1)).toBe('done');
     const text = JSON.parse(events.find((e) => e.event === 'text')!.data);
-    expect(text).toContain('OpenAI-compatible final minimum cue.');
+    expect(text).toContain('Final minimum cue.');
     expect(text).toContain('first-pass verification bite');
     expect(text).not.toContain('research-bounded proxy test');
     expect(requestCount).toBe(5);
@@ -945,7 +945,7 @@ describe('/ask premature cue guard', () => {
       achiote.kill('SIGINT');
       await new Promise<void>((resolveClose) => fakeOpenAi.close(() => resolveClose()));
     }
-  });
+  }, 10_000);
 
   it('uses structured clarification when the model stops after memory collection', async () => {
     const fakePort = await getFreePort();

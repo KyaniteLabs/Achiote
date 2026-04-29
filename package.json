@@ -22,6 +22,8 @@
     "coverage:guard": "node scripts/coverage-threshold.mjs",
     "live:ask": "node scripts/live-ask-smoke.mjs",
     "preview:smoke": "node scripts/preview-ask-smoke.mjs",
+    "canary:local": "npm run build && node scripts/local-canary-qa.mjs",
+    "torture:fake": "npm run build && node scripts/torture-smoke.mjs",
     "viability:smoke": "node scripts/viability-transcript-smoke.mjs"
   },
   "dependencies": {
