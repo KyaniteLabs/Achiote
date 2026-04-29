@@ -264,6 +264,16 @@ describe('HTTP server integration', () => {
     expect(await operatorRead.json()).toEqual({
       counters: { feedback_close: 1 },
       breakdowns: { feedback_close: { route: { '/app': 1 }, category: { answer_quality: 1 } } },
+      quality: {
+        total: 0,
+        byMemoryType: {},
+        byFamily: {},
+        byRegion: {},
+        byGuard: {},
+        bySearch: {},
+        byCache: {},
+        missing: {},
+      },
     });
 
     for (let i = 0; i < 30; i += 1) {

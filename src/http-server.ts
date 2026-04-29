@@ -19,6 +19,7 @@ import { BillingStripe, loadBillingConfigFromEnv, type CheckoutTier } from './li
 import { getHttpReadiness, getRequestRateLimitIdentity, isAnonymousAskAllowed, shouldApplyRateLimit } from './lib/http-runtime.js';
 import { resolveLocalSpeechConfig, synthesizeWithLocalSpeech, transcribeWithLocalSpeech, validateSpeechAudioPayload, validateSpeechTextPayload } from './lib/local-speech.js';
 import { buildMemoryReceipt } from './lib/memory-receipt.js';
+import { buildAskQualitySignal, emptyQualitySignalReport, recordQualitySignal } from './lib/quality-signals.js';
 import { filterRepeatedToolCalls } from './lib/tool-loop.js';
 import type { Tier } from './lib/auth.js';
 import type { CollectedFoodMemory, DishResearchPlan, MinimumViableNostalgiaCue, ReconstructionDossier } from './lib/types.js';
@@ -151,6 +152,7 @@ const OTHER_TELEMETRY_VALUE = 'other';
 const telemetryCounters = new Map<string, number>();
 const telemetryBreakdowns = new Map<string, Map<string, Map<string, number>>>();
 const telemetryBuckets = new Map<string, { count: number; resetAt: number }>();
+const qualitySignalReport = emptyQualitySignalReport();
 
 function sanitizeTelemetryProperties(raw: unknown): Record<string, string> {
   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return {};
@@ -513,6 +515,10 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
     const toolPayloads: Record<string, unknown> = {};
     const deterministicPlanInput = { userMessage };
     let didInjectPlanToolResult = false;
+    const finish: DoneSender = (data = {}) => {
+      recordAskCompletion(toolPayloads, calledTools, data);
+      send('done', data);
+    };
 
     // Execute plan_tool_workflow deterministically — do not rely on the model to call it.
     send('status', { stage: 'routing', tool: 'plan_tool_workflow' });
@@ -536,7 +542,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
     } catch (err) {
       if (isProviderContextLimitError(err)) {
         console.warn(`[ask] provider context limit before first model turn, using deterministic recovery: ${err instanceof Error ? err.message : String(err)}`);
-        if (await recoverFromInitialProviderFailure({ userMessage, toolPayloads, calledTools, send, guarded: 'provider_context_deterministic_recovery' })) return;
+        if (await recoverFromInitialProviderFailure({ userMessage, toolPayloads, calledTools, send, finish, guarded: 'provider_context_deterministic_recovery' })) return;
       }
       throw err;
     }
@@ -550,7 +556,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       } catch (err) {
         if (isProviderContextLimitError(err)) {
           console.warn(`[ask] provider context limit on retry, using deterministic recovery: ${err instanceof Error ? err.message : String(err)}`);
-          if (await recoverFromInitialProviderFailure({ userMessage, toolPayloads, calledTools, send, guarded: 'provider_context_deterministic_recovery' })) return;
+          if (await recoverFromInitialProviderFailure({ userMessage, toolPayloads, calledTools, send, finish, guarded: 'provider_context_deterministic_recovery' })) return;
         }
         throw err;
       }
@@ -669,7 +675,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
           const responseText = buildMinimumCueCompletedResponse(toolPayloads);
           send('text', responseText);
           maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
-          send('done', { guarded: 'minimum_cue_deterministic_completion' });
+          finish({ guarded: 'minimum_cue_deterministic_completion' });
           return;
         }
         console.warn(`[ask] model thinking turn timed out after tools, using deterministic continuation: ${detail}`);
@@ -681,7 +687,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
     await maybeRunMissingResearchPlan({ userMessage, toolPayloads, calledTools, send });
     await maybeRunPlannedSubstitutions({ userMessage, toolPayloads, calledTools, send });
 
-    if (await maybeSendForcedMinimumCue({ userMessage, toolPayloads, calledTools, send })) {
+    if (await maybeSendForcedMinimumCue({ userMessage, toolPayloads, calledTools, send, finish })) {
       return;
     }
 
@@ -697,7 +703,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
         const responseText = buildClarificationOnlyResponse(toolPayloads);
         send('text', responseText);
         maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
-        send('done', { guarded: 'missing_research_plan_clarification' });
+        finish({ guarded: 'missing_research_plan_clarification' });
         return;
       }
     }
@@ -714,7 +720,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
         const responseText = buildClarificationOnlyResponse(toolPayloads);
         send('text', responseText);
         maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
-        send('done', { guarded: 'missing_research_plan_clarification' });
+        finish({ guarded: 'missing_research_plan_clarification' });
         return;
       }
     }
@@ -724,7 +730,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       const responseText = buildClarificationOnlyResponse(toolPayloads);
       send('text', responseText);
       maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
-      send('done', { guarded: 'premature_concrete_cue' });
+      finish({ guarded: 'premature_concrete_cue' });
       return;
     }
 
@@ -733,7 +739,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       const responseText = buildClarificationOnlyResponse(toolPayloads);
       send('text', responseText);
       maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
-      send('done', { guarded: 'generic_uncertainty_clarification' });
+      finish({ guarded: 'generic_uncertainty_clarification' });
       return;
     }
 
@@ -742,7 +748,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       const responseText = buildClarificationOnlyResponse(toolPayloads);
       send('text', responseText);
       maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
-      send('done', { guarded: 'premature_candidate_speculation' });
+      finish({ guarded: 'premature_candidate_speculation' });
       return;
     }
 
@@ -751,7 +757,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       const responseText = buildClarificationOnlyResponse(toolPayloads);
       send('text', responseText);
       maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
-      send('done', { guarded: 'broad_memory_clarification' });
+      finish({ guarded: 'broad_memory_clarification' });
       return;
     }
 
@@ -760,7 +766,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       const responseText = buildMinimumCueCompletedResponse(toolPayloads);
       send('text', responseText);
       maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
-      send('done', { guarded: 'minimum_cue_deterministic_completion' });
+      finish({ guarded: 'minimum_cue_deterministic_completion' });
       return;
     }
 
@@ -770,7 +776,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       const responseText = buildMinimumCueCompletedResponse(toolPayloads);
       send('text', responseText);
       maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
-      send('done', { guarded: 'minimum_cue_deterministic_completion' });
+      finish({ guarded: 'minimum_cue_deterministic_completion' });
       return;
     }
 
@@ -785,13 +791,13 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       const sanitized = sanitizeRecipeStyleCueLanguage(trustBoundedResponseText);
       send('text', sanitized);
       maybeSendMemoryReceipt({ toolPayloads, assistantText: sanitized, send });
-      send('done', { guarded: 'recipe_measurement_sanitized' });
+      finish({ guarded: 'recipe_measurement_sanitized' });
       return;
     }
 
     if (trustBoundedResponseText) send('text', trustBoundedResponseText);
     maybeSendMemoryReceipt({ toolPayloads, assistantText: trustBoundedResponseText, send });
-    send('done', didSanitizeTrustBoundary ? { guarded: 'trust_boundary_sanitized' } : {});
+    finish(didSanitizeTrustBoundary ? { guarded: 'trust_boundary_sanitized' } : {});
   } catch (err) {
     send('error', sanitizeAskError(err));
   } finally {
@@ -800,6 +806,17 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
 }
 
 type SseSender = (event: string, data: unknown) => void;
+type DoneSender = (data?: Record<string, unknown>) => void;
+
+function recordAskCompletion(toolPayloads: Record<string, unknown>, calledTools: Set<string>, donePayload: Record<string, unknown>): void {
+  const guarded = typeof donePayload.guarded === 'string' ? donePayload.guarded : 'none';
+  recordQualitySignal(qualitySignalReport, buildAskQualitySignal({
+    toolPayloads,
+    calledTools: [...calledTools],
+    guarded,
+    cache: 'unavailable',
+  }));
+}
 
 function maybeSendMemoryReceipt(input: {
   toolPayloads: Record<string, unknown>;
@@ -1108,12 +1125,14 @@ async function recoverFromInitialProviderFailure({
   toolPayloads,
   calledTools,
   send,
+  finish,
   guarded,
 }: {
   userMessage: string;
   toolPayloads: Record<string, unknown>;
   calledTools: Set<string>;
   send: SseSender;
+  finish: DoneSender;
   guarded: string;
 }): Promise<boolean> {
   send('status', { stage: 'deterministic_recovery', reason: 'provider_context_limit' });
@@ -1126,14 +1145,14 @@ async function recoverFromInitialProviderFailure({
   await maybeRunMissingResearchPlan({ userMessage, toolPayloads, calledTools, send });
   await maybeRunPlannedSubstitutions({ userMessage, toolPayloads, calledTools, send });
 
-  if (await maybeSendForcedMinimumCue({ userMessage, toolPayloads, calledTools, send })) {
+  if (await maybeSendForcedMinimumCue({ userMessage, toolPayloads, calledTools, send, finish })) {
     return true;
   }
 
   const responseText = buildClarificationOnlyResponse(toolPayloads);
   send('text', responseText);
   maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
-  send('done', { guarded });
+  finish({ guarded });
   return true;
 }
 
@@ -1150,11 +1169,13 @@ async function maybeSendForcedMinimumCue({
   toolPayloads,
   calledTools,
   send,
+  finish,
 }: {
   userMessage: string;
   toolPayloads: Record<string, unknown>;
   calledTools: Set<string>;
   send: SseSender;
+  finish: DoneSender;
 }): Promise<boolean> {
   if (calledTools.has('generate_minimum_viable_nostalgia')) return false;
   if (!shouldForceMinimumCue(userMessage, toolPayloads, calledTools)) return false;
@@ -1192,7 +1213,7 @@ async function maybeSendForcedMinimumCue({
   const responseText = formatMinimumCueFallback(cue, memory.userLocation);
   send('text', responseText);
   maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
-  send('done', { guarded: 'explicit_minimum_cue_fallback' });
+  finish({ guarded: 'explicit_minimum_cue_fallback' });
   return true;
 }
 
@@ -1902,6 +1923,7 @@ const server = createServer(async (req, res) => {
     sendJson(res, 200, {
       counters: Object.fromEntries(telemetryCounters),
       breakdowns: serializeTelemetryBreakdowns(),
+      quality: qualitySignalReport,
     });
     return;
   }

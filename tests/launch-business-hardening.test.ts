@@ -85,6 +85,10 @@ describe('launch business hardening', () => {
     expect(server()).toContain("'feedback_missed_correction'");
     expect(server()).toContain('telemetryBreakdowns');
     expect(server()).toContain('telemetryCounters');
+    expect(server()).toContain('qualitySignalReport');
+    expect(server()).toContain('buildAskQualitySignal');
+    expect(server()).toContain('recordQualitySignal');
+    expect(server()).toContain('quality: qualitySignalReport');
     expect(server()).toContain("sendJson(res, 404, { error: 'Not found' })");
     expect(server()).not.toContain('event.payload');
   });

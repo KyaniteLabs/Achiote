@@ -87,6 +87,18 @@ describe('package distribution metadata', () => {
     expect(pkg.scripts['package:smoke']).toBe('node scripts/package-smoke.mjs');
   });
 
+  it('keeps private quality-signal telemetry inside the shipped server build', () => {
+    const server = fs.readFileSync('src/http-server.ts', 'utf8');
+    const qualitySignals = fs.readFileSync('src/lib/quality-signals.ts', 'utf8');
+
+    expect(pkg.files).toContain('dist/');
+    expect(server).toContain("from './lib/quality-signals.js'");
+    expect(server).toContain('quality: qualitySignalReport');
+    expect(qualitySignals).toContain('export function buildAskQualitySignal');
+    expect(qualitySignals).not.toContain('rawMemory');
+    expect(qualitySignals).not.toContain('memoryText');
+  });
+
   it('uses a portable package-smoke temp directory prefix', () => {
     const smokeScript = fs.readFileSync('scripts/package-smoke.mjs', 'utf8');
 
