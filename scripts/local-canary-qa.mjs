@@ -134,7 +134,7 @@ const deepCases = [
     category: 'deep-clarification',
     message: 'My abuela made something sour and herby, maybe green, but I do not know the country, dish name, ingredients, or whether it was soup, sauce, or stew. Do not list candidate dishes; ask only what is needed or give a safe tiny cue if you have enough.',
     forbiddenText: /\b(?:pozole|ceviche|chimichurri|sancocho|caldo verde|salsa verde|aguachile)\b/i,
-    allowedGuarded: ['missing_research_plan_clarification', 'generic_uncertainty_clarification', 'premature_candidate_speculation', 'trust_boundary_sanitized'],
+    allowedGuarded: ['missing_research_plan_clarification', 'generic_uncertainty_clarification', 'premature_candidate_speculation', 'broad_memory_clarification', 'trust_boundary_sanitized'],
   },
   {
     id: 'deep_transliteration_uncertain_beverage',

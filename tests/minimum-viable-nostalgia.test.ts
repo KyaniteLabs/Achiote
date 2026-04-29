@@ -497,6 +497,35 @@ describe('minimum viable nostalgia cue', () => {
     expect(recommendationText).toContain('do not buy the exact drink');
   });
 
+  it('treats barley and cebada drink memories as cold cereal beverages', () => {
+    const cue = generateMinimumViableNostalgiaCue({
+      dossier: beverageDossier(
+        'My tia called it agua de cebada or aguita de ceba. It was a cold, watery, barely sweet barley drink with lime over ice.',
+        [
+          'Agua de cebada should be tested as a cereal drink memory, not as porridge or a generic sweet texture.',
+          'The strongest signals are barley or cebada, cold dilution, lime brightness, low sweetness, and the over-ice serving ritual.',
+        ],
+      ),
+      researchFindings: {
+        researchedFacts: ['Barley-water style drinks preserve toasted grain aroma, watery body, citrus brightness, low sweetness, dilution, and cold serving temperature.'],
+        inferredFacts: ['The minimum cue should be a small cold sip that tests barley or grain-water body with lime.'],
+        unknowns: ['exact household spelling', 'exact grain preparation'],
+        sourceCount: 2,
+        confidence: 'Medium',
+      },
+      userLocation: 'United States',
+      maxEffortMinutes: 12,
+    });
+    const recommendationText = fullCueText(cue);
+
+    expect(cue.title).toContain('beverage');
+    expect(cue.format).toBe('sip');
+    expect(cue.ingredients[0]?.item.toLowerCase()).toMatch(/barley|cebada|grain/);
+    expect(recommendationText).toMatch(/lime|citrus|acid/);
+    expect(recommendationText).toMatch(/cold|ice|chill|temperature|dilution/);
+    expect(cue.components.some((component) => component.role === 'beverage')).toBe(true);
+  });
+
   it('does not classify iced baked goods as beverages', () => {
     const cue = generateMinimumViableNostalgiaCue({
       dossier: confectioneryDossier(

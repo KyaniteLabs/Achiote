@@ -645,7 +645,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
             toolCallHistory.push({ name: call.name, input: call.input });
             continue;
           }
-          const payload = await executeAndStreamTool(call.name, call.input, userMessage, send, calledTools, toolPayloads);
+          const payload = await executeAndStreamTool(call.name, call.input, userMessage, send, calledTools, toolPayloads, history);
           if (call.name === 'search_web') searchCallCount++;
           const content = JSON.stringify(payload);
           toolResults.push({ id: call.id, content });
@@ -746,6 +746,24 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       return;
     }
 
+    if (calledTools.has('generate_minimum_viable_nostalgia') && shouldClarifyBroadUncertainMemory(userMessage, toolPayloads)) {
+      console.warn('[ask] replaced broad uncertain post-cue response with structured clarification');
+      const responseText = buildClarificationOnlyResponse(toolPayloads);
+      send('text', responseText);
+      maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
+      send('done', { guarded: 'broad_memory_clarification' });
+      return;
+    }
+
+    if (calledTools.has('generate_minimum_viable_nostalgia') && containsBlockedRecipeToolSynthesis(modelResponse.textBlocks.join('\n\n'))) {
+      console.warn('[ask] replaced blocked recipe-tool synthesis with deterministic minimum cue');
+      const responseText = buildMinimumCueCompletedResponse(toolPayloads);
+      send('text', responseText);
+      maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
+      send('done', { guarded: 'minimum_cue_deterministic_completion' });
+      return;
+    }
+
     if (calledTools.has('generate_minimum_viable_nostalgia')
       && (modelResponse.textBlocks.length === 0 || containsStalledFallbackText(modelResponse.textBlocks.join('\n\n')))) {
       console.warn('[ask] replaced stalled post-cue response with deterministic minimum cue');
@@ -833,6 +851,7 @@ async function executeAndStreamTool(
   send: SseSender,
   calledTools: Set<string>,
   toolPayloads: Record<string, unknown>,
+  history?: AskHistoryItem[],
 ): Promise<unknown> {
   if (toolName === 'generate_minimum_viable_nostalgia' && shouldBuildMissingDossier(input, toolPayloads)) {
     const searchResults = toolPayloads.search_web as { results?: Array<{ title?: string; snippet?: string }> } | undefined;
@@ -847,9 +866,9 @@ async function executeAndStreamTool(
       inferredFacts: [
         'The model requested a minimum viable cue before building a dossier, so the server built the evidence boundary from available research.',
       ],
-    }, userMessage, send, calledTools, toolPayloads);
+    }, userMessage, send, calledTools, toolPayloads, history);
   }
-  const normalizedInput = normalizeDependentToolInput(toolName, input, userMessage, toolPayloads);
+  const normalizedInput = normalizeDependentToolInput(toolName, input, userMessage, toolPayloads, history);
   send('tool_call', { name: toolName, input: normalizedInput });
   const result = await executeToolDefinition(toolName, normalizedInput, toolContext);
   validateToolOutput(toolName, result.payload);
@@ -882,7 +901,7 @@ function hasUsableResearchPlan(value: unknown): boolean {
   return outputSchemas.plan_dish_research.safeParse(value).success;
 }
 
-function normalizeDependentToolInput(toolName: string, input: unknown, userMessage: string, toolPayloads: Record<string, unknown>): unknown {
+function normalizeDependentToolInput(toolName: string, input: unknown, userMessage: string, toolPayloads: Record<string, unknown>, history?: AskHistoryItem[]): unknown {
   const record = isRecord(input) ? input : {};
   const collectedMemory = hasUsableCollectedMemory(toolPayloads.collect_food_memory)
     ? toolPayloads.collect_food_memory
@@ -892,9 +911,12 @@ function normalizeDependentToolInput(toolName: string, input: unknown, userMessa
     : undefined;
 
   if (toolName === 'collect_food_memory') {
-    const memoryText = typeof record.memoryText === 'string' && record.memoryText.trim()
+    const rawMemoryText = typeof record.memoryText === 'string' && record.memoryText.trim()
       ? record.memoryText
       : userMessage;
+    const memoryText = isLatestCorrectionMessage(userMessage)
+      ? buildCorrectedMemoryText(rawMemoryText, userMessage, history)
+      : rawMemoryText;
     const normalizedRecord: Record<string, unknown> = { ...record, memoryText };
     delete normalizedRecord.knownRegion;
     delete normalizedRecord.knownLanguage;
@@ -925,6 +947,44 @@ function normalizeDependentToolInput(toolName: string, input: unknown, userMessa
     };
   }
   return input;
+}
+
+function isLatestCorrectionMessage(userMessage: string): boolean {
+  return /\b(?:correction|actually|wait\s+no|remembered\s+wrong)\b/i.test(userMessage);
+}
+
+function buildCorrectedMemoryText(modelMemoryText: string, userMessage: string, history?: AskHistoryItem[]): string {
+  const userHistory = (history ?? [])
+    .filter((item) => item.role === 'user')
+    .map((item) => item.content)
+    .join('\n');
+  return sanitizeStaleModelMemoryText([
+    userHistory,
+    modelMemoryText,
+    `Latest correction: ${sanitizeLatestCorrectionMemoryText(userMessage)}`,
+  ].filter((entry) => entry.trim().length > 0).join('\n'), userMessage);
+}
+
+function sanitizeLatestCorrectionMemoryText(userMessage: string): string {
+  return userMessage
+    .replace(/\b(?:not|no|wasn['’]?t|weren['’]?t|isn['’]?t|aren['’]?t|was\s+not|were\s+not|is\s+not|are\s+not)\s+(?:milky|creamy|cream|thick|warm|hot|sweet)(?:\s+or\s+(?:milky|creamy|cream|thick|warm|hot|sweet))*[;,.]?\s*/gi, '')
+    .replace(/\b(was|were|is|are)\s+(?:;|,)\s+/gi, '$1 ')
+    .replace(/\b(was|were|is|are)\s+(it|this|that|they)\s+\1\b/gi, '$1')
+    .replace(/\s{2,}/g, ' ')
+    .trim();
+}
+
+function sanitizeStaleModelMemoryText(modelMemoryText: string, userMessage: string): string {
+  let sanitized = modelMemoryText;
+  const rejectsPreviousDescription = /\b(?:correction:\s*)?no,?\s+I\s+remembered\s+wrong\b/i.test(userMessage);
+  for (const descriptor of ['milky', 'creamy', 'cream', 'milk-forward', 'thick', 'warm', 'hot', 'sweet']) {
+    const isContradicted = rejectsPreviousDescription
+      || new RegExp(`\\b(?:not|no|wasn['’]?t|was\\s+not|isn['’]?t|is\\s+not)\\s+(?:\\w+\\s+){0,3}${descriptor}\\b`, 'i').test(userMessage);
+    if (isContradicted) {
+      sanitized = sanitized.replace(new RegExp(`\\b${descriptor}\\b`, 'gi'), '');
+    }
+  }
+  return sanitized.replace(/\s{2,}/g, ' ').replace(/\s+([,.;:])/g, '$1').trim();
 }
 
 function normalizeResearchRecordInput(record: Record<string, unknown>, toolPayloads: Record<string, unknown>): unknown {
@@ -1550,6 +1610,12 @@ function containsStalledFallbackText(text: string): boolean {
   return /\bI've gathered enough information so far\.?\s+Let me work with what we have\.?\b/i.test(text.trim());
 }
 
+function containsBlockedRecipeToolSynthesis(text: string): boolean {
+  return /\brecipe generation was skipped\b/i.test(text)
+    || /\boutside the minimum cue flow\b/i.test(text)
+    || /\bsynthesize directly from the minimum viable nostalgia cue\b/i.test(text);
+}
+
 function containsPrematureCandidateSpeculation(text: string, toolPayloads: Record<string, unknown>): boolean {
   const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
   const hasStableAnchor = Boolean(
@@ -1561,6 +1627,29 @@ function containsPrematureCandidateSpeculation(text: string, toolPayloads: Recor
     || /\bmight\s+be\s+(?:a|an|the)?\s*[\s\S]{0,120}\b(?:or\s+even|,\s*(?:a|an|the)?\s*[\p{L}\p{M}])/iu.test(text)
     || /\bfrom\s+(?:a|an|the)?\s*[\s\S]{0,160}\bto\s+(?:a|an|the)?\s*[\s\S]{0,160}\bto\b/iu.test(text)
     || /\bfor example\s+[\s\S]{0,160},\s*[\s\S]{0,80}\bor\s+[\s\S]{0,80}\b/iu.test(text);
+}
+
+function shouldClarifyBroadUncertainMemory(userMessage: string, toolPayloads: Record<string, unknown>): boolean {
+  const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
+  if (!memory) return false;
+
+  const text = `${userMessage}\n${memory.normalizedMemory}`.toLowerCase();
+  const explicitUncertainty = /\b(?:do\s+not|don't|not\s+sure|uncertain|no\s+idea|unknown)\b[\s\S]{0,180}\b(?:country|region|dish\s+name|name|ingredients?|soup|sauce|stew)\b/i.test(text)
+    || /\bwhether\s+(?:it\s+)?(?:was\s+)?(?:a\s+)?(?:soup|sauce|stew)\b/i.test(text);
+  const asksNotToGuess = /\b(?:do\s+not|don't)\s+(?:list\s+candidate(?:\s+dishes|\s+lists?|s)?|guess|pretend\s+certainty)\b/i.test(text)
+    || /\bno\s+(?:guesses|candidate\s+lists?)\b/i.test(text);
+  if (!explicitUncertainty && !asksNotToGuess) return false;
+
+  const explicitlyRequestsCue = /\b(?:smallest|minimum|tiny|first)\b[\s\S]{0,80}\b(?:cue|sip|bite|test)\b/i.test(text);
+  if (explicitlyRequestsCue && !asksNotToGuess && !explicitUncertainty) return false;
+
+  const stableNames = memory.extractedClues.possibleDishNames.filter((name) => name.trim().length > 0);
+  const stableRegions = memory.extractedClues.culturalOrRegionalHints.filter((hint) => !isBroadRegionalHint(hint));
+  const concreteIngredients = memory.extractedClues.rememberedIngredients.filter((ingredient) =>
+    !/\b(?:unknown|ingredient|herb|spice|sour|something)\b/i.test(ingredient),
+  );
+  if (asksNotToGuess && explicitUncertainty) return true;
+  return stableNames.length === 0 && stableRegions.length === 0 && concreteIngredients.length === 0;
 }
 
 function hasSubstantialMemoryAnchors(memory: unknown): boolean {

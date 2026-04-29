@@ -4,32 +4,34 @@ Generated from `LOCAL_CANARY_PROFILE=deep LOCAL_CANARY_PACE_MS=20000 npm run can
 
 ## Result
 
-- 2/6 passed.
-- 4 product findings.
+- Initial run: 2/6 passed.
+- Fixed run: 6/6 passed.
+- Remaining product findings: 0.
 - 0 provider/runtime failures.
-- Artifact: `/var/folders/5n/3x16yjf57ld6mmz28h8wb0nc0000gn/T/achiote-local-canary/2026-04-29T22-13-53-985Z-qwen3.5-0.8b.json`
+- Initial artifact: `/var/folders/5n/3x16yjf57ld6mmz28h8wb0nc0000gn/T/achiote-local-canary/2026-04-29T22-13-53-985Z-qwen3.5-0.8b.json`
+- Fixed artifact: `/var/folders/5n/3x16yjf57ld6mmz28h8wb0nc0000gn/T/achiote-local-canary/2026-04-29T22-41-22-194Z-qwen3.5-0.8b.json`
 
-## Findings To Fix
+## Findings Fixed
 
 1. Negated dietary constraints still triggered substitution tools.
    - Case: `deep_negated_dietary_constraints`
    - Symptom: `find_sensory_substitutes` ran even though the user explicitly said they did not need vegan, nut-free, gluten-free, halal, heart-healthier, or medical substitutions.
-   - Likely fix: strengthen adaptation intent detection so negated restriction terms do not set `needsSubstitutions`.
+   - Fix: substitution planning now recognizes explicit "do not need substitutions" framing and keeps the request in the nostalgic-memory path.
 
 2. Follow-up correction did not preserve the newest user turn strongly enough.
    - Case: `deep_followup_correction_preserves_latest_turn`
    - Symptom: final text retained forbidden earlier-history flavor such as milky/creamy after the user corrected it to watery, icy, and barely sweet.
-   - Likely fix: mark the latest user message as authoritative in `/ask` context and deterministic cue fallback, and add contradiction-aware tests.
+   - Fix: correction turns merge stable earlier anchors with the newest correction while stripping contradicted stale descriptors; blocked recipe-tool syntheses after a minimum cue now fall back to deterministic cue text.
 
 3. Broad-family ambiguity produced a deterministic cue where clarification may be safer.
    - Case: `deep_broad_family_inference_trap`
    - Symptom: no candidate-list leak, but the guard ended as `minimum_cue_deterministic_completion` instead of a clarification path.
-   - Product decision needed: if sparse memory has no dish type, region, name, or stable ingredient, prefer clarification over generic cue.
+   - Fix: broad, explicitly uncertain memories that ask not to guess now route to `broad_memory_clarification`.
 
 4. Uncertain transliterated beverage drifted into a sweet-texture cue.
    - Case: `deep_transliteration_uncertain_beverage`
    - Symptom: the final cue lost beverage anchors for `agua de cebada`, barley/rice, cold drink, and lime.
-   - Likely fix: add beverage/cereal-drink mechanisms and aliases to reference data so deterministic fallback preserves the beverage category.
+   - Fix: cereal-drink beverage mechanisms now cover `agua de cebada`, `cebada`, `ceba`, and barley-water signals.
 
 ## Guard Cost Analysis
 

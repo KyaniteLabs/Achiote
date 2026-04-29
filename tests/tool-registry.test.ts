@@ -80,6 +80,19 @@ describe('shared tool registry', () => {
     expect(explicitSubstitution.payload.workflowSteps.map((step: { tool: string }) => step.tool)).toContain('find_sensory_substitutes');
   });
 
+  it('does not route negated dietary terms to substitutions', async () => {
+    const plan = await executeToolDefinition('plan_tool_workflow', {
+      userMessage: 'My aunt made chicken and peanut stew. I do not need vegan, nut-free, gluten-free, halal, heart-healthy, or medical substitutions; I only want the smallest memory cue to test the aroma.',
+    }, defaultToolExecutionContext);
+
+    expect(plan.payload).toMatchObject({
+      detectedIntent: 'nostalgic_memory',
+      needsSubstitutions: false,
+      detectedRestrictions: expect.arrayContaining(['nut_allergy', 'gluten_free', 'halal', 'heart_healthy']),
+    });
+    expect(plan.payload.workflowSteps.map((step: { tool: string }) => step.tool)).not.toContain('find_sensory_substitutes');
+  });
+
   it('recovers research planning when a model passes only normalized memory text', async () => {
     const plan = await executeToolDefinition('plan_dish_research', {
       memory: { normalizedMemory: "Grandma's sour dill soup with pale chunks" },
