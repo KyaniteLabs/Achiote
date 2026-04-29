@@ -33,7 +33,10 @@ describe('research-first food memory workflow', () => {
       expect.arrayContaining(['pasteles-puertorriquenos', 'pastelon', 'piononos']),
     );
     expect(plan.searchQueries.length).toBeGreaterThanOrEqual(3);
-    expect(plan.factsToVerify).toEqual(expect.arrayContaining(['base ingredient or starch', 'cooking method']));
+    expect(plan.factsToVerify).toEqual(expect.arrayContaining([
+      'base ingredient, beverage base, or starch',
+      'cooking, extraction, mixing, or serving method',
+    ]));
     expect(plan.questionsForUser.length).toBeLessThanOrEqual(3);
   });
 

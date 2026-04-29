@@ -111,6 +111,19 @@ function trinidadFishSauceDossier() {
   });
 }
 
+function beverageDossier(memoryText: string, researchedFacts: string[] = [], inferredFacts: string[] = []) {
+  const memory = collectFoodMemory({ memoryText });
+  const researchPlan = planDishResearch(memory);
+  return buildReconstructionDossier({
+    memory,
+    researchPlan,
+    researchedFacts,
+    inferredFacts: inferredFacts.length > 0
+      ? inferredFacts
+      : ['The first test should isolate beverage body, aroma, sweetness, temperature, and serving ritual before naming an exact recipe.'],
+  });
+}
+
 function confectioneryDossier(memoryText: string, researchedFacts: string[] = [], inferredFacts: string[] = []) {
   const memory = collectFoodMemory({ memoryText });
   const researchPlan = planDishResearch(memory);
@@ -422,6 +435,87 @@ describe('minimum viable nostalgia cue', () => {
     expect(cue.format).toBe('sip');
 
     expect(cue.components.length).toBeGreaterThanOrEqual(1);
+  });
+
+  it('treats rice-cinnamon drink memories as first-class beverages instead of generic soup or dish cues', () => {
+    const cue = generateMinimumViableNostalgiaCue({
+      dossier: beverageDossier(
+        'My abuela made a cold rice-cinnamon drink, milky and sweet, poured over ice.',
+        [
+          'Horchata-style drinks often preserve rice body, cinnamon aroma, sweetness, dilution, chill, and the over-ice serving ritual.',
+          'The memory should be tested as a beverage, not as rice pudding or soup.',
+        ],
+      ),
+      researchFindings: {
+        researchedFacts: ['Rice-cinnamon drinks are often defined by starch body, spice extraction, sugar level, dilution, and cold serving temperature.'],
+        inferredFacts: ['The minimum cue should be a small sip that tests beverage body and serving temperature.'],
+        unknowns: ['exact household recipe'],
+        sourceCount: 2,
+        confidence: 'Medium',
+      },
+      userLocation: 'Phoenix',
+      maxEffortMinutes: 12,
+    });
+    const recommendationText = fullCueText(cue);
+
+    expect(cue.title).toContain('beverage');
+    expect(cue.title).not.toContain('soup');
+    expect(cue.format).toBe('sip');
+    expect(cue.effortMinutes).toBeLessThanOrEqual(12);
+    expect(recommendationText).toMatch(/rice|oat|milk|plant milk|starch/);
+    expect(recommendationText).toMatch(/cinnamon|spice extraction|steep/);
+    expect(recommendationText).toMatch(/ice|chill|temperature|dilution/);
+    expect(recommendationText).toMatch(/sweetness|sugar/);
+    expect(cue.components.some((component) => component.role === 'beverage')).toBe(true);
+  });
+
+  it('handles carbonated drink memories through fizz, acid, sugar, temperature, and aroma', () => {
+    const cue = generateMinimumViableNostalgiaCue({
+      dossier: beverageDossier(
+        'A bright red fizzy soda from a street cart, very cold, sweet, tart, maybe fruit or kola.',
+        [
+          'Carbonated nostalgic drinks depend on carbonation bite, acid-sugar balance, aroma syrup, cold temperature, and serving ritual.',
+        ],
+      ),
+      researchFindings: {
+        researchedFacts: ['A soda-like beverage cue should test carbonation separately from syrup aroma and sweetness.'],
+        inferredFacts: ['Use ordinary seltzer and pantry acid/sugar/aroma before sourcing the exact soda brand.'],
+        unknowns: ['exact brand', 'exact fruit or kola aroma'],
+        sourceCount: 1,
+        confidence: 'Low',
+      },
+      maxEffortMinutes: 8,
+    });
+    const recommendationText = fullCueText(cue);
+
+    expect(cue.title).toContain('beverage');
+    expect(cue.format).toBe('sip');
+    expect(recommendationText).toMatch(/seltzer|carbonation|fizz|sparkling/);
+    expect(recommendationText).toMatch(/acid|tart|citrus/);
+    expect(recommendationText).toMatch(/sugar|sweetness|syrup/);
+    expect(recommendationText).toMatch(/cold|ice|temperature/);
+    expect(recommendationText).toContain('do not buy the exact drink');
+  });
+
+  it('does not classify iced baked goods as beverages', () => {
+    const cue = generateMinimumViableNostalgiaCue({
+      dossier: confectioneryDossier(
+        'I remember an iced cake from a neighborhood bakery, soft and sweet with a thin white icing.',
+        ['The memory points to a baked sweet with icing texture.'],
+      ),
+      researchFindings: {
+        researchedFacts: ['Iced cakes are baked goods where crumb texture and icing sweetness carry the memory.'],
+        inferredFacts: ['The cue should test cake crumb and icing sweetness.'],
+        unknowns: ['exact bakery style'],
+        sourceCount: 1,
+        confidence: 'Low',
+      },
+      maxEffortMinutes: 10,
+    });
+
+    expect(cue.title).not.toContain('beverage');
+    expect(cue.format).not.toBe('sip');
+    expect(fullCueText(cue)).toMatch(/cake|starch|sweet|icing|bite/);
   });
 
   it('rewrites composed-bite ingredients and components for vegan and halal constraints', () => {

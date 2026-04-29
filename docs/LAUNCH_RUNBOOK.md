@@ -43,6 +43,11 @@ As of April 28, 2026, the public production host is `https://achiote.kyanitelabs
 
 ## Required Environment
 
+Production secrets should live in an operator-owned env file outside the
+rsynced source tree. The root production `docker-compose.yml` reads
+`${ACHIOTE_ENV_FILE:-/docker/achiote/env/achiote.env}`. Create it with owner
+root and mode `600`; keep only `.env.example`-style templates in git.
+
 - `ACHIOTE_AUTH_ENABLED=true` for public deployment.
 - `ACHIOTE_ALLOWED_ORIGINS` set to exact HTTPS origins.
 - `ACHIOTE_RATE_LIMIT_DB` on persistent storage.
@@ -50,6 +55,8 @@ As of April 28, 2026, the public production host is `https://achiote.kyanitelabs
 - `ACHIOTE_EVENTS_ADMIN_TOKEN` set if operators need private `/events` counters.
 - Provider credentials for `/ask`.
 - Stripe credentials only when billing is intentionally live.
+
+Do not run unredacted `docker compose config` or inspect container environment output in shared logs. If config diagnostics are needed, print only variable names, readiness flags, and health status; never copy provider keys, Stripe secrets, API key arrays, demo passwords, or webhook secrets into agent transcripts or issue comments.
 
 If /ready reports "authEnabled": false, do not treat the deployment as paid-launch ready. That state is acceptable only for bounded public demos with explicit anonymous quota controls.
 

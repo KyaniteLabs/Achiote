@@ -1,6 +1,6 @@
 # Achiote
 
-Achiote is a **Model Context Protocol (MCP)** server for research-first food-memory reconstruction. It helps a host AI turn incomplete family food memories into structured clues, research plans, cited/provenance-ready findings, sensory analysis, sourcing/substitution strategy, and a minimum viable nostalgia cue before any fuller recipe handoff.
+Achiote is a **Model Context Protocol (MCP)** server for research-first food-and-drink memory reconstruction. It helps a host AI turn incomplete family food or drink memories into structured clues, research plans, cited/provenance-ready findings, sensory analysis, sourcing/substitution strategy, and a minimum viable nostalgia cue before any fuller recipe handoff.
 
 > "The nostalgia lives in the maillard crust's interaction with the lactic tang — here's how to reproduce that."
 
@@ -46,12 +46,12 @@ A polished static landing page lives at [`docs/landing/index.html`](docs/landing
 
 ## What It Does Today
 
-Achiote is a research-first food-memory reconstruction server. It provides 15 MCP tools that let a host AI chat client run the workflow from a fragment to a minimum viable nostalgia cue, with optional sourcing/substitution and recipe handoff if the user wants more:
+Achiote is a research-first food-and-drink memory reconstruction server. It provides 15 MCP tools that let a host AI chat client run the workflow from a fragment to a minimum viable nostalgia cue, with optional sourcing/substitution and recipe handoff if the user wants more:
 
 | Stage | Tool | Implemented behavior |
 |------|------|----------------------|
 | Memory intake | `collect_food_memory` | Structures raw fragments, sound-alikes, family context, remembered ingredients, sensory clues, missing information, and gentle next questions. |
-| Research planning | `plan_dish_research` | Produces hypotheses, search queries, source preferences, facts to verify, and clarification questions. It plans research instead of pretending sparse fragments are solved. |
+| Research planning | `plan_dish_research` | Produces hypotheses, search queries, source preferences, facts to verify, and clarification questions for foods or drinks. It plans research instead of pretending sparse fragments are solved. |
 | Research provenance | `build_research_record` / `validate_research_record` / `extract_research_findings` | Converts host-researched source facts into typed provenance records, validates source metadata, and summarizes researched facts/inferences/unknowns for dossier handoff. |
 | Evidence ledger | `build_reconstruction_dossier` | Builds a dossier that separates user-said, researched, inferred, and unknown claims, plus sensory priorities and adaptation strategy. |
 | Family connection | `generate_family_followup_questions` | Generates gentle questions the user can ask relatives to deepen the memory and resolve uncertainty. |
@@ -60,7 +60,7 @@ Achiote is a research-first food-memory reconstruction server. It provides 15 MC
 | Substitution | `find_sensory_substitutes` | Returns compound/group-matched substitutes from bundled ingredient data, plus regional hints when available. |
 | Sourcing | `source_ingredients` | Returns static regional store/corridor hints and a host-model prompt for sourcing. It returns static sourcing guidance, not live inventory, and does not perform live price lookup. |
 | Regional comparison | `discover_regional_similars` | Returns bundled dish-family context and a host-model prompt for neighboring/regional comparisons. |
-| Minimum viable nostalgia cue | `generate_minimum_viable_nostalgia` | Produces the smallest practical aroma, bite, sip, condiment, or ritual to test the likely memory trigger before attempting a full recipe. It prioritizes cheap, accessible, easy-to-find proxies and explains the substitute logic instead of defaulting to exact specialty ingredients. |
+| Minimum viable nostalgia cue | `generate_minimum_viable_nostalgia` | Produces the smallest practical aroma, bite, sip, condiment, or ritual to test the likely memory trigger before attempting a full recipe or drink. It prioritizes cheap, accessible, easy-to-find proxies and explains the substitute logic instead of defaulting to exact specialty ingredients. |
 | Optional recipe handoff | `generate_recipe` | Returns an expected recipe schema and a bounded host-model prompt for recipe generation and self-critique. Use only after the minimum viable cue has been presented and the user wants something more complex. |
 | Recipe validation | `validate_recipe_output` | Validates a host-synthesized final recipe object against the expected schema before treating it as structured output. |
 

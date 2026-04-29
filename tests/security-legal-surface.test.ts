@@ -49,4 +49,18 @@ describe('security and legal surface guardrails', () => {
     expect(server).toContain("code: 'model_provider_failed'");
     expect(server).not.toContain("send('error', { message: err instanceof Error ? err.message : 'Unknown error' });");
   });
+
+  it('keeps production deployment secrets behind external env files', () => {
+    const rootCompose = read('docker-compose.yml');
+    const runbook = read('docs/LAUNCH_RUNBOOK.md');
+    const deployScript = read('deploy-achiote.sh');
+
+    expect(rootCompose).toContain('env_file:');
+    expect(rootCompose).toContain('${ACHIOTE_ENV_FILE:-/docker/achiote/env/achiote.env}');
+    expect(rootCompose).not.toMatch(/\b(?:ANTHROPIC_API_KEY|ANTHROPIC_AUTH_TOKEN|OPENAI_API_KEY|GLM_API_KEY|STRIPE_SECRET_KEY|STRIPE_WEBHOOK_SECRET|ACHIOTE_API_KEYS|ACHIOTE_DEMO_PASSWORD)\s*=/);
+    expect(runbook).toContain('/docker/achiote/env/achiote.env');
+    expect(runbook).toContain('Do not run unredacted `docker compose config` or inspect container environment output in shared logs.');
+    expect(deployScript).toContain('--env-file "$ENV_FILE"');
+    expect(deployScript).not.toContain('docker inspect');
+  });
 });

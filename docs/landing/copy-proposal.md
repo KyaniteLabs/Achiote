@@ -187,7 +187,7 @@ To get cited by ChatGPT, Perplexity, Claude, etc.:
 ### 6. Keyword Clustering Strategy
 
 **Primary cluster:** Food memory reconstruction
-- "reconstruct nostalgic dishes"
+- "reconstruct nostalgic dishes or drinks"
 - "food memory AI"
 - "recreate grandmother's recipe"
 - "forgotten family dish"
@@ -326,7 +326,7 @@ This is honest and accurate per the AGENTS.md constraints.
 **Sample Q&A:**
 
 > **What is Achiote?**
-> Achiote is a source-available Model Context Protocol (MCP) server that helps AI agents reconstruct nostalgic dishes from fragmented food memories. It provides 15 deterministic tools for memory collection, research planning, provenance tracking, sensory analysis, and generating minimum viable nostalgia cues.
+> Achiote is a source-available Model Context Protocol (MCP) server that helps AI agents reconstruct nostalgic dishes and drinks from fragmented food memories. It provides 15 deterministic tools for memory collection, research planning, provenance tracking, sensory analysis, and generating minimum viable nostalgia cues.
 
 > **How does food memory reconstruction work?**
 > Achiote follows a 5-step workflow: collect the memory fragment, plan research hypotheses, build an evidence-separated dossier, generate the smallest sensory cue to test, and help source ingredients. Your AI does the live research; Achiote keeps it structured, honest, and organized.

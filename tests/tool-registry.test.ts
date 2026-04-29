@@ -87,7 +87,10 @@ describe('shared tool registry', () => {
 
     expect(outputSchemas.plan_dish_research.safeParse(plan.payload).success).toBe(true);
     expect(plan.payload.researchRequired).toBe(true);
-    expect(plan.payload.factsToVerify).toEqual(expect.arrayContaining(['base ingredient or starch', 'cooking method']));
+    expect(plan.payload.factsToVerify).toEqual(expect.arrayContaining([
+      'base ingredient, beverage base, or starch',
+      'cooking, extraction, mixing, or serving method',
+    ]));
   });
 
 

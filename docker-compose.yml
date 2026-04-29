@@ -1,6 +1,7 @@
 # Production docker-compose for Hostinger VPS deployment.
 # The Hostinger MCP API resolves GitHub repo URLs to this file.
-# It builds from source (no registry pull needed) and uses env for config.
+# It builds from source (no registry pull needed) and keeps secrets in an
+# operator-owned env file outside the rsynced source tree.
 services:
   achiote:
     build:
@@ -9,6 +10,11 @@ services:
     image: achiote:latest
     container_name: achiote
     restart: unless-stopped
+    env_file:
+      - ${ACHIOTE_ENV_FILE:-/docker/achiote/env/achiote.env}
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
