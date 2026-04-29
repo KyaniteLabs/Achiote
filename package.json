@@ -27,7 +27,7 @@
     "viability:smoke": "node scripts/viability-transcript-smoke.mjs"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.90.0",
+    "@anthropic-ai/sdk": "^0.91.1",
     "@modelcontextprotocol/sdk": "^1.12.0",
     "better-sqlite3": "^11.9.0",
     "stripe": "^22.0.2",
