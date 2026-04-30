@@ -51,6 +51,7 @@ export interface AskSession {
   create(maxTokens: number): Promise<AskModelResponse>;
   appendToolResults(response: AskModelResponse, toolResults: AskToolResult[]): void;
   injectDeterministicToolResult(toolCallId: string, toolName: string, toolInput: unknown, result: unknown): void;
+  setAvailableTools(tools: AnthropicTool[]): void;
   pushUserMessage(text: string): void;
   compactForSynthesis(caseFileText: string): void;
 }
@@ -269,6 +270,9 @@ export function createAnthropicAskSession(input: {
         }],
       });
     },
+    setAvailableTools(tools: AnthropicTool[]): void {
+      activeTools = tools;
+    },
     pushUserMessage(text: string): void {
       messages.push({ role: 'user', content: text });
     },
@@ -378,6 +382,9 @@ export function createOpenAICompatibleAskSession(input: {
         }],
       });
       messages.push({ role: 'tool', tool_call_id: toolCallId, content: stringifyToolJson(result) });
+    },
+    setAvailableTools(tools: AnthropicTool[]): void {
+      activeTools = tools;
     },
     pushUserMessage(text: string): void {
       messages.push({ role: 'user', content: text });
