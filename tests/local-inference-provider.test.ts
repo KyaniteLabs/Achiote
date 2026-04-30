@@ -8,6 +8,7 @@ import {
   openAICompatibleProviderReady,
   resolveLocalInferenceEndpointStyle,
   resolveGlmEndpointStyle,
+  resolveProviderCapabilityProfile,
 } from '../src/lib/ask-provider.js';
 
 describe('local inference provider resolution', () => {
@@ -29,6 +30,7 @@ describe('local inference provider resolution', () => {
 
     it('maps glm to anthropic provider kind', () => {
       expect(resolveAskProviderKind({ ACHIOTE_ASK_PROVIDER: 'glm' })).toBe('anthropic');
+      expect(resolveAskProviderKind({ ACHIOTE_ASK_PROVIDER: 'glm', ACHIOTE_ASK_MODEL: 'GLM-4.5-Air' })).toBe('openai');
     });
 
     it('maps GLM Coding Plan OpenAI style to openai provider kind for endpoint experiments', () => {
@@ -200,9 +202,40 @@ describe('local inference provider resolution', () => {
     it('defaults newer Coding Plan models to Anthropic-compatible style while allowing old-model endpoint experiments', () => {
       expect(resolveGlmEndpointStyle({ ACHIOTE_ASK_PROVIDER: 'glm', ACHIOTE_ASK_MODEL: 'GLM-5.1' })).toBe('anthropic-coding');
       expect(resolveGlmEndpointStyle({ ACHIOTE_ASK_PROVIDER: 'glm', ACHIOTE_ASK_MODEL: 'GLM-4.7' })).toBe('anthropic-coding');
-      expect(resolveGlmEndpointStyle({ ACHIOTE_ASK_PROVIDER: 'glm', ACHIOTE_ASK_MODEL: 'GLM-4.5-Air' })).toBe('anthropic-coding');
+      expect(resolveGlmEndpointStyle({ ACHIOTE_ASK_PROVIDER: 'glm', ACHIOTE_ASK_MODEL: 'GLM-4.5-Air' })).toBe('openai-coding');
       expect(resolveGlmEndpointStyle({ ACHIOTE_ASK_PROVIDER: 'glm', ACHIOTE_ASK_MODEL: 'GLM-4.5-Air', GLM_ENDPOINT_STYLE: 'openai-coding' })).toBe('openai-coding');
+      expect(resolveGlmEndpointStyle({ ACHIOTE_ASK_PROVIDER: 'glm', ACHIOTE_ASK_MODEL: 'GLM-4.5-Air', GLM_ENDPOINT_STYLE: 'anthropic-coding' })).toBe('anthropic-coding');
       expect(resolveGlmEndpointStyle({ ACHIOTE_ASK_PROVIDER: 'zhipu', ZHIPU_ENDPOINT_STYLE: 'openai' })).toBe('openai-coding');
+    });
+  });
+
+  describe('resolveProviderCapabilityProfile', () => {
+    it('keeps provider, model, endpoint style, and capability posture together for telemetry', () => {
+      expect(resolveProviderCapabilityProfile({
+        ACHIOTE_ASK_PROVIDER: 'local',
+        LOCAL_INFERENCE_MODEL: 'lfm2-8b-a1b',
+        LOCAL_INFERENCE_BASE_URL: 'http://100.66.225.85:1234',
+      })).toMatchObject({
+        provider: 'local',
+        providerKind: 'openai',
+        model: 'lfm2-8b-a1b',
+        endpointStyle: 'openai-chat-completions',
+        baseUrl: 'http://100.66.225.85:1234/v1',
+        nativeTools: 'unknown',
+      });
+
+      expect(resolveProviderCapabilityProfile({
+        ACHIOTE_ASK_PROVIDER: 'openai',
+        OPENAI_BASE_URL: 'https://openrouter.ai/api/v1',
+        OPENAI_MODEL: 'meta-llama/llama-3.3-8b-instruct:free',
+      }, {
+        data: [{ id: 'meta-llama/llama-3.3-8b-instruct:free', supported_parameters: ['max_tokens'] }],
+      })).toMatchObject({
+        provider: 'openrouter',
+        nativeTools: 'unsupported',
+        rateLimitSensitive: true,
+        recommendedTimeoutMs: 240_000,
+      });
     });
   });
 

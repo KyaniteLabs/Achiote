@@ -6,7 +6,7 @@ import { createServer, type IncomingMessage, type ServerResponse } from 'node:ht
 import { dirname, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import Anthropic from '@anthropic-ai/sdk';
-import { createAnthropicAskSession, createOpenAICompatibleAskSession, isLocalInferenceUrl, isOpenRouterUrl, openAIBaseUrlFromEnv, openAICompatibleProviderReady, openRouterCatalogModelSupportsParameter, resolveAskModel, resolveAskProviderKind, anthropicBaseUrlFromEnv } from './lib/ask-provider.js';
+import { createAnthropicAskSession, createOpenAICompatibleAskSession, isLocalInferenceUrl, isOpenRouterUrl, openAIBaseUrlFromEnv, openAICompatibleProviderReady, resolveAskModel, resolveAskProviderKind, anthropicBaseUrlFromEnv, resolveProviderCapabilityProfile } from './lib/ask-provider.js';
 import type { AskHistoryItem, AskImage, AskModelResponse } from './lib/ask-provider.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { isInitializeRequest } from '@modelcontextprotocol/sdk/types.js';
@@ -49,6 +49,7 @@ const ANTHROPIC_TIMEOUT_MS = parseInt(process.env.ANTHROPIC_TIMEOUT_MS || proces
 const OPENAI_TIMEOUT_MS = parseInt(process.env.LOCAL_INFERENCE_TIMEOUT_MS || process.env.OPENAI_TIMEOUT_MS || process.env.LMSTUDIO_TIMEOUT_MS || process.env.GLM_TIMEOUT_MS || process.env.ZHIPU_TIMEOUT_MS || process.env.API_TIMEOUT_MS || '180000', 10);
 const FINAL_SYNTHESIS_TIMEOUT_MS = parsePositiveInteger(process.env.ACHIOTE_FINAL_SYNTHESIS_TIMEOUT_MS) ?? 20_000;
 const OPENAI_BASE_URL = openAIBaseUrlFromEnv();
+const PROVIDER_CAPABILITY_PROFILE = resolveProviderCapabilityProfile();
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const STATIC_DIR = resolve(__dirname, '..', 'docs', 'landing');
 const ALLOWED_ORIGINS = (process.env.ACHIOTE_ALLOWED_ORIGINS || 'http://localhost:3000,http://127.0.0.1:3000,https://achiote.kyanitelabs.tech')
@@ -1269,7 +1270,10 @@ async function fetchOpenRouterModelSupportsTools(): Promise<boolean | undefined>
     });
     if (!response.ok) return undefined;
     const catalog = await response.json() as unknown;
-    return openRouterCatalogModelSupportsParameter(catalog, ASK_MODEL, 'tools');
+    const profile = resolveProviderCapabilityProfile(process.env, catalog);
+    if (profile.nativeTools === 'supported') return true;
+    if (profile.nativeTools === 'unsupported') return false;
+    return undefined;
   } catch (err) {
     console.warn('[ask] OpenRouter tool capability lookup failed:', err instanceof Error ? err.message : String(err));
     return undefined;
@@ -2206,6 +2210,15 @@ const server = createServer(async (req, res) => {
       billingEnabled: Boolean(billingConfig),
       readiness,
       uptime: process.uptime(),
+      provider: {
+        kind: PROVIDER_CAPABILITY_PROFILE.providerKind,
+        provider: PROVIDER_CAPABILITY_PROFILE.provider,
+        model: PROVIDER_CAPABILITY_PROFILE.model,
+        endpointStyle: PROVIDER_CAPABILITY_PROFILE.endpointStyle,
+        nativeTools: PROVIDER_CAPABILITY_PROFILE.nativeTools,
+        rateLimitSensitive: PROVIDER_CAPABILITY_PROFILE.rateLimitSensitive,
+        compatibilitySource: PROVIDER_CAPABILITY_PROFILE.compatibilitySource,
+      },
     });
     return;
   }

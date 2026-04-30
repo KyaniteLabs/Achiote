@@ -21,12 +21,26 @@ Deploy Achiote to the same Hostinger VPS (`187.124.238.235`) that runs Declutter
    GLM_ENDPOINT_STYLE=anthropic-coding
    GLM_BASE_URL=https://api.z.ai/api/anthropic
 
-   # Older GLM 4.5-family endpoint experiments:
+   # Older GLM 4.5-family defaults to OpenAI-compatible coding-plan routing
+   # unless GLM_ENDPOINT_STYLE is set explicitly for a comparison run.
    # ACHIOTE_ASK_MODEL=GLM-4.5-Air
    # GLM_ENDPOINT_STYLE=openai-coding
    # GLM_OPENAI_BASE_URL=https://api.z.ai/api/coding/paas/v4
    # GLM_MODEL=GLM-4.5-Flash
    ```
+
+   **OpenRouter weak/free cloud models — diagnostic only:**
+   ```env
+   ACHIOTE_ASK_PROVIDER=openai
+   OPENAI_BASE_URL=https://openrouter.ai/api/v1
+   OPENAI_API_KEY=your-openrouter-key
+   OPENAI_MODEL=openai/gpt-oss-20b:free
+   OPENAI_TIMEOUT_MS=240000
+   ```
+
+   OpenRouter models are profiled per model, not per provider. `:free` models
+   are treated as rate-limit sensitive, and Achiote uses catalog metadata when
+   available before assuming native tool support.
 
    **Local inference via Tailscale — for demo/cost savings:**
    ```env

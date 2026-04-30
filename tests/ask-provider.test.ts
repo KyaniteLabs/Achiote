@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { anthropicTools } from '../src/tools/tool-registry.js';
 import Anthropic from '@anthropic-ai/sdk';
-import { createAnthropicAskSession, createOpenAICompatibleAskSession, isOpenRouterUrl, openAICompatibleProviderReady, openAIBaseUrlFromEnv, openAiToolsFromAnthropic, openRouterCatalogModelSupportsParameter, resolveAskModel, resolveAskProviderKind, anthropicBaseUrlFromEnv, resolveGlmEndpointStyle, resolveLocalInferenceEndpointStyle } from '../src/lib/ask-provider.js';
+import { createAnthropicAskSession, createOpenAICompatibleAskSession, defaultGlmEndpointStyleForModel, isOpenRouterFreeModel, isOpenRouterUrl, openAICompatibleProviderReady, openAIBaseUrlFromEnv, openAiToolsFromAnthropic, openRouterCatalogModelSupportsParameter, resolveAskModel, resolveAskProviderKind, anthropicBaseUrlFromEnv, resolveGlmEndpointStyle, resolveLocalInferenceEndpointStyle, resolveProviderCapabilityProfile } from '../src/lib/ask-provider.js';
 
 describe('ask provider compatibility', () => {
   it('maps Anthropic tool definitions into OpenAI-compatible function tools', () => {
@@ -22,6 +22,7 @@ describe('ask provider compatibility', () => {
     expect(resolveAskProviderKind({ ACHIOTE_ASK_PROVIDER: 'lmstudio' })).toBe('openai');
     expect(resolveAskProviderKind({ ACHIOTE_ASK_PROVIDER: 'lmstudio', LMSTUDIO_ENDPOINT_STYLE: 'anthropic-messages' })).toBe('anthropic');
     expect(resolveAskProviderKind({ ACHIOTE_ASK_PROVIDER: 'glm' })).toBe('anthropic');
+    expect(resolveAskProviderKind({ ACHIOTE_ASK_PROVIDER: 'glm', ACHIOTE_ASK_MODEL: 'GLM-4.5-Air' })).toBe('openai');
     expect(resolveAskProviderKind({ ACHIOTE_ASK_PROVIDER: 'glm', GLM_ENDPOINT_STYLE: 'openai-coding' })).toBe('openai');
     expect(resolveAskProviderKind({ ACHIOTE_ASK_PROVIDER: 'zhipu' })).toBe('anthropic');
     expect(resolveAskProviderKind({ OPENAI_API_KEY: 'ambient-openai-key' })).toBe('anthropic');
@@ -70,10 +71,80 @@ describe('ask provider compatibility', () => {
     expect(resolveGlmEndpointStyle({ ACHIOTE_ASK_PROVIDER: 'glm', ACHIOTE_ASK_MODEL: 'GLM-5.1' })).toBe('anthropic-coding');
     expect(resolveGlmEndpointStyle({ ACHIOTE_ASK_PROVIDER: 'glm', ACHIOTE_ASK_MODEL: 'GLM-5-Turbo' })).toBe('anthropic-coding');
     expect(resolveGlmEndpointStyle({ ACHIOTE_ASK_PROVIDER: 'glm', ACHIOTE_ASK_MODEL: 'GLM-4.7' })).toBe('anthropic-coding');
-    expect(resolveGlmEndpointStyle({ ACHIOTE_ASK_PROVIDER: 'glm', ACHIOTE_ASK_MODEL: 'GLM-4.5-Air' })).toBe('anthropic-coding');
+    expect(defaultGlmEndpointStyleForModel('GLM-4.5-Air')).toBe('openai-coding');
+    expect(defaultGlmEndpointStyleForModel('GLM-4.5-Flash')).toBe('openai-coding');
+    expect(resolveGlmEndpointStyle({ ACHIOTE_ASK_PROVIDER: 'glm', ACHIOTE_ASK_MODEL: 'GLM-4.5-Air' })).toBe('openai-coding');
     expect(resolveGlmEndpointStyle({ ACHIOTE_ASK_PROVIDER: 'glm', ACHIOTE_ASK_MODEL: 'GLM-4.5-Air', GLM_ENDPOINT_STYLE: 'openai-coding' })).toBe('openai-coding');
+    expect(resolveGlmEndpointStyle({ ACHIOTE_ASK_PROVIDER: 'glm', ACHIOTE_ASK_MODEL: 'GLM-4.5-Air', GLM_ENDPOINT_STYLE: 'anthropic-coding' })).toBe('anthropic-coding');
     expect(resolveGlmEndpointStyle({ ACHIOTE_ASK_PROVIDER: 'glm', ACHIOTE_ASK_MODEL: 'GLM-4.5-Flash', GLM_COMPATIBILITY: 'openai' })).toBe('openai-coding');
     expect(resolveGlmEndpointStyle({ ACHIOTE_ASK_PROVIDER: 'openai' })).toBeUndefined();
+  });
+
+  it('uses GLM model variables even when old GLM families route through OpenAI-compatible coding endpoints', () => {
+    expect(resolveAskModel({
+      ACHIOTE_ASK_PROVIDER: 'glm',
+      GLM_MODEL: 'GLM-4.5-Flash',
+      OPENAI_MODEL: 'wrong-openai-model',
+    })).toBe('GLM-4.5-Flash');
+    expect(openAIBaseUrlFromEnv({
+      ACHIOTE_ASK_PROVIDER: 'glm',
+      GLM_MODEL: 'GLM-4.5-Flash',
+    })).toBe('https://api.z.ai/api/coding/paas/v4');
+  });
+
+  it('builds provider capability profiles for GLM model families and OpenRouter free models', () => {
+    expect(resolveProviderCapabilityProfile({
+      ACHIOTE_ASK_PROVIDER: 'glm',
+      ACHIOTE_ASK_MODEL: 'GLM-5.1',
+    })).toMatchObject({
+      provider: 'glm',
+      providerKind: 'anthropic',
+      model: 'GLM-5.1',
+      endpointStyle: 'anthropic-coding',
+      compatibilitySource: 'model-family',
+    });
+
+    expect(resolveProviderCapabilityProfile({
+      ACHIOTE_ASK_PROVIDER: 'glm',
+      GLM_MODEL: 'GLM-4.5-Flash',
+    })).toMatchObject({
+      provider: 'glm',
+      providerKind: 'openai',
+      model: 'GLM-4.5-Flash',
+      endpointStyle: 'openai-coding',
+      baseUrl: 'https://api.z.ai/api/coding/paas/v4',
+      compatibilitySource: 'model-family',
+    });
+
+    const openRouterProfile = resolveProviderCapabilityProfile({
+      ACHIOTE_ASK_PROVIDER: 'openai',
+      OPENAI_BASE_URL: 'https://openrouter.ai/api/v1',
+      OPENAI_MODEL: 'baidu/qianfan-ocr-fast:free',
+    }, {
+      data: [{ id: 'baidu/qianfan-ocr-fast:free', supported_parameters: ['max_tokens'] }],
+    });
+    expect(isOpenRouterFreeModel(openRouterProfile.model)).toBe(true);
+    expect(openRouterProfile).toMatchObject({
+      provider: 'openrouter',
+      providerKind: 'openai',
+      endpointStyle: 'openai-chat-completions',
+      nativeTools: 'unsupported',
+      rateLimitSensitive: true,
+      recommendedTimeoutMs: 240_000,
+      compatibilitySource: 'catalog',
+    });
+
+    expect(resolveProviderCapabilityProfile({
+      ACHIOTE_ASK_PROVIDER: 'openai',
+      OPENAI_BASE_URL: 'https://openrouter.ai/api/v1',
+      OPENAI_MODEL: 'openai/gpt-oss-20b:free',
+    }, {
+      data: [{ id: 'openai/gpt-oss-20b:free', supported_parameters: ['tools', 'tool_choice'] }],
+    })).toMatchObject({
+      nativeTools: 'supported',
+      nativeToolChoice: 'supported',
+      rateLimitSensitive: true,
+    });
   });
 
   it('treats LM Studio endpoint style as a local inference routing and telemetry dimension', () => {
