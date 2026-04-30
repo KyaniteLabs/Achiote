@@ -78,6 +78,23 @@ Speech is an optional HTTP-mode input/output layer, not part of the MCP reasonin
 - `src/data/sensory-profiles.json` defines sensory dimensions and nostalgia-critical criteria.
 - `src/data/global-coverage-matrix.json`, `src/data/reference-seed-queue.json`, and `src/data/cache-warming-manifest.json` define the private operator reference-seeding loop. They are seed hypotheses and task manifests, not authoritative culinary facts.
 - `src/data/reference-source-registry.json` defines which public source classes are allowed for pantry fixtures, which require manual review, and which patterns are forbidden.
+- `src/data/inference-burden-inventory.json` names repeatable prompt and inference burdens that should move into deterministic data, retrieval, controller, validator, formatter, observability, or consent layers while preserving model-owned reasoning latitude.
+
+## Inference burden operating model
+
+Achiote should make the model synthesize, not make it do bookkeeping. The inference burden inventory is the system map for reducing prompt load without making reconstruction rigid. It is permanent source data, compiled into `dist/data/`, and queried through `src/lib/inference-burden-inventory.ts`.
+
+The inventory assigns ownership:
+
+- data owns aliases, cultural patterns, sensory mechanisms, and source policy
+- retrieval owns pantry records, cache records, regional availability, and substitution candidates
+- controllers own workflow state, provider profiles, tool transitions, and retry budgets
+- validators own trust boundaries, output sanitizers, schema conformance, and tool alias repair
+- formatters own receipts, case files, output sections, and prompt templates
+- observability owns aggregate quality signals and seed priorities
+- consent gates own optional analytics and quality-signal recording
+
+The model still owns interpretation: sensory reasoning, cultural synthesis, hypothesis ranking, ambiguity handling, humane explanation, creative cue construction, and deciding when retrieved context does not fit the user's memory. Every burden entry must state what latitude is preserved and what could go wrong if the deterministic layer becomes too rigid.
 
 ## Reference seed operating loop
 

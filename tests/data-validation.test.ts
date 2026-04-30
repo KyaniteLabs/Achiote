@@ -8,6 +8,7 @@ import globalCoverageMatrixData from '../src/data/global-coverage-matrix.json' w
 import referenceSeedQueueData from '../src/data/reference-seed-queue.json' with { type: 'json' };
 import cacheWarmingManifestData from '../src/data/cache-warming-manifest.json' with { type: 'json' };
 import referenceSourceRegistryData from '../src/data/reference-source-registry.json' with { type: 'json' };
+import inferenceBurdenInventoryData from '../src/data/inference-burden-inventory.json' with { type: 'json' };
 import { validateBundledData, type BundledDataSet } from '../src/lib/data-schemas.js';
 
 const bundledData: BundledDataSet = {
@@ -20,6 +21,7 @@ const bundledData: BundledDataSet = {
   referenceSeedQueue: referenceSeedQueueData,
   cacheWarmingManifest: cacheWarmingManifestData,
   referenceSourceRegistry: referenceSourceRegistryData,
+  inferenceBurdenInventory: inferenceBurdenInventoryData,
 };
 
 function cloneBundledData(): BundledDataSet {
@@ -257,5 +259,36 @@ describe('bundled data validation', () => {
     expectIssue(issues, 'referenceSourceRegistry.sources[4].id', 'duplicate source id');
     expectIssue(issues, 'referenceSourceRegistry.sources[4].allowedUses', 'non-empty array');
     expectIssue(issues, 'referenceSourceRegistry.sources[4].disallowedUses', 'non-empty array');
+  });
+
+  it('accepts the committed inference burden inventory contract', () => {
+    expect(validateBundledData(bundledData)).toEqual([]);
+  });
+
+  it('rejects malformed inference burden inventory entries', () => {
+    const data = cloneBundledData();
+    const badIndex = data.inferenceBurdenInventory.burdens.length;
+    data.inferenceBurdenInventory.burdens.push({
+      ...structuredClone(data.inferenceBurdenInventory.burdens[0]),
+      id: data.inferenceBurdenInventory.burdens[0].id,
+      burdenType: 'magic',
+      deterministicOwner: 'model',
+      leverage: 6,
+      rigidityRisk: 0,
+      promptRemovalTargets: [],
+      preserveLatitude: ['interpretation'],
+      modelKeeps: [],
+    });
+
+    const issues = validateBundledData(data);
+
+    expectIssue(issues, `inferenceBurdenInventory.burdens[${badIndex}].id`, 'duplicate');
+    expectIssue(issues, `inferenceBurdenInventory.burdens[${badIndex}].burdenType`, 'known burden type');
+    expectIssue(issues, `inferenceBurdenInventory.burdens[${badIndex}].deterministicOwner`, 'known owner');
+    expectIssue(issues, `inferenceBurdenInventory.burdens[${badIndex}].leverage`, 'between 1 and 5');
+    expectIssue(issues, `inferenceBurdenInventory.burdens[${badIndex}].rigidityRisk`, 'between 1 and 5');
+    expectIssue(issues, `inferenceBurdenInventory.burdens[${badIndex}].promptRemovalTargets`, 'non-empty array');
+    expectIssue(issues, `inferenceBurdenInventory.burdens[${badIndex}].preserveLatitude`, 'at least 2');
+    expectIssue(issues, `inferenceBurdenInventory.burdens[${badIndex}].modelKeeps`, 'non-empty array');
   });
 });

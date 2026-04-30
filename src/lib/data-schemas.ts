@@ -157,6 +157,46 @@ export type ReferencePantryFixtureBatch = {
   fixtures: ReferencePantryFixtureEntry[];
 };
 
+export type InferenceBurdenType =
+  | 'normalization'
+  | 'intent_routing'
+  | 'context_packing'
+  | 'reference_retrieval'
+  | 'workflow_control'
+  | 'evidence_bookkeeping'
+  | 'safety_policy'
+  | 'output_contract'
+  | 'quality_evaluation'
+  | 'sensory_mechanism'
+  | 'availability_substitution'
+  | 'privacy_consent';
+
+type InferenceBurdenEntry = {
+  id?: unknown;
+  burdenType?: unknown;
+  title?: unknown;
+  currentSurfaceRefs?: unknown;
+  currentModelBurden?: unknown;
+  dataEngineeringMove?: unknown;
+  deterministicOwner?: unknown;
+  leverage?: unknown;
+  rigidityRisk?: unknown;
+  candidateArtifacts?: unknown;
+  promptRemovalTargets?: unknown;
+  acceptanceSignals?: unknown;
+  preserveLatitude?: unknown;
+  modelKeeps?: unknown;
+  riskIfOverRigid?: unknown;
+  status?: unknown;
+};
+
+export type InferenceBurdenInventory = {
+  meta: Meta;
+  burdenTypes: InferenceBurdenType[];
+  deterministicOwners: string[];
+  burdens: InferenceBurdenEntry[];
+};
+
 export type BundledDataSet = {
   dishFamilies: { meta: Meta; families: DishFamily[] };
   ingredients: { meta: Meta; ingredients: Record<string, Ingredient> };
@@ -171,11 +211,36 @@ export type BundledDataSet = {
   referenceSeedQueue: ReferenceSeedQueue;
   cacheWarmingManifest: CacheWarmingManifest;
   referenceSourceRegistry: ReferenceSourceRegistry;
+  inferenceBurdenInventory: InferenceBurdenInventory;
 };
 
 const VALID_CONFIDENCE = new Set(['High', 'Medium', 'Low']);
 const VALID_FIXTURE_POLICIES = new Set(['allowed', 'manual_review', 'rejected']);
 const REQUIRED_SENSORY_DIMENSIONS = ['aroma', 'texture', 'flavor', 'visual', 'temperature'];
+const VALID_INFERENCE_BURDEN_TYPES = new Set<InferenceBurdenType>([
+  'normalization',
+  'intent_routing',
+  'context_packing',
+  'reference_retrieval',
+  'workflow_control',
+  'evidence_bookkeeping',
+  'safety_policy',
+  'output_contract',
+  'quality_evaluation',
+  'sensory_mechanism',
+  'availability_substitution',
+  'privacy_consent',
+]);
+const VALID_INFERENCE_OWNERS = new Set([
+  'data',
+  'retrieval',
+  'controller',
+  'validator',
+  'formatter',
+  'observability',
+  'consent_gate',
+]);
+const VALID_INFERENCE_STATUSES = new Set(['candidate', 'partially_supported', 'ready_to_extract']);
 
 function isNonEmptyString(value: unknown): value is string {
   return typeof value === 'string' && value.trim().length > 0;
@@ -236,6 +301,12 @@ function validateStringArray(
     }
     seen.add(normalized);
   });
+}
+
+function validateNumberRange(issues: ValidationIssue[], path: string, value: unknown, min: number, max: number): void {
+  if (typeof value !== 'number' || !Number.isInteger(value) || value < min || value > max) {
+    pushIssue(issues, path, `must be an integer between ${min} and ${max}`);
+  }
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -707,6 +778,63 @@ function validateReferenceSourceRegistry(issues: ValidationIssue[], data: Refere
   });
 }
 
+function validateInferenceBurdenInventory(issues: ValidationIssue[], data: InferenceBurdenInventory): void {
+  validateMeta(issues, 'inferenceBurdenInventory.meta', data.meta);
+  validateStringArray(issues, 'inferenceBurdenInventory.burdenTypes', data.burdenTypes, { requireNonEmpty: true, unique: true });
+  validateStringArray(issues, 'inferenceBurdenInventory.deterministicOwners', data.deterministicOwners, { requireNonEmpty: true, unique: true });
+
+  for (const [index, burdenType] of (Array.isArray(data.burdenTypes) ? data.burdenTypes : []).entries()) {
+    if (isNonEmptyString(burdenType) && !VALID_INFERENCE_BURDEN_TYPES.has(burdenType as InferenceBurdenType)) {
+      pushIssue(issues, `inferenceBurdenInventory.burdenTypes[${index}]`, 'must be a known burden type');
+    }
+  }
+  for (const [index, owner] of (Array.isArray(data.deterministicOwners) ? data.deterministicOwners : []).entries()) {
+    if (isNonEmptyString(owner) && !VALID_INFERENCE_OWNERS.has(owner)) {
+      pushIssue(issues, `inferenceBurdenInventory.deterministicOwners[${index}]`, 'must be a known owner');
+    }
+  }
+
+  if (!Array.isArray(data.burdens)) {
+    pushIssue(issues, 'inferenceBurdenInventory.burdens', 'must be an array');
+    return;
+  }
+  if (data.burdens.length === 0) pushIssue(issues, 'inferenceBurdenInventory.burdens', 'must be a non-empty array');
+
+  const burdenIds = new Set<string>();
+  data.burdens.forEach((burden, index) => {
+    const base = `inferenceBurdenInventory.burdens[${index}]`;
+    validateNonEmptyString(issues, `${base}.id`, burden.id);
+    if (isNonEmptyString(burden.id)) {
+      if (burdenIds.has(burden.id)) pushIssue(issues, `${base}.id`, 'duplicate burden id');
+      burdenIds.add(burden.id);
+    }
+    validateNonEmptyString(issues, `${base}.title`, burden.title);
+    if (!isNonEmptyString(burden.burdenType) || !VALID_INFERENCE_BURDEN_TYPES.has(burden.burdenType as InferenceBurdenType)) {
+      pushIssue(issues, `${base}.burdenType`, 'must be a known burden type');
+    }
+    if (!isNonEmptyString(burden.deterministicOwner) || !VALID_INFERENCE_OWNERS.has(burden.deterministicOwner)) {
+      pushIssue(issues, `${base}.deterministicOwner`, 'must be a known owner');
+    }
+    validateNumberRange(issues, `${base}.leverage`, burden.leverage, 1, 5);
+    validateNumberRange(issues, `${base}.rigidityRisk`, burden.rigidityRisk, 1, 5);
+    validateStringArray(issues, `${base}.currentSurfaceRefs`, burden.currentSurfaceRefs, { requireNonEmpty: true, unique: true });
+    validateNonEmptyString(issues, `${base}.currentModelBurden`, burden.currentModelBurden);
+    validateNonEmptyString(issues, `${base}.dataEngineeringMove`, burden.dataEngineeringMove);
+    validateStringArray(issues, `${base}.candidateArtifacts`, burden.candidateArtifacts, { requireNonEmpty: true, unique: true });
+    validateStringArray(issues, `${base}.promptRemovalTargets`, burden.promptRemovalTargets, { requireNonEmpty: true, unique: true });
+    validateStringArray(issues, `${base}.acceptanceSignals`, burden.acceptanceSignals, { requireNonEmpty: true, unique: true });
+    validateStringArray(issues, `${base}.preserveLatitude`, burden.preserveLatitude, { requireNonEmpty: true, unique: true });
+    if (Array.isArray(burden.preserveLatitude) && burden.preserveLatitude.length < 2) {
+      pushIssue(issues, `${base}.preserveLatitude`, 'must include at least 2 latitude-preserving notes');
+    }
+    validateStringArray(issues, `${base}.modelKeeps`, burden.modelKeeps, { requireNonEmpty: true, unique: true });
+    validateNonEmptyString(issues, `${base}.riskIfOverRigid`, burden.riskIfOverRigid);
+    if (!isNonEmptyString(burden.status) || !VALID_INFERENCE_STATUSES.has(burden.status)) {
+      pushIssue(issues, `${base}.status`, 'must be candidate, partially_supported, or ready_to_extract');
+    }
+  });
+}
+
 export function validateBundledData(data: BundledDataSet): ValidationIssue[] {
   const issues: ValidationIssue[] = [];
   validateDishFamilies(issues, data.dishFamilies);
@@ -718,6 +846,7 @@ export function validateBundledData(data: BundledDataSet): ValidationIssue[] {
   const seedIds = validateReferenceSeedQueue(issues, data.referenceSeedQueue, validTags);
   validateCacheWarmingManifest(issues, data.cacheWarmingManifest, validTags, seedIds);
   validateReferenceSourceRegistry(issues, data.referenceSourceRegistry);
+  validateInferenceBurdenInventory(issues, data.inferenceBurdenInventory);
   return issues;
 }
 
