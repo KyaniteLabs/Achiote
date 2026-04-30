@@ -82,6 +82,14 @@ type McpSessionEntry = {
   lastActivity: number;
 };
 
+type DataConsent = {
+  analytics: boolean;
+  qualitySignals: boolean;
+  savedMemory: boolean;
+  familyConfirmation: boolean;
+  publicContribution: boolean;
+};
+
 const transports = new Map<string, McpSessionEntry>();
 const SESSION_TTL = 30 * 60 * 1000; // 30 minutes
 
@@ -456,6 +464,19 @@ function hasEventsAdminAccess(req: IncomingMessage): boolean {
   return tokenBuf.length === adminBuf.length && timingSafeEqual(tokenBuf, adminBuf);
 }
 
+function parseDataConsent(value: unknown): DataConsent {
+  const input = value && typeof value === 'object' && !Array.isArray(value)
+    ? value as Record<string, unknown>
+    : {};
+  return {
+    analytics: input.analytics === true,
+    qualitySignals: input.qualitySignals === true,
+    savedMemory: input.savedMemory === true,
+    familyConfirmation: input.familyConfirmation === true,
+    publicContribution: input.publicContribution === true,
+  };
+}
+
 // ── AI agent endpoint ───────────────────────────────────────────────────────
 
 async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<void> {
@@ -483,7 +504,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
     }
     return;
   }
-  let parsed: { message?: string; history?: AskHistoryItem[]; images?: unknown };
+  let parsed: { message?: string; history?: AskHistoryItem[]; images?: unknown; consent?: unknown };
   try { parsed = JSON.parse(raw); } catch { sendJson(res, 400, { error: 'Invalid JSON' }); return; }
 
   const images = parseImages(parsed.images);
@@ -493,6 +514,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
   if (!userMessage && images.value.length === 0) { sendJson(res, 400, { error: 'message or images is required' }); return; }
 
   const history = parseHistory(parsed.history);
+  const consent = parseDataConsent(parsed.consent);
 
   if (shouldApplyRateLimit({ contentType, parsedBody: parsed })) {
     const limitResult = rateLimiter.checkWebLimit(authed.tier, authed.keyId, anonymousWebLimitOverride(authed));
@@ -517,7 +539,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
     const deterministicPlanInput = { userMessage };
     let didInjectPlanToolResult = false;
     const finish: DoneSender = (data = {}) => {
-      recordAskCompletion(toolPayloads, calledTools, data);
+      recordAskCompletion(toolPayloads, calledTools, data, consent);
       send('done', data);
     };
 
@@ -809,7 +831,8 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
 type SseSender = (event: string, data: unknown) => void;
 type DoneSender = (data?: Record<string, unknown>) => void;
 
-function recordAskCompletion(toolPayloads: Record<string, unknown>, calledTools: Set<string>, donePayload: Record<string, unknown>): void {
+function recordAskCompletion(toolPayloads: Record<string, unknown>, calledTools: Set<string>, donePayload: Record<string, unknown>, consent: DataConsent): void {
+  if (!consent.qualitySignals) return;
   const guarded = typeof donePayload.guarded === 'string' ? donePayload.guarded : 'none';
   recordQualitySignal(qualitySignalReport, buildAskQualitySignal({
     toolPayloads,
@@ -1905,10 +1928,15 @@ const server = createServer(async (req, res) => {
 
     try {
       const raw = await readBody(req, 1_024);
-      const parsed = JSON.parse(raw) as { event?: unknown; properties?: unknown };
+      const parsed = JSON.parse(raw) as { event?: unknown; properties?: unknown; consent?: unknown };
       const eventName = typeof parsed.event === 'string' ? parsed.event : '';
       if (!allowedTelemetryEvents.has(eventName)) {
         sendJson(res, 400, { error: 'Unsupported telemetry event' });
+        return;
+      }
+      const consent = parseDataConsent(parsed.consent);
+      if (!consent.analytics) {
+        sendJson(res, 202, { ok: true, skipped: 'analytics_consent_required' });
         return;
       }
       const properties = sanitizeTelemetryProperties(parsed.properties);

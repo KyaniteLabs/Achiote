@@ -42,6 +42,10 @@ describe('launch business hardening', () => {
     const support = fs.readFileSync('docs/landing/support.html', 'utf8');
 
     expect(privacy).toContain('Data deletion');
+    expect(privacy).toContain('Data & memory controls');
+    expect(privacy).toContain('opt in');
+    expect(privacy).toContain('opt out');
+    expect(privacy).toContain('Achiote still works if every optional toggle is off');
     expect(privacy).toContain('Food memories');
     expect(privacy).toContain('90 days');
     expect(safety).toContain('not medical advice');
@@ -55,6 +59,14 @@ describe('launch business hardening', () => {
     expect(appJs()).toContain("trackEvent('ask_succeeded'");
     expect(appJs()).toContain("trackEvent('ask_failed'");
     expect(appJs()).toContain("trackEvent('onboarding_prompt_selected'");
+    expect(appJs()).toContain('isAnalyticsConsentEnabled');
+    expect(appJs()).toContain('isQualitySignalsConsentEnabled');
+    expect(appJs()).toContain('consent: { analytics: true }');
+    expect(appJs()).toContain('qualitySignals: isQualitySignalsConsentEnabled()');
+    expect(app()).toContain('Data & memory');
+    expect(app()).toContain('id="consent-analytics"');
+    expect(app()).toContain('id="consent-quality"');
+    expect(landing()).toContain('/privacy#data-memory-controls');
     expect(appJs()).toContain("sendFeedback(");
     for (const eventName of [
       'feedback_closer',

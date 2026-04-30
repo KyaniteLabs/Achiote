@@ -7,6 +7,8 @@ const voiceStatusEl = document.getElementById('voice-status');
 const voiceLanguage = document.getElementById('voice-language');
 const micBtn = document.getElementById('mic-btn');
 const readBtn = document.getElementById('read-btn');
+const CONSENT_ANALYTICS_KEY = 'achiote-consent-analytics';
+const CONSENT_QUALITY_KEY = 'achiote-consent-quality';
 let busy = false;
 let chatHistory = [];
 let currentAskSource = 'typed';
@@ -17,14 +19,72 @@ let recordedChunks = [];
 let lastAssistantText = '';
 let lastReceipt = null;
 
+function readBooleanSetting(key) {
+  try {
+    return localStorage.getItem(key) === 'true';
+  } catch {
+    return false;
+  }
+}
+
+function writeBooleanSetting(key, enabled) {
+  try {
+    localStorage.setItem(key, enabled ? 'true' : 'false');
+  } catch {
+    // Consent controls are optional; reconstruction must keep working.
+  }
+}
+
+function isAnalyticsConsentEnabled() {
+  return readBooleanSetting(CONSENT_ANALYTICS_KEY);
+}
+
+function isQualitySignalsConsentEnabled() {
+  return readBooleanSetting(CONSENT_QUALITY_KEY);
+}
+
+function initConsentControls() {
+  const analytics = document.getElementById('consent-analytics');
+  const quality = document.getElementById('consent-quality');
+  const status = document.getElementById('consent-status');
+
+  const syncStatus = () => {
+    if (!status) return;
+    const enabled = [
+      analytics instanceof HTMLInputElement && analytics.checked ? 'analytics' : '',
+      quality instanceof HTMLInputElement && quality.checked ? 'quality signals' : '',
+    ].filter(Boolean);
+    status.textContent = enabled.length
+      ? `Optional sharing on: ${enabled.join(', ')}.`
+      : 'Optional sharing is off. Achiote still works normally.';
+  };
+
+  if (analytics instanceof HTMLInputElement) {
+    analytics.checked = isAnalyticsConsentEnabled();
+    analytics.addEventListener('change', () => {
+      writeBooleanSetting(CONSENT_ANALYTICS_KEY, analytics.checked);
+      syncStatus();
+    });
+  }
+  if (quality instanceof HTMLInputElement) {
+    quality.checked = isQualitySignalsConsentEnabled();
+    quality.addEventListener('change', () => {
+      writeBooleanSetting(CONSENT_QUALITY_KEY, quality.checked);
+      syncStatus();
+    });
+  }
+  syncStatus();
+}
+
 function trackEvent(event, properties = {}) {
+  if (!isAnalyticsConsentEnabled()) return;
   if (!event || typeof event !== 'string') return;
   const safeProperties = {};
   for (const [key, value] of Object.entries(properties || {})) {
     if (typeof value !== 'string' && typeof value !== 'number' && typeof value !== 'boolean') continue;
     safeProperties[key] = String(value).slice(0, 80);
   }
-  const body = JSON.stringify({ event, properties: safeProperties, at: new Date().toISOString() });
+  const body = JSON.stringify({ event, properties: safeProperties, consent: { analytics: true }, at: new Date().toISOString() });
   try {
     if (navigator.sendBeacon) {
       navigator.sendBeacon('/events', new Blob([body], { type: 'application/json' }));
@@ -36,6 +96,7 @@ function trackEvent(event, properties = {}) {
   }
 }
 
+initConsentControls();
 trackEvent('app_opened', { route: '/app' });
 initVoice();
 
@@ -85,7 +146,7 @@ function send(text, metadata = {}) {
   fetch('/ask', {
     method: 'POST',
     headers,
-    body: JSON.stringify({ message: val, history: chatHistory }),
+    body: JSON.stringify({ message: val, history: chatHistory, consent: { qualitySignals: isQualitySignalsConsentEnabled() } }),
   })
   .then(async res => {
     if (!res.ok) throw new Error(await explainHttpError(res));
