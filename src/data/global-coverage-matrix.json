@@ -1,0 +1,96 @@
+{
+  "meta": {
+    "version": "0.1.0",
+    "description": "Global coverage contract for Achiote reference seeding across food forms, regions, name systems, mechanisms, and evidence levels",
+    "confidence": "Medium",
+    "provenance": {
+      "sourceType": "curated seed hypothesis",
+      "notes": [
+        "Coverage axes are a planning contract, not authoritative cultural facts.",
+        "Use this matrix to prevent whole-category blind spots before adding sourced reference records."
+      ]
+    }
+  },
+  "axes": {
+    "foodForms": {
+      "label": "Food and drink forms",
+      "description": "Stable buckets for memory surfaces Achiote must support globally.",
+      "values": [
+        { "id": "beverage", "label": "Beverage", "description": "Cold, hot, thick, fermented, grain, fruit, dairy, herb, or ritual drinks." },
+        { "id": "soup_broth", "label": "Soup and broth", "description": "Liquid-forward memories where broth, sip, steam, or spoon texture matters." },
+        { "id": "stew_braise", "label": "Stew and braise", "description": "Slow-cooked, sauce-rich, or gravy-centered preparations." },
+        { "id": "sauce_condiment", "label": "Sauce and condiment", "description": "Chutneys, salsas, dips, gravies, relishes, dressings, and table sauces." },
+        { "id": "pickle_ferment", "label": "Pickle and ferment", "description": "Sour, brined, fermented, preserved, or aged preparations." },
+        { "id": "bread_flatbread", "label": "Bread and flatbread", "description": "Leavened, unleavened, griddled, baked, steamed, or fermented breads." },
+        { "id": "grain_rice_noodle", "label": "Grain, rice, and noodle", "description": "Staples where starch type, cooking texture, or grain aroma anchors memory." },
+        { "id": "dumpling_pocket", "label": "Dumpling and pocket", "description": "Filled wrappers, parcels, rolls, pies, buns, and hand-held enclosed foods." },
+        { "id": "protein_centered", "label": "Protein-centered", "description": "Meat, seafood, egg, legume, tofu, or fungi preparations where protein texture leads." },
+        { "id": "vegetable_fungi", "label": "Vegetable and fungi", "description": "Leafy, root, gourd, mushroom, seaweed, and vegetable-forward memories." },
+        { "id": "confectionery", "label": "Confectionery", "description": "Candy, brittle, fudge, nougat, halva, sugar glass, and small sweets." },
+        { "id": "dessert", "label": "Dessert", "description": "Puddings, custards, cakes, pastries, frozen sweets, fruit desserts, and celebratory sweets." },
+        { "id": "snack_street_food", "label": "Snack and street food", "description": "Portable, fried, griddled, skewered, vendor, school, or market foods." },
+        { "id": "ceremonial_holiday", "label": "Ceremonial and holiday", "description": "Ritual, religious, seasonal, festival, wedding, mourning, or feast foods." },
+        { "id": "breakfast", "label": "Breakfast", "description": "Morning foods and drinks with time-of-day or routine memory cues." },
+        { "id": "sick_day_comfort", "label": "Sick-day comfort", "description": "Care foods, healing-adjacent comfort foods, and gentle foods without medical claims." },
+        { "id": "pantry_single_ingredient", "label": "Pantry or single ingredient", "description": "Tiny nostalgia cues where one accessible ingredient or aroma does most of the work." }
+      ]
+    },
+    "regionScopes": {
+      "label": "Region and culture scopes",
+      "description": "Ways a memory can be geographically, culturally, or socially anchored without overclaiming identity.",
+      "values": [
+        { "id": "macro_region", "label": "Macro-region", "description": "Large research starting areas such as West Africa, South Asia, or the Caribbean." },
+        { "id": "nation", "label": "Nation", "description": "Country-level cue used as a hypothesis, not a final family claim." },
+        { "id": "subregion", "label": "Subregion", "description": "State, province, island, valley, coastal, highland, or local area." },
+        { "id": "city", "label": "City", "description": "Urban, market, restaurant, neighborhood, or city-specific food memories." },
+        { "id": "diaspora", "label": "Diaspora", "description": "Migration and adaptation contexts where ingredients or names shift." },
+        { "id": "borderland", "label": "Borderland", "description": "Foods shared or adapted across political, linguistic, or ecological borders." },
+        { "id": "indigenous", "label": "Indigenous foodway", "description": "Indigenous, First Nations, Native, Aboriginal, or local ancestral foodway contexts." },
+        { "id": "religious_ritual", "label": "Religious or ritual", "description": "Dietary, ceremonial, holiday, fasting, feast, or ritual contexts." },
+        { "id": "migration_corridor", "label": "Migration corridor", "description": "Trade, colonial, labor, refugee, or family migration routes that shape memory." }
+      ]
+    },
+    "nameSystems": {
+      "label": "Name systems",
+      "description": "Ways users remember or misremember food names across languages and scripts.",
+      "values": [
+        { "id": "alias", "label": "Alias", "description": "Common alternate names for the same or related food family." },
+        { "id": "transliteration", "label": "Transliteration", "description": "Latin-script approximations of non-Latin names." },
+        { "id": "script_form", "label": "Script form", "description": "Original-script names that may appear in family notes or packaging." },
+        { "id": "phonetic", "label": "Phonetic memory", "description": "Soundalike fragments, partial syllables, and heard names." },
+        { "id": "typo", "label": "Typo", "description": "Common weak-model or user spelling errors." },
+        { "id": "family_nickname", "label": "Family nickname", "description": "Private or informal names treated only as user-supplied clues." },
+        { "id": "menu_name", "label": "Menu name", "description": "Restaurant, vendor, package, or translated menu names." },
+        { "id": "colonial_postcolonial_name", "label": "Colonial or postcolonial name", "description": "Names shaped by historical language contact and migration." }
+      ]
+    },
+    "mechanisms": {
+      "label": "Sensory and food-science mechanisms",
+      "description": "Reusable mechanisms that help small models produce a safe first cue without exact dish certainty.",
+      "values": [
+        { "id": "aroma", "label": "Aroma", "description": "Volatile compounds, spice bloom, herbs, smoke, dairy aroma, or fruit aroma." },
+        { "id": "browning", "label": "Browning", "description": "Maillard, caramelization, toasted grain, char, roasted spice, or fried edge notes." },
+        { "id": "fermentation_acid", "label": "Fermentation and acid", "description": "Sourness, brine, yogurt, vinegar, citrus, lactic fermentation, or tang." },
+        { "id": "starch_texture", "label": "Starch texture", "description": "Gelation, chew, grit, slipperiness, stickiness, porridge body, or noodle bounce." },
+        { "id": "fat_mouthfeel", "label": "Fat mouthfeel", "description": "Creaminess, oil bloom, ghee aroma, schmaltz, rendered fat, coconut richness, or butter." },
+        { "id": "sugar_crystal", "label": "Sugar crystal", "description": "Crackle, brittleness, syrup, fudge grain, caramel, jaggery, honey, or candy snap." },
+        { "id": "smoke", "label": "Smoke", "description": "Wood, charcoal, dried chile, smoked fish, cured meat, or hearth aromas." },
+        { "id": "alkaline_processing", "label": "Alkaline processing", "description": "Nixtamal, lye, kansui, ash, baking soda, or alkaline noodle and corn aromas." },
+        { "id": "sauce_balance", "label": "Sauce balance", "description": "Salt, acid, sweetness, heat, umami, body, cling, and serving ratio." },
+        { "id": "temperature", "label": "Temperature", "description": "Cold, iced, room-temperature, hot, reheated, chilled, frozen, or steam cues." },
+        { "id": "texture_contrast", "label": "Texture contrast", "description": "Crisp-soft, chewy-crunchy, creamy-gritty, broth-solid, or tender-charred contrast." },
+        { "id": "serving_ritual", "label": "Serving ritual", "description": "Utensils, wrappers, bowls, cups, hands, family sequence, market ritual, or holiday service." }
+      ]
+    },
+    "evidenceLevels": {
+      "label": "Evidence levels",
+      "description": "Bounded levels for seed, research, and family-specific certainty.",
+      "values": [
+        { "id": "seed_hypothesis", "label": "Seed hypothesis", "description": "A research target, not a factual answer." },
+        { "id": "researched_record", "label": "Researched record", "description": "A typed record backed by cited public references." },
+        { "id": "family_confirmed", "label": "Family confirmed", "description": "User or family supplied clue, not globally authoritative." },
+        { "id": "operator_quality_signal", "label": "Operator quality signal", "description": "Aggregate private signal from quality counters." }
+      ]
+    }
+  }
+}
