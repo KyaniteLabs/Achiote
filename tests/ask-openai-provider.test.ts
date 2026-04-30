@@ -56,7 +56,7 @@ describe('/ask OpenAI-compatible provider mode', () => {
   let achiote: ChildProcess;
   let achioteBaseUrl: string;
   const seenAuthHeaders: Array<string | undefined> = [];
-  const requestBodies: Array<{ messages?: Array<{ role?: string; tool_call_id?: string; tool_calls?: unknown[]; content?: unknown }> }> = [];
+  const requestBodies: Array<{ messages?: Array<{ role?: string; tool_call_id?: string; tool_calls?: unknown[]; content?: unknown }>; tools?: unknown[] }> = [];
   let requestCount = 0;
 
   beforeAll(async () => {
@@ -143,6 +143,17 @@ describe('/ask OpenAI-compatible provider mode', () => {
         content: expect.stringContaining('"workflowSteps"'),
       }),
     ]));
+    expect(requestBodies.at(-1)?.messages).toEqual([
+      expect.objectContaining({ role: 'system' }),
+      expect.objectContaining({ role: 'user' }),
+      expect.objectContaining({
+        role: 'user',
+        content: expect.stringContaining('Achiote compact case file'),
+      }),
+    ]);
+    expect(requestBodies.at(-1)?.messages?.some((message) => message.role === 'tool' || message.tool_call_id)).toBe(false);
+    expect(requestBodies.at(-1)?.tools).toBeUndefined();
+    expect(JSON.stringify(requestBodies.at(-1))).toContain('minimum cue');
   });
 });
 

@@ -11,6 +11,7 @@ import type { AskHistoryItem, AskImage, AskModelResponse } from './lib/ask-provi
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { isInitializeRequest } from '@modelcontextprotocol/sdk/types.js';
 import { createAchioteServer } from './server.js';
+import { buildAskCaseFile, formatAskCaseFileForModel } from './lib/ask-case-file.js';
 import { createCacheWithStatus } from './lib/cache-path.js';
 import { createAuthenticator, loadKeysFromEnv } from './lib/auth.js';
 import { createRateLimiter } from './lib/rate-limit.js';
@@ -688,6 +689,15 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       }
 
       askSession.appendToolResults(modelResponse, toolResults);
+      if (modelResponse.toolCalls.some((call) => call.name === 'generate_minimum_viable_nostalgia')) {
+        askSession.compactForSynthesis(formatAskCaseFileForModel(buildAskCaseFile({
+          userMessage,
+          history,
+          toolPayloads,
+          calledTools: [...calledTools],
+        })));
+        send('status', { iteration: iterations, stage: 'case_file_compacted' });
+      }
       send('status', { iteration: iterations, stage: 'thinking' });
       try {
         modelResponse = await createWithTimeout(askSession, 2048, FINAL_SYNTHESIS_TIMEOUT_MS);
