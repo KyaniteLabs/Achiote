@@ -5,6 +5,7 @@ import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { ResearchCache } from '../src/lib/research-cache.js';
 import pantryFixtureData from '../src/data/reference-pantry-fixtures.json' with { type: 'json' };
+import globalCoverageMatrixData from '../src/data/global-coverage-matrix.json' with { type: 'json' };
 import {
   buildReferencePantryFixtureReport,
   buildReferenceSeedOperatorReport,
@@ -24,6 +25,21 @@ function emptyReport(): QualitySignalReport {
     byCache: {},
     missing: {},
   };
+}
+
+const EXPANSION_BANDS = [
+  'staple_starches',
+  'liquids_and_comfort',
+  'acid_heat_condiment',
+  'protein_vegetable_mains',
+  'handheld_social_foods',
+  'sweet_ritual_foods',
+] as const;
+
+const NON_FOOD_WIKIDATA_COLLISIONS = /Dallas Cowboys|Hamburger SV|American football team|football team|sports club/i;
+
+function stringArray(value: unknown): string[] {
+  return Array.isArray(value) ? value.filter((entry): entry is string => typeof entry === 'string') : [];
 }
 
 describe('reference seed operator integration', () => {
@@ -151,6 +167,40 @@ describe('reference seed operator integration', () => {
     expect(emptyReport.coverage.axes.cultureAreas).toMatchObject({ covered: 0, total: 20 });
     expect(emptyReport.coverage.axes.mechanisms).toMatchObject({ covered: 0, total: 12 });
     expect(emptyReport.coverage.axes.evidenceLevels).toMatchObject({ covered: 0, total: 4 });
+  });
+
+  it('keeps the first pantry expansion balanced across every culture area and food-memory band', () => {
+    const cultureAreaIds = globalCoverageMatrixData.axes.cultureAreas.values.map((value) => value.id);
+    const expansionFixtures = pantryFixtureData.fixtures.filter((fixture) => typeof fixture.expansionBand === 'string');
+
+    expect(expansionFixtures).toHaveLength(cultureAreaIds.length * EXPANSION_BANDS.length);
+
+    for (const cultureArea of cultureAreaIds) {
+      const fixturesForCulture = expansionFixtures.filter((fixture) => stringArray(fixture.coverageTags).includes(`cultureAreas.${cultureArea}`));
+      expect(fixturesForCulture.map((fixture) => fixture.expansionBand).sort()).toEqual([...EXPANSION_BANDS].sort());
+    }
+
+    for (const band of EXPANSION_BANDS) {
+      const fixturesForBand = expansionFixtures.filter((fixture) => fixture.expansionBand === band);
+      expect(fixturesForBand).toHaveLength(cultureAreaIds.length);
+      expect(new Set(fixturesForBand.flatMap((fixture) => stringArray(fixture.coverageTags).filter((tag) => tag.startsWith('cultureAreas.'))))).toEqual(
+        new Set(cultureAreaIds.map((cultureArea) => `cultureAreas.${cultureArea}`)),
+      );
+    }
+
+    for (const fixture of expansionFixtures) {
+      expect(fixture.sourceIds).toEqual(['wikidata-structured-food-data']);
+      expect(stringArray(fixture.coverageTags)).toEqual(expect.arrayContaining([
+        'evidenceLevels.seed_hypothesis',
+        'evidenceLevels.researched_record',
+      ]));
+      expect(stringArray(fixture.coverageTags)).not.toEqual(expect.arrayContaining([
+        'evidenceLevels.family_confirmed',
+        'evidenceLevels.operator_quality_signal',
+      ]));
+      expect(JSON.stringify(fixture)).not.toMatch(/rawMemory|memoryText|prompt_text|recipe instructions|medical advice|legal advice|Achiote browses|live web/i);
+      expect(JSON.stringify(fixture)).not.toMatch(NON_FOOD_WIKIDATA_COLLISIONS);
+    }
   });
 
   it('counts only fixture writes that can be read back from the cache', () => {

@@ -143,7 +143,7 @@ function assertPackagedHelperScripts(installDir, tempRoot) {
     throw new Error(`Packaged bundled reference pantry write failed\nstdout:\n${bundledWrite.stdout}\nstderr:\n${bundledWrite.stderr}`);
   }
   const bundledWriteResult = JSON.parse(bundledWrite.stdout);
-  if (typeof bundledWriteResult.stored !== 'number' || bundledWriteResult.stored < 18) {
+  if (typeof bundledWriteResult.stored !== 'number' || bundledWriteResult.stored < 138) {
     throw new Error(`Packaged bundled reference pantry write returned unexpected result: ${bundledWrite.stdout}`);
   }
 }
