@@ -274,6 +274,15 @@ describe('HTTP server integration', () => {
         byCache: {},
         missing: {},
       },
+      referenceSeeds: {
+        priorities: [],
+        cacheWarmingTasks: [],
+        coverage: expect.objectContaining({
+          axes: expect.objectContaining({
+            foodForms: expect.objectContaining({ covered: expect.any(Number), total: expect.any(Number) }),
+          }),
+        }),
+      },
     });
 
     for (let i = 0; i < 30; i += 1) {

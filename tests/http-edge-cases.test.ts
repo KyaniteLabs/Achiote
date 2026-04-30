@@ -14,7 +14,13 @@ function spawnServer(port: number, env?: Record<string, string>): Promise<ChildP
   });
 
   return new Promise((resolve, reject) => {
-    const timeout = setTimeout(() => reject(new Error('Server startup timeout')), 10000);
+    let timeout: ReturnType<typeof setTimeout>;
+    const fail = (error: Error) => {
+      clearTimeout(timeout);
+      server.kill('SIGINT');
+      reject(error);
+    };
+    timeout = setTimeout(() => fail(new Error('Server startup timeout')), 10000);
     server.stdout!.on('data', (data: Buffer) => {
       if (data.toString().includes(`localhost:${port}`)) {
         clearTimeout(timeout);
@@ -23,15 +29,27 @@ function spawnServer(port: number, env?: Record<string, string>): Promise<ChildP
     });
     server.stderr!.on('data', (data: Buffer) => {
       if (data.toString().includes('EADDRINUSE')) {
-        clearTimeout(timeout);
-        reject(new Error(`Port ${port} already in use`));
+        fail(new Error(`Port ${port} already in use`));
       }
     });
     server.on('error', (err) => {
-      clearTimeout(timeout);
-      reject(err);
+      fail(err);
     });
   });
+}
+
+async function startServer(env?: Record<string, string>): Promise<{ server: ChildProcess; port: number; baseUrl: string }> {
+  let lastError: unknown;
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    const port = await getFreePort();
+    try {
+      return { server: await spawnServer(port, env), port, baseUrl: `http://127.0.0.1:${port}` };
+    } catch (error) {
+      lastError = error;
+      if (!(error instanceof Error) || !error.message.includes('already in use')) break;
+    }
+  }
+  throw lastError instanceof Error ? lastError : new Error(String(lastError));
 }
 
 
@@ -42,9 +60,7 @@ describe('CORS edge cases', () => {
   let baseUrl: string;
 
   beforeAll(async () => {
-    const port = await getFreePort();
-    baseUrl = `http://127.0.0.1:${port}`;
-    server = await spawnServer(port);
+    ({ server, baseUrl } = await startServer());
   }, 15000);
 
   afterAll(() => { server?.kill('SIGINT'); });
@@ -88,9 +104,7 @@ describe('HTTP method edge cases', () => {
   let baseUrl: string;
 
   beforeAll(async () => {
-    const port = await getFreePort();
-    baseUrl = `http://127.0.0.1:${port}`;
-    server = await spawnServer(port);
+    ({ server, baseUrl } = await startServer());
   }, 15000);
 
   afterAll(() => { server?.kill('SIGINT'); });
@@ -136,9 +150,7 @@ describe('path traversal protection', () => {
   let baseUrl: string;
 
   beforeAll(async () => {
-    const port = await getFreePort();
-    baseUrl = `http://127.0.0.1:${port}`;
-    server = await spawnServer(port);
+    ({ server, baseUrl } = await startServer());
   }, 15000);
 
   afterAll(() => { server?.kill('SIGINT'); });
@@ -163,10 +175,9 @@ describe('path traversal protection', () => {
 
 describe('/ask pre-API-call guards', () => {
   it('returns 415 for wrong content-type', async () => {
-    const port = await getFreePort();
-    const server = await spawnServer(port);
+    const { server, baseUrl } = await startServer();
     try {
-      const res = await fetch(`http://127.0.0.1:${port}/ask`, {
+      const res = await fetch(`${baseUrl}/ask`, {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain' },
         body: 'hello',
@@ -178,11 +189,10 @@ describe('/ask pre-API-call guards', () => {
   });
 
   it('returns 413 for body too large', async () => {
-    const port = await getFreePort();
-    const server = await spawnServer(port);
+    const { server, baseUrl } = await startServer();
     try {
       const hugeBody = 'x'.repeat(3_100_000);
-      const res = await fetch(`http://127.0.0.1:${port}/ask`, {
+      const res = await fetch(`${baseUrl}/ask`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: hugeBody,
@@ -192,10 +202,9 @@ describe('/ask pre-API-call guards', () => {
   });
 
   it('returns 400 for invalid JSON', async () => {
-    const port = await getFreePort();
-    const server = await spawnServer(port);
+    const { server, baseUrl } = await startServer();
     try {
-      const res = await fetch(`http://127.0.0.1:${port}/ask`, {
+      const res = await fetch(`${baseUrl}/ask`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: 'not valid json{{{',
@@ -207,10 +216,9 @@ describe('/ask pre-API-call guards', () => {
   });
 
   it('returns 400 for missing message field', async () => {
-    const port = await getFreePort();
-    const server = await spawnServer(port);
+    const { server, baseUrl } = await startServer();
     try {
-      const res = await fetch(`http://127.0.0.1:${port}/ask`, {
+      const res = await fetch(`${baseUrl}/ask`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ notMessage: 'hello' }),
@@ -222,10 +230,9 @@ describe('/ask pre-API-call guards', () => {
   });
 
   it('returns 400 for empty message', async () => {
-    const port = await getFreePort();
-    const server = await spawnServer(port);
+    const { server, baseUrl } = await startServer();
     try {
-      const res = await fetch(`http://127.0.0.1:${port}/ask`, {
+      const res = await fetch(`${baseUrl}/ask`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: '   ' }),
@@ -244,9 +251,7 @@ describe('auth edge cases', () => {
   let baseUrl: string;
 
   beforeAll(async () => {
-    const port = await getFreePort();
-    baseUrl = `http://127.0.0.1:${port}`;
-    server = await spawnServer(port, { ACHIOTE_AUTH_ENABLED: 'true' });
+    ({ server, baseUrl } = await startServer({ ACHIOTE_AUTH_ENABLED: 'true' }));
   }, 15000);
 
   afterAll(() => { server?.kill('SIGINT'); });
@@ -293,9 +298,7 @@ describe('static file edge cases', () => {
   let baseUrl: string;
 
   beforeAll(async () => {
-    const port = await getFreePort();
-    baseUrl = `http://127.0.0.1:${port}`;
-    server = await spawnServer(port);
+    ({ server, baseUrl } = await startServer());
   }, 15000);
 
   afterAll(() => { server?.kill('SIGINT'); });

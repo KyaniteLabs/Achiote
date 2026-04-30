@@ -169,6 +169,22 @@ The SQLite research cache path is:
 
 User memories can be emotionally sensitive. Do not add optional food-data provider integrations without documenting what is sent, where it is sent, and how it is cached.
 
+## Operator reference seeding
+
+Achiote can turn private aggregate `/ask` quality counters into reference seed priorities for future data hardening:
+
+```bash
+npm run reference:seeds -- --quality-report quality.json --limit 10
+```
+
+The command prints host-research prompts and cache-warming targets. It does not browse. To warm the local SQLite cache, provide an explicitly approved fixture containing typed `ResearchRecord` objects:
+
+```bash
+npm run reference:seeds -- --fixture approved-fixture.json --cache-path ~/.cache/achiote/culture-cache.db
+```
+
+Fixtures must match the seed manifest and pass provenance validation before any cache write.
+
 ## Development
 
 ```bash

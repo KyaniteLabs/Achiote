@@ -76,6 +76,20 @@ Speech is an optional HTTP-mode input/output layer, not part of the MCP reasonin
 - `src/data/ingredients.json` maps ingredients to volatile/flavor compounds and substitution groups.
 - `src/data/regional-availability.json` contains static US metro-area store/corridor hints.
 - `src/data/sensory-profiles.json` defines sensory dimensions and nostalgia-critical criteria.
+- `src/data/global-coverage-matrix.json`, `src/data/reference-seed-queue.json`, and `src/data/cache-warming-manifest.json` define the private operator reference-seeding loop. They are seed hypotheses and task manifests, not authoritative culinary facts.
+
+## Reference seed operating loop
+
+HTTP `/ask` records privacy-preserving quality counters for successful completions: memory type, bounded family bucket, region bucket, guard path, search outcome, cache outcome, and missing-clue dimensions. Authenticated `GET /events` returns those counters plus deterministic reference seed priorities and cache-warming tasks from `buildReferenceSeedOperatorReport`.
+
+The local operator script runs with:
+
+```bash
+npm run reference:seeds -- --quality-report quality.json --limit 10
+npm run reference:seeds -- --fixture approved-fixture.json --cache-path ~/.cache/achiote/culture-cache.db
+```
+
+The script does not browse. Report mode prints host-research prompts for approved human or host-AI research. Fixture mode validates typed `ResearchRecord` artifacts against the cache-warming manifest before writing them to SQLite. Raw memories, prompts, provider details, credentials, medical claims, and legal claims do not belong in seed data or fixtures.
 
 ## Cache
 

@@ -104,9 +104,11 @@ function assertPackagedHelperScripts(installDir) {
   const keygenPath = path.join(packageRoot, 'scripts', 'generate-api-key.mjs');
   const dockerSmokePath = path.join(packageRoot, 'scripts', 'docker-smoke.mjs');
   const liveAskPath = path.join(packageRoot, 'scripts', 'live-ask-smoke.mjs');
+  const referenceSeedOperatorPath = path.join(packageRoot, 'scripts', 'reference-seed-operator.mjs');
   if (!fs.existsSync(keygenPath)) throw new Error(`Packaged keygen helper missing at ${keygenPath}`);
   if (!fs.existsSync(dockerSmokePath)) throw new Error(`Packaged docker smoke helper missing at ${dockerSmokePath}`);
   if (!fs.existsSync(liveAskPath)) throw new Error(`Packaged live ask smoke helper missing at ${liveAskPath}`);
+  if (!fs.existsSync(referenceSeedOperatorPath)) throw new Error(`Packaged reference seed operator helper missing at ${referenceSeedOperatorPath}`);
 
   const keygen = spawnSync(process.execPath, [keygenPath, '--tier', 'free', '--name', 'package-smoke'], { encoding: 'utf8' });
   if (keygen.status !== 0) {
@@ -118,6 +120,15 @@ function assertPackagedHelperScripts(installDir) {
   }
   if (!/^ak_[0-9a-f]{16}$/.test(parsed.envRecord.keyId) || !/^sha256:[0-9a-f]{64}$/.test(parsed.envRecord.keyHash) || 'key' in parsed.envRecord) {
     throw new Error(`Packaged keygen helper returned unsafe envRecord: ${keygen.stdout}`);
+  }
+
+  const referenceReport = spawnSync(process.execPath, [referenceSeedOperatorPath, '--limit', '1'], { encoding: 'utf8' });
+  if (referenceReport.status !== 0) {
+    throw new Error(`Packaged reference seed operator helper failed\nstdout:\n${referenceReport.stdout}\nstderr:\n${referenceReport.stderr}`);
+  }
+  const report = JSON.parse(referenceReport.stdout);
+  if (!report.coverage?.axes?.foodForms || !Array.isArray(report.cacheWarmingTasks)) {
+    throw new Error(`Packaged reference seed operator returned unexpected report: ${referenceReport.stdout}`);
   }
 }
 

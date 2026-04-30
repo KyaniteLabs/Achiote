@@ -1,0 +1,225 @@
+import { describe, expect, it } from 'vitest';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import { spawnSync } from 'node:child_process';
+import { ResearchCache } from '../src/lib/research-cache.js';
+import {
+  buildReferenceSeedOperatorReport,
+  validateReferenceSeedFixtures,
+  writeReferenceSeedFixturesToCache,
+} from '../src/lib/reference-seed-operator.js';
+import type { QualitySignalReport } from '../src/lib/quality-signals.js';
+
+function emptyReport(): QualitySignalReport {
+  return {
+    total: 0,
+    byMemoryType: {},
+    byFamily: {},
+    byRegion: {},
+    byGuard: {},
+    bySearch: {},
+    byCache: {},
+    missing: {},
+  };
+}
+
+describe('reference seed operator integration', () => {
+  it('turns private aggregate quality signals into prioritized host-research tasks and coverage gaps', () => {
+    const report = emptyReport();
+    report.total = 7;
+    report.byMemoryType = { beverage: 5 };
+    report.byCache = { unavailable: 7 };
+    report.missing = { missing_region: 3 };
+
+    const operatorReport = buildReferenceSeedOperatorReport(report, { limit: 3 });
+
+    expect(operatorReport.priorities[0]).toMatchObject({
+      seedId: 'beverage-rice-cinnamon-latin-america',
+      reasons: expect.arrayContaining(['frequent_memory_type', 'missing_region', 'cache_unavailable']),
+    });
+    expect(operatorReport.cacheWarmingTasks[0]).toMatchObject({
+      id: 'warm-beverage-rice-cinnamon-latin-america',
+      seedId: 'beverage-rice-cinnamon-latin-america',
+      cacheTarget: { dishFamily: 'rice-cinnamon-beverage', region: 'Mexico' },
+      promptForHostResearch: expect.stringContaining('host-led research'),
+    });
+    expect(operatorReport.coverage.axes.foodForms).toMatchObject({ covered: 17, total: 17, missing: [] });
+    expect(operatorReport.coverage.axes.regionScopes.missing).toEqual(expect.arrayContaining(['indigenous']));
+    expect(JSON.stringify(operatorReport)).not.toMatch(/rawMemory|memoryText|prompt_text|Achiote browses/i);
+  });
+
+  it('validates approved cache-warming fixtures before writing cache records', () => {
+    const fixture = {
+      fixtures: [
+        {
+          seedId: 'beverage-rice-cinnamon-latin-america',
+          cacheTarget: { dishFamily: 'rice-cinnamon-beverage', region: 'Mexico' },
+          record: {
+            dishName: 'rice cinnamon beverage',
+            query: 'rice cinnamon beverage Mexico variants',
+            sources: [
+              {
+                title: 'Approved operator source',
+                url: 'https://example.org/rice-cinnamon-beverage',
+                sourceType: 'article',
+                accessedAt: '2026-04-29T00:00:00.000Z',
+                reliability: 'Medium',
+                quotedFacts: ['Rice cinnamon drinks appear in multiple Mexican and diaspora contexts.'],
+              },
+            ],
+            extractedFacts: {
+              namesAndAliases: ['rice cinnamon beverage'],
+              regions: ['Mexico'],
+              ingredients: [],
+              techniques: [],
+              sensoryDescriptors: [],
+              culturalOccasions: [],
+              regionalVariants: ['diaspora versions vary'],
+            },
+            uncertainty: ['family-specific sweetness and thickness'],
+            confidence: 'Medium',
+            createdAt: '2026-04-29T00:00:00.000Z',
+          },
+        },
+      ],
+    };
+
+    expect(validateReferenceSeedFixtures(fixture)).toEqual([]);
+  });
+
+  it('rejects fixture records whose seed target or research record is malformed', () => {
+    const issues = validateReferenceSeedFixtures({
+      fixtures: [
+        {
+          seedId: 'missing-seed',
+          cacheTarget: { dishFamily: 'rice-cinnamon-beverage', region: 'Mexico' },
+          record: { dishName: '', query: '', sources: [] },
+        },
+      ],
+    });
+
+    expect(issues).toEqual(expect.arrayContaining([
+      expect.objectContaining({ path: 'fixtures[0].seedId', message: expect.stringContaining('known seed') }),
+      expect.objectContaining({ path: 'fixtures[0].record.dishName' }),
+      expect.objectContaining({ path: 'fixtures[0].record.sources' }),
+    ]));
+  });
+
+  it('counts only fixture writes that can be read back from the cache', () => {
+    const fixture = {
+      fixtures: [
+        {
+          seedId: 'beverage-rice-cinnamon-latin-america',
+          cacheTarget: { dishFamily: 'rice-cinnamon-beverage', region: 'Mexico' },
+          record: {
+            dishName: 'rice cinnamon beverage',
+            query: 'rice cinnamon beverage Mexico variants',
+            sources: [{
+              title: 'Approved operator source',
+              url: 'https://example.org/rice-cinnamon-beverage',
+              sourceType: 'article',
+              accessedAt: '2026-04-29T00:00:00.000Z',
+              reliability: 'Medium',
+              quotedFacts: ['Rice cinnamon drinks appear in multiple Mexican and diaspora contexts.'],
+            }],
+            extractedFacts: {
+              namesAndAliases: ['rice cinnamon beverage'],
+              regions: ['Mexico'],
+              ingredients: [],
+              techniques: [],
+              sensoryDescriptors: [],
+              culturalOccasions: [],
+              regionalVariants: [],
+            },
+            uncertainty: ['family-specific sweetness and thickness'],
+            confidence: 'Medium',
+            createdAt: '2026-04-29T00:00:00.000Z',
+          },
+        },
+      ],
+    };
+
+    expect(() => writeReferenceSeedFixturesToCache(fixture, {
+      storeResearchRecord: () => {},
+      getResearchRecord: () => null,
+    })).toThrow(/Cache write verification failed/);
+  });
+
+  it('runs the operator script in report and approved fixture write modes without live browsing', () => {
+    const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'achiote-reference-seeds-'));
+    const qualityPath = path.join(tempRoot, 'quality.json');
+    const fixturePath = path.join(tempRoot, 'fixture.json');
+    const cachePath = path.join(tempRoot, 'cache.db');
+    fs.writeFileSync(qualityPath, JSON.stringify({
+      total: 3,
+      byMemoryType: { beverage: 3 },
+      byFamily: {},
+      byRegion: {},
+      byGuard: {},
+      bySearch: {},
+      byCache: { unavailable: 3 },
+      missing: { missing_region: 1 },
+    }));
+    fs.writeFileSync(fixturePath, JSON.stringify({
+      fixtures: [
+        {
+          seedId: 'beverage-rice-cinnamon-latin-america',
+          cacheTarget: { dishFamily: 'rice-cinnamon-beverage', region: 'Mexico' },
+          record: {
+            dishName: 'rice cinnamon beverage',
+            query: 'rice cinnamon beverage Mexico variants',
+            sources: [{
+              title: 'Approved operator source',
+              url: 'https://example.org/rice-cinnamon-beverage',
+              sourceType: 'article',
+              accessedAt: '2026-04-29T00:00:00.000Z',
+              reliability: 'Medium',
+              quotedFacts: ['Rice cinnamon drinks appear in multiple Mexican and diaspora contexts.'],
+            }],
+            extractedFacts: {
+              namesAndAliases: ['rice cinnamon beverage'],
+              regions: ['Mexico'],
+              ingredients: [],
+              techniques: [],
+              sensoryDescriptors: [],
+              culturalOccasions: [],
+              regionalVariants: [],
+            },
+            uncertainty: ['family-specific sweetness and thickness'],
+            confidence: 'Medium',
+            createdAt: '2026-04-29T00:00:00.000Z',
+          },
+        },
+      ],
+    }));
+
+    try {
+      const report = spawnSync(process.execPath, ['scripts/reference-seed-operator.mjs', '--quality-report', qualityPath, '--limit', '2'], {
+        encoding: 'utf8',
+      });
+      expect(report.status).toBe(0);
+      expect(report.stdout).toContain('warm-beverage-rice-cinnamon-latin-america');
+      expect(report.stdout).not.toMatch(/Achiote browses|live web|rawMemory|memoryText/i);
+
+      const write = spawnSync(process.execPath, [
+        'scripts/reference-seed-operator.mjs',
+        '--fixture',
+        fixturePath,
+        '--cache-path',
+        cachePath,
+      ], { encoding: 'utf8' });
+      expect(write.status).toBe(0);
+      expect(JSON.parse(write.stdout)).toEqual({ stored: 1 });
+
+      const cache = new ResearchCache(cachePath);
+      try {
+        expect(cache.getResearchRecord('rice-cinnamon-beverage', 'Mexico')?.dishName).toBe('rice cinnamon beverage');
+      } finally {
+        cache.close();
+      }
+    } finally {
+      fs.rmSync(tempRoot, { recursive: true, force: true });
+    }
+  }, 20_000);
+});
