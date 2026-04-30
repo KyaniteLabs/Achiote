@@ -39,14 +39,24 @@ function spawnAchioteServer(port: number, openAiBaseUrl: string, env?: Record<st
   });
 
   return new Promise((resolveServer, reject) => {
-    const timeout = setTimeout(() => reject(new Error('Server startup timeout')), 10_000);
+    let stderr = '';
+    const timeout = setTimeout(() => {
+      server.kill('SIGINT');
+      reject(new Error(`Server startup timeout${stderr ? `: ${stderr.slice(-1000)}` : ''}`));
+    }, 30_000);
+    server.stderr?.on('data', (data: Buffer) => {
+      stderr += data.toString();
+    });
     server.stdout?.on('data', (data: Buffer) => {
       if (data.toString().includes(`localhost:${port}`)) {
         clearTimeout(timeout);
         resolveServer(server);
       }
     });
-    server.once('error', reject);
+    server.once('error', (err) => {
+      clearTimeout(timeout);
+      reject(err);
+    });
   });
 }
 
