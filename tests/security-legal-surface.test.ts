@@ -70,6 +70,7 @@ describe('security and legal surface guardrails', () => {
       read('src/data/reference-seed-queue.json'),
       read('src/data/cache-warming-manifest.json'),
       read('src/data/reference-source-registry.json'),
+      read('src/data/reference-pantry-fixtures.json'),
       read('src/lib/reference-seed-planner.ts'),
       read('src/lib/reference-seed-operator.ts'),
       read('scripts/reference-seed-operator.mjs'),

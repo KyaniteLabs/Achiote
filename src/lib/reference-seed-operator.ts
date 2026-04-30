@@ -96,6 +96,8 @@ export type ReferenceSeedOperatorReport = {
 export type ReferenceSeedFixture = {
   seedId?: unknown;
   cacheTarget?: CacheTarget;
+  sourceIds?: unknown;
+  coverageTags?: unknown;
   record?: ResearchRecord;
 };
 
@@ -106,6 +108,13 @@ export type ReferenceSeedFixtureCache = {
 
 export type ReferenceSeedFixtureWriteResult = {
   stored: number;
+};
+
+export type ReferencePantryFixtureReport = {
+  totalFixtures: number;
+  sourceIds: string[];
+  cacheTargets: Array<{ dishFamily: string; region: string }>;
+  coverage: ReferenceSeedOperatorReport['coverage'];
 };
 
 export function buildReferenceSeedOperatorReport(
@@ -145,6 +154,12 @@ export function validateReferenceSeedFixtures(input: unknown): ReferenceSeedOper
     const region = typeof target?.region === 'string' ? target.region : '';
     return `${seedId}\u0000${dishFamily}\u0000${region}`;
   }));
+  const allowedSourceIds = new Set(
+    bundledGlobalReferenceSeeds.referenceSourceRegistry.sources
+      .filter((source) => source.fixturePolicy === 'allowed')
+      .map((source) => typeof source.id === 'string' ? source.id : '')
+      .filter(Boolean),
+  );
 
   input.fixtures.forEach((fixture, index) => {
     const base = `fixtures[${index}]`;
@@ -158,6 +173,17 @@ export function validateReferenceSeedFixtures(input: unknown): ReferenceSeedOper
     const region = typeof cacheTarget.region === 'string' ? cacheTarget.region : '';
     if (!validTargets.has(`${seedId}\u0000${dishFamily}\u0000${region}`)) {
       issues.push({ path: `${base}.seedId`, message: 'must reference a known seed/cache target pair' });
+    }
+    if (!Array.isArray(fixture.sourceIds) || fixture.sourceIds.length === 0) {
+      issues.push({ path: `${base}.sourceIds`, message: 'must list at least one approved fixture source id' });
+    } else {
+      fixture.sourceIds.forEach((sourceId, sourceIndex) => {
+        if (typeof sourceId !== 'string' || sourceId.trim().length === 0) {
+          issues.push({ path: `${base}.sourceIds[${sourceIndex}]`, message: 'must be a non-empty string' });
+        } else if (!allowedSourceIds.has(sourceId)) {
+          issues.push({ path: `${base}.sourceIds[${sourceIndex}]`, message: 'must reference an allowed fixture source' });
+        }
+      });
     }
     if (!isRecord(fixture.record)) {
       issues.push({ path: `${base}.record`, message: 'must be a typed ResearchRecord object' });
@@ -200,6 +226,32 @@ export function writeReferenceSeedFixturesToCache(
   return { stored };
 }
 
+export function buildReferencePantryFixtureReport(input: unknown = bundledGlobalReferenceSeeds.referencePantryFixtures): ReferencePantryFixtureReport {
+  const fixtures = isRecord(input) && Array.isArray(input.fixtures) ? input.fixtures : [];
+  const sourceIds = new Set<string>();
+  const cacheTargets: ReferencePantryFixtureReport['cacheTargets'] = [];
+  const fixtureCoverageTags = new Set<string>();
+
+  fixtures.forEach((fixture) => {
+    if (!isRecord(fixture)) return;
+    stringArray(fixture.sourceIds).forEach((sourceId) => sourceIds.add(sourceId));
+    stringArray(fixture.coverageTags).forEach((tag) => fixtureCoverageTags.add(tag));
+    if (isRecord(fixture.cacheTarget)) {
+      cacheTargets.push({
+        dishFamily: stringValue(fixture.cacheTarget.dishFamily, 'unknown-dish-family'),
+        region: stringValue(fixture.cacheTarget.region, 'unknown-region'),
+      });
+    }
+  });
+
+  return {
+    totalFixtures: fixtures.length,
+    sourceIds: [...sourceIds].sort(),
+    cacheTargets,
+    coverage: summarizeCoverage(fixtureCoverageTags),
+  };
+}
+
 function toOperatorTask(task: CacheWarmingTask): ReferenceSeedOperatorTask {
   const id = stringValue(task.id, 'unknown-task');
   const seedId = stringValue(task.seedId, 'unknown-seed');
@@ -227,13 +279,14 @@ function toOperatorTask(task: CacheWarmingTask): ReferenceSeedOperatorTask {
   };
 }
 
-function summarizeCoverage(): ReferenceSeedOperatorReport['coverage'] {
+function summarizeCoverage(extraCoverageTags?: Set<string>): ReferenceSeedOperatorReport['coverage'] {
   const axes: ReferenceSeedOperatorReport['coverage']['axes'] = {};
   const coveredTags = new Set(bundledGlobalReferenceSeeds.referenceSeedQueue.seeds.flatMap((seed) => [
     ...stringArray(seed.forms),
     ...stringArray(seed.mechanisms),
     ...stringArray(seed.coverageTags),
   ]));
+  extraCoverageTags?.forEach((tag) => coveredTags.add(tag));
 
   for (const [axisId, axis] of Object.entries(bundledGlobalReferenceSeeds.globalCoverageMatrix.axes as Record<string, CoverageAxis>)) {
     const values = Array.isArray(axis.values) ? axis.values : [];

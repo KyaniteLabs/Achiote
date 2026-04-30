@@ -3,6 +3,7 @@
 import fs from 'node:fs';
 import { resolve } from 'node:path';
 import { ResearchCache } from '../dist/lib/research-cache.js';
+import { bundledGlobalReferenceSeeds } from '../dist/lib/reference-seed-planner.js';
 import {
   buildReferenceSeedOperatorReport,
   writeReferenceSeedFixturesToCache,
@@ -13,6 +14,7 @@ function usage() {
     'Usage:',
     '  node scripts/reference-seed-operator.mjs [--quality-report quality.json] [--limit 10]',
     '  node scripts/reference-seed-operator.mjs --fixture approved-fixture.json --cache-path /path/to/cache.db',
+    '  node scripts/reference-seed-operator.mjs --fixture bundled --cache-path /path/to/cache.db',
     '',
     'This script does not browse. It only prints host-research tasks or stores approved typed ResearchRecord fixtures.',
   ].join('\n');
@@ -50,7 +52,7 @@ function emptyQualityReport() {
 }
 
 function writeApprovedFixtures(fixturePath, cachePath) {
-  const fixture = readJson(fixturePath);
+  const fixture = fixturePath === 'bundled' ? bundledGlobalReferenceSeeds.referencePantryFixtures : readJson(fixturePath);
   const cache = new ResearchCache(resolve(cachePath));
   try {
     return writeReferenceSeedFixturesToCache(fixture, cache);
