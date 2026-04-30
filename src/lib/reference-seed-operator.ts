@@ -30,6 +30,33 @@ type CacheWarmingTask = {
   doneWhen?: unknown;
 };
 
+type ReferenceSource = {
+  id?: unknown;
+  label?: unknown;
+  homepage?: unknown;
+  license?: {
+    id?: unknown;
+    name?: unknown;
+    url?: unknown;
+    status?: unknown;
+  };
+  fixturePolicy?: unknown;
+  coverageRoles?: unknown;
+  allowedUses?: unknown;
+  disallowedUses?: unknown;
+};
+
+export type ReferenceSourcePolicySummary = {
+  id: string;
+  label: string;
+  homepage: string;
+  licenseId: string;
+  licenseStatus: string;
+  coverageRoles: string[];
+  allowedUses: string[];
+  disallowedUses: string[];
+};
+
 export type ReferenceSeedOperatorIssue = {
   path: string;
   message: string;
@@ -57,6 +84,12 @@ export type ReferenceSeedOperatorReport = {
       total: number;
       missing: string[];
     }>;
+  };
+  sourcePolicy: {
+    allowedFixtureSources: ReferenceSourcePolicySummary[];
+    manualReviewSources: ReferenceSourcePolicySummary[];
+    rejectedSources: ReferenceSourcePolicySummary[];
+    disallowedPatterns: string[];
   };
 };
 
@@ -92,6 +125,7 @@ export function buildReferenceSeedOperatorReport(
     priorities,
     cacheWarmingTasks,
     coverage: summarizeCoverage(),
+    sourcePolicy: summarizeSourcePolicy(),
   };
 }
 
@@ -213,6 +247,30 @@ function summarizeCoverage(): ReferenceSeedOperatorReport['coverage'] {
   }
 
   return { axes };
+}
+
+function summarizeSourcePolicy(): ReferenceSeedOperatorReport['sourcePolicy'] {
+  const registry = bundledGlobalReferenceSeeds.referenceSourceRegistry;
+  const sources = Array.isArray(registry.sources) ? registry.sources as ReferenceSource[] : [];
+  return {
+    allowedFixtureSources: sources.filter((source) => source.fixturePolicy === 'allowed').map(toSourcePolicySummary),
+    manualReviewSources: sources.filter((source) => source.fixturePolicy === 'manual_review').map(toSourcePolicySummary),
+    rejectedSources: sources.filter((source) => source.fixturePolicy === 'rejected').map(toSourcePolicySummary),
+    disallowedPatterns: stringArray(registry.disallowedPatterns),
+  };
+}
+
+function toSourcePolicySummary(source: ReferenceSource): ReferenceSourcePolicySummary {
+  return {
+    id: stringValue(source.id, 'unknown-source'),
+    label: stringValue(source.label, 'Unknown source'),
+    homepage: stringValue(source.homepage, ''),
+    licenseId: stringValue(source.license?.id, 'unknown-license'),
+    licenseStatus: stringValue(source.license?.status, 'unknown'),
+    coverageRoles: stringArray(source.coverageRoles),
+    allowedUses: stringArray(source.allowedUses),
+    disallowedUses: stringArray(source.disallowedUses),
+  };
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

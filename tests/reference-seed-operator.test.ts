@@ -44,8 +44,23 @@ describe('reference seed operator integration', () => {
       cacheTarget: { dishFamily: 'rice-cinnamon-beverage', region: 'Mexico' },
       promptForHostResearch: expect.stringContaining('host-led research'),
     });
+    expect(operatorReport.sourcePolicy.allowedFixtureSources.map((source) => source.id)).toEqual([
+      'wikidata-structured-food-data',
+      'usda-fooddata-central',
+    ]);
+    expect(operatorReport.sourcePolicy.manualReviewSources.map((source) => source.id)).toEqual([
+      'open-food-facts-products',
+      'fao-infoods-food-composition',
+    ]);
+    expect(operatorReport.sourcePolicy.disallowedPatterns).toEqual(expect.arrayContaining([
+      'copied recipe instructions or article prose',
+      'proprietary food guides or ranking databases',
+    ]));
     expect(operatorReport.coverage.axes.foodForms).toMatchObject({ covered: 17, total: 17, missing: [] });
-    expect(operatorReport.coverage.axes.regionScopes.missing).toEqual(expect.arrayContaining(['indigenous']));
+    expect(operatorReport.coverage.axes.cultureAreas).toMatchObject({ covered: 20, total: 20, missing: [] });
+    expect(operatorReport.coverage.axes.regionScopes.missing).not.toEqual(expect.arrayContaining(['indigenous', 'borderland']));
+    expect(operatorReport.coverage.axes.nameSystems.missing).not.toEqual(expect.arrayContaining(['script_form', 'phonetic']));
+    expect(operatorReport.coverage.axes.mechanisms.missing).not.toEqual(expect.arrayContaining(['smoke']));
     expect(JSON.stringify(operatorReport)).not.toMatch(/rawMemory|memoryText|prompt_text|Achiote browses/i);
   });
 

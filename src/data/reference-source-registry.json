@@ -1,0 +1,132 @@
+{
+  "meta": {
+    "version": "0.1.0",
+    "description": "Source policy registry for Achiote reference pantry and cache-warming fixtures",
+    "confidence": "Medium",
+    "provenance": {
+      "sourceType": "operator source policy",
+      "notes": [
+        "This registry controls which public data sources may be used for typed pantry fixtures.",
+        "It is a legal and quality gate, not a claim that the server performs source access itself."
+      ]
+    }
+  },
+  "sources": [
+    {
+      "id": "wikidata-structured-food-data",
+      "label": "Wikidata structured food data",
+      "homepage": "https://www.wikidata.org/wiki/Wikidata:Data_access",
+      "license": {
+        "id": "CC0-1.0",
+        "name": "Creative Commons CC0 1.0 Universal",
+        "url": "https://www.wikidata.org/wiki/Wikidata:Licensing",
+        "status": "approved"
+      },
+      "fixturePolicy": "allowed",
+      "coverageRoles": ["names", "aliases", "multilingual labels", "broad cuisine or origin hints"],
+      "allowedUses": [
+        "structured labels, aliases, item identifiers, and high-level statements",
+        "cross-language name discovery and transliteration clues",
+        "candidate generation that remains marked as source_researched or uncertain"
+      ],
+      "disallowedUses": [
+        "article prose from Wikipedia or other non-CC0 namespaces",
+        "uncited cultural interpretation beyond the structured statements",
+        "treating country-of-origin statements as family-specific certainty"
+      ],
+      "operatorNotes": [
+        "Prefer Wikidata as the first source for high-frequency names because the structured data is CC0.",
+        "Record item identifiers or stable URLs in ResearchRecord sources."
+      ]
+    },
+    {
+      "id": "usda-fooddata-central",
+      "label": "USDA FoodData Central",
+      "homepage": "https://fdc.nal.usda.gov/api-guide",
+      "license": {
+        "id": "CC0-1.0",
+        "name": "Public domain / CC0 1.0 Universal",
+        "url": "https://fdc.nal.usda.gov/api-guide",
+        "status": "approved"
+      },
+      "fixturePolicy": "allowed",
+      "coverageRoles": ["ingredient composition", "commodity names", "food category normalization"],
+      "allowedUses": [
+        "ingredient and commodity facts",
+        "generic food category names",
+        "source metadata for public-domain nutrient or composition records"
+      ],
+      "disallowedUses": [
+        "cultural origin claims",
+        "medical or nutrition advice",
+        "storing API keys or request credentials in fixtures"
+      ],
+      "operatorNotes": [
+        "Use for ingredient grounding, not as an authority on cultural memory.",
+        "List FoodData Central as a source when its data is used."
+      ]
+    },
+    {
+      "id": "open-food-facts-products",
+      "label": "Open Food Facts product database",
+      "homepage": "https://world.openfoodfacts.org/",
+      "license": {
+        "id": "ODbL-1.0",
+        "name": "Open Database License 1.0",
+        "url": "https://wiki.openfoodfacts.org/ODBL_License",
+        "status": "conditional"
+      },
+      "fixturePolicy": "manual_review",
+      "coverageRoles": ["packaged food labels", "barcode products", "ingredient label variants"],
+      "allowedUses": [
+        "operator-reviewed package label facts when attribution and share-alike obligations are acceptable",
+        "ingredient label variants for diaspora grocery products",
+        "barcode-linked source metadata when a product clue matters"
+      ],
+      "disallowedUses": [
+        "unattributed adapted database extraction",
+        "product images or contributor photos without separate rights review",
+        "using packaged products as cultural authority for a whole foodway"
+      ],
+      "operatorNotes": [
+        "Default to manual review because ODbL has attribution and share-alike obligations.",
+        "Prefer CC0/public-domain sources when they answer the same question."
+      ]
+    },
+    {
+      "id": "fao-infoods-food-composition",
+      "label": "FAO/INFOODS food composition databases",
+      "homepage": "https://www.fao.org/infoods/infoods/tables-and-databases/faoinfoods-databases/en/",
+      "license": {
+        "id": "FAO-TERMS-REVIEW",
+        "name": "FAO terms require operator review before redistribution",
+        "url": "https://www.fao.org/infoods/infoods/tables-and-databases/faoinfoods-databases/en/",
+        "status": "manual_review"
+      },
+      "fixturePolicy": "manual_review",
+      "coverageRoles": ["regional food composition", "ingredient names", "analytical food composition context"],
+      "allowedUses": [
+        "operator-reviewed citation metadata",
+        "research planning and source discovery",
+        "region-specific ingredient composition context after license review"
+      ],
+      "disallowedUses": [
+        "bulk redistribution before terms review",
+        "copying table rows into fixtures without license approval",
+        "nutrition or health claims"
+      ],
+      "operatorNotes": [
+        "Useful for global breadth, especially underrepresented regions, but do not auto-ingest.",
+        "Treat as a source discovery and review target until redistribution terms are recorded."
+      ]
+    }
+  ],
+  "disallowedPatterns": [
+    "copied recipe instructions or article prose",
+    "proprietary food guides or ranking databases",
+    "paywalled or access-restricted databases without explicit rights",
+    "uncited model-generated facts",
+    "medical, legal, or nutrition advice",
+    "raw user memories, prompts, credentials, or provider diagnostics"
+  ]
+}

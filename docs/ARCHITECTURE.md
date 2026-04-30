@@ -77,6 +77,7 @@ Speech is an optional HTTP-mode input/output layer, not part of the MCP reasonin
 - `src/data/regional-availability.json` contains static US metro-area store/corridor hints.
 - `src/data/sensory-profiles.json` defines sensory dimensions and nostalgia-critical criteria.
 - `src/data/global-coverage-matrix.json`, `src/data/reference-seed-queue.json`, and `src/data/cache-warming-manifest.json` define the private operator reference-seeding loop. They are seed hypotheses and task manifests, not authoritative culinary facts.
+- `src/data/reference-source-registry.json` defines which public source classes are allowed for pantry fixtures, which require manual review, and which patterns are forbidden.
 
 ## Reference seed operating loop
 
@@ -90,6 +91,10 @@ npm run reference:seeds -- --fixture approved-fixture.json --cache-path ~/.cache
 ```
 
 The script does not browse. Report mode prints host-research prompts for approved human or host-AI research. Fixture mode validates typed `ResearchRecord` artifacts against the cache-warming manifest before writing them to SQLite. Raw memories, prompts, provider details, credentials, medical claims, and legal claims do not belong in seed data or fixtures.
+
+Reference pantry growth is source-gated. CC0/public-domain structured data such as Wikidata labels/aliases and USDA FoodData Central commodity facts may be used for approved typed fixtures when cited. ODbL product data and FAO/INFOODS composition tables are manual-review sources because attribution, share-alike, or redistribution terms must be checked before cache warming. Copied recipe instructions, article prose, proprietary food guides, uncited model-generated facts, and user memories are never fixture material.
+
+The coverage matrix includes broad world culture-area buckets so the operator can see whether the pantry is overfitting to a few regions. These buckets are planning coverage only; they do not assert that one seed represents an entire culture.
 
 ## Cache
 

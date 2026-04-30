@@ -50,6 +50,32 @@
         { "id": "migration_corridor", "label": "Migration corridor", "description": "Trade, colonial, labor, refugee, or family migration routes that shape memory." }
       ]
     },
+    "cultureAreas": {
+      "label": "World culture-area coverage",
+      "description": "Broad, non-authoritative coverage buckets used to prevent the pantry from overfitting to a few regions.",
+      "values": [
+        { "id": "north_africa", "label": "North Africa", "description": "Maghreb, Nile Valley, Sahara, and adjacent foodway contexts." },
+        { "id": "west_africa", "label": "West Africa", "description": "Atlantic, Sahelian, forest, coastal, and diaspora-linked West African foodway contexts." },
+        { "id": "central_africa", "label": "Central Africa", "description": "Congo Basin, Great Lakes-adjacent, forest, river, and regional staple contexts." },
+        { "id": "east_africa", "label": "East Africa", "description": "Horn, Swahili coast, highland, pastoral, lake, and Indian Ocean-linked contexts." },
+        { "id": "southern_africa", "label": "Southern Africa", "description": "Southern African staple, braai, maize, legume, and regional household contexts." },
+        { "id": "middle_east_west_asia", "label": "Middle East and West Asia", "description": "Levant, Anatolia, Arabian Peninsula, Iranian plateau, Caucasus, and adjacent foodways." },
+        { "id": "central_asia", "label": "Central Asia", "description": "Steppe, Silk Road, Turkic, Persianate, mountain, and migration-corridor foodways." },
+        { "id": "south_asia", "label": "South Asia", "description": "Subcontinental, Himalayan, island, coastal, and diaspora South Asian foodways." },
+        { "id": "east_asia", "label": "East Asia", "description": "Chinese, Korean, Japanese, Mongolian, Tibetan, and regional East Asian foodways." },
+        { "id": "southeast_asia", "label": "Southeast Asia", "description": "Mainland, maritime, island, river, tropical, and diaspora Southeast Asian foodways." },
+        { "id": "oceania_pacific", "label": "Oceania and Pacific", "description": "Pacific Islander, Aboriginal, Torres Strait Islander, Aotearoa, and regional oceanic foodways." },
+        { "id": "europe", "label": "Europe", "description": "Northern, Southern, Eastern, Western, Balkan, Baltic, and diaspora European foodways." },
+        { "id": "caribbean", "label": "Caribbean", "description": "Island, coastal, plantation-history, Indigenous, African, Asian, European, and diaspora Caribbean foodways." },
+        { "id": "central_america", "label": "Central America", "description": "Mesoamerican, isthmus, coastal, highland, and diaspora Central American foodways." },
+        { "id": "south_america", "label": "South America", "description": "Andean, Amazonian, Southern Cone, coastal, interior, and diaspora South American foodways." },
+        { "id": "north_america", "label": "North America", "description": "North American regional, Indigenous, immigrant, urban, rural, and diaspora foodways." },
+        { "id": "indigenous_first_peoples", "label": "Indigenous and First Peoples", "description": "Indigenous, First Nations, Native, Aboriginal, and local ancestral foodway contexts handled with care." },
+        { "id": "diaspora_global", "label": "Global diaspora", "description": "Migration, substitution, language shift, and local-ingredient adaptation contexts." },
+        { "id": "borderland_trade_routes", "label": "Borderland and trade routes", "description": "Foods shaped by borders, ports, trade routes, colonial contact, and shared ecologies." },
+        { "id": "arctic_subarctic", "label": "Arctic and subarctic", "description": "High-latitude, northern coastal, preservation, fish, game, berry, and cold-climate foodways." }
+      ]
+    },
     "nameSystems": {
       "label": "Name systems",
       "description": "Ways users remember or misremember food names across languages and scripts.",
