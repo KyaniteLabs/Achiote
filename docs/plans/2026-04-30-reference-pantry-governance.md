@@ -61,7 +61,7 @@ npm pack --dry-run
 
 ### Follow-up Fixture Batch
 
-The first implementation pass after this governance layer adds `src/data/reference-pantry-fixtures.json`: 18 approved typed `ResearchRecord` fixtures, one for every current cache-warming target. The bundled batch uses Wikidata structured labels/descriptions under the CC0 source policy and can be written with:
+The first implementation pass after this governance layer added `src/data/reference-pantry-fixtures.json`: 18 approved typed `ResearchRecord` fixtures, one for every initial cache-warming target. Expansion 1 then grew that bundle to 138 fixtures total by adding 120 balanced records across 20 culture-area buckets and six food-memory bands. The bundled batch uses Wikidata structured labels/descriptions under the CC0 source policy and can be written with:
 
 ```bash
 npm run reference:seeds -- --fixture bundled --cache-path ~/.cache/achiote/culture-cache.db

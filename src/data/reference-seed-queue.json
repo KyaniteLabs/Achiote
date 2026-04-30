@@ -1,13 +1,14 @@
 {
   "meta": {
-    "version": "0.1.0",
-    "description": "Global reference seed backlog for Achiote cache and reference hardening",
+    "version": "0.2.0",
+    "description": "Global reference seed backlog for Achiote cache and reference hardening, including the first balanced pantry expansion",
     "confidence": "Medium",
     "provenance": {
       "sourceType": "curated seed hypothesis",
       "notes": [
         "Seeds are research targets only and must be converted into sourced ResearchRecord entries before factual use.",
-        "This starter set spans food and drink forms so no single category dominates the cache plan."
+        "This starter set spans food and drink forms so no single category dominates the cache plan.",
+        "Expansion 1 adds one seed for each culture-area and food-memory band pair to reduce weak-model inference burden without claiming cultural completeness."
       ]
     }
   },
@@ -980,6 +981,5993 @@
         "sourceType": "curated seed hypothesis",
         "notes": [
           "Use for cold-climate preservation memories; do not add health claims or infer a specific Indigenous identity without user evidence and sources."
+        ]
+      }
+    },
+    {
+      "id": "exp1-north_africa-staple_starches-couscous",
+      "forms": [
+        "foodForms.grain_rice_noodle",
+        "foodForms.bread_flatbread"
+      ],
+      "regions": [
+        "macro:North Africa",
+        "North Africa"
+      ],
+      "nameSignals": [
+        "couscous"
+      ],
+      "mechanisms": [
+        "mechanisms.starch_texture",
+        "mechanisms.browning"
+      ],
+      "querySeeds": [
+        "couscous North Africa staple starches names aliases",
+        "couscous North Africa food memory sensory cues",
+        "couscous structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "couscous-staple-starches",
+          "region": "North Africa"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 staple starches slot for North Africa.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-north_africa-liquids_and_comfort-harira",
+      "forms": [
+        "foodForms.soup_broth",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort"
+      ],
+      "regions": [
+        "macro:North Africa",
+        "North Africa"
+      ],
+      "nameSignals": [
+        "harira"
+      ],
+      "mechanisms": [
+        "mechanisms.temperature",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "Harira North Africa liquids and comfort names aliases",
+        "harira North Africa food memory sensory cues",
+        "Harira structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "harira-liquids-and-comfort",
+          "region": "North Africa"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 liquids and comfort slot for North Africa.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-north_africa-acid_heat_condiment-harissa",
+      "forms": [
+        "foodForms.sauce_condiment",
+        "foodForms.pickle_ferment"
+      ],
+      "regions": [
+        "macro:North Africa",
+        "North Africa"
+      ],
+      "nameSignals": [
+        "harissa"
+      ],
+      "mechanisms": [
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "Harissa North Africa acid heat condiment names aliases",
+        "harissa North Africa food memory sensory cues",
+        "Harissa structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "harissa-acid-heat-condiment",
+          "region": "North Africa"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 acid heat condiment slot for North Africa.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-north_africa-protein_vegetable_mains-tajine",
+      "forms": [
+        "foodForms.protein_centered",
+        "foodForms.vegetable_fungi",
+        "foodForms.stew_braise"
+      ],
+      "regions": [
+        "macro:North Africa",
+        "North Africa"
+      ],
+      "nameSignals": [
+        "tagine",
+        "tajine"
+      ],
+      "mechanisms": [
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "tajine North Africa protein and vegetable mains names aliases",
+        "tagine North Africa food memory sensory cues",
+        "tajine structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "tajine-protein-vegetable-mains",
+          "region": "North Africa"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 protein and vegetable mains slot for North Africa.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-north_africa-handheld_social_foods-brik",
+      "forms": [
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "macro:North Africa",
+        "North Africa"
+      ],
+      "nameSignals": [
+        "brik"
+      ],
+      "mechanisms": [
+        "mechanisms.texture_contrast",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "Brik North Africa handheld and social foods names aliases",
+        "brik North Africa food memory sensory cues",
+        "Brik structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "brik-handheld-social-foods",
+          "region": "North Africa"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 handheld and social foods slot for North Africa.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-north_africa-sweet_ritual_foods-basbousa",
+      "forms": [
+        "foodForms.dessert",
+        "foodForms.confectionery",
+        "foodForms.ceremonial_holiday"
+      ],
+      "regions": [
+        "macro:North Africa",
+        "North Africa"
+      ],
+      "nameSignals": [
+        "basbousa"
+      ],
+      "mechanisms": [
+        "mechanisms.sugar_crystal",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "basbousa North Africa sweet and ritual foods names aliases",
+        "basbousa North Africa food memory sensory cues",
+        "basbousa structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "basbousa-sweet-ritual-foods",
+          "region": "North Africa"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 sweet and ritual foods slot for North Africa.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-west_africa-staple_starches-fufu",
+      "forms": [
+        "foodForms.grain_rice_noodle",
+        "foodForms.bread_flatbread"
+      ],
+      "regions": [
+        "macro:West Africa",
+        "West Africa"
+      ],
+      "nameSignals": [
+        "fufu"
+      ],
+      "mechanisms": [
+        "mechanisms.starch_texture",
+        "mechanisms.browning"
+      ],
+      "querySeeds": [
+        "fufu West Africa staple starches names aliases",
+        "fufu West Africa food memory sensory cues",
+        "fufu structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "fufu-staple-starches",
+          "region": "West Africa"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 staple starches slot for West Africa.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-west_africa-liquids_and_comfort-roselle-juice",
+      "forms": [
+        "foodForms.soup_broth",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort"
+      ],
+      "regions": [
+        "macro:West Africa",
+        "West Africa"
+      ],
+      "nameSignals": [
+        "bissap",
+        "roselle juice"
+      ],
+      "mechanisms": [
+        "mechanisms.temperature",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "roselle juice West Africa liquids and comfort names aliases",
+        "bissap West Africa food memory sensory cues",
+        "roselle juice structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "roselle-juice-liquids-and-comfort",
+          "region": "West Africa"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 liquids and comfort slot for West Africa.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-west_africa-acid_heat_condiment-shito",
+      "forms": [
+        "foodForms.sauce_condiment",
+        "foodForms.pickle_ferment"
+      ],
+      "regions": [
+        "macro:West Africa",
+        "West Africa"
+      ],
+      "nameSignals": [
+        "shito"
+      ],
+      "mechanisms": [
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "Shito West Africa acid heat condiment names aliases",
+        "shito West Africa food memory sensory cues",
+        "Shito structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "shito-acid-heat-condiment",
+          "region": "West Africa"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 acid heat condiment slot for West Africa.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-west_africa-protein_vegetable_mains-egusi-soup",
+      "forms": [
+        "foodForms.protein_centered",
+        "foodForms.vegetable_fungi",
+        "foodForms.stew_braise"
+      ],
+      "regions": [
+        "macro:West Africa",
+        "West Africa"
+      ],
+      "nameSignals": [
+        "egusi soup"
+      ],
+      "mechanisms": [
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "Egusi soup West Africa protein and vegetable mains names aliases",
+        "egusi soup West Africa food memory sensory cues",
+        "Egusi soup structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "egusi-soup-protein-vegetable-mains",
+          "region": "West Africa"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 protein and vegetable mains slot for West Africa.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-west_africa-handheld_social_foods-akara",
+      "forms": [
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "macro:West Africa",
+        "West Africa"
+      ],
+      "nameSignals": [
+        "akara"
+      ],
+      "mechanisms": [
+        "mechanisms.texture_contrast",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "akara West Africa handheld and social foods names aliases",
+        "akara West Africa food memory sensory cues",
+        "akara structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "akara-handheld-social-foods",
+          "region": "West Africa"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 handheld and social foods slot for West Africa.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-west_africa-sweet_ritual_foods-chin-chin",
+      "forms": [
+        "foodForms.dessert",
+        "foodForms.confectionery",
+        "foodForms.ceremonial_holiday"
+      ],
+      "regions": [
+        "macro:West Africa",
+        "West Africa"
+      ],
+      "nameSignals": [
+        "chin chin"
+      ],
+      "mechanisms": [
+        "mechanisms.sugar_crystal",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "Chin chin West Africa sweet and ritual foods names aliases",
+        "chin chin West Africa food memory sensory cues",
+        "Chin chin structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "chin-chin-sweet-ritual-foods",
+          "region": "West Africa"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 sweet and ritual foods slot for West Africa.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-central_africa-staple_starches-kwanga",
+      "forms": [
+        "foodForms.grain_rice_noodle",
+        "foodForms.bread_flatbread"
+      ],
+      "regions": [
+        "macro:Central Africa",
+        "Central Africa"
+      ],
+      "nameSignals": [
+        "chikwangue",
+        "kwanga"
+      ],
+      "mechanisms": [
+        "mechanisms.starch_texture",
+        "mechanisms.browning"
+      ],
+      "querySeeds": [
+        "kwanga Central Africa staple starches names aliases",
+        "chikwangue Central Africa food memory sensory cues",
+        "kwanga structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "kwanga-staple-starches",
+          "region": "Central Africa"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 staple starches slot for Central Africa.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-central_africa-liquids_and_comfort-palm-nut-soup",
+      "forms": [
+        "foodForms.soup_broth",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort"
+      ],
+      "regions": [
+        "macro:Central Africa",
+        "Central Africa"
+      ],
+      "nameSignals": [
+        "palm nut soup"
+      ],
+      "mechanisms": [
+        "mechanisms.temperature",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "palm nut soup Central Africa liquids and comfort names aliases",
+        "palm nut soup Central Africa food memory sensory cues",
+        "palm nut soup structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "palm-nut-soup-liquids-and-comfort",
+          "region": "Central Africa"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 liquids and comfort slot for Central Africa.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-central_africa-acid_heat_condiment-chicken-moambe",
+      "forms": [
+        "foodForms.sauce_condiment",
+        "foodForms.pickle_ferment"
+      ],
+      "regions": [
+        "macro:Central Africa",
+        "Central Africa"
+      ],
+      "nameSignals": [
+        "moambe",
+        "chicken moambe"
+      ],
+      "mechanisms": [
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "chicken moambe Central Africa acid heat condiment names aliases",
+        "moambe Central Africa food memory sensory cues",
+        "chicken moambe structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "chicken-moambe-acid-heat-condiment",
+          "region": "Central Africa"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 acid heat condiment slot for Central Africa.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-central_africa-protein_vegetable_mains-cassava",
+      "forms": [
+        "foodForms.protein_centered",
+        "foodForms.vegetable_fungi",
+        "foodForms.stew_braise"
+      ],
+      "regions": [
+        "macro:Central Africa",
+        "Central Africa"
+      ],
+      "nameSignals": [
+        "saka-saka",
+        "cassava"
+      ],
+      "mechanisms": [
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "cassava Central Africa protein and vegetable mains names aliases",
+        "saka-saka Central Africa food memory sensory cues",
+        "cassava structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "cassava-protein-vegetable-mains",
+          "region": "Central Africa"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 protein and vegetable mains slot for Central Africa.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-central_africa-handheld_social_foods-beignet",
+      "forms": [
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "macro:Central Africa",
+        "Central Africa"
+      ],
+      "nameSignals": [
+        "beignet"
+      ],
+      "mechanisms": [
+        "mechanisms.texture_contrast",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "beignet Central Africa handheld and social foods names aliases",
+        "beignet Central Africa food memory sensory cues",
+        "beignet structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "beignet-handheld-social-foods",
+          "region": "Central Africa"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 handheld and social foods slot for Central Africa.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-central_africa-sweet_ritual_foods-beignet",
+      "forms": [
+        "foodForms.dessert",
+        "foodForms.confectionery",
+        "foodForms.ceremonial_holiday"
+      ],
+      "regions": [
+        "macro:Central Africa",
+        "Central Africa"
+      ],
+      "nameSignals": [
+        "mikate",
+        "beignet"
+      ],
+      "mechanisms": [
+        "mechanisms.sugar_crystal",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "beignet Central Africa sweet and ritual foods names aliases",
+        "mikate Central Africa food memory sensory cues",
+        "beignet structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "beignet-sweet-ritual-foods",
+          "region": "Central Africa"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 sweet and ritual foods slot for Central Africa.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-east_africa-staple_starches-ugali",
+      "forms": [
+        "foodForms.grain_rice_noodle",
+        "foodForms.bread_flatbread"
+      ],
+      "regions": [
+        "macro:East Africa",
+        "East Africa"
+      ],
+      "nameSignals": [
+        "ugali"
+      ],
+      "mechanisms": [
+        "mechanisms.starch_texture",
+        "mechanisms.browning"
+      ],
+      "querySeeds": [
+        "ugali East Africa staple starches names aliases",
+        "ugali East Africa food memory sensory cues",
+        "ugali structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "ugali-staple-starches",
+          "region": "East Africa"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.east_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 staple starches slot for East Africa.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-east_africa-liquids_and_comfort-chair",
+      "forms": [
+        "foodForms.soup_broth",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort"
+      ],
+      "regions": [
+        "macro:East Africa",
+        "East Africa"
+      ],
+      "nameSignals": [
+        "chai",
+        "chair"
+      ],
+      "mechanisms": [
+        "mechanisms.temperature",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "chair East Africa liquids and comfort names aliases",
+        "chai East Africa food memory sensory cues",
+        "chair structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "chair-liquids-and-comfort",
+          "region": "East Africa"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.east_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 liquids and comfort slot for East Africa.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-east_africa-acid_heat_condiment-kachumbari",
+      "forms": [
+        "foodForms.sauce_condiment",
+        "foodForms.pickle_ferment"
+      ],
+      "regions": [
+        "macro:East Africa",
+        "East Africa"
+      ],
+      "nameSignals": [
+        "kachumbari"
+      ],
+      "mechanisms": [
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "Kachumbari East Africa acid heat condiment names aliases",
+        "kachumbari East Africa food memory sensory cues",
+        "Kachumbari structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "kachumbari-acid-heat-condiment",
+          "region": "East Africa"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.east_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 acid heat condiment slot for East Africa.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-east_africa-protein_vegetable_mains-doro-wat",
+      "forms": [
+        "foodForms.protein_centered",
+        "foodForms.vegetable_fungi",
+        "foodForms.stew_braise"
+      ],
+      "regions": [
+        "macro:East Africa",
+        "East Africa"
+      ],
+      "nameSignals": [
+        "doro wat"
+      ],
+      "mechanisms": [
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "doro wat East Africa protein and vegetable mains names aliases",
+        "doro wat East Africa food memory sensory cues",
+        "doro wat structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "doro-wat-protein-vegetable-mains",
+          "region": "East Africa"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.east_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 protein and vegetable mains slot for East Africa.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-east_africa-handheld_social_foods-mandazi",
+      "forms": [
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "macro:East Africa",
+        "East Africa"
+      ],
+      "nameSignals": [
+        "mandazi"
+      ],
+      "mechanisms": [
+        "mechanisms.texture_contrast",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "Mandazi East Africa handheld and social foods names aliases",
+        "mandazi East Africa food memory sensory cues",
+        "Mandazi structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "mandazi-handheld-social-foods",
+          "region": "East Africa"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.east_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 handheld and social foods slot for East Africa.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-east_africa-sweet_ritual_foods-halva",
+      "forms": [
+        "foodForms.dessert",
+        "foodForms.confectionery",
+        "foodForms.ceremonial_holiday"
+      ],
+      "regions": [
+        "macro:East Africa",
+        "East Africa"
+      ],
+      "nameSignals": [
+        "halva"
+      ],
+      "mechanisms": [
+        "mechanisms.sugar_crystal",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "halva East Africa sweet and ritual foods names aliases",
+        "halva East Africa food memory sensory cues",
+        "halva structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "halva-sweet-ritual-foods",
+          "region": "East Africa"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.east_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 sweet and ritual foods slot for East Africa.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-southern_africa-staple_starches-mielie-meal",
+      "forms": [
+        "foodForms.grain_rice_noodle",
+        "foodForms.bread_flatbread"
+      ],
+      "regions": [
+        "macro:Southern Africa",
+        "Southern Africa"
+      ],
+      "nameSignals": [
+        "mielie meal",
+        "Mielie-meal"
+      ],
+      "mechanisms": [
+        "mechanisms.starch_texture",
+        "mechanisms.browning"
+      ],
+      "querySeeds": [
+        "Mielie-meal Southern Africa staple starches names aliases",
+        "mielie meal Southern Africa food memory sensory cues",
+        "Mielie-meal structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "mielie-meal-staple-starches",
+          "region": "Southern Africa"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.southern_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 staple starches slot for Southern Africa.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-southern_africa-liquids_and_comfort-mageu",
+      "forms": [
+        "foodForms.soup_broth",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort"
+      ],
+      "regions": [
+        "macro:Southern Africa",
+        "Southern Africa"
+      ],
+      "nameSignals": [
+        "mageu"
+      ],
+      "mechanisms": [
+        "mechanisms.temperature",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "Mageu Southern Africa liquids and comfort names aliases",
+        "mageu Southern Africa food memory sensory cues",
+        "Mageu structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "mageu-liquids-and-comfort",
+          "region": "Southern Africa"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.southern_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 liquids and comfort slot for Southern Africa.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-southern_africa-acid_heat_condiment-chakalaka",
+      "forms": [
+        "foodForms.sauce_condiment",
+        "foodForms.pickle_ferment"
+      ],
+      "regions": [
+        "macro:Southern Africa",
+        "Southern Africa"
+      ],
+      "nameSignals": [
+        "chakalaka"
+      ],
+      "mechanisms": [
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "chakalaka Southern Africa acid heat condiment names aliases",
+        "chakalaka Southern Africa food memory sensory cues",
+        "chakalaka structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "chakalaka-acid-heat-condiment",
+          "region": "Southern Africa"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.southern_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 acid heat condiment slot for Southern Africa.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-southern_africa-protein_vegetable_mains-bobotie",
+      "forms": [
+        "foodForms.protein_centered",
+        "foodForms.vegetable_fungi",
+        "foodForms.stew_braise"
+      ],
+      "regions": [
+        "macro:Southern Africa",
+        "Southern Africa"
+      ],
+      "nameSignals": [
+        "bobotie"
+      ],
+      "mechanisms": [
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "bobotie Southern Africa protein and vegetable mains names aliases",
+        "bobotie Southern Africa food memory sensory cues",
+        "bobotie structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "bobotie-protein-vegetable-mains",
+          "region": "Southern Africa"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.southern_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 protein and vegetable mains slot for Southern Africa.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-southern_africa-handheld_social_foods-bunny-chow",
+      "forms": [
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "macro:Southern Africa",
+        "Southern Africa"
+      ],
+      "nameSignals": [
+        "bunny chow"
+      ],
+      "mechanisms": [
+        "mechanisms.texture_contrast",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "bunny chow Southern Africa handheld and social foods names aliases",
+        "bunny chow Southern Africa food memory sensory cues",
+        "bunny chow structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "bunny-chow-handheld-social-foods",
+          "region": "Southern Africa"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.southern_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 handheld and social foods slot for Southern Africa.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-southern_africa-sweet_ritual_foods-malva-pudding",
+      "forms": [
+        "foodForms.dessert",
+        "foodForms.confectionery",
+        "foodForms.ceremonial_holiday"
+      ],
+      "regions": [
+        "macro:Southern Africa",
+        "Southern Africa"
+      ],
+      "nameSignals": [
+        "malva pudding"
+      ],
+      "mechanisms": [
+        "mechanisms.sugar_crystal",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "Malva pudding Southern Africa sweet and ritual foods names aliases",
+        "malva pudding Southern Africa food memory sensory cues",
+        "Malva pudding structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "malva-pudding-sweet-ritual-foods",
+          "region": "Southern Africa"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.southern_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 sweet and ritual foods slot for Southern Africa.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-middle_east_west_asia-staple_starches-pita",
+      "forms": [
+        "foodForms.grain_rice_noodle",
+        "foodForms.bread_flatbread"
+      ],
+      "regions": [
+        "macro:Middle East and West Asia",
+        "Middle East and West Asia"
+      ],
+      "nameSignals": [
+        "pita"
+      ],
+      "mechanisms": [
+        "mechanisms.starch_texture",
+        "mechanisms.browning"
+      ],
+      "querySeeds": [
+        "pita Middle East and West Asia staple starches names aliases",
+        "pita Middle East and West Asia food memory sensory cues",
+        "pita structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "pita-staple-starches",
+          "region": "Middle East and West Asia"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 staple starches slot for Middle East and West Asia.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-middle_east_west_asia-liquids_and_comfort-ayran",
+      "forms": [
+        "foodForms.soup_broth",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort"
+      ],
+      "regions": [
+        "macro:Middle East and West Asia",
+        "Middle East and West Asia"
+      ],
+      "nameSignals": [
+        "ayran"
+      ],
+      "mechanisms": [
+        "mechanisms.temperature",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "ayran Middle East and West Asia liquids and comfort names aliases",
+        "ayran Middle East and West Asia food memory sensory cues",
+        "ayran structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "ayran-liquids-and-comfort",
+          "region": "Middle East and West Asia"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 liquids and comfort slot for Middle East and West Asia.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-middle_east_west_asia-acid_heat_condiment-toum",
+      "forms": [
+        "foodForms.sauce_condiment",
+        "foodForms.pickle_ferment"
+      ],
+      "regions": [
+        "macro:Middle East and West Asia",
+        "Middle East and West Asia"
+      ],
+      "nameSignals": [
+        "toum"
+      ],
+      "mechanisms": [
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "toum Middle East and West Asia acid heat condiment names aliases",
+        "toum Middle East and West Asia food memory sensory cues",
+        "toum structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "toum-acid-heat-condiment",
+          "region": "Middle East and West Asia"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 acid heat condiment slot for Middle East and West Asia.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-middle_east_west_asia-protein_vegetable_mains-doner-kebab",
+      "forms": [
+        "foodForms.protein_centered",
+        "foodForms.vegetable_fungi",
+        "foodForms.stew_braise"
+      ],
+      "regions": [
+        "macro:Middle East and West Asia",
+        "Middle East and West Asia"
+      ],
+      "nameSignals": [
+        "kebab",
+        "doner kebab"
+      ],
+      "mechanisms": [
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "doner kebab Middle East and West Asia protein and vegetable mains names aliases",
+        "kebab Middle East and West Asia food memory sensory cues",
+        "doner kebab structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "doner-kebab-protein-vegetable-mains",
+          "region": "Middle East and West Asia"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 protein and vegetable mains slot for Middle East and West Asia.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-middle_east_west_asia-handheld_social_foods-kibbeh",
+      "forms": [
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "macro:Middle East and West Asia",
+        "Middle East and West Asia"
+      ],
+      "nameSignals": [
+        "kibbeh"
+      ],
+      "mechanisms": [
+        "mechanisms.texture_contrast",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "kibbeh Middle East and West Asia handheld and social foods names aliases",
+        "kibbeh Middle East and West Asia food memory sensory cues",
+        "kibbeh structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "kibbeh-handheld-social-foods",
+          "region": "Middle East and West Asia"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 handheld and social foods slot for Middle East and West Asia.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-middle_east_west_asia-sweet_ritual_foods-baklava",
+      "forms": [
+        "foodForms.dessert",
+        "foodForms.confectionery",
+        "foodForms.ceremonial_holiday"
+      ],
+      "regions": [
+        "macro:Middle East and West Asia",
+        "Middle East and West Asia"
+      ],
+      "nameSignals": [
+        "baklava"
+      ],
+      "mechanisms": [
+        "mechanisms.sugar_crystal",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "baklava Middle East and West Asia sweet and ritual foods names aliases",
+        "baklava Middle East and West Asia food memory sensory cues",
+        "baklava structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "baklava-sweet-ritual-foods",
+          "region": "Middle East and West Asia"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 sweet and ritual foods slot for Middle East and West Asia.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-central_asia-staple_starches-naan",
+      "forms": [
+        "foodForms.grain_rice_noodle",
+        "foodForms.bread_flatbread"
+      ],
+      "regions": [
+        "macro:Central Asia",
+        "Central Asia"
+      ],
+      "nameSignals": [
+        "naan"
+      ],
+      "mechanisms": [
+        "mechanisms.starch_texture",
+        "mechanisms.browning"
+      ],
+      "querySeeds": [
+        "naan Central Asia staple starches names aliases",
+        "naan Central Asia food memory sensory cues",
+        "naan structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "naan-staple-starches",
+          "region": "Central Asia"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 staple starches slot for Central Asia.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-central_asia-liquids_and_comfort-kumis",
+      "forms": [
+        "foodForms.soup_broth",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort"
+      ],
+      "regions": [
+        "macro:Central Asia",
+        "Central Asia"
+      ],
+      "nameSignals": [
+        "kumis"
+      ],
+      "mechanisms": [
+        "mechanisms.temperature",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "kumis Central Asia liquids and comfort names aliases",
+        "kumis Central Asia food memory sensory cues",
+        "kumis structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "kumis-liquids-and-comfort",
+          "region": "Central Asia"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 liquids and comfort slot for Central Asia.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-central_asia-acid_heat_condiment-ac-ka",
+      "forms": [
+        "foodForms.sauce_condiment",
+        "foodForms.pickle_ferment"
+      ],
+      "regions": [
+        "macro:Central Asia",
+        "Central Asia"
+      ],
+      "nameSignals": [
+        "adjika",
+        "acıka"
+      ],
+      "mechanisms": [
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "acıka Central Asia acid heat condiment names aliases",
+        "adjika Central Asia food memory sensory cues",
+        "acıka structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "ac-ka-acid-heat-condiment",
+          "region": "Central Asia"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 acid heat condiment slot for Central Asia.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-central_asia-protein_vegetable_mains-besbarmaq",
+      "forms": [
+        "foodForms.protein_centered",
+        "foodForms.vegetable_fungi",
+        "foodForms.stew_braise"
+      ],
+      "regions": [
+        "macro:Central Asia",
+        "Central Asia"
+      ],
+      "nameSignals": [
+        "beshbarmak",
+        "beşbarmaq"
+      ],
+      "mechanisms": [
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "beşbarmaq Central Asia protein and vegetable mains names aliases",
+        "beshbarmak Central Asia food memory sensory cues",
+        "beşbarmaq structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "besbarmaq-protein-vegetable-mains",
+          "region": "Central Asia"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 protein and vegetable mains slot for Central Asia.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-central_asia-handheld_social_foods-turkish-mant",
+      "forms": [
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "macro:Central Asia",
+        "Central Asia"
+      ],
+      "nameSignals": [
+        "Turkish manti",
+        "Turkish mantı"
+      ],
+      "mechanisms": [
+        "mechanisms.texture_contrast",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "Turkish mantı Central Asia handheld and social foods names aliases",
+        "Turkish manti Central Asia food memory sensory cues",
+        "Turkish mantı structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "turkish-mant-handheld-social-foods",
+          "region": "Central Asia"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 handheld and social foods slot for Central Asia.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-central_asia-sweet_ritual_foods-cakcak",
+      "forms": [
+        "foodForms.dessert",
+        "foodForms.confectionery",
+        "foodForms.ceremonial_holiday"
+      ],
+      "regions": [
+        "macro:Central Asia",
+        "Central Asia"
+      ],
+      "nameSignals": [
+        "chak-chak",
+        "çäkçäk"
+      ],
+      "mechanisms": [
+        "mechanisms.sugar_crystal",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "çäkçäk Central Asia sweet and ritual foods names aliases",
+        "chak-chak Central Asia food memory sensory cues",
+        "çäkçäk structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "cakcak-sweet-ritual-foods",
+          "region": "Central Asia"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 sweet and ritual foods slot for Central Asia.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-south_asia-staple_starches-chapati",
+      "forms": [
+        "foodForms.grain_rice_noodle",
+        "foodForms.bread_flatbread"
+      ],
+      "regions": [
+        "macro:South Asia",
+        "South Asia"
+      ],
+      "nameSignals": [
+        "chapati"
+      ],
+      "mechanisms": [
+        "mechanisms.starch_texture",
+        "mechanisms.browning"
+      ],
+      "querySeeds": [
+        "chapati South Asia staple starches names aliases",
+        "chapati South Asia food memory sensory cues",
+        "chapati structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "chapati-staple-starches",
+          "region": "South Asia"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 staple starches slot for South Asia.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-south_asia-liquids_and_comfort-lassi",
+      "forms": [
+        "foodForms.soup_broth",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort"
+      ],
+      "regions": [
+        "macro:South Asia",
+        "South Asia"
+      ],
+      "nameSignals": [
+        "lassi"
+      ],
+      "mechanisms": [
+        "mechanisms.temperature",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "lassi South Asia liquids and comfort names aliases",
+        "lassi South Asia food memory sensory cues",
+        "lassi structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "lassi-liquids-and-comfort",
+          "region": "South Asia"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 liquids and comfort slot for South Asia.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-south_asia-acid_heat_condiment-chutney",
+      "forms": [
+        "foodForms.sauce_condiment",
+        "foodForms.pickle_ferment"
+      ],
+      "regions": [
+        "macro:South Asia",
+        "South Asia"
+      ],
+      "nameSignals": [
+        "chutney"
+      ],
+      "mechanisms": [
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "chutney South Asia acid heat condiment names aliases",
+        "chutney South Asia food memory sensory cues",
+        "chutney structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "chutney-acid-heat-condiment",
+          "region": "South Asia"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 acid heat condiment slot for South Asia.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-south_asia-protein_vegetable_mains-dal",
+      "forms": [
+        "foodForms.protein_centered",
+        "foodForms.vegetable_fungi",
+        "foodForms.stew_braise"
+      ],
+      "regions": [
+        "macro:South Asia",
+        "South Asia"
+      ],
+      "nameSignals": [
+        "dal",
+        "daal"
+      ],
+      "mechanisms": [
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "dal South Asia protein and vegetable mains names aliases",
+        "dal South Asia food memory sensory cues",
+        "dal structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "dal-protein-vegetable-mains",
+          "region": "South Asia"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 protein and vegetable mains slot for South Asia.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-south_asia-handheld_social_foods-momo",
+      "forms": [
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "macro:South Asia",
+        "South Asia"
+      ],
+      "nameSignals": [
+        "momo food",
+        "momo"
+      ],
+      "mechanisms": [
+        "mechanisms.texture_contrast",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "momo South Asia handheld and social foods names aliases",
+        "momo food South Asia food memory sensory cues",
+        "momo structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "momo-handheld-social-foods",
+          "region": "South Asia"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 handheld and social foods slot for South Asia.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-south_asia-sweet_ritual_foods-gulab-jamun",
+      "forms": [
+        "foodForms.dessert",
+        "foodForms.confectionery",
+        "foodForms.ceremonial_holiday"
+      ],
+      "regions": [
+        "macro:South Asia",
+        "South Asia"
+      ],
+      "nameSignals": [
+        "gulab jamun"
+      ],
+      "mechanisms": [
+        "mechanisms.sugar_crystal",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "gulab jamun South Asia sweet and ritual foods names aliases",
+        "gulab jamun South Asia food memory sensory cues",
+        "gulab jamun structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "gulab-jamun-sweet-ritual-foods",
+          "region": "South Asia"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 sweet and ritual foods slot for South Asia.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-east_asia-staple_starches-congee",
+      "forms": [
+        "foodForms.grain_rice_noodle",
+        "foodForms.bread_flatbread"
+      ],
+      "regions": [
+        "macro:East Asia",
+        "East Asia"
+      ],
+      "nameSignals": [
+        "congee"
+      ],
+      "mechanisms": [
+        "mechanisms.starch_texture",
+        "mechanisms.browning"
+      ],
+      "querySeeds": [
+        "congee East Asia staple starches names aliases",
+        "congee East Asia food memory sensory cues",
+        "congee structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "congee-staple-starches",
+          "region": "East Asia"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 staple starches slot for East Asia.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-east_asia-liquids_and_comfort-green-tea",
+      "forms": [
+        "foodForms.soup_broth",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort"
+      ],
+      "regions": [
+        "macro:East Asia",
+        "East Asia"
+      ],
+      "nameSignals": [
+        "green tea"
+      ],
+      "mechanisms": [
+        "mechanisms.temperature",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "green tea East Asia liquids and comfort names aliases",
+        "green tea East Asia food memory sensory cues",
+        "green tea structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "green-tea-liquids-and-comfort",
+          "region": "East Asia"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 liquids and comfort slot for East Asia.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-east_asia-acid_heat_condiment-kimchi",
+      "forms": [
+        "foodForms.sauce_condiment",
+        "foodForms.pickle_ferment"
+      ],
+      "regions": [
+        "macro:East Asia",
+        "East Asia"
+      ],
+      "nameSignals": [
+        "kimchi"
+      ],
+      "mechanisms": [
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "Kimchi East Asia acid heat condiment names aliases",
+        "kimchi East Asia food memory sensory cues",
+        "Kimchi structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "kimchi-acid-heat-condiment",
+          "region": "East Asia"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 acid heat condiment slot for East Asia.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-east_asia-protein_vegetable_mains-mapo-doufu",
+      "forms": [
+        "foodForms.protein_centered",
+        "foodForms.vegetable_fungi",
+        "foodForms.stew_braise"
+      ],
+      "regions": [
+        "macro:East Asia",
+        "East Asia"
+      ],
+      "nameSignals": [
+        "mapo tofu",
+        "mapo doufu"
+      ],
+      "mechanisms": [
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "mapo doufu East Asia protein and vegetable mains names aliases",
+        "mapo tofu East Asia food memory sensory cues",
+        "mapo doufu structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "mapo-doufu-protein-vegetable-mains",
+          "region": "East Asia"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 protein and vegetable mains slot for East Asia.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-east_asia-handheld_social_foods-gyoza",
+      "forms": [
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "macro:East Asia",
+        "East Asia"
+      ],
+      "nameSignals": [
+        "gyoza"
+      ],
+      "mechanisms": [
+        "mechanisms.texture_contrast",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "gyoza East Asia handheld and social foods names aliases",
+        "gyoza East Asia food memory sensory cues",
+        "gyoza structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "gyoza-handheld-social-foods",
+          "region": "East Asia"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 handheld and social foods slot for East Asia.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-east_asia-sweet_ritual_foods-mochi",
+      "forms": [
+        "foodForms.dessert",
+        "foodForms.confectionery",
+        "foodForms.ceremonial_holiday"
+      ],
+      "regions": [
+        "macro:East Asia",
+        "East Asia"
+      ],
+      "nameSignals": [
+        "mochi"
+      ],
+      "mechanisms": [
+        "mechanisms.sugar_crystal",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "mochi East Asia sweet and ritual foods names aliases",
+        "mochi East Asia food memory sensory cues",
+        "mochi structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "mochi-sweet-ritual-foods",
+          "region": "East Asia"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 sweet and ritual foods slot for East Asia.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-southeast_asia-staple_starches-nasi-lemak",
+      "forms": [
+        "foodForms.grain_rice_noodle",
+        "foodForms.bread_flatbread"
+      ],
+      "regions": [
+        "macro:Southeast Asia",
+        "Southeast Asia"
+      ],
+      "nameSignals": [
+        "nasi lemak"
+      ],
+      "mechanisms": [
+        "mechanisms.starch_texture",
+        "mechanisms.browning"
+      ],
+      "querySeeds": [
+        "Nasi lemak Southeast Asia staple starches names aliases",
+        "nasi lemak Southeast Asia food memory sensory cues",
+        "Nasi lemak structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "nasi-lemak-staple-starches",
+          "region": "Southeast Asia"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 staple starches slot for Southeast Asia.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-southeast_asia-liquids_and_comfort-laksa",
+      "forms": [
+        "foodForms.soup_broth",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort"
+      ],
+      "regions": [
+        "macro:Southeast Asia",
+        "Southeast Asia"
+      ],
+      "nameSignals": [
+        "laksa"
+      ],
+      "mechanisms": [
+        "mechanisms.temperature",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "laksa Southeast Asia liquids and comfort names aliases",
+        "laksa Southeast Asia food memory sensory cues",
+        "laksa structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "laksa-liquids-and-comfort",
+          "region": "Southeast Asia"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 liquids and comfort slot for Southeast Asia.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-southeast_asia-acid_heat_condiment-sambal",
+      "forms": [
+        "foodForms.sauce_condiment",
+        "foodForms.pickle_ferment"
+      ],
+      "regions": [
+        "macro:Southeast Asia",
+        "Southeast Asia"
+      ],
+      "nameSignals": [
+        "sambal"
+      ],
+      "mechanisms": [
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "sambal Southeast Asia acid heat condiment names aliases",
+        "sambal Southeast Asia food memory sensory cues",
+        "sambal structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "sambal-acid-heat-condiment",
+          "region": "Southeast Asia"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 acid heat condiment slot for Southeast Asia.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-southeast_asia-protein_vegetable_mains-rendang",
+      "forms": [
+        "foodForms.protein_centered",
+        "foodForms.vegetable_fungi",
+        "foodForms.stew_braise"
+      ],
+      "regions": [
+        "macro:Southeast Asia",
+        "Southeast Asia"
+      ],
+      "nameSignals": [
+        "rendang"
+      ],
+      "mechanisms": [
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "rendang Southeast Asia protein and vegetable mains names aliases",
+        "rendang Southeast Asia food memory sensory cues",
+        "rendang structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "rendang-protein-vegetable-mains",
+          "region": "Southeast Asia"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 protein and vegetable mains slot for Southeast Asia.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-southeast_asia-handheld_social_foods-popiah",
+      "forms": [
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "macro:Southeast Asia",
+        "Southeast Asia"
+      ],
+      "nameSignals": [
+        "lumpia",
+        "popiah"
+      ],
+      "mechanisms": [
+        "mechanisms.texture_contrast",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "popiah Southeast Asia handheld and social foods names aliases",
+        "lumpia Southeast Asia food memory sensory cues",
+        "popiah structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "popiah-handheld-social-foods",
+          "region": "Southeast Asia"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 handheld and social foods slot for Southeast Asia.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-southeast_asia-sweet_ritual_foods-halo-halo",
+      "forms": [
+        "foodForms.dessert",
+        "foodForms.confectionery",
+        "foodForms.ceremonial_holiday"
+      ],
+      "regions": [
+        "macro:Southeast Asia",
+        "Southeast Asia"
+      ],
+      "nameSignals": [
+        "halo-halo"
+      ],
+      "mechanisms": [
+        "mechanisms.sugar_crystal",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "Halo-halo Southeast Asia sweet and ritual foods names aliases",
+        "halo-halo Southeast Asia food memory sensory cues",
+        "Halo-halo structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "halo-halo-sweet-ritual-foods",
+          "region": "Southeast Asia"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 sweet and ritual foods slot for Southeast Asia.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-oceania_pacific-staple_starches-colocasia-esculenta",
+      "forms": [
+        "foodForms.grain_rice_noodle",
+        "foodForms.bread_flatbread"
+      ],
+      "regions": [
+        "macro:Oceania and Pacific",
+        "Oceania and Pacific"
+      ],
+      "nameSignals": [
+        "taro root",
+        "Colocasia esculenta"
+      ],
+      "mechanisms": [
+        "mechanisms.starch_texture",
+        "mechanisms.browning"
+      ],
+      "querySeeds": [
+        "Colocasia esculenta Oceania and Pacific staple starches names aliases",
+        "taro root Oceania and Pacific food memory sensory cues",
+        "Colocasia esculenta structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "colocasia-esculenta-staple-starches",
+          "region": "Oceania and Pacific"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.oceania_pacific",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 staple starches slot for Oceania and Pacific.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-oceania_pacific-liquids_and_comfort-kava-drinking-as-practised-by-the-papuans-and-polynesians",
+      "forms": [
+        "foodForms.soup_broth",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort"
+      ],
+      "regions": [
+        "macro:Oceania and Pacific",
+        "Oceania and Pacific"
+      ],
+      "nameSignals": [
+        "kava drink",
+        "Kava drinking as practised by the Papuans and Polynesians"
+      ],
+      "mechanisms": [
+        "mechanisms.temperature",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "Kava drinking as practised by the Papuans and Polynesians Oceania and Pacific liquids and comfort names aliases",
+        "kava drink Oceania and Pacific food memory sensory cues",
+        "Kava drinking as practised by the Papuans and Polynesians structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "kava-drinking-as-practised-by-the-papuans-and-polynesians-liquids-and-comfort",
+          "region": "Oceania and Pacific"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.oceania_pacific",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 liquids and comfort slot for Oceania and Pacific.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-oceania_pacific-acid_heat_condiment-ota-ika",
+      "forms": [
+        "foodForms.sauce_condiment",
+        "foodForms.pickle_ferment"
+      ],
+      "regions": [
+        "macro:Oceania and Pacific",
+        "Oceania and Pacific"
+      ],
+      "nameSignals": [
+        "ota ika",
+        "'Ota 'ika"
+      ],
+      "mechanisms": [
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "'Ota 'ika Oceania and Pacific acid heat condiment names aliases",
+        "ota ika Oceania and Pacific food memory sensory cues",
+        "'Ota 'ika structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "ota-ika-acid-heat-condiment",
+          "region": "Oceania and Pacific"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.oceania_pacific",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 acid heat condiment slot for Oceania and Pacific.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-oceania_pacific-protein_vegetable_mains-lomi-salmon",
+      "forms": [
+        "foodForms.protein_centered",
+        "foodForms.vegetable_fungi",
+        "foodForms.stew_braise"
+      ],
+      "regions": [
+        "macro:Oceania and Pacific",
+        "Oceania and Pacific"
+      ],
+      "nameSignals": [
+        "lomi salmon"
+      ],
+      "mechanisms": [
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "Lomi salmon Oceania and Pacific protein and vegetable mains names aliases",
+        "lomi salmon Oceania and Pacific food memory sensory cues",
+        "Lomi salmon structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "lomi-salmon-protein-vegetable-mains",
+          "region": "Oceania and Pacific"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.oceania_pacific",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 protein and vegetable mains slot for Oceania and Pacific.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-oceania_pacific-handheld_social_foods-meat-pie",
+      "forms": [
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "macro:Oceania and Pacific",
+        "Oceania and Pacific"
+      ],
+      "nameSignals": [
+        "meat pie"
+      ],
+      "mechanisms": [
+        "mechanisms.texture_contrast",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "meat pie Oceania and Pacific handheld and social foods names aliases",
+        "meat pie Oceania and Pacific food memory sensory cues",
+        "meat pie structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "meat-pie-handheld-social-foods",
+          "region": "Oceania and Pacific"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.oceania_pacific",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 handheld and social foods slot for Oceania and Pacific.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-oceania_pacific-sweet_ritual_foods-pavlova",
+      "forms": [
+        "foodForms.dessert",
+        "foodForms.confectionery",
+        "foodForms.ceremonial_holiday"
+      ],
+      "regions": [
+        "macro:Oceania and Pacific",
+        "Oceania and Pacific"
+      ],
+      "nameSignals": [
+        "pavlova"
+      ],
+      "mechanisms": [
+        "mechanisms.sugar_crystal",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "pavlova Oceania and Pacific sweet and ritual foods names aliases",
+        "pavlova Oceania and Pacific food memory sensory cues",
+        "pavlova structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "pavlova-sweet-ritual-foods",
+          "region": "Oceania and Pacific"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.oceania_pacific",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 sweet and ritual foods slot for Oceania and Pacific.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-europe-staple_starches-polenta",
+      "forms": [
+        "foodForms.grain_rice_noodle",
+        "foodForms.bread_flatbread"
+      ],
+      "regions": [
+        "macro:Europe",
+        "Europe"
+      ],
+      "nameSignals": [
+        "polenta"
+      ],
+      "mechanisms": [
+        "mechanisms.starch_texture",
+        "mechanisms.browning"
+      ],
+      "querySeeds": [
+        "polenta Europe staple starches names aliases",
+        "polenta Europe food memory sensory cues",
+        "polenta structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "polenta-staple-starches",
+          "region": "Europe"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.europe",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 staple starches slot for Europe.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-europe-liquids_and_comfort-borscht",
+      "forms": [
+        "foodForms.soup_broth",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort"
+      ],
+      "regions": [
+        "macro:Europe",
+        "Europe"
+      ],
+      "nameSignals": [
+        "borscht"
+      ],
+      "mechanisms": [
+        "mechanisms.temperature",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "borscht Europe liquids and comfort names aliases",
+        "borscht Europe food memory sensory cues",
+        "borscht structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "borscht-liquids-and-comfort",
+          "region": "Europe"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.europe",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 liquids and comfort slot for Europe.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-europe-acid_heat_condiment-mustard",
+      "forms": [
+        "foodForms.sauce_condiment",
+        "foodForms.pickle_ferment"
+      ],
+      "regions": [
+        "macro:Europe",
+        "Europe"
+      ],
+      "nameSignals": [
+        "mustard condiment",
+        "mustard"
+      ],
+      "mechanisms": [
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "mustard Europe acid heat condiment names aliases",
+        "mustard condiment Europe food memory sensory cues",
+        "mustard structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "mustard-acid-heat-condiment",
+          "region": "Europe"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.europe",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 acid heat condiment slot for Europe.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-europe-protein_vegetable_mains-goulash",
+      "forms": [
+        "foodForms.protein_centered",
+        "foodForms.vegetable_fungi",
+        "foodForms.stew_braise"
+      ],
+      "regions": [
+        "macro:Europe",
+        "Europe"
+      ],
+      "nameSignals": [
+        "goulash"
+      ],
+      "mechanisms": [
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "goulash Europe protein and vegetable mains names aliases",
+        "goulash Europe food memory sensory cues",
+        "goulash structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "goulash-protein-vegetable-mains",
+          "region": "Europe"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.europe",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 protein and vegetable mains slot for Europe.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-europe-handheld_social_foods-pierogi",
+      "forms": [
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "macro:Europe",
+        "Europe"
+      ],
+      "nameSignals": [
+        "pierogi"
+      ],
+      "mechanisms": [
+        "mechanisms.texture_contrast",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "pierogi Europe handheld and social foods names aliases",
+        "pierogi Europe food memory sensory cues",
+        "pierogi structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "pierogi-handheld-social-foods",
+          "region": "Europe"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.europe",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 handheld and social foods slot for Europe.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-europe-sweet_ritual_foods-panettone",
+      "forms": [
+        "foodForms.dessert",
+        "foodForms.confectionery",
+        "foodForms.ceremonial_holiday"
+      ],
+      "regions": [
+        "macro:Europe",
+        "Europe"
+      ],
+      "nameSignals": [
+        "panettone"
+      ],
+      "mechanisms": [
+        "mechanisms.sugar_crystal",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "panettone Europe sweet and ritual foods names aliases",
+        "panettone Europe food memory sensory cues",
+        "panettone structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "panettone-sweet-ritual-foods",
+          "region": "Europe"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.europe",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 sweet and ritual foods slot for Europe.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-caribbean-staple_starches-bammy",
+      "forms": [
+        "foodForms.grain_rice_noodle",
+        "foodForms.bread_flatbread"
+      ],
+      "regions": [
+        "macro:Caribbean",
+        "Caribbean"
+      ],
+      "nameSignals": [
+        "bammy"
+      ],
+      "mechanisms": [
+        "mechanisms.starch_texture",
+        "mechanisms.browning"
+      ],
+      "querySeeds": [
+        "bammy Caribbean staple starches names aliases",
+        "bammy Caribbean food memory sensory cues",
+        "bammy structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "bammy-staple-starches",
+          "region": "Caribbean"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 staple starches slot for Caribbean.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-caribbean-liquids_and_comfort-hibiscus-tea",
+      "forms": [
+        "foodForms.soup_broth",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort"
+      ],
+      "regions": [
+        "macro:Caribbean",
+        "Caribbean"
+      ],
+      "nameSignals": [
+        "hibiscus tea"
+      ],
+      "mechanisms": [
+        "mechanisms.temperature",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "Hibiscus tea Caribbean liquids and comfort names aliases",
+        "hibiscus tea Caribbean food memory sensory cues",
+        "Hibiscus tea structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "hibiscus-tea-liquids-and-comfort",
+          "region": "Caribbean"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 liquids and comfort slot for Caribbean.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-caribbean-acid_heat_condiment-pikliz",
+      "forms": [
+        "foodForms.sauce_condiment",
+        "foodForms.pickle_ferment"
+      ],
+      "regions": [
+        "macro:Caribbean",
+        "Caribbean"
+      ],
+      "nameSignals": [
+        "pikliz"
+      ],
+      "mechanisms": [
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "Pikliz Caribbean acid heat condiment names aliases",
+        "pikliz Caribbean food memory sensory cues",
+        "Pikliz structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "pikliz-acid-heat-condiment",
+          "region": "Caribbean"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 acid heat condiment slot for Caribbean.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-caribbean-protein_vegetable_mains-curry-goat",
+      "forms": [
+        "foodForms.protein_centered",
+        "foodForms.vegetable_fungi",
+        "foodForms.stew_braise"
+      ],
+      "regions": [
+        "macro:Caribbean",
+        "Caribbean"
+      ],
+      "nameSignals": [
+        "curry goat"
+      ],
+      "mechanisms": [
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "curry goat Caribbean protein and vegetable mains names aliases",
+        "curry goat Caribbean food memory sensory cues",
+        "curry goat structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "curry-goat-protein-vegetable-mains",
+          "region": "Caribbean"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 protein and vegetable mains slot for Caribbean.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-caribbean-handheld_social_foods-jamaican-patty",
+      "forms": [
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "macro:Caribbean",
+        "Caribbean"
+      ],
+      "nameSignals": [
+        "Jamaican patty"
+      ],
+      "mechanisms": [
+        "mechanisms.texture_contrast",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "Jamaican patty Caribbean handheld and social foods names aliases",
+        "Jamaican patty Caribbean food memory sensory cues",
+        "Jamaican patty structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "jamaican-patty-handheld-social-foods",
+          "region": "Caribbean"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 handheld and social foods slot for Caribbean.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-caribbean-sweet_ritual_foods-rum-cake",
+      "forms": [
+        "foodForms.dessert",
+        "foodForms.confectionery",
+        "foodForms.ceremonial_holiday"
+      ],
+      "regions": [
+        "macro:Caribbean",
+        "Caribbean"
+      ],
+      "nameSignals": [
+        "rum cake"
+      ],
+      "mechanisms": [
+        "mechanisms.sugar_crystal",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "rum cake Caribbean sweet and ritual foods names aliases",
+        "rum cake Caribbean food memory sensory cues",
+        "rum cake structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "rum-cake-sweet-ritual-foods",
+          "region": "Caribbean"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 sweet and ritual foods slot for Caribbean.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-central_america-staple_starches-corn-tortilla",
+      "forms": [
+        "foodForms.grain_rice_noodle",
+        "foodForms.bread_flatbread"
+      ],
+      "regions": [
+        "macro:Central America",
+        "Central America"
+      ],
+      "nameSignals": [
+        "corn tortilla"
+      ],
+      "mechanisms": [
+        "mechanisms.starch_texture",
+        "mechanisms.browning"
+      ],
+      "querySeeds": [
+        "corn tortilla Central America staple starches names aliases",
+        "corn tortilla Central America food memory sensory cues",
+        "corn tortilla structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "corn-tortilla-staple-starches",
+          "region": "Central America"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 staple starches slot for Central America.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-central_america-liquids_and_comfort-atole",
+      "forms": [
+        "foodForms.soup_broth",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort"
+      ],
+      "regions": [
+        "macro:Central America",
+        "Central America"
+      ],
+      "nameSignals": [
+        "atole"
+      ],
+      "mechanisms": [
+        "mechanisms.temperature",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "atole Central America liquids and comfort names aliases",
+        "atole Central America food memory sensory cues",
+        "atole structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "atole-liquids-and-comfort",
+          "region": "Central America"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 liquids and comfort slot for Central America.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-central_america-acid_heat_condiment-curtido",
+      "forms": [
+        "foodForms.sauce_condiment",
+        "foodForms.pickle_ferment"
+      ],
+      "regions": [
+        "macro:Central America",
+        "Central America"
+      ],
+      "nameSignals": [
+        "curtido"
+      ],
+      "mechanisms": [
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "Curtido Central America acid heat condiment names aliases",
+        "curtido Central America food memory sensory cues",
+        "Curtido structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "curtido-acid-heat-condiment",
+          "region": "Central America"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 acid heat condiment slot for Central America.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-central_america-protein_vegetable_mains-pepian",
+      "forms": [
+        "foodForms.protein_centered",
+        "foodForms.vegetable_fungi",
+        "foodForms.stew_braise"
+      ],
+      "regions": [
+        "macro:Central America",
+        "Central America"
+      ],
+      "nameSignals": [
+        "pepian",
+        "pepián"
+      ],
+      "mechanisms": [
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "pepián Central America protein and vegetable mains names aliases",
+        "pepian Central America food memory sensory cues",
+        "pepián structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "pepian-protein-vegetable-mains",
+          "region": "Central America"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 protein and vegetable mains slot for Central America.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-central_america-handheld_social_foods-pupusa",
+      "forms": [
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "macro:Central America",
+        "Central America"
+      ],
+      "nameSignals": [
+        "pupusa"
+      ],
+      "mechanisms": [
+        "mechanisms.texture_contrast",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "pupusa Central America handheld and social foods names aliases",
+        "pupusa Central America food memory sensory cues",
+        "pupusa structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "pupusa-handheld-social-foods",
+          "region": "Central America"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 handheld and social foods slot for Central America.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-central_america-sweet_ritual_foods-tres-leches-cake",
+      "forms": [
+        "foodForms.dessert",
+        "foodForms.confectionery",
+        "foodForms.ceremonial_holiday"
+      ],
+      "regions": [
+        "macro:Central America",
+        "Central America"
+      ],
+      "nameSignals": [
+        "tres leches cake"
+      ],
+      "mechanisms": [
+        "mechanisms.sugar_crystal",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "tres leches cake Central America sweet and ritual foods names aliases",
+        "tres leches cake Central America food memory sensory cues",
+        "tres leches cake structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "tres-leches-cake-sweet-ritual-foods",
+          "region": "Central America"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 sweet and ritual foods slot for Central America.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-south_america-staple_starches-arepa",
+      "forms": [
+        "foodForms.grain_rice_noodle",
+        "foodForms.bread_flatbread"
+      ],
+      "regions": [
+        "macro:South America",
+        "South America"
+      ],
+      "nameSignals": [
+        "arepa"
+      ],
+      "mechanisms": [
+        "mechanisms.starch_texture",
+        "mechanisms.browning"
+      ],
+      "querySeeds": [
+        "arepa South America staple starches names aliases",
+        "arepa South America food memory sensory cues",
+        "arepa structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "arepa-staple-starches",
+          "region": "South America"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.south_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 staple starches slot for South America.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-south_america-liquids_and_comfort-yerba-mate-beverage",
+      "forms": [
+        "foodForms.soup_broth",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort"
+      ],
+      "regions": [
+        "macro:South America",
+        "South America"
+      ],
+      "nameSignals": [
+        "mate drink",
+        "yerba mate beverage"
+      ],
+      "mechanisms": [
+        "mechanisms.temperature",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "yerba mate beverage South America liquids and comfort names aliases",
+        "mate drink South America food memory sensory cues",
+        "yerba mate beverage structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "yerba-mate-beverage-liquids-and-comfort",
+          "region": "South America"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.south_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 liquids and comfort slot for South America.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-south_america-acid_heat_condiment-chimichurri",
+      "forms": [
+        "foodForms.sauce_condiment",
+        "foodForms.pickle_ferment"
+      ],
+      "regions": [
+        "macro:South America",
+        "South America"
+      ],
+      "nameSignals": [
+        "chimichurri"
+      ],
+      "mechanisms": [
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "chimichurri South America acid heat condiment names aliases",
+        "chimichurri South America food memory sensory cues",
+        "chimichurri structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "chimichurri-acid-heat-condiment",
+          "region": "South America"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.south_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 acid heat condiment slot for South America.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-south_america-protein_vegetable_mains-feijoada",
+      "forms": [
+        "foodForms.protein_centered",
+        "foodForms.vegetable_fungi",
+        "foodForms.stew_braise"
+      ],
+      "regions": [
+        "macro:South America",
+        "South America"
+      ],
+      "nameSignals": [
+        "feijoada"
+      ],
+      "mechanisms": [
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "feijoada South America protein and vegetable mains names aliases",
+        "feijoada South America food memory sensory cues",
+        "feijoada structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "feijoada-protein-vegetable-mains",
+          "region": "South America"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.south_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 protein and vegetable mains slot for South America.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-south_america-handheld_social_foods-empanada",
+      "forms": [
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "macro:South America",
+        "South America"
+      ],
+      "nameSignals": [
+        "empanada"
+      ],
+      "mechanisms": [
+        "mechanisms.texture_contrast",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "empanada South America handheld and social foods names aliases",
+        "empanada South America food memory sensory cues",
+        "empanada structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "empanada-handheld-social-foods",
+          "region": "South America"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.south_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 handheld and social foods slot for South America.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-south_america-sweet_ritual_foods-brigadeiro",
+      "forms": [
+        "foodForms.dessert",
+        "foodForms.confectionery",
+        "foodForms.ceremonial_holiday"
+      ],
+      "regions": [
+        "macro:South America",
+        "South America"
+      ],
+      "nameSignals": [
+        "brigadeiro"
+      ],
+      "mechanisms": [
+        "mechanisms.sugar_crystal",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "brigadeiro South America sweet and ritual foods names aliases",
+        "brigadeiro South America food memory sensory cues",
+        "brigadeiro structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "brigadeiro-sweet-ritual-foods",
+          "region": "South America"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.south_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 sweet and ritual foods slot for South America.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-north_america-staple_starches-cornbread",
+      "forms": [
+        "foodForms.grain_rice_noodle",
+        "foodForms.bread_flatbread"
+      ],
+      "regions": [
+        "macro:North America",
+        "North America"
+      ],
+      "nameSignals": [
+        "cornbread"
+      ],
+      "mechanisms": [
+        "mechanisms.starch_texture",
+        "mechanisms.browning"
+      ],
+      "querySeeds": [
+        "Cornbread North America staple starches names aliases",
+        "cornbread North America food memory sensory cues",
+        "Cornbread structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "cornbread-staple-starches",
+          "region": "North America"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.north_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 staple starches slot for North America.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-north_america-liquids_and_comfort-chicken-soup",
+      "forms": [
+        "foodForms.soup_broth",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort"
+      ],
+      "regions": [
+        "macro:North America",
+        "North America"
+      ],
+      "nameSignals": [
+        "chicken soup"
+      ],
+      "mechanisms": [
+        "mechanisms.temperature",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "chicken soup North America liquids and comfort names aliases",
+        "chicken soup North America food memory sensory cues",
+        "chicken soup structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "chicken-soup-liquids-and-comfort",
+          "region": "North America"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.north_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 liquids and comfort slot for North America.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-north_america-acid_heat_condiment-barbecue-sauce",
+      "forms": [
+        "foodForms.sauce_condiment",
+        "foodForms.pickle_ferment"
+      ],
+      "regions": [
+        "macro:North America",
+        "North America"
+      ],
+      "nameSignals": [
+        "barbecue sauce"
+      ],
+      "mechanisms": [
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "barbecue sauce North America acid heat condiment names aliases",
+        "barbecue sauce North America food memory sensory cues",
+        "barbecue sauce structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "barbecue-sauce-acid-heat-condiment",
+          "region": "North America"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.north_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 acid heat condiment slot for North America.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-north_america-protein_vegetable_mains-pot-roast",
+      "forms": [
+        "foodForms.protein_centered",
+        "foodForms.vegetable_fungi",
+        "foodForms.stew_braise"
+      ],
+      "regions": [
+        "macro:North America",
+        "North America"
+      ],
+      "nameSignals": [
+        "pot roast"
+      ],
+      "mechanisms": [
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "pot roast North America protein and vegetable mains names aliases",
+        "pot roast North America food memory sensory cues",
+        "pot roast structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "pot-roast-protein-vegetable-mains",
+          "region": "North America"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.north_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 protein and vegetable mains slot for North America.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-north_america-handheld_social_foods-hamburger",
+      "forms": [
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "macro:North America",
+        "North America"
+      ],
+      "nameSignals": [
+        "hamburger"
+      ],
+      "mechanisms": [
+        "mechanisms.texture_contrast",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "hamburger North America handheld and social foods names aliases",
+        "hamburger North America food memory sensory cues",
+        "hamburger structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "hamburger-handheld-social-foods",
+          "region": "North America"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.north_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 handheld and social foods slot for North America.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-north_america-sweet_ritual_foods-apple-pie",
+      "forms": [
+        "foodForms.dessert",
+        "foodForms.confectionery",
+        "foodForms.ceremonial_holiday"
+      ],
+      "regions": [
+        "macro:North America",
+        "North America"
+      ],
+      "nameSignals": [
+        "apple pie"
+      ],
+      "mechanisms": [
+        "mechanisms.sugar_crystal",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "apple pie North America sweet and ritual foods names aliases",
+        "apple pie North America food memory sensory cues",
+        "apple pie structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "apple-pie-sweet-ritual-foods",
+          "region": "North America"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.north_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 sweet and ritual foods slot for North America.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-indigenous_first_peoples-staple_starches-frybread",
+      "forms": [
+        "foodForms.grain_rice_noodle",
+        "foodForms.bread_flatbread"
+      ],
+      "regions": [
+        "macro:Indigenous and First Peoples",
+        "Indigenous and First Peoples"
+      ],
+      "nameSignals": [
+        "frybread"
+      ],
+      "mechanisms": [
+        "mechanisms.starch_texture",
+        "mechanisms.browning"
+      ],
+      "querySeeds": [
+        "frybread Indigenous and First Peoples staple starches names aliases",
+        "frybread Indigenous and First Peoples food memory sensory cues",
+        "frybread structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "frybread-staple-starches",
+          "region": "Indigenous and First Peoples"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.indigenous_first_peoples",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.indigenous"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 staple starches slot for Indigenous and First Peoples.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-indigenous_first_peoples-liquids_and_comfort-labrador-tea",
+      "forms": [
+        "foodForms.soup_broth",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort"
+      ],
+      "regions": [
+        "macro:Indigenous and First Peoples",
+        "Indigenous and First Peoples"
+      ],
+      "nameSignals": [
+        "Labrador tea"
+      ],
+      "mechanisms": [
+        "mechanisms.temperature",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "Labrador tea Indigenous and First Peoples liquids and comfort names aliases",
+        "Labrador tea Indigenous and First Peoples food memory sensory cues",
+        "Labrador tea structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "labrador-tea-liquids-and-comfort",
+          "region": "Indigenous and First Peoples"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.indigenous_first_peoples",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.indigenous"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 liquids and comfort slot for Indigenous and First Peoples.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-indigenous_first_peoples-acid_heat_condiment-cranberry-sauce",
+      "forms": [
+        "foodForms.sauce_condiment",
+        "foodForms.pickle_ferment"
+      ],
+      "regions": [
+        "macro:Indigenous and First Peoples",
+        "Indigenous and First Peoples"
+      ],
+      "nameSignals": [
+        "cranberry sauce"
+      ],
+      "mechanisms": [
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "cranberry sauce Indigenous and First Peoples acid heat condiment names aliases",
+        "cranberry sauce Indigenous and First Peoples food memory sensory cues",
+        "cranberry sauce structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "cranberry-sauce-acid-heat-condiment",
+          "region": "Indigenous and First Peoples"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.indigenous_first_peoples",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.indigenous"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 acid heat condiment slot for Indigenous and First Peoples.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-indigenous_first_peoples-protein_vegetable_mains-three-sisters-soup",
+      "forms": [
+        "foodForms.protein_centered",
+        "foodForms.vegetable_fungi",
+        "foodForms.stew_braise"
+      ],
+      "regions": [
+        "macro:Indigenous and First Peoples",
+        "Indigenous and First Peoples"
+      ],
+      "nameSignals": [
+        "three sisters soup"
+      ],
+      "mechanisms": [
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "Three Sisters Soup Indigenous and First Peoples protein and vegetable mains names aliases",
+        "three sisters soup Indigenous and First Peoples food memory sensory cues",
+        "Three Sisters Soup structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "three-sisters-soup-protein-vegetable-mains",
+          "region": "Indigenous and First Peoples"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.indigenous_first_peoples",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.indigenous"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 protein and vegetable mains slot for Indigenous and First Peoples.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-indigenous_first_peoples-handheld_social_foods-navajo-taco",
+      "forms": [
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "macro:Indigenous and First Peoples",
+        "Indigenous and First Peoples"
+      ],
+      "nameSignals": [
+        "Navajo taco"
+      ],
+      "mechanisms": [
+        "mechanisms.texture_contrast",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "Navajo taco Indigenous and First Peoples handheld and social foods names aliases",
+        "Navajo taco Indigenous and First Peoples food memory sensory cues",
+        "Navajo taco structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "navajo-taco-handheld-social-foods",
+          "region": "Indigenous and First Peoples"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.indigenous_first_peoples",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.indigenous"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 handheld and social foods slot for Indigenous and First Peoples.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-indigenous_first_peoples-sweet_ritual_foods-maple-syrup",
+      "forms": [
+        "foodForms.dessert",
+        "foodForms.confectionery",
+        "foodForms.ceremonial_holiday"
+      ],
+      "regions": [
+        "macro:Indigenous and First Peoples",
+        "Indigenous and First Peoples"
+      ],
+      "nameSignals": [
+        "maple syrup"
+      ],
+      "mechanisms": [
+        "mechanisms.sugar_crystal",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "maple syrup Indigenous and First Peoples sweet and ritual foods names aliases",
+        "maple syrup Indigenous and First Peoples food memory sensory cues",
+        "maple syrup structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "maple-syrup-sweet-ritual-foods",
+          "region": "Indigenous and First Peoples"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.indigenous_first_peoples",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.indigenous"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 sweet and ritual foods slot for Indigenous and First Peoples.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-diaspora_global-staple_starches-bagel",
+      "forms": [
+        "foodForms.grain_rice_noodle",
+        "foodForms.bread_flatbread"
+      ],
+      "regions": [
+        "macro:Global diaspora",
+        "Global diaspora"
+      ],
+      "nameSignals": [
+        "bagel"
+      ],
+      "mechanisms": [
+        "mechanisms.starch_texture",
+        "mechanisms.browning"
+      ],
+      "querySeeds": [
+        "bagel Global diaspora staple starches names aliases",
+        "bagel Global diaspora food memory sensory cues",
+        "bagel structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "bagel-staple-starches",
+          "region": "Global diaspora"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.diaspora"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 staple starches slot for Global diaspora.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-diaspora_global-liquids_and_comfort-bubble-tea",
+      "forms": [
+        "foodForms.soup_broth",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort"
+      ],
+      "regions": [
+        "macro:Global diaspora",
+        "Global diaspora"
+      ],
+      "nameSignals": [
+        "bubble tea"
+      ],
+      "mechanisms": [
+        "mechanisms.temperature",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "bubble tea Global diaspora liquids and comfort names aliases",
+        "bubble tea Global diaspora food memory sensory cues",
+        "bubble tea structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "bubble-tea-liquids-and-comfort",
+          "region": "Global diaspora"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.diaspora"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 liquids and comfort slot for Global diaspora.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-diaspora_global-acid_heat_condiment-mango-pickle",
+      "forms": [
+        "foodForms.sauce_condiment",
+        "foodForms.pickle_ferment"
+      ],
+      "regions": [
+        "macro:Global diaspora",
+        "Global diaspora"
+      ],
+      "nameSignals": [
+        "mango pickle"
+      ],
+      "mechanisms": [
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "Mango pickle Global diaspora acid heat condiment names aliases",
+        "mango pickle Global diaspora food memory sensory cues",
+        "Mango pickle structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "mango-pickle-acid-heat-condiment",
+          "region": "Global diaspora"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.diaspora"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 acid heat condiment slot for Global diaspora.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-diaspora_global-protein_vegetable_mains-jerk-chicken",
+      "forms": [
+        "foodForms.protein_centered",
+        "foodForms.vegetable_fungi",
+        "foodForms.stew_braise"
+      ],
+      "regions": [
+        "macro:Global diaspora",
+        "Global diaspora"
+      ],
+      "nameSignals": [
+        "jerk chicken"
+      ],
+      "mechanisms": [
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "jerk chicken Global diaspora protein and vegetable mains names aliases",
+        "jerk chicken Global diaspora food memory sensory cues",
+        "jerk chicken structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "jerk-chicken-protein-vegetable-mains",
+          "region": "Global diaspora"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.diaspora"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 protein and vegetable mains slot for Global diaspora.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-diaspora_global-handheld_social_foods-falafel",
+      "forms": [
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "macro:Global diaspora",
+        "Global diaspora"
+      ],
+      "nameSignals": [
+        "falafel"
+      ],
+      "mechanisms": [
+        "mechanisms.texture_contrast",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "falafel Global diaspora handheld and social foods names aliases",
+        "falafel Global diaspora food memory sensory cues",
+        "falafel structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "falafel-handheld-social-foods",
+          "region": "Global diaspora"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.diaspora"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 handheld and social foods slot for Global diaspora.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-diaspora_global-sweet_ritual_foods-mooncake",
+      "forms": [
+        "foodForms.dessert",
+        "foodForms.confectionery",
+        "foodForms.ceremonial_holiday"
+      ],
+      "regions": [
+        "macro:Global diaspora",
+        "Global diaspora"
+      ],
+      "nameSignals": [
+        "mooncake"
+      ],
+      "mechanisms": [
+        "mechanisms.sugar_crystal",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "mooncake Global diaspora sweet and ritual foods names aliases",
+        "mooncake Global diaspora food memory sensory cues",
+        "mooncake structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "mooncake-sweet-ritual-foods",
+          "region": "Global diaspora"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.diaspora"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 sweet and ritual foods slot for Global diaspora.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-borderland_trade_routes-staple_starches-wheat-tortilla",
+      "forms": [
+        "foodForms.grain_rice_noodle",
+        "foodForms.bread_flatbread"
+      ],
+      "regions": [
+        "macro:Borderlands and trade routes",
+        "Borderlands and trade routes"
+      ],
+      "nameSignals": [
+        "flour tortilla",
+        "wheat tortilla"
+      ],
+      "mechanisms": [
+        "mechanisms.starch_texture",
+        "mechanisms.browning"
+      ],
+      "querySeeds": [
+        "wheat tortilla Borderlands and trade routes staple starches names aliases",
+        "flour tortilla Borderlands and trade routes food memory sensory cues",
+        "wheat tortilla structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "wheat-tortilla-staple-starches",
+          "region": "Borderlands and trade routes"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.borderland_trade_routes",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.borderland"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 staple starches slot for Borderlands and trade routes.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-borderland_trade_routes-liquids_and_comfort-champurrado",
+      "forms": [
+        "foodForms.soup_broth",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort"
+      ],
+      "regions": [
+        "macro:Borderlands and trade routes",
+        "Borderlands and trade routes"
+      ],
+      "nameSignals": [
+        "champurrado"
+      ],
+      "mechanisms": [
+        "mechanisms.temperature",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "Champurrado Borderlands and trade routes liquids and comfort names aliases",
+        "champurrado Borderlands and trade routes food memory sensory cues",
+        "Champurrado structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "champurrado-liquids-and-comfort",
+          "region": "Borderlands and trade routes"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.borderland_trade_routes",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.borderland"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 liquids and comfort slot for Borderlands and trade routes.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-borderland_trade_routes-acid_heat_condiment-salsa-food-group",
+      "forms": [
+        "foodForms.sauce_condiment",
+        "foodForms.pickle_ferment"
+      ],
+      "regions": [
+        "macro:Borderlands and trade routes",
+        "Borderlands and trade routes"
+      ],
+      "nameSignals": [
+        "salsa food",
+        "Salsa Food Group"
+      ],
+      "mechanisms": [
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "Salsa Food Group Borderlands and trade routes acid heat condiment names aliases",
+        "salsa food Borderlands and trade routes food memory sensory cues",
+        "Salsa Food Group structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "salsa-food-group-acid-heat-condiment",
+          "region": "Borderlands and trade routes"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.borderland_trade_routes",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.borderland"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 acid heat condiment slot for Borderlands and trade routes.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-borderland_trade_routes-protein_vegetable_mains-chili",
+      "forms": [
+        "foodForms.protein_centered",
+        "foodForms.vegetable_fungi",
+        "foodForms.stew_braise"
+      ],
+      "regions": [
+        "macro:Borderlands and trade routes",
+        "Borderlands and trade routes"
+      ],
+      "nameSignals": [
+        "chili con carne",
+        "chili"
+      ],
+      "mechanisms": [
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "chili Borderlands and trade routes protein and vegetable mains names aliases",
+        "chili con carne Borderlands and trade routes food memory sensory cues",
+        "chili structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "chili-protein-vegetable-mains",
+          "region": "Borderlands and trade routes"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.borderland_trade_routes",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.borderland"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 protein and vegetable mains slot for Borderlands and trade routes.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-borderland_trade_routes-handheld_social_foods-burrito",
+      "forms": [
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "macro:Borderlands and trade routes",
+        "Borderlands and trade routes"
+      ],
+      "nameSignals": [
+        "burrito"
+      ],
+      "mechanisms": [
+        "mechanisms.texture_contrast",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "burrito Borderlands and trade routes handheld and social foods names aliases",
+        "burrito Borderlands and trade routes food memory sensory cues",
+        "burrito structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "burrito-handheld-social-foods",
+          "region": "Borderlands and trade routes"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.borderland_trade_routes",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.borderland"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 handheld and social foods slot for Borderlands and trade routes.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-borderland_trade_routes-sweet_ritual_foods-pan-de-muerto",
+      "forms": [
+        "foodForms.dessert",
+        "foodForms.confectionery",
+        "foodForms.ceremonial_holiday"
+      ],
+      "regions": [
+        "macro:Borderlands and trade routes",
+        "Borderlands and trade routes"
+      ],
+      "nameSignals": [
+        "pan de muerto"
+      ],
+      "mechanisms": [
+        "mechanisms.sugar_crystal",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "pan de muerto Borderlands and trade routes sweet and ritual foods names aliases",
+        "pan de muerto Borderlands and trade routes food memory sensory cues",
+        "pan de muerto structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "pan-de-muerto-sweet-ritual-foods",
+          "region": "Borderlands and trade routes"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.borderland_trade_routes",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.borderland"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 sweet and ritual foods slot for Borderlands and trade routes.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-arctic_subarctic-staple_starches-bannock",
+      "forms": [
+        "foodForms.grain_rice_noodle",
+        "foodForms.bread_flatbread"
+      ],
+      "regions": [
+        "macro:Arctic and Subarctic",
+        "Arctic and Subarctic"
+      ],
+      "nameSignals": [
+        "bannock"
+      ],
+      "mechanisms": [
+        "mechanisms.starch_texture",
+        "mechanisms.browning"
+      ],
+      "querySeeds": [
+        "bannock Arctic and Subarctic staple starches names aliases",
+        "bannock Arctic and Subarctic food memory sensory cues",
+        "bannock structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "bannock-staple-starches",
+          "region": "Arctic and Subarctic"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.arctic_subarctic",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 staple starches slot for Arctic and Subarctic.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-arctic_subarctic-liquids_and_comfort-labrador-tea",
+      "forms": [
+        "foodForms.soup_broth",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort"
+      ],
+      "regions": [
+        "macro:Arctic and Subarctic",
+        "Arctic and Subarctic"
+      ],
+      "nameSignals": [
+        "Labrador tea"
+      ],
+      "mechanisms": [
+        "mechanisms.temperature",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "Labrador tea Arctic and Subarctic liquids and comfort names aliases",
+        "Labrador tea Arctic and Subarctic food memory sensory cues",
+        "Labrador tea structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "labrador-tea-liquids-and-comfort",
+          "region": "Arctic and Subarctic"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.arctic_subarctic",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 liquids and comfort slot for Arctic and Subarctic.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-arctic_subarctic-acid_heat_condiment-fermented-fish",
+      "forms": [
+        "foodForms.sauce_condiment",
+        "foodForms.pickle_ferment"
+      ],
+      "regions": [
+        "macro:Arctic and Subarctic",
+        "Arctic and Subarctic"
+      ],
+      "nameSignals": [
+        "fermented fish"
+      ],
+      "mechanisms": [
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "fermented fish Arctic and Subarctic acid heat condiment names aliases",
+        "fermented fish Arctic and Subarctic food memory sensory cues",
+        "fermented fish structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "fermented-fish-acid-heat-condiment",
+          "region": "Arctic and Subarctic"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.arctic_subarctic",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 acid heat condiment slot for Arctic and Subarctic.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-arctic_subarctic-protein_vegetable_mains-muktuk",
+      "forms": [
+        "foodForms.protein_centered",
+        "foodForms.vegetable_fungi",
+        "foodForms.stew_braise"
+      ],
+      "regions": [
+        "macro:Arctic and Subarctic",
+        "Arctic and Subarctic"
+      ],
+      "nameSignals": [
+        "muktuk"
+      ],
+      "mechanisms": [
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "muktuk Arctic and Subarctic protein and vegetable mains names aliases",
+        "muktuk Arctic and Subarctic food memory sensory cues",
+        "muktuk structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "muktuk-protein-vegetable-mains",
+          "region": "Arctic and Subarctic"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.arctic_subarctic",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 protein and vegetable mains slot for Arctic and Subarctic.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-arctic_subarctic-handheld_social_foods-dried-fish",
+      "forms": [
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "macro:Arctic and Subarctic",
+        "Arctic and Subarctic"
+      ],
+      "nameSignals": [
+        "dried fish"
+      ],
+      "mechanisms": [
+        "mechanisms.texture_contrast",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "dried fish Arctic and Subarctic handheld and social foods names aliases",
+        "dried fish Arctic and Subarctic food memory sensory cues",
+        "dried fish structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "dried-fish-handheld-social-foods",
+          "region": "Arctic and Subarctic"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.arctic_subarctic",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 handheld and social foods slot for Arctic and Subarctic.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
+        ]
+      }
+    },
+    {
+      "id": "exp1-arctic_subarctic-sweet_ritual_foods-alaskan-ice-cream",
+      "forms": [
+        "foodForms.dessert",
+        "foodForms.confectionery",
+        "foodForms.ceremonial_holiday"
+      ],
+      "regions": [
+        "macro:Arctic and Subarctic",
+        "Arctic and Subarctic"
+      ],
+      "nameSignals": [
+        "akutaq",
+        "Alaskan ice cream"
+      ],
+      "mechanisms": [
+        "mechanisms.sugar_crystal",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "Alaskan ice cream Arctic and Subarctic sweet and ritual foods names aliases",
+        "akutaq Arctic and Subarctic food memory sensory cues",
+        "Alaskan ice cream structured data cultural context"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "alaskan-ice-cream-sweet-ritual-foods",
+          "region": "Arctic and Subarctic"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.arctic_subarctic",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Expansion 1 sweet and ritual foods slot for Arctic and Subarctic.",
+          "Uses source-gated Wikidata structured data only; not family-specific."
         ]
       }
     }

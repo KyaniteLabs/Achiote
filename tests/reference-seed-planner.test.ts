@@ -37,8 +37,8 @@ describe('reference seed planner', () => {
 
     const priorities = prioritizeReferenceSeeds(report, referenceSeedQueueData);
 
-    expect(priorities.length).toBeGreaterThan(0);
-    expect(priorities[0]).toMatchObject({
+    const beveragePriority = priorities.find((priority) => priority.seedId === 'beverage-rice-cinnamon-latin-america');
+    expect(beveragePriority).toMatchObject({
       seedId: 'beverage-rice-cinnamon-latin-america',
       reasons: expect.arrayContaining([
         'frequent_memory_type',

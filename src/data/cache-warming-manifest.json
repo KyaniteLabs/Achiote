@@ -1,13 +1,14 @@
 {
   "meta": {
-    "version": "0.1.0",
-    "description": "Deterministic cache warming task manifest derived from global reference seed entries",
+    "version": "0.2.0",
+    "description": "Deterministic cache warming task manifest derived from global reference seed entries, including expansion 1",
     "confidence": "Medium",
     "provenance": {
       "sourceType": "curated seed hypothesis",
       "notes": [
         "Tasks prepare operator research work; they do not perform browsing inside Achiote.",
-        "Each task should produce a typed ResearchRecord before any cache write."
+        "Each task should produce a typed ResearchRecord before any cache write.",
+        "Expansion 1 tasks mirror the 20 culture-area x 6 food-memory-band matrix."
       ]
     }
   },
@@ -497,6 +498,4126 @@
         "sourceType": "curated seed hypothesis",
         "notes": [
           "Warm only from approved public research artifacts and avoid medical or nutrition claims."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-north_africa-staple_starches-couscous",
+      "seedId": "exp1-north_africa-staple_starches-couscous",
+      "cacheTarget": {
+        "dishFamily": "couscous-staple-starches",
+        "region": "North Africa"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, staple starches role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-north_africa-liquids_and_comfort-harira",
+      "seedId": "exp1-north_africa-liquids_and_comfort-harira",
+      "cacheTarget": {
+        "dishFamily": "harira-liquids-and-comfort",
+        "region": "North Africa"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "fallback_guard"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, liquids and comfort role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-north_africa-acid_heat_condiment-harissa",
+      "seedId": "exp1-north_africa-acid_heat_condiment-harissa",
+      "cacheTarget": {
+        "dishFamily": "harissa-acid-heat-condiment",
+        "region": "North Africa"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, acid heat condiment role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-north_africa-protein_vegetable_mains-tajine",
+      "seedId": "exp1-north_africa-protein_vegetable_mains-tajine",
+      "cacheTarget": {
+        "dishFamily": "tajine-protein-vegetable-mains",
+        "region": "North Africa"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "unknown_family",
+        "fallback_guard",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, protein and vegetable mains role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-north_africa-handheld_social_foods-brik",
+      "seedId": "exp1-north_africa-handheld_social_foods-brik",
+      "cacheTarget": {
+        "dishFamily": "brik-handheld-social-foods",
+        "region": "North Africa"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, handheld and social foods role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-north_africa-sweet_ritual_foods-basbousa",
+      "seedId": "exp1-north_africa-sweet_ritual_foods-basbousa",
+      "cacheTarget": {
+        "dishFamily": "basbousa-sweet-ritual-foods",
+        "region": "North Africa"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, sweet and ritual foods role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-west_africa-staple_starches-fufu",
+      "seedId": "exp1-west_africa-staple_starches-fufu",
+      "cacheTarget": {
+        "dishFamily": "fufu-staple-starches",
+        "region": "West Africa"
+      },
+      "coverageTags": [
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, staple starches role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-west_africa-liquids_and_comfort-roselle-juice",
+      "seedId": "exp1-west_africa-liquids_and_comfort-roselle-juice",
+      "cacheTarget": {
+        "dishFamily": "roselle-juice-liquids-and-comfort",
+        "region": "West Africa"
+      },
+      "coverageTags": [
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "fallback_guard"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, liquids and comfort role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-west_africa-acid_heat_condiment-shito",
+      "seedId": "exp1-west_africa-acid_heat_condiment-shito",
+      "cacheTarget": {
+        "dishFamily": "shito-acid-heat-condiment",
+        "region": "West Africa"
+      },
+      "coverageTags": [
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, acid heat condiment role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-west_africa-protein_vegetable_mains-egusi-soup",
+      "seedId": "exp1-west_africa-protein_vegetable_mains-egusi-soup",
+      "cacheTarget": {
+        "dishFamily": "egusi-soup-protein-vegetable-mains",
+        "region": "West Africa"
+      },
+      "coverageTags": [
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "unknown_family",
+        "fallback_guard",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, protein and vegetable mains role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-west_africa-handheld_social_foods-akara",
+      "seedId": "exp1-west_africa-handheld_social_foods-akara",
+      "cacheTarget": {
+        "dishFamily": "akara-handheld-social-foods",
+        "region": "West Africa"
+      },
+      "coverageTags": [
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, handheld and social foods role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-west_africa-sweet_ritual_foods-chin-chin",
+      "seedId": "exp1-west_africa-sweet_ritual_foods-chin-chin",
+      "cacheTarget": {
+        "dishFamily": "chin-chin-sweet-ritual-foods",
+        "region": "West Africa"
+      },
+      "coverageTags": [
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, sweet and ritual foods role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-central_africa-staple_starches-kwanga",
+      "seedId": "exp1-central_africa-staple_starches-kwanga",
+      "cacheTarget": {
+        "dishFamily": "kwanga-staple-starches",
+        "region": "Central Africa"
+      },
+      "coverageTags": [
+        "cultureAreas.central_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, staple starches role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-central_africa-liquids_and_comfort-palm-nut-soup",
+      "seedId": "exp1-central_africa-liquids_and_comfort-palm-nut-soup",
+      "cacheTarget": {
+        "dishFamily": "palm-nut-soup-liquids-and-comfort",
+        "region": "Central Africa"
+      },
+      "coverageTags": [
+        "cultureAreas.central_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "fallback_guard"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, liquids and comfort role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-central_africa-acid_heat_condiment-chicken-moambe",
+      "seedId": "exp1-central_africa-acid_heat_condiment-chicken-moambe",
+      "cacheTarget": {
+        "dishFamily": "chicken-moambe-acid-heat-condiment",
+        "region": "Central Africa"
+      },
+      "coverageTags": [
+        "cultureAreas.central_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, acid heat condiment role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-central_africa-protein_vegetable_mains-cassava",
+      "seedId": "exp1-central_africa-protein_vegetable_mains-cassava",
+      "cacheTarget": {
+        "dishFamily": "cassava-protein-vegetable-mains",
+        "region": "Central Africa"
+      },
+      "coverageTags": [
+        "cultureAreas.central_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "unknown_family",
+        "fallback_guard",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, protein and vegetable mains role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-central_africa-handheld_social_foods-beignet",
+      "seedId": "exp1-central_africa-handheld_social_foods-beignet",
+      "cacheTarget": {
+        "dishFamily": "beignet-handheld-social-foods",
+        "region": "Central Africa"
+      },
+      "coverageTags": [
+        "cultureAreas.central_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, handheld and social foods role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-central_africa-sweet_ritual_foods-beignet",
+      "seedId": "exp1-central_africa-sweet_ritual_foods-beignet",
+      "cacheTarget": {
+        "dishFamily": "beignet-sweet-ritual-foods",
+        "region": "Central Africa"
+      },
+      "coverageTags": [
+        "cultureAreas.central_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, sweet and ritual foods role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-east_africa-staple_starches-ugali",
+      "seedId": "exp1-east_africa-staple_starches-ugali",
+      "cacheTarget": {
+        "dishFamily": "ugali-staple-starches",
+        "region": "East Africa"
+      },
+      "coverageTags": [
+        "cultureAreas.east_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, staple starches role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-east_africa-liquids_and_comfort-chair",
+      "seedId": "exp1-east_africa-liquids_and_comfort-chair",
+      "cacheTarget": {
+        "dishFamily": "chair-liquids-and-comfort",
+        "region": "East Africa"
+      },
+      "coverageTags": [
+        "cultureAreas.east_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "fallback_guard"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, liquids and comfort role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-east_africa-acid_heat_condiment-kachumbari",
+      "seedId": "exp1-east_africa-acid_heat_condiment-kachumbari",
+      "cacheTarget": {
+        "dishFamily": "kachumbari-acid-heat-condiment",
+        "region": "East Africa"
+      },
+      "coverageTags": [
+        "cultureAreas.east_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, acid heat condiment role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-east_africa-protein_vegetable_mains-doro-wat",
+      "seedId": "exp1-east_africa-protein_vegetable_mains-doro-wat",
+      "cacheTarget": {
+        "dishFamily": "doro-wat-protein-vegetable-mains",
+        "region": "East Africa"
+      },
+      "coverageTags": [
+        "cultureAreas.east_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "unknown_family",
+        "fallback_guard",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, protein and vegetable mains role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-east_africa-handheld_social_foods-mandazi",
+      "seedId": "exp1-east_africa-handheld_social_foods-mandazi",
+      "cacheTarget": {
+        "dishFamily": "mandazi-handheld-social-foods",
+        "region": "East Africa"
+      },
+      "coverageTags": [
+        "cultureAreas.east_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, handheld and social foods role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-east_africa-sweet_ritual_foods-halva",
+      "seedId": "exp1-east_africa-sweet_ritual_foods-halva",
+      "cacheTarget": {
+        "dishFamily": "halva-sweet-ritual-foods",
+        "region": "East Africa"
+      },
+      "coverageTags": [
+        "cultureAreas.east_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, sweet and ritual foods role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-southern_africa-staple_starches-mielie-meal",
+      "seedId": "exp1-southern_africa-staple_starches-mielie-meal",
+      "cacheTarget": {
+        "dishFamily": "mielie-meal-staple-starches",
+        "region": "Southern Africa"
+      },
+      "coverageTags": [
+        "cultureAreas.southern_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, staple starches role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-southern_africa-liquids_and_comfort-mageu",
+      "seedId": "exp1-southern_africa-liquids_and_comfort-mageu",
+      "cacheTarget": {
+        "dishFamily": "mageu-liquids-and-comfort",
+        "region": "Southern Africa"
+      },
+      "coverageTags": [
+        "cultureAreas.southern_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "fallback_guard"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, liquids and comfort role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-southern_africa-acid_heat_condiment-chakalaka",
+      "seedId": "exp1-southern_africa-acid_heat_condiment-chakalaka",
+      "cacheTarget": {
+        "dishFamily": "chakalaka-acid-heat-condiment",
+        "region": "Southern Africa"
+      },
+      "coverageTags": [
+        "cultureAreas.southern_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, acid heat condiment role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-southern_africa-protein_vegetable_mains-bobotie",
+      "seedId": "exp1-southern_africa-protein_vegetable_mains-bobotie",
+      "cacheTarget": {
+        "dishFamily": "bobotie-protein-vegetable-mains",
+        "region": "Southern Africa"
+      },
+      "coverageTags": [
+        "cultureAreas.southern_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "unknown_family",
+        "fallback_guard",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, protein and vegetable mains role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-southern_africa-handheld_social_foods-bunny-chow",
+      "seedId": "exp1-southern_africa-handheld_social_foods-bunny-chow",
+      "cacheTarget": {
+        "dishFamily": "bunny-chow-handheld-social-foods",
+        "region": "Southern Africa"
+      },
+      "coverageTags": [
+        "cultureAreas.southern_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, handheld and social foods role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-southern_africa-sweet_ritual_foods-malva-pudding",
+      "seedId": "exp1-southern_africa-sweet_ritual_foods-malva-pudding",
+      "cacheTarget": {
+        "dishFamily": "malva-pudding-sweet-ritual-foods",
+        "region": "Southern Africa"
+      },
+      "coverageTags": [
+        "cultureAreas.southern_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, sweet and ritual foods role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-middle_east_west_asia-staple_starches-pita",
+      "seedId": "exp1-middle_east_west_asia-staple_starches-pita",
+      "cacheTarget": {
+        "dishFamily": "pita-staple-starches",
+        "region": "Middle East and West Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, staple starches role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-middle_east_west_asia-liquids_and_comfort-ayran",
+      "seedId": "exp1-middle_east_west_asia-liquids_and_comfort-ayran",
+      "cacheTarget": {
+        "dishFamily": "ayran-liquids-and-comfort",
+        "region": "Middle East and West Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "fallback_guard"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, liquids and comfort role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-middle_east_west_asia-acid_heat_condiment-toum",
+      "seedId": "exp1-middle_east_west_asia-acid_heat_condiment-toum",
+      "cacheTarget": {
+        "dishFamily": "toum-acid-heat-condiment",
+        "region": "Middle East and West Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, acid heat condiment role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-middle_east_west_asia-protein_vegetable_mains-doner-kebab",
+      "seedId": "exp1-middle_east_west_asia-protein_vegetable_mains-doner-kebab",
+      "cacheTarget": {
+        "dishFamily": "doner-kebab-protein-vegetable-mains",
+        "region": "Middle East and West Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "unknown_family",
+        "fallback_guard",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, protein and vegetable mains role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-middle_east_west_asia-handheld_social_foods-kibbeh",
+      "seedId": "exp1-middle_east_west_asia-handheld_social_foods-kibbeh",
+      "cacheTarget": {
+        "dishFamily": "kibbeh-handheld-social-foods",
+        "region": "Middle East and West Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, handheld and social foods role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-middle_east_west_asia-sweet_ritual_foods-baklava",
+      "seedId": "exp1-middle_east_west_asia-sweet_ritual_foods-baklava",
+      "cacheTarget": {
+        "dishFamily": "baklava-sweet-ritual-foods",
+        "region": "Middle East and West Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, sweet and ritual foods role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-central_asia-staple_starches-naan",
+      "seedId": "exp1-central_asia-staple_starches-naan",
+      "cacheTarget": {
+        "dishFamily": "naan-staple-starches",
+        "region": "Central Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.central_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, staple starches role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-central_asia-liquids_and_comfort-kumis",
+      "seedId": "exp1-central_asia-liquids_and_comfort-kumis",
+      "cacheTarget": {
+        "dishFamily": "kumis-liquids-and-comfort",
+        "region": "Central Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.central_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "fallback_guard"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, liquids and comfort role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-central_asia-acid_heat_condiment-ac-ka",
+      "seedId": "exp1-central_asia-acid_heat_condiment-ac-ka",
+      "cacheTarget": {
+        "dishFamily": "ac-ka-acid-heat-condiment",
+        "region": "Central Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.central_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, acid heat condiment role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-central_asia-protein_vegetable_mains-besbarmaq",
+      "seedId": "exp1-central_asia-protein_vegetable_mains-besbarmaq",
+      "cacheTarget": {
+        "dishFamily": "besbarmaq-protein-vegetable-mains",
+        "region": "Central Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.central_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "unknown_family",
+        "fallback_guard",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, protein and vegetable mains role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-central_asia-handheld_social_foods-turkish-mant",
+      "seedId": "exp1-central_asia-handheld_social_foods-turkish-mant",
+      "cacheTarget": {
+        "dishFamily": "turkish-mant-handheld-social-foods",
+        "region": "Central Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.central_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, handheld and social foods role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-central_asia-sweet_ritual_foods-cakcak",
+      "seedId": "exp1-central_asia-sweet_ritual_foods-cakcak",
+      "cacheTarget": {
+        "dishFamily": "cakcak-sweet-ritual-foods",
+        "region": "Central Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.central_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, sweet and ritual foods role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-south_asia-staple_starches-chapati",
+      "seedId": "exp1-south_asia-staple_starches-chapati",
+      "cacheTarget": {
+        "dishFamily": "chapati-staple-starches",
+        "region": "South Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, staple starches role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-south_asia-liquids_and_comfort-lassi",
+      "seedId": "exp1-south_asia-liquids_and_comfort-lassi",
+      "cacheTarget": {
+        "dishFamily": "lassi-liquids-and-comfort",
+        "region": "South Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "fallback_guard"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, liquids and comfort role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-south_asia-acid_heat_condiment-chutney",
+      "seedId": "exp1-south_asia-acid_heat_condiment-chutney",
+      "cacheTarget": {
+        "dishFamily": "chutney-acid-heat-condiment",
+        "region": "South Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, acid heat condiment role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-south_asia-protein_vegetable_mains-dal",
+      "seedId": "exp1-south_asia-protein_vegetable_mains-dal",
+      "cacheTarget": {
+        "dishFamily": "dal-protein-vegetable-mains",
+        "region": "South Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "unknown_family",
+        "fallback_guard",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, protein and vegetable mains role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-south_asia-handheld_social_foods-momo",
+      "seedId": "exp1-south_asia-handheld_social_foods-momo",
+      "cacheTarget": {
+        "dishFamily": "momo-handheld-social-foods",
+        "region": "South Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, handheld and social foods role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-south_asia-sweet_ritual_foods-gulab-jamun",
+      "seedId": "exp1-south_asia-sweet_ritual_foods-gulab-jamun",
+      "cacheTarget": {
+        "dishFamily": "gulab-jamun-sweet-ritual-foods",
+        "region": "South Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, sweet and ritual foods role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-east_asia-staple_starches-congee",
+      "seedId": "exp1-east_asia-staple_starches-congee",
+      "cacheTarget": {
+        "dishFamily": "congee-staple-starches",
+        "region": "East Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, staple starches role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-east_asia-liquids_and_comfort-green-tea",
+      "seedId": "exp1-east_asia-liquids_and_comfort-green-tea",
+      "cacheTarget": {
+        "dishFamily": "green-tea-liquids-and-comfort",
+        "region": "East Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "fallback_guard"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, liquids and comfort role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-east_asia-acid_heat_condiment-kimchi",
+      "seedId": "exp1-east_asia-acid_heat_condiment-kimchi",
+      "cacheTarget": {
+        "dishFamily": "kimchi-acid-heat-condiment",
+        "region": "East Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, acid heat condiment role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-east_asia-protein_vegetable_mains-mapo-doufu",
+      "seedId": "exp1-east_asia-protein_vegetable_mains-mapo-doufu",
+      "cacheTarget": {
+        "dishFamily": "mapo-doufu-protein-vegetable-mains",
+        "region": "East Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "unknown_family",
+        "fallback_guard",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, protein and vegetable mains role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-east_asia-handheld_social_foods-gyoza",
+      "seedId": "exp1-east_asia-handheld_social_foods-gyoza",
+      "cacheTarget": {
+        "dishFamily": "gyoza-handheld-social-foods",
+        "region": "East Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, handheld and social foods role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-east_asia-sweet_ritual_foods-mochi",
+      "seedId": "exp1-east_asia-sweet_ritual_foods-mochi",
+      "cacheTarget": {
+        "dishFamily": "mochi-sweet-ritual-foods",
+        "region": "East Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, sweet and ritual foods role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-southeast_asia-staple_starches-nasi-lemak",
+      "seedId": "exp1-southeast_asia-staple_starches-nasi-lemak",
+      "cacheTarget": {
+        "dishFamily": "nasi-lemak-staple-starches",
+        "region": "Southeast Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, staple starches role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-southeast_asia-liquids_and_comfort-laksa",
+      "seedId": "exp1-southeast_asia-liquids_and_comfort-laksa",
+      "cacheTarget": {
+        "dishFamily": "laksa-liquids-and-comfort",
+        "region": "Southeast Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "fallback_guard"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, liquids and comfort role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-southeast_asia-acid_heat_condiment-sambal",
+      "seedId": "exp1-southeast_asia-acid_heat_condiment-sambal",
+      "cacheTarget": {
+        "dishFamily": "sambal-acid-heat-condiment",
+        "region": "Southeast Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, acid heat condiment role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-southeast_asia-protein_vegetable_mains-rendang",
+      "seedId": "exp1-southeast_asia-protein_vegetable_mains-rendang",
+      "cacheTarget": {
+        "dishFamily": "rendang-protein-vegetable-mains",
+        "region": "Southeast Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "unknown_family",
+        "fallback_guard",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, protein and vegetable mains role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-southeast_asia-handheld_social_foods-popiah",
+      "seedId": "exp1-southeast_asia-handheld_social_foods-popiah",
+      "cacheTarget": {
+        "dishFamily": "popiah-handheld-social-foods",
+        "region": "Southeast Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, handheld and social foods role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-southeast_asia-sweet_ritual_foods-halo-halo",
+      "seedId": "exp1-southeast_asia-sweet_ritual_foods-halo-halo",
+      "cacheTarget": {
+        "dishFamily": "halo-halo-sweet-ritual-foods",
+        "region": "Southeast Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, sweet and ritual foods role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-oceania_pacific-staple_starches-colocasia-esculenta",
+      "seedId": "exp1-oceania_pacific-staple_starches-colocasia-esculenta",
+      "cacheTarget": {
+        "dishFamily": "colocasia-esculenta-staple-starches",
+        "region": "Oceania and Pacific"
+      },
+      "coverageTags": [
+        "cultureAreas.oceania_pacific",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, staple starches role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-oceania_pacific-liquids_and_comfort-kava-drinking-as-practised-by-the-papuans-and-polynesians",
+      "seedId": "exp1-oceania_pacific-liquids_and_comfort-kava-drinking-as-practised-by-the-papuans-and-polynesians",
+      "cacheTarget": {
+        "dishFamily": "kava-drinking-as-practised-by-the-papuans-and-polynesians-liquids-and-comfort",
+        "region": "Oceania and Pacific"
+      },
+      "coverageTags": [
+        "cultureAreas.oceania_pacific",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "fallback_guard"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, liquids and comfort role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-oceania_pacific-acid_heat_condiment-ota-ika",
+      "seedId": "exp1-oceania_pacific-acid_heat_condiment-ota-ika",
+      "cacheTarget": {
+        "dishFamily": "ota-ika-acid-heat-condiment",
+        "region": "Oceania and Pacific"
+      },
+      "coverageTags": [
+        "cultureAreas.oceania_pacific",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, acid heat condiment role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-oceania_pacific-protein_vegetable_mains-lomi-salmon",
+      "seedId": "exp1-oceania_pacific-protein_vegetable_mains-lomi-salmon",
+      "cacheTarget": {
+        "dishFamily": "lomi-salmon-protein-vegetable-mains",
+        "region": "Oceania and Pacific"
+      },
+      "coverageTags": [
+        "cultureAreas.oceania_pacific",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "unknown_family",
+        "fallback_guard",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, protein and vegetable mains role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-oceania_pacific-handheld_social_foods-meat-pie",
+      "seedId": "exp1-oceania_pacific-handheld_social_foods-meat-pie",
+      "cacheTarget": {
+        "dishFamily": "meat-pie-handheld-social-foods",
+        "region": "Oceania and Pacific"
+      },
+      "coverageTags": [
+        "cultureAreas.oceania_pacific",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, handheld and social foods role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-oceania_pacific-sweet_ritual_foods-pavlova",
+      "seedId": "exp1-oceania_pacific-sweet_ritual_foods-pavlova",
+      "cacheTarget": {
+        "dishFamily": "pavlova-sweet-ritual-foods",
+        "region": "Oceania and Pacific"
+      },
+      "coverageTags": [
+        "cultureAreas.oceania_pacific",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, sweet and ritual foods role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-europe-staple_starches-polenta",
+      "seedId": "exp1-europe-staple_starches-polenta",
+      "cacheTarget": {
+        "dishFamily": "polenta-staple-starches",
+        "region": "Europe"
+      },
+      "coverageTags": [
+        "cultureAreas.europe",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, staple starches role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-europe-liquids_and_comfort-borscht",
+      "seedId": "exp1-europe-liquids_and_comfort-borscht",
+      "cacheTarget": {
+        "dishFamily": "borscht-liquids-and-comfort",
+        "region": "Europe"
+      },
+      "coverageTags": [
+        "cultureAreas.europe",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "fallback_guard"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, liquids and comfort role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-europe-acid_heat_condiment-mustard",
+      "seedId": "exp1-europe-acid_heat_condiment-mustard",
+      "cacheTarget": {
+        "dishFamily": "mustard-acid-heat-condiment",
+        "region": "Europe"
+      },
+      "coverageTags": [
+        "cultureAreas.europe",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, acid heat condiment role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-europe-protein_vegetable_mains-goulash",
+      "seedId": "exp1-europe-protein_vegetable_mains-goulash",
+      "cacheTarget": {
+        "dishFamily": "goulash-protein-vegetable-mains",
+        "region": "Europe"
+      },
+      "coverageTags": [
+        "cultureAreas.europe",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "unknown_family",
+        "fallback_guard",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, protein and vegetable mains role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-europe-handheld_social_foods-pierogi",
+      "seedId": "exp1-europe-handheld_social_foods-pierogi",
+      "cacheTarget": {
+        "dishFamily": "pierogi-handheld-social-foods",
+        "region": "Europe"
+      },
+      "coverageTags": [
+        "cultureAreas.europe",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, handheld and social foods role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-europe-sweet_ritual_foods-panettone",
+      "seedId": "exp1-europe-sweet_ritual_foods-panettone",
+      "cacheTarget": {
+        "dishFamily": "panettone-sweet-ritual-foods",
+        "region": "Europe"
+      },
+      "coverageTags": [
+        "cultureAreas.europe",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, sweet and ritual foods role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-caribbean-staple_starches-bammy",
+      "seedId": "exp1-caribbean-staple_starches-bammy",
+      "cacheTarget": {
+        "dishFamily": "bammy-staple-starches",
+        "region": "Caribbean"
+      },
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, staple starches role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-caribbean-liquids_and_comfort-hibiscus-tea",
+      "seedId": "exp1-caribbean-liquids_and_comfort-hibiscus-tea",
+      "cacheTarget": {
+        "dishFamily": "hibiscus-tea-liquids-and-comfort",
+        "region": "Caribbean"
+      },
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "fallback_guard"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, liquids and comfort role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-caribbean-acid_heat_condiment-pikliz",
+      "seedId": "exp1-caribbean-acid_heat_condiment-pikliz",
+      "cacheTarget": {
+        "dishFamily": "pikliz-acid-heat-condiment",
+        "region": "Caribbean"
+      },
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, acid heat condiment role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-caribbean-protein_vegetable_mains-curry-goat",
+      "seedId": "exp1-caribbean-protein_vegetable_mains-curry-goat",
+      "cacheTarget": {
+        "dishFamily": "curry-goat-protein-vegetable-mains",
+        "region": "Caribbean"
+      },
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "unknown_family",
+        "fallback_guard",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, protein and vegetable mains role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-caribbean-handheld_social_foods-jamaican-patty",
+      "seedId": "exp1-caribbean-handheld_social_foods-jamaican-patty",
+      "cacheTarget": {
+        "dishFamily": "jamaican-patty-handheld-social-foods",
+        "region": "Caribbean"
+      },
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, handheld and social foods role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-caribbean-sweet_ritual_foods-rum-cake",
+      "seedId": "exp1-caribbean-sweet_ritual_foods-rum-cake",
+      "cacheTarget": {
+        "dishFamily": "rum-cake-sweet-ritual-foods",
+        "region": "Caribbean"
+      },
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, sweet and ritual foods role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-central_america-staple_starches-corn-tortilla",
+      "seedId": "exp1-central_america-staple_starches-corn-tortilla",
+      "cacheTarget": {
+        "dishFamily": "corn-tortilla-staple-starches",
+        "region": "Central America"
+      },
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, staple starches role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-central_america-liquids_and_comfort-atole",
+      "seedId": "exp1-central_america-liquids_and_comfort-atole",
+      "cacheTarget": {
+        "dishFamily": "atole-liquids-and-comfort",
+        "region": "Central America"
+      },
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "fallback_guard"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, liquids and comfort role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-central_america-acid_heat_condiment-curtido",
+      "seedId": "exp1-central_america-acid_heat_condiment-curtido",
+      "cacheTarget": {
+        "dishFamily": "curtido-acid-heat-condiment",
+        "region": "Central America"
+      },
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, acid heat condiment role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-central_america-protein_vegetable_mains-pepian",
+      "seedId": "exp1-central_america-protein_vegetable_mains-pepian",
+      "cacheTarget": {
+        "dishFamily": "pepian-protein-vegetable-mains",
+        "region": "Central America"
+      },
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "unknown_family",
+        "fallback_guard",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, protein and vegetable mains role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-central_america-handheld_social_foods-pupusa",
+      "seedId": "exp1-central_america-handheld_social_foods-pupusa",
+      "cacheTarget": {
+        "dishFamily": "pupusa-handheld-social-foods",
+        "region": "Central America"
+      },
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, handheld and social foods role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-central_america-sweet_ritual_foods-tres-leches-cake",
+      "seedId": "exp1-central_america-sweet_ritual_foods-tres-leches-cake",
+      "cacheTarget": {
+        "dishFamily": "tres-leches-cake-sweet-ritual-foods",
+        "region": "Central America"
+      },
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, sweet and ritual foods role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-south_america-staple_starches-arepa",
+      "seedId": "exp1-south_america-staple_starches-arepa",
+      "cacheTarget": {
+        "dishFamily": "arepa-staple-starches",
+        "region": "South America"
+      },
+      "coverageTags": [
+        "cultureAreas.south_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, staple starches role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-south_america-liquids_and_comfort-yerba-mate-beverage",
+      "seedId": "exp1-south_america-liquids_and_comfort-yerba-mate-beverage",
+      "cacheTarget": {
+        "dishFamily": "yerba-mate-beverage-liquids-and-comfort",
+        "region": "South America"
+      },
+      "coverageTags": [
+        "cultureAreas.south_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "fallback_guard"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, liquids and comfort role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-south_america-acid_heat_condiment-chimichurri",
+      "seedId": "exp1-south_america-acid_heat_condiment-chimichurri",
+      "cacheTarget": {
+        "dishFamily": "chimichurri-acid-heat-condiment",
+        "region": "South America"
+      },
+      "coverageTags": [
+        "cultureAreas.south_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, acid heat condiment role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-south_america-protein_vegetable_mains-feijoada",
+      "seedId": "exp1-south_america-protein_vegetable_mains-feijoada",
+      "cacheTarget": {
+        "dishFamily": "feijoada-protein-vegetable-mains",
+        "region": "South America"
+      },
+      "coverageTags": [
+        "cultureAreas.south_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "unknown_family",
+        "fallback_guard",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, protein and vegetable mains role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-south_america-handheld_social_foods-empanada",
+      "seedId": "exp1-south_america-handheld_social_foods-empanada",
+      "cacheTarget": {
+        "dishFamily": "empanada-handheld-social-foods",
+        "region": "South America"
+      },
+      "coverageTags": [
+        "cultureAreas.south_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, handheld and social foods role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-south_america-sweet_ritual_foods-brigadeiro",
+      "seedId": "exp1-south_america-sweet_ritual_foods-brigadeiro",
+      "cacheTarget": {
+        "dishFamily": "brigadeiro-sweet-ritual-foods",
+        "region": "South America"
+      },
+      "coverageTags": [
+        "cultureAreas.south_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, sweet and ritual foods role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-north_america-staple_starches-cornbread",
+      "seedId": "exp1-north_america-staple_starches-cornbread",
+      "cacheTarget": {
+        "dishFamily": "cornbread-staple-starches",
+        "region": "North America"
+      },
+      "coverageTags": [
+        "cultureAreas.north_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, staple starches role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-north_america-liquids_and_comfort-chicken-soup",
+      "seedId": "exp1-north_america-liquids_and_comfort-chicken-soup",
+      "cacheTarget": {
+        "dishFamily": "chicken-soup-liquids-and-comfort",
+        "region": "North America"
+      },
+      "coverageTags": [
+        "cultureAreas.north_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "fallback_guard"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, liquids and comfort role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-north_america-acid_heat_condiment-barbecue-sauce",
+      "seedId": "exp1-north_america-acid_heat_condiment-barbecue-sauce",
+      "cacheTarget": {
+        "dishFamily": "barbecue-sauce-acid-heat-condiment",
+        "region": "North America"
+      },
+      "coverageTags": [
+        "cultureAreas.north_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, acid heat condiment role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-north_america-protein_vegetable_mains-pot-roast",
+      "seedId": "exp1-north_america-protein_vegetable_mains-pot-roast",
+      "cacheTarget": {
+        "dishFamily": "pot-roast-protein-vegetable-mains",
+        "region": "North America"
+      },
+      "coverageTags": [
+        "cultureAreas.north_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "unknown_family",
+        "fallback_guard",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, protein and vegetable mains role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-north_america-handheld_social_foods-hamburger",
+      "seedId": "exp1-north_america-handheld_social_foods-hamburger",
+      "cacheTarget": {
+        "dishFamily": "hamburger-handheld-social-foods",
+        "region": "North America"
+      },
+      "coverageTags": [
+        "cultureAreas.north_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, handheld and social foods role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-north_america-sweet_ritual_foods-apple-pie",
+      "seedId": "exp1-north_america-sweet_ritual_foods-apple-pie",
+      "cacheTarget": {
+        "dishFamily": "apple-pie-sweet-ritual-foods",
+        "region": "North America"
+      },
+      "coverageTags": [
+        "cultureAreas.north_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, sweet and ritual foods role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-indigenous_first_peoples-staple_starches-frybread",
+      "seedId": "exp1-indigenous_first_peoples-staple_starches-frybread",
+      "cacheTarget": {
+        "dishFamily": "frybread-staple-starches",
+        "region": "Indigenous and First Peoples"
+      },
+      "coverageTags": [
+        "cultureAreas.indigenous_first_peoples",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.indigenous"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, staple starches role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-indigenous_first_peoples-liquids_and_comfort-labrador-tea",
+      "seedId": "exp1-indigenous_first_peoples-liquids_and_comfort-labrador-tea",
+      "cacheTarget": {
+        "dishFamily": "labrador-tea-liquids-and-comfort",
+        "region": "Indigenous and First Peoples"
+      },
+      "coverageTags": [
+        "cultureAreas.indigenous_first_peoples",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.indigenous"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "fallback_guard"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, liquids and comfort role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-indigenous_first_peoples-acid_heat_condiment-cranberry-sauce",
+      "seedId": "exp1-indigenous_first_peoples-acid_heat_condiment-cranberry-sauce",
+      "cacheTarget": {
+        "dishFamily": "cranberry-sauce-acid-heat-condiment",
+        "region": "Indigenous and First Peoples"
+      },
+      "coverageTags": [
+        "cultureAreas.indigenous_first_peoples",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.indigenous"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, acid heat condiment role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-indigenous_first_peoples-protein_vegetable_mains-three-sisters-soup",
+      "seedId": "exp1-indigenous_first_peoples-protein_vegetable_mains-three-sisters-soup",
+      "cacheTarget": {
+        "dishFamily": "three-sisters-soup-protein-vegetable-mains",
+        "region": "Indigenous and First Peoples"
+      },
+      "coverageTags": [
+        "cultureAreas.indigenous_first_peoples",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.indigenous"
+      ],
+      "qualityTriggers": [
+        "unknown_family",
+        "fallback_guard",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, protein and vegetable mains role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-indigenous_first_peoples-handheld_social_foods-navajo-taco",
+      "seedId": "exp1-indigenous_first_peoples-handheld_social_foods-navajo-taco",
+      "cacheTarget": {
+        "dishFamily": "navajo-taco-handheld-social-foods",
+        "region": "Indigenous and First Peoples"
+      },
+      "coverageTags": [
+        "cultureAreas.indigenous_first_peoples",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.indigenous"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, handheld and social foods role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-indigenous_first_peoples-sweet_ritual_foods-maple-syrup",
+      "seedId": "exp1-indigenous_first_peoples-sweet_ritual_foods-maple-syrup",
+      "cacheTarget": {
+        "dishFamily": "maple-syrup-sweet-ritual-foods",
+        "region": "Indigenous and First Peoples"
+      },
+      "coverageTags": [
+        "cultureAreas.indigenous_first_peoples",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.indigenous"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, sweet and ritual foods role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-diaspora_global-staple_starches-bagel",
+      "seedId": "exp1-diaspora_global-staple_starches-bagel",
+      "cacheTarget": {
+        "dishFamily": "bagel-staple-starches",
+        "region": "Global diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.diaspora"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, staple starches role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-diaspora_global-liquids_and_comfort-bubble-tea",
+      "seedId": "exp1-diaspora_global-liquids_and_comfort-bubble-tea",
+      "cacheTarget": {
+        "dishFamily": "bubble-tea-liquids-and-comfort",
+        "region": "Global diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.diaspora"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "fallback_guard"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, liquids and comfort role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-diaspora_global-acid_heat_condiment-mango-pickle",
+      "seedId": "exp1-diaspora_global-acid_heat_condiment-mango-pickle",
+      "cacheTarget": {
+        "dishFamily": "mango-pickle-acid-heat-condiment",
+        "region": "Global diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.diaspora"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, acid heat condiment role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-diaspora_global-protein_vegetable_mains-jerk-chicken",
+      "seedId": "exp1-diaspora_global-protein_vegetable_mains-jerk-chicken",
+      "cacheTarget": {
+        "dishFamily": "jerk-chicken-protein-vegetable-mains",
+        "region": "Global diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.diaspora"
+      ],
+      "qualityTriggers": [
+        "unknown_family",
+        "fallback_guard",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, protein and vegetable mains role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-diaspora_global-handheld_social_foods-falafel",
+      "seedId": "exp1-diaspora_global-handheld_social_foods-falafel",
+      "cacheTarget": {
+        "dishFamily": "falafel-handheld-social-foods",
+        "region": "Global diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.diaspora"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, handheld and social foods role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-diaspora_global-sweet_ritual_foods-mooncake",
+      "seedId": "exp1-diaspora_global-sweet_ritual_foods-mooncake",
+      "cacheTarget": {
+        "dishFamily": "mooncake-sweet-ritual-foods",
+        "region": "Global diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.diaspora"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, sweet and ritual foods role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-borderland_trade_routes-staple_starches-wheat-tortilla",
+      "seedId": "exp1-borderland_trade_routes-staple_starches-wheat-tortilla",
+      "cacheTarget": {
+        "dishFamily": "wheat-tortilla-staple-starches",
+        "region": "Borderlands and trade routes"
+      },
+      "coverageTags": [
+        "cultureAreas.borderland_trade_routes",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.borderland"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, staple starches role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-borderland_trade_routes-liquids_and_comfort-champurrado",
+      "seedId": "exp1-borderland_trade_routes-liquids_and_comfort-champurrado",
+      "cacheTarget": {
+        "dishFamily": "champurrado-liquids-and-comfort",
+        "region": "Borderlands and trade routes"
+      },
+      "coverageTags": [
+        "cultureAreas.borderland_trade_routes",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.borderland"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "fallback_guard"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, liquids and comfort role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-borderland_trade_routes-acid_heat_condiment-salsa-food-group",
+      "seedId": "exp1-borderland_trade_routes-acid_heat_condiment-salsa-food-group",
+      "cacheTarget": {
+        "dishFamily": "salsa-food-group-acid-heat-condiment",
+        "region": "Borderlands and trade routes"
+      },
+      "coverageTags": [
+        "cultureAreas.borderland_trade_routes",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.borderland"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, acid heat condiment role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-borderland_trade_routes-protein_vegetable_mains-chili",
+      "seedId": "exp1-borderland_trade_routes-protein_vegetable_mains-chili",
+      "cacheTarget": {
+        "dishFamily": "chili-protein-vegetable-mains",
+        "region": "Borderlands and trade routes"
+      },
+      "coverageTags": [
+        "cultureAreas.borderland_trade_routes",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.borderland"
+      ],
+      "qualityTriggers": [
+        "unknown_family",
+        "fallback_guard",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, protein and vegetable mains role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-borderland_trade_routes-handheld_social_foods-burrito",
+      "seedId": "exp1-borderland_trade_routes-handheld_social_foods-burrito",
+      "cacheTarget": {
+        "dishFamily": "burrito-handheld-social-foods",
+        "region": "Borderlands and trade routes"
+      },
+      "coverageTags": [
+        "cultureAreas.borderland_trade_routes",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.borderland"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, handheld and social foods role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-borderland_trade_routes-sweet_ritual_foods-pan-de-muerto",
+      "seedId": "exp1-borderland_trade_routes-sweet_ritual_foods-pan-de-muerto",
+      "cacheTarget": {
+        "dishFamily": "pan-de-muerto-sweet-ritual-foods",
+        "region": "Borderlands and trade routes"
+      },
+      "coverageTags": [
+        "cultureAreas.borderland_trade_routes",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.borderland"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, sweet and ritual foods role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-arctic_subarctic-staple_starches-bannock",
+      "seedId": "exp1-arctic_subarctic-staple_starches-bannock",
+      "cacheTarget": {
+        "dishFamily": "bannock-staple-starches",
+        "region": "Arctic and Subarctic"
+      },
+      "coverageTags": [
+        "cultureAreas.arctic_subarctic",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, staple starches role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-arctic_subarctic-liquids_and_comfort-labrador-tea",
+      "seedId": "exp1-arctic_subarctic-liquids_and_comfort-labrador-tea",
+      "cacheTarget": {
+        "dishFamily": "labrador-tea-liquids-and-comfort",
+        "region": "Arctic and Subarctic"
+      },
+      "coverageTags": [
+        "cultureAreas.arctic_subarctic",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "fallback_guard"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, liquids and comfort role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-arctic_subarctic-acid_heat_condiment-fermented-fish",
+      "seedId": "exp1-arctic_subarctic-acid_heat_condiment-fermented-fish",
+      "cacheTarget": {
+        "dishFamily": "fermented-fish-acid-heat-condiment",
+        "region": "Arctic and Subarctic"
+      },
+      "coverageTags": [
+        "cultureAreas.arctic_subarctic",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, acid heat condiment role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-arctic_subarctic-protein_vegetable_mains-muktuk",
+      "seedId": "exp1-arctic_subarctic-protein_vegetable_mains-muktuk",
+      "cacheTarget": {
+        "dishFamily": "muktuk-protein-vegetable-mains",
+        "region": "Arctic and Subarctic"
+      },
+      "coverageTags": [
+        "cultureAreas.arctic_subarctic",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "unknown_family",
+        "fallback_guard",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, protein and vegetable mains role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-arctic_subarctic-handheld_social_foods-dried-fish",
+      "seedId": "exp1-arctic_subarctic-handheld_social_foods-dried-fish",
+      "cacheTarget": {
+        "dishFamily": "dried-fish-handheld-social-foods",
+        "region": "Arctic and Subarctic"
+      },
+      "coverageTags": [
+        "cultureAreas.arctic_subarctic",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, handheld and social foods role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp1-arctic_subarctic-sweet_ritual_foods-alaskan-ice-cream",
+      "seedId": "exp1-arctic_subarctic-sweet_ritual_foods-alaskan-ice-cream",
+      "cacheTarget": {
+        "dishFamily": "alaskan-ice-cream-sweet-ritual-foods",
+        "region": "Arctic and Subarctic"
+      },
+      "coverageTags": [
+        "cultureAreas.arctic_subarctic",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has names, region bucket, sweet and ritual foods role, sensory mechanisms, uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming expansion task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
         ]
       }
     }
