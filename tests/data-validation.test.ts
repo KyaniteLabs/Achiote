@@ -4,6 +4,9 @@ import ingredientsData from '../src/data/ingredients.json' with { type: 'json' }
 import memoryHintsData from '../src/data/memory-hints.json' with { type: 'json' };
 import regionalAvailabilityData from '../src/data/regional-availability.json' with { type: 'json' };
 import sensoryProfilesData from '../src/data/sensory-profiles.json' with { type: 'json' };
+import globalCoverageMatrixData from '../src/data/global-coverage-matrix.json' with { type: 'json' };
+import referenceSeedQueueData from '../src/data/reference-seed-queue.json' with { type: 'json' };
+import cacheWarmingManifestData from '../src/data/cache-warming-manifest.json' with { type: 'json' };
 import { validateBundledData, type BundledDataSet } from '../src/lib/data-schemas.js';
 
 const bundledData: BundledDataSet = {
@@ -12,6 +15,9 @@ const bundledData: BundledDataSet = {
   regionalAvailability: regionalAvailabilityData,
   sensoryProfiles: sensoryProfilesData,
   memoryHints: memoryHintsData,
+  globalCoverageMatrix: globalCoverageMatrixData,
+  referenceSeedQueue: referenceSeedQueueData,
+  cacheWarmingManifest: cacheWarmingManifestData,
 };
 
 function cloneBundledData(): BundledDataSet {
@@ -169,5 +175,63 @@ describe('bundled data validation', () => {
     expectIssue(issues, 'ingredients.meta.sources[1]', 'non-empty string');
     expectIssue(issues, 'ingredients.meta.provenance.source', 'non-empty string');
     expectIssue(issues, 'ingredients.meta.provenance.notes[1]', 'non-empty string');
+  });
+
+  it('accepts committed global coverage, reference seed queue, and cache warming manifest data', () => {
+    expect(validateBundledData(bundledData)).toEqual([]);
+  });
+
+  it('rejects malformed global coverage axes and duplicate values', () => {
+    const data = cloneBundledData();
+    data.globalCoverageMatrix.axes.foodForms.values.push(
+      { id: 'beverage', label: 'Duplicate beverage', description: 'duplicate' },
+      { id: '', label: '', description: '' },
+    );
+
+    const issues = validateBundledData(data);
+
+    expectIssue(issues, 'globalCoverageMatrix.axes.foodForms.values[17].id', 'duplicate');
+    expectIssue(issues, 'globalCoverageMatrix.axes.foodForms.values[18].id', 'non-empty string');
+    expectIssue(issues, 'globalCoverageMatrix.axes.foodForms.values[18].label', 'non-empty string');
+  });
+
+  it('rejects malformed reference seed queue entries', () => {
+    const data = cloneBundledData();
+    data.referenceSeedQueue.seeds.push({
+      ...structuredClone(data.referenceSeedQueue.seeds[0]),
+      id: data.referenceSeedQueue.seeds[0].id,
+      coverageTags: ['foodForms.not-real'],
+      querySeeds: [],
+      cacheTargets: [{ dishFamily: 'missing-region' }],
+    });
+    delete data.referenceSeedQueue.seeds[1].provenance;
+
+    const issues = validateBundledData(data);
+
+    expectIssue(issues, 'referenceSeedQueue.seeds[16].id', 'duplicate');
+    expectIssue(issues, 'referenceSeedQueue.seeds[16].coverageTags[0]', 'unknown coverage tag');
+    expectIssue(issues, 'referenceSeedQueue.seeds[16].querySeeds', 'non-empty array');
+    expectIssue(issues, 'referenceSeedQueue.seeds[16].cacheTargets[0].region', 'non-empty string');
+    expectIssue(issues, 'referenceSeedQueue.seeds[1].provenance', 'provenance');
+  });
+
+  it('rejects malformed cache warming manifest tasks', () => {
+    const data = cloneBundledData();
+    data.cacheWarmingManifest.tasks.push({
+      ...structuredClone(data.cacheWarmingManifest.tasks[0]),
+      id: data.cacheWarmingManifest.tasks[0].id,
+      seedId: 'missing-seed',
+      coverageTags: ['mechanisms.not-real'],
+      qualityTriggers: [],
+      doneWhen: [],
+    });
+
+    const issues = validateBundledData(data);
+
+    expectIssue(issues, 'cacheWarmingManifest.tasks[16].id', 'duplicate');
+    expectIssue(issues, 'cacheWarmingManifest.tasks[16].seedId', 'unknown seed id');
+    expectIssue(issues, 'cacheWarmingManifest.tasks[16].coverageTags[0]', 'unknown coverage tag');
+    expectIssue(issues, 'cacheWarmingManifest.tasks[16].qualityTriggers', 'non-empty array');
+    expectIssue(issues, 'cacheWarmingManifest.tasks[16].doneWhen', 'non-empty array');
   });
 });

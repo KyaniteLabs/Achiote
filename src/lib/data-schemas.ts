@@ -65,6 +65,60 @@ type MemoryHints = {
   regionFamilyMap: Record<string, unknown>;
 };
 
+type CoverageAxisValue = {
+  id?: unknown;
+  label?: unknown;
+  description?: unknown;
+};
+
+type CoverageAxis = {
+  label?: unknown;
+  description?: unknown;
+  values?: CoverageAxisValue[];
+};
+
+export type GlobalCoverageMatrix = {
+  meta: Meta;
+  axes: Record<string, CoverageAxis>;
+};
+
+type CacheTarget = {
+  dishFamily?: unknown;
+  region?: unknown;
+};
+
+export type ReferenceSeedEntry = {
+  id?: unknown;
+  forms?: unknown;
+  regions?: unknown;
+  nameSignals?: unknown;
+  mechanisms?: unknown;
+  querySeeds?: unknown;
+  cacheTargets?: CacheTarget[];
+  coverageTags?: unknown;
+  provenance?: unknown;
+};
+
+export type ReferenceSeedQueue = {
+  meta: Meta;
+  seeds: ReferenceSeedEntry[];
+};
+
+type CacheWarmingTask = {
+  id?: unknown;
+  seedId?: unknown;
+  cacheTarget?: CacheTarget;
+  coverageTags?: unknown;
+  qualityTriggers?: unknown;
+  doneWhen?: unknown;
+  provenance?: unknown;
+};
+
+export type CacheWarmingManifest = {
+  meta: Meta;
+  tasks: CacheWarmingTask[];
+};
+
 export type BundledDataSet = {
   dishFamilies: { meta: Meta; families: DishFamily[] };
   ingredients: { meta: Meta; ingredients: Record<string, Ingredient> };
@@ -75,6 +129,9 @@ export type BundledDataSet = {
     nostalgiaCriticalCriteria?: unknown;
   };
   memoryHints: MemoryHints;
+  globalCoverageMatrix: GlobalCoverageMatrix;
+  referenceSeedQueue: ReferenceSeedQueue;
+  cacheWarmingManifest: CacheWarmingManifest;
 };
 
 const VALID_CONFIDENCE = new Set(['High', 'Medium', 'Low']);
@@ -415,6 +472,141 @@ function validateSensoryProfiles(issues: ValidationIssue[], data: BundledDataSet
   }
 }
 
+function validateGlobalCoverageMatrix(issues: ValidationIssue[], data: GlobalCoverageMatrix): Set<string> {
+  validateMeta(issues, 'globalCoverageMatrix.meta', data.meta);
+  if (!validateNonEmptyRecord(issues, 'globalCoverageMatrix.axes', data.axes)) return new Set();
+
+  const tags = new Set<string>();
+  for (const [axisId, axis] of Object.entries(data.axes)) {
+    const base = `globalCoverageMatrix.axes.${axisId}`;
+    if (!isNonEmptyString(axisId)) pushIssue(issues, base, 'must use a non-empty string key');
+    validateNonEmptyString(issues, `${base}.label`, axis.label);
+    validateNonEmptyString(issues, `${base}.description`, axis.description);
+    if (!Array.isArray(axis.values)) {
+      pushIssue(issues, `${base}.values`, 'must be an array');
+      continue;
+    }
+    if (axis.values.length === 0) pushIssue(issues, `${base}.values`, 'must be a non-empty array');
+
+    const valueIds = new Set<string>();
+    axis.values.forEach((value, index) => {
+      const valuePath = `${base}.values[${index}]`;
+      validateNonEmptyString(issues, `${valuePath}.id`, value.id);
+      validateNonEmptyString(issues, `${valuePath}.label`, value.label);
+      validateNonEmptyString(issues, `${valuePath}.description`, value.description);
+      if (!isNonEmptyString(value.id)) return;
+      const normalized = value.id.trim();
+      if (valueIds.has(normalized)) {
+        pushIssue(issues, `${valuePath}.id`, 'duplicate value id');
+      }
+      valueIds.add(normalized);
+      tags.add(`${axisId}.${normalized}`);
+    });
+  }
+
+  return tags;
+}
+
+function validateCoverageTags(
+  issues: ValidationIssue[],
+  path: string,
+  value: unknown,
+  validTags: Set<string>,
+  options: { requireNonEmpty?: boolean } = { requireNonEmpty: true },
+): void {
+  validateStringArray(issues, path, value, { requireNonEmpty: options.requireNonEmpty, unique: true });
+  if (!Array.isArray(value)) return;
+  value.forEach((tag, index) => {
+    if (isNonEmptyString(tag) && !validTags.has(tag)) {
+      pushIssue(issues, `${path}[${index}]`, 'unknown coverage tag');
+    }
+  });
+}
+
+function validateCacheTarget(issues: ValidationIssue[], path: string, value: unknown): void {
+  if (!isRecord(value)) {
+    pushIssue(issues, path, 'must be an object');
+    return;
+  }
+  validateNonEmptyString(issues, `${path}.dishFamily`, value.dishFamily);
+  validateNonEmptyString(issues, `${path}.region`, value.region);
+}
+
+function validateCacheTargets(issues: ValidationIssue[], path: string, value: unknown): void {
+  if (!Array.isArray(value)) {
+    pushIssue(issues, path, 'must be an array');
+    return;
+  }
+  if (value.length === 0) pushIssue(issues, path, 'must be a non-empty array');
+  value.forEach((target, index) => validateCacheTarget(issues, `${path}[${index}]`, target));
+}
+
+function validateReferenceSeedQueue(
+  issues: ValidationIssue[],
+  data: ReferenceSeedQueue,
+  validTags: Set<string>,
+): Set<string> {
+  validateMeta(issues, 'referenceSeedQueue.meta', data.meta);
+  const seedIds = new Set<string>();
+  if (!Array.isArray(data.seeds)) {
+    pushIssue(issues, 'referenceSeedQueue.seeds', 'must be an array');
+    return seedIds;
+  }
+  if (data.seeds.length === 0) pushIssue(issues, 'referenceSeedQueue.seeds', 'must be a non-empty array');
+
+  data.seeds.forEach((seed, index) => {
+    const base = `referenceSeedQueue.seeds[${index}]`;
+    validateNonEmptyString(issues, `${base}.id`, seed.id);
+    if (isNonEmptyString(seed.id)) {
+      if (seedIds.has(seed.id)) pushIssue(issues, `${base}.id`, 'duplicate seed id');
+      seedIds.add(seed.id);
+    }
+    validateCoverageTags(issues, `${base}.forms`, seed.forms, validTags);
+    validateStringArray(issues, `${base}.regions`, seed.regions, { requireNonEmpty: true, unique: true });
+    validateStringArray(issues, `${base}.nameSignals`, seed.nameSignals, { requireNonEmpty: true, unique: true });
+    validateCoverageTags(issues, `${base}.mechanisms`, seed.mechanisms, validTags);
+    validateStringArray(issues, `${base}.querySeeds`, seed.querySeeds, { requireNonEmpty: true, unique: true });
+    validateCacheTargets(issues, `${base}.cacheTargets`, seed.cacheTargets);
+    validateCoverageTags(issues, `${base}.coverageTags`, seed.coverageTags, validTags);
+    validateRequiredProvenance(issues, `${base}.provenance`, seed.provenance);
+  });
+
+  return seedIds;
+}
+
+function validateCacheWarmingManifest(
+  issues: ValidationIssue[],
+  data: CacheWarmingManifest,
+  validTags: Set<string>,
+  seedIds: Set<string>,
+): void {
+  validateMeta(issues, 'cacheWarmingManifest.meta', data.meta);
+  if (!Array.isArray(data.tasks)) {
+    pushIssue(issues, 'cacheWarmingManifest.tasks', 'must be an array');
+    return;
+  }
+  if (data.tasks.length === 0) pushIssue(issues, 'cacheWarmingManifest.tasks', 'must be a non-empty array');
+
+  const taskIds = new Set<string>();
+  data.tasks.forEach((task, index) => {
+    const base = `cacheWarmingManifest.tasks[${index}]`;
+    validateNonEmptyString(issues, `${base}.id`, task.id);
+    if (isNonEmptyString(task.id)) {
+      if (taskIds.has(task.id)) pushIssue(issues, `${base}.id`, 'duplicate task id');
+      taskIds.add(task.id);
+    }
+    validateNonEmptyString(issues, `${base}.seedId`, task.seedId);
+    if (isNonEmptyString(task.seedId) && !seedIds.has(task.seedId)) {
+      pushIssue(issues, `${base}.seedId`, 'unknown seed id');
+    }
+    validateCacheTarget(issues, `${base}.cacheTarget`, task.cacheTarget);
+    validateCoverageTags(issues, `${base}.coverageTags`, task.coverageTags, validTags);
+    validateStringArray(issues, `${base}.qualityTriggers`, task.qualityTriggers, { requireNonEmpty: true, unique: true });
+    validateStringArray(issues, `${base}.doneWhen`, task.doneWhen, { requireNonEmpty: true, unique: true });
+    validateRequiredProvenance(issues, `${base}.provenance`, task.provenance);
+  });
+}
+
 export function validateBundledData(data: BundledDataSet): ValidationIssue[] {
   const issues: ValidationIssue[] = [];
   validateDishFamilies(issues, data.dishFamilies);
@@ -422,6 +614,9 @@ export function validateBundledData(data: BundledDataSet): ValidationIssue[] {
   validateRegionalAvailability(issues, data.regionalAvailability);
   validateSensoryProfiles(issues, data.sensoryProfiles);
   validateMemoryHints(issues, data.memoryHints);
+  const validTags = validateGlobalCoverageMatrix(issues, data.globalCoverageMatrix);
+  const seedIds = validateReferenceSeedQueue(issues, data.referenceSeedQueue, validTags);
+  validateCacheWarmingManifest(issues, data.cacheWarmingManifest, validTags, seedIds);
   return issues;
 }
 

@@ -63,4 +63,19 @@ describe('security and legal surface guardrails', () => {
     expect(deployScript).toContain('--env-file "$ENV_FILE"');
     expect(deployScript).not.toContain('docker inspect');
   });
+
+  it('keeps global seed data provenance-bounded and free of provider, credential, browsing, medical, and legal claims', () => {
+    const seedSurface = [
+      read('src/data/global-coverage-matrix.json'),
+      read('src/data/reference-seed-queue.json'),
+      read('src/data/cache-warming-manifest.json'),
+      read('src/lib/reference-seed-planner.ts'),
+    ].join('\n');
+
+    expect(seedSurface).toContain('curated seed hypothesis');
+    expect(seedSurface).not.toMatch(/\b(?:OpenAI|Anthropic|Claude|GPT|GLM|Zhipu|provider returned|live web|Achiote browses|Achiote searches|Achiote scrapes)\b/i);
+    expect(seedSurface).not.toMatch(/\b(?:api[_-]?key|secret|token|password)\b/i);
+    expect(seedSurface).not.toMatch(/\b(?:medical advice|legal advice|cure|treats|prevents|lowers cholesterol|diagnoses)\b/i);
+    expect(seedSurface).not.toMatch(/\b(?:rawMemory|memoryText|prompt_text|user prompt)\b/i);
+  });
 });

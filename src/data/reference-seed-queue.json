@@ -1,0 +1,192 @@
+{
+  "meta": {
+    "version": "0.1.0",
+    "description": "Global reference seed backlog for Achiote cache and reference hardening",
+    "confidence": "Medium",
+    "provenance": {
+      "sourceType": "curated seed hypothesis",
+      "notes": [
+        "Seeds are research targets only and must be converted into sourced ResearchRecord entries before factual use.",
+        "This starter set spans food and drink forms so no single category dominates the cache plan."
+      ]
+    }
+  },
+  "seeds": [
+    {
+      "id": "beverage-rice-cinnamon-latin-america",
+      "forms": ["foodForms.beverage"],
+      "regions": ["macro:Latin America", "nation:Mexico", "macro:Central America", "diaspora:United States"],
+      "nameSignals": ["horchata", "agua de arroz", "rice cinnamon drink", "thin milky grain drink"],
+      "mechanisms": ["mechanisms.starch_texture", "mechanisms.aroma", "mechanisms.temperature", "mechanisms.serving_ritual"],
+      "querySeeds": ["rice cinnamon drink regional variants", "agua de arroz cinnamon family drink", "horchata rice cinnamon diaspora variations"],
+      "cacheTargets": [{ "dishFamily": "rice-cinnamon-beverage", "region": "Mexico" }],
+      "coverageTags": ["foodForms.beverage", "regionScopes.diaspora", "nameSystems.alias", "mechanisms.starch_texture", "evidenceLevels.seed_hypothesis"],
+      "provenance": { "sourceType": "curated seed hypothesis", "notes": ["Use for drink memories with rice, cinnamon, cold serving, or watered texture clues."] }
+    },
+    {
+      "id": "soup-sour-herb-eastern-europe",
+      "forms": ["foodForms.soup_broth"],
+      "regions": ["macro:Eastern Europe", "nation:Poland", "nation:Ukraine", "diaspora:North America"],
+      "nameSignals": ["sour dill soup", "pickle soup", "sorrel soup", "green sour soup"],
+      "mechanisms": ["mechanisms.fermentation_acid", "mechanisms.aroma", "mechanisms.temperature", "mechanisms.starch_texture"],
+      "querySeeds": ["sour herb soup dill potato regional variants", "pickle soup sorrel soup family memory", "Eastern European sour soup diaspora"],
+      "cacheTargets": [{ "dishFamily": "sour-herb-soup", "region": "Eastern Europe" }],
+      "coverageTags": ["foodForms.soup_broth", "regionScopes.macro_region", "nameSystems.alias", "mechanisms.fermentation_acid", "evidenceLevels.seed_hypothesis"],
+      "provenance": { "sourceType": "curated seed hypothesis", "notes": ["Use for sour, herbal, potato, egg, dill, sorrel, or pickle-brine soup memories."] }
+    },
+    {
+      "id": "sauce-chile-vinegar-caribbean",
+      "forms": ["foodForms.sauce_condiment"],
+      "regions": ["macro:Caribbean", "nation:Trinidad and Tobago", "nation:Barbados", "diaspora:United Kingdom"],
+      "nameSignals": ["pepper sauce", "hot sauce", "chile vinegar", "table pepper"],
+      "mechanisms": ["mechanisms.sauce_balance", "mechanisms.fermentation_acid", "mechanisms.aroma", "mechanisms.serving_ritual"],
+      "querySeeds": ["Caribbean pepper sauce vinegar regional variants", "family table hot sauce chile vinegar", "diaspora Caribbean pepper sauce memory"],
+      "cacheTargets": [{ "dishFamily": "chile-vinegar-condiment", "region": "Caribbean" }],
+      "coverageTags": ["foodForms.sauce_condiment", "regionScopes.macro_region", "nameSystems.menu_name", "mechanisms.sauce_balance", "evidenceLevels.seed_hypothesis"],
+      "provenance": { "sourceType": "curated seed hypothesis", "notes": ["Use for condiment memories where heat, vinegar, fruit, herbs, or table ritual dominate."] }
+    },
+    {
+      "id": "pickle-ferment-vegetable-east-asia",
+      "forms": ["foodForms.pickle_ferment"],
+      "regions": ["macro:East Asia", "nation:Korea", "nation:China", "diaspora:United States"],
+      "nameSignals": ["kimchi", "paocai", "pickled cabbage", "fermented vegetable"],
+      "mechanisms": ["mechanisms.fermentation_acid", "mechanisms.aroma", "mechanisms.texture_contrast", "mechanisms.temperature"],
+      "querySeeds": ["fermented cabbage pickle regional variants", "kimchi paocai family memory", "East Asian fermented vegetable diaspora"],
+      "cacheTargets": [{ "dishFamily": "fermented-vegetable-pickle", "region": "East Asia" }],
+      "coverageTags": ["foodForms.pickle_ferment", "regionScopes.macro_region", "nameSystems.transliteration", "mechanisms.fermentation_acid", "evidenceLevels.seed_hypothesis"],
+      "provenance": { "sourceType": "curated seed hypothesis", "notes": ["Use for brined, spicy, sour, cold, crunchy, or fermented vegetable memories."] }
+    },
+    {
+      "id": "bread-flatbread-global-staple",
+      "forms": ["foodForms.bread_flatbread"],
+      "regions": ["macro:South Asia", "macro:Middle East", "macro:Latin America", "macro:East Africa"],
+      "nameSignals": ["flatbread", "roti", "tortilla", "injera", "pita", "lavash"],
+      "mechanisms": ["mechanisms.browning", "mechanisms.starch_texture", "mechanisms.alkaline_processing", "mechanisms.serving_ritual"],
+      "querySeeds": ["global flatbread family variants griddle hearth", "flatbread staple serving ritual", "diaspora flatbread ingredient substitution"],
+      "cacheTargets": [{ "dishFamily": "flatbread", "region": "Global" }],
+      "coverageTags": ["foodForms.bread_flatbread", "regionScopes.macro_region", "nameSystems.alias", "mechanisms.browning", "evidenceLevels.seed_hypothesis"],
+      "provenance": { "sourceType": "curated seed hypothesis", "notes": ["Use for bread memories where griddle marks, chew, scoop ritual, or flour aroma matter."] }
+    },
+    {
+      "id": "grain-rice-noodle-staple",
+      "forms": ["foodForms.grain_rice_noodle"],
+      "regions": ["macro:East Asia", "macro:Southeast Asia", "macro:West Africa", "macro:South Asia"],
+      "nameSignals": ["rice dish", "noodle bowl", "porridge rice", "fried rice", "jollof", "biryani"],
+      "mechanisms": ["mechanisms.starch_texture", "mechanisms.aroma", "mechanisms.sauce_balance", "mechanisms.temperature"],
+      "querySeeds": ["rice noodle staple regional sensory variants", "grain dish family memory aroma texture", "diaspora rice noodle staple adaptation"],
+      "cacheTargets": [{ "dishFamily": "grain-rice-noodle-staple", "region": "Global" }],
+      "coverageTags": ["foodForms.grain_rice_noodle", "regionScopes.macro_region", "nameSystems.alias", "mechanisms.starch_texture", "evidenceLevels.seed_hypothesis"],
+      "provenance": { "sourceType": "curated seed hypothesis", "notes": ["Use for staple memories where grain variety, starch texture, spice aroma, or serving sequence dominates."] }
+    },
+    {
+      "id": "dumpling-pocket-global",
+      "forms": ["foodForms.dumpling_pocket"],
+      "regions": ["macro:East Asia", "macro:Eastern Europe", "macro:Central Asia", "macro:Latin America"],
+      "nameSignals": ["dumpling", "mandu", "pierogi", "empanada", "momo", "samosa"],
+      "mechanisms": ["mechanisms.starch_texture", "mechanisms.texture_contrast", "mechanisms.sauce_balance", "mechanisms.serving_ritual"],
+      "querySeeds": ["filled dumpling pocket global variants", "dumpling family memory wrapper filling", "diaspora dumpling pocket regional names"],
+      "cacheTargets": [{ "dishFamily": "dumpling", "region": "Global" }],
+      "coverageTags": ["foodForms.dumpling_pocket", "regionScopes.migration_corridor", "nameSystems.transliteration", "mechanisms.texture_contrast", "evidenceLevels.seed_hypothesis"],
+      "provenance": { "sourceType": "curated seed hypothesis", "notes": ["Use for filled wrapper memories with unclear regional name, shape, cooking method, or sauce."] }
+    },
+    {
+      "id": "protein-braise-spiced-gravy",
+      "forms": ["foodForms.protein_centered", "foodForms.stew_braise"],
+      "regions": ["macro:South Asia", "macro:Middle East", "macro:West Africa", "diaspora:Global"],
+      "nameSignals": ["spiced gravy", "braised meat", "stewed chicken", "family curry", "sauce meat"],
+      "mechanisms": ["mechanisms.browning", "mechanisms.fat_mouthfeel", "mechanisms.sauce_balance", "mechanisms.aroma"],
+      "querySeeds": ["spiced protein braise gravy regional variants", "family curry braised meat sensory memory", "diaspora protein stew ingredient adaptation"],
+      "cacheTargets": [{ "dishFamily": "spiced-protein-braise", "region": "Global" }],
+      "coverageTags": ["foodForms.protein_centered", "foodForms.stew_braise", "regionScopes.diaspora", "mechanisms.fat_mouthfeel", "evidenceLevels.seed_hypothesis"],
+      "provenance": { "sourceType": "curated seed hypothesis", "notes": ["Use for gravy, browned spice, protein texture, or fat-bloom memories without exact dish certainty."] }
+    },
+    {
+      "id": "vegetable-fungi-simmered-greens",
+      "forms": ["foodForms.vegetable_fungi"],
+      "regions": ["macro:West Africa", "macro:South Asia", "macro:East Asia", "macro:American South"],
+      "nameSignals": ["greens", "bitter greens", "mushrooms", "leafy stew", "simmered vegetables"],
+      "mechanisms": ["mechanisms.fermentation_acid", "mechanisms.fat_mouthfeel", "mechanisms.texture_contrast", "mechanisms.aroma"],
+      "querySeeds": ["simmered greens vegetable dish regional variants", "bitter greens family food memory", "mushroom vegetable stew sensory cues"],
+      "cacheTargets": [{ "dishFamily": "simmered-vegetable-greens", "region": "Global" }],
+      "coverageTags": ["foodForms.vegetable_fungi", "regionScopes.macro_region", "nameSystems.family_nickname", "mechanisms.texture_contrast", "evidenceLevels.seed_hypothesis"],
+      "provenance": { "sourceType": "curated seed hypothesis", "notes": ["Use for vegetable-forward memories where bitterness, leaf texture, broth, oil, or mushroom aroma leads."] }
+    },
+    {
+      "id": "confectionery-nut-sugar-snap",
+      "forms": ["foodForms.confectionery"],
+      "regions": ["macro:South Asia", "macro:Middle East", "macro:Latin America", "diaspora:Global"],
+      "nameSignals": ["chikki", "brittle", "halva", "nut candy", "sesame candy", "jaggery candy"],
+      "mechanisms": ["mechanisms.sugar_crystal", "mechanisms.aroma", "mechanisms.texture_contrast", "mechanisms.temperature"],
+      "querySeeds": ["nut sugar brittle regional variants", "chikki sesame candy halva family memory", "diaspora confectionery jaggery nut candy"],
+      "cacheTargets": [{ "dishFamily": "nut-sugar-confectionery", "region": "Global" }],
+      "coverageTags": ["foodForms.confectionery", "regionScopes.diaspora", "nameSystems.alias", "mechanisms.sugar_crystal", "evidenceLevels.seed_hypothesis"],
+      "provenance": { "sourceType": "curated seed hypothesis", "notes": ["Use for brittle, grainy, sticky, nutty, sesame, jaggery, caramel, or snap-texture sweets."] }
+    },
+    {
+      "id": "dessert-milk-custard-pudding",
+      "forms": ["foodForms.dessert"],
+      "regions": ["macro:Latin America", "macro:South Asia", "macro:Europe", "macro:Middle East"],
+      "nameSignals": ["custard", "pudding", "flan", "kheer", "rice pudding", "milk dessert"],
+      "mechanisms": ["mechanisms.starch_texture", "mechanisms.fat_mouthfeel", "mechanisms.aroma", "mechanisms.temperature"],
+      "querySeeds": ["milk custard pudding regional variants", "rice pudding family memory cardamom cinnamon", "flan kheer custard diaspora dessert"],
+      "cacheTargets": [{ "dishFamily": "milk-custard-pudding-dessert", "region": "Global" }],
+      "coverageTags": ["foodForms.dessert", "regionScopes.macro_region", "nameSystems.alias", "mechanisms.fat_mouthfeel", "evidenceLevels.seed_hypothesis"],
+      "provenance": { "sourceType": "curated seed hypothesis", "notes": ["Use for soft dairy or starch desserts where aroma, chill, wobble, or creamy texture matters."] }
+    },
+    {
+      "id": "snack-street-fried-starch",
+      "forms": ["foodForms.snack_street_food"],
+      "regions": ["macro:Latin America", "macro:South Asia", "macro:West Africa", "macro:Southeast Asia"],
+      "nameSignals": ["fried snack", "street food", "fritter", "pakora", "carimanola", "akara"],
+      "mechanisms": ["mechanisms.browning", "mechanisms.texture_contrast", "mechanisms.starch_texture", "mechanisms.serving_ritual"],
+      "querySeeds": ["fried starch street snack regional variants", "family market fritter memory", "diaspora street snack local ingredient adaptation"],
+      "cacheTargets": [{ "dishFamily": "fried-starch-street-snack", "region": "Global" }],
+      "coverageTags": ["foodForms.snack_street_food", "regionScopes.city", "nameSystems.typo", "mechanisms.browning", "evidenceLevels.seed_hypothesis"],
+      "provenance": { "sourceType": "curated seed hypothesis", "notes": ["Use for vendor, school, market, fried, handheld, crisp-soft snack memories."] }
+    },
+    {
+      "id": "ceremonial-wrapped-holiday-food",
+      "forms": ["foodForms.ceremonial_holiday"],
+      "regions": ["macro:Latin America", "macro:Middle East", "macro:East Asia", "diaspora:Global"],
+      "nameSignals": ["holiday wrapped food", "pasteles", "tamales", "zongzi", "dolma", "festival parcel"],
+      "mechanisms": ["mechanisms.serving_ritual", "mechanisms.aroma", "mechanisms.starch_texture", "mechanisms.texture_contrast"],
+      "querySeeds": ["holiday wrapped food regional variants", "festival food family memory leaf wrapper", "diaspora ceremonial food ingredient substitution"],
+      "cacheTargets": [{ "dishFamily": "ceremonial-wrapped-food", "region": "Global" }],
+      "coverageTags": ["foodForms.ceremonial_holiday", "regionScopes.religious_ritual", "nameSystems.colonial_postcolonial_name", "mechanisms.serving_ritual", "evidenceLevels.seed_hypothesis"],
+      "provenance": { "sourceType": "curated seed hypothesis", "notes": ["Use for holiday, family-labor, leaf-wrapper, feast, or ritual serving memories."] }
+    },
+    {
+      "id": "breakfast-porridge-grain",
+      "forms": ["foodForms.breakfast", "foodForms.grain_rice_noodle"],
+      "regions": ["macro:Caribbean", "macro:East Africa", "macro:Europe", "macro:East Asia"],
+      "nameSignals": ["porridge", "congee", "ogi", "oatmeal", "cornmeal porridge", "breakfast grain"],
+      "mechanisms": ["mechanisms.starch_texture", "mechanisms.temperature", "mechanisms.aroma", "mechanisms.fat_mouthfeel"],
+      "querySeeds": ["breakfast porridge grain regional variants", "family breakfast porridge memory", "congee cornmeal porridge diaspora variations"],
+      "cacheTargets": [{ "dishFamily": "breakfast-grain-porridge", "region": "Global" }],
+      "coverageTags": ["foodForms.breakfast", "foodForms.grain_rice_noodle", "regionScopes.macro_region", "mechanisms.starch_texture", "evidenceLevels.seed_hypothesis"],
+      "provenance": { "sourceType": "curated seed hypothesis", "notes": ["Use for morning routine, spoon texture, warm grain, milk, spice, or caregiver breakfast memories."] }
+    },
+    {
+      "id": "sick-day-comfort-broth",
+      "forms": ["foodForms.sick_day_comfort", "foodForms.soup_broth"],
+      "regions": ["macro:Global", "diaspora:Global", "migration_corridor:family"],
+      "nameSignals": ["comfort broth", "sick day soup", "chicken soup", "rice broth", "ginger broth"],
+      "mechanisms": ["mechanisms.temperature", "mechanisms.aroma", "mechanisms.sauce_balance", "mechanisms.serving_ritual"],
+      "querySeeds": ["comfort broth family memory regional variants", "sick day soup cultural food memory", "gentle broth caregiver ritual"],
+      "cacheTargets": [{ "dishFamily": "comfort-broth", "region": "Global" }],
+      "coverageTags": ["foodForms.sick_day_comfort", "foodForms.soup_broth", "regionScopes.diaspora", "mechanisms.temperature", "evidenceLevels.seed_hypothesis"],
+      "provenance": { "sourceType": "curated seed hypothesis", "notes": ["Use only for comfort and sensory memory; do not make health or treatment claims."] }
+    },
+    {
+      "id": "pantry-single-ingredient-aroma",
+      "forms": ["foodForms.pantry_single_ingredient"],
+      "regions": ["macro:Global", "diaspora:Global", "city:local grocery"],
+      "nameSignals": ["one spice", "one herb", "pantry aroma", "tiny cue", "first smell"],
+      "mechanisms": ["mechanisms.aroma", "mechanisms.browning", "mechanisms.fat_mouthfeel", "mechanisms.serving_ritual"],
+      "querySeeds": ["single ingredient nostalgia cue spice aroma", "pantry aroma family food memory", "tiny sensory cue local grocery"],
+      "cacheTargets": [{ "dishFamily": "single-ingredient-nostalgia-cue", "region": "Global" }],
+      "coverageTags": ["foodForms.pantry_single_ingredient", "regionScopes.city", "nameSystems.family_nickname", "mechanisms.aroma", "evidenceLevels.seed_hypothesis"],
+      "provenance": { "sourceType": "curated seed hypothesis", "notes": ["Use when exact dish identity is sparse but one accessible smell or taste can test memory direction."] }
+    }
+  ]
+}

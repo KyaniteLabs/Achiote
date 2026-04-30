@@ -1,0 +1,160 @@
+{
+  "meta": {
+    "version": "0.1.0",
+    "description": "Deterministic cache warming task manifest derived from global reference seed entries",
+    "confidence": "Medium",
+    "provenance": {
+      "sourceType": "curated seed hypothesis",
+      "notes": [
+        "Tasks prepare operator research work; they do not perform browsing inside Achiote.",
+        "Each task should produce a typed ResearchRecord before any cache write."
+      ]
+    }
+  },
+  "tasks": [
+    {
+      "id": "warm-beverage-rice-cinnamon-latin-america",
+      "seedId": "beverage-rice-cinnamon-latin-america",
+      "cacheTarget": { "dishFamily": "rice-cinnamon-beverage", "region": "Mexico" },
+      "coverageTags": ["foodForms.beverage", "regionScopes.diaspora", "mechanisms.starch_texture"],
+      "qualityTriggers": ["frequent_memory_type", "missing_region", "cache_unavailable"],
+      "doneWhen": ["typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"],
+      "provenance": { "sourceType": "curated seed hypothesis", "notes": ["Warm only from approved public research artifacts."] }
+    },
+    {
+      "id": "warm-soup-sour-herb-eastern-europe",
+      "seedId": "soup-sour-herb-eastern-europe",
+      "cacheTarget": { "dishFamily": "sour-herb-soup", "region": "Eastern Europe" },
+      "coverageTags": ["foodForms.soup_broth", "regionScopes.macro_region", "mechanisms.fermentation_acid"],
+      "qualityTriggers": ["frequent_memory_type", "missing_region", "fallback_guard"],
+      "doneWhen": ["typed ResearchRecord distinguishes sourness source, starch body, herbs, and regional uncertainty"],
+      "provenance": { "sourceType": "curated seed hypothesis", "notes": ["Warm only from approved public research artifacts."] }
+    },
+    {
+      "id": "warm-sauce-chile-vinegar-caribbean",
+      "seedId": "sauce-chile-vinegar-caribbean",
+      "cacheTarget": { "dishFamily": "chile-vinegar-condiment", "region": "Caribbean" },
+      "coverageTags": ["foodForms.sauce_condiment", "regionScopes.macro_region", "mechanisms.sauce_balance"],
+      "qualityTriggers": ["missing_region", "unknown_family", "cache_unavailable"],
+      "doneWhen": ["typed ResearchRecord captures heat, acid, aromatics, serving ritual, and variant uncertainty"],
+      "provenance": { "sourceType": "curated seed hypothesis", "notes": ["Warm only from approved public research artifacts."] }
+    },
+    {
+      "id": "warm-pickle-ferment-vegetable-east-asia",
+      "seedId": "pickle-ferment-vegetable-east-asia",
+      "cacheTarget": { "dishFamily": "fermented-vegetable-pickle", "region": "East Asia" },
+      "coverageTags": ["foodForms.pickle_ferment", "nameSystems.transliteration", "mechanisms.fermentation_acid"],
+      "qualityTriggers": ["missing_region", "unknown_family", "cache_unavailable"],
+      "doneWhen": ["typed ResearchRecord separates names, brine or fermentation cues, texture, and regional variants"],
+      "provenance": { "sourceType": "curated seed hypothesis", "notes": ["Warm only from approved public research artifacts."] }
+    },
+    {
+      "id": "warm-bread-flatbread-global-staple",
+      "seedId": "bread-flatbread-global-staple",
+      "cacheTarget": { "dishFamily": "flatbread", "region": "Global" },
+      "coverageTags": ["foodForms.bread_flatbread", "regionScopes.macro_region", "mechanisms.browning"],
+      "qualityTriggers": ["frequent_memory_type", "unknown_family", "cache_unavailable"],
+      "doneWhen": ["typed ResearchRecord covers flour type, cooking surface, chew, char, and serving role"],
+      "provenance": { "sourceType": "curated seed hypothesis", "notes": ["Warm only from approved public research artifacts."] }
+    },
+    {
+      "id": "warm-grain-rice-noodle-staple",
+      "seedId": "grain-rice-noodle-staple",
+      "cacheTarget": { "dishFamily": "grain-rice-noodle-staple", "region": "Global" },
+      "coverageTags": ["foodForms.grain_rice_noodle", "regionScopes.macro_region", "mechanisms.starch_texture"],
+      "qualityTriggers": ["frequent_memory_type", "unknown_family", "cache_unavailable"],
+      "doneWhen": ["typed ResearchRecord captures starch texture, aroma, serving temperature, and variant uncertainty"],
+      "provenance": { "sourceType": "curated seed hypothesis", "notes": ["Warm only from approved public research artifacts."] }
+    },
+    {
+      "id": "warm-dumpling-pocket-global",
+      "seedId": "dumpling-pocket-global",
+      "cacheTarget": { "dishFamily": "dumpling", "region": "Global" },
+      "coverageTags": ["foodForms.dumpling_pocket", "regionScopes.migration_corridor", "mechanisms.texture_contrast"],
+      "qualityTriggers": ["missing_region", "unknown_family", "cache_unavailable"],
+      "doneWhen": ["typed ResearchRecord captures wrapper, filling, cooking method, sauce, and name variants"],
+      "provenance": { "sourceType": "curated seed hypothesis", "notes": ["Warm only from approved public research artifacts."] }
+    },
+    {
+      "id": "warm-protein-braise-spiced-gravy",
+      "seedId": "protein-braise-spiced-gravy",
+      "cacheTarget": { "dishFamily": "spiced-protein-braise", "region": "Global" },
+      "coverageTags": ["foodForms.protein_centered", "foodForms.stew_braise", "mechanisms.fat_mouthfeel"],
+      "qualityTriggers": ["fallback_guard", "unknown_family", "cache_unavailable"],
+      "doneWhen": ["typed ResearchRecord captures browning, spice bloom, fat texture, and substitution-sensitive elements"],
+      "provenance": { "sourceType": "curated seed hypothesis", "notes": ["Warm only from approved public research artifacts."] }
+    },
+    {
+      "id": "warm-vegetable-fungi-simmered-greens",
+      "seedId": "vegetable-fungi-simmered-greens",
+      "cacheTarget": { "dishFamily": "simmered-vegetable-greens", "region": "Global" },
+      "coverageTags": ["foodForms.vegetable_fungi", "regionScopes.macro_region", "mechanisms.texture_contrast"],
+      "qualityTriggers": ["missing_region", "unknown_family", "cache_unavailable"],
+      "doneWhen": ["typed ResearchRecord covers bitterness, oil, broth, fungi aroma, and family-specific uncertainty"],
+      "provenance": { "sourceType": "curated seed hypothesis", "notes": ["Warm only from approved public research artifacts."] }
+    },
+    {
+      "id": "warm-confectionery-nut-sugar-snap",
+      "seedId": "confectionery-nut-sugar-snap",
+      "cacheTarget": { "dishFamily": "nut-sugar-confectionery", "region": "Global" },
+      "coverageTags": ["foodForms.confectionery", "regionScopes.diaspora", "mechanisms.sugar_crystal"],
+      "qualityTriggers": ["frequent_memory_type", "fallback_guard", "cache_unavailable"],
+      "doneWhen": ["typed ResearchRecord captures sugar stage, nut or seed aroma, snap, chew, and name variants"],
+      "provenance": { "sourceType": "curated seed hypothesis", "notes": ["Warm only from approved public research artifacts."] }
+    },
+    {
+      "id": "warm-dessert-milk-custard-pudding",
+      "seedId": "dessert-milk-custard-pudding",
+      "cacheTarget": { "dishFamily": "milk-custard-pudding-dessert", "region": "Global" },
+      "coverageTags": ["foodForms.dessert", "regionScopes.macro_region", "mechanisms.fat_mouthfeel"],
+      "qualityTriggers": ["frequent_memory_type", "unknown_family", "cache_unavailable"],
+      "doneWhen": ["typed ResearchRecord captures dairy or starch body, aroma, chill or warmth, and regional variants"],
+      "provenance": { "sourceType": "curated seed hypothesis", "notes": ["Warm only from approved public research artifacts."] }
+    },
+    {
+      "id": "warm-snack-street-fried-starch",
+      "seedId": "snack-street-fried-starch",
+      "cacheTarget": { "dishFamily": "fried-starch-street-snack", "region": "Global" },
+      "coverageTags": ["foodForms.snack_street_food", "regionScopes.city", "mechanisms.browning"],
+      "qualityTriggers": ["missing_region", "fallback_guard", "cache_unavailable"],
+      "doneWhen": ["typed ResearchRecord captures fried texture, starch base, filling or sauce, vendor ritual, and typo variants"],
+      "provenance": { "sourceType": "curated seed hypothesis", "notes": ["Warm only from approved public research artifacts."] }
+    },
+    {
+      "id": "warm-ceremonial-wrapped-holiday-food",
+      "seedId": "ceremonial-wrapped-holiday-food",
+      "cacheTarget": { "dishFamily": "ceremonial-wrapped-food", "region": "Global" },
+      "coverageTags": ["foodForms.ceremonial_holiday", "regionScopes.religious_ritual", "mechanisms.serving_ritual"],
+      "qualityTriggers": ["missing_region", "unknown_family", "cache_unavailable"],
+      "doneWhen": ["typed ResearchRecord captures wrapper, holiday role, family labor, aroma, and uncertain regional names"],
+      "provenance": { "sourceType": "curated seed hypothesis", "notes": ["Warm only from approved public research artifacts."] }
+    },
+    {
+      "id": "warm-breakfast-porridge-grain",
+      "seedId": "breakfast-porridge-grain",
+      "cacheTarget": { "dishFamily": "breakfast-grain-porridge", "region": "Global" },
+      "coverageTags": ["foodForms.breakfast", "foodForms.grain_rice_noodle", "mechanisms.starch_texture"],
+      "qualityTriggers": ["frequent_memory_type", "unknown_family", "cache_unavailable"],
+      "doneWhen": ["typed ResearchRecord captures grain type, thickness, aroma, serving temperature, and routine context"],
+      "provenance": { "sourceType": "curated seed hypothesis", "notes": ["Warm only from approved public research artifacts."] }
+    },
+    {
+      "id": "warm-sick-day-comfort-broth",
+      "seedId": "sick-day-comfort-broth",
+      "cacheTarget": { "dishFamily": "comfort-broth", "region": "Global" },
+      "coverageTags": ["foodForms.sick_day_comfort", "foodForms.soup_broth", "mechanisms.temperature"],
+      "qualityTriggers": ["missing_region", "fallback_guard", "cache_unavailable"],
+      "doneWhen": ["typed ResearchRecord captures warmth, aroma, caregiver ritual, gentle texture, and avoids health claims"],
+      "provenance": { "sourceType": "curated seed hypothesis", "notes": ["Warm only from approved public research artifacts."] }
+    },
+    {
+      "id": "warm-pantry-single-ingredient-aroma",
+      "seedId": "pantry-single-ingredient-aroma",
+      "cacheTarget": { "dishFamily": "single-ingredient-nostalgia-cue", "region": "Global" },
+      "coverageTags": ["foodForms.pantry_single_ingredient", "regionScopes.city", "mechanisms.aroma"],
+      "qualityTriggers": ["unknown_family", "fallback_guard", "cache_unavailable"],
+      "doneWhen": ["typed ResearchRecord captures accessible ingredient cues, aroma mechanism, and uncertainty boundaries"],
+      "provenance": { "sourceType": "curated seed hypothesis", "notes": ["Warm only from approved public research artifacts."] }
+    }
+  ]
+}

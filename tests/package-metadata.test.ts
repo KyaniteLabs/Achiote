@@ -99,6 +99,18 @@ describe('package distribution metadata', () => {
     expect(qualitySignals).not.toContain('memoryText');
   });
 
+  it('ships global reference seed data only through the compiled dist data bundle', () => {
+    const planner = fs.readFileSync('src/lib/reference-seed-planner.ts', 'utf8');
+
+    expect(pkg.files).toContain('dist/');
+    expect(pkg.files).not.toContain('src/data/global-coverage-matrix.json');
+    expect(pkg.files).not.toContain('src/data/reference-seed-queue.json');
+    expect(pkg.files).not.toContain('src/data/cache-warming-manifest.json');
+    expect(planner).toContain("from '../data/global-coverage-matrix.json'");
+    expect(planner).toContain("from '../data/reference-seed-queue.json'");
+    expect(planner).toContain("from '../data/cache-warming-manifest.json'");
+  });
+
   it('uses a portable package-smoke temp directory prefix', () => {
     const smokeScript = fs.readFileSync('scripts/package-smoke.mjs', 'utf8');
 
