@@ -4,7 +4,9 @@ import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { ResearchCache } from '../src/lib/research-cache.js';
+import pantryFixtureData from '../src/data/reference-pantry-fixtures.json' with { type: 'json' };
 import {
+  buildReferencePantryFixtureReport,
   buildReferenceSeedOperatorReport,
   validateReferenceSeedFixtures,
   writeReferenceSeedFixturesToCache,
@@ -70,6 +72,7 @@ describe('reference seed operator integration', () => {
         {
           seedId: 'beverage-rice-cinnamon-latin-america',
           cacheTarget: { dishFamily: 'rice-cinnamon-beverage', region: 'Mexico' },
+          sourceIds: ['wikidata-structured-food-data'],
           record: {
             dishName: 'rice cinnamon beverage',
             query: 'rice cinnamon beverage Mexico variants',
@@ -109,6 +112,7 @@ describe('reference seed operator integration', () => {
         {
           seedId: 'missing-seed',
           cacheTarget: { dishFamily: 'rice-cinnamon-beverage', region: 'Mexico' },
+          sourceIds: ['open-food-facts-products'],
           record: { dishName: '', query: '', sources: [] },
         },
       ],
@@ -116,9 +120,30 @@ describe('reference seed operator integration', () => {
 
     expect(issues).toEqual(expect.arrayContaining([
       expect.objectContaining({ path: 'fixtures[0].seedId', message: expect.stringContaining('known seed') }),
+      expect.objectContaining({ path: 'fixtures[0].sourceIds[0]', message: expect.stringContaining('allowed fixture source') }),
       expect.objectContaining({ path: 'fixtures[0].record.dishName' }),
       expect.objectContaining({ path: 'fixtures[0].record.sources' }),
     ]));
+  });
+
+  it('validates the committed CC0 reference pantry fixture batch and proves full axis coverage', () => {
+    expect(validateReferenceSeedFixtures(pantryFixtureData)).toEqual([]);
+
+    const report = buildReferencePantryFixtureReport(pantryFixtureData);
+
+    expect(report.totalFixtures).toBeGreaterThanOrEqual(18);
+    expect(report.sourceIds).toEqual(['wikidata-structured-food-data']);
+    expect(report.coverage.axes.foodForms).toMatchObject({ covered: 17, total: 17, missing: [] });
+    expect(report.coverage.axes.cultureAreas).toMatchObject({ covered: 20, total: 20, missing: [] });
+    expect(report.coverage.axes.regionScopes).toMatchObject({ covered: 9, total: 9, missing: [] });
+    expect(report.coverage.axes.nameSystems).toMatchObject({ covered: 8, total: 8, missing: [] });
+    expect(report.coverage.axes.mechanisms).toMatchObject({ covered: 12, total: 12, missing: [] });
+    expect(report.coverage.axes.evidenceLevels).toMatchObject({
+      covered: 2,
+      total: 4,
+      missing: ['family_confirmed', 'operator_quality_signal'],
+    });
+    expect(JSON.stringify(pantryFixtureData)).not.toMatch(/rawMemory|memoryText|prompt_text|medical advice|legal advice/i);
   });
 
   it('counts only fixture writes that can be read back from the cache', () => {
@@ -127,6 +152,7 @@ describe('reference seed operator integration', () => {
         {
           seedId: 'beverage-rice-cinnamon-latin-america',
           cacheTarget: { dishFamily: 'rice-cinnamon-beverage', region: 'Mexico' },
+          sourceIds: ['wikidata-structured-food-data'],
           record: {
             dishName: 'rice cinnamon beverage',
             query: 'rice cinnamon beverage Mexico variants',
@@ -181,6 +207,7 @@ describe('reference seed operator integration', () => {
         {
           seedId: 'beverage-rice-cinnamon-latin-america',
           cacheTarget: { dishFamily: 'rice-cinnamon-beverage', region: 'Mexico' },
+          sourceIds: ['wikidata-structured-food-data'],
           record: {
             dishName: 'rice cinnamon beverage',
             query: 'rice cinnamon beverage Mexico variants',
@@ -232,6 +259,25 @@ describe('reference seed operator integration', () => {
         expect(cache.getResearchRecord('rice-cinnamon-beverage', 'Mexico')?.dishName).toBe('rice cinnamon beverage');
       } finally {
         cache.close();
+      }
+
+      const bundledCachePath = path.join(tempRoot, 'bundled-cache.db');
+      const bundledWrite = spawnSync(process.execPath, [
+        'scripts/reference-seed-operator.mjs',
+        '--fixture',
+        'bundled',
+        '--cache-path',
+        bundledCachePath,
+      ], { encoding: 'utf8' });
+      expect(bundledWrite.status).toBe(0);
+      expect(JSON.parse(bundledWrite.stdout)).toEqual({ stored: pantryFixtureData.fixtures.length });
+
+      const bundledCache = new ResearchCache(bundledCachePath);
+      try {
+        expect(bundledCache.getResearchRecord('fermented-vegetable-pickle', 'East Asia')?.dishName).toBe('fermented-vegetable-pickle');
+        expect(bundledCache.getResearchRecord('coconut-taro-earth-oven-foodway', 'Oceania and Pacific')?.dishName).toBe('coconut-taro-earth-oven-foodway');
+      } finally {
+        bundledCache.close();
       }
     } finally {
       fs.rmSync(tempRoot, { recursive: true, force: true });

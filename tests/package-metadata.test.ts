@@ -108,10 +108,12 @@ describe('package distribution metadata', () => {
     expect(pkg.files).not.toContain('src/data/reference-seed-queue.json');
     expect(pkg.files).not.toContain('src/data/cache-warming-manifest.json');
     expect(pkg.files).not.toContain('src/data/reference-source-registry.json');
+    expect(pkg.files).not.toContain('src/data/reference-pantry-fixtures.json');
     expect(planner).toContain("from '../data/global-coverage-matrix.json'");
     expect(planner).toContain("from '../data/reference-seed-queue.json'");
     expect(planner).toContain("from '../data/cache-warming-manifest.json'");
     expect(planner).toContain("from '../data/reference-source-registry.json'");
+    expect(planner).toContain("from '../data/reference-pantry-fixtures.json'");
     expect(fs.readFileSync('src/index.ts', 'utf8')).toContain("export { bundledGlobalReferenceSeeds, prioritizeReferenceSeeds } from './lib/reference-seed-planner.js';");
     expect(fs.readFileSync('src/index.ts', 'utf8')).toContain('writeReferenceSeedFixturesToCache');
     expect(fs.existsSync('src/lib/reference-seed-operator.ts')).toBe(true);
@@ -125,6 +127,9 @@ describe('package distribution metadata', () => {
     expect(smokeScript).toContain("fs.mkdtempSync(path.join(smokeRoot, 'run-'))");
     expect(smokeScript).not.toContain("fs.mkdtempSync(path.join(os.tmpdir(), 'achiote-package-smoke-'))");
     expect(smokeScript).not.toContain("achiote-package-smoke-XXXXXX");
+    expect(smokeScript).toContain("'--fixture'");
+    expect(smokeScript).toContain("'bundled'");
+    expect(smokeScript).toContain('packaged-reference-pantry.db');
     expect(smokeScript).toContain("const exited = new Promise((resolve) => child.once('exit', resolve));");
     expect(smokeScript).toContain("await withTimeout(exited, 5_000, 'packaged HTTP shutdown');");
   });

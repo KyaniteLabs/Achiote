@@ -144,6 +144,19 @@ export type ReferenceSourceRegistry = {
   disallowedPatterns: string[];
 };
 
+export type ReferencePantryFixtureEntry = {
+  seedId?: unknown;
+  cacheTarget?: CacheTarget;
+  sourceIds?: unknown;
+  coverageTags?: unknown;
+  record?: unknown;
+};
+
+export type ReferencePantryFixtureBatch = {
+  meta: Meta;
+  fixtures: ReferencePantryFixtureEntry[];
+};
+
 export type BundledDataSet = {
   dishFamilies: { meta: Meta; families: DishFamily[] };
   ingredients: { meta: Meta; ingredients: Record<string, Ingredient> };

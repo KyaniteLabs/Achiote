@@ -99,7 +99,7 @@ function waitForServer(child, port) {
   });
 }
 
-function assertPackagedHelperScripts(installDir) {
+function assertPackagedHelperScripts(installDir, tempRoot) {
   const packageRoot = path.join(installDir, 'node_modules', 'achiote');
   const keygenPath = path.join(packageRoot, 'scripts', 'generate-api-key.mjs');
   const dockerSmokePath = path.join(packageRoot, 'scripts', 'docker-smoke.mjs');
@@ -129,6 +129,22 @@ function assertPackagedHelperScripts(installDir) {
   const report = JSON.parse(referenceReport.stdout);
   if (!report.coverage?.axes?.foodForms || !Array.isArray(report.cacheWarmingTasks)) {
     throw new Error(`Packaged reference seed operator returned unexpected report: ${referenceReport.stdout}`);
+  }
+
+  const bundledCachePath = path.join(tempRoot, 'packaged-reference-pantry.db');
+  const bundledWrite = spawnSync(process.execPath, [
+    referenceSeedOperatorPath,
+    '--fixture',
+    'bundled',
+    '--cache-path',
+    bundledCachePath,
+  ], { encoding: 'utf8' });
+  if (bundledWrite.status !== 0) {
+    throw new Error(`Packaged bundled reference pantry write failed\nstdout:\n${bundledWrite.stdout}\nstderr:\n${bundledWrite.stderr}`);
+  }
+  const bundledWriteResult = JSON.parse(bundledWrite.stdout);
+  if (typeof bundledWriteResult.stored !== 'number' || bundledWriteResult.stored < 18) {
+    throw new Error(`Packaged bundled reference pantry write returned unexpected result: ${bundledWrite.stdout}`);
   }
 }
 
@@ -237,7 +253,7 @@ async function main() {
     await assertPackagedCliListsTools(installDir, tempRoot, expectedTools);
 
     console.log('Checking packaged helper scripts');
-    assertPackagedHelperScripts(installDir);
+    assertPackagedHelperScripts(installDir, tempRoot);
 
     console.log('Checking packaged HTTP server health, trust, and launch metadata responses');
     await assertPackagedHttpServerStarts(installDir, tempRoot);

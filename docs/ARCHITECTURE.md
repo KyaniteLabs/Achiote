@@ -88,13 +88,14 @@ The local operator script runs with:
 ```bash
 npm run reference:seeds -- --quality-report quality.json --limit 10
 npm run reference:seeds -- --fixture approved-fixture.json --cache-path ~/.cache/achiote/culture-cache.db
+npm run reference:seeds -- --fixture bundled --cache-path ~/.cache/achiote/culture-cache.db
 ```
 
 The script does not browse. Report mode prints host-research prompts for approved human or host-AI research. Fixture mode validates typed `ResearchRecord` artifacts against the cache-warming manifest before writing them to SQLite. Raw memories, prompts, provider details, credentials, medical claims, and legal claims do not belong in seed data or fixtures.
 
 Reference pantry growth is source-gated. CC0/public-domain structured data such as Wikidata labels/aliases and USDA FoodData Central commodity facts may be used for approved typed fixtures when cited. ODbL product data and FAO/INFOODS composition tables are manual-review sources because attribution, share-alike, or redistribution terms must be checked before cache warming. Copied recipe instructions, article prose, proprietary food guides, uncited model-generated facts, and user memories are never fixture material.
 
-The coverage matrix includes broad world culture-area buckets so the operator can see whether the pantry is overfitting to a few regions. These buckets are planning coverage only; they do not assert that one seed represents an entire culture.
+The coverage matrix includes broad world culture-area buckets so the operator can see whether the pantry is overfitting to a few regions. These buckets are planning coverage only; they do not assert that one seed represents an entire culture. The bundled fixture batch in `src/data/reference-pantry-fixtures.json` is the first cache-warmable tranche: 18 typed `ResearchRecord` entries across all current cache-warming targets, using Wikidata structured labels/descriptions under the allowed CC0 source policy. The batch can truthfully satisfy the seed-hypothesis and researched-record evidence levels, but it does not claim family confirmation or operator quality-signal evidence.
 
 ## Cache
 

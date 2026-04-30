@@ -1,0 +1,2009 @@
+{
+  "meta": {
+    "version": "0.1.0",
+    "description": "Approved CC0 structured-data reference pantry fixture batch for all current Achiote cache-warming targets",
+    "confidence": "Medium",
+    "provenance": {
+      "sourceType": "operator-approved fixture batch",
+      "notes": [
+        "Fixture sources use Wikidata structured labels and descriptions under the CC0 source policy.",
+        "Records are broad grounding context for small models, not authoritative recipes or family-specific claims.",
+        "The batch is designed to cover every current food form, culture area, region scope, name system, and mechanism axis before cache warming."
+      ]
+    }
+  },
+  "fixtures": [
+    {
+      "seedId": "beverage-rice-cinnamon-latin-america",
+      "cacheTarget": {
+        "dishFamily": "rice-cinnamon-beverage",
+        "region": "Mexico"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "cultureAreas.diaspora_global",
+        "cultureAreas.north_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.diaspora",
+        "regionScopes.nation"
+      ],
+      "record": {
+        "dishName": "rice-cinnamon-beverage",
+        "query": "rice cinnamon drink regional variants | agua de arroz cinnamon family drink | horchata rice cinnamon diaspora variations",
+        "sources": [
+          {
+            "title": "Horchata (Q2889371) structured data",
+            "url": "https://www.wikidata.org/wiki/Q2889371",
+            "sourceType": "other",
+            "accessedAt": "2026-04-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q2889371 has English label \"Horchata\".",
+              "Wikidata item Q2889371 has English description: drink."
+            ]
+          },
+          {
+            "title": "Horchata (Q1587937) structured data",
+            "url": "https://www.wikidata.org/wiki/Q1587937",
+            "sourceType": "other",
+            "accessedAt": "2026-04-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q1587937 has English label \"Horchata\".",
+              "Wikidata item Q1587937 has English description: vegetal milk, made from tiger nut, txufleroide."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "rice-cinnamon-beverage",
+            "horchata",
+            "agua de arroz",
+            "rice cinnamon drink",
+            "thin milky grain drink",
+            "Horchata"
+          ],
+          "regions": [
+            "macro:Latin America",
+            "nation:Mexico",
+            "macro:Central America",
+            "diaspora:United States",
+            "central america",
+            "diaspora global",
+            "north america"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "starch texture",
+            "aroma",
+            "temperature",
+            "serving ritual"
+          ],
+          "sensoryDescriptors": [
+            "starch texture",
+            "aroma",
+            "temperature",
+            "serving ritual"
+          ],
+          "culturalOccasions": [
+            "beverage"
+          ],
+          "regionalVariants": [
+            "Wikidata item Q2889371 has English label \"Horchata\".",
+            "Wikidata item Q2889371 has English description: drink.",
+            "Wikidata item Q1587937 has English label \"Horchata\".",
+            "Wikidata item Q1587937 has English description: vegetal milk, made from tiger nut, txufleroide."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation.",
+          "This pantry record is a starting context for small-model grounding, not a final dish identification."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-04-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "soup-sour-herb-eastern-europe",
+      "cacheTarget": {
+        "dishFamily": "sour-herb-soup",
+        "region": "Eastern Europe"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.europe",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "record": {
+        "dishName": "sour-herb-soup",
+        "query": "sour herb soup dill potato regional variants | pickle soup sorrel soup family memory | Eastern European sour soup diaspora",
+        "sources": [
+          {
+            "title": "pickle soup (Q18388465) structured data",
+            "url": "https://www.wikidata.org/wiki/Q18388465",
+            "sourceType": "other",
+            "accessedAt": "2026-04-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q18388465 has English label \"pickle soup\".",
+              "Wikidata item Q18388465 has English description: soup prepared with pickled vegetables."
+            ]
+          },
+          {
+            "title": "sorrel soup (Q2635144) structured data",
+            "url": "https://www.wikidata.org/wiki/Q2635144",
+            "sourceType": "other",
+            "accessedAt": "2026-04-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q2635144 has English label \"sorrel soup\".",
+              "Wikidata item Q2635144 has English description: Eastern European dish."
+            ]
+          },
+          {
+            "title": "borscht (Q4551) structured data",
+            "url": "https://www.wikidata.org/wiki/Q4551",
+            "sourceType": "other",
+            "accessedAt": "2026-04-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q4551 has English label \"borscht\".",
+              "Wikidata item Q4551 has English description: Ukrainian beet soup."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "sour-herb-soup",
+            "sour dill soup",
+            "pickle soup",
+            "sorrel soup",
+            "green sour soup",
+            "borscht"
+          ],
+          "regions": [
+            "macro:Eastern Europe",
+            "nation:Poland",
+            "nation:Ukraine",
+            "diaspora:North America",
+            "diaspora global",
+            "europe"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "fermentation acid",
+            "aroma",
+            "temperature",
+            "starch texture"
+          ],
+          "sensoryDescriptors": [
+            "fermentation acid",
+            "aroma",
+            "temperature",
+            "starch texture"
+          ],
+          "culturalOccasions": [
+            "soup broth"
+          ],
+          "regionalVariants": [
+            "Wikidata item Q18388465 has English label \"pickle soup\".",
+            "Wikidata item Q18388465 has English description: soup prepared with pickled vegetables.",
+            "Wikidata item Q2635144 has English label \"sorrel soup\".",
+            "Wikidata item Q2635144 has English description: Eastern European dish.",
+            "Wikidata item Q4551 has English label \"borscht\".",
+            "Wikidata item Q4551 has English description: Ukrainian beet soup."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation.",
+          "This pantry record is a starting context for small-model grounding, not a final dish identification."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-04-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "sauce-chile-vinegar-caribbean",
+      "cacheTarget": {
+        "dishFamily": "chile-vinegar-condiment",
+        "region": "Caribbean"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "mechanisms.serving_ritual",
+        "nameSystems.menu_name",
+        "nameSystems.phonetic",
+        "regionScopes.macro_region",
+        "regionScopes.nation"
+      ],
+      "record": {
+        "dishName": "chile-vinegar-condiment",
+        "query": "Caribbean pepper sauce vinegar regional variants | family table hot sauce chile vinegar | diaspora Caribbean pepper sauce memory",
+        "sources": [
+          {
+            "title": "hot sauce (Q522171) structured data",
+            "url": "https://www.wikidata.org/wiki/Q522171",
+            "sourceType": "other",
+            "accessedAt": "2026-04-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q522171 has English label \"hot sauce\".",
+              "Wikidata item Q522171 has English description: chili pepper-based condiment."
+            ]
+          },
+          {
+            "title": "hot sauce (Q138542223) structured data",
+            "url": "https://www.wikidata.org/wiki/Q138542223",
+            "sourceType": "other",
+            "accessedAt": "2026-04-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q138542223 has English label \"hot sauce\".",
+              "Wikidata item Q138542223 has English description: condiment made from chili peppers preserved in oil or vinegar."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "chile-vinegar-condiment",
+            "pepper sauce",
+            "hot sauce",
+            "chile vinegar",
+            "table pepper"
+          ],
+          "regions": [
+            "macro:Caribbean",
+            "nation:Trinidad and Tobago",
+            "nation:Barbados",
+            "diaspora:United Kingdom",
+            "caribbean",
+            "diaspora global"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "sauce balance",
+            "fermentation acid",
+            "aroma",
+            "serving ritual"
+          ],
+          "sensoryDescriptors": [
+            "sauce balance",
+            "fermentation acid",
+            "aroma",
+            "serving ritual"
+          ],
+          "culturalOccasions": [
+            "sauce condiment"
+          ],
+          "regionalVariants": [
+            "Wikidata item Q522171 has English label \"hot sauce\".",
+            "Wikidata item Q522171 has English description: chili pepper-based condiment.",
+            "Wikidata item Q138542223 has English label \"hot sauce\".",
+            "Wikidata item Q138542223 has English description: condiment made from chili peppers preserved in oil or vinegar."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation.",
+          "This pantry record is a starting context for small-model grounding, not a final dish identification."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-04-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "pickle-ferment-vegetable-east-asia",
+      "cacheTarget": {
+        "dishFamily": "fermented-vegetable-pickle",
+        "region": "East Asia"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.east_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast",
+        "nameSystems.script_form",
+        "nameSystems.transliteration",
+        "regionScopes.macro_region"
+      ],
+      "record": {
+        "dishName": "fermented-vegetable-pickle",
+        "query": "fermented cabbage pickle regional variants | kimchi paocai family memory | East Asian fermented vegetable diaspora",
+        "sources": [
+          {
+            "title": "Kimchi (Q141898) structured data",
+            "url": "https://www.wikidata.org/wiki/Q141898",
+            "sourceType": "other",
+            "accessedAt": "2026-04-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q141898 has English label \"Kimchi\".",
+              "Wikidata item Q141898 has English description: Traditional Korean dish of fermented vegetables."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "fermented-vegetable-pickle",
+            "kimchi",
+            "paocai",
+            "pickled cabbage",
+            "fermented vegetable",
+            "Kimchi"
+          ],
+          "regions": [
+            "macro:East Asia",
+            "nation:Korea",
+            "nation:China",
+            "diaspora:United States",
+            "diaspora global",
+            "east asia"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "fermentation acid",
+            "aroma",
+            "texture contrast",
+            "temperature"
+          ],
+          "sensoryDescriptors": [
+            "fermentation acid",
+            "aroma",
+            "texture contrast",
+            "temperature"
+          ],
+          "culturalOccasions": [
+            "pickle ferment"
+          ],
+          "regionalVariants": [
+            "Wikidata item Q141898 has English label \"Kimchi\".",
+            "Wikidata item Q141898 has English description: Traditional Korean dish of fermented vegetables."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation.",
+          "This pantry record is a starting context for small-model grounding, not a final dish identification."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-04-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "bread-flatbread-global-staple",
+      "cacheTarget": {
+        "dishFamily": "flatbread",
+        "region": "Global"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.borderland_trade_routes",
+        "cultureAreas.east_africa",
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.north_africa",
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "mechanisms.alkaline_processing",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.borderland",
+        "regionScopes.macro_region"
+      ],
+      "record": {
+        "dishName": "flatbread",
+        "query": "global flatbread family variants griddle hearth | flatbread staple serving ritual | diaspora flatbread ingredient substitution",
+        "sources": [
+          {
+            "title": "flatbread (Q666242) structured data",
+            "url": "https://www.wikidata.org/wiki/Q666242",
+            "sourceType": "other",
+            "accessedAt": "2026-04-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q666242 has English label \"flatbread\".",
+              "Wikidata item Q666242 has English description: type of bread."
+            ]
+          },
+          {
+            "title": "chapati (Q752006) structured data",
+            "url": "https://www.wikidata.org/wiki/Q752006",
+            "sourceType": "other",
+            "accessedAt": "2026-04-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q752006 has English label \"chapati\".",
+              "Wikidata item Q752006 has English description: unleavened wheat flatbread."
+            ]
+          },
+          {
+            "title": "injera (Q935807) structured data",
+            "url": "https://www.wikidata.org/wiki/Q935807",
+            "sourceType": "other",
+            "accessedAt": "2026-04-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q935807 has English label \"injera\".",
+              "Wikidata item Q935807 has English description: sourdough flatbread."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "flatbread",
+            "roti",
+            "tortilla",
+            "injera",
+            "pita",
+            "lavash",
+            "chapati"
+          ],
+          "regions": [
+            "macro:South Asia",
+            "macro:Middle East",
+            "macro:Latin America",
+            "macro:East Africa",
+            "borderland trade routes",
+            "east africa",
+            "middle east west asia",
+            "north africa",
+            "south asia"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "browning",
+            "starch texture",
+            "alkaline processing",
+            "serving ritual"
+          ],
+          "sensoryDescriptors": [
+            "browning",
+            "starch texture",
+            "alkaline processing",
+            "serving ritual"
+          ],
+          "culturalOccasions": [
+            "bread flatbread"
+          ],
+          "regionalVariants": [
+            "Wikidata item Q666242 has English label \"flatbread\".",
+            "Wikidata item Q666242 has English description: type of bread.",
+            "Wikidata item Q752006 has English label \"chapati\".",
+            "Wikidata item Q752006 has English description: unleavened wheat flatbread.",
+            "Wikidata item Q935807 has English label \"injera\".",
+            "Wikidata item Q935807 has English description: sourdough flatbread."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation.",
+          "This pantry record is a starting context for small-model grounding, not a final dish identification."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-04-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "grain-rice-noodle-staple",
+      "cacheTarget": {
+        "dishFamily": "grain-rice-noodle-staple",
+        "region": "Global"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.south_asia",
+        "cultureAreas.southeast_asia",
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "record": {
+        "dishName": "grain-rice-noodle-staple",
+        "query": "rice noodle staple regional sensory variants | grain dish family memory aroma texture | diaspora rice noodle staple adaptation",
+        "sources": [
+          {
+            "title": "jollof rice (Q816663) structured data",
+            "url": "https://www.wikidata.org/wiki/Q816663",
+            "sourceType": "other",
+            "accessedAt": "2026-04-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q816663 has English label \"jollof rice\".",
+              "Wikidata item Q816663 has English description: rice dish from West Africa."
+            ]
+          },
+          {
+            "title": "biryani (Q271555) structured data",
+            "url": "https://www.wikidata.org/wiki/Q271555",
+            "sourceType": "other",
+            "accessedAt": "2026-04-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q271555 has English label \"biryani\".",
+              "Wikidata item Q271555 has English description: rice dish from the Indian subcontinent."
+            ]
+          },
+          {
+            "title": "congee (Q878624) structured data",
+            "url": "https://www.wikidata.org/wiki/Q878624",
+            "sourceType": "other",
+            "accessedAt": "2026-04-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q878624 has English label \"congee\".",
+              "Wikidata item Q878624 has English description: type of rice, millet or grain porridge or gruel popular in many Asian countries."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "grain-rice-noodle-staple",
+            "rice dish",
+            "noodle bowl",
+            "porridge rice",
+            "fried rice",
+            "jollof",
+            "biryani",
+            "jollof rice",
+            "congee"
+          ],
+          "regions": [
+            "macro:East Asia",
+            "macro:Southeast Asia",
+            "macro:West Africa",
+            "macro:South Asia",
+            "east asia",
+            "south asia",
+            "southeast asia",
+            "west africa"
+          ],
+          "ingredients": [
+            "jollof rice"
+          ],
+          "techniques": [
+            "starch texture",
+            "aroma",
+            "sauce balance",
+            "temperature"
+          ],
+          "sensoryDescriptors": [
+            "starch texture",
+            "aroma",
+            "sauce balance",
+            "temperature"
+          ],
+          "culturalOccasions": [
+            "grain rice noodle"
+          ],
+          "regionalVariants": [
+            "Wikidata item Q816663 has English label \"jollof rice\".",
+            "Wikidata item Q816663 has English description: rice dish from West Africa.",
+            "Wikidata item Q271555 has English label \"biryani\".",
+            "Wikidata item Q271555 has English description: rice dish from the Indian subcontinent.",
+            "Wikidata item Q878624 has English label \"congee\".",
+            "Wikidata item Q878624 has English description: type of rice, millet or grain porridge or gruel popular in many Asian countries."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation.",
+          "This pantry record is a starting context for small-model grounding, not a final dish identification."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-04-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "dumpling-pocket-global",
+      "cacheTarget": {
+        "dishFamily": "dumpling",
+        "region": "Global"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.borderland_trade_routes",
+        "cultureAreas.central_asia",
+        "cultureAreas.east_asia",
+        "cultureAreas.europe",
+        "cultureAreas.south_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "mechanisms.sauce_balance",
+        "mechanisms.serving_ritual",
+        "mechanisms.starch_texture",
+        "mechanisms.texture_contrast",
+        "nameSystems.phonetic",
+        "nameSystems.transliteration",
+        "regionScopes.borderland",
+        "regionScopes.migration_corridor"
+      ],
+      "record": {
+        "dishName": "dumpling",
+        "query": "filled dumpling pocket global variants | dumpling family memory wrapper filling | diaspora dumpling pocket regional names",
+        "sources": [
+          {
+            "title": "dumpling (Q1854639) structured data",
+            "url": "https://www.wikidata.org/wiki/Q1854639",
+            "sourceType": "other",
+            "accessedAt": "2026-04-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q1854639 has English label \"dumpling\".",
+              "Wikidata item Q1854639 has English description: food that consists of small pieces of dough (with or without filling)."
+            ]
+          },
+          {
+            "title": "pierogi (Q697800) structured data",
+            "url": "https://www.wikidata.org/wiki/Q697800",
+            "sourceType": "other",
+            "accessedAt": "2026-04-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q697800 has English label \"pierogi\".",
+              "Wikidata item Q697800 has English description: unleavened stuffed bun of Central and Eastern European origin."
+            ]
+          },
+          {
+            "title": "empanada (Q747457) structured data",
+            "url": "https://www.wikidata.org/wiki/Q747457",
+            "sourceType": "other",
+            "accessedAt": "2026-04-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q747457 has English label \"empanada\".",
+              "Wikidata item Q747457 has English description: baked or fried turnover consisting of pastry and filling."
+            ]
+          },
+          {
+            "title": "momo (Q134092) structured data",
+            "url": "https://www.wikidata.org/wiki/Q134092",
+            "sourceType": "other",
+            "accessedAt": "2026-04-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q134092 has English label \"momo\".",
+              "Wikidata item Q134092 has English description: dumpling from Nepal."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "dumpling",
+            "mandu",
+            "pierogi",
+            "empanada",
+            "momo",
+            "samosa"
+          ],
+          "regions": [
+            "macro:East Asia",
+            "macro:Eastern Europe",
+            "macro:Central Asia",
+            "macro:Latin America",
+            "borderland trade routes",
+            "central asia",
+            "east asia",
+            "europe",
+            "south america"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "starch texture",
+            "texture contrast",
+            "sauce balance",
+            "serving ritual"
+          ],
+          "sensoryDescriptors": [
+            "starch texture",
+            "texture contrast",
+            "sauce balance",
+            "serving ritual"
+          ],
+          "culturalOccasions": [
+            "dumpling pocket"
+          ],
+          "regionalVariants": [
+            "Wikidata item Q1854639 has English label \"dumpling\".",
+            "Wikidata item Q1854639 has English description: food that consists of small pieces of dough (with or without filling).",
+            "Wikidata item Q697800 has English label \"pierogi\".",
+            "Wikidata item Q697800 has English description: unleavened stuffed bun of Central and Eastern European origin.",
+            "Wikidata item Q747457 has English label \"empanada\".",
+            "Wikidata item Q747457 has English description: baked or fried turnover consisting of pastry and filling.",
+            "Wikidata item Q134092 has English label \"momo\".",
+            "Wikidata item Q134092 has English description: dumpling from Nepal."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation.",
+          "This pantry record is a starting context for small-model grounding, not a final dish identification."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-04-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "protein-braise-spiced-gravy",
+      "cacheTarget": {
+        "dishFamily": "spiced-protein-braise",
+        "region": "Global"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.south_asia",
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "mechanisms.aroma",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "regionScopes.diaspora"
+      ],
+      "record": {
+        "dishName": "spiced-protein-braise",
+        "query": "spiced protein braise gravy regional variants | family curry braised meat sensory memory | diaspora protein stew ingredient adaptation",
+        "sources": [
+          {
+            "title": "curry (Q164606) structured data",
+            "url": "https://www.wikidata.org/wiki/Q164606",
+            "sourceType": "other",
+            "accessedAt": "2026-04-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q164606 has English label \"curry\".",
+              "Wikidata item Q164606 has English description: dish whose origins are in South and Southeast Asian cuisines."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "spiced-protein-braise",
+            "spiced gravy",
+            "braised meat",
+            "stewed chicken",
+            "family curry",
+            "sauce meat",
+            "curry"
+          ],
+          "regions": [
+            "macro:South Asia",
+            "macro:Middle East",
+            "macro:West Africa",
+            "diaspora:Global",
+            "diaspora global",
+            "middle east west asia",
+            "south asia",
+            "west africa"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "browning",
+            "fat mouthfeel",
+            "sauce balance",
+            "aroma"
+          ],
+          "sensoryDescriptors": [
+            "browning",
+            "fat mouthfeel",
+            "sauce balance",
+            "aroma"
+          ],
+          "culturalOccasions": [
+            "protein centered",
+            "stew braise"
+          ],
+          "regionalVariants": [
+            "Wikidata item Q164606 has English label \"curry\".",
+            "Wikidata item Q164606 has English description: dish whose origins are in South and Southeast Asian cuisines."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation.",
+          "This pantry record is a starting context for small-model grounding, not a final dish identification."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-04-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "vegetable-fungi-simmered-greens",
+      "cacheTarget": {
+        "dishFamily": "simmered-vegetable-greens",
+        "region": "Global"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.central_africa",
+        "cultureAreas.east_asia",
+        "cultureAreas.north_america",
+        "cultureAreas.south_asia",
+        "cultureAreas.southern_africa",
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.fermentation_acid",
+        "mechanisms.texture_contrast",
+        "nameSystems.family_nickname",
+        "regionScopes.macro_region"
+      ],
+      "record": {
+        "dishName": "simmered-vegetable-greens",
+        "query": "simmered greens vegetable dish regional variants | bitter greens family food memory | mushroom vegetable stew sensory cues",
+        "sources": [
+          {
+            "title": "collard greens (Q104673882) structured data",
+            "url": "https://www.wikidata.org/wiki/Q104673882",
+            "sourceType": "other",
+            "accessedAt": "2026-04-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q104673882 has English label \"collard greens\".",
+              "Wikidata item Q104673882 has English description: leaf vegetable from Brassica oleracea var. viridis."
+            ]
+          },
+          {
+            "title": "saag (Q2748359) structured data",
+            "url": "https://www.wikidata.org/wiki/Q2748359",
+            "sourceType": "other",
+            "accessedAt": "2026-04-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q2748359 has English label \"saag\".",
+              "Wikidata item Q2748359 has English description: Indian Food."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "simmered-vegetable-greens",
+            "greens",
+            "bitter greens",
+            "mushrooms",
+            "leafy stew",
+            "simmered vegetables",
+            "collard greens",
+            "saag"
+          ],
+          "regions": [
+            "macro:West Africa",
+            "macro:South Asia",
+            "macro:East Asia",
+            "macro:American South",
+            "central africa",
+            "east asia",
+            "north america",
+            "south asia",
+            "southern africa",
+            "west africa"
+          ],
+          "ingredients": [
+            "collard greens"
+          ],
+          "techniques": [
+            "fermentation acid",
+            "fat mouthfeel",
+            "texture contrast",
+            "aroma"
+          ],
+          "sensoryDescriptors": [
+            "fermentation acid",
+            "fat mouthfeel",
+            "texture contrast",
+            "aroma"
+          ],
+          "culturalOccasions": [
+            "vegetable fungi"
+          ],
+          "regionalVariants": [
+            "Wikidata item Q104673882 has English label \"collard greens\".",
+            "Wikidata item Q104673882 has English description: leaf vegetable from Brassica oleracea var. viridis.",
+            "Wikidata item Q2748359 has English label \"saag\".",
+            "Wikidata item Q2748359 has English description: Indian Food."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation.",
+          "This pantry record is a starting context for small-model grounding, not a final dish identification."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-04-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "confectionery-nut-sugar-snap",
+      "cacheTarget": {
+        "dishFamily": "nut-sugar-confectionery",
+        "region": "Global"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.south_america",
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.confectionery",
+        "mechanisms.aroma",
+        "mechanisms.sugar_crystal",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.diaspora"
+      ],
+      "record": {
+        "dishName": "nut-sugar-confectionery",
+        "query": "nut sugar brittle regional variants | chikki sesame candy halva family memory | diaspora confectionery jaggery nut candy",
+        "sources": [
+          {
+            "title": "halva (Q183599) structured data",
+            "url": "https://www.wikidata.org/wiki/Q183599",
+            "sourceType": "other",
+            "accessedAt": "2026-04-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q183599 has English label \"halva\".",
+              "Wikidata item Q183599 has English description: confections often made from nut butters or flours."
+            ]
+          },
+          {
+            "title": "chikki (Q3535125) structured data",
+            "url": "https://www.wikidata.org/wiki/Q3535125",
+            "sourceType": "other",
+            "accessedAt": "2026-04-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q3535125 has English label \"chikki\".",
+              "Wikidata item Q3535125 has English description: peanut-based confection."
+            ]
+          },
+          {
+            "title": "sesame seed candy (Q926500) structured data",
+            "url": "https://www.wikidata.org/wiki/Q926500",
+            "sourceType": "other",
+            "accessedAt": "2026-04-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q926500 has English label \"sesame seed candy\".",
+              "Wikidata item Q926500 has English description: food."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "nut-sugar-confectionery",
+            "chikki",
+            "brittle",
+            "halva",
+            "nut candy",
+            "sesame candy",
+            "jaggery candy",
+            "sesame seed candy"
+          ],
+          "regions": [
+            "macro:South Asia",
+            "macro:Middle East",
+            "macro:Latin America",
+            "diaspora:Global",
+            "diaspora global",
+            "middle east west asia",
+            "south america",
+            "south asia"
+          ],
+          "ingredients": [
+            "sesame seed candy"
+          ],
+          "techniques": [
+            "sugar crystal",
+            "aroma",
+            "texture contrast",
+            "temperature"
+          ],
+          "sensoryDescriptors": [
+            "sugar crystal",
+            "aroma",
+            "texture contrast",
+            "temperature"
+          ],
+          "culturalOccasions": [
+            "confectionery"
+          ],
+          "regionalVariants": [
+            "Wikidata item Q183599 has English label \"halva\".",
+            "Wikidata item Q183599 has English description: confections often made from nut butters or flours.",
+            "Wikidata item Q3535125 has English label \"chikki\".",
+            "Wikidata item Q3535125 has English description: peanut-based confection.",
+            "Wikidata item Q926500 has English label \"sesame seed candy\".",
+            "Wikidata item Q926500 has English description: food."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation.",
+          "This pantry record is a starting context for small-model grounding, not a final dish identification."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-04-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "dessert-milk-custard-pudding",
+      "cacheTarget": {
+        "dishFamily": "milk-custard-pudding-dessert",
+        "region": "Global"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.south_america",
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "record": {
+        "dishName": "milk-custard-pudding-dessert",
+        "query": "milk custard pudding regional variants | rice pudding family memory cardamom cinnamon | flan kheer custard diaspora dessert",
+        "sources": [
+          {
+            "title": "rice pudding (Q19029) structured data",
+            "url": "https://www.wikidata.org/wiki/Q19029",
+            "sourceType": "other",
+            "accessedAt": "2026-04-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q19029 has English label \"rice pudding\".",
+              "Wikidata item Q19029 has English description: dish made from rice with milk."
+            ]
+          },
+          {
+            "title": "kheer (Q59134) structured data",
+            "url": "https://www.wikidata.org/wiki/Q59134",
+            "sourceType": "other",
+            "accessedAt": "2026-04-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q59134 has English label \"kheer\".",
+              "Wikidata item Q59134 has English description: rice dish."
+            ]
+          },
+          {
+            "title": "flan (Q16636380) structured data",
+            "url": "https://www.wikidata.org/wiki/Q16636380",
+            "sourceType": "other",
+            "accessedAt": "2026-04-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q16636380 has English label \"flan\".",
+              "Wikidata item Q16636380 has English description: dessert."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "milk-custard-pudding-dessert",
+            "custard",
+            "pudding",
+            "flan",
+            "kheer",
+            "rice pudding",
+            "milk dessert"
+          ],
+          "regions": [
+            "macro:Latin America",
+            "macro:South Asia",
+            "macro:Europe",
+            "macro:Middle East",
+            "europe",
+            "middle east west asia",
+            "south america",
+            "south asia"
+          ],
+          "ingredients": [
+            "rice pudding"
+          ],
+          "techniques": [
+            "starch texture",
+            "fat mouthfeel",
+            "aroma",
+            "temperature"
+          ],
+          "sensoryDescriptors": [
+            "starch texture",
+            "fat mouthfeel",
+            "aroma",
+            "temperature"
+          ],
+          "culturalOccasions": [
+            "dessert"
+          ],
+          "regionalVariants": [
+            "Wikidata item Q19029 has English label \"rice pudding\".",
+            "Wikidata item Q19029 has English description: dish made from rice with milk.",
+            "Wikidata item Q59134 has English label \"kheer\".",
+            "Wikidata item Q59134 has English description: rice dish.",
+            "Wikidata item Q16636380 has English label \"flan\".",
+            "Wikidata item Q16636380 has English description: dessert."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation.",
+          "This pantry record is a starting context for small-model grounding, not a final dish identification."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-04-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "snack-street-fried-starch",
+      "cacheTarget": {
+        "dishFamily": "fried-starch-street-snack",
+        "region": "Global"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "cultureAreas.south_asia",
+        "cultureAreas.southeast_asia",
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.starch_texture",
+        "mechanisms.texture_contrast",
+        "nameSystems.typo",
+        "regionScopes.city"
+      ],
+      "record": {
+        "dishName": "fried-starch-street-snack",
+        "query": "fried starch street snack regional variants | family market fritter memory | diaspora street snack local ingredient adaptation",
+        "sources": [
+          {
+            "title": "fritter (Q690292) structured data",
+            "url": "https://www.wikidata.org/wiki/Q690292",
+            "sourceType": "other",
+            "accessedAt": "2026-04-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q690292 has English label \"fritter\".",
+              "Wikidata item Q690292 has English description: fried sweet or savory pastry."
+            ]
+          },
+          {
+            "title": "pakora (Q1126275) structured data",
+            "url": "https://www.wikidata.org/wiki/Q1126275",
+            "sourceType": "other",
+            "accessedAt": "2026-04-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q1126275 has English label \"pakora\".",
+              "Wikidata item Q1126275 has English description: piece of meat or vegetable from the Indian subcontinent."
+            ]
+          },
+          {
+            "title": "akara (Q392935) structured data",
+            "url": "https://www.wikidata.org/wiki/Q392935",
+            "sourceType": "other",
+            "accessedAt": "2026-04-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q392935 has English label \"akara\".",
+              "Wikidata item Q392935 has English description: peeled beans formed into a ball and deep-fried in palm oil."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "fried-starch-street-snack",
+            "fried snack",
+            "street food",
+            "fritter",
+            "pakora",
+            "carimanola",
+            "akara"
+          ],
+          "regions": [
+            "macro:Latin America",
+            "macro:South Asia",
+            "macro:West Africa",
+            "macro:Southeast Asia",
+            "central america",
+            "south asia",
+            "southeast asia",
+            "west africa"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "browning",
+            "texture contrast",
+            "starch texture",
+            "serving ritual"
+          ],
+          "sensoryDescriptors": [
+            "browning",
+            "texture contrast",
+            "starch texture",
+            "serving ritual"
+          ],
+          "culturalOccasions": [
+            "snack street food"
+          ],
+          "regionalVariants": [
+            "Wikidata item Q690292 has English label \"fritter\".",
+            "Wikidata item Q690292 has English description: fried sweet or savory pastry.",
+            "Wikidata item Q1126275 has English label \"pakora\".",
+            "Wikidata item Q1126275 has English description: piece of meat or vegetable from the Indian subcontinent.",
+            "Wikidata item Q392935 has English label \"akara\".",
+            "Wikidata item Q392935 has English description: peeled beans formed into a ball and deep-fried in palm oil."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation.",
+          "This pantry record is a starting context for small-model grounding, not a final dish identification."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-04-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "ceremonial-wrapped-holiday-food",
+      "cacheTarget": {
+        "dishFamily": "ceremonial-wrapped-food",
+        "region": "Global"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "cultureAreas.diaspora_global",
+        "cultureAreas.east_asia",
+        "cultureAreas.middle_east_west_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.starch_texture",
+        "mechanisms.texture_contrast",
+        "nameSystems.colonial_postcolonial_name",
+        "regionScopes.religious_ritual",
+        "regionScopes.subregion"
+      ],
+      "record": {
+        "dishName": "ceremonial-wrapped-food",
+        "query": "holiday wrapped food regional variants | festival food family memory leaf wrapper | diaspora ceremonial food ingredient substitution",
+        "sources": [
+          {
+            "title": "tamale (Q1147853) structured data",
+            "url": "https://www.wikidata.org/wiki/Q1147853",
+            "sourceType": "other",
+            "accessedAt": "2026-04-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q1147853 has English label \"tamale\".",
+              "Wikidata item Q1147853 has English description: corn-based food from Mesoamerica, traditionally wrapped in corn husks or banana leaves."
+            ]
+          },
+          {
+            "title": "zongzi (Q713466) structured data",
+            "url": "https://www.wikidata.org/wiki/Q713466",
+            "sourceType": "other",
+            "accessedAt": "2026-04-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q713466 has English label \"zongzi\".",
+              "Wikidata item Q713466 has English description: traditional Chinese food."
+            ]
+          },
+          {
+            "title": "dolma (Q339193) structured data",
+            "url": "https://www.wikidata.org/wiki/Q339193",
+            "sourceType": "other",
+            "accessedAt": "2026-04-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q339193 has English label \"dolma\".",
+              "Wikidata item Q339193 has English description: category of dishes of stuffed vegetables, fruits, seafood and flowers."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "ceremonial-wrapped-food",
+            "holiday wrapped food",
+            "pasteles",
+            "tamales",
+            "zongzi",
+            "dolma",
+            "festival parcel",
+            "tamale"
+          ],
+          "regions": [
+            "macro:Latin America",
+            "macro:Middle East",
+            "macro:East Asia",
+            "diaspora:Global",
+            "central america",
+            "diaspora global",
+            "east asia",
+            "middle east west asia"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "serving ritual",
+            "aroma",
+            "starch texture",
+            "texture contrast"
+          ],
+          "sensoryDescriptors": [
+            "serving ritual",
+            "aroma",
+            "starch texture",
+            "texture contrast"
+          ],
+          "culturalOccasions": [
+            "ceremonial holiday"
+          ],
+          "regionalVariants": [
+            "Wikidata item Q1147853 has English label \"tamale\".",
+            "Wikidata item Q1147853 has English description: corn-based food from Mesoamerica, traditionally wrapped in corn husks or banana leaves.",
+            "Wikidata item Q713466 has English label \"zongzi\".",
+            "Wikidata item Q713466 has English description: traditional Chinese food.",
+            "Wikidata item Q339193 has English label \"dolma\".",
+            "Wikidata item Q339193 has English description: category of dishes of stuffed vegetables, fruits, seafood and flowers."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation.",
+          "This pantry record is a starting context for small-model grounding, not a final dish identification."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-04-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "breakfast-porridge-grain",
+      "cacheTarget": {
+        "dishFamily": "breakfast-grain-porridge",
+        "region": "Global"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "cultureAreas.east_africa",
+        "cultureAreas.east_asia",
+        "cultureAreas.europe",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.breakfast",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "regionScopes.macro_region"
+      ],
+      "record": {
+        "dishName": "breakfast-grain-porridge",
+        "query": "breakfast porridge grain regional variants | family breakfast porridge memory | congee cornmeal porridge diaspora variations",
+        "sources": [
+          {
+            "title": "porridge (Q186817) structured data",
+            "url": "https://www.wikidata.org/wiki/Q186817",
+            "sourceType": "other",
+            "accessedAt": "2026-04-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q186817 has English label \"porridge\".",
+              "Wikidata item Q186817 has English description: food commonly eaten as a breakfast cereal dish, made by boiling ground, crushed or chopped starchy plants, typically grain, in water or milk."
+            ]
+          },
+          {
+            "title": "congee (Q878624) structured data",
+            "url": "https://www.wikidata.org/wiki/Q878624",
+            "sourceType": "other",
+            "accessedAt": "2026-04-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q878624 has English label \"congee\".",
+              "Wikidata item Q878624 has English description: type of rice, millet or grain porridge or gruel popular in many Asian countries."
+            ]
+          },
+          {
+            "title": "ogi (Q7080021) structured data",
+            "url": "https://www.wikidata.org/wiki/Q7080021",
+            "sourceType": "other",
+            "accessedAt": "2026-04-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q7080021 has English label \"ogi\".",
+              "Wikidata item Q7080021 has English description: fermented cereal pudding from Nigeria, typically made from maize, sorghum, or millet."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "breakfast-grain-porridge",
+            "porridge",
+            "congee",
+            "ogi",
+            "oatmeal",
+            "cornmeal porridge",
+            "breakfast grain"
+          ],
+          "regions": [
+            "macro:Caribbean",
+            "macro:East Africa",
+            "macro:Europe",
+            "macro:East Asia",
+            "caribbean",
+            "east africa",
+            "east asia",
+            "europe"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "starch texture",
+            "temperature",
+            "aroma",
+            "fat mouthfeel"
+          ],
+          "sensoryDescriptors": [
+            "starch texture",
+            "temperature",
+            "aroma",
+            "fat mouthfeel"
+          ],
+          "culturalOccasions": [
+            "breakfast",
+            "grain rice noodle"
+          ],
+          "regionalVariants": [
+            "Wikidata item Q186817 has English label \"porridge\".",
+            "Wikidata item Q186817 has English description: food commonly eaten as a breakfast cereal dish, made by boiling ground, crushed or chopped starchy plants, typically grain, in water or milk.",
+            "Wikidata item Q878624 has English label \"congee\".",
+            "Wikidata item Q878624 has English description: type of rice, millet or grain porridge or gruel popular in many Asian countries.",
+            "Wikidata item Q7080021 has English label \"ogi\".",
+            "Wikidata item Q7080021 has English description: fermented cereal pudding from Nigeria, typically made from maize, sorghum, or millet."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation.",
+          "This pantry record is a starting context for small-model grounding, not a final dish identification."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-04-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "sick-day-comfort-broth",
+      "cacheTarget": {
+        "dishFamily": "comfort-broth",
+        "region": "Global"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.arctic_subarctic",
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "regionScopes.diaspora"
+      ],
+      "record": {
+        "dishName": "comfort-broth",
+        "query": "comfort broth family memory regional variants | sick day soup cultural food memory | gentle broth caregiver ritual",
+        "sources": [
+          {
+            "title": "chicken soup (Q1432535) structured data",
+            "url": "https://www.wikidata.org/wiki/Q1432535",
+            "sourceType": "other",
+            "accessedAt": "2026-04-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q1432535 has English label \"chicken soup\".",
+              "Wikidata item Q1432535 has English description: soup made from chicken."
+            ]
+          },
+          {
+            "title": "ginger tea (Q1061187) structured data",
+            "url": "https://www.wikidata.org/wiki/Q1061187",
+            "sourceType": "other",
+            "accessedAt": "2026-04-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q1061187 has English label \"ginger tea\".",
+              "Wikidata item Q1061187 has English description: hot water infused ginger roots."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "comfort-broth",
+            "comfort broth",
+            "sick day soup",
+            "chicken soup",
+            "rice broth",
+            "ginger broth",
+            "ginger tea"
+          ],
+          "regions": [
+            "macro:Global",
+            "diaspora:Global",
+            "migration_corridor:family",
+            "arctic subarctic",
+            "diaspora global"
+          ],
+          "ingredients": [
+            "chicken soup",
+            "ginger tea"
+          ],
+          "techniques": [
+            "temperature",
+            "aroma",
+            "sauce balance",
+            "serving ritual"
+          ],
+          "sensoryDescriptors": [
+            "temperature",
+            "aroma",
+            "sauce balance",
+            "serving ritual"
+          ],
+          "culturalOccasions": [
+            "sick day comfort",
+            "soup broth"
+          ],
+          "regionalVariants": [
+            "Wikidata item Q1432535 has English label \"chicken soup\".",
+            "Wikidata item Q1432535 has English description: soup made from chicken.",
+            "Wikidata item Q1061187 has English label \"ginger tea\".",
+            "Wikidata item Q1061187 has English description: hot water infused ginger roots."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation.",
+          "This pantry record is a starting context for small-model grounding, not a final dish identification."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-04-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "pantry-single-ingredient-aroma",
+      "cacheTarget": {
+        "dishFamily": "single-ingredient-nostalgia-cue",
+        "region": "Global"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.north_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pantry_single_ingredient",
+        "mechanisms.aroma",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.serving_ritual",
+        "nameSystems.family_nickname",
+        "regionScopes.city"
+      ],
+      "record": {
+        "dishName": "single-ingredient-nostalgia-cue",
+        "query": "single ingredient nostalgia cue spice aroma | pantry aroma family food memory | tiny sensory cue local grocery",
+        "sources": [
+          {
+            "title": "cinnamon (Q28165) structured data",
+            "url": "https://www.wikidata.org/wiki/Q28165",
+            "sourceType": "other",
+            "accessedAt": "2026-04-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q28165 has English label \"cinnamon\".",
+              "Wikidata item Q28165 has English description: spice obtained from the inner bark of several tree species from the genus Cinnamomum."
+            ]
+          },
+          {
+            "title": "cardamom (Q14625808) structured data",
+            "url": "https://www.wikidata.org/wiki/Q14625808",
+            "sourceType": "other",
+            "accessedAt": "2026-04-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q14625808 has English label \"cardamom\".",
+              "Wikidata item Q14625808 has English description: spice used in the kitchen."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "single-ingredient-nostalgia-cue",
+            "one spice",
+            "one herb",
+            "pantry aroma",
+            "tiny cue",
+            "first smell",
+            "cinnamon",
+            "cardamom"
+          ],
+          "regions": [
+            "macro:Global",
+            "diaspora:Global",
+            "city:local grocery",
+            "diaspora global",
+            "north america"
+          ],
+          "ingredients": [
+            "cinnamon",
+            "cardamom"
+          ],
+          "techniques": [
+            "aroma",
+            "browning",
+            "fat mouthfeel",
+            "serving ritual"
+          ],
+          "sensoryDescriptors": [
+            "aroma",
+            "browning",
+            "fat mouthfeel",
+            "serving ritual"
+          ],
+          "culturalOccasions": [
+            "pantry single ingredient"
+          ],
+          "regionalVariants": [
+            "Wikidata item Q28165 has English label \"cinnamon\".",
+            "Wikidata item Q28165 has English description: spice obtained from the inner bark of several tree species from the genus Cinnamomum.",
+            "Wikidata item Q14625808 has English label \"cardamom\".",
+            "Wikidata item Q14625808 has English description: spice used in the kitchen."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation.",
+          "This pantry record is a starting context for small-model grounding, not a final dish identification."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-04-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "oceania-coconut-taro-earth-oven",
+      "cacheTarget": {
+        "dishFamily": "coconut-taro-earth-oven-foodway",
+        "region": "Oceania and Pacific"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.indigenous_first_peoples",
+        "cultureAreas.oceania_pacific",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.protein_centered",
+        "foodForms.vegetable_fungi",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.serving_ritual",
+        "mechanisms.smoke",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.indigenous",
+        "regionScopes.subregion"
+      ],
+      "record": {
+        "dishName": "coconut-taro-earth-oven-foodway",
+        "query": "Oceania Pacific earth oven taro coconut feast variants | umu hangi lovo family food memory | Pacific diaspora coconut taro local ingredient adaptation",
+        "sources": [
+          {
+            "title": "earth oven (Q473594) structured data",
+            "url": "https://www.wikidata.org/wiki/Q473594",
+            "sourceType": "other",
+            "accessedAt": "2026-04-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q473594 has English label \"earth oven\".",
+              "Wikidata item Q473594 has English description: simple pit for cooking."
+            ]
+          },
+          {
+            "title": "hangi (Q1186334) structured data",
+            "url": "https://www.wikidata.org/wiki/Q1186334",
+            "sourceType": "other",
+            "accessedAt": "2026-04-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q1186334 has English label \"hangi\".",
+              "Wikidata item Q1186334 has English description: Traditional Maori cooking method."
+            ]
+          },
+          {
+            "title": "coconut (Q3342808) structured data",
+            "url": "https://www.wikidata.org/wiki/Q3342808",
+            "sourceType": "other",
+            "accessedAt": "2026-04-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q3342808 has English label \"coconut\".",
+              "Wikidata item Q3342808 has English description: fruit of the coconut palm used as food and raw material."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "coconut-taro-earth-oven-foodway",
+            "umu",
+            "hangi",
+            "lovo",
+            "earth oven",
+            "taro coconut food",
+            "pit-cooked feast",
+            "coconut"
+          ],
+          "regions": [
+            "macro:Oceania and Pacific",
+            "subregion:Pacific Islands",
+            "indigenous:Pacific and Aboriginal foodways",
+            "diaspora:Global",
+            "diaspora global",
+            "indigenous first peoples",
+            "oceania pacific"
+          ],
+          "ingredients": [
+            "coconut"
+          ],
+          "techniques": [
+            "smoke",
+            "starch texture",
+            "fat mouthfeel",
+            "serving ritual"
+          ],
+          "sensoryDescriptors": [
+            "smoke",
+            "starch texture",
+            "fat mouthfeel",
+            "serving ritual"
+          ],
+          "culturalOccasions": [
+            "ceremonial holiday",
+            "protein centered",
+            "vegetable fungi"
+          ],
+          "regionalVariants": [
+            "Wikidata item Q473594 has English label \"earth oven\".",
+            "Wikidata item Q473594 has English description: simple pit for cooking.",
+            "Wikidata item Q1186334 has English label \"hangi\".",
+            "Wikidata item Q1186334 has English description: Traditional Maori cooking method.",
+            "Wikidata item Q3342808 has English label \"coconut\".",
+            "Wikidata item Q3342808 has English description: fruit of the coconut palm used as food and raw material."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation.",
+          "This pantry record is a starting context for small-model grounding, not a final dish identification."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-04-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "arctic-subarctic-smoked-fish-berry-preserve",
+      "cacheTarget": {
+        "dishFamily": "smoked-fish-berry-preserve-foodway",
+        "region": "Arctic and subarctic"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.arctic_subarctic",
+        "cultureAreas.europe",
+        "cultureAreas.indigenous_first_peoples",
+        "cultureAreas.north_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.pantry_single_ingredient",
+        "foodForms.protein_centered",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.serving_ritual",
+        "mechanisms.smoke",
+        "mechanisms.temperature",
+        "nameSystems.family_nickname",
+        "regionScopes.indigenous",
+        "regionScopes.subregion"
+      ],
+      "record": {
+        "dishName": "smoked-fish-berry-preserve-foodway",
+        "query": "Arctic subarctic smoked fish berry preserve food memory | northern Indigenous preserved fish family foodway | cold climate smoke drying fat berry sensory cue",
+        "sources": [
+          {
+            "title": "smoked fish (Q70608) structured data",
+            "url": "https://www.wikidata.org/wiki/Q70608",
+            "sourceType": "other",
+            "accessedAt": "2026-04-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q70608 has English label \"smoked fish\".",
+              "Wikidata item Q70608 has English description: fish preserved by smoking."
+            ]
+          },
+          {
+            "title": "dried fish (Q5307391) structured data",
+            "url": "https://www.wikidata.org/wiki/Q5307391",
+            "sourceType": "other",
+            "accessedAt": "2026-04-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q5307391 has English label \"dried fish\".",
+              "Wikidata item Q5307391 has English description: fish preserved by drying."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "smoked-fish-berry-preserve-foodway",
+            "smoked fish",
+            "dried fish",
+            "berry preserve",
+            "seal oil",
+            "cold-climate preserved food"
+          ],
+          "regions": [
+            "macro:Arctic and subarctic",
+            "indigenous:First Peoples northern foodways",
+            "subregion:northern coastal and inland cold-climate regions",
+            "arctic subarctic",
+            "europe",
+            "indigenous first peoples",
+            "north america"
+          ],
+          "ingredients": [
+            "smoked fish",
+            "dried fish"
+          ],
+          "techniques": [
+            "smoke",
+            "temperature",
+            "fat mouthfeel",
+            "serving ritual"
+          ],
+          "sensoryDescriptors": [
+            "smoke",
+            "temperature",
+            "fat mouthfeel",
+            "serving ritual"
+          ],
+          "culturalOccasions": [
+            "ceremonial holiday",
+            "pantry single ingredient",
+            "protein centered"
+          ],
+          "regionalVariants": [
+            "Wikidata item Q70608 has English label \"smoked fish\".",
+            "Wikidata item Q70608 has English description: fish preserved by smoking.",
+            "Wikidata item Q5307391 has English label \"dried fish\".",
+            "Wikidata item Q5307391 has English description: fish preserved by drying."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation.",
+          "This pantry record is a starting context for small-model grounding, not a final dish identification."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-04-30T00:00:00.000Z"
+      }
+    }
+  ]
+}

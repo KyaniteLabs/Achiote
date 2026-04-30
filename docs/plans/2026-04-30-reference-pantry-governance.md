@@ -58,3 +58,13 @@ npm audit --audit-level=moderate
 git diff --check
 npm pack --dry-run
 ```
+
+### Follow-up Fixture Batch
+
+The first implementation pass after this governance layer adds `src/data/reference-pantry-fixtures.json`: 18 approved typed `ResearchRecord` fixtures, one for every current cache-warming target. The bundled batch uses Wikidata structured labels/descriptions under the CC0 source policy and can be written with:
+
+```bash
+npm run reference:seeds -- --fixture bundled --cache-path ~/.cache/achiote/culture-cache.db
+```
+
+The batch is meant to reduce inference burden by giving smaller models stable vocabulary, aliases, broad regional/culture-area tags, food-form tags, and sensory mechanism context before the host model reasons from scratch. It is cited researched context, not family-confirmed evidence and not an operator quality signal.
