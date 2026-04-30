@@ -3,7 +3,7 @@ import type { CollectedFoodMemory, DishResearchPlan, MinimumViableNostalgiaCue }
 export type QualityMemoryType = 'beverage' | 'dish' | 'sauce_broth' | 'confectionery' | 'unknown';
 export type QualityMissingDimension = 'missing_name' | 'missing_region' | 'missing_ingredient' | 'missing_format';
 export type QualitySearchOutcome = 'called' | 'capped' | 'skipped' | 'not_applicable';
-export type QualityCacheOutcome = 'unavailable' | 'miss' | 'hit' | 'fallback';
+export type QualityCacheOutcome = 'unavailable' | 'miss' | 'hit' | 'fallback' | 'bundled';
 
 export interface AskQualitySignal {
   memoryType: QualityMemoryType;
@@ -114,6 +114,7 @@ export function inferAskCacheOutcome(input: AskCacheOutcomeInput): QualityCacheO
   if (input.cacheFallbackUsed) return 'fallback';
   if (!input.cacheAvailable) return 'unavailable';
   if (Object.values(input.toolPayloads).some(hasCachedResearch)) return 'hit';
+  if (Object.values(input.toolPayloads).some(hasBundledReferenceResearch)) return 'bundled';
   if (input.calledTools.some((tool) => CACHE_CAPABLE_TOOLS.has(tool))) return 'miss';
   return 'unavailable';
 }
@@ -194,7 +195,7 @@ function inferSearch(calledTools: string[], toolPayloads: Record<string, unknown
 }
 
 function normalizeCache(value?: string): QualityCacheOutcome {
-  if (value === 'hit' || value === 'miss' || value === 'fallback') return value;
+  if (value === 'hit' || value === 'miss' || value === 'fallback' || value === 'bundled') return value;
   return 'unavailable';
 }
 
@@ -205,6 +206,15 @@ function hasCachedResearch(value: unknown): boolean {
     && value !== null
     && !Array.isArray(value)
     && 'cachedResearch' in value;
+}
+
+function hasBundledReferenceResearch(value: unknown): boolean {
+  return typeof value === 'object'
+    && value !== null
+    && !Array.isArray(value)
+    && 'referenceResearch' in value
+    && typeof (value as { referenceResearch?: { source?: unknown } }).referenceResearch === 'object'
+    && (value as { referenceResearch?: { source?: unknown } }).referenceResearch?.source === 'bundled';
 }
 
 function normalizeGuard(value?: string): string {

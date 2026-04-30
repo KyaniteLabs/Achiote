@@ -9,6 +9,7 @@ import { runAchioteStdioServer } from './cli.js';
 export { runAchioteStdioServer } from './cli.js';
 export { createAchioteServer } from './server.js';
 export { bundledGlobalReferenceSeeds, prioritizeReferenceSeeds } from './lib/reference-seed-planner.js';
+export { getBundledReferenceResearch, getReferenceResearch } from './lib/reference-pantry.js';
 export { buildReferencePantryFixtureReport, buildReferenceSeedOperatorReport, validateReferenceSeedFixtures, writeReferenceSeedFixturesToCache } from './lib/reference-seed-operator.js';
 export type { AchioteServerOptions } from './server.js';
 export type { ReferencePantryFixtureReport, ReferenceSeedOperatorReport, ReferenceSeedOperatorTask } from './lib/reference-seed-operator.js';

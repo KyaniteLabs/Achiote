@@ -81,7 +81,7 @@ Speech is an optional HTTP-mode input/output layer, not part of the MCP reasonin
 
 ## Reference seed operating loop
 
-HTTP `/ask` records privacy-preserving quality counters for successful completions: memory type, bounded family bucket, region bucket, guard path, search outcome, cache outcome, and missing-clue dimensions. Authenticated `GET /events` returns those counters plus deterministic reference seed priorities and cache-warming tasks from `buildReferenceSeedOperatorReport`.
+HTTP `/ask` records privacy-preserving quality counters for successful completions: memory type, bounded family bucket, region bucket, guard path, search outcome, reference/cache outcome, and missing-clue dimensions. Authenticated `GET /events` returns those counters plus deterministic reference seed priorities and reference bootstrap tasks from `buildReferenceSeedOperatorReport`.
 
 The local operator script runs with:
 
@@ -91,15 +91,21 @@ npm run reference:seeds -- --fixture approved-fixture.json --cache-path ~/.cache
 npm run reference:seeds -- --fixture bundled --cache-path ~/.cache/achiote/culture-cache.db
 ```
 
-The script does not browse. Report mode prints host-research prompts for approved human or host-AI research. Fixture mode validates typed `ResearchRecord` artifacts against the cache-warming manifest before writing them to SQLite. Raw memories, prompts, provider details, credentials, medical claims, and legal claims do not belong in seed data or fixtures.
+The script does not browse. Report mode prints host-research prompts for approved human or host-AI research. Fixture mode validates typed `ResearchRecord` artifacts against the reference manifest before writing them to SQLite. Raw memories, prompts, provider details, credentials, medical claims, and legal claims do not belong in seed data or fixtures.
 
-Reference pantry growth is source-gated. CC0/public-domain structured data such as Wikidata labels/aliases and USDA FoodData Central commodity facts may be used for approved typed fixtures when cited. ODbL product data and FAO/INFOODS composition tables are manual-review sources because attribution, share-alike, or redistribution terms must be checked before cache warming. Copied recipe instructions, article prose, proprietary food guides, uncited model-generated facts, and user memories are never fixture material.
+Reference pantry growth is source-gated. CC0/public-domain structured data such as Wikidata labels/aliases and USDA FoodData Central commodity facts may be used for approved typed fixtures when cited. ODbL product data and FAO/INFOODS composition tables are manual-review sources because attribution, share-alike, or redistribution terms must be checked before fixture use. Copied recipe instructions, article prose, proprietary food guides, uncited model-generated facts, and user memories are never fixture material.
 
-The coverage matrix includes broad world culture-area buckets so the operator can see whether the pantry is overfitting to a few regions. These buckets are planning coverage only; they do not assert that one seed represents an entire culture. The bundled fixture batch in `src/data/reference-pantry-fixtures.json` now contains 138 typed `ResearchRecord` entries across all current cache-warming targets, using Wikidata structured labels/descriptions under the allowed CC0 source policy. Expansion 1 adds a balanced 20 culture-area by six food-memory-band matrix so every bucket has staple-starch, liquid/comfort, acid/condiment, protein/vegetable main, handheld/social, and sweet/ritual grounding. The batch can truthfully satisfy the seed-hypothesis and researched-record evidence levels, but it does not claim family confirmation or operator quality-signal evidence.
+The coverage matrix includes broad world culture-area buckets so the operator can see whether the pantry is overfitting to a few regions. These buckets are planning coverage only; they do not assert that one seed represents an entire culture. The bundled fixture batch in `src/data/reference-pantry-fixtures.json` now contains 138 typed `ResearchRecord` entries across all current reference targets, using Wikidata structured labels/descriptions under the allowed CC0 source policy. Runtime tools check SQLite first, then fall back to this bundled baseline, so the pantry is available without a bootstrap step. Expansion 1 adds a balanced 20 culture-area by six food-memory-band matrix so every bucket has staple-starch, liquid/comfort, acid/condiment, protein/vegetable main, handheld/social, and sweet/ritual grounding. The batch can truthfully satisfy the seed-hypothesis and researched-record evidence levels, but it does not claim family confirmation or operator quality-signal evidence.
 
 ## Cache
 
-`ResearchCache` stores optional research data in SQLite and can store/retrieve typed `ResearchRecord` JSON. By default the CLI uses:
+`ResearchCache` stores optional overlay research data in SQLite and can store/retrieve typed `ResearchRecord` JSON. The bundled reference pantry is the immutable baseline; SQLite is for deployment-local overlays, operator-approved additions, and optional bootstrap copies. Runtime reference lookup order is:
+
+1. SQLite overlay exact match.
+2. Bundled pantry exact match.
+3. Bundled pantry family-level global match when available.
+
+By default the CLI uses:
 
 ```text
 $ACHIOTE_CACHE_PATH

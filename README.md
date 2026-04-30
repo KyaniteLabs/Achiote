@@ -177,21 +177,21 @@ Achiote can turn private aggregate `/ask` quality counters into reference seed p
 npm run reference:seeds -- --quality-report quality.json --limit 10
 ```
 
-The command prints host-research prompts and cache-warming targets. It does not browse. To warm the local SQLite cache, provide an explicitly approved fixture containing typed `ResearchRecord` objects:
+The command prints host-research prompts and reference bootstrap targets. It does not browse. SQLite is an optional persistent overlay for additional approved `ResearchRecord` objects:
 
 ```bash
 npm run reference:seeds -- --fixture approved-fixture.json --cache-path ~/.cache/achiote/culture-cache.db
 ```
 
-Fixtures must match the seed manifest and pass provenance validation before any cache write.
+Fixtures must match the seed manifest and pass provenance validation before any SQLite write.
 
-The repo also ships an approved CC0 structured-data pantry batch that can warm every current cache target:
+The repo also ships an approved CC0 structured-data pantry batch. Those records are committed in `src/data/reference-pantry-fixtures.json`, compiled into `dist/data/`, and used by runtime tools as the built-in baseline even when SQLite has never been bootstrapped:
 
 ```bash
 npm run reference:seeds -- --fixture bundled --cache-path ~/.cache/achiote/culture-cache.db
 ```
 
-That bundled batch uses Wikidata structured labels/descriptions only. It currently contains 138 typed `ResearchRecord` fixtures: the original 18-record skeleton plus a 120-record expansion across 20 culture-area buckets and six food-memory bands. It covers every current food form, culture-area bucket, region scope, name system, and sensory mechanism, and remains explicit that the records are broad grounding context rather than final family-specific answers. It marks the entries as cited researched records without pretending they are family-confirmed memories or operator quality signals.
+That optional bootstrap command copies the bundled baseline into SQLite for deployments that want a single local database view, but it is not required on every request and it is not required for Achiote to see the baseline pantry. The bundled batch uses Wikidata structured labels/descriptions only. It currently contains 138 typed `ResearchRecord` fixtures: the original 18-record skeleton plus a 120-record expansion across 20 culture-area buckets and six food-memory bands. It covers every current food form, culture-area bucket, region scope, name system, and sensory mechanism, and remains explicit that the records are broad grounding context rather than final family-specific answers. It marks the entries as cited researched records without pretending they are family-confirmed memories or operator quality signals.
 
 The reference pantry is intentionally conservative. `src/data/reference-source-registry.json` allows CC0/public-domain structured sources first, currently Wikidata structured food data and USDA FoodData Central, and marks sources such as Open Food Facts and FAO/INFOODS for manual review before fixture use. Do not copy recipe prose, paywalled database content, proprietary rankings, raw user memories, credentials, or uncited model guesses into pantry fixtures.
 

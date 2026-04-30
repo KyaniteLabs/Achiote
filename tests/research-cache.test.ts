@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { ResearchCache } from '../src/lib/research-cache.js';
+import { getBundledReferenceResearch } from '../src/lib/reference-pantry.js';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -91,6 +92,20 @@ describe('ResearchCache', () => {
   it('returns null when cached JSON is corrupted', () => {
     cache.store('dumpling', 'China', 'not-valid-json{{{');
     expect(cache.getResearchRecord('dumpling', 'China')).toBeNull();
+  });
+
+  it('can read committed bundled pantry records without writing SQLite first', () => {
+    const bundled = getBundledReferenceResearch('dumpling', 'Eastern Europe');
+
+    expect(bundled).toMatchObject({
+      source: 'bundled',
+      entry: {
+        dishFamily: 'dumpling',
+        region: 'Global',
+        hitCount: 0,
+      },
+    });
+    expect(JSON.parse(bundled!.entry.researchData).dishName).toBe('dumpling');
   });
 
   it('rejects entries exceeding max data size', () => {

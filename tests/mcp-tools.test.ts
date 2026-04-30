@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { resolveDishName } from '../src/lib/name-resolver.js';
 import { findSubstitutes } from '../src/lib/substitution-engine.js';
 import { ResearchCache } from '../src/lib/research-cache.js';
+import { defaultToolExecutionContext, executeToolDefinition } from '../src/tools/tool-registry.js';
 import type { RecipeOutput, Confidence } from '../src/lib/types.js';
 import sensoryProfilesData from '../src/data/sensory-profiles.json' with { type: 'json' };
 import regionalData from '../src/data/regional-availability.json' with { type: 'json' };
@@ -220,6 +221,49 @@ describe('generate_recipe schema integration', () => {
 // 7. ResearchCache integration with MCP tools pattern
 // ---------------------------------------------------------------------------
 describe('ResearchCache integration with MCP tools pattern', () => {
+  it('uses the committed bundled pantry as a baseline when SQLite has not been bootstrapped', async () => {
+    const result = await executeToolDefinition(
+      'discover_regional_similars',
+      { dishName: 'pierogi', region: 'Eastern Europe' },
+      defaultToolExecutionContext,
+    );
+
+    expect(result.payload.cachedResearch).toBeUndefined();
+    expect(result.payload.referenceResearch).toMatchObject({
+      source: 'bundled',
+      dishFamily: 'dumpling',
+      region: 'Global',
+    });
+    expect(JSON.parse(result.payload.referenceResearch.researchData).dishName).toBe('dumpling');
+  });
+
+  it('prefers SQLite overlay records over the committed bundled pantry', async () => {
+    const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'achiote-mcp-cache-overlay-'));
+    const dbPath = path.join(tempRoot, 'test-mcp-cache-overlay.db');
+    const testCache = new ResearchCache(dbPath);
+
+    try {
+      testCache.store('dumpling', 'Eastern Europe', JSON.stringify({ dishName: 'operator dumpling overlay' }));
+
+      const result = await executeToolDefinition(
+        'discover_regional_similars',
+        { dishName: 'pierogi', region: 'Eastern Europe' },
+        { ...defaultToolExecutionContext, cache: testCache },
+      );
+
+      expect(result.payload.cachedResearch).toMatchObject({ hitCount: 1 });
+      expect(result.payload.referenceResearch).toMatchObject({
+        source: 'cache',
+        dishFamily: 'dumpling',
+        region: 'Eastern Europe',
+      });
+      expect(JSON.parse(result.payload.referenceResearch.researchData).dishName).toBe('operator dumpling overlay');
+    } finally {
+      testCache.close();
+      fs.rmSync(tempRoot, { recursive: true, force: true });
+    }
+  });
+
   it('cache stores and retrieves research for dish families', () => {
     const tempRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'achiote-mcp-cache-'));
     const dbPath = path.join(tempRoot, 'test-mcp-cache.db');
