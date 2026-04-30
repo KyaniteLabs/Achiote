@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { anthropicTools } from '../src/tools/tool-registry.js';
 import Anthropic from '@anthropic-ai/sdk';
-import { createAnthropicAskSession, createOpenAICompatibleAskSession, openAICompatibleProviderReady, openAIBaseUrlFromEnv, openAiToolsFromAnthropic, resolveAskModel, resolveAskProviderKind, anthropicBaseUrlFromEnv } from '../src/lib/ask-provider.js';
+import { createAnthropicAskSession, createOpenAICompatibleAskSession, isOpenRouterUrl, openAICompatibleProviderReady, openAIBaseUrlFromEnv, openAiToolsFromAnthropic, openRouterCatalogModelSupportsParameter, resolveAskModel, resolveAskProviderKind, anthropicBaseUrlFromEnv } from '../src/lib/ask-provider.js';
 
 describe('ask provider compatibility', () => {
   it('maps Anthropic tool definitions into OpenAI-compatible function tools', () => {
@@ -33,6 +33,23 @@ describe('ask provider compatibility', () => {
     expect(openAICompatibleProviderReady('https://api.openai.com/v1', undefined)).toBe(false);
     expect(openAICompatibleProviderReady('https://api.openai.com/v1', 'sk-test')).toBe(true);
     expect(openAICompatibleProviderReady('http://127.0.0.1:1234/v1', undefined)).toBe(true);
+  });
+
+  it('detects OpenRouter URLs and per-model supported parameters from catalog metadata', () => {
+    expect(isOpenRouterUrl('https://openrouter.ai/api/v1')).toBe(true);
+    expect(isOpenRouterUrl('https://api.openai.com/v1')).toBe(false);
+    expect(openRouterCatalogModelSupportsParameter({
+      data: [
+        { id: 'baidu/qianfan-ocr-fast:free', supported_parameters: ['max_tokens'] },
+        { id: 'openai/gpt-oss-20b:free', supported_parameters: ['tools', 'tool_choice'] },
+      ],
+    }, 'baidu/qianfan-ocr-fast:free', 'tools')).toBe(false);
+    expect(openRouterCatalogModelSupportsParameter({
+      data: [
+        { id: 'openai/gpt-oss-20b:free', supported_parameters: ['tools', 'tool_choice'] },
+      ],
+    }, 'openai/gpt-oss-20b:free', 'tools')).toBe(true);
+    expect(openRouterCatalogModelSupportsParameter({ data: [] }, 'missing/model', 'tools')).toBe(false);
   });
 
   it('resolves Anthropic-compatible base URLs for GLM/Zhipu', () => {

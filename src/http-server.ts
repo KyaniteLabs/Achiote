@@ -6,7 +6,7 @@ import { createServer, type IncomingMessage, type ServerResponse } from 'node:ht
 import { dirname, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import Anthropic from '@anthropic-ai/sdk';
-import { createAnthropicAskSession, createOpenAICompatibleAskSession, isLocalInferenceUrl, openAIBaseUrlFromEnv, openAICompatibleProviderReady, resolveAskModel, resolveAskProviderKind, anthropicBaseUrlFromEnv } from './lib/ask-provider.js';
+import { createAnthropicAskSession, createOpenAICompatibleAskSession, isLocalInferenceUrl, isOpenRouterUrl, openAIBaseUrlFromEnv, openAICompatibleProviderReady, openRouterCatalogModelSupportsParameter, resolveAskModel, resolveAskProviderKind, anthropicBaseUrlFromEnv } from './lib/ask-provider.js';
 import type { AskHistoryItem, AskImage, AskModelResponse } from './lib/ask-provider.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { isInitializeRequest } from '@modelcontextprotocol/sdk/types.js';
@@ -216,27 +216,7 @@ function isSameHostOrigin(req: IncomingMessage, origin: string | undefined): boo
   }
 }
 
-function isGlm4Model(model: string): boolean {
-  return model.startsWith('glm-4');
-}
-
 function createAskSession(userMessage: string, history?: AskHistoryItem[], images?: AskImage[]) {
-  // GLM 4.x models on Z.ai use OpenAI-compatible endpoint; honor explicit openai provider
-  const provider = process.env.ACHIOTE_ASK_PROVIDER?.trim().toLowerCase() ?? '';
-  if ((provider === 'glm' || provider === 'zhipu') && isGlm4Model(ASK_MODEL)) {
-    return createOpenAICompatibleAskSession({
-      model: ASK_MODEL,
-      systemPrompt: SYSTEM_PROMPT,
-      userMessage,
-      tools: TOOLS,
-      baseUrl: process.env.GLM_OPENAI_BASE_URL?.trim() || 'https://api.z.ai/api/coding/paas/v4',
-      apiKey: process.env.GLM_API_KEY || process.env.ZHIPU_API_KEY || null,
-      timeoutMs: OPENAI_TIMEOUT_MS,
-      history,
-      images,
-    });
-  }
-
   if (ASK_PROVIDER_KIND === 'openai') {
     return createOpenAICompatibleAskSession({
       model: ASK_MODEL,
@@ -562,13 +542,19 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       configureAvailableAskTools(askSession, toolPayloads, calledTools);
     }
 
+    const nativeToolSupport = await selectedProviderSupportsNativeTools();
+    if (nativeToolSupport === false) {
+      console.warn('[ask] selected provider/model does not advertise native tool support, using deterministic workflow');
+      if (await recoverFromInitialProviderFailure({ userMessage, toolPayloads, calledTools, send, finish, guarded: 'provider_tool_deterministic_recovery' })) return;
+    }
+
     send('status', { stage: 'model' });
     let modelResponse: AskModelResponse;
     try {
       modelResponse = await askSession.create(4096);
     } catch (err) {
-      if (isRecoverableInitialProviderFailure(err)) {
-        console.warn(`[ask] recoverable provider failure before first model turn, using deterministic recovery: ${err instanceof Error ? err.message : String(err)}`);
+      if (isRecoverableAskProviderFailure(err)) {
+        console.warn(`[ask] recoverable provider failure before first model turn, using deterministic recovery: ${providerRecoveryLogSummary(err)}`);
         if (await recoverFromInitialProviderFailure({ userMessage, toolPayloads, calledTools, send, finish, guarded: 'provider_context_deterministic_recovery' })) return;
       }
       throw err;
@@ -581,8 +567,8 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       try {
         modelResponse = await askSession.create(4096);
       } catch (err) {
-        if (isRecoverableInitialProviderFailure(err)) {
-          console.warn(`[ask] recoverable provider failure on retry, using deterministic recovery: ${err instanceof Error ? err.message : String(err)}`);
+        if (isRecoverableAskProviderFailure(err)) {
+          console.warn(`[ask] recoverable provider failure on retry, using deterministic recovery: ${providerRecoveryLogSummary(err)}`);
           if (await recoverFromInitialProviderFailure({ userMessage, toolPayloads, calledTools, send, finish, guarded: 'provider_context_deterministic_recovery' })) return;
         }
         throw err;
@@ -591,11 +577,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
     }
     if (modelResponse.toolCalls.length === 0) {
       console.warn('[ask] model still skipped tool workflow after retry');
-      send('error', {
-        message: 'The model skipped Achiote\'s structured memory workflow. Try again, or use a provider/model with tool-calling support.',
-        code: 'tool_workflow_skipped',
-      });
-      return;
+      if (await recoverFromInitialProviderFailure({ userMessage, toolPayloads, calledTools, send, finish, guarded: 'provider_tool_deterministic_recovery' })) return;
     }
 
     let iterations = 0;
@@ -1225,12 +1207,75 @@ function isProviderContextLimitError(err: unknown): boolean {
     && /\b(?:exceeded|limit|too large|too many)\b/i.test(message);
 }
 
-function isRecoverableInitialProviderFailure(err: unknown): boolean {
+function isRecoverableAskProviderFailure(err: unknown): boolean {
   if (isProviderContextLimitError(err)) return true;
   const message = err instanceof Error ? err.message : String(err);
-  return ASK_PROVIDER_KIND === 'openai'
-    && isLocalInferenceUrl(OPENAI_BASE_URL)
-    && /\bOpenAI-compatible provider returned 5\d\d\b/i.test(message);
+  if (/\b(?:401|402|403|api[_ -]?key|invalid key|authorization|bearer|token|credential|secret|moderation|flagged|insufficient credits)\b/i.test(message)) {
+    return false;
+  }
+
+  if (/\b(?:Failed to parse tool arguments|no assistant message|finish_reason: length|fetch failed|ECONNREFUSED|ETIMEDOUT|ENOTFOUND|AbortError|timed out)\b/i.test(message)) {
+    return true;
+  }
+
+  if (ASK_PROVIDER_KIND === 'openai') {
+    return /\bOpenAI-compatible provider returned (?:400|404|408|429|5\d\d)\b/i.test(message)
+      || /\b(?:No endpoints found that support tool use|unsupported.*tool|tool use|provider returned error|model provider failed|rate limit)\b/i.test(message);
+  }
+
+  return /\b(?:429|5\d\d|rate limit|overloaded|temporarily unavailable|timeout|model provider failed)\b/i.test(message);
+}
+
+function providerRecoveryLogSummary(err: unknown): string {
+  const message = err instanceof Error ? err.message : String(err);
+  const statusMatch = message.match(/\b(?:returned|status)\s+(\d{3})\b/i) ?? message.match(/\b(4\d\d|5\d\d)\b/);
+  if (statusMatch?.[1]) return `status=${statusMatch[1]}`;
+  if (isProviderContextLimitError(err)) return 'context_limit';
+  if (/\brate limit|429\b/i.test(message)) return 'rate_limited';
+  if (/\btool use|tools?\b/i.test(message)) return 'tool_capability';
+  if (/\bFailed to parse tool arguments\b/i.test(message)) return 'malformed_tool_arguments';
+  if (/\btimeout|timed out|AbortError\b/i.test(message)) return 'timeout';
+  return 'provider_unavailable';
+}
+
+let openRouterToolsSupportPromise: Promise<boolean | undefined> | undefined;
+
+function parseBooleanEnv(value: string | undefined): boolean | undefined {
+  if (!value) return undefined;
+  const normalized = value.trim().toLowerCase();
+  if (['1', 'true', 'yes', 'y', 'on'].includes(normalized)) return true;
+  if (['0', 'false', 'no', 'n', 'off'].includes(normalized)) return false;
+  return undefined;
+}
+
+async function selectedProviderSupportsNativeTools(): Promise<boolean | undefined> {
+  const explicit = parseBooleanEnv(process.env.ACHIOTE_ASK_MODEL_SUPPORTS_TOOLS)
+    ?? parseBooleanEnv(process.env.OPENROUTER_MODEL_SUPPORTS_TOOLS);
+  if (explicit !== undefined) return explicit;
+
+  if (ASK_PROVIDER_KIND !== 'openai' || !isOpenRouterUrl(OPENAI_BASE_URL)) return undefined;
+
+  openRouterToolsSupportPromise ??= fetchOpenRouterModelSupportsTools();
+  return openRouterToolsSupportPromise;
+}
+
+async function fetchOpenRouterModelSupportsTools(): Promise<boolean | undefined> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 7_500);
+  try {
+    const response = await fetch('https://openrouter.ai/api/v1/models?supported_parameters=tools', {
+      signal: controller.signal,
+      headers: { Accept: 'application/json' },
+    });
+    if (!response.ok) return undefined;
+    const catalog = await response.json() as unknown;
+    return openRouterCatalogModelSupportsParameter(catalog, ASK_MODEL, 'tools');
+  } catch (err) {
+    console.warn('[ask] OpenRouter tool capability lookup failed:', err instanceof Error ? err.message : String(err));
+    return undefined;
+  } finally {
+    clearTimeout(timeout);
+  }
 }
 
 function sanitizeAskError(err: unknown): { message: string; code?: string } {
@@ -1510,12 +1555,15 @@ function hasSensorySignal(userMessage: string, collectedMemory: unknown): boolea
 }
 
 function formatMinimumCueFallback(cue: MinimumViableNostalgiaCue, userLocation?: string): string {
-  const ingredientLines = cue.ingredients
-    .slice(0, 4)
-    .map((ingredient) => formatMinimumCueIngredientLine(ingredient));
-  const stepLines = cue.steps
-    .slice(0, 4)
-    .map((step, index) => `${index + 1}. ${sanitizeMinimumCueFallbackText(step)}`);
+  const cueItems = cue.ingredients
+    .filter((ingredient) => !ingredient.optional)
+    .slice(0, 2)
+    .map((ingredient) => formatMinimumCueIngredientPhrase(ingredient));
+  const optionalItem = cue.ingredients.find((ingredient) => ingredient.optional);
+  const cuePhrase = cueItems.length > 0
+    ? cueItems.join(' plus ')
+    : 'one ordinary grocery or pantry cue that matches the remembered aroma, texture, or balance';
+  const action = firstUsefulCueStep(cue);
   const followUp = cue.followUpIfItWorks[0] ? sanitizeMinimumCueFallbackText(cue.followUpIfItWorks[0]) : undefined;
   const localLine = userLocation
     ? `Local sourcing: use ordinary grocery or pantry ingredients near ${userLocation}; do not buy the exact suspected dish for this first test.`
@@ -1524,26 +1572,42 @@ function formatMinimumCueFallback(cue: MinimumViableNostalgiaCue, userLocation?:
   return sanitizeMinimumCueFallbackBlock([
     cue.title,
     '',
-    sanitizeMinimumCueFallbackText(cue.goal),
+    `First-pass verification bite: ${cuePhrase}.`,
     '',
-    'Use:',
-    ...ingredientLines,
+    action,
+    'Do not buy the exact suspected dish yet; this is only the first check.',
+    optionalItem ? `Optional adjustment: ${formatMinimumCueIngredientPhrase(optionalItem)}.` : '',
     '',
-    'Try:',
-    ...stepLines,
-    '',
-    `Why this is minimum: ${sanitizeMinimumCueFallbackText(cue.whyThisIsMinimum)}`,
+    `Why this is minimum: ${compactMinimumCueWhy(cue.whyThisIsMinimum)}`,
     localLine,
-    followUp ? `If it works: ${followUp}` : '',
+    followUp ? `If it works, next ask: ${followUp}` : '',
   ].filter((line) => line.length > 0).join('\n'));
 }
 
-function formatMinimumCueIngredientLine(ingredient: MinimumViableNostalgiaCue['ingredients'][number]): string {
+function formatMinimumCueIngredientPhrase(ingredient: MinimumViableNostalgiaCue['ingredients'][number]): string {
   const item = sanitizeMinimumCueFallbackText(ingredient.item)
     .replace(/^(?:a\s+)?(?:tiny|small)\s+(?:test\s+)?amount\s+of\s+/i, '')
     .replace(/^tiny\s+/i, '')
     .trim();
-  return `- a tiny test amount of ${item}${ingredient.optional ? ' (optional)' : ''}`;
+  return `a tiny amount of ${item}`;
+}
+
+function firstUsefulCueStep(cue: MinimumViableNostalgiaCue): string {
+  const step = cue.steps
+    .map((candidate) => sanitizeMinimumCueFallbackText(candidate))
+    .find((candidate) => candidate && !/\b(?:do not buy|do not build|record whether|change one|escalating|full dish)\b/i.test(candidate))
+    ?? cue.steps.map((candidate) => sanitizeMinimumCueFallbackText(candidate)).find(Boolean)
+    ?? 'Taste once, then stop and notice whether aroma, texture, acidity, fat, sweetness, or salt carried the memory.';
+  return step
+    .replace(/^(?:try|step\s*\d+[:.)-]?)\s*/i, '')
+    .replace(/\b(?:one teaspoon|one-cup|one cup|1 cup|1-2 bites|1-2 tablespoons)\b/gi, 'a tiny amount')
+    .replace(/\.$/, '') + '.';
+}
+
+function compactMinimumCueWhy(text: string): string {
+  return sanitizeMinimumCueFallbackText(text)
+    .replace(/\b(?:before wasting ingredients on a full pot|before committing to specialty shopping or a full dish|before specialty shopping or cooking|before buying the suspected sweet)\b/gi, 'before you spend more effort')
+    .replace(/\bfood-science mechanisms\b/gi, 'memory mechanisms');
 }
 
 function buildMinimumCueCompletedResponse(toolPayloads: Record<string, unknown>): string {

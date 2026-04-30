@@ -76,4 +76,23 @@ describe('hostile fake-provider torture flow', () => {
     expect(script).toContain('if (summary.findings > 0)');
     expect(script).toContain('process.exitCode = 1');
   });
+
+  it('rejects fake GLM torture because GLM live tests use Anthropic-compatible endpoints', async () => {
+    const child = spawn(process.execPath, ['scripts/torture-smoke.mjs', '--list-json'], {
+      env: {
+        ...process.env,
+        ACHIOTE_TORTURE_PROVIDER: 'glm-4.5-air',
+      },
+      stdio: ['ignore', 'pipe', 'pipe'],
+    });
+    let stderr = '';
+    child.stderr?.on('data', (chunk: Buffer) => { stderr += chunk.toString('utf8'); });
+    const code = await new Promise<number | null>((resolve, reject) => {
+      child.once('error', reject);
+      child.once('exit', resolve);
+    });
+
+    expect(code).not.toBe(0);
+    expect(stderr).toContain('Use scripts/live-ask-smoke.mjs or scripts/weak-cloud-overnight.mjs for GLM/Z.ai and OpenRouter live provider tests');
+  });
 });

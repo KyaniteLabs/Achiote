@@ -14,9 +14,12 @@ Deploy Achiote to the same Hostinger VPS (`187.124.238.235`) that runs Declutter
    **Cloud (GLM/Z.AI) — default:**
    ```env
    ACHIOTE_ASK_PROVIDER=glm
-   ACHIOTE_ASK_MODEL=glm-5.1
    GLM_API_KEY=your-key
+
+   # GLM Coding Plan models use Z.ai's Anthropic-compatible endpoint.
+   ACHIOTE_ASK_MODEL=GLM-4.5-Air
    GLM_BASE_URL=https://api.z.ai/api/anthropic
+   # GLM_MODEL=GLM-4.5-Flash
    ```
 
    **Local inference via Tailscale — for demo/cost savings:**

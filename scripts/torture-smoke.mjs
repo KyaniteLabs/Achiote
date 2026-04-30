@@ -10,6 +10,10 @@ const listJsonOnly = process.argv.includes('--list-json');
 const scenarioFilter = process.env.ACHIOTE_TORTURE_CASES
   ? new Set(process.env.ACHIOTE_TORTURE_CASES.split(',').map((id) => id.trim()).filter(Boolean))
   : null;
+const tortureProvider = process.env.ACHIOTE_TORTURE_PROVIDER?.trim().toLowerCase() ?? 'openai-compatible';
+if (!['openai', 'openai-compatible'].includes(tortureProvider)) {
+  throw new Error(`ACHIOTE_TORTURE_PROVIDER=${process.env.ACHIOTE_TORTURE_PROVIDER} is not supported by the offline fake-provider harness. Use scripts/live-ask-smoke.mjs or scripts/weak-cloud-overnight.mjs for GLM/Z.ai and OpenRouter live provider tests.`);
+}
 
 const forbiddenExternalEnv = [
   'ANTHROPIC_API_KEY',
@@ -151,14 +155,14 @@ async function spawnAchiote(port, fakeBaseUrl, env = {}) {
       PORT: String(port),
       ACHIOTE_AUTH_ENABLED: 'false',
       ACHIOTE_ALLOW_ANON_ASK: 'true',
-      ACHIOTE_ASK_PROVIDER: 'openai',
-      OPENAI_BASE_URL: fakeBaseUrl,
-      OPENAI_MODEL: 'fake-hostile-model',
-      OPENAI_API_KEY: 'test-fake-provider-key',
       OPENAI_TIMEOUT_MS: '700',
       ACHIOTE_FINAL_SYNTHESIS_TIMEOUT_MS: '400',
       ACHIOTE_RATE_LIMIT_DB: '',
       ...Object.fromEntries(forbiddenExternalEnv.map((key) => [key, ''])),
+      ACHIOTE_ASK_PROVIDER: 'openai',
+      OPENAI_BASE_URL: fakeBaseUrl,
+      OPENAI_MODEL: 'fake-hostile-model',
+      OPENAI_API_KEY: 'test-fake-provider-key',
       ...env,
     },
     stdio: ['ignore', 'pipe', 'pipe'],
@@ -451,8 +455,11 @@ const scenarios = [
     respond: () => toolsResponse([toolCall('call_1', 'collect_food_memory', '{"memoryText":"Warm sour dill soup",')]),
     assert: (result) => {
       const findings = [];
-      const errors = errorPayloads(result);
-      if (errors.length === 0) findings.push('malformed tool arguments did not produce an error event');
+      expectNoErrors(result, findings);
+      expectDone(result, findings);
+      if (donePayload(result)?.guarded !== 'provider_context_deterministic_recovery') {
+        findings.push(`malformed tool arguments did not recover deterministically, got ${JSON.stringify(donePayload(result))}`);
+      }
       if (/Warm sour dill soup",/.test(eventDataText(result))) findings.push('raw malformed tool arguments leaked to browser');
       if (!noRawProviderLeaks(result)) findings.push('provider detail leaked in malformed-argument path');
       return findings;
@@ -701,13 +708,17 @@ const scenarios = [
     },
   },
   {
-    id: 'no_tool_retries_then_skips',
+    id: 'no_tool_retries_then_recovers',
     message: 'Warm sour dill soup with pale chunks.',
     respond: () => textResponse('I can answer directly without tools.'),
     assert: (result) => {
       const findings = [];
-      const errors = errorPayloads(result);
-      if (!errors.some((event) => event.code === 'tool_workflow_skipped')) findings.push('no-tool provider did not produce tool_workflow_skipped');
+      expectNoErrors(result, findings);
+      expectDone(result, findings);
+      const done = donePayload(result);
+      if (done?.guarded !== 'provider_tool_deterministic_recovery' && done?.guarded !== 'explicit_minimum_cue_fallback') {
+        findings.push(`no-tool provider did not recover deterministically, got ${JSON.stringify(done)}`);
+      }
       if (result.providerRequestCount !== 2) findings.push(`expected one retry after no-tool response, got ${result.providerRequestCount} provider requests`);
       return findings;
     },
@@ -725,7 +736,7 @@ async function main() {
     })}`);
     return;
   }
-  log(`Achiote fake-provider torture smoke: ${selected.length} offline scenarios`);
+  log(`Achiote fake-provider torture smoke: ${selected.length} offline OpenAI-compatible scenarios`);
   log('No real provider, browser, grocery, or payment calls are made.');
   const results = [];
   for (const scenario of selected) {

@@ -121,6 +121,31 @@ export function openAICompatibleProviderReady(baseUrl: string, apiKey?: string |
   return isLocalInferenceUrl(baseUrl) || Boolean(apiKey?.trim());
 }
 
+export function isOpenRouterUrl(baseUrl: string): boolean {
+  try {
+    return new URL(baseUrl).hostname.toLowerCase() === 'openrouter.ai';
+  } catch {
+    return false;
+  }
+}
+
+export function openRouterCatalogModelSupportsParameter(
+  catalog: unknown,
+  modelId: string,
+  parameter: string,
+): boolean | undefined {
+  if (!catalog || typeof catalog !== 'object') return undefined;
+  const data = (catalog as { data?: unknown }).data;
+  if (!Array.isArray(data)) return undefined;
+  const model = data.find((item): item is { id?: unknown; supported_parameters?: unknown } =>
+    Boolean(item)
+    && typeof item === 'object'
+    && (item as { id?: unknown }).id === modelId);
+  if (!model) return false;
+  return Array.isArray(model.supported_parameters)
+    && model.supported_parameters.includes(parameter);
+}
+
 /** Returns true when the URL looks like a local or Tailscale inference endpoint. */
 export function isLocalInferenceUrl(baseUrl: string): boolean {
   try {
@@ -336,7 +361,15 @@ export function createOpenAICompatibleAskSession(input: {
         });
         const body = await response.text();
         if (!response.ok) throw new Error(`OpenAI-compatible provider returned ${response.status}: ${body.slice(0, 1000)}`);
-        const parsed = JSON.parse(body) as { choices?: Array<{ message?: OpenAIMessage; finish_reason?: string }> };
+        const parsed = JSON.parse(body) as {
+          choices?: Array<{ message?: OpenAIMessage; finish_reason?: string }>;
+          error?: { code?: string | number; message?: string };
+        };
+        if (parsed.error) {
+          const code = parsed.error.code ?? response.status;
+          const message = parsed.error.message ?? 'Unknown provider error';
+          throw new Error(`OpenAI-compatible provider returned ${code}: ${message}`);
+        }
         const choice = parsed.choices?.[0];
         const message = choice?.message;
         if (!message || message.role !== 'assistant') throw new Error('OpenAI-compatible provider returned no assistant message');

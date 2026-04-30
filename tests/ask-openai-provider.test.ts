@@ -232,6 +232,226 @@ describe('/ask deterministic completion after minimum cue', () => {
     }
   }, 20_000);
 
+  it('recovers deterministically when an OpenRouter-style endpoint rejects tool use', async () => {
+    const fakePort = await getFreePort();
+    let requestCount = 0;
+    const fakeOpenAi = createServer(async (req, res) => {
+      if (req.url !== '/v1/chat/completions' || req.method !== 'POST') {
+        res.writeHead(404).end();
+        return;
+      }
+      requestCount++;
+      await readBody(req);
+      res.writeHead(404, { 'content-type': 'application/json' });
+      res.end(JSON.stringify({
+        error: {
+          code: 404,
+          message: 'No endpoints found that support tool use. Try disabling "collect_food_memory".',
+        },
+      }));
+    });
+    await new Promise<void>((resolveListen) => fakeOpenAi.listen(fakePort, '127.0.0.1', resolveListen));
+
+    const achiotePort = await getFreePort();
+    const achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`);
+    try {
+      const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: 'Warm sour dill soup with pale chunks. I do not know the name. What is the smallest safe cue to test first?',
+        }),
+      });
+
+      expect(response.status).toBe(200);
+      const events = parseSse(await response.text());
+      const toolNames = events.filter((event) => event.event === 'tool_call').map((event) => JSON.parse(event.data).name);
+
+      expect(events.some((event) => event.event === 'error')).toBe(false);
+      expect(events.some((event) => event.event === 'status' && JSON.parse(event.data).stage === 'deterministic_recovery')).toBe(true);
+      expect(toolNames).toEqual(expect.arrayContaining([
+        'collect_food_memory',
+        'plan_dish_research',
+        'build_reconstruction_dossier',
+        'generate_minimum_viable_nostalgia',
+      ]));
+      expect(events.find((event) => event.event === 'receipt')).toBeDefined();
+      expect(events.at(-1)?.event).toBe('done');
+      expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'explicit_minimum_cue_fallback' });
+      expect(requestCount).toBe(1);
+    } finally {
+      achiote.kill('SIGINT');
+      fakeOpenAi.closeAllConnections();
+      await new Promise<void>((resolveClose) => fakeOpenAi.close(() => resolveClose()));
+    }
+  }, 20_000);
+
+  it('recovers deterministically when a weak model emits malformed tool arguments', async () => {
+    const fakePort = await getFreePort();
+    let requestCount = 0;
+    const fakeOpenAi = createServer(async (req, res) => {
+      if (req.url !== '/v1/chat/completions' || req.method !== 'POST') {
+        res.writeHead(404).end();
+        return;
+      }
+      requestCount++;
+      await readBody(req);
+      res.setHeader('content-type', 'application/json');
+      res.end(JSON.stringify({
+        choices: [{
+          finish_reason: 'tool_calls',
+          message: {
+            role: 'assistant',
+            content: '',
+            tool_calls: [{
+              id: 'bad_call',
+              type: 'function',
+              function: {
+                name: 'plan_dish_research',
+                arguments: '{"hypotheses": [{}]"regional": "broken weak model args"',
+              },
+            }],
+          },
+        }],
+      }));
+    });
+    await new Promise<void>((resolveListen) => fakeOpenAi.listen(fakePort, '127.0.0.1', resolveListen));
+
+    const achiotePort = await getFreePort();
+    const achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`);
+    try {
+      const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: 'I remember a white coconut sweet, grainy sugar crystals, chewy, school festival. I live in Ohio. Give a tiny grocery-store test first.',
+        }),
+      });
+
+      expect(response.status).toBe(200);
+      const events = parseSse(await response.text());
+      const toolNames = events.filter((event) => event.event === 'tool_call').map((event) => JSON.parse(event.data).name);
+      const finalText = events.filter((event) => event.event === 'text').map((event) => JSON.parse(event.data)).join('\n\n');
+
+      expect(events.some((event) => event.event === 'error')).toBe(false);
+      expect(events.some((event) => event.event === 'status' && JSON.parse(event.data).stage === 'deterministic_recovery')).toBe(true);
+      expect(toolNames).toEqual(expect.arrayContaining([
+        'collect_food_memory',
+        'plan_dish_research',
+        'generate_minimum_viable_nostalgia',
+      ]));
+      expect(finalText).toContain('First-pass verification bite');
+      expect(finalText).not.toContain('\nUse:\n');
+      expect(finalText).not.toContain('\nTry:\n');
+      expect(events.at(-1)?.event).toBe('done');
+      expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'explicit_minimum_cue_fallback' });
+      expect(requestCount).toBe(1);
+    } finally {
+      achiote.kill('SIGINT');
+      fakeOpenAi.closeAllConnections();
+      await new Promise<void>((resolveClose) => fakeOpenAi.close(() => resolveClose()));
+    }
+  }, 20_000);
+
+  it('bypasses model tool calls when capability profile says tools are unsupported', async () => {
+    const fakePort = await getFreePort();
+    let requestCount = 0;
+    const fakeOpenAi = createServer(async (req, res) => {
+      if (req.url !== '/v1/chat/completions' || req.method !== 'POST') {
+        res.writeHead(404).end();
+        return;
+      }
+      requestCount++;
+      res.writeHead(500, { 'content-type': 'application/json' });
+      res.end(JSON.stringify({ error: { message: 'model should have been bypassed' } }));
+    });
+    await new Promise<void>((resolveListen) => fakeOpenAi.listen(fakePort, '127.0.0.1', resolveListen));
+
+    const achiotePort = await getFreePort();
+    const achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`, {
+      ACHIOTE_ASK_MODEL_SUPPORTS_TOOLS: 'false',
+    });
+    try {
+      const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: 'Warm sour dill soup with pale chunks. Give me the smallest safe cue.',
+        }),
+      });
+
+      expect(response.status).toBe(200);
+      const events = parseSse(await response.text());
+      const toolNames = events.filter((event) => event.event === 'tool_call').map((event) => JSON.parse(event.data).name);
+
+      expect(events.some((event) => event.event === 'error')).toBe(false);
+      expect(events.some((event) => event.event === 'status' && JSON.parse(event.data).stage === 'deterministic_recovery')).toBe(true);
+      expect(toolNames).toEqual(expect.arrayContaining([
+        'collect_food_memory',
+        'plan_dish_research',
+        'generate_minimum_viable_nostalgia',
+      ]));
+      expect(events.at(-1)?.event).toBe('done');
+      expect(requestCount).toBe(0);
+    } finally {
+      achiote.kill('SIGINT');
+      fakeOpenAi.closeAllConnections();
+      await new Promise<void>((resolveClose) => fakeOpenAi.close(() => resolveClose()));
+    }
+  }, 20_000);
+
+  it('recovers deterministically when a weak model ignores tool calls after retry', async () => {
+    const fakePort = await getFreePort();
+    let requestCount = 0;
+    const fakeOpenAi = createServer(async (req, res) => {
+      if (req.url !== '/v1/chat/completions' || req.method !== 'POST') {
+        res.writeHead(404).end();
+        return;
+      }
+      requestCount++;
+      await readBody(req);
+      res.setHeader('content-type', 'application/json');
+      res.end(JSON.stringify({
+        choices: [{
+          finish_reason: 'stop',
+          message: { role: 'assistant', content: 'I can answer directly without tools.' },
+        }],
+      }));
+    });
+    await new Promise<void>((resolveListen) => fakeOpenAi.listen(fakePort, '127.0.0.1', resolveListen));
+
+    const achiotePort = await getFreePort();
+    const achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`);
+    try {
+      const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: 'Cold rice-cinnamon drink, thinner than horchata. Give me the smallest sip cue.',
+        }),
+      });
+
+      expect(response.status).toBe(200);
+      const events = parseSse(await response.text());
+      const toolNames = events.filter((event) => event.event === 'tool_call').map((event) => JSON.parse(event.data).name);
+
+      expect(events.some((event) => event.event === 'error')).toBe(false);
+      expect(events.some((event) => event.event === 'status' && JSON.parse(event.data).stage === 'deterministic_recovery')).toBe(true);
+      expect(toolNames).toEqual(expect.arrayContaining([
+        'collect_food_memory',
+        'plan_dish_research',
+        'generate_minimum_viable_nostalgia',
+      ]));
+      expect(events.at(-1)?.event).toBe('done');
+      expect(JSON.parse(events.at(-1)!.data).guarded).toMatch(/^(provider_tool_deterministic_recovery|explicit_minimum_cue_fallback)$/);
+      expect(requestCount).toBe(2);
+    } finally {
+      achiote.kill('SIGINT');
+      fakeOpenAi.closeAllConnections();
+      await new Promise<void>((resolveClose) => fakeOpenAi.close(() => resolveClose()));
+    }
+  }, 20_000);
+
   it('continues planned substitutions when the provider stalls after early tools', async () => {
     const fakePort = await getFreePort();
     let requestCount = 0;
@@ -348,6 +568,9 @@ describe('/ask deterministic completion after minimum cue', () => {
 
       expect(text).toContain('Minimum viable');
       expect(text).toContain('composed bite');
+      expect(text).toContain('First-pass verification bite');
+      expect(text).not.toContain('\nUse:\n');
+      expect(text).not.toContain('\nTry:\n');
       expect(events.find((event) => event.event === 'receipt')).toBeDefined();
       expect(events.at(-1)?.event).toBe('done');
       expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'minimum_cue_deterministic_completion' });

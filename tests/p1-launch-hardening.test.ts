@@ -68,7 +68,7 @@ describe('P1 launch hardening guardrails', () => {
   it('does not stream a plain first model response when the tool workflow was skipped', () => {
     const server = fs.readFileSync('src/http-server.ts', 'utf8');
 
-    expect(server).toContain('tool_workflow_skipped');
+    expect(server).toContain('provider_tool_deterministic_recovery');
     expect(server).toContain('model skipped required Achiote tool workflow');
   });
 
