@@ -153,6 +153,24 @@ describe('ask quality signals', () => {
 
     expect(inferAskCacheOutcome({
       toolPayloads: {
+        discover_regional_similars: {
+          referenceResearch: {
+            source: 'bundled',
+            dishFamily: 'dumpling',
+            region: 'Global',
+            researchData: '{"dishName":"dumpling"}',
+            createdAt: '2026-04-30T00:00:00.000Z',
+            hitCount: 0,
+          },
+        },
+      },
+      calledTools: ['discover_regional_similars'],
+      cacheAvailable: true,
+      cacheFallbackUsed: false,
+    })).toBe('bundled');
+
+    expect(inferAskCacheOutcome({
+      toolPayloads: {
         discover_regional_similars: { dishName: 'dumpling', region: 'Poland' },
       },
       calledTools: ['discover_regional_similars'],

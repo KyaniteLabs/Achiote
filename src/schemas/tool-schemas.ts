@@ -38,6 +38,12 @@ const cachedResearchSchema = z.object({
   hitCount: z.number(),
 });
 
+const referenceResearchSchema = cachedResearchSchema.extend({
+  source: z.enum(['cache', 'bundled']),
+  dishFamily: z.string(),
+  region: z.string(),
+});
+
 const regionalContextSchema = z.object({
   region: z.string(),
   ethnicCorridors: z.array(
@@ -65,6 +71,7 @@ export const analyzeNostalgicDishOutputSchema = z.object({
   sensoryDimensions: z.record(z.string(), z.unknown()),
   nostalgiaCriticalCriteria: z.string(),
   cachedResearch: cachedResearchSchema.optional(),
+  referenceResearch: referenceResearchSchema.optional(),
   promptForAgent: z.string(),
 });
 
@@ -99,6 +106,7 @@ export const discoverRegionalSimilarsOutputSchema = z.object({
   knownAliases: z.array(z.string()),
   familyData: familyDataSchema.optional(),
   cachedResearch: cachedResearchSchema.optional(),
+  referenceResearch: referenceResearchSchema.optional(),
   promptForAgent: z.string(),
 });
 
