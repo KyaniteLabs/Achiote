@@ -248,7 +248,7 @@ export function buildReferencePantryFixtureReport(input: unknown = bundledGlobal
     totalFixtures: fixtures.length,
     sourceIds: [...sourceIds].sort(),
     cacheTargets,
-    coverage: summarizeCoverage(fixtureCoverageTags),
+    coverage: summarizeCoverageFromTags(fixtureCoverageTags),
   };
 }
 
@@ -280,14 +280,17 @@ function toOperatorTask(task: CacheWarmingTask): ReferenceSeedOperatorTask {
 }
 
 function summarizeCoverage(extraCoverageTags?: Set<string>): ReferenceSeedOperatorReport['coverage'] {
-  const axes: ReferenceSeedOperatorReport['coverage']['axes'] = {};
   const coveredTags = new Set(bundledGlobalReferenceSeeds.referenceSeedQueue.seeds.flatMap((seed) => [
     ...stringArray(seed.forms),
     ...stringArray(seed.mechanisms),
     ...stringArray(seed.coverageTags),
   ]));
   extraCoverageTags?.forEach((tag) => coveredTags.add(tag));
+  return summarizeCoverageFromTags(coveredTags);
+}
 
+function summarizeCoverageFromTags(coveredTags: Set<string>): ReferenceSeedOperatorReport['coverage'] {
+  const axes: ReferenceSeedOperatorReport['coverage']['axes'] = {};
   for (const [axisId, axis] of Object.entries(bundledGlobalReferenceSeeds.globalCoverageMatrix.axes as Record<string, CoverageAxis>)) {
     const values = Array.isArray(axis.values) ? axis.values : [];
     const ids = values.map((value) => stringValue(value.id, '')).filter(Boolean);
