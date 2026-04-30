@@ -144,6 +144,13 @@ describe('reference seed operator integration', () => {
       missing: ['family_confirmed', 'operator_quality_signal'],
     });
     expect(JSON.stringify(pantryFixtureData)).not.toMatch(/rawMemory|memoryText|prompt_text|medical advice|legal advice/i);
+
+    const emptyReport = buildReferencePantryFixtureReport({ fixtures: [] });
+    expect(emptyReport.totalFixtures).toBe(0);
+    expect(emptyReport.coverage.axes.foodForms).toMatchObject({ covered: 0, total: 17 });
+    expect(emptyReport.coverage.axes.cultureAreas).toMatchObject({ covered: 0, total: 20 });
+    expect(emptyReport.coverage.axes.mechanisms).toMatchObject({ covered: 0, total: 12 });
+    expect(emptyReport.coverage.axes.evidenceLevels).toMatchObject({ covered: 0, total: 4 });
   });
 
   it('counts only fixture writes that can be read back from the cache', () => {
