@@ -52,6 +52,7 @@ export interface AskSession {
   appendToolResults(response: AskModelResponse, toolResults: AskToolResult[]): void;
   injectDeterministicToolResult(toolCallId: string, toolName: string, toolInput: unknown, result: unknown): void;
   pushUserMessage(text: string): void;
+  compactForSynthesis(caseFileText: string): void;
 }
 
 export function resolveAskProviderKind(env: Record<string, string | undefined> = process.env): AskProviderKind {
@@ -218,6 +219,8 @@ export function createAnthropicAskSession(input: {
     ...(input.history ?? []).map((h): Anthropic.MessageParam => ({ role: h.role, content: h.content })),
     { role: 'user', content: userContent },
   ];
+  const initialMessages = [...messages];
+  let activeTools = input.tools;
 
   return {
     async create(maxTokens: number): Promise<AskModelResponse> {
@@ -226,7 +229,7 @@ export function createAnthropicAskSession(input: {
         max_tokens: maxTokens,
         system: input.systemPrompt,
         messages,
-        tools: input.tools,
+        tools: activeTools,
       });
       const toolCalls = response.content
         .filter((block): block is Anthropic.ToolUseBlock => block.type === 'tool_use')
@@ -269,6 +272,11 @@ export function createAnthropicAskSession(input: {
     pushUserMessage(text: string): void {
       messages.push({ role: 'user', content: text });
     },
+    compactForSynthesis(caseFileText: string): void {
+      messages.length = 0;
+      messages.push(...initialMessages, { role: 'user', content: caseFileText });
+      activeTools = [];
+    },
   };
 }
 
@@ -298,6 +306,8 @@ export function createOpenAICompatibleAskSession(input: {
     ...historyMessages,
     { role: 'user', content: userContent },
   ];
+  const initialMessages = [...messages];
+  let activeTools = input.tools;
 
   return {
     async create(maxTokens: number): Promise<AskModelResponse> {
@@ -313,8 +323,10 @@ export function createOpenAICompatibleAskSession(input: {
           body: JSON.stringify({
             model: input.model,
             messages,
-            tools: openAiToolsFromAnthropic(input.tools),
-            tool_choice: 'auto',
+            ...(activeTools.length > 0 ? {
+              tools: openAiToolsFromAnthropic(activeTools),
+              tool_choice: 'auto',
+            } : {}),
             max_tokens: maxTokens,
           }),
         });
@@ -369,6 +381,11 @@ export function createOpenAICompatibleAskSession(input: {
     },
     pushUserMessage(text: string): void {
       messages.push({ role: 'user', content: text });
+    },
+    compactForSynthesis(caseFileText: string): void {
+      messages.length = 0;
+      messages.push(...initialMessages, { role: 'user', content: caseFileText });
+      activeTools = [];
     },
   };
 }

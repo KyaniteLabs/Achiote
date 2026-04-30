@@ -112,6 +112,36 @@ describe('ask provider compatibility', () => {
     });
   });
 
+  it('can replace OpenAI-compatible tool transcript history with a compact synthesis case file', async () => {
+    const requests: Array<{ messages: Array<{ role?: string; content?: unknown; tool_call_id?: string }>; tools?: unknown[] }> = [];
+    const session = createOpenAICompatibleAskSession({
+      model: 'local-model',
+      systemPrompt: 'Use tools first.',
+      userMessage: 'memory',
+      tools: anthropicTools.slice(0, 1),
+      baseUrl: 'http://local.test/v1',
+      timeoutMs: 30_000,
+      fetchImpl: async (_url, init) => {
+        requests.push(JSON.parse(String(init?.body)));
+        return new Response(JSON.stringify({
+          choices: [{ message: { role: 'assistant', content: 'done' }, finish_reason: 'stop' }],
+        }), { status: 200, headers: { 'content-type': 'application/json' } });
+      },
+    });
+
+    session.injectDeterministicToolResult('deterministic_plan', 'plan_tool_workflow', { userMessage: 'memory' }, { workflowSteps: [] });
+    session.compactForSynthesis('Achiote compact case file:\n- User-said evidence: memory');
+    await session.create(128);
+
+    expect(requests[0].messages).toEqual([
+      { role: 'system', content: 'Use tools first.' },
+      expect.objectContaining({ role: 'user' }),
+      { role: 'user', content: 'Achiote compact case file:\n- User-said evidence: memory' },
+    ]);
+    expect(requests[0].messages.some((message) => message.role === 'tool' || message.tool_call_id)).toBe(false);
+    expect(requests[0].tools).toBeUndefined();
+  });
+
   it('injects deterministic tool results into OpenAI-compatible message history before create', async () => {
     const requests: Array<{ messages: unknown[] }> = [];
     const session = createOpenAICompatibleAskSession({
@@ -159,10 +189,10 @@ describe('ask provider compatibility', () => {
   });
 
   it('injects deterministic tool results into Anthropic message history before create', async () => {
-    const captured: { messages?: unknown[] }[] = [];
+    const captured: { messages?: unknown[]; tools?: unknown[] }[] = [];
     const fakeClient = {
       messages: {
-        create: async (params: { messages?: unknown[] }) => {
+        create: async (params: { messages?: unknown[]; tools?: unknown[] }) => {
           captured.push(params);
           return {
             content: [{ type: 'text', text: 'ok' }],
@@ -177,7 +207,7 @@ describe('ask provider compatibility', () => {
       model: 'test-model',
       systemPrompt: 'sys',
       userMessage: 'memory',
-      tools: [],
+      tools: anthropicTools.slice(0, 1),
     });
 
     session.injectDeterministicToolResult(
@@ -207,6 +237,39 @@ describe('ask provider compatibility', () => {
         }],
       },
     ]));
+  });
+
+  it('can replace Anthropic tool transcript history with a compact synthesis case file', async () => {
+    const captured: { messages?: unknown[]; tools?: unknown[] }[] = [];
+    const fakeClient = {
+      messages: {
+        create: async (params: { messages?: unknown[]; tools?: unknown[] }) => {
+          captured.push(params);
+          return {
+            content: [{ type: 'text', text: 'ok' }],
+            stop_reason: 'end_turn',
+          } as unknown as Anthropic.Messages.Message;
+        },
+      },
+    } as unknown as Anthropic;
+
+    const session = createAnthropicAskSession({
+      client: fakeClient,
+      model: 'test-model',
+      systemPrompt: 'sys',
+      userMessage: 'memory',
+      tools: [],
+    });
+
+    session.injectDeterministicToolResult('deterministic_plan', 'plan_tool_workflow', { userMessage: 'memory' }, { workflowSteps: [] });
+    session.compactForSynthesis('Achiote compact case file:\n- User-said evidence: memory');
+    await session.create(128);
+
+    expect(captured[0].messages).toEqual([
+      expect.objectContaining({ role: 'user' }),
+      { role: 'user', content: 'Achiote compact case file:\n- User-said evidence: memory' },
+    ]);
+    expect(captured[0].tools).toEqual([]);
   });
 
   it('embeds images as Anthropic content blocks', async () => {
