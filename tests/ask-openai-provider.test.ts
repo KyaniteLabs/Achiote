@@ -39,14 +39,24 @@ function spawnAchioteServer(port: number, openAiBaseUrl: string, env?: Record<st
   });
 
   return new Promise((resolveServer, reject) => {
-    const timeout = setTimeout(() => reject(new Error('Server startup timeout')), 10_000);
+    let stderr = '';
+    const timeout = setTimeout(() => {
+      server.kill('SIGINT');
+      reject(new Error(`Server startup timeout${stderr ? `: ${stderr.slice(-1000)}` : ''}`));
+    }, 30_000);
+    server.stderr?.on('data', (data: Buffer) => {
+      stderr += data.toString();
+    });
     server.stdout?.on('data', (data: Buffer) => {
       if (data.toString().includes(`localhost:${port}`)) {
         clearTimeout(timeout);
         resolveServer(server);
       }
     });
-    server.once('error', reject);
+    server.once('error', (err) => {
+      clearTimeout(timeout);
+      reject(err);
+    });
   });
 }
 
@@ -143,6 +153,20 @@ describe('/ask OpenAI-compatible provider mode', () => {
         content: expect.stringContaining('"workflowSteps"'),
       }),
     ]));
+    const exposedToolNames = requestBodies.map((body) =>
+      body.tools?.map((tool) => ((tool as { function?: { name?: string } }).function?.name)).filter(Boolean),
+    );
+    expect(exposedToolNames[0]).toEqual(['collect_food_memory']);
+    expect(exposedToolNames[1]).toEqual(['plan_dish_research']);
+    expect(exposedToolNames[2]).toEqual([
+      'resolve_dish_name',
+      'search_web',
+      'build_reconstruction_dossier',
+      'generate_minimum_viable_nostalgia',
+    ]);
+    expect(exposedToolNames[2]).not.toContain('plan_tool_workflow');
+    expect(exposedToolNames[2]).not.toContain('generate_recipe');
+    expect(exposedToolNames[2]).not.toContain('validate_recipe_output');
     expect(requestBodies.at(-1)?.messages).toEqual([
       expect.objectContaining({ role: 'system' }),
       expect.objectContaining({ role: 'user' }),

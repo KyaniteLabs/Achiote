@@ -6,7 +6,7 @@ import { createServer, type IncomingMessage, type ServerResponse } from 'node:ht
 import { dirname, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import Anthropic from '@anthropic-ai/sdk';
-import { createAnthropicAskSession, createOpenAICompatibleAskSession, openAIBaseUrlFromEnv, openAICompatibleProviderReady, resolveAskModel, resolveAskProviderKind, anthropicBaseUrlFromEnv } from './lib/ask-provider.js';
+import { createAnthropicAskSession, createOpenAICompatibleAskSession, isLocalInferenceUrl, openAIBaseUrlFromEnv, openAICompatibleProviderReady, resolveAskModel, resolveAskProviderKind, anthropicBaseUrlFromEnv } from './lib/ask-provider.js';
 import type { AskHistoryItem, AskImage, AskModelResponse } from './lib/ask-provider.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { isInitializeRequest } from '@modelcontextprotocol/sdk/types.js';
@@ -58,6 +58,7 @@ const ALLOWED_ORIGINS = (process.env.ACHIOTE_ALLOWED_ORIGINS || 'http://localhos
 const TELEMETRY_LIMIT_PER_MINUTE = parseInt(process.env.ACHIOTE_TELEMETRY_LIMIT_PER_MINUTE || '120', 10);
 const EVENTS_ADMIN_TOKEN = process.env.ACHIOTE_EVENTS_ADMIN_TOKEN?.trim();
 const KNOWN_TOOL_NAMES = new Set(TOOLS.map((tool) => tool.name));
+const TOOLS_BY_NAME = new Map(TOOLS.map((tool) => [tool.name, tool]));
 const MODEL_TOOL_NAME_ALIASES: Record<string, string> = {
   find_sensory_subutes: 'find_sensory_substitutes',
   generate_minimum_viable_nystalgia: 'generate_minimum_viable_nostalgia',
@@ -552,11 +553,13 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       toolPayloads.plan_tool_workflow = planResult.payload;
       askSession.injectDeterministicToolResult('deterministic_plan_tool_workflow', 'plan_tool_workflow', deterministicPlanInput, planResult.payload);
       didInjectPlanToolResult = true;
+      configureAvailableAskTools(askSession, toolPayloads, calledTools);
       send('tool_call', { name: 'plan_tool_workflow', input: deterministicPlanInput, deterministic: true });
       send('tool_result', { name: 'plan_tool_workflow', result: planResult.payload, deterministic: true });
       console.log(`[ask] plan_tool_workflow: intent=${(planResult.payload as Record<string, unknown>)?.detectedIntent} maxSearch=${(planResult.payload as Record<string, unknown>)?.maxSearchCalls}`);
     } catch (err) {
       console.warn('[ask] plan_tool_workflow failed, using defaults:', err instanceof Error ? err.message : String(err));
+      configureAvailableAskTools(askSession, toolPayloads, calledTools);
     }
 
     send('status', { stage: 'model' });
@@ -564,8 +567,8 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
     try {
       modelResponse = await askSession.create(4096);
     } catch (err) {
-      if (isProviderContextLimitError(err)) {
-        console.warn(`[ask] provider context limit before first model turn, using deterministic recovery: ${err instanceof Error ? err.message : String(err)}`);
+      if (isRecoverableInitialProviderFailure(err)) {
+        console.warn(`[ask] recoverable provider failure before first model turn, using deterministic recovery: ${err instanceof Error ? err.message : String(err)}`);
         if (await recoverFromInitialProviderFailure({ userMessage, toolPayloads, calledTools, send, finish, guarded: 'provider_context_deterministic_recovery' })) return;
       }
       throw err;
@@ -578,8 +581,8 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       try {
         modelResponse = await askSession.create(4096);
       } catch (err) {
-        if (isProviderContextLimitError(err)) {
-          console.warn(`[ask] provider context limit on retry, using deterministic recovery: ${err instanceof Error ? err.message : String(err)}`);
+        if (isRecoverableInitialProviderFailure(err)) {
+          console.warn(`[ask] recoverable provider failure on retry, using deterministic recovery: ${err instanceof Error ? err.message : String(err)}`);
           if (await recoverFromInitialProviderFailure({ userMessage, toolPayloads, calledTools, send, finish, guarded: 'provider_context_deterministic_recovery' })) return;
         }
         throw err;
@@ -697,6 +700,8 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
           calledTools: [...calledTools],
         })));
         send('status', { iteration: iterations, stage: 'case_file_compacted' });
+      } else {
+        configureAvailableAskTools(askSession, toolPayloads, calledTools);
       }
       send('status', { iteration: iterations, stage: 'thinking' });
       try {
@@ -794,6 +799,15 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       return;
     }
 
+    if (calledTools.has('generate_minimum_viable_nostalgia') && shouldClarifySparseUnanchoredMemory(userMessage, toolPayloads)) {
+      console.warn('[ask] replaced sparse unanchored post-cue response with structured clarification');
+      const responseText = buildClarificationOnlyResponse(toolPayloads);
+      send('text', responseText);
+      maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
+      finish({ guarded: 'generic_uncertainty_clarification' });
+      return;
+    }
+
     if (calledTools.has('generate_minimum_viable_nostalgia') && containsBlockedRecipeToolSynthesis(modelResponse.textBlocks.join('\n\n'))) {
       console.warn('[ask] replaced blocked recipe-tool synthesis with deterministic minimum cue');
       const responseText = buildMinimumCueCompletedResponse(toolPayloads);
@@ -818,6 +832,15 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       .join('\n\n');
     const trustBoundedResponseText = sanitizeFinalAnswerTrustBoundaryLanguage(responseText);
     const didSanitizeTrustBoundary = trustBoundedResponseText !== responseText;
+
+    if (calledTools.has('generate_minimum_viable_nostalgia') && contradictsLatestCorrection(trustBoundedResponseText, userMessage)) {
+      console.warn('[ask] replaced stale correction-conflicting response with deterministic minimum cue');
+      const responseText = sanitizeLatestCorrectionResponse(buildMinimumCueCompletedResponse(toolPayloads), userMessage);
+      send('text', responseText);
+      maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
+      finish({ guarded: 'latest_correction_sanitized' });
+      return;
+    }
 
     if (calledTools.has('generate_minimum_viable_nostalgia') && containsRecipeMeasurementLanguage(trustBoundedResponseText)) {
       console.warn('[ask] suppressed recipe-style measurements in cue response');
@@ -977,22 +1000,28 @@ function normalizeDependentToolInput(toolName: string, input: unknown, userMessa
     delete normalizedRecord.knownRegion;
     delete normalizedRecord.knownLanguage;
     const userLocation = inferUserLocation(userMessage);
-    return typeof normalizedRecord.userLocation === 'string' || !userLocation
-      ? normalizedRecord
-      : { ...normalizedRecord, userLocation };
+    if (userLocation) {
+      normalizedRecord.userLocation = userLocation;
+    } else {
+      delete normalizedRecord.userLocation;
+    }
+    return normalizedRecord;
   }
   if (toolName === 'build_research_record') {
     return normalizeResearchRecordInput(record, toolPayloads);
   }
-  if (toolName === 'plan_dish_research' && !hasUsableCollectedMemory(record.memory) && collectedMemory) {
+  if (toolName === 'plan_dish_research' && collectedMemory) {
     return { ...record, memory: collectedMemory };
   }
   if (toolName === 'build_reconstruction_dossier') {
     return {
       ...record,
-      ...(!hasUsableCollectedMemory(record.memory) && collectedMemory ? { memory: collectedMemory } : {}),
-      ...(!hasUsableResearchPlan(record.researchPlan) && researchPlan ? { researchPlan } : {}),
+      ...(collectedMemory ? { memory: collectedMemory } : {}),
+      ...(researchPlan ? { researchPlan } : {}),
     };
+  }
+  if (toolName === 'search_web' && collectedMemory) {
+    return { ...record, query: buildGroundedSearchQuery(collectedMemory, toolPayloads.resolve_dish_name) };
   }
   if (toolName === 'generate_minimum_viable_nostalgia' && !hasUsableDossier(record.dossier) && toolPayloads.build_reconstruction_dossier) {
     const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
@@ -1003,6 +1032,33 @@ function normalizeDependentToolInput(toolName: string, input: unknown, userMessa
     };
   }
   return input;
+}
+
+function buildGroundedSearchQuery(collectedMemory: unknown, resolvedDish: unknown): string {
+  const memory = collectedMemory as CollectedFoodMemory;
+  const clues = memory.extractedClues;
+  const resolved = isRecord(resolvedDish) ? resolvedDish : {};
+  const canonicalName = typeof resolved.canonicalName === 'string' && !/^unknown$/i.test(resolved.canonicalName)
+    ? resolved.canonicalName
+    : '';
+  const parts = [
+    canonicalName,
+    ...clues.possibleDishNames,
+    ...clues.rememberedIngredients,
+    ...clues.sensoryClues,
+    ...clues.culturalOrRegionalHints.filter((hint) => !isBroadRegionalHint(hint)),
+    memory.normalizedMemory,
+  ];
+  return sanitizeGroundedSearchQuery([...new Set(parts.map((part) => part.trim()).filter(Boolean))].join(' '));
+}
+
+function sanitizeGroundedSearchQuery(query: string): string {
+  return query
+    .replace(/\b(?:I\s+remember|I\s+do\s+not\s+know|give\s+me|smallest|first-pass|not\s+a\s+full\s+recipe|memory|memories)\b/gi, ' ')
+    .replace(/[^\p{L}\p{M}\p{N}\s'-]/gu, ' ')
+    .replace(/\s{2,}/g, ' ')
+    .trim()
+    .slice(0, 180);
 }
 
 function isLatestCorrectionMessage(userMessage: string): boolean {
@@ -1041,6 +1097,32 @@ function sanitizeStaleModelMemoryText(modelMemoryText: string, userMessage: stri
     }
   }
   return sanitized.replace(/\s{2,}/g, ' ').replace(/\s+([,.;:])/g, '$1').trim();
+}
+
+function contradictsLatestCorrection(text: string, userMessage: string): boolean {
+  if (!isLatestCorrectionMessage(userMessage)) return false;
+  const contradictedDescriptors = latestCorrectionContradictedDescriptors(userMessage);
+  return contradictedDescriptors.some((descriptor) => new RegExp(`\\b${descriptor}\\b`, 'i').test(text));
+}
+
+function latestCorrectionContradictedDescriptors(userMessage: string): string[] {
+  return ['milky', 'creamy', 'cream', 'milk', 'milk-forward', 'thick', 'warm', 'hot', 'sweet']
+    .filter((descriptor) => {
+      const negatedDescriptor = new RegExp(`\\b(?:not|no|wasn['’]?t|was\\s+not|isn['’]?t|is\\s+not)\\s+(?:\\w+\\s+){0,4}${descriptor}\\b`, 'i');
+      return negatedDescriptor.test(userMessage) || /\b(?:remembered\s+wrong|correction)\b/i.test(userMessage);
+    });
+}
+
+function sanitizeLatestCorrectionResponse(text: string, userMessage: string): string {
+  const contradictedDescriptors = latestCorrectionContradictedDescriptors(userMessage);
+  if (contradictedDescriptors.length === 0) return text;
+  const contradictedPattern = new RegExp(`\\b(?:${contradictedDescriptors.map(escapeRegExp).join('|')})\\b`, 'i');
+  return text
+    .split('\n')
+    .filter((line) => !contradictedPattern.test(line))
+    .join('\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
 }
 
 function normalizeResearchRecordInput(record: Record<string, unknown>, toolPayloads: Record<string, unknown>): unknown {
@@ -1138,8 +1220,17 @@ async function createWithTimeout(
 
 function isProviderContextLimitError(err: unknown): boolean {
   const message = err instanceof Error ? err.message : String(err);
+  if (/\bn_keep\b[\s\S]{0,80}\bn_ctx\b/i.test(message)) return true;
   return /\b(?:context size|context length|maximum context|token limit|too many tokens)\b/i.test(message)
     && /\b(?:exceeded|limit|too large|too many)\b/i.test(message);
+}
+
+function isRecoverableInitialProviderFailure(err: unknown): boolean {
+  if (isProviderContextLimitError(err)) return true;
+  const message = err instanceof Error ? err.message : String(err);
+  return ASK_PROVIDER_KIND === 'openai'
+    && isLocalInferenceUrl(OPENAI_BASE_URL)
+    && /\bOpenAI-compatible provider returned 5\d\d\b/i.test(message);
 }
 
 function sanitizeAskError(err: unknown): { message: string; code?: string } {
@@ -1157,6 +1248,29 @@ function isModelProviderErrorMessage(message: string): boolean {
   return /\b(?:OpenAI-compatible provider|Anthropic|model provider|provider returned|finish_reason|fetch failed|ECONNREFUSED|ETIMEDOUT|ENOTFOUND)\b/i.test(message)
     || /\b(?:api[_ -]?key|authorization|bearer|token|credential|secret)\b/i.test(message)
     || /\b(?:sk|ach|ak|whsec)_[A-Za-z0-9_-]{8,}\b/.test(message);
+}
+
+function configureAvailableAskTools(
+  askSession: ReturnType<typeof createAskSession>,
+  toolPayloads: Record<string, unknown>,
+  calledTools: Set<string>,
+): void {
+  const toolNames = nextAskToolNames(toolPayloads, calledTools);
+  askSession.setAvailableTools(toolNames.map((name) => TOOLS_BY_NAME.get(name)).filter((tool): tool is typeof TOOLS[number] => Boolean(tool)));
+}
+
+function nextAskToolNames(toolPayloads: Record<string, unknown>, calledTools: Set<string>): string[] {
+  const plan = toolPayloads.plan_tool_workflow as { workflowSteps?: Array<{ tool?: unknown }> } | undefined;
+  const plannedToolNames = (plan?.workflowSteps ?? [])
+    .map((step) => step.tool)
+    .filter((tool): tool is string => typeof tool === 'string' && KNOWN_TOOL_NAMES.has(tool) && tool !== 'plan_tool_workflow');
+
+  if (plannedToolNames.length === 0) return calledTools.has('collect_food_memory') ? [] : ['collect_food_memory'];
+  if (!calledTools.has('collect_food_memory') && plannedToolNames.includes('collect_food_memory')) return ['collect_food_memory'];
+  if (!calledTools.has('plan_dish_research') && plannedToolNames.includes('plan_dish_research')) return ['plan_dish_research'];
+
+  const remaining = plannedToolNames.filter((name) => !calledTools.has(name));
+  return [...new Set(remaining)];
 }
 
 async function recoverFromInitialProviderFailure({
@@ -1258,6 +1372,8 @@ async function maybeSendForcedMinimumCue({
 
 function shouldForceMinimumCue(userMessage: string, toolPayloads: Record<string, unknown>, calledTools: Set<string>): boolean {
   if (!toolPayloads.collect_food_memory || !toolPayloads.plan_dish_research) return false;
+  if (shouldClarifyBroadUncertainMemory(userMessage, toolPayloads)) return false;
+  if (shouldClarifySparseUnanchoredMemory(userMessage, toolPayloads)) return false;
 
   const workflowPlan = toolPayloads.plan_tool_workflow as { needsSubstitutions?: boolean } | undefined;
   if (workflowPlan?.needsSubstitutions && calledTools.has('find_sensory_substitutes')) return true;
@@ -1378,8 +1494,8 @@ function normalizeSubstitutionTarget(ingredient: string): string {
 }
 
 function isExplicitMinimumTestRequest(text: string): boolean {
-  return /\b(?:minimum viable|minimum|smallest|smallest safe|smallest local|first|local)\b[\s\S]{0,40}\b(?:test|cue|try|taste|nostalgia)\b/i.test(text)
-    || /\b(?:test|cue|try|taste)\b[\s\S]{0,40}\b(?:minimum viable|minimum|smallest|first|local)\b/i.test(text);
+  return /\b(?:minimum viable|minimum|smallest|smallest safe|smallest local|tiny|first|local)\b[\s\S]{0,60}\b(?:test|cue|try|taste|nostalgia|sip|bite|drink)\b/i.test(text)
+    || /\b(?:test|cue|try|taste|sip|bite|drink)\b[\s\S]{0,60}\b(?:minimum viable|minimum|smallest|tiny|first|local)\b/i.test(text);
 }
 
 function hasSensorySignal(userMessage: string, collectedMemory: unknown): boolean {
@@ -1390,7 +1506,7 @@ function hasSensorySignal(userMessage: string, collectedMemory: unknown): boolea
   const sensoryClues = Array.isArray(clues?.sensoryClues) ? clues.sensoryClues : [];
   if (rememberedIngredients.length > 0 || sensoryClues.length > 0) return true;
 
-  return /\b(?:sweet|sour|salty|bitter|spicy|hot|cold|warm|crispy|crunchy|crumbly|grainy|powdery|chewy|creamy|sticky|aroma|smell|texture|color|mouth|tongue|sesame|coconut|peanut|dill|garlic|onion|sauce|gravy|relish)\b/i.test(userMessage);
+  return /\b(?:sweet|sour|salty|bitter|spicy|hot|cold|warm|icy|ice|iced|thin|thinner|watery|lightly sweet|barely sweet|crispy|crunchy|crumbly|grainy|powdery|chewy|creamy|sticky|aroma|smell|texture|color|mouth|tongue|sip|drink|bebida|agua|arroz|rice|canela|cinnamon|hielo|vainilla|vanilla|lime|barley|cebada|sesame|coconut|peanut|dill|garlic|onion|sauce|gravy|relish)\b/i.test(userMessage);
 }
 
 function formatMinimumCueFallback(cue: MinimumViableNostalgiaCue, userLocation?: string): string {
@@ -1647,12 +1763,21 @@ function sanitizeMinimumCueFallbackBlock(text: string): string {
 
 function sanitizeFinalAnswerTrustBoundaryLanguage(text: string): string {
   const revised = text
-    .replace(/(?:^|\n)\s*(?:[-*]\s*)?[^.\n?!]*(?:medical advice|legal advice|professional advice|medically safe|legally safe|heart-healthy|lowers cholesterol|cures?)[^.\n?!]*(?:[.?!]|$)/gim, '\n')
-    .replace(/\bI\s+cannot\s+give\b[^.?!]*(?:medical advice|legal advice|professional advice)[^.?!]*(?:[.?!]|$)/gi, '')
-    .replace(/\b(?:OpenAI|Anthropic|Claude|GPT[-\s]?\d[\w.-]*|gpt[-\s]?\d[\w.-]*|fake-hostile-model|provider(?:\/model)?|model identity)\b[^.?!]*(?:[.?!]|$)/gi, '')
-    .replace(/\b(?:I\s+(?:browsed|searched)|Achiote\s+(?:browsed|searched)|live web|current grocery prices|live search results?|web results?)\b[^.?!]*(?:[.?!]|$)/gi, '')
-    .replace(/\b(?:This\s+)?(?:medically safe|medical(?:ly)?|heart-healthy|cure|cures|lowers cholesterol|(?:treats?|prevents?|diagnoses?)\s+(?:a\s+|an\s+|the\s+)?(?:illness|disease|condition|symptoms?|inflammation|cholesterol|infection|diabetes|heart disease|medical problem))\b[^.?!]*(?:[.?!]|$)/gi, '')
-    .replace(/\b(?:legal(?:ly)? safe|legal advice|medical advice|professional advice)\b[^.?!]*(?:[.?!]|$)/gi, '')
+    .replace(/(?:^|[.?!]\s*|\n)\s*(?:[-*]\s*)?[^.\n?!]*?(?:I\s+am\s+not\s+browsing|I\s+am\s+Achiote|built\s+into\s+this\s+specific\s+toolset|specific\s+toolset|toolset|workflow)[^.\n?!]*?(?:[.?!]|$)/gim, '\n')
+    .replace(/\bI\s+am\s+Achiote\b[^.?!]*?(?:[.?!]|$)/gi, '')
+    .replace(/\bI\s+am\s+not\s+browsing\b[^.?!]*?(?:[.?!]|$)/gi, '')
+    .replace(/\bI\s+have\s+browsed\b[^.?!]*?(?:[.?!]|$)/gi, '')
+    .replace(/\bI\s+do\s+not\s+browse\b[^.?!]*?(?:[.?!]|$)/gi, '')
+    .replace(/\bMy\s+model\b[^.?!]*?(?:[.?!]|$)/gi, '')
+    .replace(/\bI\s+cannot\s+browse\b[^.?!]*?(?:[.?!]|$)/gi, '')
+    .replace(/\b[^.?!]*?(?:ignore\s+Achiote|Achiote\s+(?:assistant|app|tool|toolset|workflow|model|server|searched|browsed)|browse)\b[^.?!]*?(?:[.?!]|$)/gi, '')
+    .replace(/\b[^.?!]*?(?:specific\s+toolset|toolset|workflow)\b[^.?!]*?(?:[.?!]|$)/gi, '')
+    .replace(/(?:^|\n)\s*(?:[-*]\s*)?[^.\n?!]*?(?:medical advice|legal advice|professional advice|medically safe|legally safe|heart-healthy|lowers cholesterol|cures?)[^.\n?!]*?(?:[.?!]|$)/gim, '\n')
+    .replace(/\bI\s+cannot\s+give\b[^.?!]*?(?:medical advice|legal advice|professional advice)[^.?!]*?(?:[.?!]|$)/gi, '')
+    .replace(/\b(?:OpenAI|Anthropic|Claude|GPT[-\s]?\d[\w.-]*|gpt[-\s]?\d[\w.-]*|fake-hostile-model|provider(?:\/model)?|model identity)\b[^.?!]*?(?:[.?!]|$)/gi, '')
+    .replace(/\b(?:I\s+(?:browsed|searched)|Achiote\s+(?:browsed|searched)|live web|current grocery prices|live search results?|web results?)\b[^.?!]*?(?:[.?!]|$)/gi, '')
+    .replace(/\b(?:This\s+)?(?:medically safe|medical(?:ly)?|heart-healthy|cure|cures|lowers cholesterol|(?:treats?|prevents?|diagnoses?)\s+(?:a\s+|an\s+|the\s+)?(?:illness|disease|condition|symptoms?|inflammation|cholesterol|infection|diabetes|heart disease|medical problem))\b[^.?!]*?(?:[.?!]|$)/gi, '')
+    .replace(/\b(?:legal(?:ly)? safe|legal advice|medical advice|professional advice)\b[^.?!]*?(?:[.?!]|$)/gi, '')
     .replace(/\bFirst-pass verification bite\b/g, 'first-pass verification bite')
     .replace(/\s{2,}/g, ' ')
     .trim();
@@ -1710,6 +1835,26 @@ function shouldClarifyBroadUncertainMemory(userMessage: string, toolPayloads: Re
   );
   if (asksNotToGuess && explicitUncertainty) return true;
   return stableNames.length === 0 && stableRegions.length === 0 && concreteIngredients.length === 0;
+}
+
+function shouldClarifySparseUnanchoredMemory(userMessage: string, toolPayloads: Record<string, unknown>): boolean {
+  if (isExplicitMinimumTestRequest(userMessage)) return false;
+  const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
+  if (!memory) return false;
+  const text = `${userMessage}\n${memory.normalizedMemory}`.toLowerCase();
+  if (/\bi\s+remember\s+something\b[\s\S]{0,160}\b(?:smelled|tasted|felt|looked|toasty|herby|aroma|texture)\b/i.test(text)) {
+    return true;
+  }
+  const stableNames = memory.extractedClues.possibleDishNames.filter((name) => name.trim().length > 0);
+  const stableRegions = memory.extractedClues.culturalOrRegionalHints.filter((hint) => !isBroadRegionalHint(hint));
+  const concreteIngredients = memory.extractedClues.rememberedIngredients.filter((ingredient) =>
+    !/\b(?:unknown|ingredient|herb|herby|spice|spiced|aromatic|something|toasty)\b/i.test(ingredient),
+  );
+  const sensoryOnly = memory.extractedClues.sensoryClues.length > 0 && concreteIngredients.length === 0;
+  const sparseSomethingMemory = /\b(?:something|thing)\b[\s\S]{0,120}\b(?:smelled|tasted|felt|looked|toasty|herby|aroma|texture)\b/i.test(text);
+  return stableNames.length === 0
+    && stableRegions.length === 0
+    && (sensoryOnly || sparseSomethingMemory);
 }
 
 function hasSubstantialMemoryAnchors(memory: unknown): boolean {
