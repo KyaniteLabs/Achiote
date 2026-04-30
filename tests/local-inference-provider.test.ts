@@ -1,10 +1,13 @@
 import { describe, expect, it } from 'vitest';
+import fs from 'node:fs';
 import {
   resolveAskProviderKind,
   resolveAskModel,
   openAIBaseUrlFromEnv,
   anthropicBaseUrlFromEnv,
   openAICompatibleProviderReady,
+  resolveLocalInferenceEndpointStyle,
+  resolveGlmEndpointStyle,
 } from '../src/lib/ask-provider.js';
 
 describe('local inference provider resolution', () => {
@@ -13,12 +16,26 @@ describe('local inference provider resolution', () => {
       expect(resolveAskProviderKind({ ACHIOTE_ASK_PROVIDER: 'local' })).toBe('openai');
     });
 
+    it('maps local LM Studio Anthropic Messages style to anthropic provider kind', () => {
+      expect(resolveAskProviderKind({
+        ACHIOTE_ASK_PROVIDER: 'local',
+        LOCAL_INFERENCE_ENDPOINT_STYLE: 'anthropic-messages',
+      })).toBe('anthropic');
+    });
+
     it('maps lmstudio to openai provider kind', () => {
       expect(resolveAskProviderKind({ ACHIOTE_ASK_PROVIDER: 'lmstudio' })).toBe('openai');
     });
 
     it('maps glm to anthropic provider kind', () => {
       expect(resolveAskProviderKind({ ACHIOTE_ASK_PROVIDER: 'glm' })).toBe('anthropic');
+    });
+
+    it('maps GLM Coding Plan OpenAI style to openai provider kind for endpoint experiments', () => {
+      expect(resolveAskProviderKind({
+        ACHIOTE_ASK_PROVIDER: 'glm',
+        GLM_ENDPOINT_STYLE: 'openai-coding',
+      })).toBe('openai');
     });
 
     it('defaults to anthropic when unset', () => {
@@ -54,6 +71,16 @@ describe('local inference provider resolution', () => {
           LOCAL_INFERENCE_MODEL: 'local-model',
         }),
       ).toBe('glm-5.1');
+    });
+
+    it('uses LOCAL_INFERENCE_MODEL when local provider is routed through Anthropic Messages style', () => {
+      expect(
+        resolveAskModel({
+          ACHIOTE_ASK_PROVIDER: 'local',
+          LOCAL_INFERENCE_ENDPOINT_STYLE: 'anthropic-messages',
+          LOCAL_INFERENCE_MODEL: 'qwen3.6-35b-a3b',
+        }),
+      ).toBe('qwen3.6-35b-a3b');
     });
   });
 
@@ -104,8 +131,27 @@ describe('local inference provider resolution', () => {
       ).toBe('http://127.0.0.1:1234/v1');
     });
 
+    it('normalizes local OpenAI-compatible style to a /v1 base URL', () => {
+      expect(
+        openAIBaseUrlFromEnv({
+          ACHIOTE_ASK_PROVIDER: 'local',
+          LOCAL_INFERENCE_BASE_URL: 'http://100.66.225.85:1234',
+          LOCAL_INFERENCE_ENDPOINT_STYLE: 'openai-chat-completions',
+        }),
+      ).toBe('http://100.66.225.85:1234/v1');
+    });
+
     it('defaults to openai.com for unset provider', () => {
       expect(openAIBaseUrlFromEnv({})).toBe('https://api.openai.com/v1');
+    });
+
+    it('defaults GLM OpenAI Coding Plan experiments to the dedicated coding endpoint', () => {
+      expect(
+        openAIBaseUrlFromEnv({
+          ACHIOTE_ASK_PROVIDER: 'glm',
+          GLM_ENDPOINT_STYLE: 'openai-coding',
+        }),
+      ).toBe('https://api.z.ai/api/coding/paas/v4');
     });
   });
 
@@ -117,6 +163,46 @@ describe('local inference provider resolution', () => {
           GLM_BASE_URL: 'https://api.z.ai/api/anthropic',
         }),
       ).toBe('https://api.z.ai/api/anthropic');
+    });
+
+    it('normalizes local LM Studio Anthropic Messages style to the server root base URL', () => {
+      expect(
+        anthropicBaseUrlFromEnv({
+          ACHIOTE_ASK_PROVIDER: 'local',
+          LOCAL_INFERENCE_ENDPOINT_STYLE: 'anthropic-messages',
+          LOCAL_INFERENCE_BASE_URL: 'http://100.66.225.85:1234/v1',
+        }),
+      ).toBe('http://100.66.225.85:1234');
+    });
+
+    it('does not provide an Anthropic base URL when GLM is forced to OpenAI Coding Plan style', () => {
+      expect(
+        anthropicBaseUrlFromEnv({
+          ACHIOTE_ASK_PROVIDER: 'glm',
+          GLM_ENDPOINT_STYLE: 'openai-coding',
+          GLM_BASE_URL: 'https://api.z.ai/api/anthropic',
+        }),
+      ).toBeUndefined();
+    });
+  });
+
+  describe('resolveLocalInferenceEndpointStyle', () => {
+    it('tracks LM Studio endpoint families separately from the model', () => {
+      expect(resolveLocalInferenceEndpointStyle({ ACHIOTE_ASK_PROVIDER: 'local' })).toBe('openai-chat-completions');
+      expect(resolveLocalInferenceEndpointStyle({ ACHIOTE_ASK_PROVIDER: 'lmstudio', LMSTUDIO_ENDPOINT_STYLE: 'anthropic' })).toBe('anthropic-messages');
+      expect(resolveLocalInferenceEndpointStyle({ ACHIOTE_ASK_PROVIDER: 'local', LOCAL_INFERENCE_ENDPOINT_STYLE: 'responses' })).toBe('openai-responses');
+      expect(resolveLocalInferenceEndpointStyle({ ACHIOTE_ASK_PROVIDER: 'local', LOCAL_INFERENCE_ENDPOINT_STYLE: 'native-chat' })).toBe('native-chat');
+      expect(resolveLocalInferenceEndpointStyle({ ACHIOTE_ASK_PROVIDER: 'openai' })).toBeUndefined();
+    });
+  });
+
+  describe('resolveGlmEndpointStyle', () => {
+    it('defaults newer Coding Plan models to Anthropic-compatible style while allowing old-model endpoint experiments', () => {
+      expect(resolveGlmEndpointStyle({ ACHIOTE_ASK_PROVIDER: 'glm', ACHIOTE_ASK_MODEL: 'GLM-5.1' })).toBe('anthropic-coding');
+      expect(resolveGlmEndpointStyle({ ACHIOTE_ASK_PROVIDER: 'glm', ACHIOTE_ASK_MODEL: 'GLM-4.7' })).toBe('anthropic-coding');
+      expect(resolveGlmEndpointStyle({ ACHIOTE_ASK_PROVIDER: 'glm', ACHIOTE_ASK_MODEL: 'GLM-4.5-Air' })).toBe('anthropic-coding');
+      expect(resolveGlmEndpointStyle({ ACHIOTE_ASK_PROVIDER: 'glm', ACHIOTE_ASK_MODEL: 'GLM-4.5-Air', GLM_ENDPOINT_STYLE: 'openai-coding' })).toBe('openai-coding');
+      expect(resolveGlmEndpointStyle({ ACHIOTE_ASK_PROVIDER: 'zhipu', ZHIPU_ENDPOINT_STYLE: 'openai' })).toBe('openai-coding');
     });
   });
 
@@ -143,6 +229,13 @@ describe('local inference provider resolution', () => {
 
     it('accepts public URLs with API key', () => {
       expect(openAICompatibleProviderReady('https://api.openai.com/v1', 'sk-test-key')).toBe(true);
+    });
+  });
+
+  describe('live ask smoke reporting', () => {
+    it('reports the local inference model instead of falling back to stale cloud defaults', () => {
+      const script = fs.readFileSync('scripts/live-ask-smoke.mjs', 'utf8');
+      expect(script).toContain('process.env.LOCAL_INFERENCE_MODEL');
     });
   });
 });

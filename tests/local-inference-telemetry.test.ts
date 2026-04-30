@@ -1,12 +1,16 @@
 import { describe, expect, it } from 'vitest';
+import fs from 'node:fs';
 import {
   buildLmStudioLoadPayload,
+  lmStudioInferenceEndpointStyles,
   localInferenceProfiles,
+  profileApplicationSummary,
   summarizeLoadProfile,
 } from '../src/lib/local-inference-profiles.js';
 import {
   mineTelemetryPatterns,
   normalizeLocalCanarySummary,
+  normalizeLocalProfilerArtifact,
   normalizeWeakCloudRow,
   renderTelemetryMarkdown,
 } from '../src/lib/model-telemetry.js';
@@ -39,6 +43,13 @@ describe('local inference load profiles', () => {
     expect(summary).toContain('KV q8_0');
     expect(summary).toContain('Flash Attention');
     expect(summary).toContain('GPU KV');
+    expect(summary).toContain('REST applies');
+    expect(summary).toContain('SDK/CLI required');
+
+    expect(profileApplicationSummary('speed')).toMatchObject({
+      appliedByRest: expect.arrayContaining(['context_length', 'eval_batch_size', 'parallel', 'flash_attention', 'offload_kv_cache_to_gpu', 'num_experts']),
+      requiresSdkOrCli: expect.arrayContaining(['cpu_threads', 'llama_k_cache_quantization_type', 'llama_v_cache_quantization_type', 'keep_model_in_memory', 'gpu_offload_policy']),
+    });
   });
 
   it('supports profile overrides for controlled experiments', () => {
@@ -56,6 +67,36 @@ describe('local inference load profiles', () => {
       flash_attention: true,
       echo_load_config: true,
     });
+  });
+
+  it('tracks LM Studio endpoint families instead of assuming chat completions is the only route', () => {
+    expect(lmStudioInferenceEndpointStyles['openai-chat-completions']).toMatchObject({
+      protocol: 'openai-compatible',
+      path: '/v1/chat/completions',
+      runtimeSupportedByAchiote: true,
+    });
+    expect(lmStudioInferenceEndpointStyles['anthropic-messages']).toMatchObject({
+      protocol: 'anthropic-compatible',
+      path: '/v1/messages',
+      runtimeSupportedByAchiote: true,
+    });
+    expect(lmStudioInferenceEndpointStyles['openai-responses']).toMatchObject({
+      protocol: 'openai-compatible',
+      path: '/v1/responses',
+      runtimeSupportedByAchiote: false,
+    });
+    expect(lmStudioInferenceEndpointStyles['native-chat']).toMatchObject({
+      protocol: 'lmstudio-native',
+      path: '/api/v1/chat',
+      runtimeSupportedByAchiote: false,
+    });
+  });
+
+  it('keeps native LM Studio probes bounded with native REST token limits', () => {
+    const profilerScript = fs.readFileSync('scripts/local-inference-profiler.mjs', 'utf8');
+    const nativeBranch = profilerScript.match(/if \(targetEndpointStyle === 'native-chat'\) \{([\s\S]*?)\n  \}\n  return/)?.[1] ?? '';
+    expect(nativeBranch).toContain('max_output_tokens: 512');
+    expect(nativeBranch).not.toContain('max_tokens: 512');
   });
 });
 
@@ -112,6 +153,52 @@ describe('cross-provider model telemetry', () => {
       prompt: 'misspelled_carimanola',
       guardReason: 'explicit_minimum_cue_fallback',
       reasoningTracePreview: 'Thinking Process: the user asked for a small cue, but I am drifting into recipe instructions.',
+    });
+
+    const glm = normalizeWeakCloudRow({
+      mode: 'naked',
+      provider: 'glm',
+      model: 'GLM-4.5-Air',
+      endpointStyle: 'openai-coding',
+      baseUrl: 'https://api.z.ai/api/coding/paas/v4',
+      prompt: 'sparse_sour_dill_soup',
+      status: 200,
+      classification: 'provider_ok',
+      quality: [],
+      ms: 12000,
+      text: 'Tiny cue.',
+    }, 'glm.jsonl:1');
+
+    expect(glm).toMatchObject({
+      provider: 'glm',
+      model: 'GLM-4.5-Air',
+      endpointStyle: 'openai-coding',
+      baseUrl: 'https://api.z.ai/api/coding/paas/v4',
+    });
+
+    const profiler = normalizeLocalProfilerArtifact({
+      model: 'qwen3.6-35b-a3b',
+      baseUrl: 'http://100.66.225.85:1234/v1',
+      endpointStyle: 'native-chat',
+      profile: 'speed',
+      events: [{
+        label: 'direct_probe',
+        ok: true,
+        ms: 4264,
+        result: {
+          endpointStyle: 'native-chat',
+          textPreview: 'Tiny rice-cinnamon cue.',
+          response: { stats: { reasoning_output_tokens: 135 } },
+        },
+      }],
+    }, 'profiler.json');
+
+    expect(profiler[0]).toMatchObject({
+      source: 'local_profiler',
+      provider: 'local',
+      model: 'qwen3.6-35b-a3b',
+      endpointStyle: 'native-chat',
+      baseUrl: 'http://100.66.225.85:1234/v1',
     });
   });
 

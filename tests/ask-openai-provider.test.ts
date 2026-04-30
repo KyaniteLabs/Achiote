@@ -665,7 +665,7 @@ describe('/ask premature cue guard', () => {
     await new Promise<void>((resolveListen) => fakeOpenAi.listen(fakePort, '127.0.0.1', resolveListen));
 
     const achiotePort = await getFreePort();
-    const achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`);
+    const achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`, { ACHIOTE_FINAL_SYNTHESIS_TIMEOUT_MS: '750' });
     try {
       const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
         method: 'POST',

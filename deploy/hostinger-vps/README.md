@@ -16,9 +16,15 @@ Deploy Achiote to the same Hostinger VPS (`187.124.238.235`) that runs Declutter
    ACHIOTE_ASK_PROVIDER=glm
    GLM_API_KEY=your-key
 
-   # GLM Coding Plan models use Z.ai's Anthropic-compatible endpoint.
-   ACHIOTE_ASK_MODEL=GLM-4.5-Air
+   # GLM Coding Plan newer models usually use Z.ai's Anthropic-compatible endpoint.
+   ACHIOTE_ASK_MODEL=GLM-5.1
+   GLM_ENDPOINT_STYLE=anthropic-coding
    GLM_BASE_URL=https://api.z.ai/api/anthropic
+
+   # Older GLM 4.5-family endpoint experiments:
+   # ACHIOTE_ASK_MODEL=GLM-4.5-Air
+   # GLM_ENDPOINT_STYLE=openai-coding
+   # GLM_OPENAI_BASE_URL=https://api.z.ai/api/coding/paas/v4
    # GLM_MODEL=GLM-4.5-Flash
    ```
 
@@ -26,9 +32,12 @@ Deploy Achiote to the same Hostinger VPS (`187.124.238.235`) that runs Declutter
    ```env
    ACHIOTE_ASK_PROVIDER=local
    ACHIOTE_ASK_MODEL=your-loaded-model
+   LOCAL_INFERENCE_ENDPOINT_STYLE=openai-chat-completions
    LOCAL_INFERENCE_BASE_URL=http://host.docker.internal:1234/v1
    LOCAL_INFERENCE_MODEL=your-loaded-model
    ```
+
+   LM Studio exposes several interfaces. Achiote runtime currently supports `openai-chat-completions` (`/v1/chat/completions`) and `anthropic-messages` (`/v1/messages`). The profiler tracks `openai-responses` (`/v1/responses`) and `native-chat` (`/api/v1/chat`) as diagnostic surfaces, but they are not runtime adapters yet.
 
 3. Deploy:
    ```bash

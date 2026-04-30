@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { anthropicTools } from '../src/tools/tool-registry.js';
 import Anthropic from '@anthropic-ai/sdk';
-import { createAnthropicAskSession, createOpenAICompatibleAskSession, isOpenRouterUrl, openAICompatibleProviderReady, openAIBaseUrlFromEnv, openAiToolsFromAnthropic, openRouterCatalogModelSupportsParameter, resolveAskModel, resolveAskProviderKind, anthropicBaseUrlFromEnv } from '../src/lib/ask-provider.js';
+import { createAnthropicAskSession, createOpenAICompatibleAskSession, isOpenRouterUrl, openAICompatibleProviderReady, openAIBaseUrlFromEnv, openAiToolsFromAnthropic, openRouterCatalogModelSupportsParameter, resolveAskModel, resolveAskProviderKind, anthropicBaseUrlFromEnv, resolveGlmEndpointStyle, resolveLocalInferenceEndpointStyle } from '../src/lib/ask-provider.js';
 
 describe('ask provider compatibility', () => {
   it('maps Anthropic tool definitions into OpenAI-compatible function tools', () => {
@@ -20,7 +20,9 @@ describe('ask provider compatibility', () => {
   it('requires explicit provider selection before switching away from Anthropic', () => {
     expect(resolveAskProviderKind({ ACHIOTE_ASK_PROVIDER: 'openai' })).toBe('openai');
     expect(resolveAskProviderKind({ ACHIOTE_ASK_PROVIDER: 'lmstudio' })).toBe('openai');
+    expect(resolveAskProviderKind({ ACHIOTE_ASK_PROVIDER: 'lmstudio', LMSTUDIO_ENDPOINT_STYLE: 'anthropic-messages' })).toBe('anthropic');
     expect(resolveAskProviderKind({ ACHIOTE_ASK_PROVIDER: 'glm' })).toBe('anthropic');
+    expect(resolveAskProviderKind({ ACHIOTE_ASK_PROVIDER: 'glm', GLM_ENDPOINT_STYLE: 'openai-coding' })).toBe('openai');
     expect(resolveAskProviderKind({ ACHIOTE_ASK_PROVIDER: 'zhipu' })).toBe('anthropic');
     expect(resolveAskProviderKind({ OPENAI_API_KEY: 'ambient-openai-key' })).toBe('anthropic');
     expect(resolveAskProviderKind({ OPENAI_BASE_URL: 'http://127.0.0.1:1234/v1' })).toBe('anthropic');
@@ -30,6 +32,9 @@ describe('ask provider compatibility', () => {
   it('resolves OpenAI-compatible base URLs and readiness without pretending localhost is OpenAI', () => {
     expect(openAIBaseUrlFromEnv({ ACHIOTE_ASK_PROVIDER: 'openai' })).toBe('https://api.openai.com/v1');
     expect(openAIBaseUrlFromEnv({ ACHIOTE_ASK_PROVIDER: 'lmstudio' })).toBe('http://127.0.0.1:1234/v1');
+    expect(openAIBaseUrlFromEnv({ ACHIOTE_ASK_PROVIDER: 'lmstudio', LMSTUDIO_BASE_URL: 'http://100.66.225.85:1234' })).toBe('http://100.66.225.85:1234/v1');
+    expect(openAIBaseUrlFromEnv({ ACHIOTE_ASK_PROVIDER: 'glm', GLM_ENDPOINT_STYLE: 'openai-coding' })).toBe('https://api.z.ai/api/coding/paas/v4');
+    expect(openAIBaseUrlFromEnv({ ACHIOTE_ASK_PROVIDER: 'glm', GLM_ENDPOINT_STYLE: 'openai-coding', GLM_OPENAI_BASE_URL: 'https://custom.z.ai/v4' })).toBe('https://custom.z.ai/v4');
     expect(openAICompatibleProviderReady('https://api.openai.com/v1', undefined)).toBe(false);
     expect(openAICompatibleProviderReady('https://api.openai.com/v1', 'sk-test')).toBe(true);
     expect(openAICompatibleProviderReady('http://127.0.0.1:1234/v1', undefined)).toBe(true);
@@ -54,10 +59,28 @@ describe('ask provider compatibility', () => {
 
   it('resolves Anthropic-compatible base URLs for GLM/Zhipu', () => {
     expect(anthropicBaseUrlFromEnv({ ACHIOTE_ASK_PROVIDER: 'glm' })).toBe('https://api.z.ai/api/anthropic');
+    expect(anthropicBaseUrlFromEnv({ ACHIOTE_ASK_PROVIDER: 'glm', GLM_ENDPOINT_STYLE: 'openai-coding' })).toBeUndefined();
     expect(anthropicBaseUrlFromEnv({ ACHIOTE_ASK_PROVIDER: 'zhipu' })).toBe('https://api.z.ai/api/anthropic');
     expect(anthropicBaseUrlFromEnv({ GLM_BASE_URL: 'https://custom.z.ai/api/anthropic' })).toBe('https://custom.z.ai/api/anthropic');
     expect(anthropicBaseUrlFromEnv({ ANTHROPIC_BASE_URL: 'https://api.anthropic.com' })).toBe('https://api.anthropic.com');
     expect(anthropicBaseUrlFromEnv({})).toBeUndefined();
+  });
+
+  it('treats GLM Coding Plan endpoint style as a per-model experiment dimension', () => {
+    expect(resolveGlmEndpointStyle({ ACHIOTE_ASK_PROVIDER: 'glm', ACHIOTE_ASK_MODEL: 'GLM-5.1' })).toBe('anthropic-coding');
+    expect(resolveGlmEndpointStyle({ ACHIOTE_ASK_PROVIDER: 'glm', ACHIOTE_ASK_MODEL: 'GLM-5-Turbo' })).toBe('anthropic-coding');
+    expect(resolveGlmEndpointStyle({ ACHIOTE_ASK_PROVIDER: 'glm', ACHIOTE_ASK_MODEL: 'GLM-4.7' })).toBe('anthropic-coding');
+    expect(resolveGlmEndpointStyle({ ACHIOTE_ASK_PROVIDER: 'glm', ACHIOTE_ASK_MODEL: 'GLM-4.5-Air' })).toBe('anthropic-coding');
+    expect(resolveGlmEndpointStyle({ ACHIOTE_ASK_PROVIDER: 'glm', ACHIOTE_ASK_MODEL: 'GLM-4.5-Air', GLM_ENDPOINT_STYLE: 'openai-coding' })).toBe('openai-coding');
+    expect(resolveGlmEndpointStyle({ ACHIOTE_ASK_PROVIDER: 'glm', ACHIOTE_ASK_MODEL: 'GLM-4.5-Flash', GLM_COMPATIBILITY: 'openai' })).toBe('openai-coding');
+    expect(resolveGlmEndpointStyle({ ACHIOTE_ASK_PROVIDER: 'openai' })).toBeUndefined();
+  });
+
+  it('treats LM Studio endpoint style as a local inference routing and telemetry dimension', () => {
+    expect(resolveLocalInferenceEndpointStyle({ ACHIOTE_ASK_PROVIDER: 'lmstudio' })).toBe('openai-chat-completions');
+    expect(resolveLocalInferenceEndpointStyle({ ACHIOTE_ASK_PROVIDER: 'lmstudio', LMSTUDIO_ENDPOINT_STYLE: 'anthropic' })).toBe('anthropic-messages');
+    expect(resolveLocalInferenceEndpointStyle({ ACHIOTE_ASK_PROVIDER: 'lmstudio', LMSTUDIO_ENDPOINT_STYLE: 'responses' })).toBe('openai-responses');
+    expect(resolveLocalInferenceEndpointStyle({ ACHIOTE_ASK_PROVIDER: 'lmstudio', LMSTUDIO_ENDPOINT_STYLE: 'native-chat' })).toBe('native-chat');
   });
 
   it('does not default normal Anthropic sessions to a GLM model', () => {

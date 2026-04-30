@@ -103,6 +103,14 @@ npm run local:profile -- --list-profiles
 npm run local:profile -- --model qwen3.6-35b-a3b --profile speed --probe --timeout-ms 240000 --out artifacts/local-inference-profiler
 ```
 
+LM Studio endpoint style matters. Use `LOCAL_INFERENCE_ENDPOINT_STYLE=openai-chat-completions` for the current default `/v1/chat/completions` runtime path, or `LOCAL_INFERENCE_ENDPOINT_STYLE=anthropic-messages` with a server-root base URL such as `http://100.x.x.x:1234` to test LM Studio's `/v1/messages` route. `openai-responses` and `native-chat` belong in profiling until Achiote has dedicated runtime adapters for `/v1/responses` and `/api/v1/chat`.
+
+GLM endpoint style matters too. Keep newer Coding Plan defaults on `GLM_ENDPOINT_STYLE=anthropic-coding`, but include `openai-coding` rows for GLM 4.5-family experiments:
+
+```bash
+ACHIOTE_ASK_PROVIDER=glm ACHIOTE_ASK_MODEL=GLM-4.5-Air GLM_ENDPOINT_STYLE=openai-coding GLM_OPENAI_BASE_URL=https://api.z.ai/api/coding/paas/v4 npm run live:ask
+```
+
 Reasoning traces, `reasoning_tokens`, provider error bodies, and tool-argument parse failures are useful QA telemetry. Treat them as raw diagnostic output: keep artifact links for engineering analysis, do not present them as verified facts, and sanitize credential-looking or provider-identity text before any user-facing route.
 
 Alert when:

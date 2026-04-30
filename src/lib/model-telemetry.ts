@@ -9,6 +9,8 @@ export interface NormalizedTelemetryEvent {
   category?: string;
   status?: number | string;
   classification?: string;
+  endpointStyle?: string;
+  baseUrl?: string;
   latencyMs?: number;
   passed?: boolean;
   providerFailure?: boolean;
@@ -103,6 +105,8 @@ export function normalizeWeakCloudRow(row: unknown, artifactPath?: string): Norm
     category: stringField(object.category),
     status: numberOrString(object.status),
     classification: stringField(object.classification),
+    endpointStyle: stringField(object.endpointStyle),
+    baseUrl: stringField(object.baseUrl),
     latencyMs: numberField(object.ms) ?? numberField(object.latencyMs),
     passed: booleanField(object.passed),
     providerFailure: booleanField(object.providerFailure) ?? inferProviderFailure(object, errors),
@@ -121,6 +125,8 @@ export function normalizeLocalProfilerArtifact(artifact: unknown, artifactPath?:
   const object = asRecord(artifact);
   const model = stringField(object.model) ?? 'unknown-local-model';
   const profile = stringField(object.profile) ?? 'unknown-profile';
+  const baseUrl = stringField(object.baseUrl);
+  const artifactEndpointStyle = stringField(object.endpointStyle);
   const events = Array.isArray(object.events) ? object.events : [];
 
   return events.map((event) => {
@@ -147,6 +153,8 @@ export function normalizeLocalProfilerArtifact(artifact: unknown, artifactPath?:
       mode: `local-profile:${profile}`,
       prompt: stringField(row.label) ?? 'profiler_event',
       status: booleanField(row.ok) === false ? 'error' : 'ok',
+      endpointStyle: stringField(result.endpointStyle) ?? artifactEndpointStyle,
+      baseUrl,
       latencyMs: numberField(row.ms),
       passed: booleanField(row.ok),
       providerFailure: booleanField(row.ok) === false,

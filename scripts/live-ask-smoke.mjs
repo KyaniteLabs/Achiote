@@ -7,6 +7,10 @@ import path from 'node:path';
 const isOpenAICompatible = ['openai', 'openai-compatible', 'lmstudio', 'lm-studio'].includes(process.env.ACHIOTE_ASK_PROVIDER?.trim().toLowerCase() ?? '')
   || Boolean(process.env.OPENAI_BASE_URL?.trim() || process.env.LMSTUDIO_BASE_URL?.trim() || process.env.LM_STUDIO_BASE_URL?.trim());
 const isGlm = ['glm', 'zhipu'].includes(process.env.ACHIOTE_ASK_PROVIDER?.trim().toLowerCase() ?? '');
+const glmEndpointStyle = process.env.GLM_ENDPOINT_STYLE?.trim().toLowerCase().replace(/_/g, '-')
+  || process.env.GLM_COMPATIBILITY?.trim().toLowerCase().replace(/_/g, '-')
+  || 'anthropic-coding';
+const isGlmOpenAIStyle = isGlm && ['openai', 'openai-compatible', 'openai-coding'].includes(glmEndpointStyle);
 const hasProviderCredential = Boolean(
   process.env.ANTHROPIC_API_KEY?.trim()
   || process.env.ANTHROPIC_AUTH_TOKEN?.trim()
@@ -127,9 +131,11 @@ async function main() {
   }
 
   const providerBase = isGlm
-    ? (process.env.GLM_BASE_URL || process.env.ZHIPU_BASE_URL || 'https://api.z.ai/api/anthropic')
+    ? (isGlmOpenAIStyle
+        ? (process.env.GLM_OPENAI_BASE_URL || process.env.ZHIPU_OPENAI_BASE_URL || process.env.GLM_CODING_BASE_URL || 'https://api.z.ai/api/coding/paas/v4')
+        : (process.env.GLM_BASE_URL || process.env.ZHIPU_BASE_URL || 'https://api.z.ai/api/anthropic'))
     : (process.env.OPENAI_BASE_URL || process.env.LMSTUDIO_BASE_URL || process.env.LM_STUDIO_BASE_URL || process.env.ANTHROPIC_BASE_URL || 'https://api.anthropic.com');
-  const providerModel = process.env.ACHIOTE_ASK_MODEL || process.env.GLM_MODEL || process.env.ZHIPU_MODEL || process.env.OPENAI_MODEL || process.env.LMSTUDIO_MODEL || process.env.ANTHROPIC_DEFAULT_SONNET_MODEL || 'claude-sonnet-4-5-20250929';
+  const providerModel = process.env.LOCAL_INFERENCE_MODEL || process.env.ACHIOTE_ASK_MODEL || process.env.GLM_MODEL || process.env.ZHIPU_MODEL || process.env.OPENAI_MODEL || process.env.LMSTUDIO_MODEL || process.env.ANTHROPIC_DEFAULT_SONNET_MODEL || 'claude-sonnet-4-5-20250929';
   console.log(`Live /ask smoke target: provider=${process.env.ACHIOTE_ASK_PROVIDER || (isOpenAICompatible ? 'openai' : 'anthropic')} base=${providerBase} model=${providerModel} timeout=${liveAskTimeoutMs}ms`);
 
   const child = spawn(process.execPath, [serverPath], {

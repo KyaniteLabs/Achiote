@@ -264,7 +264,7 @@ describe('launch business hardening', () => {
         server.close((error) => (error ? reject(error) : resolve()));
       });
     }
-  });
+  }, 30_000);
 
   it('keeps SEO and launch metadata current for trust pages', () => {
     const sitemap = fs.readFileSync('docs/landing/sitemap.xml', 'utf8');

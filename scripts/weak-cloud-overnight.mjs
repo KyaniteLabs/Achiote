@@ -10,6 +10,14 @@ const args = new Map(process.argv.slice(2).map((arg) => {
   return [key, rest.join('=') || 'true'];
 }));
 
+if (args.has('help')) {
+  console.log(`Usage: node scripts/weak-cloud-overnight.mjs [--out=artifacts/weak-cloud-overnight] [--interval-ms=1800000] [--end=ISO_DATE]
+
+Runs weak-cloud torture across GLM Coding Plan endpoint styles and OpenRouter free models.
+GLM telemetry rows include endpointStyle and baseUrl so GLM-4.5-era models can be compared across Anthropic-compatible and OpenAI-compatible Coding Plan routes.`);
+  process.exit(0);
+}
+
 const artifactDir = path.resolve(args.get('out') || 'artifacts/weak-cloud-overnight');
 const intervalMs = Number.parseInt(args.get('interval-ms') || String(60 * 60 * 1000), 10);
 const endAt = args.has('end') ? new Date(args.get('end')) : nextEightAm();
@@ -72,7 +80,15 @@ const openRouterPriority = [
   'poolside/laguna-m.1:free',
 ];
 
-const glmModels = ['GLM-4.5-Air', 'GLM-4.5-Flash'];
+const glmMatrix = [
+  { model: 'GLM-5.1', endpointStyle: 'anthropic-coding', baseUrl: 'https://api.z.ai/api/anthropic' },
+  { model: 'GLM-5-Turbo', endpointStyle: 'anthropic-coding', baseUrl: 'https://api.z.ai/api/anthropic' },
+  { model: 'GLM-4.7', endpointStyle: 'anthropic-coding', baseUrl: 'https://api.z.ai/api/anthropic' },
+  { model: 'GLM-4.5-Air', endpointStyle: 'anthropic-coding', baseUrl: 'https://api.z.ai/api/anthropic' },
+  { model: 'GLM-4.5-Air', endpointStyle: 'openai-coding', baseUrl: 'https://api.z.ai/api/coding/paas/v4' },
+  { model: 'GLM-4.5-Flash', endpointStyle: 'anthropic-coding', baseUrl: 'https://api.z.ai/api/anthropic' },
+  { model: 'GLM-4.5-Flash', endpointStyle: 'openai-coding', baseUrl: 'https://api.z.ai/api/coding/paas/v4' },
+];
 const liveChildren = new Set();
 
 fs.mkdirSync(artifactDir, { recursive: true });
@@ -268,30 +284,35 @@ function qualityFindings(text, prompt, mode) {
   return findings;
 }
 
-async function nakedGlm(model, prompt) {
+async function nakedGlm(model, prompt, endpointStyle = 'anthropic-coding') {
   const started = Date.now();
   const key = getGlmKey();
-  if (!key) return { mode: 'naked', provider: 'glm', model, status: 'missing_key', ms: 0, text: '', errors: ['missing_glm_key'], classification: 'provider_auth', quality: [] };
+  const baseUrl = endpointStyle === 'openai-coding'
+    ? 'https://api.z.ai/api/coding/paas/v4'
+    : 'https://api.z.ai/api/anthropic';
+  if (!key) return { mode: 'naked', provider: 'glm', model, endpointStyle, baseUrl, status: 'missing_key', ms: 0, text: '', errors: ['missing_glm_key'], classification: 'provider_auth', quality: [] };
   try {
-    const response = await timedFetch('https://api.z.ai/api/anthropic/v1/messages', {
+    const response = await timedFetch(endpointStyle === 'openai-coding'
+      ? `${baseUrl}/chat/completions`
+      : `${baseUrl}/v1/messages`, {
       method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-        'x-api-key': key,
-        'anthropic-version': '2023-06-01',
-      },
+      headers: endpointStyle === 'openai-coding'
+        ? { 'content-type': 'application/json', authorization: `Bearer ${key}` }
+        : { 'content-type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01' },
       body: JSON.stringify({ model, max_tokens: 900, messages: [{ role: 'user', content: prompt.text }] }),
     }, nakedProviderTimeoutMs);
     const body = await response.json().catch(() => ({}));
-    const text = (body.content || []).map((block) => block.text || '').join('\n');
+    const text = endpointStyle === 'openai-coding'
+      ? (body.choices?.[0]?.message?.content || '')
+      : (body.content || []).map((block) => block.text || '').join('\n');
     const error = body.error?.message || body.message || '';
     return {
-      mode: 'naked', provider: 'glm', model, prompt: prompt.id, status: response.status, ms: Date.now() - started,
+      mode: 'naked', provider: 'glm', model, endpointStyle, baseUrl, prompt: prompt.id, status: response.status, ms: Date.now() - started,
       text: truncate(text), errors: error ? [error] : [], classification: classifyProvider(response.status, error, text),
       quality: qualityFindings(text, prompt.text, 'naked'),
     };
   } catch (error) {
-    return { mode: 'naked', provider: 'glm', model, prompt: prompt.id, status: 'timeout', ms: Date.now() - started, text: '', errors: [error.message], classification: 'provider_rate_limited', quality: [] };
+    return { mode: 'naked', provider: 'glm', model, endpointStyle, baseUrl, prompt: prompt.id, status: 'timeout', ms: Date.now() - started, text: '', errors: [error.message], classification: 'provider_rate_limited', quality: [] };
   }
 }
 
@@ -342,7 +363,7 @@ async function waitForServer(child, port) {
   });
 }
 
-async function achioteAsk({ provider, model, prompt, openRouterKey }) {
+async function achioteAsk({ provider, model, prompt, openRouterKey, endpointStyle, baseUrl }) {
   const started = Date.now();
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'achiote-weak-cloud-'));
   const port = 46000 + Math.floor(Math.random() * 10_000);
@@ -359,17 +380,19 @@ async function achioteAsk({ provider, model, prompt, openRouterKey }) {
   if (provider === 'glm') {
     env.ACHIOTE_ASK_PROVIDER = 'glm';
     env.ACHIOTE_ASK_MODEL = model;
-	    env.GLM_BASE_URL = 'https://api.z.ai/api/anthropic';
-	    env.GLM_API_KEY = getGlmKey();
-	    env.ANTHROPIC_TIMEOUT_MS = String(achioteAskTimeoutMs);
-	    env.GLM_TIMEOUT_MS = String(achioteAskTimeoutMs);
-	  } else {
-	    env.ACHIOTE_ASK_PROVIDER = 'openai';
-	    env.OPENAI_BASE_URL = 'https://openrouter.ai/api/v1';
-	    env.OPENAI_MODEL = model;
-	    env.OPENAI_API_KEY = openRouterKey || '';
-	    env.OPENAI_TIMEOUT_MS = String(achioteAskTimeoutMs);
-	  }
+    env.GLM_ENDPOINT_STYLE = endpointStyle || 'anthropic-coding';
+    env.GLM_BASE_URL = 'https://api.z.ai/api/anthropic';
+    env.GLM_OPENAI_BASE_URL = 'https://api.z.ai/api/coding/paas/v4';
+    env.GLM_API_KEY = getGlmKey();
+    env.ANTHROPIC_TIMEOUT_MS = String(achioteAskTimeoutMs);
+    env.GLM_TIMEOUT_MS = String(achioteAskTimeoutMs);
+  } else {
+    env.ACHIOTE_ASK_PROVIDER = 'openai';
+    env.OPENAI_BASE_URL = 'https://openrouter.ai/api/v1';
+    env.OPENAI_MODEL = model;
+    env.OPENAI_API_KEY = openRouterKey || '';
+    env.OPENAI_TIMEOUT_MS = String(achioteAskTimeoutMs);
+  }
   const child = spawn(process.execPath, ['dist/http-server.js'], {
     cwd: root,
     env,
@@ -390,14 +413,14 @@ async function achioteAsk({ provider, model, prompt, openRouterKey }) {
     const tools = eventTools(events);
     const done = events.filter((event) => event.event === 'done').map(parseData).at(-1) || null;
     return {
-      mode: 'achiote', provider, model, prompt: prompt.id, status: response.status, ms: Date.now() - started,
+      mode: 'achiote', provider, model, endpointStyle, baseUrl, prompt: prompt.id, status: response.status, ms: Date.now() - started,
       text: truncate(text), errors, tools, done,
       classification: errors.length > 0 ? classifyProvider(response.status, JSON.stringify(errors), text) : 'workflow_ok',
       quality: [...qualityFindings(text, prompt.text, 'achiote'), ...(tools.length === 0 ? ['missing_tool_workflow'] : [])],
     };
   } catch (error) {
     return {
-      mode: 'achiote', provider, model, prompt: prompt.id, status: 'timeout', ms: Date.now() - started,
+      mode: 'achiote', provider, model, endpointStyle, baseUrl, prompt: prompt.id, status: 'timeout', ms: Date.now() - started,
       text: '', errors: [{ message: error.message, code: 'timeout_or_runtime' }], tools: [], done: null,
       classification: 'provider_rate_limited', quality: [],
     };
@@ -413,12 +436,14 @@ function appendResult(result) {
   fs.appendFileSync(jsonlPath, `${JSON.stringify({ ...result, at: new Date().toISOString() })}\n`);
 }
 
-function exceptionResult({ roundId, mode, provider, model, prompt, error }) {
+function exceptionResult({ roundId, mode, provider, model, endpointStyle, baseUrl, prompt, error }) {
   return {
     roundId,
     mode,
     provider,
     model,
+    endpointStyle,
+    baseUrl,
     prompt: prompt.id,
     status: 'runner_exception',
     ms: 0,
@@ -465,8 +490,8 @@ async function runRound(roundIndex) {
   appendResult(catalogResult);
 
   const tests = [];
-  for (let i = 0; i < glmModels.length; i += 1) {
-    tests.push({ provider: 'glm', model: glmModels[i], prompt: prompts[(promptOffset + i) % prompts.length] });
+  for (let i = 0; i < glmMatrix.length; i += 1) {
+    tests.push({ provider: 'glm', ...glmMatrix[i], prompt: prompts[(promptOffset + i) % prompts.length] });
   }
   for (let i = 0; i < selectedOpenRouter.length; i += 1) {
     tests.push({ provider: 'openrouter', model: selectedOpenRouter[i], prompt: prompts[(promptOffset + i + 2) % prompts.length] });
@@ -477,7 +502,7 @@ async function runRound(roundIndex) {
     const naked = await runWithRetries(`${roundId} naked ${test.provider} ${test.model}`, async () => {
       try {
         return test.provider === 'glm'
-          ? await nakedGlm(test.model, test.prompt)
+          ? await nakedGlm(test.model, test.prompt, test.endpointStyle)
           : await nakedOpenRouter(test.model, test.prompt, openRouterKey);
       } catch (error) {
         log(`${roundId} naked exception ${test.provider} ${test.model}: ${error instanceof Error ? error.message : String(error)}`);
@@ -535,12 +560,14 @@ function writeSummary() {
   lines.push('');
   lines.push('## Latest Quality Findings');
   for (const result of quality.slice(-30)) {
-    lines.push(`- ${result.at} ${result.mode}/${result.provider}/${result.model}/${result.prompt}: ${result.quality.join(', ')} | ${truncate(result.text, 240)}`);
+    const endpoint = result.endpointStyle ? `[${result.endpointStyle}]` : '';
+    lines.push(`- ${result.at} ${result.mode}/${result.provider}/${result.model}${endpoint}/${result.prompt}: ${result.quality.join(', ')} | ${truncate(result.text, 240)}`);
   }
   lines.push('');
   lines.push('## Latest Provider/Workflow Failures');
   for (const result of tested.filter((item) => item.classification !== 'provider_ok' && item.classification !== 'workflow_ok').slice(-30)) {
-    lines.push(`- ${result.at} ${result.mode}/${result.provider}/${result.model}/${result.prompt}: ${result.classification} status=${result.status} errors=${truncate(JSON.stringify(result.errors), 240)}`);
+    const endpoint = result.endpointStyle ? `[${result.endpointStyle}]` : '';
+    lines.push(`- ${result.at} ${result.mode}/${result.provider}/${result.model}${endpoint}/${result.prompt}: ${result.classification} status=${result.status} errors=${truncate(JSON.stringify(result.errors), 240)}`);
   }
   fs.writeFileSync(summaryPath, `${lines.join('\n')}\n`);
   fs.writeFileSync(statePath, JSON.stringify({ updatedAt: new Date().toISOString(), endAt: endAt.toISOString(), totalTests: tested.length }, null, 2));
