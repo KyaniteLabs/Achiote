@@ -23,6 +23,13 @@ export interface AskQualitySignalInput {
   cache?: string;
 }
 
+export interface AskCacheOutcomeInput {
+  toolPayloads: Record<string, unknown>;
+  calledTools: string[];
+  cacheAvailable: boolean;
+  cacheFallbackUsed: boolean;
+}
+
 export interface QualitySignalReport {
   total: number;
   byMemoryType: Record<string, number>;
@@ -103,6 +110,14 @@ export function recordQualitySignal(report: QualitySignalReport, signal: AskQual
   for (const dimension of signal.missing) increment(report.missing, dimension);
 }
 
+export function inferAskCacheOutcome(input: AskCacheOutcomeInput): QualityCacheOutcome {
+  if (input.cacheFallbackUsed) return 'fallback';
+  if (!input.cacheAvailable) return 'unavailable';
+  if (Object.values(input.toolPayloads).some(hasCachedResearch)) return 'hit';
+  if (input.calledTools.some((tool) => CACHE_CAPABLE_TOOLS.has(tool))) return 'miss';
+  return 'unavailable';
+}
+
 function inferMemoryType(memory?: CollectedFoodMemory, cue?: MinimumViableNostalgiaCue): QualityMemoryType {
   const signals = qualitySignalsText(memory, cue);
   if (/\b(?:beverage|drink|bebida|sip|horchata|agua|juice|soda|tea|coffee|barley|cebada)\b/i.test(signals)) return 'beverage';
@@ -181,6 +196,15 @@ function inferSearch(calledTools: string[], toolPayloads: Record<string, unknown
 function normalizeCache(value?: string): QualityCacheOutcome {
   if (value === 'hit' || value === 'miss' || value === 'fallback') return value;
   return 'unavailable';
+}
+
+const CACHE_CAPABLE_TOOLS = new Set(['analyze_nostalgic_dish', 'discover_regional_similars']);
+
+function hasCachedResearch(value: unknown): boolean {
+  return typeof value === 'object'
+    && value !== null
+    && !Array.isArray(value)
+    && 'cachedResearch' in value;
 }
 
 function normalizeGuard(value?: string): string {

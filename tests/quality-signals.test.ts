@@ -3,6 +3,7 @@ import { collectFoodMemory, generateMinimumViableNostalgiaCue, planDishResearch 
 import {
   buildAskQualitySignal,
   emptyQualitySignalReport,
+  inferAskCacheOutcome,
   recordQualitySignal,
 } from '../src/lib/quality-signals.js';
 
@@ -136,5 +137,41 @@ describe('ask quality signals', () => {
       bySearch: { capped: 1 },
       byCache: { unavailable: 1 },
     });
+  });
+
+  it('infers cache hit, miss, fallback, and unavailable outcomes from ask tool payloads', () => {
+    expect(inferAskCacheOutcome({
+      toolPayloads: {
+        discover_regional_similars: {
+          cachedResearch: { researchData: '{"ok":true}', createdAt: '2026-04-29T00:00:00.000Z', hitCount: 1 },
+        },
+      },
+      calledTools: ['discover_regional_similars'],
+      cacheAvailable: true,
+      cacheFallbackUsed: false,
+    })).toBe('hit');
+
+    expect(inferAskCacheOutcome({
+      toolPayloads: {
+        discover_regional_similars: { dishName: 'dumpling', region: 'Poland' },
+      },
+      calledTools: ['discover_regional_similars'],
+      cacheAvailable: true,
+      cacheFallbackUsed: false,
+    })).toBe('miss');
+
+    expect(inferAskCacheOutcome({
+      toolPayloads: {},
+      calledTools: ['collect_food_memory'],
+      cacheAvailable: true,
+      cacheFallbackUsed: true,
+    })).toBe('fallback');
+
+    expect(inferAskCacheOutcome({
+      toolPayloads: {},
+      calledTools: ['discover_regional_similars'],
+      cacheAvailable: false,
+      cacheFallbackUsed: false,
+    })).toBe('unavailable');
   });
 });

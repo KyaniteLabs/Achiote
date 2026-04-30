@@ -19,7 +19,8 @@ import { BillingStripe, loadBillingConfigFromEnv, type CheckoutTier } from './li
 import { getHttpReadiness, getRequestRateLimitIdentity, isAnonymousAskAllowed, shouldApplyRateLimit } from './lib/http-runtime.js';
 import { resolveLocalSpeechConfig, synthesizeWithLocalSpeech, transcribeWithLocalSpeech, validateSpeechAudioPayload, validateSpeechTextPayload } from './lib/local-speech.js';
 import { buildMemoryReceipt } from './lib/memory-receipt.js';
-import { buildAskQualitySignal, emptyQualitySignalReport, recordQualitySignal } from './lib/quality-signals.js';
+import { buildAskQualitySignal, emptyQualitySignalReport, inferAskCacheOutcome, recordQualitySignal } from './lib/quality-signals.js';
+import { buildReferenceSeedOperatorReport } from './lib/reference-seed-operator.js';
 import { filterRepeatedToolCalls } from './lib/tool-loop.js';
 import type { Tier } from './lib/auth.js';
 import type { CollectedFoodMemory, DishResearchPlan, MinimumViableNostalgiaCue, ReconstructionDossier } from './lib/types.js';
@@ -814,7 +815,12 @@ function recordAskCompletion(toolPayloads: Record<string, unknown>, calledTools:
     toolPayloads,
     calledTools: [...calledTools],
     guarded,
-    cache: 'unavailable',
+    cache: inferAskCacheOutcome({
+      toolPayloads,
+      calledTools: [...calledTools],
+      cacheAvailable: cache !== null,
+      cacheFallbackUsed: cacheState.fallbackUsed,
+    }),
   }));
 }
 
@@ -1924,6 +1930,7 @@ const server = createServer(async (req, res) => {
       counters: Object.fromEntries(telemetryCounters),
       breakdowns: serializeTelemetryBreakdowns(),
       quality: qualitySignalReport,
+      referenceSeeds: buildReferenceSeedOperatorReport(qualitySignalReport),
     });
     return;
   }

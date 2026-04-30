@@ -8,7 +8,10 @@ import { runAchioteStdioServer } from './cli.js';
 
 export { runAchioteStdioServer } from './cli.js';
 export { createAchioteServer } from './server.js';
+export { bundledGlobalReferenceSeeds, prioritizeReferenceSeeds } from './lib/reference-seed-planner.js';
+export { buildReferenceSeedOperatorReport, validateReferenceSeedFixtures, writeReferenceSeedFixturesToCache } from './lib/reference-seed-operator.js';
 export type { AchioteServerOptions } from './server.js';
+export type { ReferenceSeedOperatorReport, ReferenceSeedOperatorTask } from './lib/reference-seed-operator.js';
 
 const isCliEntrypoint = process.argv[1] ? path.resolve(process.argv[1]) === fileURLToPath(import.meta.url) : false;
 

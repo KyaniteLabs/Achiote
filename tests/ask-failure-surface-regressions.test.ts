@@ -595,6 +595,15 @@ describe('/ask failure surface regressions', () => {
       bySearch: { skipped: 1 },
       byCache: { unavailable: 1 },
     });
+    expect(body.referenceSeeds.priorities[0]).toMatchObject({
+      seedId: 'beverage-rice-cinnamon-latin-america',
+      reasons: expect.arrayContaining(['frequent_memory_type', 'cache_unavailable']),
+    });
+    expect(body.referenceSeeds.cacheWarmingTasks[0]).toMatchObject({
+      id: 'warm-beverage-rice-cinnamon-latin-america',
+      seedId: 'beverage-rice-cinnamon-latin-america',
+      promptForHostResearch: expect.stringContaining('host-led research'),
+    });
     expect(bodyText).not.toContain('Cold rice-cinnamon drink');
     expect(bodyText).not.toContain('horchata but thinner');
   }, 20_000);

@@ -24,7 +24,8 @@
     "preview:smoke": "node scripts/preview-ask-smoke.mjs",
     "canary:local": "npm run build && node scripts/local-canary-qa.mjs",
     "torture:fake": "npm run build && node scripts/torture-smoke.mjs",
-    "viability:smoke": "node scripts/viability-transcript-smoke.mjs"
+    "viability:smoke": "node scripts/viability-transcript-smoke.mjs",
+    "reference:seeds": "npm run build && node scripts/reference-seed-operator.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.91.1",

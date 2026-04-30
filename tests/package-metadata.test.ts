@@ -83,6 +83,7 @@ describe('package distribution metadata', () => {
     expect(pkg.scripts['canary:local']).toBe('npm run build && node scripts/local-canary-qa.mjs');
     expect(pkg.scripts['torture:fake']).toBe('npm run build && node scripts/torture-smoke.mjs');
     expect(pkg.scripts['viability:smoke']).toBe('node scripts/viability-transcript-smoke.mjs');
+    expect(pkg.scripts['reference:seeds']).toBe('npm run build && node scripts/reference-seed-operator.mjs');
     expect(pkg.scripts['pack:check']).toBe('npm run check && npm run package:smoke && npm pack --dry-run');
     expect(pkg.scripts['package:smoke']).toBe('node scripts/package-smoke.mjs');
   });
@@ -109,6 +110,9 @@ describe('package distribution metadata', () => {
     expect(planner).toContain("from '../data/global-coverage-matrix.json'");
     expect(planner).toContain("from '../data/reference-seed-queue.json'");
     expect(planner).toContain("from '../data/cache-warming-manifest.json'");
+    expect(fs.readFileSync('src/index.ts', 'utf8')).toContain("export { bundledGlobalReferenceSeeds, prioritizeReferenceSeeds } from './lib/reference-seed-planner.js';");
+    expect(fs.readFileSync('src/index.ts', 'utf8')).toContain('writeReferenceSeedFixturesToCache');
+    expect(fs.existsSync('src/lib/reference-seed-operator.ts')).toBe(true);
   });
 
   it('uses a portable package-smoke temp directory prefix', () => {
@@ -183,5 +187,6 @@ describe('packaged helper scripts', () => {
     expect(fs.existsSync('scripts/local-canary-qa.mjs')).toBe(true);
     expect(fs.existsSync('scripts/torture-smoke.mjs')).toBe(true);
     expect(fs.existsSync('scripts/viability-transcript-smoke.mjs')).toBe(true);
+    expect(fs.existsSync('scripts/reference-seed-operator.mjs')).toBe(true);
   });
 });
