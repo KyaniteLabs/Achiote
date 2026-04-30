@@ -54,6 +54,12 @@ describe('HTTP server integration', () => {
     expect(body).toHaveProperty('authEnabled');
     expect(body).toHaveProperty('billingEnabled');
     expect(body).toHaveProperty('uptime');
+    expect(body.provider).toMatchObject({
+      kind: 'anthropic',
+      provider: 'anthropic',
+      nativeTools: 'unknown',
+      rateLimitSensitive: false,
+    });
     expect(typeof body.uptime).toBe('number');
   });
 

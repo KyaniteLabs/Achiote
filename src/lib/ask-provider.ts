@@ -54,6 +54,22 @@ export type AskModelResponse = {
   providerMessage: unknown;
 };
 
+export type NativeToolSupport = 'supported' | 'unsupported' | 'unknown';
+
+export interface ProviderCapabilityProfile {
+  provider: 'anthropic' | 'openai' | 'glm' | 'local' | 'openrouter';
+  providerKind: AskProviderKind;
+  model: string;
+  endpointStyle?: string;
+  baseUrl?: string;
+  nativeTools: NativeToolSupport;
+  nativeToolChoice: NativeToolSupport;
+  rateLimitSensitive: boolean;
+  recommendedTimeoutMs: number;
+  compatibilitySource: 'explicit-env' | 'model-family' | 'catalog' | 'default';
+  compatibilityNotes: string[];
+}
+
 export interface AskSession {
   create(maxTokens: number): Promise<AskModelResponse>;
   appendToolResults(response: AskModelResponse, toolResults: AskToolResult[]): void;
@@ -77,6 +93,10 @@ export function resolveAskModel(env: Record<string, string | undefined> = proces
   const provider = env.ACHIOTE_ASK_PROVIDER?.trim().toLowerCase();
   const providerKind = resolveAskProviderKind(env);
   const isLocalProvider = provider === 'local' || provider === 'lmstudio' || provider === 'lm-studio';
+  if (provider === 'glm' || provider === 'zhipu') {
+    return glmModelFromEnv(env);
+  }
+
   if (providerKind === 'openai') {
     return env.LOCAL_INFERENCE_MODEL?.trim()
       || env.ACHIOTE_ASK_MODEL?.trim()
@@ -94,13 +114,6 @@ export function resolveAskModel(env: Record<string, string | undefined> = proces
       || env.LM_STUDIO_MODEL?.trim()
       || env.ANTHROPIC_MODEL?.trim()
       || 'qwen3.5-0.8b';
-  }
-
-  if (provider === 'glm' || provider === 'zhipu') {
-    return env.ACHIOTE_ASK_MODEL?.trim()
-      || env.GLM_MODEL?.trim()
-      || env.ZHIPU_MODEL?.trim()
-      || 'glm-5v-turbo';
   }
 
   return env.ACHIOTE_ASK_MODEL?.trim()
@@ -164,13 +177,10 @@ export function resolveGlmEndpointStyle(env: Record<string, string | undefined> 
   const provider = env.ACHIOTE_ASK_PROVIDER?.trim().toLowerCase();
   if (provider !== 'glm' && provider !== 'zhipu') return undefined;
 
-  const explicit = env.GLM_ENDPOINT_STYLE?.trim()
-    || env.ZHIPU_ENDPOINT_STYLE?.trim()
-    || env.GLM_COMPATIBILITY?.trim()
-    || env.ZHIPU_COMPATIBILITY?.trim();
+  const explicit = explicitGlmEndpointStyle(env);
   if (explicit) return normalizeGlmEndpointStyle(explicit);
 
-  return 'anthropic-coding';
+  return defaultGlmEndpointStyleForModel(glmModelFromEnv(env));
 }
 
 export function glmOpenAIBaseUrlFromEnv(env: Record<string, string | undefined> = process.env): string {
@@ -250,6 +260,105 @@ export function openRouterCatalogModelSupportsParameter(
     && model.supported_parameters.includes(parameter);
 }
 
+export function defaultGlmEndpointStyleForModel(model: string): GlmEndpointStyle {
+  return isGlm45FamilyModel(model) ? 'openai-coding' : 'anthropic-coding';
+}
+
+export function isOpenRouterFreeModel(model: string): boolean {
+  return /:free$/i.test(model.trim());
+}
+
+export function resolveProviderCapabilityProfile(
+  env: Record<string, string | undefined> = process.env,
+  openRouterCatalog?: unknown,
+): ProviderCapabilityProfile {
+  const provider = env.ACHIOTE_ASK_PROVIDER?.trim().toLowerCase();
+  const providerKind = resolveAskProviderKind(env);
+  const model = resolveAskModel(env);
+  const timeoutMs = recommendedProviderTimeoutMs(env, providerKind);
+  const localProvider = provider === 'local' || provider === 'lmstudio' || provider === 'lm-studio';
+  const glmProvider = provider === 'glm' || provider === 'zhipu';
+  const baseUrl = providerKind === 'openai' ? openAIBaseUrlFromEnv(env) : anthropicBaseUrlFromEnv(env);
+
+  if (glmProvider) {
+    const endpointStyle = resolveGlmEndpointStyle(env);
+    const explicit = Boolean(explicitGlmEndpointStyle(env));
+    return {
+      provider: 'glm',
+      providerKind,
+      model,
+      endpointStyle,
+      baseUrl,
+      nativeTools: 'unknown',
+      nativeToolChoice: 'unknown',
+      rateLimitSensitive: false,
+      recommendedTimeoutMs: timeoutMs,
+      compatibilitySource: explicit ? 'explicit-env' : 'model-family',
+      compatibilityNotes: endpointStyle === 'openai-coding'
+        ? ['GLM 4.5-family coding-plan models default to the OpenAI-compatible coding endpoint unless overridden.']
+        : ['Newer GLM coding-plan models default to the Anthropic-compatible endpoint unless overridden.'],
+    };
+  }
+
+  if (localProvider) {
+    const endpointStyle = resolveLocalInferenceEndpointStyle(env);
+    const explicit = Boolean(env.LOCAL_INFERENCE_ENDPOINT_STYLE?.trim()
+      || env.LMSTUDIO_ENDPOINT_STYLE?.trim()
+      || env.LM_STUDIO_ENDPOINT_STYLE?.trim());
+    return {
+      provider: 'local',
+      providerKind,
+      model,
+      endpointStyle,
+      baseUrl,
+      nativeTools: endpointStyle === 'openai-completions' || endpointStyle === 'native-chat' ? 'unsupported' : 'unknown',
+      nativeToolChoice: endpointStyle === 'openai-completions' || endpointStyle === 'native-chat' ? 'unsupported' : 'unknown',
+      rateLimitSensitive: false,
+      recommendedTimeoutMs: timeoutMs,
+      compatibilitySource: explicit ? 'explicit-env' : 'default',
+      compatibilityNotes: [
+        'LM Studio exposes multiple endpoint families; runtime support and profiler support are tracked separately.',
+      ],
+    };
+  }
+
+  if (providerKind === 'openai' && baseUrl && isOpenRouterUrl(baseUrl)) {
+    const tools = openRouterCatalogModelSupportsParameter(openRouterCatalog, model, 'tools');
+    const toolChoice = openRouterCatalogModelSupportsParameter(openRouterCatalog, model, 'tool_choice');
+    const catalogKnown = tools !== undefined || toolChoice !== undefined;
+    return {
+      provider: 'openrouter',
+      providerKind,
+      model,
+      endpointStyle: 'openai-chat-completions',
+      baseUrl,
+      nativeTools: nativeToolSupportFromCatalog(tools),
+      nativeToolChoice: nativeToolSupportFromCatalog(toolChoice),
+      rateLimitSensitive: isOpenRouterFreeModel(model),
+      recommendedTimeoutMs: Math.max(timeoutMs, isOpenRouterFreeModel(model) ? 240_000 : timeoutMs),
+      compatibilitySource: catalogKnown ? 'catalog' : 'default',
+      compatibilityNotes: [
+        isOpenRouterFreeModel(model)
+          ? 'OpenRouter free models are treated as rate-limit sensitive and need long timeouts for QA runs.'
+          : 'OpenRouter models vary by model; catalog metadata should decide tool support when available.',
+      ],
+    };
+  }
+
+  return {
+    provider: providerKind,
+    providerKind,
+    model,
+    baseUrl,
+    nativeTools: 'unknown',
+    nativeToolChoice: 'unknown',
+    rateLimitSensitive: false,
+    recommendedTimeoutMs: timeoutMs,
+    compatibilitySource: 'default',
+    compatibilityNotes: ['No model-specific compatibility profile is configured for this provider.'],
+  };
+}
+
 /** Returns true when the URL looks like a local or Tailscale inference endpoint. */
 export function isLocalInferenceUrl(baseUrl: string): boolean {
   try {
@@ -263,6 +372,49 @@ export function isLocalInferenceUrl(baseUrl: string): boolean {
   } catch {
     return false;
   }
+}
+
+function explicitGlmEndpointStyle(env: Record<string, string | undefined>): string | undefined {
+  return env.GLM_ENDPOINT_STYLE?.trim()
+    || env.ZHIPU_ENDPOINT_STYLE?.trim()
+    || env.GLM_COMPATIBILITY?.trim()
+    || env.ZHIPU_COMPATIBILITY?.trim()
+    || undefined;
+}
+
+function glmModelFromEnv(env: Record<string, string | undefined>): string {
+  return env.ACHIOTE_ASK_MODEL?.trim()
+    || env.GLM_MODEL?.trim()
+    || env.ZHIPU_MODEL?.trim()
+    || 'glm-5v-turbo';
+}
+
+function isGlm45FamilyModel(model: string): boolean {
+  return /\bglm[-_ ]?4\.5(?:[-_ ]?(?:air|flash))?\b/i.test(model);
+}
+
+function nativeToolSupportFromCatalog(value: boolean | undefined): NativeToolSupport {
+  if (value === true) return 'supported';
+  if (value === false) return 'unsupported';
+  return 'unknown';
+}
+
+function recommendedProviderTimeoutMs(env: Record<string, string | undefined>, providerKind: AskProviderKind): number {
+  const candidates = providerKind === 'openai'
+    ? [
+        env.LOCAL_INFERENCE_TIMEOUT_MS,
+        env.OPENAI_TIMEOUT_MS,
+        env.LMSTUDIO_TIMEOUT_MS,
+        env.GLM_TIMEOUT_MS,
+        env.ZHIPU_TIMEOUT_MS,
+        env.API_TIMEOUT_MS,
+      ]
+    : [env.ANTHROPIC_TIMEOUT_MS, env.GLM_TIMEOUT_MS, env.ZHIPU_TIMEOUT_MS, env.API_TIMEOUT_MS];
+  for (const candidate of candidates) {
+    const parsed = candidate ? Number.parseInt(candidate, 10) : Number.NaN;
+    if (Number.isFinite(parsed) && parsed > 0) return parsed;
+  }
+  return providerKind === 'openai' ? 180_000 : 120_000;
 }
 
 /**
