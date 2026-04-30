@@ -575,7 +575,10 @@ describe('/ask failure surface regressions', () => {
     const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: 'I miss a cold rice-cinnamon drink like horchata but thinner over ice. Smallest sip cue only.' }),
+      body: JSON.stringify({
+        message: 'I miss a cold rice-cinnamon drink like horchata but thinner over ice. Smallest sip cue only.',
+        consent: { qualitySignals: true },
+      }),
     });
     expect(response.status).toBe(200);
     const events = parseSse(await response.text());
@@ -606,6 +609,62 @@ describe('/ask failure surface regressions', () => {
     });
     expect(bodyText).not.toContain('Cold rice-cinnamon drink');
     expect(bodyText).not.toContain('horchata but thinner');
+  }, 20_000);
+
+  it('keeps /ask fully functional while skipping aggregate quality signals when the user opts out', async () => {
+    const fakePort = await getFreePort();
+    let requestCount = 0;
+    fakeOpenAi = createServer(async (req, res) => {
+      if (req.url !== '/v1/chat/completions' || req.method !== 'POST') {
+        res.writeHead(404).end();
+        return;
+      }
+      requestCount++;
+      await readBody(req);
+      const toolCallsByTurn = [
+        [{ id: 'call_1', type: 'function', function: { name: 'collect_food_memory', arguments: JSON.stringify({ memoryText: 'Cold rice-cinnamon drink like horchata but thinner over ice.' }) } }],
+        [{ id: 'call_2', type: 'function', function: { name: 'plan_dish_research', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_3', type: 'function', function: { name: 'build_reconstruction_dossier', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_4', type: 'function', function: { name: 'generate_minimum_viable_nostalgia', arguments: JSON.stringify({}) } }],
+      ];
+      const toolCalls = toolCallsByTurn[requestCount - 1];
+      res.setHeader('content-type', 'application/json');
+      res.end(JSON.stringify({
+        choices: [{
+          finish_reason: toolCalls ? 'tool_calls' : 'stop',
+          message: toolCalls
+            ? { role: 'assistant', content: '', tool_calls: toolCalls }
+            : { role: 'assistant', content: "I've gathered enough information so far. Let me work with what we have." },
+        }],
+      }));
+    });
+    await new Promise<void>((resolveListen) => fakeOpenAi?.listen(fakePort, '127.0.0.1', resolveListen));
+
+    const achiotePort = await getFreePort();
+    achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`, {
+      ACHIOTE_EVENTS_ADMIN_TOKEN: 'operator-quality-token',
+    });
+
+    const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: 'I miss a cold rice-cinnamon drink like horchata but thinner over ice. Smallest sip cue only.',
+        consent: { qualitySignals: false },
+      }),
+    });
+    expect(response.status).toBe(200);
+    const events = parseSse(await response.text());
+    expect(events.some((event) => event.event === 'error')).toBe(false);
+    expect(events.at(-1)?.event).toBe('done');
+
+    const operatorRead = await fetch(`http://127.0.0.1:${achiotePort}/events`, {
+      headers: { Authorization: 'Bearer operator-quality-token' },
+    });
+    expect(operatorRead.status).toBe(200);
+    const body = await operatorRead.json();
+    expect(body.quality).toMatchObject({ total: 0 });
+    expect(body.referenceSeeds.priorities).toEqual([]);
   }, 20_000);
 
   it('keeps latest user corrections authoritative when weak model tool args echo stale history', async () => {

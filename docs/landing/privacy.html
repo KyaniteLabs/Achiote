@@ -32,6 +32,11 @@
     <h2>Telemetry and logs</h2>
     <p>We collect privacy-preserving events such as page opened, pricing viewed, onboarding prompt selected, ask started, ask succeeded, ask failed, checkout started, checkout failed, and feedback category. Analytics may include privacy-preserving event dimensions such as route, tier, checkout mode, prompt source, and error category. We do not intentionally store full food-memory prompts in analytics events. Server logs may include operational metadata such as endpoint, status, provider/tool state, timestamps, and error class.</p>
 
+    <h2 id="data-memory-controls">Data & memory controls</h2>
+    <p>Achiote's default path is ephemeral request processing: you can describe a dish or drink, get a Memory Receipt, and leave every optional data toggle off. Achiote still works if every optional toggle is off.</p>
+    <p>Optional analytics and aggregate quality signals are opt in, not default-on. You can opt out again from the app controls at any time. These signals are intended to count product usage and reliability patterns, not store full prompts, recipes, credentials, or private family stories.</p>
+    <p>Saved memories, family confirmations, and public pantry contributions require a separate explicit opt in before anything is retained or reused beyond the current request. If you do not opt in, Achiote should continue to reconstruct memories using the current request, bundled reference data, and whatever research context your host AI provides.</p>
+
     <h2>Retention</h2>
     <p>Operational logs should be retained for no more than 90 days unless needed for security, abuse prevention, accounting, or legal obligations. Support records may be kept while an issue is open and for a reasonable follow-up period. Billing records follow accounting and payment-provider requirements.</p>
 

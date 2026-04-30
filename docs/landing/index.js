@@ -1,13 +1,24 @@
 document.documentElement.classList.add('js');
 
+const CONSENT_ANALYTICS_KEY = 'achiote-consent-analytics';
+
+function isAnalyticsConsentEnabled() {
+  try {
+    return localStorage.getItem(CONSENT_ANALYTICS_KEY) === 'true';
+  } catch {
+    return false;
+  }
+}
+
 function trackEvent(event, properties = {}) {
+  if (!isAnalyticsConsentEnabled()) return;
   if (!event || typeof event !== 'string') return;
   const safeProperties = {};
   for (const [key, value] of Object.entries(properties || {})) {
     if (typeof value !== 'string' && typeof value !== 'number' && typeof value !== 'boolean') continue;
     safeProperties[key] = String(value).slice(0, 80);
   }
-  const body = JSON.stringify({ event, properties: safeProperties, at: new Date().toISOString() });
+  const body = JSON.stringify({ event, properties: safeProperties, consent: { analytics: true }, at: new Date().toISOString() });
   try {
     if (navigator.sendBeacon) {
       navigator.sendBeacon('/events', new Blob([body], { type: 'application/json' }));

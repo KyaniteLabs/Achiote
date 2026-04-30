@@ -479,6 +479,45 @@
       color: #fff;
       border-color: var(--achiote);
     }
+    .data-controls {
+      max-width: 720px;
+      margin: 0 auto 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      background: var(--card-solid);
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+    .data-controls summary {
+      cursor: pointer;
+      padding: 9px 12px;
+      color: var(--ink);
+      font-weight: 800;
+    }
+    .data-controls-body {
+      display: grid;
+      gap: 8px;
+      padding: 0 12px 12px;
+    }
+    .data-controls label {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      line-height: 1.35;
+    }
+    .data-controls input {
+      margin-top: 2px;
+      accent-color: var(--achiote);
+    }
+    .data-controls small {
+      display: block;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+    .data-controls-status {
+      color: var(--achiote);
+      font-weight: 750;
+    }
 
     .input-wrap {
       max-width: 720px; margin: 0 auto;
@@ -609,6 +648,21 @@
       <input type="password" id="demo-password" placeholder="Demo password (optional)" />
       <input type="password" id="api-key" placeholder="API key (optional)" style="margin-top:6px;" />
     </details>
+    <details class="data-controls" id="data-memory-controls">
+      <summary>Data & memory</summary>
+      <div class="data-controls-body">
+        <label>
+          <input type="checkbox" id="consent-analytics" />
+          <span>Share anonymous product events such as app opened, ask started, and feedback category.</span>
+        </label>
+        <label>
+          <input type="checkbox" id="consent-quality" />
+          <span>Share aggregate quality signals from this request so Achiote can improve weak-model reliability.</span>
+        </label>
+        <small>Saved memories, family confirmations, and public pantry contributions stay off unless a future account flow asks you first. Achiote works even if every optional toggle is off.</small>
+        <small class="data-controls-status" id="consent-status" aria-live="polite"></small>
+      </div>
+    </details>
     <div class="voice-strip" id="voice-strip" hidden>
       <span class="voice-status" id="voice-status">Local OSS speech is optional; auto-detect helps accents, code-switching, and immigrant-family memories.</span>
       <select class="voice-select" id="voice-language" aria-label="Speech language hint"></select>
@@ -626,6 +680,7 @@
     <a href="/terms">Terms</a> ·
     <a href="/safety">AI and food safety</a> ·
     <a href="/support">Support</a> ·
+    <a href="/privacy#data-memory-controls">Data controls</a> ·
     <a href="/ai-search">AI search</a> ·
     <a href="mailto:support@kyanitelabs.tech">support@kyanitelabs.tech</a>
   </footer>

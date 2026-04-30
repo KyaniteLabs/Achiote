@@ -191,11 +191,23 @@ describe('HTTP server integration', () => {
   });
 
   it('accepts only same-origin allowlisted telemetry events and keeps counters private', async () => {
+    const optedOut = await fetch(`${baseUrl}/events`, {
+      method: 'POST',
+      headers: { Origin: baseUrl, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        event: 'ask_started',
+        properties: { route: '/app', source: 'typed' },
+      }),
+    });
+    expect(optedOut.status).toBe(202);
+    expect(await optedOut.json()).toEqual({ ok: true, skipped: 'analytics_consent_required' });
+
     const accepted = await fetch(`${baseUrl}/events`, {
       method: 'POST',
       headers: { Origin: baseUrl, 'Content-Type': 'application/json' },
       body: JSON.stringify({
         event: 'ask_started',
+        consent: { analytics: true },
         properties: { route: '/app', source: 'typed', prompt_text: 'should_not_be_stored', tier: 'personal' },
         prompt_text: 'should_not_be_stored',
       }),
@@ -213,7 +225,7 @@ describe('HTTP server integration', () => {
     const rejectedEvent = await fetch(`${baseUrl}/events`, {
       method: 'POST',
       headers: { Origin: baseUrl, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ event: 'prompt_text' }),
+      body: JSON.stringify({ event: 'prompt_text', consent: { analytics: true } }),
     });
     expect(rejectedEvent.status).toBe(400);
 
@@ -250,7 +262,7 @@ describe('HTTP server integration', () => {
     const event = await fetch(`${baseUrl}/events`, {
       method: 'POST',
       headers: { Origin: baseUrl, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ event: 'feedback_close', properties: { route: '/app', category: 'answer_quality' } }),
+      body: JSON.stringify({ event: 'feedback_close', consent: { analytics: true }, properties: { route: '/app', category: 'answer_quality' } }),
     });
     expect(event.status).toBe(202);
 
@@ -300,7 +312,7 @@ describe('HTTP server integration', () => {
       const cardinalityEvent = await fetch(`${baseUrl}/events`, {
         method: 'POST',
         headers: { Origin: baseUrl, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ event: 'feedback_too_hard', properties: { route: '/app', category: `segment-${i}` } }),
+        body: JSON.stringify({ event: 'feedback_too_hard', consent: { analytics: true }, properties: { route: '/app', category: `segment-${i}` } }),
       });
       expect(cardinalityEvent.status).toBe(202);
     }
