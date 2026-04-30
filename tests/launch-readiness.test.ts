@@ -67,6 +67,14 @@ describe('P0 launch readiness guards', () => {
     expect(`${landing}\n${robots}\n${sitemap}`).not.toContain('achiote.app');
   });
 
+  it('does not publish placeholder testimonials before real customer feedback exists', () => {
+    const landing = fs.readFileSync('docs/landing/index.html', 'utf8');
+
+    expect(landing).not.toContain('Simon G., first memory reconstructed');
+    expect(landing).not.toContain('Beta user, family recipe recovery');
+    expect(landing).not.toMatch(/\btestimonial\b/i);
+  });
+
   it('documents secure HTTP auth defaults and source/tarball install status', () => {
     const readme = fs.readFileSync('README.md', 'utf8');
     const envExample = fs.readFileSync('.env.example', 'utf8');
