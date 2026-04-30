@@ -69,6 +69,7 @@ describe('security and legal surface guardrails', () => {
       read('src/data/global-coverage-matrix.json'),
       read('src/data/reference-seed-queue.json'),
       read('src/data/cache-warming-manifest.json'),
+      read('src/data/reference-source-registry.json'),
       read('src/lib/reference-seed-planner.ts'),
       read('src/lib/reference-seed-operator.ts'),
       read('scripts/reference-seed-operator.mjs'),
@@ -76,6 +77,7 @@ describe('security and legal surface guardrails', () => {
 
     expect(seedSurface).toContain('curated seed hypothesis');
     expect(seedSurface).toContain('Achiote does not browse');
+    expect(seedSurface).toContain('CC0-1.0');
     expect(seedSurface).not.toMatch(/\b(?:OpenAI|Anthropic|Claude|GPT|GLM|Zhipu|provider returned|live web|Achiote browses|Achiote searches|Achiote scrapes)\b/i);
     expect(seedSurface).not.toMatch(/\b(?:api[_-]?key|secret|token|password)\b/i);
     expect(seedSurface).not.toMatch(/\b(?:medical advice|legal advice|cure|treats|prevents|lowers cholesterol|diagnoses)\b/i);

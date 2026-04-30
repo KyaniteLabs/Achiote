@@ -119,6 +119,31 @@ export type CacheWarmingManifest = {
   tasks: CacheWarmingTask[];
 };
 
+type SourceLicense = {
+  id?: unknown;
+  name?: unknown;
+  url?: unknown;
+  status?: unknown;
+};
+
+export type ReferenceSourceEntry = {
+  id?: unknown;
+  label?: unknown;
+  homepage?: unknown;
+  license?: SourceLicense;
+  fixturePolicy?: unknown;
+  coverageRoles?: unknown;
+  allowedUses?: unknown;
+  disallowedUses?: unknown;
+  operatorNotes?: unknown;
+};
+
+export type ReferenceSourceRegistry = {
+  meta: Meta;
+  sources: ReferenceSourceEntry[];
+  disallowedPatterns: string[];
+};
+
 export type BundledDataSet = {
   dishFamilies: { meta: Meta; families: DishFamily[] };
   ingredients: { meta: Meta; ingredients: Record<string, Ingredient> };
@@ -132,9 +157,11 @@ export type BundledDataSet = {
   globalCoverageMatrix: GlobalCoverageMatrix;
   referenceSeedQueue: ReferenceSeedQueue;
   cacheWarmingManifest: CacheWarmingManifest;
+  referenceSourceRegistry: ReferenceSourceRegistry;
 };
 
 const VALID_CONFIDENCE = new Set(['High', 'Medium', 'Low']);
+const VALID_FIXTURE_POLICIES = new Set(['allowed', 'manual_review', 'rejected']);
 const REQUIRED_SENSORY_DIMENSIONS = ['aroma', 'texture', 'flavor', 'visual', 'temperature'];
 
 function isNonEmptyString(value: unknown): value is string {
@@ -148,6 +175,22 @@ function pushIssue(issues: ValidationIssue[], path: string, message: string): vo
 function validateNonEmptyString(issues: ValidationIssue[], path: string, value: unknown): void {
   if (!isNonEmptyString(value)) {
     pushIssue(issues, path, 'must be a non-empty string');
+  }
+}
+
+function validateUrlString(issues: ValidationIssue[], path: string, value: unknown): void {
+  if (!isNonEmptyString(value)) {
+    pushIssue(issues, path, 'must be a non-empty string');
+    return;
+  }
+
+  try {
+    const url = new URL(value);
+    if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+      pushIssue(issues, path, 'must be an http(s) URL');
+    }
+  } catch {
+    pushIssue(issues, path, 'must be an http(s) URL');
   }
 }
 
@@ -607,6 +650,50 @@ function validateCacheWarmingManifest(
   });
 }
 
+function validateReferenceSourceRegistry(issues: ValidationIssue[], data: ReferenceSourceRegistry): void {
+  validateMeta(issues, 'referenceSourceRegistry.meta', data.meta);
+  validateStringArray(issues, 'referenceSourceRegistry.disallowedPatterns', data.disallowedPatterns, {
+    requireNonEmpty: true,
+    unique: true,
+  });
+
+  if (!Array.isArray(data.sources)) {
+    pushIssue(issues, 'referenceSourceRegistry.sources', 'must be an array');
+    return;
+  }
+  if (data.sources.length === 0) pushIssue(issues, 'referenceSourceRegistry.sources', 'must be a non-empty array');
+
+  const sourceIds = new Set<string>();
+  data.sources.forEach((source, index) => {
+    const base = `referenceSourceRegistry.sources[${index}]`;
+    validateNonEmptyString(issues, `${base}.id`, source.id);
+    if (isNonEmptyString(source.id)) {
+      if (sourceIds.has(source.id)) pushIssue(issues, `${base}.id`, 'duplicate source id');
+      sourceIds.add(source.id);
+    }
+    validateNonEmptyString(issues, `${base}.label`, source.label);
+    validateUrlString(issues, `${base}.homepage`, source.homepage);
+
+    if (!isRecord(source.license)) {
+      pushIssue(issues, `${base}.license`, 'must be an object');
+    } else {
+      validateNonEmptyString(issues, `${base}.license.id`, source.license.id);
+      validateNonEmptyString(issues, `${base}.license.name`, source.license.name);
+      validateUrlString(issues, `${base}.license.url`, source.license.url);
+      validateNonEmptyString(issues, `${base}.license.status`, source.license.status);
+    }
+
+    if (!isNonEmptyString(source.fixturePolicy) || !VALID_FIXTURE_POLICIES.has(source.fixturePolicy)) {
+      pushIssue(issues, `${base}.fixturePolicy`, 'must be allowed, manual_review, or rejected');
+    }
+
+    validateStringArray(issues, `${base}.coverageRoles`, source.coverageRoles, { requireNonEmpty: true, unique: true });
+    validateStringArray(issues, `${base}.allowedUses`, source.allowedUses, { requireNonEmpty: true, unique: true });
+    validateStringArray(issues, `${base}.disallowedUses`, source.disallowedUses, { requireNonEmpty: true, unique: true });
+    validateStringArray(issues, `${base}.operatorNotes`, source.operatorNotes, { requireNonEmpty: true, unique: true });
+  });
+}
+
 export function validateBundledData(data: BundledDataSet): ValidationIssue[] {
   const issues: ValidationIssue[] = [];
   validateDishFamilies(issues, data.dishFamilies);
@@ -617,6 +704,7 @@ export function validateBundledData(data: BundledDataSet): ValidationIssue[] {
   const validTags = validateGlobalCoverageMatrix(issues, data.globalCoverageMatrix);
   const seedIds = validateReferenceSeedQueue(issues, data.referenceSeedQueue, validTags);
   validateCacheWarmingManifest(issues, data.cacheWarmingManifest, validTags, seedIds);
+  validateReferenceSourceRegistry(issues, data.referenceSourceRegistry);
   return issues;
 }
 

@@ -282,6 +282,17 @@ describe('HTTP server integration', () => {
             foodForms: expect.objectContaining({ covered: expect.any(Number), total: expect.any(Number) }),
           }),
         }),
+        sourcePolicy: expect.objectContaining({
+          allowedFixtureSources: expect.arrayContaining([
+            expect.objectContaining({ id: 'wikidata-structured-food-data', licenseId: 'CC0-1.0' }),
+            expect.objectContaining({ id: 'usda-fooddata-central', licenseId: 'CC0-1.0' }),
+          ]),
+          manualReviewSources: expect.arrayContaining([
+            expect.objectContaining({ id: 'open-food-facts-products', licenseId: 'ODbL-1.0' }),
+            expect.objectContaining({ id: 'fao-infoods-food-composition' }),
+          ]),
+          disallowedPatterns: expect.arrayContaining(['copied recipe instructions or article prose']),
+        }),
       },
     });
 

@@ -7,6 +7,7 @@ import sensoryProfilesData from '../src/data/sensory-profiles.json' with { type:
 import globalCoverageMatrixData from '../src/data/global-coverage-matrix.json' with { type: 'json' };
 import referenceSeedQueueData from '../src/data/reference-seed-queue.json' with { type: 'json' };
 import cacheWarmingManifestData from '../src/data/cache-warming-manifest.json' with { type: 'json' };
+import referenceSourceRegistryData from '../src/data/reference-source-registry.json' with { type: 'json' };
 import { validateBundledData, type BundledDataSet } from '../src/lib/data-schemas.js';
 
 const bundledData: BundledDataSet = {
@@ -18,6 +19,7 @@ const bundledData: BundledDataSet = {
   globalCoverageMatrix: globalCoverageMatrixData,
   referenceSeedQueue: referenceSeedQueueData,
   cacheWarmingManifest: cacheWarmingManifestData,
+  referenceSourceRegistry: referenceSourceRegistryData,
 };
 
 function cloneBundledData(): BundledDataSet {
@@ -197,6 +199,7 @@ describe('bundled data validation', () => {
 
   it('rejects malformed reference seed queue entries', () => {
     const data = cloneBundledData();
+    const badSeedIndex = data.referenceSeedQueue.seeds.length;
     data.referenceSeedQueue.seeds.push({
       ...structuredClone(data.referenceSeedQueue.seeds[0]),
       id: data.referenceSeedQueue.seeds[0].id,
@@ -208,15 +211,16 @@ describe('bundled data validation', () => {
 
     const issues = validateBundledData(data);
 
-    expectIssue(issues, 'referenceSeedQueue.seeds[16].id', 'duplicate');
-    expectIssue(issues, 'referenceSeedQueue.seeds[16].coverageTags[0]', 'unknown coverage tag');
-    expectIssue(issues, 'referenceSeedQueue.seeds[16].querySeeds', 'non-empty array');
-    expectIssue(issues, 'referenceSeedQueue.seeds[16].cacheTargets[0].region', 'non-empty string');
+    expectIssue(issues, `referenceSeedQueue.seeds[${badSeedIndex}].id`, 'duplicate');
+    expectIssue(issues, `referenceSeedQueue.seeds[${badSeedIndex}].coverageTags[0]`, 'unknown coverage tag');
+    expectIssue(issues, `referenceSeedQueue.seeds[${badSeedIndex}].querySeeds`, 'non-empty array');
+    expectIssue(issues, `referenceSeedQueue.seeds[${badSeedIndex}].cacheTargets[0].region`, 'non-empty string');
     expectIssue(issues, 'referenceSeedQueue.seeds[1].provenance', 'provenance');
   });
 
   it('rejects malformed cache warming manifest tasks', () => {
     const data = cloneBundledData();
+    const badTaskIndex = data.cacheWarmingManifest.tasks.length;
     data.cacheWarmingManifest.tasks.push({
       ...structuredClone(data.cacheWarmingManifest.tasks[0]),
       id: data.cacheWarmingManifest.tasks[0].id,
@@ -228,10 +232,30 @@ describe('bundled data validation', () => {
 
     const issues = validateBundledData(data);
 
-    expectIssue(issues, 'cacheWarmingManifest.tasks[16].id', 'duplicate');
-    expectIssue(issues, 'cacheWarmingManifest.tasks[16].seedId', 'unknown seed id');
-    expectIssue(issues, 'cacheWarmingManifest.tasks[16].coverageTags[0]', 'unknown coverage tag');
-    expectIssue(issues, 'cacheWarmingManifest.tasks[16].qualityTriggers', 'non-empty array');
-    expectIssue(issues, 'cacheWarmingManifest.tasks[16].doneWhen', 'non-empty array');
+    expectIssue(issues, `cacheWarmingManifest.tasks[${badTaskIndex}].id`, 'duplicate');
+    expectIssue(issues, `cacheWarmingManifest.tasks[${badTaskIndex}].seedId`, 'unknown seed id');
+    expectIssue(issues, `cacheWarmingManifest.tasks[${badTaskIndex}].coverageTags[0]`, 'unknown coverage tag');
+    expectIssue(issues, `cacheWarmingManifest.tasks[${badTaskIndex}].qualityTriggers`, 'non-empty array');
+    expectIssue(issues, `cacheWarmingManifest.tasks[${badTaskIndex}].doneWhen`, 'non-empty array');
+  });
+
+  it('requires a legally bounded source registry for pantry fixtures', () => {
+    const data = cloneBundledData();
+    data.referenceSourceRegistry.sources[0].license.id = '';
+    data.referenceSourceRegistry.sources[1].fixturePolicy = 'always-allowed';
+    data.referenceSourceRegistry.sources.push({
+      ...structuredClone(data.referenceSourceRegistry.sources[0]),
+      id: data.referenceSourceRegistry.sources[0].id,
+      allowedUses: [],
+      disallowedUses: [],
+    });
+
+    const issues = validateBundledData(data);
+
+    expectIssue(issues, 'referenceSourceRegistry.sources[0].license.id', 'non-empty string');
+    expectIssue(issues, 'referenceSourceRegistry.sources[1].fixturePolicy', 'allowed, manual_review, or rejected');
+    expectIssue(issues, 'referenceSourceRegistry.sources[4].id', 'duplicate source id');
+    expectIssue(issues, 'referenceSourceRegistry.sources[4].allowedUses', 'non-empty array');
+    expectIssue(issues, 'referenceSourceRegistry.sources[4].disallowedUses', 'non-empty array');
   });
 });

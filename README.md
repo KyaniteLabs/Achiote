@@ -185,6 +185,8 @@ npm run reference:seeds -- --fixture approved-fixture.json --cache-path ~/.cache
 
 Fixtures must match the seed manifest and pass provenance validation before any cache write.
 
+The reference pantry is intentionally conservative. `src/data/reference-source-registry.json` allows CC0/public-domain structured sources first, currently Wikidata structured food data and USDA FoodData Central, and marks sources such as Open Food Facts and FAO/INFOODS for manual review before fixture use. Do not copy recipe prose, paywalled database content, proprietary rankings, raw user memories, credentials, or uncited model guesses into pantry fixtures.
+
 ## Development
 
 ```bash

@@ -1,10 +1,12 @@
 import globalCoverageMatrixData from '../data/global-coverage-matrix.json' with { type: 'json' };
 import referenceSeedQueueData from '../data/reference-seed-queue.json' with { type: 'json' };
 import cacheWarmingManifestData from '../data/cache-warming-manifest.json' with { type: 'json' };
+import referenceSourceRegistryData from '../data/reference-source-registry.json' with { type: 'json' };
 import type { QualitySignalReport } from './quality-signals.js';
 import type {
   CacheWarmingManifest,
   GlobalCoverageMatrix,
+  ReferenceSourceRegistry,
   ReferenceSeedEntry,
   ReferenceSeedQueue,
 } from './data-schemas.js';
@@ -27,6 +29,7 @@ export const bundledGlobalReferenceSeeds = {
   globalCoverageMatrix: globalCoverageMatrixData as GlobalCoverageMatrix,
   referenceSeedQueue: referenceSeedQueueData as ReferenceSeedQueue,
   cacheWarmingManifest: cacheWarmingManifestData as CacheWarmingManifest,
+  referenceSourceRegistry: referenceSourceRegistryData as ReferenceSourceRegistry,
 };
 
 const MEMORY_TYPE_TO_FORM_TAGS: Record<string, string[]> = {

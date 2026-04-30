@@ -107,9 +107,11 @@ describe('package distribution metadata', () => {
     expect(pkg.files).not.toContain('src/data/global-coverage-matrix.json');
     expect(pkg.files).not.toContain('src/data/reference-seed-queue.json');
     expect(pkg.files).not.toContain('src/data/cache-warming-manifest.json');
+    expect(pkg.files).not.toContain('src/data/reference-source-registry.json');
     expect(planner).toContain("from '../data/global-coverage-matrix.json'");
     expect(planner).toContain("from '../data/reference-seed-queue.json'");
     expect(planner).toContain("from '../data/cache-warming-manifest.json'");
+    expect(planner).toContain("from '../data/reference-source-registry.json'");
     expect(fs.readFileSync('src/index.ts', 'utf8')).toContain("export { bundledGlobalReferenceSeeds, prioritizeReferenceSeeds } from './lib/reference-seed-planner.js';");
     expect(fs.readFileSync('src/index.ts', 'utf8')).toContain('writeReferenceSeedFixturesToCache');
     expect(fs.existsSync('src/lib/reference-seed-operator.ts')).toBe(true);
