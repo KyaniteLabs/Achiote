@@ -29,6 +29,13 @@ type OpenAIToolCall = {
 type FetchLike = typeof fetch;
 
 export type AskProviderKind = 'anthropic' | 'openai';
+export type GlmEndpointStyle = 'anthropic-coding' | 'openai-coding';
+export type LocalInferenceEndpointStyle =
+  | 'openai-chat-completions'
+  | 'openai-responses'
+  | 'openai-completions'
+  | 'anthropic-messages'
+  | 'native-chat';
 
 export type AskToolCall = {
   id: string;
@@ -58,7 +65,10 @@ export interface AskSession {
 
 export function resolveAskProviderKind(env: Record<string, string | undefined> = process.env): AskProviderKind {
   const explicit = env.ACHIOTE_ASK_PROVIDER?.trim().toLowerCase();
+  if ((explicit === 'local' || explicit === 'lmstudio' || explicit === 'lm-studio')
+    && resolveLocalInferenceEndpointStyle(env) === 'anthropic-messages') return 'anthropic';
   if (explicit === 'openai' || explicit === 'openai-compatible' || explicit === 'lmstudio' || explicit === 'lm-studio' || explicit === 'local') return 'openai';
+  if ((explicit === 'glm' || explicit === 'zhipu') && resolveGlmEndpointStyle(env) === 'openai-coding') return 'openai';
   if (explicit === 'anthropic' || explicit === 'anthropic-compatible' || explicit === 'glm' || explicit === 'zhipu') return 'anthropic';
   return 'anthropic';
 }
@@ -66,6 +76,7 @@ export function resolveAskProviderKind(env: Record<string, string | undefined> =
 export function resolveAskModel(env: Record<string, string | undefined> = process.env): string {
   const provider = env.ACHIOTE_ASK_PROVIDER?.trim().toLowerCase();
   const providerKind = resolveAskProviderKind(env);
+  const isLocalProvider = provider === 'local' || provider === 'lmstudio' || provider === 'lm-studio';
   if (providerKind === 'openai') {
     return env.LOCAL_INFERENCE_MODEL?.trim()
       || env.ACHIOTE_ASK_MODEL?.trim()
@@ -74,6 +85,15 @@ export function resolveAskModel(env: Record<string, string | undefined> = proces
       || env.LM_STUDIO_MODEL?.trim()
       || env.ANTHROPIC_DEFAULT_SONNET_MODEL?.trim()
       || 'gpt-4o-mini';
+  }
+
+  if (isLocalProvider) {
+    return env.LOCAL_INFERENCE_MODEL?.trim()
+      || env.ACHIOTE_ASK_MODEL?.trim()
+      || env.LMSTUDIO_MODEL?.trim()
+      || env.LM_STUDIO_MODEL?.trim()
+      || env.ANTHROPIC_MODEL?.trim()
+      || 'qwen3.5-0.8b';
   }
 
   if (provider === 'glm' || provider === 'zhipu') {
@@ -97,11 +117,14 @@ export function openAIBaseUrlFromEnv(env: Record<string, string | undefined> = p
   // LOCAL_INFERENCE_BASE_URL is only consulted when the provider is explicitly set to a local
   // inference variant. This prevents it from silently overriding cloud routing for openai/anthropic.
   if (isLocalInference) {
-    return env.LOCAL_INFERENCE_BASE_URL?.trim()
+    return normalizeOpenAICompatibleBaseUrl(env.LOCAL_INFERENCE_BASE_URL?.trim()
       || env.OPENAI_BASE_URL?.trim()
       || env.LMSTUDIO_BASE_URL?.trim()
       || env.LM_STUDIO_BASE_URL?.trim()
-      || 'http://127.0.0.1:1234/v1';
+      || 'http://127.0.0.1:1234/v1');
+  }
+  if ((provider === 'glm' || provider === 'zhipu') && resolveGlmEndpointStyle(env) === 'openai-coding') {
+    return glmOpenAIBaseUrlFromEnv(env);
   }
   return env.OPENAI_BASE_URL?.trim()
     || env.LMSTUDIO_BASE_URL?.trim()
@@ -111,10 +134,91 @@ export function openAIBaseUrlFromEnv(env: Record<string, string | undefined> = p
 
 export function anthropicBaseUrlFromEnv(env: Record<string, string | undefined> = process.env): string | undefined {
   const provider = env.ACHIOTE_ASK_PROVIDER?.trim().toLowerCase();
+  if ((provider === 'local' || provider === 'lmstudio' || provider === 'lm-studio')
+    && resolveLocalInferenceEndpointStyle(env) === 'anthropic-messages') {
+    return normalizeAnthropicCompatibleBaseUrl(env.LOCAL_INFERENCE_BASE_URL?.trim()
+      || env.LMSTUDIO_BASE_URL?.trim()
+      || env.LM_STUDIO_BASE_URL?.trim()
+      || env.ANTHROPIC_BASE_URL?.trim()
+      || 'http://127.0.0.1:1234');
+  }
+  if ((provider === 'glm' || provider === 'zhipu') && resolveGlmEndpointStyle(env) === 'openai-coding') return undefined;
   return env.ANTHROPIC_BASE_URL?.trim()
     || env.GLM_BASE_URL?.trim()
     || env.ZHIPU_BASE_URL?.trim()
     || (provider === 'glm' || provider === 'zhipu' ? 'https://api.z.ai/api/anthropic' : undefined);
+}
+
+export function resolveLocalInferenceEndpointStyle(env: Record<string, string | undefined> = process.env): LocalInferenceEndpointStyle | undefined {
+  const provider = env.ACHIOTE_ASK_PROVIDER?.trim().toLowerCase();
+  if (provider !== 'local' && provider !== 'lmstudio' && provider !== 'lm-studio') return undefined;
+  return normalizeLocalInferenceEndpointStyle(
+    env.LOCAL_INFERENCE_ENDPOINT_STYLE?.trim()
+    || env.LMSTUDIO_ENDPOINT_STYLE?.trim()
+    || env.LM_STUDIO_ENDPOINT_STYLE?.trim()
+    || 'openai-chat-completions',
+  );
+}
+
+export function resolveGlmEndpointStyle(env: Record<string, string | undefined> = process.env): GlmEndpointStyle | undefined {
+  const provider = env.ACHIOTE_ASK_PROVIDER?.trim().toLowerCase();
+  if (provider !== 'glm' && provider !== 'zhipu') return undefined;
+
+  const explicit = env.GLM_ENDPOINT_STYLE?.trim()
+    || env.ZHIPU_ENDPOINT_STYLE?.trim()
+    || env.GLM_COMPATIBILITY?.trim()
+    || env.ZHIPU_COMPATIBILITY?.trim();
+  if (explicit) return normalizeGlmEndpointStyle(explicit);
+
+  return 'anthropic-coding';
+}
+
+export function glmOpenAIBaseUrlFromEnv(env: Record<string, string | undefined> = process.env): string {
+  return env.GLM_OPENAI_BASE_URL?.trim()
+    || env.ZHIPU_OPENAI_BASE_URL?.trim()
+    || env.GLM_CODING_BASE_URL?.trim()
+    || env.ZHIPU_CODING_BASE_URL?.trim()
+    || env.OPENAI_BASE_URL?.trim()
+    || 'https://api.z.ai/api/coding/paas/v4';
+}
+
+function normalizeGlmEndpointStyle(value: string): GlmEndpointStyle {
+  const normalized = value.trim().toLowerCase().replace(/_/g, '-');
+  if (['openai', 'openai-compatible', 'openai-coding', 'coding-openai', 'coding/paas/v4'].includes(normalized)) {
+    return 'openai-coding';
+  }
+  if (['anthropic', 'anthropic-compatible', 'anthropic-coding', 'claude', 'claude-code'].includes(normalized)) {
+    return 'anthropic-coding';
+  }
+  return 'anthropic-coding';
+}
+
+function normalizeLocalInferenceEndpointStyle(value: string): LocalInferenceEndpointStyle {
+  const normalized = value.trim().toLowerCase().replace(/_/g, '-');
+  if (['anthropic', 'anthropic-compatible', 'anthropic-messages', 'messages', 'claude'].includes(normalized)) {
+    return 'anthropic-messages';
+  }
+  if (['responses', 'openai-responses', 'response'].includes(normalized)) {
+    return 'openai-responses';
+  }
+  if (['completions', 'openai-completions', 'completion'].includes(normalized)) {
+    return 'openai-completions';
+  }
+  if (['native', 'native-chat', 'lmstudio-native', 'api-v1-chat'].includes(normalized)) {
+    return 'native-chat';
+  }
+  return 'openai-chat-completions';
+}
+
+function normalizeOpenAICompatibleBaseUrl(baseUrl: string): string {
+  const trimmed = baseUrl.replace(/\/$/, '');
+  if (trimmed.endsWith('/v1')) return trimmed;
+  if (trimmed.endsWith('/api/v1')) return trimmed.replace(/\/api\/v1$/, '/v1');
+  return `${trimmed}/v1`;
+}
+
+function normalizeAnthropicCompatibleBaseUrl(baseUrl: string): string {
+  return baseUrl.replace(/\/$/, '').replace(/\/v1$/, '').replace(/\/api\/v1$/, '');
 }
 
 export function openAICompatibleProviderReady(baseUrl: string, apiKey?: string | null): boolean {

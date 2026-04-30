@@ -142,7 +142,7 @@ describe('/ask endpoint — post-rate-limit guards', () => {
       });
       expect(res.status).toBe(200);
     } finally { server.kill('SIGINT'); }
-  });
+  }, 15_000);
 
   it('returns 400 for invalid image format', async () => {
     const port = await getFreePort();

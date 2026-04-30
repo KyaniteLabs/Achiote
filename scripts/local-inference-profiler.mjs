@@ -5,7 +5,9 @@ import path from 'node:path';
 import {
   buildLmStudioLoadPayload,
   isLocalInferenceProfileName,
+  lmStudioInferenceEndpointStyles,
   localInferenceProfiles,
+  profileApplicationSummary,
   summarizeLoadProfile,
 } from '../dist/lib/local-inference-profiles.js';
 
@@ -14,6 +16,7 @@ const args = parseArgs(process.argv.slice(2));
 const baseUrl = stringArg('base-url') ?? process.env.LOCAL_INFERENCE_BASE_URL ?? process.env.OPENAI_BASE_URL ?? DEFAULT_BASE_URL;
 const model = stringArg('model') ?? process.env.LOCAL_INFERENCE_MODEL ?? 'qwen3.5-0.8b';
 const profileName = profileArg();
+const endpointStyle = endpointStyleArg();
 const outputDir = stringArg('out') ?? path.join('artifacts', 'local-inference-profiler');
 const timeoutMs = numberArg('timeout-ms') ?? 180_000;
 
@@ -23,9 +26,11 @@ if (args.has('list-profiles')) {
       name,
       {
         summary: summarizeLoadProfile(name),
+        application: profileApplicationSummary(name),
         profile: localInferenceProfiles[name],
       },
     ])),
+    endpointStyles: lmStudioInferenceEndpointStyles,
   });
   process.exit(0);
 }
@@ -37,7 +42,10 @@ const artifact = {
   managementBaseUrl: managementBaseUrl(baseUrl),
   model,
   profile: profileName,
+  endpointStyle,
+  endpoint: lmStudioInferenceEndpointStyles[endpointStyle],
   intendedLoadPayload: buildLmStudioLoadPayload(model, profileName),
+  application: profileApplicationSummary(profileName),
   profileSummary: summarizeLoadProfile(profileName),
   events: [],
 };
@@ -51,7 +59,7 @@ if (args.has('load') || args.has('probe') || args.has('canary')) {
 }
 
 if (args.has('probe')) {
-  artifact.events.push(await timed('direct_probe', () => directProbe(baseUrl, model, timeoutMs)));
+  artifact.events.push(await timed('direct_probe', () => directProbe(baseUrl, model, endpointStyle, timeoutMs)));
 }
 
 if (args.has('canary')) {
@@ -105,6 +113,14 @@ function profileArg() {
   const requested = stringArg('profile') ?? process.env.LOCAL_INFERENCE_PROFILE ?? 'speed';
   if (!isLocalInferenceProfileName(requested)) {
     throw new Error(`Unknown local inference profile "${requested}". Expected speed, quality, or memory.`);
+  }
+  return requested;
+}
+
+function endpointStyleArg() {
+  const requested = stringArg('endpoint-style') ?? process.env.LOCAL_INFERENCE_ENDPOINT_STYLE ?? 'openai-chat-completions';
+  if (!Object.hasOwn(lmStudioInferenceEndpointStyles, requested)) {
+    throw new Error(`Unknown LM Studio endpoint style "${requested}". Expected ${Object.keys(lmStudioInferenceEndpointStyles).join(', ')}.`);
   }
   return requested;
 }
@@ -170,28 +186,66 @@ async function loadModel(targetBaseUrl, payload, requestTimeoutMs) {
   }, requestTimeoutMs);
 }
 
-async function directProbe(targetBaseUrl, targetModel, requestTimeoutMs) {
-  const response = await fetchJson(`${openAiBaseUrl(targetBaseUrl)}/chat/completions`, {
+async function directProbe(targetBaseUrl, targetModel, targetEndpointStyle, requestTimeoutMs) {
+  const prompt = 'Give a tiny rice-cinnamon drink nostalgia cue. Include no full recipe, no browsing claim, and no provider identity.';
+  const response = await fetchJson(probeUrl(targetBaseUrl, targetEndpointStyle), {
     method: 'POST',
     headers: jsonHeaders(),
-    body: JSON.stringify({
-      model: targetModel,
-      temperature: 0.2,
-      max_tokens: 512,
-      messages: [
-        {
-          role: 'user',
-          content: 'Give a tiny rice-cinnamon drink nostalgia cue. Include no full recipe, no browsing claim, and no provider identity.',
-        },
-      ],
-    }),
+    body: JSON.stringify(probeBody(targetModel, targetEndpointStyle, prompt)),
   }, requestTimeoutMs);
-  const text = response.choices?.[0]?.message?.content ?? '';
+  const text = extractProbeText(response, targetEndpointStyle);
   return {
+    endpointStyle: targetEndpointStyle,
+    endpoint: lmStudioInferenceEndpointStyles[targetEndpointStyle],
     response,
     textPreview: typeof text === 'string' ? text.slice(0, 1200) : '',
     reasoningTracePreview: extractReasoningTrace(typeof text === 'string' ? text : ''),
   };
+}
+
+function probeUrl(targetBaseUrl, targetEndpointStyle) {
+  if (targetEndpointStyle === 'anthropic-messages') return `${anthropicBaseUrl(targetBaseUrl)}/v1/messages`;
+  if (targetEndpointStyle === 'openai-responses') return `${openAiBaseUrl(targetBaseUrl)}/responses`;
+  if (targetEndpointStyle === 'openai-completions') return `${openAiBaseUrl(targetBaseUrl)}/completions`;
+  if (targetEndpointStyle === 'native-chat') return `${managementBaseUrl(targetBaseUrl)}/chat`;
+  return `${openAiBaseUrl(targetBaseUrl)}/chat/completions`;
+}
+
+function probeBody(targetModel, targetEndpointStyle, prompt) {
+  if (targetEndpointStyle === 'anthropic-messages') {
+    return { model: targetModel, max_tokens: 512, messages: [{ role: 'user', content: prompt }] };
+  }
+  if (targetEndpointStyle === 'openai-responses') {
+    return { model: targetModel, max_output_tokens: 512, input: prompt };
+  }
+  if (targetEndpointStyle === 'openai-completions') {
+    return { model: targetModel, max_tokens: 512, prompt };
+  }
+  if (targetEndpointStyle === 'native-chat') {
+    return { model: targetModel, input: prompt, temperature: 0.2, max_output_tokens: 512, store: false };
+  }
+  return {
+    model: targetModel,
+    temperature: 0.2,
+    max_tokens: 512,
+    messages: [{ role: 'user', content: prompt }],
+  };
+}
+
+function extractProbeText(response, targetEndpointStyle) {
+  if (targetEndpointStyle === 'anthropic-messages') {
+    return (response.content || []).map((block) => block.text || block.content || '').join('\n');
+  }
+  if (targetEndpointStyle === 'openai-responses') {
+    return (response.output || []).flatMap((item) => item.content || []).map((item) => item.text || '').join('\n');
+  }
+  if (targetEndpointStyle === 'openai-completions') {
+    return response.choices?.[0]?.text ?? '';
+  }
+  if (targetEndpointStyle === 'native-chat') {
+    return (response.output || []).map((item) => item.content || '').join('\n');
+  }
+  return response.choices?.[0]?.message?.content ?? '';
 }
 
 async function fetchJson(url, options, requestTimeoutMs) {
@@ -231,6 +285,10 @@ function openAiBaseUrl(targetBaseUrl) {
   const normalized = targetBaseUrl.replace(/\/$/, '');
   if (normalized.endsWith('/v1') && !normalized.endsWith('/api/v1')) return normalized;
   return normalized.replace(/\/api\/v1$/, '') + '/v1';
+}
+
+function anthropicBaseUrl(targetBaseUrl) {
+  return targetBaseUrl.replace(/\/$/, '').replace(/\/v1$/, '').replace(/\/api\/v1$/, '');
 }
 
 function runLocalCanary(options) {

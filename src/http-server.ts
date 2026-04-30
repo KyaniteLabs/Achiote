@@ -117,7 +117,7 @@ const toolContext: AchioteToolExecutionContext = { ...defaultToolExecutionContex
 const ANTHROPIC_BASE_URL = anthropicBaseUrlFromEnv();
 const anthropicClientOptions: ConstructorParameters<typeof Anthropic>[0] = {
   timeout: ANTHROPIC_TIMEOUT_MS,
-  apiKey: process.env.ANTHROPIC_API_KEY?.trim() || process.env.GLM_API_KEY?.trim() || process.env.ZHIPU_API_KEY?.trim() || null,
+  apiKey: process.env.ANTHROPIC_API_KEY?.trim() || process.env.GLM_API_KEY?.trim() || process.env.ZHIPU_API_KEY?.trim() || process.env.LOCAL_INFERENCE_API_KEY?.trim() || process.env.LMSTUDIO_API_KEY?.trim() || process.env.LM_STUDIO_API_KEY?.trim() || null,
   authToken: process.env.ANTHROPIC_AUTH_TOKEN?.trim() || null,
 };
 if (ANTHROPIC_BASE_URL) anthropicClientOptions.baseURL = ANTHROPIC_BASE_URL;
@@ -224,7 +224,7 @@ function createAskSession(userMessage: string, history?: AskHistoryItem[], image
       userMessage,
       tools: TOOLS,
       baseUrl: OPENAI_BASE_URL,
-      apiKey: process.env.LOCAL_INFERENCE_API_KEY || process.env.OPENAI_API_KEY || process.env.LMSTUDIO_API_KEY || process.env.LM_STUDIO_API_KEY || null,
+      apiKey: process.env.LOCAL_INFERENCE_API_KEY || process.env.OPENAI_API_KEY || process.env.GLM_API_KEY || process.env.ZHIPU_API_KEY || process.env.LMSTUDIO_API_KEY || process.env.LM_STUDIO_API_KEY || null,
       timeoutMs: OPENAI_TIMEOUT_MS,
       history,
       images,

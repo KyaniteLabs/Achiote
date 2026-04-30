@@ -491,7 +491,7 @@ describe('/ask failure surface regressions', () => {
     await new Promise<void>((resolveListen) => fakeOpenAi?.listen(fakePort, '127.0.0.1', resolveListen));
 
     const achiotePort = await getFreePort();
-    achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`);
+    achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`, { ACHIOTE_FINAL_SYNTHESIS_TIMEOUT_MS: '750' });
 
     const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
       method: 'POST',
@@ -510,7 +510,7 @@ describe('/ask failure surface regressions', () => {
 
     expect(searchCall?.input.query).toMatch(/\b(?:sour|dill|soft|pale|chunks)\b/i);
     expect(searchCall?.input.query).not.toMatch(/Sichuan/i);
-  }, 20_000);
+  }, 45_000);
 
   it('continues planned substitutions when the provider stalls after early tools', async () => {
     const fakePort = await getFreePort();

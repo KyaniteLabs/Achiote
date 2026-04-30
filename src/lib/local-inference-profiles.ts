@@ -1,4 +1,10 @@
 export type LocalInferenceProfileName = 'speed' | 'quality' | 'memory';
+export type LmStudioInferenceEndpointStyleName =
+  | 'openai-chat-completions'
+  | 'openai-responses'
+  | 'openai-completions'
+  | 'anthropic-messages'
+  | 'native-chat';
 
 export interface LocalInferenceProfile {
   contextLength: number;
@@ -10,6 +16,11 @@ export interface LocalInferenceProfile {
   advanced: LocalInferenceAdvancedKnobs;
 }
 
+export interface LocalInferenceProfileApplicationSummary {
+  appliedByRest: string[];
+  requiresSdkOrCli: string[];
+}
+
 export interface LocalInferenceAdvancedKnobs {
   keepModelInMemory: boolean;
   useFp16ForKVCache: boolean;
@@ -17,6 +28,13 @@ export interface LocalInferenceAdvancedKnobs {
   llamaVCacheQuantizationType: string;
   cpuThreads: 'all' | number;
   gpuOffload: 'max' | 'balanced' | 'minimal';
+}
+
+export interface LmStudioInferenceEndpointStyle {
+  protocol: 'openai-compatible' | 'anthropic-compatible' | 'lmstudio-native';
+  path: string;
+  runtimeSupportedByAchiote: boolean;
+  note: string;
 }
 
 export type LocalInferenceProfileOverrides = Partial<Omit<LocalInferenceProfile, 'advanced'>> & {
@@ -84,6 +102,39 @@ export const localInferenceProfiles: Record<LocalInferenceProfileName, LocalInfe
   },
 };
 
+export const lmStudioInferenceEndpointStyles: Record<LmStudioInferenceEndpointStyleName, LmStudioInferenceEndpointStyle> = {
+  'openai-chat-completions': {
+    protocol: 'openai-compatible',
+    path: '/v1/chat/completions',
+    runtimeSupportedByAchiote: true,
+    note: 'Default Achiote local/lmstudio route; supports OpenAI-compatible tool-call experiments.',
+  },
+  'openai-responses': {
+    protocol: 'openai-compatible',
+    path: '/v1/responses',
+    runtimeSupportedByAchiote: false,
+    note: 'Useful for profiling newer LM Studio Responses behavior; Achiote does not yet have a Responses adapter.',
+  },
+  'openai-completions': {
+    protocol: 'openai-compatible',
+    path: '/v1/completions',
+    runtimeSupportedByAchiote: false,
+    note: 'Legacy text-completion surface; keep as a diagnostic baseline, not the Achiote workflow path.',
+  },
+  'anthropic-messages': {
+    protocol: 'anthropic-compatible',
+    path: '/v1/messages',
+    runtimeSupportedByAchiote: true,
+    note: 'Claude-style Messages route for LM Studio; configure Achiote with local/lmstudio plus anthropic-messages endpoint style.',
+  },
+  'native-chat': {
+    protocol: 'lmstudio-native',
+    path: '/api/v1/chat',
+    runtimeSupportedByAchiote: false,
+    note: 'Stateful LM Studio native chat endpoint; profiler/diagnostic route until Achiote has a native adapter.',
+  },
+};
+
 export function buildLmStudioLoadPayload(
   model: string,
   profileName: LocalInferenceProfileName,
@@ -109,6 +160,7 @@ export function buildLmStudioLoadPayload(
 
 export function summarizeLoadProfile(profileName: LocalInferenceProfileName): string {
   const profile = localInferenceProfiles[profileName];
+  const application = profileApplicationSummary(profileName);
   const kvType = profile.advanced.llamaKCacheQuantizationType === profile.advanced.llamaVCacheQuantizationType
     ? profile.advanced.llamaKCacheQuantizationType
     : `${profile.advanced.llamaKCacheQuantizationType}/${profile.advanced.llamaVCacheQuantizationType}`;
@@ -126,7 +178,32 @@ export function summarizeLoadProfile(profileName: LocalInferenceProfileName): st
     `threads ${profile.advanced.cpuThreads}`,
     `offload ${profile.advanced.gpuOffload}`,
     keepWarm,
+    `REST applies ${application.appliedByRest.join(',')}`,
+    `SDK/CLI required ${application.requiresSdkOrCli.join(',')}`,
   ].join(' | ');
+}
+
+export function profileApplicationSummary(profileName: LocalInferenceProfileName): LocalInferenceProfileApplicationSummary {
+  const profile = localInferenceProfiles[profileName];
+  const appliedByRest = [
+    'context_length',
+    'eval_batch_size',
+    'parallel',
+    'flash_attention',
+    'offload_kv_cache_to_gpu',
+  ];
+  if (profile.numExperts !== undefined) appliedByRest.push('num_experts');
+
+  return {
+    appliedByRest,
+    requiresSdkOrCli: [
+      'cpu_threads',
+      'llama_k_cache_quantization_type',
+      'llama_v_cache_quantization_type',
+      'keep_model_in_memory',
+      'gpu_offload_policy',
+    ],
+  };
 }
 
 export function resolveLoadProfile(

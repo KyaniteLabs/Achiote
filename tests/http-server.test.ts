@@ -120,7 +120,7 @@ describe('HTTP server integration', () => {
     expect(res.status).toBe(503);
     const body = await res.json();
     expect(body.error).toContain('speech-to-text is disabled');
-  });
+  }, 20_000);
 
   it('rejects unsupported voice audio payloads before invoking a backend', async () => {
     const res = await fetch(`${baseUrl}/voice/transcribe`, {

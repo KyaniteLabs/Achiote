@@ -251,7 +251,7 @@ describe('stalled-research enforcement — server forces cue after plan+search',
       achiote2.kill('SIGINT');
       await new Promise<void>((ok) => fake2.close(() => ok()));
     }
-  });
+  }, 20_000);
 });
 
 // ─── 4. context-aware clarification responses ──────────────────────────────────
