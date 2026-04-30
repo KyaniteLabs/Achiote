@@ -102,6 +102,7 @@ describe('package distribution metadata', () => {
 
   it('ships global reference seed data only through the compiled dist data bundle', () => {
     const planner = fs.readFileSync('src/lib/reference-seed-planner.ts', 'utf8');
+    const index = fs.readFileSync('src/index.ts', 'utf8');
 
     expect(pkg.files).toContain('dist/');
     expect(pkg.files).not.toContain('src/data/global-coverage-matrix.json');
@@ -109,14 +110,18 @@ describe('package distribution metadata', () => {
     expect(pkg.files).not.toContain('src/data/cache-warming-manifest.json');
     expect(pkg.files).not.toContain('src/data/reference-source-registry.json');
     expect(pkg.files).not.toContain('src/data/reference-pantry-fixtures.json');
+    expect(pkg.files).not.toContain('src/data/inference-burden-inventory.json');
     expect(planner).toContain("from '../data/global-coverage-matrix.json'");
     expect(planner).toContain("from '../data/reference-seed-queue.json'");
     expect(planner).toContain("from '../data/cache-warming-manifest.json'");
     expect(planner).toContain("from '../data/reference-source-registry.json'");
     expect(planner).toContain("from '../data/reference-pantry-fixtures.json'");
-    expect(fs.readFileSync('src/index.ts', 'utf8')).toContain("export { bundledGlobalReferenceSeeds, prioritizeReferenceSeeds } from './lib/reference-seed-planner.js';");
-    expect(fs.readFileSync('src/index.ts', 'utf8')).toContain('writeReferenceSeedFixturesToCache');
+    expect(index).toContain("export { bundledGlobalReferenceSeeds, prioritizeReferenceSeeds } from './lib/reference-seed-planner.js';");
+    expect(index).toContain('writeReferenceSeedFixturesToCache');
+    expect(index).toContain('buildInferenceBurdenSummary');
+    expect(index).toContain('findPromptOffloadCandidates');
     expect(fs.existsSync('src/lib/reference-seed-operator.ts')).toBe(true);
+    expect(fs.existsSync('src/lib/inference-burden-inventory.ts')).toBe(true);
   });
 
   it('uses a portable package-smoke temp directory prefix', () => {

@@ -70,4 +70,17 @@ describe('release documentation consistency', () => {
     }
     expect(runbook).toContain('docs/VIABILITY_EXPERIMENT.md');
   });
+
+  it('documents inference burden ownership without making the model a rigid script runner', () => {
+    const architecture = fs.readFileSync('docs/ARCHITECTURE.md', 'utf8');
+    const plan = fs.readFileSync('docs/plans/2026-04-30-inference-burden-inventory.md', 'utf8');
+
+    expect(architecture).toContain('Inference burden operating model');
+    expect(architecture).toContain('The model still owns interpretation');
+    expect(architecture).toContain('sensory reasoning, cultural synthesis, hypothesis ranking, ambiguity handling');
+    expect(architecture).toContain('src/data/inference-burden-inventory.json');
+    expect(plan).toContain('The goal is not to make the model dumb');
+    expect(plan).toContain('Anti-Rigidity Guard');
+    expect(plan).toContain('preserveLatitude');
+  });
 });
