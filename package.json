@@ -23,6 +23,8 @@
     "live:ask": "node scripts/live-ask-smoke.mjs",
     "preview:smoke": "node scripts/preview-ask-smoke.mjs",
     "canary:local": "npm run build && node scripts/local-canary-qa.mjs",
+    "local:profile": "npm run build && node scripts/local-inference-profiler.mjs",
+    "telemetry:models": "npm run build && node scripts/model-telemetry-report.mjs",
     "torture:fake": "npm run build && node scripts/torture-smoke.mjs",
     "viability:smoke": "node scripts/viability-transcript-smoke.mjs",
     "reference:seeds": "npm run build && node scripts/reference-seed-operator.mjs"
@@ -58,6 +60,7 @@
     "dist/",
     "skill/",
     "scripts/",
+    "!scripts/weak-cloud-overnight.mjs",
     "docs/ARCHITECTURE.md",
     "docs/AI_SEARCH_SUBMISSION_RUNBOOK.md",
     "docs/LAUNCH_RUNBOOK.md",

@@ -96,6 +96,14 @@ The inventory assigns ownership:
 
 The model still owns interpretation: sensory reasoning, cultural synthesis, hypothesis ranking, ambiguity handling, humane explanation, creative cue construction, and deciding when retrieved context does not fit the user's memory. Every burden entry must state what latitude is preserved and what could go wrong if the deterministic layer becomes too rigid.
 
+## Cross-model telemetry loop
+
+Cloud and local torture tests feed the same telemetry model instead of staying as separate anecdotes. `src/lib/model-telemetry.ts` normalizes local canary summaries, weak-cloud JSONL rows, and local profiler artifacts into one event shape with provider, model, mode, prompt/case, status, findings, quality labels, guard reason, tool path, latency, errors, and trace previews. `scripts/model-telemetry-report.mjs` mines those events for recurring engineering patterns such as tool workflow fragility, fallback quality drift, provider/runtime instability, trust-boundary pressure, latency outliers, guard dependency, and reasoning trace exposure.
+
+Local model runs also record the load configuration as first-class telemetry. `src/lib/local-inference-profiles.ts` defines `speed`, `quality`, and `memory` profiles with explicit LM Studio native REST load payloads plus advanced SDK-only knobs that should remain visible even when the REST endpoint cannot send them. `scripts/local-inference-profiler.mjs` uses LM Studio `/api/v1/models/load` for load telemetry and `/v1/chat/completions` for direct OpenAI-compatible probes, preserving intended load payloads, echoed load config, usage, latency, errors, text previews, and reasoning-trace previews when a model exposes them.
+
+Reasoning traces are diagnostic telemetry, not facts and not user-facing content. They are useful for seeing whether a model is planning the wrong task, leaking scratchpad text, overfitting to guardrails, or drifting into recipes, but they must be treated as untrusted model output and sanitized before any product display.
+
 ## Reference seed operating loop
 
 HTTP `/ask` records privacy-preserving quality counters for successful completions: memory type, bounded family bucket, region bucket, guard path, search outcome, reference/cache outcome, and missing-clue dimensions. Authenticated `GET /events` returns those counters plus deterministic reference seed priorities and reference bootstrap tasks from `buildReferenceSeedOperatorReport`.

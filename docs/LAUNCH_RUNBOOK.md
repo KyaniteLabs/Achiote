@@ -82,13 +82,28 @@ Track these server signals:
 
 - `/ask` 4xx/5xx rates.
 - Provider timeout and provider error counts.
-- `tool_workflow_skipped` errors.
+- Provider/tool deterministic recovery counts, especially spikes from tool-unsupported models, malformed tool arguments, upstream 429/5xx, or provider timeouts. `tool_workflow_skipped` in new telemetry should be treated as a regression.
 - Premature-cue suppression events.
 - Private `/events` counters with `Authorization: Bearer $ACHIOTE_EVENTS_ADMIN_TOKEN`, or equivalent host metrics for telemetry events: `page_view`, `pricing_viewed`, `checkout_started`, `checkout_failed`, `app_opened`, `onboarding_prompt_selected`, `ask_started`, `ask_succeeded`, `ask_failed`, and preview feedback events such as `feedback_close`, `feedback_wrong_region`, `feedback_too_hard`, and `feedback_missed_correction`. Do not expose raw event counters on a public route.
 - Private `/events` counters should also include sharper learning signals: `feedback_closer`, `feedback_wrong_region`, `feedback_wrong_acid`, `feedback_wrong_texture`, `feedback_too_generic`, `feedback_too_hard`, `feedback_missed_name_correction`, `receipt_downloaded`, and `family_questions_copied`.
 - Funnel ratios: `checkout_started / pricing_viewed`, `ask_started / app_opened`, `ask_succeeded / ask_started`, `ask_failed / ask_started`, `feedback_closer / ask_succeeded`, and `onboarding_prompt_selected / app_opened`.
 - Rate-limit and auth failure spikes.
 - Process restarts and memory growth.
+
+For model torture testing and provider changes, aggregate cloud and local runs before drawing conclusions:
+
+```bash
+npm run telemetry:models -- artifacts/local-canary-post-fixes artifacts/weak-cloud-overnight artifacts/weak-cloud-patience-2026-04-30 artifacts/local-inference-profiler --out artifacts/model-telemetry-report
+```
+
+For local LM Studio runs, profile loads with explicit settings and keep the echoed load config with the result:
+
+```bash
+npm run local:profile -- --list-profiles
+npm run local:profile -- --model qwen3.6-35b-a3b --profile speed --probe --timeout-ms 240000 --out artifacts/local-inference-profiler
+```
+
+Reasoning traces, `reasoning_tokens`, provider error bodies, and tool-argument parse failures are useful QA telemetry. Treat them as raw diagnostic output: keep artifact links for engineering analysis, do not present them as verified facts, and sanitize credential-looking or provider-identity text before any user-facing route.
 
 Alert when:
 

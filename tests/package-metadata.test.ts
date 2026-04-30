@@ -40,6 +40,7 @@ describe('package distribution metadata', () => {
       'dist/',
       'skill/',
       'scripts/',
+      '!scripts/weak-cloud-overnight.mjs',
       'docs/ARCHITECTURE.md',
       'docs/AI_SEARCH_SUBMISSION_RUNBOOK.md',
       'docs/LAUNCH_RUNBOOK.md',
@@ -81,6 +82,8 @@ describe('package distribution metadata', () => {
     expect(pkg.scripts['live:ask']).toBe('node scripts/live-ask-smoke.mjs');
     expect(pkg.scripts['preview:smoke']).toBe('node scripts/preview-ask-smoke.mjs');
     expect(pkg.scripts['canary:local']).toBe('npm run build && node scripts/local-canary-qa.mjs');
+    expect(pkg.scripts['local:profile']).toBe('npm run build && node scripts/local-inference-profiler.mjs');
+    expect(pkg.scripts['telemetry:models']).toBe('npm run build && node scripts/model-telemetry-report.mjs');
     expect(pkg.scripts['torture:fake']).toBe('npm run build && node scripts/torture-smoke.mjs');
     expect(pkg.scripts['viability:smoke']).toBe('node scripts/viability-transcript-smoke.mjs');
     expect(pkg.scripts['reference:seeds']).toBe('npm run build && node scripts/reference-seed-operator.mjs');
@@ -197,6 +200,8 @@ describe('packaged helper scripts', () => {
     expect(fs.existsSync('scripts/live-ask-smoke.mjs')).toBe(true);
     expect(fs.existsSync('scripts/preview-ask-smoke.mjs')).toBe(true);
     expect(fs.existsSync('scripts/local-canary-qa.mjs')).toBe(true);
+    expect(fs.existsSync('scripts/local-inference-profiler.mjs')).toBe(true);
+    expect(fs.existsSync('scripts/model-telemetry-report.mjs')).toBe(true);
     expect(fs.existsSync('scripts/torture-smoke.mjs')).toBe(true);
     expect(fs.existsSync('scripts/viability-transcript-smoke.mjs')).toBe(true);
     expect(fs.existsSync('scripts/reference-seed-operator.mjs')).toBe(true);
