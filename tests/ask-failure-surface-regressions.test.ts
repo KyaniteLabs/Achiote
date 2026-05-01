@@ -832,6 +832,68 @@ describe('/ask failure surface regressions', () => {
     expect(events.at(-1)?.event).toBe('done');
   }, 20_000);
 
+  it('drops malformed provider tool-name envelopes and recovers with a deterministic cue', async () => {
+    const fakePort = await getFreePort();
+    let requestCount = 0;
+    fakeOpenAi = createServer(async (req, res) => {
+      if (req.url !== '/v1/chat/completions' || req.method !== 'POST') {
+        res.writeHead(404).end();
+        return;
+      }
+      requestCount++;
+      await readBody(req);
+      const malformedToolName = 'researchPlan</arg_key><arg_value>{"hypotheses":[{"name":"thin rice-cinnamon drink","confidence":"Low"}]}</arg_value>';
+      const toolCallsByTurn = [
+        [{ id: 'call_1', type: 'function', function: { name: 'collect_food_memory', arguments: JSON.stringify({ memoryText: 'Cold rice-cinnamon drink like horchata but thinner.' }) } }],
+        [{ id: 'call_2', type: 'function', function: { name: 'plan_dish_research', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_3', type: 'function', function: { name: 'resolve_dish_name', arguments: JSON.stringify({ input: 'thin rice cinnamon drink' }) } }],
+        [{ id: 'call_4', type: 'function', function: { name: 'search_web', arguments: JSON.stringify({ query: 'thin rice cinnamon drink horchata' }) } }],
+        [{ id: 'call_5', type: 'function', function: { name: 'build_reconstruction_dossier', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_6', type: 'function', function: { name: malformedToolName, arguments: JSON.stringify({}) } }],
+      ];
+      const toolCalls = toolCallsByTurn[requestCount - 1];
+      res.setHeader('content-type', 'application/json');
+      res.end(JSON.stringify({
+        choices: [{
+          finish_reason: toolCalls ? 'tool_calls' : 'stop',
+          message: toolCalls
+            ? { role: 'assistant', content: '', tool_calls: toolCalls }
+            : { role: 'assistant', content: '' },
+        }],
+      }));
+    });
+    await new Promise<void>((resolveListen) => fakeOpenAi?.listen(fakePort, '127.0.0.1', resolveListen));
+
+    const achiotePort = await getFreePort();
+    achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`);
+
+    const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: 'Cold rice-cinnamon drink like horchata but thinner. Give me the smallest local sip test.' }),
+    });
+
+    expect(response.status).toBe(200);
+    const events = parseSse(await response.text());
+    const toolNames = events.filter((event) => event.event === 'tool_call').map((event) => JSON.parse(event.data).name);
+    const malformedStatus = events.find((event) => event.event === 'status' && JSON.parse(event.data).stage === 'malformed_tool_call_dropped');
+    const finalText = events
+      .filter((event) => event.event === 'text')
+      .map((event) => JSON.parse(event.data))
+      .join('\n\n');
+
+    expect(events.some((event) => event.event === 'error')).toBe(false);
+    expect(malformedStatus).toBeDefined();
+    expect(JSON.parse(malformedStatus!.data)).toMatchObject({
+      reason: 'provider_tool_name_envelope',
+    });
+    expect(toolNames.some((name) => name.includes('</arg_key>'))).toBe(false);
+    expect(toolNames).toContain('generate_minimum_viable_nostalgia');
+    expect(finalText).toMatch(/first-pass verification (?:bite|sip)/i);
+    expect(events.at(-1)?.event).toBe('done');
+    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'explicit_minimum_cue_fallback' });
+  }, 20_000);
+
   it('blocks recipe tools inside /ask minimum-cue flows', async () => {
     const fakePort = await getFreePort();
     let requestCount = 0;
