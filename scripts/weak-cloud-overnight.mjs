@@ -232,6 +232,39 @@ async function openRouterCatalog() {
   }
 }
 
+function openRouterModelFromCatalog(catalog, modelId) {
+  if (!Array.isArray(catalog)) return null;
+  return catalog.find((model) => model?.id === modelId) || null;
+}
+
+function openRouterCapabilityMetadata(catalog, modelId) {
+  const model = openRouterModelFromCatalog(catalog, modelId);
+  const supportedParameters = Array.isArray(model?.supported_parameters) ? model.supported_parameters.filter((item) => typeof item === 'string') : [];
+  const topProvider = model && typeof model.top_provider === 'object' && model.top_provider !== null ? model.top_provider : {};
+  return {
+    catalogMetadata: model ? {
+      id: model.id,
+      name: typeof model.name === 'string' ? model.name : undefined,
+      context_length: typeof model.context_length === 'number' ? model.context_length : undefined,
+      top_provider: {
+        context_length: typeof topProvider.context_length === 'number' ? topProvider.context_length : undefined,
+        max_completion_tokens: typeof topProvider.max_completion_tokens === 'number' ? topProvider.max_completion_tokens : undefined,
+      },
+      supported_parameters: supportedParameters,
+    } : null,
+    endpointStyle: 'openai-chat-completions',
+    baseUrl: 'https://openrouter.ai/api/v1',
+    nativeTools: supportedParameters.includes('tools') ? 'supported' : model ? 'unsupported' : 'unknown',
+    nativeToolChoice: supportedParameters.includes('tool_choice') ? 'supported' : model ? 'unsupported' : 'unknown',
+    rateLimitSensitive: /:free$/i.test(modelId),
+    compatibilitySource: model ? 'catalog' : 'default',
+    supportedParameters,
+    contextLength: typeof model?.context_length === 'number'
+      ? model.context_length
+      : typeof topProvider.context_length === 'number' ? topProvider.context_length : undefined,
+  };
+}
+
 function classifyProvider(status, errorText, text) {
   const combined = `${status} ${errorText} ${text}`;
   if (/\b429\b|rate limit|temporarily overloaded|overloaded/i.test(combined)) return 'provider_rate_limited';
@@ -316,9 +349,9 @@ async function nakedGlm(model, prompt, endpointStyle = 'anthropic-coding') {
   }
 }
 
-async function nakedOpenRouter(model, prompt, key) {
+async function nakedOpenRouter(model, prompt, key, capabilityMetadata = {}) {
   const started = Date.now();
-  if (!key) return { mode: 'naked', provider: 'openrouter', model, status: 'missing_key', ms: 0, text: '', errors: ['missing_openrouter_key'], classification: 'provider_auth', quality: [] };
+  if (!key) return { mode: 'naked', provider: 'openrouter', model, ...capabilityMetadata, status: 'missing_key', ms: 0, text: '', errors: ['missing_openrouter_key'], classification: 'provider_auth', quality: [] };
   try {
     const response = await timedFetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
@@ -334,12 +367,12 @@ async function nakedOpenRouter(model, prompt, key) {
     const text = body.choices?.[0]?.message?.content || '';
     const error = body.error?.message || '';
     return {
-      mode: 'naked', provider: 'openrouter', model, prompt: prompt.id, status: response.status, ms: Date.now() - started,
+      mode: 'naked', provider: 'openrouter', model, ...capabilityMetadata, prompt: prompt.id, status: response.status, ms: Date.now() - started,
       text: truncate(text), errors: error ? [error] : [], classification: classifyProvider(response.status, error, text),
       quality: qualityFindings(text, prompt.text, 'naked'),
     };
   } catch (error) {
-    return { mode: 'naked', provider: 'openrouter', model, prompt: prompt.id, status: 'timeout', ms: Date.now() - started, text: '', errors: [error.message], classification: 'provider_rate_limited', quality: [] };
+    return { mode: 'naked', provider: 'openrouter', model, ...capabilityMetadata, prompt: prompt.id, status: 'timeout', ms: Date.now() - started, text: '', errors: [error.message], classification: 'provider_rate_limited', quality: [] };
   }
 }
 
@@ -363,7 +396,7 @@ async function waitForServer(child, port) {
   });
 }
 
-async function achioteAsk({ provider, model, prompt, openRouterKey, endpointStyle, baseUrl }) {
+async function achioteAsk({ provider, model, prompt, openRouterKey, endpointStyle, baseUrl, capabilityMetadata }) {
   const started = Date.now();
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'achiote-weak-cloud-'));
   const port = 46000 + Math.floor(Math.random() * 10_000);
@@ -413,14 +446,14 @@ async function achioteAsk({ provider, model, prompt, openRouterKey, endpointStyl
     const tools = eventTools(events);
     const done = events.filter((event) => event.event === 'done').map(parseData).at(-1) || null;
     return {
-      mode: 'achiote', provider, model, endpointStyle, baseUrl, prompt: prompt.id, status: response.status, ms: Date.now() - started,
+      mode: 'achiote', provider, model, ...(capabilityMetadata || {}), endpointStyle: endpointStyle || capabilityMetadata?.endpointStyle, baseUrl: baseUrl || capabilityMetadata?.baseUrl, prompt: prompt.id, status: response.status, ms: Date.now() - started,
       text: truncate(text), errors, tools, done,
       classification: errors.length > 0 ? classifyProvider(response.status, JSON.stringify(errors), text) : 'workflow_ok',
       quality: [...qualityFindings(text, prompt.text, 'achiote'), ...(tools.length === 0 ? ['missing_tool_workflow'] : [])],
     };
   } catch (error) {
     return {
-      mode: 'achiote', provider, model, endpointStyle, baseUrl, prompt: prompt.id, status: 'timeout', ms: Date.now() - started,
+      mode: 'achiote', provider, model, ...(capabilityMetadata || {}), endpointStyle: endpointStyle || capabilityMetadata?.endpointStyle, baseUrl: baseUrl || capabilityMetadata?.baseUrl, prompt: prompt.id, status: 'timeout', ms: Date.now() - started,
       text: '', errors: [{ message: error.message, code: 'timeout_or_runtime' }], tools: [], done: null,
       classification: 'provider_rate_limited', quality: [],
     };
@@ -436,14 +469,15 @@ function appendResult(result) {
   fs.appendFileSync(jsonlPath, `${JSON.stringify({ ...result, at: new Date().toISOString() })}\n`);
 }
 
-function exceptionResult({ roundId, mode, provider, model, endpointStyle, baseUrl, prompt, error }) {
+function exceptionResult({ roundId, mode, provider, model, endpointStyle, baseUrl, prompt, error, capabilityMetadata }) {
   return {
     roundId,
     mode,
     provider,
     model,
-    endpointStyle,
-    baseUrl,
+    ...(capabilityMetadata || {}),
+    endpointStyle: endpointStyle || capabilityMetadata?.endpointStyle,
+    baseUrl: baseUrl || capabilityMetadata?.baseUrl,
     prompt: prompt.id,
     status: 'runner_exception',
     ms: 0,
@@ -479,12 +513,17 @@ async function runRound(roundIndex) {
   const openRouterKey = await validatedOpenRouterKey();
   const promptOffset = roundIndex % prompts.length;
   const selectedOpenRouter = chooseOpenRouterModels(catalog, roundIndex);
+  const selectedModelCapabilities = Object.fromEntries(selectedOpenRouter.map((modelId) => [
+    modelId,
+    openRouterCapabilityMetadata(catalog, modelId),
+  ]));
   const catalogResult = {
     kind: 'catalog',
     roundId,
     provider: 'openrouter',
     modelCount: Array.isArray(catalog) ? catalog.length : 0,
     selectedModels: selectedOpenRouter,
+    selectedModelCapabilities,
     catalogError: catalog.error || null,
   };
   appendResult(catalogResult);
@@ -494,7 +533,8 @@ async function runRound(roundIndex) {
     tests.push({ provider: 'glm', ...glmMatrix[i], prompt: prompts[(promptOffset + i) % prompts.length] });
   }
   for (let i = 0; i < selectedOpenRouter.length; i += 1) {
-    tests.push({ provider: 'openrouter', model: selectedOpenRouter[i], prompt: prompts[(promptOffset + i + 2) % prompts.length] });
+    const capabilityMetadata = selectedModelCapabilities[selectedOpenRouter[i]];
+    tests.push({ provider: 'openrouter', model: selectedOpenRouter[i], capabilityMetadata, prompt: prompts[(promptOffset + i + 2) % prompts.length] });
   }
 
   for (const test of tests) {
@@ -503,7 +543,7 @@ async function runRound(roundIndex) {
       try {
         return test.provider === 'glm'
           ? await nakedGlm(test.model, test.prompt, test.endpointStyle)
-          : await nakedOpenRouter(test.model, test.prompt, openRouterKey);
+          : await nakedOpenRouter(test.model, test.prompt, openRouterKey, test.capabilityMetadata);
       } catch (error) {
         log(`${roundId} naked exception ${test.provider} ${test.model}: ${error instanceof Error ? error.message : String(error)}`);
         return exceptionResult({ roundId, mode: 'naked', ...test, error });

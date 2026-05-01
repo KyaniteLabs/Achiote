@@ -134,6 +134,12 @@ describe('cross-provider model telemetry', () => {
       errors: [],
       tools: ['plan_tool_workflow'],
       done: { guarded: 'explicit_minimum_cue_fallback' },
+      nativeTools: 'unsupported',
+      nativeToolChoice: 'unsupported',
+      rateLimitSensitive: true,
+      compatibilitySource: 'catalog',
+      supportedParameters: ['max_tokens'],
+      contextLength: 8192,
     }, 'artifacts/results.jsonl:12');
 
     expect(local[0]).toMatchObject({
@@ -153,6 +159,12 @@ describe('cross-provider model telemetry', () => {
       prompt: 'misspelled_carimanola',
       guardReason: 'explicit_minimum_cue_fallback',
       reasoningTracePreview: 'Thinking Process: the user asked for a small cue, but I am drifting into recipe instructions.',
+      nativeTools: 'unsupported',
+      nativeToolChoice: 'unsupported',
+      rateLimitSensitive: true,
+      compatibilitySource: 'catalog',
+      supportedParameters: ['max_tokens'],
+      contextLength: 8192,
     });
 
     const glm = normalizeWeakCloudRow({
@@ -200,6 +212,18 @@ describe('cross-provider model telemetry', () => {
       endpointStyle: 'native-chat',
       baseUrl: 'http://100.66.225.85:1234/v1',
     });
+  });
+
+  it('keeps OpenRouter catalog capabilities attached to weak-cloud runner rows', () => {
+    const runner = fs.readFileSync('scripts/weak-cloud-overnight.mjs', 'utf8');
+
+    expect(runner).toContain('openRouterCapabilityMetadata');
+    expect(runner).toContain('selectedModelCapabilities');
+    expect(runner).toContain('supported_parameters');
+    expect(runner).toContain('context_length');
+    expect(runner).toContain('nativeTools');
+    expect(runner).toContain('nativeToolChoice');
+    expect(runner).toContain('rateLimitSensitive');
   });
 
   it('mines meta-patterns across local and cloud model telemetry', () => {

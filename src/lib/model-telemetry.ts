@@ -14,6 +14,12 @@ export interface NormalizedTelemetryEvent {
   latencyMs?: number;
   passed?: boolean;
   providerFailure?: boolean;
+  nativeTools?: string;
+  nativeToolChoice?: string;
+  rateLimitSensitive?: boolean;
+  compatibilitySource?: string;
+  supportedParameters?: string[];
+  contextLength?: number;
   findings: string[];
   quality: string[];
   errors: unknown[];
@@ -92,9 +98,16 @@ export function normalizeWeakCloudRow(row: unknown, artifactPath?: string): Norm
   const quality = stringArray(object.quality);
   const errors = unknownArray(object.errors);
   const done = asRecord(object.done);
+  const catalogMetadata = asRecord(object.catalogMetadata);
   const guardReason = normalizeGuardReason(object.guardReason)
     ?? normalizeGuardReason(object.guarded)
     ?? normalizeGuardReason(done.guarded);
+  const supportedParameters = stringArray(object.supportedParameters).length > 0
+    ? stringArray(object.supportedParameters)
+    : stringArray(catalogMetadata.supported_parameters);
+  const contextLength = numberField(object.contextLength)
+    ?? numberField(catalogMetadata.context_length)
+    ?? numberField(asRecord(catalogMetadata.top_provider).context_length);
 
   return {
     source: 'weak_cloud',
@@ -110,6 +123,12 @@ export function normalizeWeakCloudRow(row: unknown, artifactPath?: string): Norm
     latencyMs: numberField(object.ms) ?? numberField(object.latencyMs),
     passed: booleanField(object.passed),
     providerFailure: booleanField(object.providerFailure) ?? inferProviderFailure(object, errors),
+    nativeTools: stringField(object.nativeTools),
+    nativeToolChoice: stringField(object.nativeToolChoice),
+    rateLimitSensitive: booleanField(object.rateLimitSensitive),
+    compatibilitySource: stringField(object.compatibilitySource),
+    supportedParameters,
+    contextLength,
     findings,
     quality,
     errors,
@@ -335,6 +354,12 @@ function eventSignals(event: NormalizedTelemetryEvent): string[] {
   return [
     event.classification,
     event.guardReason,
+    event.nativeTools ? `native_tools:${event.nativeTools}` : undefined,
+    event.nativeToolChoice ? `native_tool_choice:${event.nativeToolChoice}` : undefined,
+    event.rateLimitSensitive ? 'rate_limit_sensitive' : undefined,
+    event.compatibilitySource ? `compatibility:${event.compatibilitySource}` : undefined,
+    event.contextLength ? `context_length:${event.contextLength}` : undefined,
+    ...(event.supportedParameters?.map((param) => `supports:${param}`) ?? []),
     ...event.findings,
     ...event.quality,
     ...event.errors.map(stringifyUnknown),
