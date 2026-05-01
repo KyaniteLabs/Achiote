@@ -140,4 +140,12 @@ describe('weak cloud runner hardening', () => {
     expect(runner).toContain("error: 'unload_response_error'");
     expect(runner).toMatch(/if \(responseBody\?\.error\)[\s\S]+error: 'unload_response_error'[\s\S]+continue;[\s\S]+return \{ ok: true, id, body, response: responseBody, attempts \};/);
   });
+
+  it('does not strand the round when an Achiote child exits before cleanup awaits it', () => {
+    const runner = fs.readFileSync('scripts/weak-cloud-overnight.mjs', 'utf8');
+
+    expect(runner).toContain('waitForChildExit(child)');
+    expect(runner).toContain('if (child.exitCode !== null || child.signalCode !== null) return;');
+    expect(runner).not.toContain("await new Promise((resolve) => child.once('exit', resolve));\n    liveChildren.delete(child);");
+  });
 });

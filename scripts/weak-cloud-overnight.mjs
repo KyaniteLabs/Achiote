@@ -637,10 +637,15 @@ async function achioteAsk({ provider, model, prompt, openRouterKey, endpointStyl
     };
   } finally {
     child.kill('SIGTERM');
-    await new Promise((resolve) => child.once('exit', resolve));
+    await waitForChildExit(child);
     liveChildren.delete(child);
     fs.rmSync(tmp, { recursive: true, force: true });
   }
+}
+
+async function waitForChildExit(child) {
+  if (child.exitCode !== null || child.signalCode !== null) return;
+  await new Promise((resolve) => child.once('exit', resolve));
 }
 
 async function inventoryLocalModels() {
