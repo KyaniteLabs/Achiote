@@ -1,12 +1,11 @@
 export const KNOWLEDGE_GAP_TYPES = [
-  'missing_dish_alias',
-  'missing_regional_family',
-  'weak_sensory_signature',
-  'missing_substitution_role',
   'missing_local_accessibility',
-  'overbroad_family',
   'insufficient_disambiguators',
-  'search_dependency',
+  'generic_mechanism_drift',
+  'control_flow_violation',
+  'optional_search_used',
+  'provider_path_failure',
+  'wrapper_quality_regression',
 ];
 
 export function analyzeKnowledgeGaps(rows) {
@@ -22,7 +21,7 @@ export function analyzeKnowledgeGaps(rows) {
       model: String(row.model ?? 'unknown-model'),
       provider: String(row.provider ?? 'unknown-provider'),
       prompt,
-      cueClass: classifyCueClass(prompt, text),
+      signature: classifyMechanismSignature(prompt, text),
       text,
       tools,
       quality,
@@ -30,30 +29,23 @@ export function analyzeKnowledgeGaps(rows) {
       roundId: String(row.roundId ?? ''),
     };
 
-    if (tools.includes('search_web')) {
-      addGap(gaps, 'search_dependency', 'Achiote used search_web; internal reference data should make this optional enrichment, not required control flow.', context);
+    if (quality.includes('forbidden_tool:search_web')) {
+      addGap(gaps, 'control_flow_violation', 'Achiote used search_web when the prompt or harness marked search as forbidden; fix planning/control flow, not dish knowledge.', context);
+    } else if (tools.includes('search_web')) {
+      addGap(gaps, 'optional_search_used', 'Achiote used search_web on this path; audit whether search was necessary for the workflow contract.', context);
     }
     if (/\b(?:dominant aromatic or spice family|Ask what gave the liquid body|cheap neutral liquid carrier)\b/i.test(text)) {
-      addGap(gaps, 'overbroad_family', 'Final cue stayed at a generic mechanism/family level instead of naming a stronger internal reference target.', context);
+      addGap(gaps, 'generic_mechanism_drift', 'Final cue stayed at a generic mechanism level; improve the generic cue contract or disambiguation flow before adding domain-specific coverage.', context);
     }
     if (/\b(?:where did you eat it|country|region|from|grandmother|neighbor|aunt|specific place)\b/i.test(text)
       && !/\b(?:minimum viable|first-pass verification)\b/i.test(text)) {
       addGap(gaps, 'insufficient_disambiguators', 'The answer needed a disambiguator but did not pair it with a useful minimum cue.', context);
     }
-    if (/\b(?:carimanol|carimañol|caribana|panama)\b/i.test(prompt)
-      && /\b(?:cassava-family carrier|plantain crisped|tapioca-starch paste)\b/i.test(text)) {
-      addGap(gaps, 'missing_dish_alias', 'Known misspelling/transliteration was handled generically; add alias and sensory signature coverage for the family.', context);
-    }
-    if (/\b(?:sour dill|polish neighbor|zurek|żurek)\b/i.test(prompt)
-      && /\b(?:dominant aromatic or spice family|Ask what gave the liquid body)\b/i.test(text)) {
-      addGap(gaps, 'missing_regional_family', 'Sour-dill soup stayed generic; add regional sour soup family distinctions and acid/body disambiguators.', context);
-    }
-    if (/\b(?:substitution|nut-free|vegan|halal|gluten-free|heart-healthier)\b/i.test(prompt)
-      && /\b(?:cheap grocery-store carrier|accessible protein|plant-based substitute)\b/i.test(text)) {
-      addGap(gaps, 'missing_substitution_role', 'Substitution request fell back to generic carrier/protein language; add original sensory-role mapping before adapted cues.', context);
-    }
     if (quality.includes('missed_minimum_cue_frame') || quality.includes('empty_text')) {
-      addGap(gaps, 'weak_sensory_signature', 'Model path did not surface a usable cue; internal sensory signatures may be too weak for this mechanism class.', context);
+      addGap(gaps, 'provider_path_failure', 'The provider path did not surface usable text; treat as provider/runtime evidence unless the wrapper also failed.', context);
+    }
+    if (quality.includes('full_recipe_drift') || quality.includes('overconfident_identity') || quality.includes('false_browsing_claim')) {
+      addGap(gaps, 'wrapper_quality_regression', 'Achiote final text retained a quality failure that the wrapper should normally prevent; turn repeated cases into fake-provider regressions.', context);
     }
     if (/\b(?:buy|grocery|store|local sourcing|ordinary grocery)\b/i.test(text)
       && !/\b(?:pantry|already available|cheap|tiny)\b/i.test(text)) {
@@ -73,10 +65,10 @@ export function parseJsonl(text) {
 }
 
 function addGap(gaps, type, reason, context) {
-  const key = `${type}\u0000${context.cueClass}`;
+  const key = `${type}\u0000${context.signature}`;
   const existing = gaps.get(key) ?? {
     type,
-    cueClass: context.cueClass,
+    signature: context.signature,
     count: 0,
     reason,
     examples: [],
@@ -97,7 +89,7 @@ function addGap(gaps, type, reason, context) {
   gaps.set(key, existing);
 }
 
-function classifyCueClass(prompt, text) {
+function classifyMechanismSignature(prompt, text) {
   const combined = `${prompt} ${text}`.toLowerCase();
   if (/\b(?:sour|tart|pickle|brine|ferment|dill|herb|zurek|żurek|sorrel|potato|egg)\b/.test(combined)
     && /\b(?:soup|broth|sip|liquid|body|chunks?|pieces?)\b/.test(combined)) {
