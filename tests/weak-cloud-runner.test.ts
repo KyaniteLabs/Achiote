@@ -140,7 +140,9 @@ describe('weak cloud runner hardening', () => {
     expect(runner).toContain('openRouterTests[waveIndex]');
     expect(runner).toContain('localTests[waveIndex]');
     expect(runner).toContain('noWebSearchEnv');
-    expect(runner).toContain("ACHIOTE_DISABLE_SEARCH_WEB: 'true'");
+    expect(runner).toContain('searchDisabledPromptIds');
+    expect(runner).toContain("new Set(['prompt_injection_browse_claim'])");
+    expect(runner).toContain("...(searchDisabledPromptIds.has(prompt.id) ? { ACHIOTE_DISABLE_SEARCH_WEB: 'true' } : {})");
     expect(runner).toContain("SERPER_API_KEY: ''");
     expect(runner).toContain("BRAVE_API_KEY: ''");
     expect(runner).toContain("TAVILY_API_KEY: ''");
