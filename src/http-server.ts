@@ -1801,6 +1801,8 @@ function normalizeModelToolCalls(toolCalls: AskModelResponse['toolCalls']): {
 }
 
 function normalizeModelToolName(toolName: string): string {
+  const stripped = stripModelToolNameDecoration(toolName);
+  if (stripped !== toolName && KNOWN_TOOL_NAMES.has(stripped)) return stripped;
   if (KNOWN_TOOL_NAMES.has(toolName)) return toolName;
   const alias = MODEL_TOOL_NAME_ALIASES[toolName];
   if (alias && KNOWN_TOOL_NAMES.has(alias)) return alias;
@@ -1811,6 +1813,13 @@ function normalizeModelToolName(toolName: string): string {
   if (candidates.length === 1) return candidates[0].candidate;
   if (candidates.length > 1 && candidates[0].distance < candidates[1].distance) return candidates[0].candidate;
   return toolName;
+}
+
+function stripModelToolNameDecoration(toolName: string): string {
+  return toolName
+    .replace(/<\|channel\|>.*$/i, '')
+    .replace(/<\|.*$/i, '')
+    .trim();
 }
 
 function isMalformedToolNameEnvelope(toolName: string): boolean {
@@ -1877,7 +1886,7 @@ function sanitizeFinalAnswerTrustBoundaryLanguage(text: string): string {
     .replace(/(?:^|\n)\s*(?:[-*]\s*)?[^.\n?!]*?(?:medical advice|legal advice|professional advice|medically safe|legally safe|heart-healthy|lowers cholesterol|cures?)[^.\n?!]*?(?:[.?!]|$)/gim, '\n')
     .replace(/\bI\s+cannot\s+give\b[^.?!]*?(?:medical advice|legal advice|professional advice)[^.?!]*?(?:[.?!]|$)/gi, '')
     .replace(/\b(?:OpenAI|Anthropic|Claude|GPT[-\s]?\d[\w.-]*|gpt[-\s]?\d[\w.-]*|fake-hostile-model|provider(?:\/model)?|model identity)\b[^.?!]*?(?:[.?!]|$)/gi, '')
-    .replace(/\b(?:I\s+(?:browsed|searched)|Achiote\s+(?:browsed|searched)|live web|current grocery prices|live search results?|web results?)\b[^.?!]*?(?:[.?!]|$)/gi, '')
+    .replace(/\b(?:I\s+(?:browsed|searched|checked|looked\s+up)|Achiote\s+(?:browsed|searched|checked)|live web|live grocery prices?|live prices?|current prices|current grocery prices|live search results?|web results?|under\s+\$\d+)\b[^.?!]*?(?:[.?!]|$)/gi, '')
     .replace(/\b(?:This\s+)?(?:medically safe|medical(?:ly)?|heart-healthy|cure|cures|lowers cholesterol|(?:treats?|prevents?|diagnoses?)\s+(?:a\s+|an\s+|the\s+)?(?:illness|disease|condition|symptoms?|inflammation|cholesterol|infection|diabetes|heart disease|medical problem))\b[^.?!]*?(?:[.?!]|$)/gi, '')
     .replace(/\b(?:legal(?:ly)? safe|legal advice|medical advice|professional advice)\b[^.?!]*?(?:[.?!]|$)/gi, '')
     .replace(/\bFirst-pass verification bite\b/g, 'first-pass verification bite')
