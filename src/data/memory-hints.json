@@ -925,6 +925,105 @@
             "flags": "i"
         }
     ],
+    "conceptAliases": {
+        "beverage": [
+            "beverage",
+            "drink",
+            "juice",
+            "agua fresca",
+            "bebida",
+            "boisson",
+            "bebida fria",
+            "suco",
+            "saft",
+            "jus",
+            "chai",
+            "tea",
+            "cha",
+            "te",
+            "cafe",
+            "coffee"
+        ],
+        "rice": [
+            "rice",
+            "arroz",
+            "riz",
+            "riso",
+            "reis",
+            "chawal",
+            "bhaat",
+            "gohan",
+            "kome",
+            "mifan",
+            "com",
+            "beras",
+            "nasi",
+            "khao"
+        ],
+        "cinnamon": [
+            "cinnamon",
+            "canela",
+            "cannelle",
+            "cannella",
+            "zimt",
+            "dalchini",
+            "kanel",
+            "kurundu",
+            "rougui"
+        ],
+        "barley": [
+            "barley",
+            "cebada",
+            "orge",
+            "orzo",
+            "gerste",
+            "jau",
+            "mugi"
+        ],
+        "corn": [
+            "corn",
+            "maize",
+            "maiz",
+            "maíz",
+            "mais",
+            "milho",
+            "masa",
+            "elote",
+            "makkai",
+            "mokka",
+            "tomorokoshi"
+        ],
+        "cold": [
+            "cold",
+            "ice",
+            "iced",
+            "hielo",
+            "fria",
+            "fría",
+            "froid",
+            "glace",
+            "freddo",
+            "ghiaccio",
+            "kalt",
+            "eis",
+            "thanda",
+            "yuki"
+        ],
+        "grain": [
+            "grain",
+            "cereal",
+            "rice",
+            "barley",
+            "corn",
+            "millet",
+            "oat",
+            "sorghum",
+            "trigo",
+            "ble",
+            "blé",
+            "weizen"
+        ]
+    },
     "regionFamilyMap": {
         "Puerto Rican": [
             "Caribbean",

@@ -93,6 +93,22 @@ describe('shared tool registry', () => {
     expect(plan.payload.workflowSteps.map((step: { tool: string }) => step.tool)).not.toContain('find_sensory_substitutes');
   });
 
+  it('can disable search_web planning for no-search local canaries', async () => {
+    const previous = process.env.ACHIOTE_DISABLE_SEARCH_WEB;
+    process.env.ACHIOTE_DISABLE_SEARCH_WEB = 'true';
+    try {
+      const plan = await executeToolDefinition('plan_tool_workflow', {
+        userMessage: 'I remember a tart green-herb broth with soft potato or egg bits, but nobody remembers the name.',
+      }, defaultToolExecutionContext);
+
+      expect(plan.payload.maxSearchCalls).toBe(0);
+      expect(plan.payload.workflowSteps.map((step: { tool: string }) => step.tool)).not.toContain('search_web');
+    } finally {
+      if (previous === undefined) delete process.env.ACHIOTE_DISABLE_SEARCH_WEB;
+      else process.env.ACHIOTE_DISABLE_SEARCH_WEB = previous;
+    }
+  });
+
   it('recovers research planning when a model passes only normalized memory text', async () => {
     const plan = await executeToolDefinition('plan_dish_research', {
       memory: { normalizedMemory: "Grandma's sour dill soup with pale chunks" },

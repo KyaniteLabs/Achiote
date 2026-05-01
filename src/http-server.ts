@@ -58,6 +58,8 @@ const ALLOWED_ORIGINS = (process.env.ACHIOTE_ALLOWED_ORIGINS || 'http://localhos
   .filter(Boolean);
 const TELEMETRY_LIMIT_PER_MINUTE = parseInt(process.env.ACHIOTE_TELEMETRY_LIMIT_PER_MINUTE || '120', 10);
 const EVENTS_ADMIN_TOKEN = process.env.ACHIOTE_EVENTS_ADMIN_TOKEN?.trim();
+const DISABLE_SEARCH_WEB = process.env.ACHIOTE_DISABLE_SEARCH_WEB === 'true';
+const ASK_TOOLS = DISABLE_SEARCH_WEB ? TOOLS.filter((tool) => tool.name !== 'search_web') : TOOLS;
 const KNOWN_TOOL_NAMES = new Set(TOOLS.map((tool) => tool.name));
 const TOOLS_BY_NAME = new Map(TOOLS.map((tool) => [tool.name, tool]));
 const MODEL_TOOL_NAME_ALIASES: Record<string, string> = {
@@ -223,7 +225,7 @@ function createAskSession(userMessage: string, history?: AskHistoryItem[], image
       model: ASK_MODEL,
       systemPrompt: SYSTEM_PROMPT,
       userMessage,
-      tools: TOOLS,
+      tools: ASK_TOOLS,
       baseUrl: OPENAI_BASE_URL,
       apiKey: process.env.LOCAL_INFERENCE_API_KEY || process.env.OPENAI_API_KEY || process.env.GLM_API_KEY || process.env.ZHIPU_API_KEY || process.env.LMSTUDIO_API_KEY || process.env.LM_STUDIO_API_KEY || null,
       timeoutMs: OPENAI_TIMEOUT_MS,
@@ -237,7 +239,7 @@ function createAskSession(userMessage: string, history?: AskHistoryItem[], image
     model: ASK_MODEL,
     systemPrompt: SYSTEM_PROMPT,
     userMessage,
-    tools: TOOLS,
+    tools: ASK_TOOLS,
     history,
     images,
   });
@@ -664,6 +666,19 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
             console.warn(`[ask] blocked ${call.name} during minimum-cue ask flow`);
             send('tool_call', { name: call.name, input: call.input, blocked: true });
             send('tool_result', { name: call.name, result: resultPayload, blocked: true });
+            toolResults.push({ id: call.id, content: JSON.stringify(resultPayload) });
+            toolCallHistory.push({ name: call.name, input: call.input });
+            continue;
+          }
+          if (call.name === 'search_web' && DISABLE_SEARCH_WEB) {
+            const resultPayload = {
+              skipped: true,
+              disabled: true,
+              message: 'search_web is disabled for this Achiote run. Continue from collected memory, resolver, and internal reference data.',
+            };
+            console.warn('[ask] blocked search_web because ACHIOTE_DISABLE_SEARCH_WEB=true');
+            send('tool_call', { name: 'search_web', input: call.input, blocked: true, disabled: true });
+            send('tool_result', { name: 'search_web', result: resultPayload, blocked: true, disabled: true });
             toolResults.push({ id: call.id, content: JSON.stringify(resultPayload) });
             toolCallHistory.push({ name: call.name, input: call.input });
             continue;
@@ -1466,7 +1481,7 @@ function nextAskToolNames(toolPayloads: Record<string, unknown>, calledTools: Se
   const plan = toolPayloads.plan_tool_workflow as { workflowSteps?: Array<{ tool?: unknown }>; needsSubstitutions?: boolean } | undefined;
   const plannedToolNames = (plan?.workflowSteps ?? [])
     .map((step) => step.tool)
-    .filter((tool): tool is string => typeof tool === 'string' && KNOWN_TOOL_NAMES.has(tool) && tool !== 'plan_tool_workflow');
+    .filter((tool): tool is string => typeof tool === 'string' && KNOWN_TOOL_NAMES.has(tool) && tool !== 'plan_tool_workflow' && !(DISABLE_SEARCH_WEB && tool === 'search_web'));
 
   if (plannedToolNames.length === 0) return calledTools.has('collect_food_memory') ? [] : ['collect_food_memory'];
   if (!calledTools.has('collect_food_memory') && plannedToolNames.includes('collect_food_memory')) return ['collect_food_memory'];
@@ -2030,7 +2045,7 @@ function containsRecipeMeasurementLanguage(text: string): boolean {
   return /\b\d+(?:\s*[-–]\s*\d+)?(?:\s*\/\s*\d+)?\s*(?:tsp|tbsp|teaspoons?|tablespoons?|cups?|ounces?|oz|pounds?|lbs?|grams?|g|ml|milliliters?|liters?|quarts?|gallons?|sticks?|cloves?|heads?|bunches?)\b/i.test(text)
     || /(?:[¼½¾⅓⅔⅛⅜⅝⅞]|\b\d+\/\d+)\s*(?:tsp|tbsp|teaspoons?|tablespoons?|cups?|ounces?|oz|pounds?|lbs?|grams?|g|ml|milliliters?|liters?|quarts?|gallons?|sticks?|cloves?|heads?|bunches?)\b/i.test(text)
     || /\b(?:one|half)[-\s]?cup\b/i.test(text)
-    || new RegExp(String.raw`\b${spelledAmount}\s+(?:of\s+|a\s+)?(?:tsp|tbsp|teaspoons?|tablespoons?|cups?|ounces?|oz|pounds?|lbs?|grams?|milliliters?|liters?|quarts?|gallons?|sticks?|cloves?|heads?|bunches?)\b`, 'i').test(text)
+    || new RegExp(String.raw`\b${spelledAmount}\s+(?:(?:small|large|tiny)\s+)?(?:of\s+|a\s+)?(?:tsp|tbsp|teaspoons?|tablespoons?|cups?|glass(?:es)?|bowls?|spoonfuls?|ounces?|oz|pounds?|lbs?|grams?|milliliters?|liters?|quarts?|gallons?|sticks?|cloves?|heads?|bunches?)\b`, 'i').test(text)
     || /\b\d+(?:\s*[-–]\s*\d+)?\s*(?:mins?|minutes?|hrs?|hours?)\b/i.test(text)
     || /\b\d{2,4}\s*°?\s*[FC]\b/i.test(text)
     || /\bpreheat\b.*\b(?:oven|to)\b/i.test(text)
@@ -2060,7 +2075,7 @@ function sanitizeRecipeStyleCueLanguage(text: string): string {
     .replace(/\b(?:one|half)[-\s]?cup\b/gi, 'tiny sip')
     .replace(/\bfull\s+recipe\b/gi, 'full dish')
     .replace(/\b\d+(?:\s*[-–]\s*\d+)?(?:\s*\/\s*\d+)?\s*(?:tsp|tbsp|teaspoons?|tablespoons?|cups?|ounces?|oz|pounds?|lbs?|grams?|g|ml|milliliters?|liters?|quarts?|gallons?|sticks?|cloves?|heads?|bunches?)\b/gi, 'a small amount of')
-    .replace(/\b(?:a|an|half|quarter|one|two|three|four|five|six|seven|eight|nine|ten)\s+(?:of\s+|a\s+)?(?:tsp|tbsp|teaspoons?|tablespoons?|cups?|ounces?|oz|pounds?|lbs?|grams?|milliliters?|liters?|quarts?|gallons?|sticks?|cloves?|heads?|bunches?)\b/gi, 'a small amount of')
+    .replace(/\b(?:a|an|half|quarter|one|two|three|four|five|six|seven|eight|nine|ten)\s+(?:(?:small|large|tiny)\s+)?(?:of\s+|a\s+)?(?:tsp|tbsp|teaspoons?|tablespoons?|cups?|glass(?:es)?|bowls?|spoonfuls?|ounces?|oz|pounds?|lbs?|grams?|milliliters?|liters?|quarts?|gallons?|sticks?|cloves?|heads?|bunches?)\b/gi, 'a tiny sip or bite')
     .replace(/\b\d+(?:\s*[-–]\s*\d+)?\s*(?:mins?|minutes?|hrs?|hours?)\b/gi, 'briefly')
     .replace(/\b\d{2,4}\s*°?\s*[FC]\b/gi, 'gentle heat')
     .replace(/\b(?:gentle\s+simmer|rolling\s+boil)\b/gi, 'gentle heat')

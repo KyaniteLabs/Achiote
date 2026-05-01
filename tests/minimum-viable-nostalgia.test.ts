@@ -546,7 +546,24 @@ describe('minimum viable nostalgia cue', () => {
     expect(cue.title).toContain('beverage');
     expect(recommendationText).toMatch(/rice|cinnamon|barley|grain|lime|citrus/);
     expect(recommendationText).toMatch(/ice|cold|chill|dilution/);
-    expect(recommendationText).not.toMatch(/dominant beverage aroma|strongest remembered aroma/);
+    expect(recommendationText).not.toMatch(/dominant beverage aroma|strongest remembered aroma|another remembered spice\/aroma/);
+  });
+
+  it('maps Spanish rice-cinnamon beverage clues to grain-drink mechanisms', () => {
+    const cue = generateMinimumViableNostalgiaCue({
+      dossier: beverageDossier(
+        'Mi abuela made una bebida fria de arroz con canela, muy ligera, served over hielo.',
+        [
+          'Spanish rice-cinnamon beverage memories should map arroz/canela/hielo to grain body, spice aroma, dilution, and cold serving ritual.',
+        ],
+      ),
+      maxEffortMinutes: 10,
+    });
+    const recommendationText = fullCueText(cue);
+
+    expect(cue.title).toContain('beverage');
+    expect(recommendationText).toMatch(/arroz|rice|canela|cinnamon|hielo|ice|cold/i);
+    expect(recommendationText).not.toMatch(/user-named fruit, spice, herb|user-named grain-spice cue|strongest remembered aroma/i);
   });
 
   it('handles carbonated drink memories through fizz, acid, sugar, temperature, and aroma', () => {

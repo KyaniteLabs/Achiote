@@ -483,17 +483,21 @@ export const toolRegistry = [
       steps.push({ tool: 'collect_food_memory', reason: 'Parse user message into structured clues and missing information', required: true });
       steps.push({ tool: 'plan_dish_research', reason: 'Build hypotheses and identify what to research', required: true });
 
-      let maxSearchCalls = 1;
+      const searchWebDisabled = process.env.ACHIOTE_DISABLE_SEARCH_WEB === 'true';
+      let maxSearchCalls = searchWebDisabled ? 0 : 1;
+      const addSearchStep = (reason: string): void => {
+        if (!searchWebDisabled) steps.push({ tool: 'search_web', reason, required: false });
+      };
 
       if (needsSubstitutions) {
         steps.push({ tool: 'resolve_dish_name', reason: 'Identify the base dish to substitute for', required: true });
-        steps.push({ tool: 'search_web', reason: 'Find authentic preparation details for the base dish', required: false });
+        addSearchStep('Find authentic preparation details for the base dish');
         steps.push({ tool: 'build_reconstruction_dossier', reason: 'Assemble the original evidence boundary before substitutions', required: true });
         steps.push({ tool: 'generate_minimum_viable_nostalgia', reason: 'Create the original minimum cue that will become the substitution basis', required: true });
         steps.push({ tool: 'find_sensory_substitutes', reason: 'Find compound-matched substitutions after the original cue is clear', required: true });
       } else if (detectedIntent === 'recipe_adaptation') {
         steps.push({ tool: 'resolve_dish_name', reason: 'Identify the target dish', required: true });
-        steps.push({ tool: 'search_web', reason: 'Find current recipe approaches', required: false });
+        addSearchStep('Find current recipe approaches');
         steps.push({ tool: 'build_reconstruction_dossier', reason: 'Assemble evidence for adaptation', required: true });
         steps.push({ tool: 'generate_minimum_viable_nostalgia', reason: 'Create a test cue for the adaptation', required: true });
       } else if (detectedIntent === 'unknown_dish' || detectedIntent === 'general_food_inquiry') {
@@ -502,7 +506,7 @@ export const toolRegistry = [
       } else {
         // nostalgic_memory, ritual_ceremony, multilingual_inquiry, contradictory_memory
         steps.push({ tool: 'resolve_dish_name', reason: 'Match dish name from memory clues', required: false });
-        steps.push({ tool: 'search_web', reason: 'Confirm dish identity or find regional details', required: false });
+        addSearchStep('Confirm dish identity or find regional details');
         steps.push({ tool: 'build_reconstruction_dossier', reason: 'Assemble evidence boundary', required: true });
         steps.push({ tool: 'generate_minimum_viable_nostalgia', reason: 'Create first sensory test cue', required: true });
       }

@@ -75,6 +75,16 @@ describe('overfitting guardrails', () => {
     expect(workflow).not.toContain('const CORRECTED_RESEARCH_TARGETS');
   });
 
+  it('keeps multilingual concept aliases in taxonomy data, not cue-selection code', () => {
+    const workflow = read('src/lib/memory-workflow.ts');
+    const memoryHints = read('src/data/memory-hints.json');
+    const cueSelectionCode = workflow.slice(workflow.indexOf('function signalIncludes'));
+
+    expect(memoryHints).toContain('"conceptAliases"');
+    expect(workflow).toContain('conceptIncludes');
+    expect(cueSelectionCode).not.toMatch(/\b(?:arroz|canela|hielo|fria|fría|maiz|maíz|bebida)\b/i);
+  });
+
   it('keeps canary prompts out-of-sample from public landing examples', () => {
     const landingExamples = extractLandingExamples();
     const canaryPrompts = extractCanaryPrompts();

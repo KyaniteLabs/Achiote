@@ -32,9 +32,16 @@ const RESEARCH_STOPWORDS = new Set([
 ]);
 
 type CookingMethodHint = { label: string; regexSource?: string; flags?: string };
+type MemoryHintsData = {
+  ingredients: string[];
+  cookingMethods: CookingMethodHint[];
+  conceptAliases?: Record<string, string[]>;
+};
 
-const INGREDIENT_HINTS = memoryHintsData.ingredients;
-const COOKING_METHOD_HINTS: CookingMethodHint[] = memoryHintsData.cookingMethods;
+const MEMORY_HINTS = memoryHintsData as MemoryHintsData;
+const INGREDIENT_HINTS = MEMORY_HINTS.ingredients;
+const COOKING_METHOD_HINTS: CookingMethodHint[] = MEMORY_HINTS.cookingMethods;
+const CONCEPT_ALIASES = MEMORY_HINTS.conceptAliases ?? {};
 
 function unique(values: string[]): string[] {
   return [...new Set(values.filter(Boolean))];
@@ -975,6 +982,21 @@ function signalIncludes(signals: string, words: string): boolean {
   return hasAnySignal(normalizedSignals, [wordSignal(words)]);
 }
 
+function conceptIncludes(signals: string, concepts: string[]): boolean {
+  const normalizedSignals = normalizeForLooseMatch(signals);
+  return concepts.some((concept) => {
+    const aliases = CONCEPT_ALIASES[concept] ?? [concept];
+    return aliases.some((alias) => {
+      const normalizedAlias = normalizeForLooseMatch(alias);
+      if (normalizedAlias.length <= 2) return false;
+      if (/^[a-z0-9 ]+$/i.test(normalizedAlias)) {
+        return new RegExp(`(?:^|\\s)${escapeRegExp(normalizedAlias)}(?:$|\\s)`, 'i').test(normalizedSignals);
+      }
+      return normalizedSignals.includes(normalizedAlias);
+    });
+  });
+}
+
 function specificCriticalElement(role: ComponentRole, signals: string, fallback: string): string {
   if (role === 'starch' && signalIncludes(signals, 'yuca|cassava|tapioca')) {
     return 'cassava-family chew, gelatinized starch body, and crisp fried surface';
@@ -985,7 +1007,7 @@ function specificCriticalElement(role: ComponentRole, signals: string, fallback:
   if (role === 'beverage' && signalIncludes(signals, 'fizzy|carbonated|sparkling|seltzer|soda')) {
     return 'carbonation bite, acid-sugar balance, syrup aroma, cold temperature, and serving ritual';
   }
-  if (role === 'beverage' && signalIncludes(signals, 'rice|horchata|agua de cebada|cebada|ceba|barley|atole|champurrado|pinol|pinole|cinnamon|masa|corn')) {
+  if (role === 'beverage' && (signalIncludes(signals, 'horchata|agua de cebada|ceba|atole|champurrado|pinol|pinole') || conceptIncludes(signals, ['rice', 'barley', 'corn', 'cinnamon', 'grain']))) {
     return 'grain or starch body, spice extraction, sweetness, dilution, serving temperature, and sip ritual';
   }
   if (role === 'beverage' && signalIncludes(signals, 'tea|chai|coffee|espresso|mate|cocoa')) {
@@ -1010,7 +1032,7 @@ function specificFlavorProfile(role: ComponentRole, signals: string, fallback: s
   if (role === 'beverage' && signalIncludes(signals, 'fizzy|carbonated|sparkling|seltzer|soda')) {
     return 'cold fizz, tart acid, syrupy sweetness, fruit or kola aroma, and a short carbonation prickle';
   }
-  if (role === 'beverage' && signalIncludes(signals, 'rice|horchata|agua de cebada|cebada|ceba|barley|atole|champurrado|pinol|pinole|cinnamon|masa|corn')) {
+  if (role === 'beverage' && (signalIncludes(signals, 'horchata|agua de cebada|ceba|atole|champurrado|pinol|pinole') || conceptIncludes(signals, ['rice', 'barley', 'corn', 'cinnamon', 'grain']))) {
     return 'milky or grainy body, cinnamon or warm spice, gentle sweetness, and dilution adjusted by ice or heat';
   }
   if (role === 'beverage' && signalIncludes(signals, 'tea|chai|coffee|espresso|mate|cocoa')) {
@@ -1038,7 +1060,7 @@ function specificLocalTestWith(role: ComponentRole, signals: string, fallback: s
   if (role === 'beverage' && signalIncludes(signals, 'agua de cebada|cebada|ceba|barley')) {
     return 'barley water, toasted barley tea, or water with a tiny barley/oat/rice-starch slurry, served cold with lime or ice as remembered';
   }
-  if (role === 'beverage' && signalIncludes(signals, 'rice|horchata|atole|champurrado|pinol|pinole|cinnamon|masa|corn')) {
+  if (role === 'beverage' && (signalIncludes(signals, 'horchata|atole|champurrado|pinol|pinole') || conceptIncludes(signals, ['rice', 'corn', 'cinnamon', 'grain']))) {
     return 'water, milk or plant milk, or a tiny rice/oat/corn-starch slurry with cinnamon and sugar, served cold over ice or warm as remembered';
   }
   if (role === 'beverage' && signalIncludes(signals, 'tea|chai|coffee|espresso|mate|cocoa')) {
@@ -1101,7 +1123,8 @@ function composedBiteSteps(signals: string): string[] {
 }
 
 function isBeverageSignal(signals: string): boolean {
-  return signalIncludes(signals, 'drink|beverage|juice|soda|fizzy|carbonated|sparkling|seltzer|horchata|agua fresca|agua de cebada|cebada|ceba|barley|atole|champurrado|lassi|chai|tea|coffee|espresso|cocoa|mate|milkshake|smoothie|tepache|sorrel|mauby|akasan|pinol|pinole|kombucha|over ice');
+  return signalIncludes(signals, 'juice|soda|fizzy|carbonated|sparkling|seltzer|horchata|agua fresca|agua de cebada|ceba|atole|champurrado|lassi|chai|tea|coffee|espresso|cocoa|mate|milkshake|smoothie|tepache|sorrel|mauby|akasan|pinol|pinole|kombucha|over ice')
+    || conceptIncludes(signals, ['beverage', 'barley', 'rice', 'cinnamon']);
 }
 
 function beverageCarrierIngredient(signals: string): string {
@@ -1111,7 +1134,7 @@ function beverageCarrierIngredient(signals: string): string {
   if (signalIncludes(signals, 'agua de cebada|cebada|ceba|barley')) {
     return 'barley water, toasted barley tea, or water with a tiny barley/oat/rice-starch slurry';
   }
-  if (signalIncludes(signals, 'rice|horchata|atole|champurrado|pinol|pinole|cinnamon|masa|corn')) {
+  if (signalIncludes(signals, 'horchata|atole|champurrado|pinol|pinole') || conceptIncludes(signals, ['rice', 'cinnamon', 'corn', 'grain'])) {
     return 'water, milk or plant milk, or a tiny rice/oat/corn-starch slurry';
   }
   if (signalIncludes(signals, 'lassi|yogurt|dairy|milk|milkshake|smoothie')) {
@@ -1125,10 +1148,10 @@ function beverageCarrierIngredient(signals: string): string {
 
 function beverageAromaIngredient(signals: string): string {
   if (signalIncludes(signals, 'agua de cebada|cebada|ceba|barley')) {
-    return 'toasted barley, lime zest, citrus juice, or another remembered grain/citrus aroma';
+    return 'toasted barley, barley tea, rice or oat starch aroma, lime zest, or a tiny citrus cue';
   }
-  if (signalIncludes(signals, 'rice|horchata|atole|champurrado|pinol|pinole|cinnamon|masa|corn')) {
-    return 'cinnamon, vanilla, cocoa, toasted grain, or another remembered spice/aroma';
+  if (signalIncludes(signals, 'horchata|atole|champurrado|pinol|pinole') || conceptIncludes(signals, ['rice', 'cinnamon', 'corn', 'grain'])) {
+    return 'cinnamon, vanilla, cocoa, toasted rice, toasted corn, barley tea, lime zest, or a tiny cue matching the named grain or spice';
   }
   if (signalIncludes(signals, 'fizzy|carbonated|sparkling|seltzer|soda')) {
     return 'one fruit, kola, vanilla, citrus, or spice aroma from pantry syrup, extract, zest, or juice';
@@ -1136,11 +1159,11 @@ function beverageAromaIngredient(signals: string): string {
   if (signalIncludes(signals, 'tea|chai|coffee|espresso|mate|cocoa')) {
     return 'the remembered tea, coffee, cocoa, or spice direction';
   }
-  return 'the strongest remembered aroma: fruit, spice, herb, roast, floral water, or citrus';
+  return 'a specific fruit, spice, herb, roast, floral-water, citrus, or serving-aroma cue identified from the memory';
 }
 
 function beverageTemperatureIngredient(signals: string): string {
-  if (signalIncludes(signals, 'cold|ice|iced|fizzy|carbonated|sparkling|seltzer|soda|juice|agua fresca')) {
+  if (signalIncludes(signals, 'cold|ice|iced|fizzy|carbonated|sparkling|seltzer|soda|juice|agua fresca') || conceptIncludes(signals, ['cold'])) {
     return 'ice or a chilled glass';
   }
   if (signalIncludes(signals, 'warm|hot|atole|champurrado|chai|tea|coffee|cocoa|mate')) {
@@ -1151,7 +1174,7 @@ function beverageTemperatureIngredient(signals: string): string {
 
 function beverageCueProfile(signals: string, userLocation?: string, overallConfidence?: Confidence): FoodScienceCueProfile {
   const carbonated = signalIncludes(signals, 'fizzy|carbonated|sparkling|seltzer|soda');
-  const grainDrink = signalIncludes(signals, 'rice|horchata|agua de cebada|cebada|ceba|barley|atole|champurrado|pinol|pinole|cinnamon|masa|corn');
+  const grainDrink = signalIncludes(signals, 'horchata|agua de cebada|ceba|atole|champurrado|pinol|pinole') || conceptIncludes(signals, ['rice', 'barley', 'corn', 'cinnamon', 'grain']);
   return {
     title: 'Minimum viable beverage-memory cue',
     goal: 'Test the memory as a drink by isolating sip temperature, dilution, body, sweetness, acid, aroma extraction, and serving ritual before buying or making the exact beverage.',
@@ -1328,8 +1351,8 @@ function foodScienceCueProfile(signals: string, userLocation?: string, overallCo
       effortMinutes: 12,
       format: 'sip',
       ingredients: [
-        { item: 'water, broth, milk, or another cheap neutral liquid carrier', amount: '1 cup', purpose: 'volatile aroma and taste carrier' },
-        { item: 'small amount of the researched dominant aromatic or spice family', amount: 'pinch to 1 teaspoon', purpose: 'primary smell/taste trigger' },
+        { item: 'safe liquid from the remembered family: water for watery/cold clues, broth for savory soup clues, milk or plant milk only when body was remembered', amount: '1 cup', purpose: 'volatile aroma and taste carrier' },
+        { item: 'one named aroma or balance cue from the memory, such as herb, spice, grain, citrus, roast, or sauce note', amount: 'pinch, drop, or tiny piece', purpose: 'primary smell/taste trigger' },
         { item: 'tiny fat source such as oil, butter, rendered fat, or coconut milk if relevant', amount: '1/4 to 1 teaspoon', purpose: 'carries fat-soluble aroma compounds', optional: true },
         { item: 'acid/sweet/salt adjustment from pantry ingredients', amount: 'drops or pinches', purpose: 'balance sourness, sweetness, salinity, and brightness', optional: true },
       ],
@@ -1350,7 +1373,7 @@ function foodScienceCueProfile(signals: string, userLocation?: string, overallCo
       ],
       whyThisIsMinimum: 'A one-cup sip tests the chemistry of aroma release, body, acid, salt, and fat before wasting ingredients on a full pot.',
       safetyNotes: ['Use only known edible ingredients.', 'Keep tasting amounts small while adjusting salt, acid, or heat.'],
-      followUpIfItWorks: ['Ask what gave the liquid body.', 'Ask whether the brightness came from citrus, vinegar, dairy, fermentation, or tomato.', 'Ask what texture or garnish is missing.', 'Use source_ingredients to help find key items near the user.'],
+      followUpIfItWorks: ['Ask whether the liquid body came from grain starch, broth, dairy/plant milk, fruit pulp, fat, or dilution.', 'Ask whether the brightness came from citrus, vinegar, dairy, fermentation, or tomato.', 'Ask what texture or garnish is missing.', 'Use source_ingredients to help find key items near the user.'],
       components: decomposeIntoComponents(signals, userLocation, overallConfidence),
     };
   }
@@ -1592,7 +1615,7 @@ function rewriteIngredientForConstraints(item: string, classes: Set<ConstraintCl
         'small amount of plant-based umami/fat carrier such as beans, mushrooms, tofu, or olive oil',
       ],
       [
-        'water, broth, milk, or another cheap neutral liquid carrier',
+        'safe liquid from the remembered family: water for watery/cold clues, broth for savory soup clues, milk or plant milk only when body was remembered',
         'water, vegetable broth, or olive-oil-enriched plant liquid carrier',
       ],
       [
@@ -1622,7 +1645,7 @@ function rewriteIngredientForConstraints(item: string, classes: Set<ConstraintCl
   if (classes.has('dairy-free')) {
     rewritten = replaceConstraintText(rewritten, [
       [
-        'water, broth, milk, or another cheap neutral liquid carrier',
+        'safe liquid from the remembered family: water for watery/cold clues, broth for savory soup clues, milk or plant milk only when body was remembered',
         'water, broth, or olive-oil-enriched plant liquid carrier',
       ],
       [

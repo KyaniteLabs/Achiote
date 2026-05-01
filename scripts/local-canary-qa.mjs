@@ -160,7 +160,11 @@ function parsePositiveInteger(value) {
 }
 
 function recipeMeasurementPattern() {
-  return /\b(?:\d+\s*(?:cups?|tbsp|tablespoons?|teaspoons?|tsp|minutes?|mins?|servings?)|1\/2\s*cup|one-cup|half-cup|exact recipe|350\s*°?F|12-15\s*min)\b/i;
+  return /\b(?:\d+\s*(?:cups?|tbsp|tablespoons?|teaspoons?|tsp|minutes?|mins?|servings?)|(?:one|two|three|four|five|six|seven|eight|nine|ten|small|large)\s+(?:glasses?|bowls?|spoonfuls?)|1\/2\s*cup|one-cup|half-cup|exact recipe|350\s*°?F|12-15\s*min)\b/i;
+}
+
+function genericPlaceholderCuePattern() {
+  return /\b(?:dominant aromatic or spice family|cheap neutral liquid carrier|another cheap neutral liquid carrier|Ask what gave the liquid body|researched dominant aromatic|another remembered spice\/aroma|strongest remembered aroma|user-named fruit, spice, herb|user-named grain-spice cue)\b/i;
 }
 
 function selectedCases() {
@@ -325,6 +329,7 @@ async function withLocalAchiote(callback) {
       ACHIOTE_AUTH_ENABLED: 'false',
       ACHIOTE_ALLOW_ANON_ASK: 'true',
       ACHIOTE_ANON_WEB_RECONSTRUCTIONS: '100',
+      ACHIOTE_DISABLE_SEARCH_WEB: 'true',
       ACHIOTE_ASK_PROVIDER: 'local',
       ACHIOTE_ASK_MODEL: model,
       LOCAL_INFERENCE_MODEL: model,
@@ -405,8 +410,10 @@ function assessCase(testCase, result) {
   for (const forbidden of testCase.forbiddenTools ?? []) {
     if (tools.includes(forbidden)) findings.push(`forbidden_tool:${forbidden}`);
   }
+  if (testCase.allowSearch !== true && tools.includes('search_web')) findings.push('forbidden_tool:search_web');
   if (testCase.requireText && !testCase.requireText.test(text)) findings.push('missing_expected_text_signal');
   if (testCase.forbiddenText && testCase.forbiddenText.test(text)) findings.push('forbidden_text');
+  if (genericPlaceholderCuePattern().test(text)) findings.push('generic_placeholder_cue');
   if (testCase.allowedGuarded && guarded && !testCase.allowedGuarded.includes(guarded)) findings.push(`unexpected_guard:${guarded}`);
 
   const providerFailure = findings.some((finding) => finding.startsWith('transport:')

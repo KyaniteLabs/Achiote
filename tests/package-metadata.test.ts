@@ -168,6 +168,8 @@ describe('package distribution metadata', () => {
     expect(canaryScript).toContain('LOCAL_CANARY_CASES');
     expect(canaryScript).toContain('LOCAL_CANARY_PROFILE');
     expect(canaryScript).toContain('LOCAL_CANARY_SUMMARY_JSON');
+    expect(canaryScript).toContain("forbidden_tool:search_web");
+    expect(canaryScript).toContain('generic_placeholder_cue');
   });
 
 
