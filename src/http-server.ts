@@ -1896,6 +1896,8 @@ function sanitizeFinalAnswerTrustBoundaryLanguage(text: string): string {
     .replace(/\b(?:OpenAI|Anthropic|Claude|GPT[-\s]?\d[\w.-]*|gpt[-\s]?\d[\w.-]*|fake-hostile-model|provider(?:\/model)?|model identity)\b[^.?!]*?(?:[.?!]|$)/gi, '')
     .replace(/\b(?:I(?:'ve|\s+have)?\s+(?:browsed|searched|checked|looked\s+up)|Achiote\s+(?:browsed|searched|checked)|live web|live grocery prices?|live prices?|current prices|current grocery prices|live search results?|web results?|under\s+\$\d+)\b[^.?!]*?(?:[.?!]|$)/gi, '')
     .replace(/\b[^.?!]*?\$\d+(?:\.\d{1,2})?[^.?!]*?(?:[.?!]|$)/gi, '')
+    .replace(/\b(?:a\s+)?(?:tiny\s+)?(?:drop|drops?|few\s+drops)\s+of\s+([a-z][a-z\s-]{0,30}?)\s+essential\s+oils?\b/gi, (_match, herb: string) => `a pinch of crushed fresh or dried ${herb.trim()}`)
+    .replace(/\b([a-z][a-z\s-]{0,30}?)\s+essential\s+oils?\b/gi, (_match, herb: string) => `crushed fresh or dried ${herb.trim()}`)
     .replace(/\b(?:This\s+)?(?:medically safe|medical(?:ly)?|heart-healthy|cure|cures|lowers cholesterol|(?:treats?|prevents?|diagnoses?)\s+(?:a\s+|an\s+|the\s+)?(?:illness|disease|condition|symptoms?|inflammation|cholesterol|infection|diabetes|heart disease|medical problem))\b[^.?!]*?(?:[.?!]|$)/gi, '')
     .replace(/\b(?:legal(?:ly)? safe|legal advice|medical advice|professional advice)\b[^.?!]*?(?:[.?!]|$)/gi, '')
     .replace(/\bFirst-pass verification bite\b/g, 'first-pass verification bite')
