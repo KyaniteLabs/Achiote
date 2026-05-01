@@ -829,6 +829,15 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       return;
     }
 
+    if (calledTools.has('generate_minimum_viable_nostalgia') && containsCueFamilyMismatch(trustBoundedResponseText, userMessage)) {
+      console.warn('[ask] replaced cue-family mismatch with deterministic mechanism cue');
+      const responseText = buildUserMessageMechanismCueResponse(userMessage, toolPayloads);
+      send('text', responseText);
+      maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
+      finish({ guarded: 'cue_family_sanitized' });
+      return;
+    }
+
     if (calledTools.has('generate_minimum_viable_nostalgia') && containsOverconfidentIdentityClaim(trustBoundedResponseText)) {
       console.warn('[ask] replaced overconfident identity claim with deterministic minimum cue');
       const responseText = buildMinimumCueCompletedResponse(toolPayloads);
@@ -1159,6 +1168,38 @@ function latestCorrectionNeedsMechanismFallback(text: string, userMessage: strin
     return true;
   }
   return false;
+}
+
+function containsCueFamilyMismatch(text: string, userMessage: string): boolean {
+  if (/\b(?:soup|broth|stew)\b/i.test(userMessage) && /\b(?:beverage-memory|carbonation|foamy|iced|over ice|exact drink)\b/i.test(text)) {
+    return true;
+  }
+  if (/\b(?:gravy|sauce|chicken|naan|substitution|adapt)\b/i.test(userMessage) && /\b(?:sweet-texture|confectionery|suspected candy)\b/i.test(text)) {
+    return true;
+  }
+  return false;
+}
+
+function buildUserMessageMechanismCueResponse(userMessage: string, toolPayloads: Record<string, unknown>): string {
+  const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
+  const localLine = memory?.userLocation
+    ? `Use ordinary grocery or pantry items near ${memory.userLocation}; do not buy the exact suspected dish for this first test.`
+    : '';
+  const cuePhrase = /\b(?:soup|broth|stew)\b/i.test(userMessage)
+    ? 'a tiny amount of safe neutral liquid carrier plus one tiny remembered aroma, acid, herb, or texture cue from the user message'
+    : 'a tiny amount of a safe neutral carrier plus one tiny remembered aroma, fat, acid, texture, or mouthfeel cue from the user message';
+  return sanitizeMinimumCueFallbackBlock([
+    'Minimum viable memory-family cue',
+    '',
+    `First-pass verification bite: ${cuePhrase}.`,
+    '',
+    'Keep it to one sip, smell, or bite that tests only the corrected memory family instead of reusing an older or incompatible cue type.',
+    'Do not buy the exact suspected dish yet; this is only the first check.',
+    '',
+    'Why this is minimum: The user message is the highest-trust evidence, so the first cue should match that memory family before adding recipe structure or exact identity.',
+    localLine,
+    'If it works, next ask: Ask which detail hit first: smell, texture, acid, fat, starch, temperature, or serving ritual.',
+  ].filter((line) => line.length > 0).join('\n'));
 }
 
 function normalizeResearchRecordInput(record: Record<string, unknown>, toolPayloads: Record<string, unknown>): unknown {
@@ -1804,11 +1845,14 @@ function containsRecipeMeasurementLanguage(text: string): boolean {
 }
 
 function containsRecipeProcedureOrAdaptationLanguage(text: string): boolean {
-  const cookingVerbs = text.match(/\b(?:peel|grate|boil|mash|form|press|seal|fry|shallow-fry|simmer|strain|blend|knead|roll|stuff|marinate|bake|roast|saute|sauté|whisk|stir|mix|combine|cook|heat|top|taste)\b/gi) || [];
+  const cookingVerbs = text.match(/\b(?:peel|grate|boil|mash|form|press|seal|fry|shallow-fry|simmer|strain|blend|knead|roll|stuff|marinate|bake|roast|saute|sauté|whisk|stir|mix|combine|cook|heat|top|taste|add|serve|chill)\b/gi) || [];
+  const recipeBullets = text.match(/(?:^|\n)\s*[-*]\s*(?:simmer|add|serve|mix|blend|heat|stir|combine|cook)\b/gi) || [];
+  if (recipeBullets.length >= 2) return true;
   if (new Set(cookingVerbs.map((match) => match.toLowerCase())).size >= 4) return true;
   return /\b(?:for your|adaptations?|replacement for|heart-healthier swaps?|halal chicken|vegan adaptation|gluten-free adaptations?|nut-free replacement)\b[\s\S]{0,500}\b(?:substitute|replace|swap|blend|certification|tofu|coconut cream|white beans|sunflower seeds)\b/i.test(text)
     || /\b(?:full substitution map|complex set of dietary needs|overlapping constraints|biggest challenges)\b/i.test(text)
     || /\bbefore I give you\b[\s\S]{0,200}\bsubstitution map\b/i.test(text)
+    || /\btry this simple version\b[\s\S]{0,500}\b(?:simmer|serve with|add|sauce)\b/i.test(text)
     || /\bmake a simple (?:broth|sauce|slurry|mixture|paste)\b[\s\S]{0,250}\b(?:dash|pinch|squeeze|spoon|sip|simmer|mix|blend|taste)\b/i.test(text)
     || /\bminimum viable nostalgia bite\b[\s\S]{0,600}\btake\b[\s\S]{0,200}\btop\b[\s\S]{0,200}\btaste\b/i.test(text);
 }
