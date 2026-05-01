@@ -697,7 +697,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
         const detail = err instanceof Error ? err.message : String(err);
         if (modelResponse.toolCalls.some((call) => call.name === 'generate_minimum_viable_nostalgia')) {
           console.warn(`[ask] final synthesis unavailable after minimum cue, using deterministic response: ${detail}`);
-          const responseText = buildMinimumCueCompletedResponse(toolPayloads);
+          const responseText = buildMinimumCueCompletedResponse(toolPayloads, userMessage);
           send('text', responseText);
           maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
           finish({ guarded: 'minimum_cue_deterministic_completion' });
@@ -797,7 +797,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
 
     if (calledTools.has('generate_minimum_viable_nostalgia') && containsBlockedRecipeToolSynthesis(modelResponse.textBlocks.join('\n\n'))) {
       console.warn('[ask] replaced blocked recipe-tool synthesis with deterministic minimum cue');
-      const responseText = buildMinimumCueCompletedResponse(toolPayloads);
+      const responseText = buildMinimumCueCompletedResponse(toolPayloads, userMessage);
       send('text', responseText);
       maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
       finish({ guarded: 'minimum_cue_deterministic_completion' });
@@ -807,7 +807,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
     if (calledTools.has('generate_minimum_viable_nostalgia')
       && (modelResponse.textBlocks.length === 0 || containsStalledFallbackText(modelResponse.textBlocks.join('\n\n')))) {
       console.warn('[ask] replaced stalled post-cue response with deterministic minimum cue');
-      const responseText = buildMinimumCueCompletedResponse(toolPayloads);
+      const responseText = buildMinimumCueCompletedResponse(toolPayloads, userMessage);
       send('text', responseText);
       maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
       finish({ guarded: 'minimum_cue_deterministic_completion' });
@@ -822,7 +822,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
 
     if (calledTools.has('generate_minimum_viable_nostalgia') && contradictsLatestCorrection(trustBoundedResponseText, userMessage)) {
       console.warn('[ask] replaced stale correction-conflicting response with deterministic minimum cue');
-      const responseText = buildLatestCorrectionAlignedResponse(buildMinimumCueCompletedResponse(toolPayloads), userMessage, toolPayloads);
+      const responseText = buildLatestCorrectionAlignedResponse(buildMinimumCueCompletedResponse(toolPayloads, userMessage), userMessage, toolPayloads);
       send('text', responseText);
       maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
       finish({ guarded: 'latest_correction_sanitized' });
@@ -840,7 +840,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
 
     if (calledTools.has('generate_minimum_viable_nostalgia') && containsOverconfidentIdentityClaim(trustBoundedResponseText)) {
       console.warn('[ask] replaced overconfident identity claim with deterministic minimum cue');
-      const responseText = buildMinimumCueCompletedResponse(toolPayloads);
+      const responseText = buildMinimumCueCompletedResponse(toolPayloads, userMessage);
       send('text', responseText);
       maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
       finish({ guarded: 'overconfident_identity_sanitized' });
@@ -849,7 +849,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
 
     if (calledTools.has('generate_minimum_viable_nostalgia') && containsRecipeProcedureOrAdaptationLanguage(trustBoundedResponseText)) {
       console.warn('[ask] replaced recipe procedure drift with deterministic minimum cue');
-      const responseText = buildMinimumCueCompletedResponse(toolPayloads);
+      const responseText = buildMinimumCueCompletedResponse(toolPayloads, userMessage);
       send('text', responseText);
       maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
       finish({ guarded: 'recipe_procedure_sanitized' });
@@ -1714,13 +1714,17 @@ function compactMinimumCueWhy(text: string): string {
     .replace(/\bfood-science mechanisms\b/gi, 'memory mechanisms');
 }
 
-function buildMinimumCueCompletedResponse(toolPayloads: Record<string, unknown>): string {
+function buildMinimumCueCompletedResponse(toolPayloads: Record<string, unknown>, userMessage?: string): string {
   const cue = toolPayloads.generate_minimum_viable_nostalgia as MinimumViableNostalgiaCue | undefined;
   if (!cue) {
     return 'I completed the structured Achiote tool workflow, but the final synthesis model did not return in time. Try again with a shorter prompt or a faster provider.';
   }
   const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
-  return ensureCueQualityLanguage(formatMinimumCueFallback(cue, memory?.userLocation), toolPayloads, new Set(['generate_minimum_viable_nostalgia']));
+  const responseText = ensureCueQualityLanguage(formatMinimumCueFallback(cue, memory?.userLocation), toolPayloads, new Set(['generate_minimum_viable_nostalgia']));
+  if (userMessage && containsCueFamilyMismatch(responseText, userMessage)) {
+    return buildUserMessageMechanismCueResponse(userMessage, toolPayloads);
+  }
+  return responseText;
 }
 
 function ensureLocalCueLanguage(text: string, toolPayloads: Record<string, unknown>, calledTools: Set<string>): string {
