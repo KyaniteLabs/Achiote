@@ -1647,7 +1647,7 @@ describe('/ask failure surface regressions', () => {
           finish_reason: toolCalls ? 'tool_calls' : 'stop',
           message: toolCalls
             ? { role: 'assistant', content: '', tool_calls: toolCalls }
-            : { role: 'assistant', content: 'For a minimum viable taste test, try a tiny spoonful of tomato paste mixed with a drop of neutral oil and a pinch of salt. For your nut-free, heart-healthier, halal, vegan, and gluten-free adaptations: 1. Nut-free replacement for cashews: blend soaked white beans or sunflower seeds with tomato. 2. Heart-healthier swaps: replace butter with avocado oil. 3. Vegan adaptation: replace chicken with tofu.' },
+            : { role: 'assistant', content: 'I am seeing a complex set of dietary needs here: nut-free, heart-healthier, halal, vegan, and gluten-free all at once. Before I give you the full substitution map, here is the fastest first-pass check: Minimum viable nostalgia bite: Take a small bowl of coconut-curry dal. Top with tofu cubes and a spoon of sunflower-seed cream. Taste the sauce first and see whether the coconut-turmeric base echoes the creamy, mildly spiced memory.' },
         }],
       }));
     });
@@ -1674,7 +1674,60 @@ describe('/ask failure surface regressions', () => {
     expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'recipe_procedure_sanitized' });
     expect(finalText).toContain('Minimum viable');
     expect(finalText).toMatch(/first-pass verification bite/i);
-    expect(finalText).not.toMatch(/\b(?:heart-healthier swaps|halal chicken|vegan adaptation|gluten-free adaptations?|Nut-free replacement)\b/i);
+    expect(finalText).not.toMatch(/\b(?:full substitution map|complex set of dietary needs|sunflower-seed cream|coconut-curry dal)\b/i);
+  }, 20_000);
+
+  it('replaces post-cue simple broth procedure drift with a deterministic cue', async () => {
+    const fakePort = await getFreePort();
+    let requestCount = 0;
+    fakeOpenAi = createServer(async (req, res) => {
+      if (req.url !== '/v1/chat/completions' || req.method !== 'POST') {
+        res.writeHead(404).end();
+        return;
+      }
+      requestCount++;
+      await readBody(req);
+      const toolCallsByTurn = [
+        [{ id: 'call_1', type: 'function', function: { name: 'collect_food_memory', arguments: JSON.stringify({ memoryText: 'It was actually a sour soup from my Polish neighbor.', userLocation: 'Ohio' }) } }],
+        [{ id: 'call_2', type: 'function', function: { name: 'plan_dish_research', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_3', type: 'function', function: { name: 'build_reconstruction_dossier', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_4', type: 'function', function: { name: 'generate_minimum_viable_nostalgia', arguments: JSON.stringify({}) } }],
+      ];
+      const toolCalls = toolCallsByTurn[requestCount - 1];
+      res.setHeader('content-type', 'application/json');
+      res.end(JSON.stringify({
+        choices: [{
+          finish_reason: toolCalls ? 'tool_calls' : 'stop',
+          message: toolCalls
+            ? { role: 'assistant', content: '', tool_calls: toolCalls }
+            : { role: 'assistant', content: 'Based on your latest correction about the Polish sour soup from your neighbor, here is your first clue: Make a simple broth with just water, a dash of vinegar or lemon juice, and a pinch of salt. Sip it slowly and focus on how the sourness hits your palate.' },
+        }],
+      }));
+    });
+    await new Promise<void>((resolveListen) => fakeOpenAi?.listen(fakePort, '127.0.0.1', resolveListen));
+
+    const achiotePort = await getFreePort();
+    achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`);
+
+    const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: 'It was actually a sour soup from my Polish neighbor. Give me the smallest safe cue, not a recipe.' }),
+    });
+
+    expect(response.status).toBe(200);
+    const events = parseSse(await response.text());
+    const finalText = events
+      .filter((event) => event.event === 'text')
+      .map((event) => JSON.parse(event.data))
+      .join('\n\n');
+
+    expect(events.some((event) => event.event === 'error')).toBe(false);
+    expect(events.at(-1)?.event).toBe('done');
+    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'recipe_procedure_sanitized' });
+    expect(finalText).toContain('Minimum viable');
+    expect(finalText).toMatch(/first-pass verification bite/i);
+    expect(finalText).not.toMatch(/\bmake a simple broth\b/i);
   }, 20_000);
 
   it('does not leak search provider configuration when search_web is unavailable', async () => {
