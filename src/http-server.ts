@@ -726,6 +726,19 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
     await maybeRunMissingResearchPlan({ userMessage, toolPayloads, calledTools, send });
     await maybeRunPlannedSubstitutions({ userMessage, toolPayloads, calledTools, send });
 
+    if (!calledTools.has('collect_food_memory')) {
+      console.warn('[ask] model called tools but skipped required memory collection, using deterministic recovery');
+      if (await recoverFromInitialProviderFailure({
+        userMessage,
+        toolPayloads,
+        calledTools,
+        send,
+        finish,
+        guarded: 'provider_tool_deterministic_recovery',
+        reason: 'missing_required_memory_tool',
+      })) return;
+    }
+
     if (await maybeSendForcedMinimumCue({ userMessage, toolPayloads, calledTools, send, finish })) {
       return;
     }
@@ -1443,6 +1456,7 @@ async function recoverFromInitialProviderFailure({
   send,
   finish,
   guarded,
+  reason = 'provider_context_limit',
 }: {
   userMessage: string;
   toolPayloads: Record<string, unknown>;
@@ -1450,8 +1464,9 @@ async function recoverFromInitialProviderFailure({
   send: SseSender;
   finish: DoneSender;
   guarded: string;
+  reason?: string;
 }): Promise<boolean> {
-  send('status', { stage: 'deterministic_recovery', reason: 'provider_context_limit' });
+  send('status', { stage: 'deterministic_recovery', reason });
 
   if (!calledTools.has('collect_food_memory')) {
     send('status', { stage: 'calling_tools', tools: ['collect_food_memory'], deterministic: true });
@@ -1872,6 +1887,9 @@ function containsRecipeProcedureOrAdaptationLanguage(text: string): boolean {
     || /\bwhat the substitutions target\b[\s\S]{0,400}\b(?:original role|constraint|stand-?in)\b/i.test(text)
     || /\boriginal role\b[\s\S]{0,200}\bconstraint\b[\s\S]{0,200}\bstand-?in\b/i.test(text)
     || /\b(?:smallest memory cue|adapted first-pass bite)\b[\s\S]{0,250}\b(?:blend|replace|serve with|gluten-free|silken tofu|sunflower seed butter)\b/i.test(text)
+    || /\bthe test:\W*mix\b[\s\S]{0,350}\b(?:microwave|stir|press|cool|few drops?)\b/i.test(text)
+    || /\bsmallest safe first test\b[\s\S]{0,250}\bheat\b[\s\S]{0,160}\bsip\b/i.test(text)
+    || /\bheat\s+tiny\s+sip\b[\s\S]{0,180}\bsip\s+it\s+warm\b/i.test(text)
     || /\bbefore I give you\b[\s\S]{0,200}\bsubstitution map\b/i.test(text)
     || /\btry this simple version\b[\s\S]{0,500}\b(?:simmer|serve with|add|sauce)\b/i.test(text)
     || /\bmake a simple (?:broth|sauce|slurry|mixture|paste)\b[\s\S]{0,250}\b(?:dash|pinch|squeeze|spoon|sip|simmer|mix|blend|taste)\b/i.test(text)
