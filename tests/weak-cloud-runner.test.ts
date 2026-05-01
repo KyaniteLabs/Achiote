@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import fs from 'node:fs';
 
 describe('weak cloud runner hardening', () => {
   it('does not classify deterministic fallback wording as an identity claim', async () => {
@@ -33,5 +34,37 @@ describe('weak cloud runner hardening', () => {
       endAt,
       minRoundStartWindowMs: 5 * 60 * 1000,
     })).toBe(true);
+  });
+
+  it('documents the final campaign three-lane concurrency and no-web child env', () => {
+    const runner = fs.readFileSync('scripts/weak-cloud-overnight.mjs', 'utf8');
+
+    expect(runner).toContain('laneConcurrency');
+    expect(runner).toContain('local: 1');
+    expect(runner).toContain('openrouter: 1');
+    expect(runner).toContain('glm: 1');
+    expect(runner).toContain('Promise.all(wave)');
+    expect(runner).toContain('glmTests[waveIndex]');
+    expect(runner).toContain('openRouterTests[waveIndex]');
+    expect(runner).toContain('localTests[waveIndex]');
+    expect(runner).toContain('noWebSearchEnv');
+    expect(runner).toContain("SERPER_API_KEY: ''");
+    expect(runner).toContain("BRAVE_API_KEY: ''");
+    expect(runner).toContain("TAVILY_API_KEY: ''");
+    expect(runner).toContain('marketing-candidates.md');
+  });
+
+  it('protects the reserved local model and records LM Studio load profile intent', () => {
+    const runner = fs.readFileSync('scripts/weak-cloud-overnight.mjs', 'utf8');
+
+    expect(runner).toContain('repo-pipeline-qwen35-q8-prod');
+    expect(runner).toContain('protectedLocalModels');
+    expect(runner).toContain('isProtectedLocalModel');
+    expect(runner).toContain('refusing to load protected local model');
+    expect(runner).toContain('loadProfilePayload');
+    expect(runner).toContain('flash_attention: true');
+    expect(runner).toContain('offload_kv_cache_to_gpu');
+    expect(runner).toContain('eval_batch_size');
+    expect(runner).toContain('context_length');
   });
 });
