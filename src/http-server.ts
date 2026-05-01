@@ -642,6 +642,20 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
 
       for (const call of modelResponse.toolCalls) {
         try {
+          if (!KNOWN_TOOL_NAMES.has(call.name)) {
+            const resultPayload = {
+              skipped: true,
+              unknownTool: true,
+              message: `Unknown tool "${call.name}" is outside the Achiote workflow. Continue with the available Achiote food-memory tools.`,
+            };
+            console.warn(`[ask] blocked unknown provider tool call: ${call.name}`);
+            send('status', { iteration: iterations, stage: 'unknown_tool_call_blocked', tool: call.name });
+            send('tool_call', { name: call.name, input: call.input, blocked: true, unknownTool: true });
+            send('tool_result', { name: call.name, result: resultPayload, blocked: true, unknownTool: true });
+            toolResults.push({ id: call.id, content: JSON.stringify(resultPayload) });
+            toolCallHistory.push({ name: call.name, input: call.input });
+            continue;
+          }
           if (call.name === 'generate_recipe' || call.name === 'validate_recipe_output') {
             const resultPayload = {
               skipped: true,
@@ -1981,6 +1995,7 @@ function sanitizeMinimumCueFallbackBlock(text: string): string {
 function sanitizeFinalAnswerTrustBoundaryLanguage(text: string): string {
   const revised = text
     .replace(/(?:^|[.?!]\s*|\n)\s*(?:[-*]\s*)?[^.\n?!]*?(?:I\s+am\s+not\s+browsing|I\s+am\s+Achiote|built\s+into\s+this\s+specific\s+toolset|specific\s+toolset|toolset|workflow)[^.\n?!]*?(?:[.?!]|$)/gim, '\n')
+    .replace(/\bafter\s+(?:browsing|searching|checking|looking\s+up)\b[:,]?\s*/gi, '')
     .replace(/\bI\s+am\s+Achiote\b[^.?!]*?(?:[.?!]|$)/gi, '')
     .replace(/\bI\s+am\s+not\s+browsing\b[^.?!]*?(?:[.?!]|$)/gi, '')
     .replace(/\bI(?:'ve|\s+have)?\s+browsed\b[^.?!]*?(?:[.?!]|$)/gi, '')
@@ -1994,6 +2009,8 @@ function sanitizeFinalAnswerTrustBoundaryLanguage(text: string): string {
     .replace(/\b(?:OpenAI|Anthropic|Claude|GPT[-\s]?\d[\w.-]*|gpt[-\s]?\d[\w.-]*|fake-hostile-model|provider(?:\/model)?|model identity)\b[^.?!]*?(?:[.?!]|$)/gi, '')
     .replace(/\b(?:I(?:'ve|\s+have)?\s+(?:browsed|searched|checked|looked\s+up)|Achiote\s+(?:browsed|searched|checked)|live web|live grocery prices?|live prices?|current prices|current grocery prices|live search results?|web results?|under\s+\$\d+)\b[^.?!]*?(?:[.?!]|$)/gi, '')
     .replace(/\b[^.?!]*?\$\d+(?:\.\d{1,2})?[^.?!]*?(?:[.?!]|$)/gi, '')
+    .replace(/\b(?:a\s+)?(?:tiny\s+)?(?:drop|drops?|few\s+drops)\s+of\s+dill\s+oil\b/gi, 'a pinch of crushed fresh or dried dill')
+    .replace(/\bdill\s+oil\b/gi, 'crushed fresh or dried dill')
     .replace(/\b(?:a\s+)?(?:tiny\s+)?(?:drop|drops?|few\s+drops)\s+of\s+([a-z][a-z\s-]{0,30}?)\s+essential\s+oils?\b/gi, (_match, herb: string) => `a pinch of crushed fresh or dried ${herb.trim()}`)
     .replace(/\b([a-z][a-z\s-]{0,30}?)\s+essential\s+oils?\b/gi, (_match, herb: string) => `crushed fresh or dried ${herb.trim()}`)
     .replace(/\b(?:This\s+)?(?:medically safe|medical(?:ly)?|heart-healthy|cure|cures|lowers cholesterol|(?:treats?|prevents?|diagnoses?)\s+(?:a\s+|an\s+|the\s+)?(?:illness|disease|condition|symptoms?|inflammation|cholesterol|infection|diabetes|heart disease|medical problem))\b[^.?!]*?(?:[.?!]|$)/gi, '')
