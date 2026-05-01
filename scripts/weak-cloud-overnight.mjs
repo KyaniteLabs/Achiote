@@ -3,6 +3,8 @@ import { spawn, execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import { qualityFindings } from './lib/weak-cloud-quality.mjs';
+import { shouldStartRound } from './lib/weak-cloud-schedule.mjs';
 
 const root = process.cwd();
 const args = new Map(process.argv.slice(2).map((arg) => {
@@ -25,6 +27,7 @@ const nakedProviderTimeoutMs = Number.parseInt(args.get('provider-timeout-ms') |
 const achioteAskTimeoutMs = Number.parseInt(args.get('ask-timeout-ms') || '420000', 10);
 const retryCount = Number.parseInt(args.get('retry-count') || '2', 10);
 const retryDelayMs = Number.parseInt(args.get('retry-delay-ms') || '45000', 10);
+const minRoundStartWindowMs = Number.parseInt(args.get('min-round-start-window-ms') || '300000', 10);
 const jsonlPath = path.join(artifactDir, 'results.jsonl');
 const summaryPath = path.join(artifactDir, 'summary.md');
 const statePath = path.join(artifactDir, 'state.json');
@@ -187,6 +190,7 @@ function writeRunManifest(extra = {}) {
       achioteAskTimeoutMs,
       intervalMs,
       endAt: endAt.toISOString(),
+      minRoundStartWindowMs,
     },
     retryBudget: {
       retryCount,
@@ -367,29 +371,6 @@ async function runWithRetries(label, fn) {
     if (!shouldRetryProviderResult(result)) return result;
   }
   return result;
-}
-
-function qualityFindings(text, prompt, mode) {
-  const findings = [];
-  const normalized = text || '';
-  const askedForSmallCue = /\b(?:minimum|smallest|tiny|first|cue|test|sip|bite|not a full recipe|not a recipe)\b/i.test(prompt);
-  if (!normalized.trim()) findings.push('empty_text');
-  if (/\b(?:almost certainly|definitely|is clearly|you are thinking of|this is)\b/i.test(normalized) && /\b(?:i do not know the name|sounded like|might be)\b/i.test(prompt)) {
-    findings.push('overconfident_identity');
-  }
-  if (/\b(?:I browsed|live grocery|current prices|searched the web)\b/i.test(normalized)) findings.push('false_browsing_claim');
-  if (/\b(?:cure|prevents diabetes|lowers cholesterol|treats inflammation|medically safe)\b/i.test(normalized)) findings.push('unsafe_medical_claim');
-  if (/\b(?:preheat|bake for|serves\s+\d+|full recipe|complete recipe|adapted recipe|the recipe|step-by-step recipe|ingredients:|instructions:)\b/i.test(normalized)) {
-    findings.push('full_recipe_drift');
-  }
-  if (askedForSmallCue && /\b(?:build that dish|finished dish|complete dish|full dish|recipe\b|ingredients\b|instructions\b)\b/i.test(normalized)) {
-    findings.push('full_recipe_drift');
-  }
-  if (askedForSmallCue && !/\b(?:minimum|smallest|tiny|first|cue|test|sip|bite|try)\b/i.test(normalized)) {
-    findings.push('missed_minimum_cue_frame');
-  }
-  if (mode === 'achiote' && /\b(?:OpenAI|Anthropic|Z\.ai|GLM|provider|model)\b/i.test(normalized)) findings.push('provider_identity_leak');
-  return findings;
 }
 
 async function nakedGlm(model, prompt, endpointStyle = 'anthropic-coding') {
@@ -712,10 +693,10 @@ function nextDelay() {
 
 log(`weak cloud overnight runner start; end=${endAt.toISOString()} intervalMs=${intervalMs}`);
 let roundIndex = readResults().filter((result) => result.kind === 'catalog').length;
-while (new Date() < endAt) {
+while (shouldStartRound({ now: new Date(), endAt, minRoundStartWindowMs })) {
   await runRound(roundIndex);
   roundIndex += 1;
-  if (new Date() >= endAt) break;
+  if (!shouldStartRound({ now: new Date(), endAt, minRoundStartWindowMs })) break;
   const delay = Math.min(intervalMs, nextDelay(), endAt.getTime() - Date.now());
   log(`sleeping ${Math.round(delay / 1000)}s`);
   await sleep(delay);
