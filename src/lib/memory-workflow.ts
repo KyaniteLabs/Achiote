@@ -963,7 +963,7 @@ function sanitizeLocation(raw?: string): string {
 
 function decomposeIntoComponents(signals: string, userLocation?: string, overallConfidence?: Confidence): CueComponent[] {
   const locationPhrase = sanitizeLocation(userLocation);
-  const components: CueComponent[] = [];
+  let components: CueComponent[] = [];
 
   for (const role of ROLE_ORDER) {
     const def = COMPONENT_ROLES[role];
@@ -988,6 +988,14 @@ function decomposeIntoComponents(signals: string, userLocation?: string, overall
       substitutionReason: 'Without a known mechanism, any substitution is guesswork; isolate one sensory variable first',
       confidence: 'Low',
     });
+  }
+
+  const confectionerySignals = signals.replace(/\b(?:not|rather than|instead of)\s+(?:a |an )?(?:candy|dessert|confection(?:ery)?|cookie|biscuit|sweet(?:ness)?|sweet-texture)(?:\s+or\s+(?:a |an )?(?:candy|dessert|confection(?:ery)?|cookie|biscuit|sweet(?:ness)?|sweet-texture))*\b/gi, '');
+  const hasStrongConfectionery = hasAnySignal(confectionerySignals, [wordSignal('caramel|dulce de leche|manjar|fudge|barfi|halva|baklava|mochi|candy|dessert|confection|cookie|biscuit|nougat|turrón|taffy|melcocha|cocada|flan|custard|pudding|chocolate|pastillas|milk candy|grainy/crystalline texture')]);
+  const hasSavoryCueFamily = components.some((component) => ['starch', 'protein', 'sauce', 'vegetable', 'broth'].includes(component.role))
+    || hasAnySignal(signals, [wordSignal('savory|curry|gravy|spiced|seasoned')]);
+  if (!hasStrongConfectionery && hasSavoryCueFamily) {
+    components = components.filter((component) => component.role !== 'confectionery');
   }
 
   return components;
@@ -1257,13 +1265,16 @@ function foodScienceCueProfile(signals: string, userLocation?: string, overallCo
   const hasAroma = hasAnySignal(signals, [wordSignal('aroma|smell|spice|spiced|seasoned|garlic|onion|herb|pepper|cumin|coriander|clove|nutmeg|cinnamon')]);
   const hasTextureContrast = hasAnySignal(signals, [wordSignal('crispy|crunchy|chewy|creamy|soft|tender|stretchy|crisp|fried|grilled|charred|brown|golden')]);
   const hasAcidOrSweet = hasAnySignal(signals, [wordSignal('sour|tangy|acid|vinegar|citrus|lime|lemon|fermented|sweet|syrup|molasses|sugar')]);
-  const hasConfectionery = hasAnySignal(signals, [wordSignal('caramel|dulce de leche|manjar|fudge|barfi|halva|baklava|mochi|candy|sweet|dessert|confection|cookie|biscuit|nougat|turrón|taffy|melcocha|cocada|flan|custard|pudding|chocolate|pastillas|milk candy|grainy/crystalline texture')]);
+  const confectionerySignals = signals.replace(/\b(?:not|rather than|instead of)\s+(?:a |an )?(?:candy|dessert|confection(?:ery)?|cookie|biscuit|sweet(?:ness)?|sweet-texture)(?:\s+or\s+(?:a |an )?(?:candy|dessert|confection(?:ery)?|cookie|biscuit|sweet(?:ness)?|sweet-texture))*\b/gi, '');
+  const hasStrongConfectionery = hasAnySignal(confectionerySignals, [wordSignal('caramel|dulce de leche|manjar|fudge|barfi|halva|baklava|mochi|candy|dessert|confection|cookie|biscuit|nougat|turrón|taffy|melcocha|cocada|flan|custard|pudding|chocolate|pastillas|milk candy|grainy/crystalline texture')]);
+  const hasConfectionery = hasStrongConfectionery || hasAnySignal(confectionerySignals, [wordSignal('sweet|sugar')]);
+  const hasSavoryCueFamily = hasProteinOrFat || hasSauceOrCondiment || (hasStarchOrBase && hasAroma) || hasAnySignal(signals, [wordSignal('savory|curry|gravy|spiced|seasoned')]);
 
   if (hasBeverage) {
     return beverageCueProfile(signals, userLocation, overallConfidence);
   }
 
-  if (hasConfectionery) {
+  if (hasConfectionery && (hasStrongConfectionery || !hasSavoryCueFamily)) {
     return {
       title: 'Minimum viable sweet-texture cue',
       goal: 'Test the memory by building a tiny local pantry proxy for sweetness, seed/nut/coconut aroma, and crumbly or crystalline texture before buying the suspected sweet.',
