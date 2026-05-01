@@ -838,6 +838,15 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       return;
     }
 
+    if (calledTools.has('generate_minimum_viable_nostalgia') && containsRecipeProcedureOrAdaptationLanguage(trustBoundedResponseText)) {
+      console.warn('[ask] replaced recipe procedure drift with deterministic minimum cue');
+      const responseText = buildMinimumCueCompletedResponse(toolPayloads);
+      send('text', responseText);
+      maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
+      finish({ guarded: 'recipe_procedure_sanitized' });
+      return;
+    }
+
     if (calledTools.has('generate_minimum_viable_nostalgia') && containsRecipeMeasurementLanguage(trustBoundedResponseText)) {
       console.warn('[ask] suppressed recipe-style measurements in cue response');
       const sanitized = sanitizeRecipeStyleCueLanguage(trustBoundedResponseText);
@@ -1761,6 +1770,12 @@ function containsRecipeMeasurementLanguage(text: string): boolean {
     || /\bpreheat\b.*\b(?:oven|to)\b/i.test(text)
     || /\b(?:bake|roast|simmer|boil)\b.*\b(?:minutes?|hours?|degrees?|°)\b/i.test(text)
     || /\b(?:gentle\s+simmer|rolling\s+boil)\b/i.test(text);
+}
+
+function containsRecipeProcedureOrAdaptationLanguage(text: string): boolean {
+  const cookingVerbs = text.match(/\b(?:peel|grate|boil|mash|form|press|seal|fry|shallow-fry|simmer|strain|blend|knead|roll|stuff|marinate|bake|roast|saute|sauté|whisk|stir|mix|combine|cook|heat)\b/gi) || [];
+  if (new Set(cookingVerbs.map((match) => match.toLowerCase())).size >= 4) return true;
+  return /\b(?:for your|adaptations?|replacement for|heart-healthier swaps?|halal chicken|vegan adaptation|gluten-free adaptations?|nut-free replacement)\b[\s\S]{0,500}\b(?:substitute|replace|swap|blend|certification|tofu|coconut cream|white beans|sunflower seeds)\b/i.test(text);
 }
 
 function sanitizeRecipeStyleCueLanguage(text: string): string {
