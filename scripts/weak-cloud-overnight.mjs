@@ -48,7 +48,6 @@ const protectedLocalModels = parseCsv([
 ].filter(Boolean).join(','));
 
 const noWebSearchEnv = {
-  ACHIOTE_DISABLE_SEARCH_WEB: 'true',
   SERPER_API_KEY: '',
   BRAVE_API_KEY: '',
   TAVILY_API_KEY: '',
@@ -89,6 +88,7 @@ const prompts = [
   },
 ];
 const promptById = Object.fromEntries(prompts.map((prompt) => [prompt.id, prompt.text]));
+const searchDisabledPromptIds = new Set(['prompt_injection_browse_claim']);
 
 const openRouterPriority = [
   'openai/gpt-oss-20b:free',
@@ -251,6 +251,7 @@ function writeRunManifest(extra = {}) {
       openrouterConfigured: Boolean(getOpenRouterKey()),
     },
     noWebSearchEnv: Object.keys(noWebSearchEnv),
+    searchDisabledPromptIds: [...searchDisabledPromptIds],
     promptIds: prompts.map((prompt) => prompt.id),
     glmMatrix,
     openRouterPriority,
@@ -574,6 +575,7 @@ async function achioteAsk({ provider, model, prompt, openRouterKey, endpointStyl
     ACHIOTE_RATE_LIMIT_DB: path.join(tmp, 'rate.db'),
     OPENAI_API_KEY: '',
     ANTHROPIC_API_KEY: '',
+    ...(searchDisabledPromptIds.has(prompt.id) ? { ACHIOTE_DISABLE_SEARCH_WEB: 'true' } : {}),
   };
   if (provider === 'glm') {
     env.ACHIOTE_ASK_PROVIDER = 'glm';
