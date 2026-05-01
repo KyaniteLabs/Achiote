@@ -1,15 +1,19 @@
 export const KNOWLEDGE_GAP_TYPES = [
   'missing_local_accessibility',
   'insufficient_disambiguators',
-  'generic_mechanism_drift',
+  'mechanism_signature_gap',
+  'search_dependency_gap',
+];
+
+export const EXCLUDED_EVIDENCE_REASONS = [
   'control_flow_violation',
-  'optional_search_used',
   'provider_path_failure',
   'wrapper_quality_regression',
 ];
 
 export function analyzeKnowledgeGaps(rows) {
   const gaps = new Map();
+  const excludedEvidence = [];
   for (const row of rows) {
     if (!row || row.kind || row.mode !== 'achiote') continue;
     const text = String(row.text ?? '');
@@ -30,22 +34,27 @@ export function analyzeKnowledgeGaps(rows) {
     };
 
     if (quality.includes('forbidden_tool:search_web')) {
-      addGap(gaps, 'control_flow_violation', 'Achiote used search_web when the prompt or harness marked search as forbidden; fix planning/control flow, not dish knowledge.', context);
-    } else if (tools.includes('search_web')) {
-      addGap(gaps, 'optional_search_used', 'Achiote used search_web on this path; audit whether search was necessary for the workflow contract.', context);
+      excludedEvidence.push(excludedRow('control_flow_violation', 'Achiote used search_web when the prompt or harness marked search as forbidden; do not infer taxonomy gaps from this row.', context));
+      continue;
+    }
+    if (quality.includes('missed_minimum_cue_frame') || quality.includes('empty_text')) {
+      excludedEvidence.push(excludedRow('provider_path_failure', 'The provider path did not surface usable text; do not infer taxonomy gaps from this row.', context));
+      continue;
+    }
+    if (quality.includes('full_recipe_drift') || quality.includes('overconfident_identity') || quality.includes('false_browsing_claim')) {
+      excludedEvidence.push(excludedRow('wrapper_quality_regression', 'Achiote final text retained a quality failure that should become a fake-provider regression before taxonomy work.', context));
+      continue;
+    }
+
+    if (tools.includes('search_web')) {
+      addGap(gaps, 'search_dependency_gap', 'Achiote used search_web on a clean path; identify the missing taxonomy/reference signal that would let the workflow proceed without live search.', context);
     }
     if (/\b(?:dominant aromatic or spice family|Ask what gave the liquid body|cheap neutral liquid carrier)\b/i.test(text)) {
-      addGap(gaps, 'generic_mechanism_drift', 'Final cue stayed at a generic mechanism level; improve the generic cue contract or disambiguation flow before adding domain-specific coverage.', context);
+      addGap(gaps, 'mechanism_signature_gap', 'Final cue stayed at a generic mechanism level; add or refine reusable taxonomy axes for aroma, body, acid, fat, starch, texture, or disambiguation.', context);
     }
     if (/\b(?:where did you eat it|country|region|from|grandmother|neighbor|aunt|specific place)\b/i.test(text)
       && !/\b(?:minimum viable|first-pass verification)\b/i.test(text)) {
       addGap(gaps, 'insufficient_disambiguators', 'The answer needed a disambiguator but did not pair it with a useful minimum cue.', context);
-    }
-    if (quality.includes('missed_minimum_cue_frame') || quality.includes('empty_text')) {
-      addGap(gaps, 'provider_path_failure', 'The provider path did not surface usable text; treat as provider/runtime evidence unless the wrapper also failed.', context);
-    }
-    if (quality.includes('full_recipe_drift') || quality.includes('overconfident_identity') || quality.includes('false_browsing_claim')) {
-      addGap(gaps, 'wrapper_quality_regression', 'Achiote final text retained a quality failure that the wrapper should normally prevent; turn repeated cases into fake-provider regressions.', context);
     }
     if (/\b(?:buy|grocery|store|local sourcing|ordinary grocery)\b/i.test(text)
       && !/\b(?:pantry|already available|cheap|tiny)\b/i.test(text)) {
@@ -53,7 +62,10 @@ export function analyzeKnowledgeGaps(rows) {
     }
   }
 
-  return [...gaps.values()].sort((a, b) => b.count - a.count || a.type.localeCompare(b.type));
+  return {
+    knowledgeGaps: [...gaps.values()].sort((a, b) => b.count - a.count || a.type.localeCompare(b.type)),
+    excludedEvidence,
+  };
 }
 
 export function parseJsonl(text) {
@@ -87,6 +99,22 @@ function addGap(gaps, type, reason, context) {
     });
   }
   gaps.set(key, existing);
+}
+
+function excludedRow(reason, detail, context) {
+  return {
+    reason,
+    detail,
+    signature: context.signature,
+    provider: context.provider,
+    model: context.model,
+    roundId: context.roundId,
+    at: context.at,
+    prompt: context.prompt,
+    tools: context.tools,
+    quality: context.quality,
+    excerpt: context.text.slice(0, 260),
+  };
 }
 
 function classifyMechanismSignature(prompt, text) {

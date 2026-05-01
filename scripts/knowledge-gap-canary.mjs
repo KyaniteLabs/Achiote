@@ -33,10 +33,11 @@ try {
   }
   if (!args.results) throw new Error('--results is required');
   const rows = parseJsonl(fs.readFileSync(resolve(args.results), 'utf8'));
+  const analysis = analyzeKnowledgeGaps(rows);
   const report = {
     generatedAt: new Date().toISOString(),
     source: resolve(args.results),
-    gaps: analyzeKnowledgeGaps(rows),
+    ...analysis,
   };
   const json = JSON.stringify(report, null, 2);
   if (args.out) fs.writeFileSync(resolve(args.out), `${json}\n`);
