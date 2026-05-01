@@ -186,6 +186,34 @@ describe('OpenAI-compatible provider edge cases', () => {
     expect(result.textBlocks).toEqual(['Try coconut rice.']);
   });
 
+  it('strips unclosed <think> reasoning blocks from weak local model content', async () => {
+    const session = createOpenAICompatibleAskSession({
+      baseUrl: 'http://127.0.0.1:0/v1',
+      apiKey: 'test',
+      model: 'test-model',
+      tools: [],
+      maxTokens: 1024,
+      systemPrompt: 'test',
+      timeoutMs: 5000,
+      fetchImpl: (async () =>
+        new Response(JSON.stringify({
+          choices: [{
+            message: {
+              role: 'assistant',
+              content: '<think>Step 1: reason about horchata and local search. The user wants a sip test.\n\nMinimum viable beverage-memory cue: tiny rice-cinnamon sip.',
+            },
+            finish_reason: 'stop',
+          }],
+        }), { status: 200, headers: { 'Content-Type': 'application/json' } })
+      ) as typeof fetch,
+    });
+
+    const result = await session.create(1024);
+    expect(result.textBlocks).toEqual(['Minimum viable beverage-memory cue: tiny rice-cinnamon sip.']);
+    expect(result.textBlocks[0]).not.toContain('<think>');
+    expect(result.textBlocks[0]).not.toContain('Step 1');
+  });
+
   it('returns empty textBlocks when content is only <think/> blocks', async () => {
     const session = createOpenAICompatibleAskSession({
       baseUrl: 'http://127.0.0.1:0/v1',

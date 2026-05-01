@@ -111,12 +111,15 @@ describe('/ask failure surface regressions', () => {
       'find_sensory_substitutes',
       'generate_minimum_viable_nostalgia',
     ]));
+    expect(toolNames.indexOf('generate_minimum_viable_nostalgia')).toBeLessThan(toolNames.indexOf('find_sensory_substitutes'));
     const finalText = events
       .filter((event) => event.event === 'text')
       .map((event) => JSON.parse(event.data))
       .join('\n\n');
     expect(events.at(-1)?.event).toBe('done');
-    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'explicit_minimum_cue_fallback' });
+    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'substitution_basis_deterministic_completion' });
+    expect(finalText).toMatch(/basis before substitutions/i);
+    expect(finalText).toMatch(/adapted cue/i);
     expect(finalText).not.toMatch(/\b(?:\d+\s*(?:cups?|tbsp|tablespoons?|teaspoons?|tsp|minutes?|mins?|servings?)|one-cup|half-cup|recipe)\b/i);
     expect(finalText).not.toMatch(/amount of (?:small amount|tiny)\b/i);
     expect(requestCount).toBe(1);
@@ -554,12 +557,16 @@ describe('/ask failure surface regressions', () => {
     expect(substituteInputs).toHaveLength(5);
     expect(substituteInputs).toEqual(expect.arrayContaining(['cashews', 'butter', 'cream', 'chicken', 'naan']));
     expect(events.some((event) => event.event === 'error')).toBe(false);
+    const toolNames = events.filter((event) => event.event === 'tool_call').map((event) => JSON.parse(event.data).name);
     const finalText = events
       .filter((event) => event.event === 'text')
       .map((event) => JSON.parse(event.data))
       .join('\n\n');
     expect(events.at(-1)?.event).toBe('done');
-    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'explicit_minimum_cue_fallback' });
+    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'substitution_basis_deterministic_completion' });
+    expect(toolNames.indexOf('generate_minimum_viable_nostalgia')).toBeLessThan(toolNames.indexOf('find_sensory_substitutes'));
+    expect(finalText).toMatch(/basis before substitutions/i);
+    expect(finalText).toMatch(/adapted cue/i);
     expect(finalText).not.toMatch(/\b(?:\d+\s*(?:cups?|tbsp|tablespoons?|teaspoons?|tsp|minutes?|mins?|servings?)|one-cup|half-cup|recipe)\b/i);
     expect(finalText).not.toMatch(/amount of (?:small amount|tiny)\b/i);
     expect(requestCount).toBeGreaterThanOrEqual(1);
@@ -617,6 +624,123 @@ describe('/ask failure surface regressions', () => {
     expect(toolNames).toContain('plan_dish_research');
     expect(events.some((event) => event.event === 'error')).toBe(false);
     expect(events.at(-1)?.event).toBe('done');
+  }, 20_000);
+
+  it('blocks unknown provider tool calls without aborting the Achiote workflow', async () => {
+    const fakePort = await getFreePort();
+    let requestCount = 0;
+    fakeOpenAi = createServer(async (req, res) => {
+      if (req.url !== '/v1/chat/completions' || req.method !== 'POST') {
+        res.writeHead(404).end();
+        return;
+      }
+      requestCount++;
+      await readBody(req);
+      const toolCallsByTurn = [
+        [
+          { id: 'call_1', type: 'function', function: { name: 'plan_tool_workflow', arguments: JSON.stringify({ userMessage: 'Warm sour dill soup with pale chunks.' }) } },
+          { id: 'call_2', type: 'function', function: { name: 'get_weather', arguments: JSON.stringify({ location: 'Seattle' }) } },
+        ],
+        [{ id: 'call_3', type: 'function', function: { name: 'collect_food_memory', arguments: JSON.stringify({ memoryText: 'Warm sour dill soup with pale chunks.' }) } }],
+        [{ id: 'call_4', type: 'function', function: { name: 'plan_dish_research', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_5', type: 'function', function: { name: 'build_reconstruction_dossier', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_6', type: 'function', function: { name: 'generate_minimum_viable_nostalgia', arguments: JSON.stringify({}) } }],
+      ];
+      const toolCalls = toolCallsByTurn[requestCount - 1];
+      res.setHeader('content-type', 'application/json');
+      res.end(JSON.stringify({
+        choices: [{
+          finish_reason: toolCalls ? 'tool_calls' : 'stop',
+          message: toolCalls
+            ? { role: 'assistant', content: '', tool_calls: toolCalls }
+            : { role: 'assistant', content: 'First-pass verification bite: warm vinegar brightness, dill aroma, soft potato starch, and a little broth salt. Keep it tiny and revise if the sour aroma is wrong.' },
+        }],
+      }));
+    });
+    await new Promise<void>((resolveListen) => fakeOpenAi?.listen(fakePort, '127.0.0.1', resolveListen));
+
+    const achiotePort = await getFreePort();
+    achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`);
+
+    const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: 'Warm sour dill soup with pale chunks. Ask me what matters first.' }),
+    });
+
+    expect(response.status).toBe(200);
+    const events = parseSse(await response.text());
+    const finalText = events
+      .filter((event) => event.event === 'text')
+      .map((event) => JSON.parse(event.data))
+      .join('\n\n');
+
+    expect(events.some((event) => event.event === 'error')).toBe(false);
+    expect(events).toContainEqual(expect.objectContaining({
+      event: 'status',
+      data: expect.stringContaining('"stage":"unknown_tool_call_blocked"'),
+    }));
+    expect(events).toContainEqual(expect.objectContaining({
+      event: 'tool_result',
+      data: expect.stringContaining('"unknownTool":true'),
+    }));
+    expect(events.at(-1)?.event).toBe('done');
+    expect(finalText).toContain('first-pass verification bite');
+    expect(finalText).toContain('dill aroma');
+  }, 20_000);
+
+  it('recovers deterministically when a provider calls search before collecting the memory', async () => {
+    const fakePort = await getFreePort();
+    let requestCount = 0;
+    fakeOpenAi = createServer(async (req, res) => {
+      if (req.url !== '/v1/chat/completions' || req.method !== 'POST') {
+        res.writeHead(404).end();
+        return;
+      }
+      requestCount++;
+      await readBody(req);
+      const toolCalls = requestCount === 1
+        ? [{ id: 'call_1', type: 'function', function: { name: 'search_web', arguments: JSON.stringify({ query: 'cold rice cinnamon drink horchata' }) } }]
+        : undefined;
+      res.setHeader('content-type', 'application/json');
+      res.end(JSON.stringify({
+        choices: [{
+          finish_reason: toolCalls ? 'tool_calls' : 'stop',
+          message: toolCalls
+            ? { role: 'assistant', content: '', tool_calls: toolCalls }
+            : { role: 'assistant', content: '<think>Okay, the user wants a local sip test, so I should reason through horchata-like drinks.\n\nMix rice milk with cinnamon and sugar, then chill and taste it.' },
+        }],
+      }));
+    });
+    await new Promise<void>((resolveListen) => fakeOpenAi?.listen(fakePort, '127.0.0.1', resolveListen));
+
+    const achiotePort = await getFreePort();
+    achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`);
+
+    const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: "My aunt made a cold rice-cinnamon drink like horchata but thinner. Give me the smallest local sip test, not a recipe." }),
+    });
+
+    expect(response.status).toBe(200);
+    const events = parseSse(await response.text());
+    const toolNames = events.filter((event) => event.event === 'tool_call').map((event) => JSON.parse(event.data).name);
+    const finalText = events
+      .filter((event) => event.event === 'text')
+      .map((event) => JSON.parse(event.data))
+      .join('\n\n');
+
+    expect(events.some((event) => event.event === 'error')).toBe(false);
+    expect(toolNames).toEqual(expect.arrayContaining(['collect_food_memory', 'plan_dish_research', 'generate_minimum_viable_nostalgia']));
+    expect(events).toContainEqual(expect.objectContaining({
+      event: 'status',
+      data: expect.stringContaining('"reason":"missing_required_memory_tool"'),
+    }));
+    expect(events.at(-1)?.event).toBe('done');
+    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'explicit_minimum_cue_fallback' });
+    expect(finalText).toMatch(/Minimum viable beverage-memory cue/i);
+    expect(finalText).not.toMatch(/<think>|horchata-like drinks|mix rice milk/i);
   }, 20_000);
 
   it('does not run substitution tools for incidental dietary context', async () => {
@@ -691,7 +815,7 @@ describe('/ask failure surface regressions', () => {
           finish_reason: toolCalls ? 'tool_calls' : 'stop',
           message: toolCalls
             ? { role: 'assistant', content: '', tool_calls: toolCalls }
-            : { role: 'assistant', content: 'Use 2 tbsp sour cream, 1/2 cup broth, one-cup water, half-cup rice milk, and 6 oz potato. Add half a teaspoon vinegar. Preheat oven to 350°F, then bring to a gentle simmer for 12-15 min before serving 4. Exact recipe follows.' },
+            : { role: 'assistant', content: 'Use 2 tbsp sour cream, 1/2 cup broth, ½ cup yogurt, one-cup water, half-cup rice milk, and 6 oz potato. Add half a teaspoon vinegar. Preheat oven to 350°F, then bring to a gentle simmer for 12-15 min before serving 4. Exact recipe follows.' },
         }],
       }));
     });
@@ -716,7 +840,7 @@ describe('/ask failure surface regressions', () => {
     expect(events.some((event) => event.event === 'error')).toBe(false);
     expect(events.at(-1)?.event).toBe('done');
     expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'recipe_measurement_sanitized' });
-    expect(finalText).not.toMatch(/\b(?:2\s*tbsp|1\/2\s*cup|one-cup|half-cup|6\s*oz|half a teaspoon|350\s*°?F|gentle simmer|12-15\s*min|serving\s+4|exact recipe)\b/i);
+    expect(finalText).not.toMatch(/\b(?:2\s*tbsp|1\/2\s*cup|½\s*cup|one-cup|half-cup|6\s*oz|half a teaspoon|350\s*°?F|gentle simmer|12-15\s*min|serving\s+4|exact recipe)\b/i);
     expect(finalText).not.toContain('amount of of');
     expect(finalText).toContain('first-pass verification bite');
   }, 20_000);
@@ -744,7 +868,7 @@ describe('/ask failure surface regressions', () => {
           finish_reason: toolCalls ? 'tool_calls' : 'stop',
           message: toolCalls
             ? { role: 'assistant', content: '', tool_calls: toolCalls }
-            : { role: 'assistant', content: 'This most likely matches Horchata de Arroz. Steep cinnamon and rice, then serve the exact drink cold.' },
+            : { role: 'assistant', content: 'Your memory points strongly toward a classic Horchata de Arroz. Steep cinnamon and rice, then serve the exact drink cold.' },
         }],
       }));
     });
@@ -768,7 +892,7 @@ describe('/ask failure surface regressions', () => {
 
     expect(events.some((event) => event.event === 'error')).toBe(false);
     expect(finalText).toMatch(/first-pass verification (?:bite|sip)/i);
-    expect(finalText).not.toMatch(/\b(?:most likely|almost certainly|Horchata de Arroz)\b/i);
+    expect(finalText).not.toMatch(/\b(?:points strongly toward|sounds like|most likely|almost certainly|Horchata de Arroz)\b/i);
     expect(events.at(-1)?.event).toBe('done');
     expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'overconfident_identity_sanitized' });
   }, 20_000);
@@ -796,7 +920,7 @@ describe('/ask failure surface regressions', () => {
           finish_reason: toolCalls ? 'tool_calls' : 'stop',
           message: toolCalls
             ? { role: 'assistant', content: '', tool_calls: toolCalls }
-            : { role: 'assistant', content: 'I checked live grocery prices to keep this under $5. First-pass verification bite: warm broth, dill aroma, and a small sour note. Do not buy the exact suspected dish yet.' },
+            : { role: 'assistant', content: "I've browsed live grocery prices and dill is $0.69 today. First-pass verification bite: warm broth, dill aroma, and a small sour note. Do not buy the exact suspected dish yet." },
         }],
       }));
     });
@@ -819,7 +943,7 @@ describe('/ask failure surface regressions', () => {
       .join('\n\n');
 
     expect(events.some((event) => event.event === 'error')).toBe(false);
-    expect(finalText).not.toMatch(/\b(?:I checked|checked|live grocery prices|live prices|under \$5)\b/i);
+    expect(finalText).not.toMatch(/\b(?:I've browsed|browsed|I checked|checked|live grocery prices|live prices|\$0\.69|under \$5)\b/i);
     expect(finalText).toContain('first-pass verification bite');
     expect(events.at(-1)?.event).toBe('done');
     expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'trust_boundary_sanitized' });
@@ -1411,6 +1535,198 @@ describe('/ask failure surface regressions', () => {
     expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'latest_correction_sanitized' });
   }, 20_000);
 
+  it('replaces latest-correction cue-family drift with a corrected mechanism cue', async () => {
+    const fakePort = await getFreePort();
+    let requestCount = 0;
+    fakeOpenAi = createServer(async (req, res) => {
+      if (req.url !== '/v1/chat/completions' || req.method !== 'POST') {
+        res.writeHead(404).end();
+        return;
+      }
+      requestCount++;
+      await readBody(req);
+      const beverageDossier = {
+        title: 'Stale beverage dossier',
+        evidenceLedger: {
+          userSaid: ['The old memory was a cold rice-cinnamon drink.'],
+          researched: ['Rice-cinnamon drinks are beverage memories.'],
+          inferred: ['The cue should test a beverage.'],
+          unknown: [],
+        },
+        hypotheses: [{ name: 'rice-cinnamon drink', confidence: 'Medium' }],
+        nostalgiaCriticalElements: [],
+        recreationStrategy: [],
+        whatToAskFamily: [],
+        confidence: 'Medium',
+      };
+      const toolCallsByTurn = [
+        [{ id: 'call_1', type: 'function', function: { name: 'collect_food_memory', arguments: JSON.stringify({ memoryText: 'The old memory was a cold rice-cinnamon drink.' }) } }],
+        [{ id: 'call_2', type: 'function', function: { name: 'plan_dish_research', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_3', type: 'function', function: { name: 'build_reconstruction_dossier', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_4', type: 'function', function: { name: 'generate_minimum_viable_nostalgia', arguments: JSON.stringify({ dossier: beverageDossier }) } }],
+      ];
+      const toolCalls = toolCallsByTurn[requestCount - 1];
+      res.setHeader('content-type', 'application/json');
+      res.end(JSON.stringify({
+        choices: [{
+          finish_reason: toolCalls ? 'tool_calls' : 'stop',
+          message: toolCalls
+            ? { role: 'assistant', content: '', tool_calls: toolCalls }
+            : { role: 'assistant', content: 'The sweet rice drink cue is still the right first test.' },
+        }],
+      }));
+    });
+    await new Promise<void>((resolveListen) => fakeOpenAi?.listen(fakePort, '127.0.0.1', resolveListen));
+
+    const achiotePort = await getFreePort();
+    achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`);
+
+    const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        history: [
+          { role: 'user', content: 'My aunt made a cold rice-cinnamon drink.' },
+          { role: 'assistant', content: 'I can build a tiny beverage cue.' },
+        ],
+        message: 'Correction: I remembered wrong. It was not a drink; it was a sour soup from my Polish neighbor.',
+      }),
+    });
+
+    expect(response.status).toBe(200);
+    const events = parseSse(await response.text());
+    const finalText = events
+      .filter((event) => event.event === 'text')
+      .map((event) => JSON.parse(event.data))
+      .join('\n\n');
+
+    expect(events.some((event) => event.event === 'error')).toBe(false);
+    expect(finalText).toContain('Minimum viable memory-family cue');
+    expect(finalText).toMatch(/corrected memory family|user message is the highest-trust evidence/i);
+    expect(finalText).not.toMatch(/\bbeverage-memory|exact drink|carbonation|foamy|over ice\b/i);
+    expect(events.at(-1)?.event).toBe('done');
+    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'latest_correction_sanitized' });
+  }, 20_000);
+
+  it('replaces non-correction cue-family drift with a user-message mechanism cue', async () => {
+    const fakePort = await getFreePort();
+    let requestCount = 0;
+    fakeOpenAi = createServer(async (req, res) => {
+      if (req.url !== '/v1/chat/completions' || req.method !== 'POST') {
+        res.writeHead(404).end();
+        return;
+      }
+      requestCount++;
+      await readBody(req);
+      const toolCallsByTurn = [
+        [{ id: 'call_1', type: 'function', function: { name: 'collect_food_memory', arguments: JSON.stringify({ memoryText: 'Warm sour dill soup with pale chunks.', userLocation: 'Ohio' }) } }],
+        [{ id: 'call_2', type: 'function', function: { name: 'plan_dish_research', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_3', type: 'function', function: { name: 'build_reconstruction_dossier', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_4', type: 'function', function: { name: 'generate_minimum_viable_nostalgia', arguments: JSON.stringify({}) } }],
+      ];
+      const toolCalls = toolCallsByTurn[requestCount - 1];
+      res.setHeader('content-type', 'application/json');
+      res.end(JSON.stringify({
+        choices: [{
+          finish_reason: toolCalls ? 'tool_calls' : 'stop',
+          message: toolCalls
+            ? { role: 'assistant', content: '', tool_calls: toolCalls }
+            : { role: 'assistant', content: 'Minimum viable beverage-memory cue: use seltzer, ice, and carbonation to test the exact drink. Ask whether it was foamy or served over ice.' },
+        }],
+      }));
+    });
+    await new Promise<void>((resolveListen) => fakeOpenAi?.listen(fakePort, '127.0.0.1', resolveListen));
+
+    const achiotePort = await getFreePort();
+    achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`);
+
+    const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: 'Warm sour dill soup with pale chunks. Give me the smallest safe cue, not a drink recipe.' }),
+    });
+
+    expect(response.status).toBe(200);
+    const events = parseSse(await response.text());
+    const finalText = events
+      .filter((event) => event.event === 'text')
+      .map((event) => JSON.parse(event.data))
+      .join('\n\n');
+
+    expect(events.some((event) => event.event === 'error')).toBe(false);
+    expect(finalText).toContain('Minimum viable memory-family cue');
+    expect(finalText).toMatch(/neutral liquid carrier/i);
+    expect(finalText).not.toMatch(/\bbeverage-memory|exact drink|carbonation|foamy|over ice\b/i);
+    expect(events.at(-1)?.event).toBe('done');
+    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'cue_family_sanitized' });
+  }, 20_000);
+
+  it('aligns deterministic overconfident-identity fallbacks to the user message family', async () => {
+    const fakePort = await getFreePort();
+    let requestCount = 0;
+    fakeOpenAi = createServer(async (req, res) => {
+      if (req.url !== '/v1/chat/completions' || req.method !== 'POST') {
+        res.writeHead(404).end();
+        return;
+      }
+      requestCount++;
+      await readBody(req);
+      const staleBeverageDossier = {
+        title: 'Stale beverage dossier',
+        evidenceLedger: {
+          userSaid: ['A cold foamy drink over ice.'],
+          researched: ['Beverage memories test carbonation, foam, and ice.'],
+          inferred: ['The cue should test an exact drink.'],
+          unknown: [],
+        },
+        hypotheses: [{ name: 'stale drink', confidence: 'Medium' }],
+        nostalgiaCriticalElements: [],
+        recreationStrategy: [],
+        whatToAskFamily: [],
+        confidence: 'Medium',
+      };
+      const toolCallsByTurn = [
+        [{ id: 'call_1', type: 'function', function: { name: 'collect_food_memory', arguments: JSON.stringify({ memoryText: 'Warm sour dill soup with pale chunks.', userLocation: 'Ohio' }) } }],
+        [{ id: 'call_2', type: 'function', function: { name: 'plan_dish_research', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_3', type: 'function', function: { name: 'build_reconstruction_dossier', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_4', type: 'function', function: { name: 'generate_minimum_viable_nostalgia', arguments: JSON.stringify({ dossier: staleBeverageDossier }) } }],
+      ];
+      const toolCalls = toolCallsByTurn[requestCount - 1];
+      res.setHeader('content-type', 'application/json');
+      res.end(JSON.stringify({
+        choices: [{
+          finish_reason: toolCalls ? 'tool_calls' : 'stop',
+          message: toolCalls
+            ? { role: 'assistant', content: '', tool_calls: toolCalls }
+            : { role: 'assistant', content: 'This is definitely a classic Eastern European soup, almost certainly zurek.' },
+        }],
+      }));
+    });
+    await new Promise<void>((resolveListen) => fakeOpenAi?.listen(fakePort, '127.0.0.1', resolveListen));
+
+    const achiotePort = await getFreePort();
+    achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`);
+
+    const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: 'Warm sour dill soup with pale chunks. Give me the smallest safe cue, not a drink recipe.' }),
+    });
+
+    expect(response.status).toBe(200);
+    const events = parseSse(await response.text());
+    const finalText = events
+      .filter((event) => event.event === 'text')
+      .map((event) => JSON.parse(event.data))
+      .join('\n\n');
+
+    expect(events.some((event) => event.event === 'error')).toBe(false);
+    expect(finalText).toContain('Minimum viable memory-family cue');
+    expect(finalText).not.toMatch(/\bbeverage-memory|exact drink|carbonation|foamy|over ice\b/i);
+    expect(events.at(-1)?.event).toBe('done');
+    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'overconfident_identity_sanitized' });
+  }, 20_000);
+
   it('clarifies broad uncertain memories instead of forcing a generic post-cue fallback', async () => {
     const fakePort = await getFreePort();
     let requestCount = 0;
@@ -1568,6 +1884,429 @@ describe('/ask failure surface regressions', () => {
     expect(finalText).toContain('first-pass verification bite');
     expect(finalText).toContain('achiote paste');
     expect(finalText).toContain('tiny treat feeling');
+  }, 20_000);
+
+  it('scrubs essential oils from edible final cue text', async () => {
+    const fakePort = await getFreePort();
+    let requestCount = 0;
+    fakeOpenAi = createServer(async (req, res) => {
+      if (req.url !== '/v1/chat/completions' || req.method !== 'POST') {
+        res.writeHead(404).end();
+        return;
+      }
+      requestCount++;
+      await readBody(req);
+      const toolCallsByTurn = [
+        [{ id: 'call_1', type: 'function', function: { name: 'collect_food_memory', arguments: JSON.stringify({ memoryText: 'Warm sour dill soup with pale chunks.' }) } }],
+        [{ id: 'call_2', type: 'function', function: { name: 'plan_dish_research', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_3', type: 'function', function: { name: 'build_reconstruction_dossier', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_4', type: 'function', function: { name: 'generate_minimum_viable_nostalgia', arguments: JSON.stringify({}) } }],
+      ];
+      const toolCalls = toolCallsByTurn[requestCount - 1];
+      res.setHeader('content-type', 'application/json');
+      res.end(JSON.stringify({
+        choices: [{
+          finish_reason: toolCalls ? 'tool_calls' : 'stop',
+          message: toolCalls
+            ? { role: 'assistant', content: '', tool_calls: toolCalls }
+            : { role: 'assistant', content: 'First-pass verification bite: prepare warm water with a splash of vinegar, a pinch of salt, and a drop of dill essential oil. Sip it warm.' },
+        }],
+      }));
+    });
+    await new Promise<void>((resolveListen) => fakeOpenAi?.listen(fakePort, '127.0.0.1', resolveListen));
+
+    const achiotePort = await getFreePort();
+    achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`);
+
+    const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: 'Warm sour dill soup with pale chunks. Give me the smallest safe cue, not a recipe.' }),
+    });
+
+    expect(response.status).toBe(200);
+    const events = parseSse(await response.text());
+    const finalText = events
+      .filter((event) => event.event === 'text')
+      .map((event) => JSON.parse(event.data))
+      .join('\n\n');
+
+    expect(events.some((event) => event.event === 'error')).toBe(false);
+    expect(events.at(-1)?.event).toBe('done');
+    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'trust_boundary_sanitized' });
+    expect(finalText).not.toMatch(/\bessential oils?\b/i);
+    expect(finalText).toContain('crushed fresh or dried dill');
+    expect(finalText).toContain('first-pass verification bite');
+  }, 20_000);
+
+  it('scrubs bare browsing prefaces and dill oil from edible final cue text', async () => {
+    const fakePort = await getFreePort();
+    let requestCount = 0;
+    fakeOpenAi = createServer(async (req, res) => {
+      if (req.url !== '/v1/chat/completions' || req.method !== 'POST') {
+        res.writeHead(404).end();
+        return;
+      }
+      requestCount++;
+      await readBody(req);
+      const toolCallsByTurn = [
+        [{ id: 'call_1', type: 'function', function: { name: 'collect_food_memory', arguments: JSON.stringify({ memoryText: 'Warm sour dill soup with pale chunks.' }) } }],
+        [{ id: 'call_2', type: 'function', function: { name: 'plan_dish_research', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_3', type: 'function', function: { name: 'build_reconstruction_dossier', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_4', type: 'function', function: { name: 'generate_minimum_viable_nostalgia', arguments: JSON.stringify({}) } }],
+      ];
+      const toolCalls = toolCallsByTurn[requestCount - 1];
+      res.setHeader('content-type', 'application/json');
+      res.end(JSON.stringify({
+        choices: [{
+          finish_reason: toolCalls ? 'tool_calls' : 'stop',
+          message: toolCalls
+            ? { role: 'assistant', content: '', tool_calls: toolCalls }
+            : { role: 'assistant', content: 'I just checked. After browsing Try making a quick tiny sip test: Heat a small amount of water with a small amount of vinegar, a small amount of salt, and a few drops of dill oil. Sip it warm.' },
+        }],
+      }));
+    });
+    await new Promise<void>((resolveListen) => fakeOpenAi?.listen(fakePort, '127.0.0.1', resolveListen));
+
+    const achiotePort = await getFreePort();
+    achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`);
+
+    const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: 'Warm sour dill soup with pale chunks. Give me the smallest safe cue, not a recipe.' }),
+    });
+
+    expect(response.status).toBe(200);
+    const events = parseSse(await response.text());
+    const finalText = events
+      .filter((event) => event.event === 'text')
+      .map((event) => JSON.parse(event.data))
+      .join('\n\n');
+
+    expect(events.some((event) => event.event === 'error')).toBe(false);
+    expect(events.at(-1)?.event).toBe('done');
+    expect(JSON.parse(events.at(-1)!.data).guarded).toMatch(/(?:trust_boundary|recipe_measurement)_sanitized/);
+    expect(finalText).not.toMatch(/\b(?:I just checked|after browsing|browsing|dill oil|few drops?)\b/i);
+    expect(finalText).toContain('crushed fresh or dried dill');
+  }, 20_000);
+
+  it('replaces post-cue recipe procedure and adaptation drift with a deterministic cue', async () => {
+    const fakePort = await getFreePort();
+    let requestCount = 0;
+    fakeOpenAi = createServer(async (req, res) => {
+      if (req.url !== '/v1/chat/completions' || req.method !== 'POST') {
+        res.writeHead(404).end();
+        return;
+      }
+      requestCount++;
+      await readBody(req);
+      const toolCallsByTurn = [
+        [{ id: 'call_1', type: 'function', function: { name: 'collect_food_memory', arguments: JSON.stringify({ memoryText: 'Butter chicken with cashew gravy, butter, cream, whiskey, chicken, and naan.', userLocation: 'Seattle' }) } }],
+        [{ id: 'call_2', type: 'function', function: { name: 'plan_dish_research', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_3', type: 'function', function: { name: 'find_sensory_substitutes', arguments: JSON.stringify({ ingredient: 'cashew gravy', location: 'Seattle' }) } }],
+        [{ id: 'call_4', type: 'function', function: { name: 'build_reconstruction_dossier', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_5', type: 'function', function: { name: 'generate_minimum_viable_nostalgia', arguments: JSON.stringify({}) } }],
+      ];
+      const toolCalls = toolCallsByTurn[requestCount - 1];
+      res.setHeader('content-type', 'application/json');
+      res.end(JSON.stringify({
+        choices: [{
+          finish_reason: toolCalls ? 'tool_calls' : 'stop',
+          message: toolCalls
+            ? { role: 'assistant', content: '', tool_calls: toolCalls }
+            : { role: 'assistant', content: 'I am seeing a complex set of dietary needs here: nut-free, heart-healthier, halal, vegan, and gluten-free all at once. Before I give you the full substitution map, here is the fastest first-pass check: Minimum viable nostalgia bite: Take a small bowl of coconut-curry dal. Top with tofu cubes and a spoon of sunflower-seed cream. Taste the sauce first and see whether the coconut-turmeric base echoes the creamy, mildly spiced memory.' },
+        }],
+      }));
+    });
+    await new Promise<void>((resolveListen) => fakeOpenAi?.listen(fakePort, '127.0.0.1', resolveListen));
+
+    const achiotePort = await getFreePort();
+    achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`);
+
+    const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: 'Butter chicken with cashew gravy, butter, cream, whiskey, chicken, and naan. Adapt the smallest memory cue for nut-free, heart-healthier, halal, vegan, and gluten-free needs without medical advice.' }),
+    });
+
+    expect(response.status).toBe(200);
+    const events = parseSse(await response.text());
+    const finalText = events
+      .filter((event) => event.event === 'text')
+      .map((event) => JSON.parse(event.data))
+      .join('\n\n');
+
+    expect(events.some((event) => event.event === 'error')).toBe(false);
+    expect(events.at(-1)?.event).toBe('done');
+    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'recipe_procedure_sanitized' });
+    expect(finalText).toContain('Minimum viable');
+    expect(finalText).toMatch(/first-pass verification bite/i);
+    expect(finalText).not.toMatch(/\b(?:full substitution map|complex set of dietary needs|sunflower-seed cream|coconut-curry dal)\b/i);
+  }, 20_000);
+
+  it('replaces post-cue substitution tables with a deterministic cue', async () => {
+    const fakePort = await getFreePort();
+    let requestCount = 0;
+    fakeOpenAi = createServer(async (req, res) => {
+      if (req.url !== '/v1/chat/completions' || req.method !== 'POST') {
+        res.writeHead(404).end();
+        return;
+      }
+      requestCount++;
+      await readBody(req);
+      const toolCallsByTurn = [
+        [{ id: 'call_1', type: 'function', function: { name: 'collect_food_memory', arguments: JSON.stringify({ memoryText: 'Butter chicken with cashew gravy, butter, cream, whiskey, chicken, and naan.', userLocation: 'Seattle' }) } }],
+        [{ id: 'call_2', type: 'function', function: { name: 'plan_dish_research', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_3', type: 'function', function: { name: 'find_sensory_substitutes', arguments: JSON.stringify({ ingredient: 'cashew gravy', location: 'Seattle' }) } }],
+        [{ id: 'call_4', type: 'function', function: { name: 'build_reconstruction_dossier', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_5', type: 'function', function: { name: 'generate_minimum_viable_nostalgia', arguments: JSON.stringify({}) } }],
+      ];
+      const toolCalls = toolCallsByTurn[requestCount - 1];
+      res.setHeader('content-type', 'application/json');
+      res.end(JSON.stringify({
+        choices: [{
+          finish_reason: toolCalls ? 'tool_calls' : 'stop',
+          message: toolCalls
+            ? { role: 'assistant', content: '', tool_calls: toolCalls }
+            : { role: 'assistant', content: 'Your dish is butter chicken. Let us build the adapted first-pass bite. ### What the substitutions target | Original role | Constraint | Stand-in | |---|---|---| | Cashew paste | Nut-free | Sunflower seed butter or tahini | | Butter and cream | Vegan | Avocado oil and silken tofu | ### Smallest memory cue Blend a small amount of sunflower seed butter into tomato sauce, add tofu, and serve with gluten-free naan.' },
+        }],
+      }));
+    });
+    await new Promise<void>((resolveListen) => fakeOpenAi?.listen(fakePort, '127.0.0.1', resolveListen));
+
+    const achiotePort = await getFreePort();
+    achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`);
+
+    const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: 'Butter chicken with cashew gravy, butter, cream, whiskey, chicken, and naan. Adapt the smallest memory cue for nut-free, heart-healthier, halal, vegan, and gluten-free needs without medical advice.' }),
+    });
+
+    expect(response.status).toBe(200);
+    const events = parseSse(await response.text());
+    const finalText = events
+      .filter((event) => event.event === 'text')
+      .map((event) => JSON.parse(event.data))
+      .join('\n\n');
+
+    expect(events.some((event) => event.event === 'error')).toBe(false);
+    expect(events.at(-1)?.event).toBe('done');
+    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'recipe_procedure_sanitized' });
+    expect(finalText).toContain('Minimum viable');
+    expect(finalText).toMatch(/first-pass verification bite/i);
+    expect(finalText).not.toMatch(/\b(?:Original role|Constraint|Stand-in|sunflower seed butter|silken tofu|gluten-free naan)\b/i);
+  }, 20_000);
+
+  it('allows tiny post-cue mix-and-microwave sensory tests', async () => {
+    const fakePort = await getFreePort();
+    let requestCount = 0;
+    fakeOpenAi = createServer(async (req, res) => {
+      if (req.url !== '/v1/chat/completions' || req.method !== 'POST') {
+        res.writeHead(404).end();
+        return;
+      }
+      requestCount++;
+      await readBody(req);
+      const toolCallsByTurn = [
+        [{ id: 'call_1', type: 'function', function: { name: 'collect_food_memory', arguments: JSON.stringify({ memoryText: 'White coconut sweet with grainy sugar crystals, chewy texture, maybe festival food.', userLocation: 'Ohio' }) } }],
+        [{ id: 'call_2', type: 'function', function: { name: 'plan_dish_research', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_3', type: 'function', function: { name: 'build_reconstruction_dossier', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_4', type: 'function', function: { name: 'generate_minimum_viable_nostalgia', arguments: JSON.stringify({}) } }],
+      ];
+      const toolCalls = toolCallsByTurn[requestCount - 1];
+      res.setHeader('content-type', 'application/json');
+      res.end(JSON.stringify({
+        choices: [{
+          finish_reason: toolCalls ? 'tool_calls' : 'stop',
+          message: toolCalls
+            ? { role: 'assistant', content: '', tool_calls: toolCalls }
+            : { role: 'assistant', content: 'Here is a first-pass verification bite you can do tonight. **The test:** Mix a small amount of shredded coconut with white sugar and a few drops of water. Microwave 15 seconds, stir, press into a small ball, and let it cool. Notice whether the grainy sugar crunch triggers recognition.' },
+        }],
+      }));
+    });
+    await new Promise<void>((resolveListen) => fakeOpenAi?.listen(fakePort, '127.0.0.1', resolveListen));
+
+    const achiotePort = await getFreePort();
+    achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`);
+
+    const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: 'White coconut sweet with grainy sugar crystals and chewy texture. Give me the smallest first cue, not a recipe.' }),
+    });
+
+    expect(response.status).toBe(200);
+    const events = parseSse(await response.text());
+    const finalText = events
+      .filter((event) => event.event === 'text')
+      .map((event) => JSON.parse(event.data))
+      .join('\n\n');
+
+    expect(events.some((event) => event.event === 'error')).toBe(false);
+    expect(events.at(-1)?.event).toBe('done');
+    expect(JSON.parse(events.at(-1)!.data)).not.toMatchObject({ guarded: 'recipe_procedure_sanitized' });
+    expect(finalText).toMatch(/first-pass verification bite/i);
+    expect(finalText).toMatch(/\b(?:The test|Microwave|press into a small ball)\b/i);
+  }, 20_000);
+
+  it('allows tiny post-cue heat-and-sip sensory tests', async () => {
+    const fakePort = await getFreePort();
+    let requestCount = 0;
+    fakeOpenAi = createServer(async (req, res) => {
+      if (req.url !== '/v1/chat/completions' || req.method !== 'POST') {
+        res.writeHead(404).end();
+        return;
+      }
+      requestCount++;
+      await readBody(req);
+      const toolCallsByTurn = [
+        [{ id: 'call_1', type: 'function', function: { name: 'collect_food_memory', arguments: JSON.stringify({ memoryText: 'Warm sour dill soup with pale chunks.', userLocation: 'Ohio' }) } }],
+        [{ id: 'call_2', type: 'function', function: { name: 'plan_dish_research', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_3', type: 'function', function: { name: 'build_reconstruction_dossier', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_4', type: 'function', function: { name: 'generate_minimum_viable_nostalgia', arguments: JSON.stringify({}) } }],
+      ];
+      const toolCalls = toolCallsByTurn[requestCount - 1];
+      res.setHeader('content-type', 'application/json');
+      res.end(JSON.stringify({
+        choices: [{
+          finish_reason: toolCalls ? 'tool_calls' : 'stop',
+          message: toolCalls
+            ? { role: 'assistant', content: '', tool_calls: toolCalls }
+            : { role: 'assistant', content: "Based on your memory of a warm sour dill soup with pale chunks, here's the smallest safe first test: Heat tiny sip of water with a small amount of white vinegar, a small amount of salt, and a few fresh dill sprigs. Sip it warm and notice the sour tang and dill aroma. This will confirm if the sour-dill flavor profile is correct." },
+        }],
+      }));
+    });
+    await new Promise<void>((resolveListen) => fakeOpenAi?.listen(fakePort, '127.0.0.1', resolveListen));
+
+    const achiotePort = await getFreePort();
+    achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`);
+
+    const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: 'Warm sour dill soup with pale chunks. Give me the smallest safe cue, not a recipe.' }),
+    });
+
+    expect(response.status).toBe(200);
+    const events = parseSse(await response.text());
+    const finalText = events
+      .filter((event) => event.event === 'text')
+      .map((event) => JSON.parse(event.data))
+      .join('\n\n');
+
+    expect(events.some((event) => event.event === 'error')).toBe(false);
+    expect(events.at(-1)?.event).toBe('done');
+    expect(JSON.parse(events.at(-1)!.data)).not.toMatchObject({ guarded: 'recipe_procedure_sanitized' });
+    expect(finalText).toMatch(/smallest safe first test|Heat tiny sip/i);
+    expect(finalText).toMatch(/Sip it warm/i);
+  }, 20_000);
+
+  it('replaces post-cue simple broth procedure drift with a deterministic cue', async () => {
+    const fakePort = await getFreePort();
+    let requestCount = 0;
+    fakeOpenAi = createServer(async (req, res) => {
+      if (req.url !== '/v1/chat/completions' || req.method !== 'POST') {
+        res.writeHead(404).end();
+        return;
+      }
+      requestCount++;
+      await readBody(req);
+      const toolCallsByTurn = [
+        [{ id: 'call_1', type: 'function', function: { name: 'collect_food_memory', arguments: JSON.stringify({ memoryText: 'It was actually a sour soup from my Polish neighbor.', userLocation: 'Ohio' }) } }],
+        [{ id: 'call_2', type: 'function', function: { name: 'plan_dish_research', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_3', type: 'function', function: { name: 'build_reconstruction_dossier', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_4', type: 'function', function: { name: 'generate_minimum_viable_nostalgia', arguments: JSON.stringify({}) } }],
+      ];
+      const toolCalls = toolCallsByTurn[requestCount - 1];
+      res.setHeader('content-type', 'application/json');
+      res.end(JSON.stringify({
+        choices: [{
+          finish_reason: toolCalls ? 'tool_calls' : 'stop',
+          message: toolCalls
+            ? { role: 'assistant', content: '', tool_calls: toolCalls }
+            : { role: 'assistant', content: 'Based on your latest correction about the Polish sour soup from your neighbor, here is your first clue: Make a simple broth with just water, a dash of vinegar or lemon juice, and a pinch of salt. Sip it slowly and focus on how the sourness hits your palate.' },
+        }],
+      }));
+    });
+    await new Promise<void>((resolveListen) => fakeOpenAi?.listen(fakePort, '127.0.0.1', resolveListen));
+
+    const achiotePort = await getFreePort();
+    achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`);
+
+    const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: 'It was actually a sour soup from my Polish neighbor. Give me the smallest safe cue, not a recipe.' }),
+    });
+
+    expect(response.status).toBe(200);
+    const events = parseSse(await response.text());
+    const finalText = events
+      .filter((event) => event.event === 'text')
+      .map((event) => JSON.parse(event.data))
+      .join('\n\n');
+
+    expect(events.some((event) => event.event === 'error')).toBe(false);
+    expect(events.at(-1)?.event).toBe('done');
+    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'recipe_procedure_sanitized' });
+    expect(finalText).toContain('Minimum viable');
+    expect(finalText).toMatch(/first-pass verification bite/i);
+    expect(finalText).not.toMatch(/\bmake a simple broth\b/i);
+  }, 20_000);
+
+  it('replaces post-cue bullet recipe drift with a deterministic cue', async () => {
+    const fakePort = await getFreePort();
+    let requestCount = 0;
+    fakeOpenAi = createServer(async (req, res) => {
+      if (req.url !== '/v1/chat/completions' || req.method !== 'POST') {
+        res.writeHead(404).end();
+        return;
+      }
+      requestCount++;
+      await readBody(req);
+      const toolCallsByTurn = [
+        [{ id: 'call_1', type: 'function', function: { name: 'collect_food_memory', arguments: JSON.stringify({ memoryText: 'Butter chicken with cashew gravy and naan.', userLocation: 'Seattle' }) } }],
+        [{ id: 'call_2', type: 'function', function: { name: 'plan_dish_research', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_3', type: 'function', function: { name: 'find_sensory_substitutes', arguments: JSON.stringify({ ingredient: 'cashew gravy', location: 'Seattle' }) } }],
+        [{ id: 'call_4', type: 'function', function: { name: 'build_reconstruction_dossier', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_5', type: 'function', function: { name: 'generate_minimum_viable_nostalgia', arguments: JSON.stringify({}) } }],
+      ];
+      const toolCalls = toolCallsByTurn[requestCount - 1];
+      res.setHeader('content-type', 'application/json');
+      res.end(JSON.stringify({
+        choices: [{
+          finish_reason: toolCalls ? 'tool_calls' : 'stop',
+          message: toolCalls
+            ? { role: 'assistant', content: '', tool_calls: toolCalls }
+            : { role: 'assistant', content: 'For a minimum viable nostalgia test, try this simple version:\n- Simmer canned tomato sauce with garam masala and turmeric\n- Add apple cider vinegar and date syrup\n- Serve with gluten-free flatbread or rice' },
+        }],
+      }));
+    });
+    await new Promise<void>((resolveListen) => fakeOpenAi?.listen(fakePort, '127.0.0.1', resolveListen));
+
+    const achiotePort = await getFreePort();
+    achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`);
+
+    const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: 'Butter chicken memory. My family asked for adapted substitutions, but give only the smallest cue.' }),
+    });
+
+    expect(response.status).toBe(200);
+    const events = parseSse(await response.text());
+    const finalText = events
+      .filter((event) => event.event === 'text')
+      .map((event) => JSON.parse(event.data))
+      .join('\n\n');
+
+    expect(events.some((event) => event.event === 'error')).toBe(false);
+    expect(events.at(-1)?.event).toBe('done');
+    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'recipe_procedure_sanitized' });
+    expect(finalText).toContain('Minimum viable');
+    expect(finalText).not.toMatch(/\b(?:try this simple version|simmer canned tomato sauce|serve with)\b/i);
   }, 20_000);
 
   it('does not leak search provider configuration when search_web is unavailable', async () => {

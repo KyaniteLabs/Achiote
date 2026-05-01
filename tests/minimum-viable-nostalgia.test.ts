@@ -61,6 +61,24 @@ function spicedSausageMashDossier() {
   });
 }
 
+function butterChickenAdaptationDossier() {
+  const memory = collectFoodMemory({
+    memoryText: 'Butter chicken with cashew gravy, butter, cream, whiskey, chicken, and naan. My family needs nut-free, heart-healthier, halal, vegan, and gluten-free substitutions that keep the soul.',
+  });
+  const researchPlan = planDishResearch(memory);
+  return buildReconstructionDossier({
+    memory,
+    researchPlan,
+    researchedFacts: [
+      'The memory is driven by creamy spiced gravy, fat-soluble aromatics, umami, chicken-like protein texture, and a bread or starch carrier.',
+      'Aromatic butter-chicken-style sauces can carry mild sweetness, but the cue family remains savory sauce and composed bite rather than confectionery.',
+    ],
+    inferredFacts: [
+      'The first test should isolate the sauce, fat, spice, protein, and starch mechanisms without turning the adaptation into a full recipe.',
+    ],
+  });
+}
+
 function sesameCandyDossier() {
   const memory = collectFoodMemory({
     memoryText: 'I remember a tan candy that tasted like sesame and crumbled into powder. I had it as a kid outside the US.',
@@ -310,6 +328,30 @@ describe('minimum viable nostalgia cue', () => {
     expect(recommendationText).not.toMatch(/buy .*dulce de ajonjol[ií]|latin grocery|international aisle|grocery-store sweet matching/);
   });
 
+  it('does not let generic sweetness flip savory adaptation memories into confectionery cues', () => {
+    const cue = generateMinimumViableNostalgiaCue({
+      dossier: butterChickenAdaptationDossier(),
+      researchFindings: {
+        researchedFacts: [
+          'The savory memory cue is creamy spiced gravy with fat-soluble aromatics, umami, and bread/starch contrast.',
+          'Mild sweetness can appear in onion, tomato, coconut, or cream substitutes, but it is not a candy or dessert memory.',
+        ],
+        inferredFacts: ['The cue should stay a composed savory bite with sauce/protein/starch mechanics.'],
+        unknowns: ['exact family spice blend'],
+        sourceCount: 2,
+        confidence: 'Medium',
+      },
+      constraints: ['nut-free', 'heart-healthier', 'halal', 'vegan', 'gluten-free'],
+      maxEffortMinutes: 10,
+    });
+    const recommendationText = fullCueText(cue);
+
+    expect(cue.title).toContain('composed-bite');
+    expect(cue.title).not.toContain('sweet-texture');
+    expect(recommendationText).toMatch(/protein|umami|fat|sauce|spice|starch|carrier/i);
+    expect(recommendationText).not.toMatch(/granulated sugar|crushed sugar cube|suspected candy/i);
+  });
+
   it('makes peanut brittle/chikki tests peanut-and-caramel specific instead of generic seed texture only', () => {
     const cue = generateMinimumViableNostalgiaCue({
       dossier: peanutBrittleDossier(),
@@ -368,7 +410,7 @@ describe('minimum viable nostalgia cue', () => {
       banned: /buy .*sesame sweet|sesame candy store|asian market|international aisle/,
     },
     {
-      label: 'coconut festival sweet',
+      label: 'unnamed coconut sugar sweet',
       memoryText: 'A white coconut dessert from a school festival abroad was grainy and melted into sugar crystals.',
       researchedFacts: ['Cocada and other coconut sweets can be grainy, fibrous, and sugar-forward.'],
       banned: /buy .*cocada|latin grocery|caribbean market|international aisle/,
@@ -414,12 +456,32 @@ describe('minimum viable nostalgia cue', () => {
     const cue = generateMinimumViableNostalgiaCue({ dossier, maxEffortMinutes: 8 });
 
     expect(cue.effortMinutes).toBeLessThanOrEqual(8);
-    expect(cue.title).toContain('aroma-balance');
-    expect(cue.steps.join(' ')).toContain('single strongest sensory clue');
+    expect(cue.title).toContain('sour-herb soup');
+    expect(cue.steps.join(' ')).toMatch(/dill|herb|sour/i);
     expect(cue.confidence).toBe('Low');
 
     expect(cue.components.length).toBeGreaterThanOrEqual(1);
     expect(cue.components.every((c) => c.criticalElement.length > 0)).toBe(true);
+  });
+
+  it('uses sour-herb soup mechanisms instead of generic liquid placeholders', () => {
+    const memory = collectFoodMemory({ memoryText: 'My neighbor remembered a tart green-herb broth with soft pale potato or egg pieces, but nobody knows the exact name.' });
+    const dossier = buildReconstructionDossier({
+      memory,
+      researchPlan: planDishResearch(memory),
+      researchedFacts: [
+        'Sour herb soups often separate pickle or fermented-brine sourness from dairy tang, herb aroma, and potato or egg body.',
+      ],
+      inferredFacts: ['The cue should test dill aroma, brine-like acid, warm liquid body, and pale starch/egg texture without naming the exact soup as certain.'],
+    });
+    const cue = generateMinimumViableNostalgiaCue({ dossier, maxEffortMinutes: 10 });
+    const recommendationText = fullCueText(cue);
+
+    expect(cue.format).toBe('sip');
+    expect(recommendationText).toMatch(/dill/);
+    expect(recommendationText).toMatch(/pickle|brine|ferment|vinegar|sour/);
+    expect(recommendationText).toMatch(/potato|egg|starch|pale/);
+    expect(recommendationText).not.toMatch(/dominant aromatic|neutral liquid carrier|another cheap neutral liquid carrier/);
   });
 
   it('does not route generic pork soup signals to the pasteles cue', () => {
@@ -467,6 +529,24 @@ describe('minimum viable nostalgia cue', () => {
     expect(recommendationText).toMatch(/ice|chill|temperature|dilution/);
     expect(recommendationText).toMatch(/sweetness|sugar/);
     expect(cue.components.some((component) => component.role === 'beverage')).toBe(true);
+  });
+
+  it('uses grain-drink mechanisms as reference signals instead of generic beverage language', () => {
+    const cue = generateMinimumViableNostalgiaCue({
+      dossier: beverageDossier(
+        'My family called it a cold grain water. It was thin, barely sweet, maybe barley or rice, with cinnamon or lime and a lot of ice.',
+        [
+          'The internal reference family is grain beverage: rice-cinnamon, barley-water, and other cereal-drink memories share starch body, spice or grain aroma, sweetness, dilution, chill, and ice ritual.',
+        ],
+      ),
+      maxEffortMinutes: 10,
+    });
+    const recommendationText = fullCueText(cue);
+
+    expect(cue.title).toContain('beverage');
+    expect(recommendationText).toMatch(/rice|cinnamon|barley|grain|lime|citrus/);
+    expect(recommendationText).toMatch(/ice|cold|chill|dilution/);
+    expect(recommendationText).not.toMatch(/dominant beverage aroma|strongest remembered aroma/);
   });
 
   it('handles carbonated drink memories through fizz, acid, sugar, temperature, and aroma', () => {

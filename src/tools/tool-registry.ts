@@ -119,7 +119,12 @@ function memoryFromModelInput(rawMemory: unknown): Parameters<typeof planDishRes
 
 function stringArrayField(input: Input, preferred: string, fallback: string): string[] {
   const value = input[preferred] ?? input[fallback];
-  return Array.isArray(value) ? value.filter((entry): entry is string => typeof entry === 'string' && entry.trim().length > 0) : [];
+  return stringArrayValue(value);
+}
+
+function stringArrayValue(value: unknown): string[] {
+  if (Array.isArray(value)) return value.filter((entry): entry is string => typeof entry === 'string' && entry.trim().length > 0);
+  return typeof value === 'string' && value.trim().length > 0 ? [value.trim()] : [];
 }
 
 function confidenceFromModelInput(value: unknown): 'High' | 'Medium' | 'Low' {
@@ -483,9 +488,9 @@ export const toolRegistry = [
       if (needsSubstitutions) {
         steps.push({ tool: 'resolve_dish_name', reason: 'Identify the base dish to substitute for', required: true });
         steps.push({ tool: 'search_web', reason: 'Find authentic preparation details for the base dish', required: false });
-        steps.push({ tool: 'find_sensory_substitutes', reason: 'Find compound-matched substitutions for restricted ingredients', required: true });
-        steps.push({ tool: 'build_reconstruction_dossier', reason: 'Assemble evidence with substitutions integrated', required: true });
-        steps.push({ tool: 'generate_minimum_viable_nostalgia', reason: 'Create adapted test cue with substitutions', required: true });
+        steps.push({ tool: 'build_reconstruction_dossier', reason: 'Assemble the original evidence boundary before substitutions', required: true });
+        steps.push({ tool: 'generate_minimum_viable_nostalgia', reason: 'Create the original minimum cue that will become the substitution basis', required: true });
+        steps.push({ tool: 'find_sensory_substitutes', reason: 'Find compound-matched substitutions after the original cue is clear', required: true });
       } else if (detectedIntent === 'recipe_adaptation') {
         steps.push({ tool: 'resolve_dish_name', reason: 'Identify the target dish', required: true });
         steps.push({ tool: 'search_web', reason: 'Find current recipe approaches', required: false });
@@ -662,8 +667,8 @@ export const toolRegistry = [
         ...buildReconstructionDossier({
           memory: memoryFromModelInput(input.memory),
           researchPlan: researchPlanFromModelInput(input),
-          researchedFacts: input.researchedFacts as string[] | undefined,
-          inferredFacts: input.inferredFacts as string[] | undefined,
+          researchedFacts: stringArrayValue(input.researchedFacts),
+          inferredFacts: stringArrayValue(input.inferredFacts),
         }),
       });
     },

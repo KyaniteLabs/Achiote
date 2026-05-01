@@ -1,4 +1,5 @@
 import dishFamiliesData from '../data/dish-families.json' with { type: 'json' };
+import correctedResearchTargetsData from '../data/corrected-research-targets.json' with { type: 'json' };
 import memoryHintsData from '../data/memory-hints.json' with { type: 'json' };
 import type {
   CollectedFoodMemory,
@@ -555,48 +556,7 @@ type CorrectedResearchTarget = {
   confidence: Confidence;
 };
 
-const CORRECTED_RESEARCH_TARGETS: CorrectedResearchTarget[] = [
-  {
-    canonicalName: 'Carimañola',
-    aliases: ['carimanola', 'carimanolas', 'carimañola', 'carimañolas', 'caribañola'],
-    regions: ['panama', 'colombia', 'central america', 'latin america'],
-    ingredients: ['yuca', 'cassava', 'meat', 'beef', 'pork'],
-    sensory: ['fried', 'crispy', 'savory', 'starch'],
-    why: 'corrected likely spelling from a remembered fragment; Panamanian/Colombian fried yuca fritter filled with meat',
-    whatWouldConfirm: ['yuca or cassava dough', 'fried oval/croquette shape', 'meat filling', 'Panama or Colombia family context'],
-    confidence: 'High',
-  },
-  {
-    canonicalName: 'Peanut Chikki',
-    aliases: ['chikki', 'chiki', 'chicky', 'cheeky', 'chikee', 'chickee'],
-    regions: ['india', 'south asia'],
-    ingredients: ['peanut', 'jaggery', 'sugar', 'caramel'],
-    sensory: ['sweet', 'crunchy', 'sandy', 'grainy', 'caramel'],
-    why: 'sound-alike correction from the remembered name plus peanut, caramel, and Indian context',
-    whatWouldConfirm: ['peanuts set in jaggery or caramelized sugar', 'brittle or sandy snap', 'Indian/South Asian sweet context'],
-    confidence: 'High',
-  },
-  {
-    canonicalName: 'Cocada',
-    aliases: ['cocada', 'cocadas', 'kokada', 'cocoda', 'coconut candy'],
-    regions: ['latin america', 'central america', 'caribbean', 'panama', 'colombia', 'mexico'],
-    ingredients: ['coconut', 'sugar', 'milk'],
-    sensory: ['sweet', 'chewy', 'grainy'],
-    why: 'corrected likely coconut-candy spelling from ingredient and regional clues',
-    whatWouldConfirm: ['shredded coconut', 'sugar syrup or milk', 'chewy or grainy candy texture', 'Latin American or Caribbean context'],
-    confidence: 'Medium',
-  },
-  {
-    canonicalName: 'Barfi / Pedha',
-    aliases: ['barfi', 'burfi', 'barfee', 'pedha', 'peda'],
-    regions: ['india', 'south asia'],
-    ingredients: ['milk', 'sugar', 'coconut'],
-    sensory: ['sweet', 'grainy', 'fudge', 'sandy'],
-    why: 'corrected likely Indian milk-sweet spelling from a remembered fragment and fudge-like texture',
-    whatWouldConfirm: ['milk solids or coconut', 'grainy fudge texture', 'cardamom or nut garnish', 'Indian/South Asian context'],
-    confidence: 'Medium',
-  },
-];
+const correctedResearchTargets: CorrectedResearchTarget[] = correctedResearchTargetsData.targets as CorrectedResearchTarget[];
 
 function correctedNameHypotheses(memory: CollectedFoodMemory): DishHypothesis[] {
   const text = normalizeForLooseMatch(memory.normalizedMemory);
@@ -605,7 +565,7 @@ function correctedNameHypotheses(memory: CollectedFoodMemory): DishHypothesis[] 
   const ingredients = memory.extractedClues.rememberedIngredients.map(normalizeForLooseMatch);
   const sensory = memory.extractedClues.sensoryClues.map(normalizeForLooseMatch);
 
-  const matches = CORRECTED_RESEARCH_TARGETS.filter((target) => {
+  const matches = correctedResearchTargets.filter((target) => {
     const aliases = target.aliases.map(normalizeForLooseMatch);
     const aliasMatch = aliases.some((alias) =>
       text.includes(alias) || possibleNames.some((name) => name.includes(alias) || alias.includes(name)),
@@ -963,7 +923,7 @@ function sanitizeLocation(raw?: string): string {
 
 function decomposeIntoComponents(signals: string, userLocation?: string, overallConfidence?: Confidence): CueComponent[] {
   const locationPhrase = sanitizeLocation(userLocation);
-  const components: CueComponent[] = [];
+  let components: CueComponent[] = [];
 
   for (const role of ROLE_ORDER) {
     const def = COMPONENT_ROLES[role];
@@ -988,6 +948,14 @@ function decomposeIntoComponents(signals: string, userLocation?: string, overall
       substitutionReason: 'Without a known mechanism, any substitution is guesswork; isolate one sensory variable first',
       confidence: 'Low',
     });
+  }
+
+  const confectionerySignals = signals.replace(/\b(?:not|rather than|instead of)\s+(?:a |an )?(?:candy|dessert|confection(?:ery)?|cookie|biscuit|sweet(?:ness)?|sweet-texture)(?:\s+or\s+(?:a |an )?(?:candy|dessert|confection(?:ery)?|cookie|biscuit|sweet(?:ness)?|sweet-texture))*\b/gi, '');
+  const hasStrongConfectionery = hasAnySignal(confectionerySignals, [wordSignal('caramel|dulce de leche|manjar|fudge|barfi|halva|baklava|mochi|candy|dessert|confection|cookie|biscuit|nougat|turrón|taffy|melcocha|cocada|flan|custard|pudding|chocolate|pastillas|milk candy|grainy/crystalline texture')]);
+  const hasSavoryCueFamily = components.some((component) => ['starch', 'protein', 'sauce', 'vegetable', 'broth'].includes(component.role))
+    || hasAnySignal(signals, [wordSignal('savory|curry|gravy|spiced|seasoned')]);
+  if (!hasStrongConfectionery && hasSavoryCueFamily) {
+    components = components.filter((component) => component.role !== 'confectionery');
   }
 
   return components;
@@ -1220,6 +1188,53 @@ function beverageCueProfile(signals: string, userLocation?: string, overallConfi
   };
 }
 
+function isSourHerbSoupSignal(signals: string): boolean {
+  return signalIncludes(signals, 'soup|broth|sip|warm')
+    && signalIncludes(signals, 'sour|tangy|acid|vinegar|pickle|brine|fermented|fermentation')
+    && signalIncludes(signals, 'dill|sorrel|herb|pickle|potato|egg|pale|chunks');
+}
+
+function sourHerbSoupCueProfile(signals: string, userLocation?: string, overallConfidence?: Confidence): FoodScienceCueProfile {
+  const hasDill = signalIncludes(signals, 'dill');
+  const acidCue = signalIncludes(signals, 'pickle|brine|fermented|fermentation')
+    ? 'pickle brine, sauerkraut brine, or mild vinegar diluted heavily in warm water or broth'
+    : 'mild vinegar, lemon, yogurt tang, or another safe sour cue diluted heavily in warm water or broth';
+  const bodyCue = signalIncludes(signals, 'egg')
+    ? 'a tiny piece of cooked egg or potato for pale body'
+    : 'a tiny piece of potato, rice, or cooked egg for pale starch/body';
+  return {
+    title: 'Minimum viable sour-herb soup cue',
+    goal: 'Test sourness source, dill or green-herb aroma, warm liquid body, and pale starch or egg texture before naming a specific soup.',
+    effortMinutes: 10,
+    format: 'sip',
+    ingredients: [
+      { item: 'warm water or light broth', amount: '1/4 cup', purpose: 'tests warm soup aroma release and body without making a pot' },
+      { item: hasDill ? 'fresh or dried dill' : 'dill, parsley, sorrel-like greens, or the remembered herb if safe', amount: 'pinch', purpose: 'tests the herb aroma that distinguishes sour dill, pickle, sorrel, and other sour-herb soup families' },
+      { item: acidCue, amount: 'drop to 1/4 teaspoon', purpose: 'tests whether the sourness is brine-like, vinegar-like, creamy-tangy, citrusy, or fermented' },
+      { item: bodyCue, amount: 'one tiny piece', purpose: 'tests the pale chunk, starch body, or egg-body memory without committing to the exact soup', optional: true },
+    ],
+    steps: [
+      'Warm only a tiny sip, not a full pot.',
+      'Smell the dill or herb over the warm liquid before adding more acid.',
+      'Add the sour cue in drops so brine, vinegar, dairy tang, or citrus does not overwhelm the herb.',
+      'Taste one sip with the pale potato, rice, or egg body if that texture is remembered.',
+      'If the herb is right but the sourness is wrong, change only the acid family before chasing a named soup.',
+    ],
+    preserves: ['dill or herb aroma', 'warm soup ritual', 'brine or fermented sourness', 'pale starch or egg body'],
+    doesNotPreserve: ['exact Polish, Ukrainian, Czech, or family-specific soup identity', 'long-cooked broth', 'full garnish set', 'complete recipe'],
+    accessibilityPrinciples: ['test one tiny warm sip', 'use pantry vinegar, pickle brine, lemon, yogurt tang, dill, potato, rice, or egg first', 'do not buy specialty sour soup ingredients until sourness and herb direction work'],
+    substituteLogic: [
+      'Sour-herb soups split into mechanisms: herb aroma, acid source, warm liquid body, and pale starch or egg texture.',
+      'Pickle brine, vinegar, dairy tang, citrus, and fermentation read differently; testing them separately prevents generic sour soup drift.',
+      'Potato, rice, or egg can test pale body without claiming a specific regional soup.',
+    ],
+    whyThisIsMinimum: 'A tiny warm sip tests the sour-herb mechanisms most likely to carry the memory: dill/herb aroma, brine-like acid, warm body, and pale chunk texture.',
+    safetyNotes: ['Use only known edible herbs and acids.', 'Keep acid and salt tiny while testing.'],
+    followUpIfItWorks: ['Ask whether the sourness was pickle brine, dairy tang, citrus, vinegar, or fermentation.', 'Ask whether the pale chunks were potato, egg, flour dumpling, rice, or something else.', 'Ask which family region or language word comes to mind.'],
+    components: decomposeIntoComponents(signals, userLocation, overallConfidence),
+  };
+}
+
 function foodScienceCueProfile(signals: string, userLocation?: string, overallConfidence?: Confidence, forceProbe?: boolean): FoodScienceCueProfile {
   if (forceProbe) {
     return {
@@ -1257,13 +1272,20 @@ function foodScienceCueProfile(signals: string, userLocation?: string, overallCo
   const hasAroma = hasAnySignal(signals, [wordSignal('aroma|smell|spice|spiced|seasoned|garlic|onion|herb|pepper|cumin|coriander|clove|nutmeg|cinnamon')]);
   const hasTextureContrast = hasAnySignal(signals, [wordSignal('crispy|crunchy|chewy|creamy|soft|tender|stretchy|crisp|fried|grilled|charred|brown|golden')]);
   const hasAcidOrSweet = hasAnySignal(signals, [wordSignal('sour|tangy|acid|vinegar|citrus|lime|lemon|fermented|sweet|syrup|molasses|sugar')]);
-  const hasConfectionery = hasAnySignal(signals, [wordSignal('caramel|dulce de leche|manjar|fudge|barfi|halva|baklava|mochi|candy|sweet|dessert|confection|cookie|biscuit|nougat|turrón|taffy|melcocha|cocada|flan|custard|pudding|chocolate|pastillas|milk candy|grainy/crystalline texture')]);
+  const confectionerySignals = signals.replace(/\b(?:not|rather than|instead of)\s+(?:a |an )?(?:candy|dessert|confection(?:ery)?|cookie|biscuit|sweet(?:ness)?|sweet-texture)(?:\s+or\s+(?:a |an )?(?:candy|dessert|confection(?:ery)?|cookie|biscuit|sweet(?:ness)?|sweet-texture))*\b/gi, '');
+  const hasStrongConfectionery = hasAnySignal(confectionerySignals, [wordSignal('caramel|dulce de leche|manjar|fudge|barfi|halva|baklava|mochi|candy|dessert|confection|cookie|biscuit|nougat|turrón|taffy|melcocha|cocada|flan|custard|pudding|chocolate|pastillas|milk candy|grainy/crystalline texture')]);
+  const hasConfectionery = hasStrongConfectionery || hasAnySignal(confectionerySignals, [wordSignal('sweet|sugar')]);
+  const hasSavoryCueFamily = hasProteinOrFat || hasSauceOrCondiment || (hasStarchOrBase && hasAroma) || hasAnySignal(signals, [wordSignal('savory|curry|gravy|spiced|seasoned')]);
 
   if (hasBeverage) {
     return beverageCueProfile(signals, userLocation, overallConfidence);
   }
 
-  if (hasConfectionery) {
+  if (isSourHerbSoupSignal(signals)) {
+    return sourHerbSoupCueProfile(signals, userLocation, overallConfidence);
+  }
+
+  if (hasConfectionery && (hasStrongConfectionery || !hasSavoryCueFamily)) {
     return {
       title: 'Minimum viable sweet-texture cue',
       goal: 'Test the memory by building a tiny local pantry proxy for sweetness, seed/nut/coconut aroma, and crumbly or crystalline texture before buying the suspected sweet.',

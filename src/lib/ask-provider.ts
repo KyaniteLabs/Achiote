@@ -644,7 +644,10 @@ export function createOpenAICompatibleAskSession(input: {
         // guard regexes on measurement or candidate-list patterns and suppress
         // valid model output.
         const rawContent = typeof message.content === 'string' ? message.content : '';
-        const strippedContent = rawContent.replace(/<think>[\s\S]*?<\/think>/gi, '').trim();
+        const strippedContent = rawContent
+          .replace(/<think>[\s\S]*?<\/think>/gi, '')
+          .replace(/<think>[\s\S]*?(?:\n\s*\n|$)/gi, '')
+          .trim();
         const textBlocks = strippedContent.length > 0 ? [strippedContent] : [];
         return { textBlocks, toolCalls, providerMessage: message };
       } finally {

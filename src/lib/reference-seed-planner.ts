@@ -64,9 +64,10 @@ export function prioritizeReferenceSeeds(
   queue: ReferenceSeedQueue = referenceSeedQueueData as ReferenceSeedQueue,
 ): SeedPriority[] {
   const priorities = queue.seeds
-    .map((seed) => scoreSeed(seed, report))
-    .filter((priority) => priority.score > 0)
-    .sort((a, b) => b.score - a.score || a.seedId.localeCompare(b.seedId));
+    .map((seed, index) => ({ priority: scoreSeed(seed, report), index }))
+    .filter((entry) => entry.priority.score > 0)
+    .sort((a, b) => b.priority.score - a.priority.score || a.index - b.index)
+    .map((entry) => entry.priority)
 
   return priorities;
 }

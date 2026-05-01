@@ -44,8 +44,23 @@ describe('bundled data validation', () => {
     expect(validateBundledData(bundledData)).toEqual([]);
   });
 
+  it('keeps production reference data framed as generalized mechanisms, not canary prompt fixtures', () => {
+    const productionReferenceText = JSON.stringify({
+      dishFamilies: dishFamiliesData,
+      referenceSeedQueue: referenceSeedQueueData,
+      cacheWarmingManifest: cacheWarmingManifestData,
+    }).toLowerCase();
+
+    expect(productionReferenceText).not.toContain('final-canary');
+    expect(productionReferenceText).not.toContain('misspelled carimanola');
+    expect(productionReferenceText).not.toContain('sparse sour dill soup');
+    expect(productionReferenceText).not.toContain('ambiguous festival sweet');
+    expect(productionReferenceText).not.toContain('substitution-pressure prompts');
+  });
+
   it('rejects dish families with empty fields or duplicate family identifiers', () => {
     const data = cloneBundledData();
+    const duplicateIndex = data.dishFamilies.families.length;
     data.dishFamilies.meta.description = ' ';
     data.dishFamilies.families[0].aliases.push('dolma', ' ');
     data.dishFamilies.families.push({
@@ -58,7 +73,7 @@ describe('bundled data validation', () => {
     expectIssue(issues, 'dishFamilies.meta.description', 'non-empty string');
     expectIssue(issues, 'dishFamilies.families[0].aliases[12]', 'duplicate');
     expectIssue(issues, 'dishFamilies.families[0].aliases[13]', 'non-empty string');
-    expectIssue(issues, 'dishFamilies.families[40].canonicalName', 'duplicate');
+    expectIssue(issues, `dishFamilies.families[${duplicateIndex}].canonicalName`, 'duplicate');
   });
 
 

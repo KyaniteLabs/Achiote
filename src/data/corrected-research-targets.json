@@ -1,0 +1,56 @@
+{
+  "meta": {
+    "version": "0.1.0",
+    "description": "Curated sound-alike correction targets used as research starts, not final identity claims",
+    "provenance": {
+      "sourceType": "curated correction taxonomy",
+      "notes": [
+        "Targets must stay data-backed and mechanism-oriented.",
+        "Do not add one-off canary prompt strings as authoritative aliases.",
+        "Use these targets only to seed research hypotheses while preserving the original user wording as evidence."
+      ]
+    }
+  },
+  "targets": [
+    {
+      "canonicalName": "Carimañola",
+      "aliases": ["carimanola", "carimanolas", "carimañola", "carimañolas", "caribañola"],
+      "regions": ["panama", "colombia", "central america", "latin america"],
+      "ingredients": ["yuca", "cassava", "meat", "beef", "pork"],
+      "sensory": ["fried", "crispy", "savory", "starch"],
+      "why": "corrected likely spelling from a remembered fragment; Panamanian/Colombian fried yuca fritter filled with meat",
+      "whatWouldConfirm": ["yuca or cassava dough", "fried oval/croquette shape", "meat filling", "Panama or Colombia family context"],
+      "confidence": "High"
+    },
+    {
+      "canonicalName": "Peanut Chikki",
+      "aliases": ["chikki", "chiki", "chicky", "cheeky", "chikee", "chickee"],
+      "regions": ["india", "south asia"],
+      "ingredients": ["peanut", "jaggery", "sugar", "caramel"],
+      "sensory": ["sweet", "crunchy", "sandy", "grainy", "caramel"],
+      "why": "sound-alike correction from the remembered name plus peanut, caramel, and Indian context",
+      "whatWouldConfirm": ["peanuts set in jaggery or caramelized sugar", "brittle or sandy snap", "Indian/South Asian sweet context"],
+      "confidence": "High"
+    },
+    {
+      "canonicalName": "Cocada",
+      "aliases": ["cocada", "cocadas", "kokada", "cocoda", "coconut candy"],
+      "regions": ["latin america", "central america", "caribbean", "panama", "colombia", "mexico"],
+      "ingredients": ["coconut", "sugar", "milk"],
+      "sensory": ["sweet", "chewy", "grainy"],
+      "why": "corrected likely coconut-candy spelling from ingredient and regional clues",
+      "whatWouldConfirm": ["shredded coconut", "sugar syrup or milk", "chewy or grainy candy texture", "Latin American or Caribbean context"],
+      "confidence": "Medium"
+    },
+    {
+      "canonicalName": "Barfi / Pedha",
+      "aliases": ["barfi", "burfi", "barfee", "pedha", "peda"],
+      "regions": ["india", "south asia"],
+      "ingredients": ["milk", "sugar", "coconut"],
+      "sensory": ["sweet", "grainy", "fudge", "sandy"],
+      "why": "corrected likely Indian milk-sweet spelling from a remembered fragment and fudge-like texture",
+      "whatWouldConfirm": ["milk solids or coconut", "grainy fudge texture", "cardamom or nut garnish", "Indian/South Asian context"],
+      "confidence": "Medium"
+    }
+  ]
+}

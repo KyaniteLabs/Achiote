@@ -6970,6 +6970,222 @@
           "Uses source-gated Wikidata structured data only; not family-specific."
         ]
       }
+    },
+    {
+      "id": "beverage-barley-cebada-latin-america",
+      "forms": [
+        "foodForms.beverage"
+      ],
+      "regions": [
+        "macro:Latin America",
+        "macro:Central America",
+        "diaspora:United States"
+      ],
+      "nameSignals": [
+        "agua de cebada",
+        "aguita de ceba",
+        "barley water",
+        "cebada",
+        "cold grain drink"
+      ],
+      "mechanisms": [
+        "mechanisms.starch_texture",
+        "mechanisms.aroma",
+        "mechanisms.temperature",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "agua de cebada barley drink regional variants",
+        "cold barley water Latin America family memory",
+        "cebada drink lime ice diaspora variations"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "grain-beverage",
+          "region": "Latin America"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.beverage",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "mechanisms.starch_texture",
+        "evidenceLevels.seed_hypothesis",
+        "cultureAreas.central_america",
+        "cultureAreas.diaspora_global"
+      ],
+      "provenance": {
+        "sourceType": "aggregate knowledge-gap seed",
+        "notes": [
+          "Added after aggregate evidence showed grain drinks need internal grounding across rice, barley, spice, citrus, dilution, and temperature.",
+          "Use as a research target, not an authoritative recipe record."
+        ]
+      }
+    },
+    {
+      "id": "cassava-fritter-caribbean-central-america",
+      "forms": [
+        "foodForms.snack_street_food",
+        "foodForms.dumpling_pocket"
+      ],
+      "regions": [
+        "nation:Panama",
+        "nation:Colombia",
+        "macro:Central America",
+        "macro:Caribbean"
+      ],
+      "nameSignals": [
+        "carimanola",
+        "carimañola",
+        "caribañola",
+        "fried yuca roll",
+        "cassava fritter"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "carimañola carimanola Panama cassava fritter aliases",
+        "fried yuca roll picadillo sensory family",
+        "caribañola cassava fritter regional spelling"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "cassava-fritter",
+          "region": "Panama and Colombia"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.snack_street_food",
+        "foodForms.dumpling_pocket",
+        "regionScopes.nation",
+        "nameSystems.alias",
+        "nameSystems.phonetic",
+        "mechanisms.starch_texture",
+        "mechanisms.texture_contrast",
+        "evidenceLevels.seed_hypothesis",
+        "cultureAreas.central_america",
+        "cultureAreas.caribbean"
+      ],
+      "provenance": {
+        "sourceType": "aggregate knowledge-gap seed",
+        "notes": [
+          "Added after aggregate evidence showed phonetic cassava-fritter memories triggered search dependence.",
+          "Keep user spelling as evidence and resolve only to the alias family; do not curate one-off typos as authoritative aliases."
+        ]
+      }
+    },
+    {
+      "id": "confectionery-coconut-sugar-festival",
+      "forms": [
+        "foodForms.confectionery",
+        "foodForms.ceremonial_holiday"
+      ],
+      "regions": [
+        "macro:Latin America",
+        "macro:Caribbean",
+        "macro:Southeast Asia",
+        "macro:West Africa",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "cocada",
+        "coconut candy",
+        "celebration coconut sweet",
+        "grainy coconut sweet",
+        "bukayo"
+      ],
+      "mechanisms": [
+        "mechanisms.sugar_crystal",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "coconut sugar confection regional variants",
+        "cocada bukayo coconut candy festival memory",
+        "grainy coconut sweet school festival diaspora"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "coconut-sugar-confection",
+          "region": "Global diaspora"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.confectionery",
+        "foodForms.ceremonial_holiday",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "mechanisms.sugar_crystal",
+        "mechanisms.texture_contrast",
+        "evidenceLevels.seed_hypothesis",
+        "cultureAreas.caribbean",
+        "cultureAreas.diaspora_global"
+      ],
+      "provenance": {
+        "sourceType": "aggregate knowledge-gap seed",
+        "notes": [
+          "Added after aggregate evidence showed weak coconut-sugar confectionery grounding.",
+          "Use as a mechanism family for coconut aroma, sugar crystal texture, and festival context."
+        ]
+      }
+    },
+    {
+      "id": "curry-cream-tomato-substitution-roles",
+      "forms": [
+        "foodForms.protein_centered",
+        "foodForms.sauce_condiment"
+      ],
+      "regions": [
+        "macro:South Asia",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "butter chicken",
+        "murgh makhani",
+        "tomato cream curry",
+        "cashew gravy",
+        "creamy curry"
+      ],
+      "mechanisms": [
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.starch_texture"
+      ],
+      "querySeeds": [
+        "butter chicken sensory roles tomato cream spice fat",
+        "cream tomato curry substitution role mapping",
+        "cashew gravy butter chicken dairy nut gluten halal vegan constraints"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "cream-tomato-curry",
+          "region": "South Asia diaspora"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.protein_centered",
+        "foodForms.sauce_condiment",
+        "regionScopes.diaspora",
+        "nameSystems.menu_name",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "evidenceLevels.seed_hypothesis",
+        "cultureAreas.south_asia",
+        "cultureAreas.diaspora_global"
+      ],
+      "provenance": {
+        "sourceType": "aggregate knowledge-gap seed",
+        "notes": [
+          "Added after aggregate evidence showed the need to preserve original sensory roles before adaptation.",
+          "Use for original-role mapping; not for medical or dietary safety claims."
+        ]
+      }
     }
   ]
 }
