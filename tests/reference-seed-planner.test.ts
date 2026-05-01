@@ -68,7 +68,7 @@ describe('reference seed planner', () => {
     ]));
   });
 
-  it('contains seed targets for the final-canary knowledge-gap buckets', () => {
+  it('contains generalized seed targets for aggregate knowledge-gap buckets', () => {
     const seedIds = referenceSeedQueueData.seeds.map((seed) => seed.id);
     expect(seedIds).toEqual(expect.arrayContaining([
       'soup-sour-herb-eastern-europe',

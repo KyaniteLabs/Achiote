@@ -2711,7 +2711,7 @@
       "provenance": {
         "sourceType": "curated cultural taxonomy",
         "notes": [
-          "Added from final-canary knowledge-gap evidence for sparse sour dill soup prompts.",
+          "Added from aggregate knowledge-gap evidence for sour, herb-forward soup memories.",
           "Use as a mechanism family; do not claim a specific regional soup without user or source confirmation."
         ]
       }
@@ -2764,7 +2764,7 @@
       "provenance": {
         "sourceType": "curated cultural taxonomy",
         "notes": [
-          "Added from final-canary evidence for horchata-like and cebada-like beverage memories.",
+          "Added from aggregate knowledge-gap evidence for grain, starch, spice, and cold-service beverage memories.",
           "Use to ground beverage mechanisms before any external search or exact identity claim."
         ]
       }
@@ -2773,7 +2773,6 @@
       "canonicalName": "cassava-fritter",
       "aliases": [
         "carimanola",
-        "carimanolla",
         "carimañola",
         "carimañolas",
         "carimanolas",
@@ -2814,8 +2813,8 @@
       "provenance": {
         "sourceType": "curated cultural taxonomy",
         "notes": [
-          "Added from final-canary misspelled carimanola evidence.",
-          "Use as an alias family; keep original user spelling as evidence."
+          "Added from aggregate knowledge-gap evidence for phonetic cassava-fritter memories.",
+          "Use as an alias family; keep original user spelling as evidence and let fuzzy matching handle one-off typos."
         ]
       }
     },
@@ -2862,7 +2861,7 @@
       "provenance": {
         "sourceType": "curated cultural taxonomy",
         "notes": [
-          "Added from final-canary substitution-pressure evidence.",
+          "Added from aggregate knowledge-gap evidence for substitution requests that need original sensory-role preservation.",
           "Use to preserve original sensory roles before substitution adaptation."
         ]
       }
@@ -2874,7 +2873,6 @@
         "cocadas",
         "kokada",
         "coconut candy",
-        "coconut festival sweet",
         "coconut sweet",
         "grainy coconut sweet"
       ],
@@ -2916,7 +2914,7 @@
       "provenance": {
         "sourceType": "curated cultural taxonomy",
         "notes": [
-          "Added from final-canary ambiguous festival sweet evidence.",
+          "Added from aggregate knowledge-gap evidence for coconut, sugar-crystal, and celebration-context confectionery memories.",
           "Use as a broad coconut-sugar mechanism family, not an exact dish claim."
         ]
       }

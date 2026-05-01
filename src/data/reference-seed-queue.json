@@ -7015,9 +7015,9 @@
         "cultureAreas.diaspora_global"
       ],
       "provenance": {
-        "sourceType": "final-canary knowledge-gap seed",
+        "sourceType": "aggregate knowledge-gap seed",
         "notes": [
-          "Added after final-canary evidence showed horchata-like and cebada-like drinks still needed separate internal grounding.",
+          "Added after aggregate evidence showed grain drinks need internal grounding across rice, barley, spice, citrus, dilution, and temperature.",
           "Use as a research target, not an authoritative recipe record."
         ]
       }
@@ -7037,7 +7037,6 @@
       "nameSignals": [
         "carimanola",
         "carimañola",
-        "carimanolla",
         "caribañola",
         "fried yuca roll",
         "cassava fritter"
@@ -7072,10 +7071,10 @@
         "cultureAreas.caribbean"
       ],
       "provenance": {
-        "sourceType": "final-canary knowledge-gap seed",
+        "sourceType": "aggregate knowledge-gap seed",
         "notes": [
-          "Added after misspelled carimanola prompts triggered search dependence.",
-          "Keep user spelling as evidence and resolve only to the alias family."
+          "Added after aggregate evidence showed phonetic cassava-fritter memories triggered search dependence.",
+          "Keep user spelling as evidence and resolve only to the alias family; do not curate one-off typos as authoritative aliases."
         ]
       }
     },
@@ -7095,7 +7094,7 @@
       "nameSignals": [
         "cocada",
         "coconut candy",
-        "coconut festival sweet",
+        "celebration coconut sweet",
         "grainy coconut sweet",
         "bukayo"
       ],
@@ -7128,9 +7127,9 @@
         "cultureAreas.diaspora_global"
       ],
       "provenance": {
-        "sourceType": "final-canary knowledge-gap seed",
+        "sourceType": "aggregate knowledge-gap seed",
         "notes": [
-          "Added after ambiguous festival sweet prompts showed weak coconut-sugar grounding.",
+          "Added after aggregate evidence showed weak coconut-sugar confectionery grounding.",
           "Use as a mechanism family for coconut aroma, sugar crystal texture, and festival context."
         ]
       }
@@ -7181,9 +7180,9 @@
         "cultureAreas.diaspora_global"
       ],
       "provenance": {
-        "sourceType": "final-canary knowledge-gap seed",
+        "sourceType": "aggregate knowledge-gap seed",
         "notes": [
-          "Added after substitution-pressure prompts showed the need to preserve original sensory roles before adaptation.",
+          "Added after aggregate evidence showed the need to preserve original sensory roles before adaptation.",
           "Use for original-role mapping; not for medical or dietary safety claims."
         ]
       }

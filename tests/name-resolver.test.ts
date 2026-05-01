@@ -43,20 +43,25 @@ describe('resolveDishName', () => {
     expect(result.canonicalName).toBe('stuffed-vegetables');
   });
 
-  it('resolves final-canary alias gaps without search-first dependence', () => {
-    expect(resolveDishName('carimanolla')).toMatchObject({
+  it('resolves canary-discovered family gaps through general aliases and fuzzy matching', () => {
+    expect(resolveDishName('caribañola')).toMatchObject({
       canonicalName: 'cassava-fritter',
       confidence: 'High',
+    });
+    expect(resolveDishName('carimanolla')).toMatchObject({
+      canonicalName: 'cassava-fritter',
+      confidence: 'Medium',
+      matchType: 'fuzzy',
     });
     expect(resolveDishName('agua de cebada')).toMatchObject({
       canonicalName: 'grain-beverage',
       confidence: 'High',
     });
-    expect(resolveDishName('sour dill soup')).toMatchObject({
+    expect(resolveDishName('pickle soup')).toMatchObject({
       canonicalName: 'sour-herb-soup',
       confidence: 'High',
     });
-    expect(resolveDishName('coconut festival sweet')).toMatchObject({
+    expect(resolveDishName('bukayo')).toMatchObject({
       canonicalName: 'coconut-sugar-confection',
       confidence: 'High',
     });
