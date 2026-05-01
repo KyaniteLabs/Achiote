@@ -104,4 +104,14 @@ describe('weak cloud runner hardening', () => {
     expect(runner).toContain('eval_batch_size');
     expect(runner).toContain('context_length');
   });
+
+  it('records local inference management failures without false ok unloads', () => {
+    const runner = fs.readFileSync('scripts/weak-cloud-overnight.mjs', 'utf8');
+
+    expect(runner).toContain('localManagementFailureResult');
+    expect(runner).toContain("classification: 'local_management_failed'");
+    expect(runner).toContain('if (responseBody?.error)');
+    expect(runner).toContain("error: 'unload_response_error'");
+    expect(runner).toMatch(/if \(responseBody\?\.error\)[\s\S]+error: 'unload_response_error'[\s\S]+continue;[\s\S]+return \{ ok: true, id, body, response: responseBody, attempts \};/);
+  });
 });

@@ -671,11 +671,15 @@ function loadProfilePayload(model) {
 async function loadLocalModel(model) {
   if (isProtectedLocalModel(model)) throw new Error(`refusing to load protected local model ${model}`);
   const managementBase = localBaseUrl.replace(/\/$/, '').replace(/\/(?:v1|api\/v1)$/, '') + '/api/v1';
-  return timedFetchJson(`${managementBase}/models/load`, {
+  const result = await timedFetchJson(`${managementBase}/models/load`, {
     method: 'POST',
     headers: { 'content-type': 'application/json', ...localAuthHeaders() },
     body: JSON.stringify(loadProfilePayload(model)),
   }, localTimeoutMs);
+  if (!result.response.ok || result.body?.error) {
+    throw new Error(`local load failed: status=${result.response.status} body=${safeDiagnosticPreview(result.rawBody)}`);
+  }
+  return result;
 }
 
 async function unloadLocalModel(model, loadResult) {
@@ -691,6 +695,10 @@ async function unloadLocalModel(model, loadResult) {
           headers: { 'content-type': 'application/json', ...localAuthHeaders() },
           body: JSON.stringify(body),
         }, localTimeoutMs);
+        if (responseBody?.error) {
+          attempts.push({ id, body, error: 'unload_response_error', response: responseBody });
+          continue;
+        }
         return { ok: true, id, body, response: responseBody, attempts };
       } catch (error) {
         attempts.push({ id, body, error: safeDiagnosticPreview(error.message) });
@@ -755,6 +763,25 @@ function exceptionResult({ roundId, mode, provider, model, endpointStyle, baseUr
   };
 }
 
+function localManagementFailureResult({ roundId, mode, provider, model, endpointStyle, baseUrl, prompt, error, capabilityMetadata }) {
+  return {
+    roundId,
+    mode,
+    provider,
+    model,
+    ...(capabilityMetadata || {}),
+    endpointStyle: endpointStyle || capabilityMetadata?.endpointStyle,
+    baseUrl: baseUrl || capabilityMetadata?.baseUrl,
+    prompt: prompt.id,
+    status: 'local_management_error',
+    ms: 0,
+    text: '',
+    errors: [{ message: error instanceof Error ? safeDiagnosticPreview(error.message) : safeDiagnosticPreview(String(error)), code: 'local_management_failed' }],
+    classification: 'local_management_failed',
+    quality: [],
+  };
+}
+
 function chooseOpenRouterModels(catalog, roundIndex) {
   const ids = Array.isArray(catalog)
     ? catalog.map((model) => model.id)
@@ -806,8 +833,8 @@ async function runLocalTest(roundId, test) {
     loadResult = await loadLocalModel(test.model);
     await runNakedAndAchiote(roundId, test, '');
   } catch (error) {
-    appendResult({ roundId, ...exceptionResult({ roundId, mode: 'naked', ...test, error }) });
-    appendResult({ roundId, ...exceptionResult({ roundId, mode: 'achiote', ...test, error }) });
+    appendResult({ roundId, ...localManagementFailureResult({ roundId, mode: 'naked', ...test, error }) });
+    appendResult({ roundId, ...localManagementFailureResult({ roundId, mode: 'achiote', ...test, error }) });
   } finally {
     const unload = await unloadLocalModel(test.model, loadResult);
     appendResult({ kind: 'local_unload', roundId, provider: 'local', model: test.model, prompt: test.prompt.id, at: new Date().toISOString(), unload });
