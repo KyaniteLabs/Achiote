@@ -829,6 +829,15 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       return;
     }
 
+    if (calledTools.has('generate_minimum_viable_nostalgia') && containsOverconfidentIdentityClaim(trustBoundedResponseText)) {
+      console.warn('[ask] replaced overconfident identity claim with deterministic minimum cue');
+      const responseText = buildMinimumCueCompletedResponse(toolPayloads);
+      send('text', responseText);
+      maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
+      finish({ guarded: 'overconfident_identity_sanitized' });
+      return;
+    }
+
     if (calledTools.has('generate_minimum_viable_nostalgia') && containsRecipeMeasurementLanguage(trustBoundedResponseText)) {
       console.warn('[ask] suppressed recipe-style measurements in cue response');
       const sanitized = sanitizeRecipeStyleCueLanguage(trustBoundedResponseText);
@@ -1887,6 +1896,11 @@ function containsBlockedRecipeToolSynthesis(text: string): boolean {
   return /\brecipe generation was skipped\b/i.test(text)
     || /\boutside the minimum cue flow\b/i.test(text)
     || /\bsynthesize directly from the minimum viable nostalgia cue\b/i.test(text);
+}
+
+function containsOverconfidentIdentityClaim(text: string): boolean {
+  return /\b(?:almost certainly|definitely|clearly|you(?:'re| are) thinking of|your memory is spot[-\s]?on|it'?s called)\b/i.test(text)
+    || /\bmost likely\s+(?:points?\s+to|matches|is|was|means|refers?\s+to)\b/i.test(text);
 }
 
 function containsPrematureCandidateSpeculation(text: string, toolPayloads: Record<string, unknown>): boolean {
