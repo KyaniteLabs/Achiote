@@ -676,19 +676,47 @@ async function loadLocalModel(model) {
   }, localTimeoutMs);
 }
 
-async function unloadLocalModel(model) {
+async function unloadLocalModel(model, loadResult) {
   if (isProtectedLocalModel(model)) return { skipped: true, reason: 'protected_model' };
   const managementBase = localBaseUrl.replace(/\/$/, '').replace(/\/(?:v1|api\/v1)$/, '') + '/api/v1';
-  try {
-    const { body } = await timedFetchJson(`${managementBase}/models/unload`, {
-      method: 'POST',
-      headers: { 'content-type': 'application/json', ...localAuthHeaders() },
-      body: JSON.stringify({ model }),
-    }, localTimeoutMs);
-    return body;
-  } catch (error) {
-    return { ok: false, error: safeDiagnosticPreview(error.message) };
+  const candidates = localModelIdentifiers(model, loadResult?.body).filter((value, index, all) => all.indexOf(value) === index);
+  const attempts = [];
+  for (const id of candidates) {
+    for (const body of [{ instance_id: id }, { model_key: id }, { model: id }]) {
+      try {
+        const { body: responseBody } = await timedFetchJson(`${managementBase}/models/unload`, {
+          method: 'POST',
+          headers: { 'content-type': 'application/json', ...localAuthHeaders() },
+          body: JSON.stringify(body),
+        }, localTimeoutMs);
+        return { ok: true, id, body, response: responseBody, attempts };
+      } catch (error) {
+        attempts.push({ id, body, error: safeDiagnosticPreview(error.message) });
+      }
+    }
   }
+  return { ok: false, candidates, attempts: attempts.slice(-9) };
+}
+
+function localModelIdentifiers(...values) {
+  const identifiers = [];
+  for (const value of values) {
+    if (!value) continue;
+    if (typeof value === 'string') {
+      identifiers.push(value);
+      continue;
+    }
+    if (typeof value !== 'object') continue;
+    for (const key of ['id', 'key', 'name', 'model', 'loaded_instance_id', 'instance_id']) {
+      const candidate = value[key];
+      if (typeof candidate === 'string' && candidate.trim()) identifiers.push(candidate);
+      if (candidate && typeof candidate === 'object') identifiers.push(...localModelIdentifiers(candidate));
+    }
+    if (Array.isArray(value.loaded_instances)) {
+      for (const loaded of value.loaded_instances) identifiers.push(...localModelIdentifiers(loaded));
+    }
+  }
+  return identifiers;
 }
 
 function chooseLocalModels(inventory, roundIndex) {
@@ -771,14 +799,15 @@ async function runNakedAndAchiote(roundId, test, openRouterKey) {
 
 async function runLocalTest(roundId, test) {
   appendResult({ kind: 'local_load', roundId, provider: 'local', model: test.model, prompt: test.prompt.id, at: new Date().toISOString(), loadProfile: loadProfilePayload(test.model) });
+  let loadResult;
   try {
-    await loadLocalModel(test.model);
+    loadResult = await loadLocalModel(test.model);
     await runNakedAndAchiote(roundId, test, '');
   } catch (error) {
     appendResult({ roundId, ...exceptionResult({ roundId, mode: 'naked', ...test, error }) });
     appendResult({ roundId, ...exceptionResult({ roundId, mode: 'achiote', ...test, error }) });
   } finally {
-    const unload = await unloadLocalModel(test.model);
+    const unload = await unloadLocalModel(test.model, loadResult);
     appendResult({ kind: 'local_unload', roundId, provider: 'local', model: test.model, prompt: test.prompt.id, at: new Date().toISOString(), unload });
   }
 }
