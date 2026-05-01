@@ -43,6 +43,44 @@ describe('knowledge-gap canary', () => {
     expect(gaps.map((gap: { type: string }) => gap.type)).not.toContain('full_recipe_drift');
   });
 
+  it('groups gaps by mechanism signature instead of exact prompt wording', async () => {
+    const { analyzeKnowledgeGaps } = await import('../scripts/lib/knowledge-gap-canary.mjs');
+
+    const gaps = analyzeKnowledgeGaps([
+      {
+        mode: 'achiote',
+        provider: 'glm',
+        model: 'glm-test',
+        prompt: 'A tart green herb broth with pale potato pieces stayed vague.',
+        text: 'Minimum viable aroma-sip cue: a tiny amount of water plus the dominant aromatic or spice family. If it works, next ask: Ask what gave the liquid body.',
+        tools: ['collect_food_memory', 'generate_minimum_viable_nostalgia'],
+        quality: [],
+      },
+      {
+        mode: 'achiote',
+        provider: 'local',
+        model: 'tiny-test',
+        prompt: 'Nobody knows the name, only warm pickle-brine soup with egg bits.',
+        text: 'Minimum viable aroma-sip cue: a tiny amount of water plus the dominant aromatic or spice family. If it works, next ask: Ask what gave the liquid body.',
+        tools: ['collect_food_memory', 'generate_minimum_viable_nostalgia'],
+        quality: [],
+      },
+    ]);
+
+    const overbroad = gaps.find((gap: { type: string }) => gap.type === 'overbroad_family');
+
+    expect(overbroad).toMatchObject({
+      type: 'overbroad_family',
+      cueClass: 'sour_herb_soup',
+      count: 2,
+    });
+    expect(overbroad).not.toHaveProperty('prompt');
+    expect(overbroad.examples.map((example: { prompt: string }) => example.prompt)).toEqual(expect.arrayContaining([
+      'A tart green herb broth with pale potato pieces stayed vague.',
+      'Nobody knows the name, only warm pickle-brine soup with egg bits.',
+    ]));
+  });
+
   it('exposes a no-provider CLI over existing JSONL artifacts', () => {
     const script = fs.readFileSync('scripts/knowledge-gap-canary.mjs', 'utf8');
 

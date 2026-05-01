@@ -1,4 +1,5 @@
 import dishFamiliesData from '../data/dish-families.json' with { type: 'json' };
+import correctedResearchTargetsData from '../data/corrected-research-targets.json' with { type: 'json' };
 import memoryHintsData from '../data/memory-hints.json' with { type: 'json' };
 import type {
   CollectedFoodMemory,
@@ -555,48 +556,7 @@ type CorrectedResearchTarget = {
   confidence: Confidence;
 };
 
-const CORRECTED_RESEARCH_TARGETS: CorrectedResearchTarget[] = [
-  {
-    canonicalName: 'Carimañola',
-    aliases: ['carimanola', 'carimanolas', 'carimañola', 'carimañolas', 'caribañola'],
-    regions: ['panama', 'colombia', 'central america', 'latin america'],
-    ingredients: ['yuca', 'cassava', 'meat', 'beef', 'pork'],
-    sensory: ['fried', 'crispy', 'savory', 'starch'],
-    why: 'corrected likely spelling from a remembered fragment; Panamanian/Colombian fried yuca fritter filled with meat',
-    whatWouldConfirm: ['yuca or cassava dough', 'fried oval/croquette shape', 'meat filling', 'Panama or Colombia family context'],
-    confidence: 'High',
-  },
-  {
-    canonicalName: 'Peanut Chikki',
-    aliases: ['chikki', 'chiki', 'chicky', 'cheeky', 'chikee', 'chickee'],
-    regions: ['india', 'south asia'],
-    ingredients: ['peanut', 'jaggery', 'sugar', 'caramel'],
-    sensory: ['sweet', 'crunchy', 'sandy', 'grainy', 'caramel'],
-    why: 'sound-alike correction from the remembered name plus peanut, caramel, and Indian context',
-    whatWouldConfirm: ['peanuts set in jaggery or caramelized sugar', 'brittle or sandy snap', 'Indian/South Asian sweet context'],
-    confidence: 'High',
-  },
-  {
-    canonicalName: 'Cocada',
-    aliases: ['cocada', 'cocadas', 'kokada', 'cocoda', 'coconut candy'],
-    regions: ['latin america', 'central america', 'caribbean', 'panama', 'colombia', 'mexico'],
-    ingredients: ['coconut', 'sugar', 'milk'],
-    sensory: ['sweet', 'chewy', 'grainy'],
-    why: 'corrected likely coconut-candy spelling from ingredient and regional clues',
-    whatWouldConfirm: ['shredded coconut', 'sugar syrup or milk', 'chewy or grainy candy texture', 'Latin American or Caribbean context'],
-    confidence: 'Medium',
-  },
-  {
-    canonicalName: 'Barfi / Pedha',
-    aliases: ['barfi', 'burfi', 'barfee', 'pedha', 'peda'],
-    regions: ['india', 'south asia'],
-    ingredients: ['milk', 'sugar', 'coconut'],
-    sensory: ['sweet', 'grainy', 'fudge', 'sandy'],
-    why: 'corrected likely Indian milk-sweet spelling from a remembered fragment and fudge-like texture',
-    whatWouldConfirm: ['milk solids or coconut', 'grainy fudge texture', 'cardamom or nut garnish', 'Indian/South Asian context'],
-    confidence: 'Medium',
-  },
-];
+const correctedResearchTargets: CorrectedResearchTarget[] = correctedResearchTargetsData.targets as CorrectedResearchTarget[];
 
 function correctedNameHypotheses(memory: CollectedFoodMemory): DishHypothesis[] {
   const text = normalizeForLooseMatch(memory.normalizedMemory);
@@ -605,7 +565,7 @@ function correctedNameHypotheses(memory: CollectedFoodMemory): DishHypothesis[] 
   const ingredients = memory.extractedClues.rememberedIngredients.map(normalizeForLooseMatch);
   const sensory = memory.extractedClues.sensoryClues.map(normalizeForLooseMatch);
 
-  const matches = CORRECTED_RESEARCH_TARGETS.filter((target) => {
+  const matches = correctedResearchTargets.filter((target) => {
     const aliases = target.aliases.map(normalizeForLooseMatch);
     const aliasMatch = aliases.some((alias) =>
       text.includes(alias) || possibleNames.some((name) => name.includes(alias) || alias.includes(name)),
@@ -1268,7 +1228,7 @@ function sourHerbSoupCueProfile(signals: string, userLocation?: string, overallC
       'Pickle brine, vinegar, dairy tang, citrus, and fermentation read differently; testing them separately prevents generic sour soup drift.',
       'Potato, rice, or egg can test pale body without claiming a specific regional soup.',
     ],
-    whyThisIsMinimum: 'A tiny warm sip tests the sour-herb mechanisms that caused the canary gap: dill/herb aroma, brine-like acid, warm body, and pale chunk texture.',
+    whyThisIsMinimum: 'A tiny warm sip tests the sour-herb mechanisms most likely to carry the memory: dill/herb aroma, brine-like acid, warm body, and pale chunk texture.',
     safetyNotes: ['Use only known edible herbs and acids.', 'Keep acid and salt tiny while testing.'],
     followUpIfItWorks: ['Ask whether the sourness was pickle brine, dairy tang, citrus, vinegar, or fermentation.', 'Ask whether the pale chunks were potato, egg, flour dumpling, rice, or something else.', 'Ask which family region or language word comes to mind.'],
     components: decomposeIntoComponents(signals, userLocation, overallConfidence),

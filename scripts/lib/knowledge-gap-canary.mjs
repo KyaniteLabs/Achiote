@@ -22,6 +22,7 @@ export function analyzeKnowledgeGaps(rows) {
       model: String(row.model ?? 'unknown-model'),
       provider: String(row.provider ?? 'unknown-provider'),
       prompt,
+      cueClass: classifyCueClass(prompt, text),
       text,
       tools,
       quality,
@@ -52,7 +53,7 @@ export function analyzeKnowledgeGaps(rows) {
       addGap(gaps, 'missing_substitution_role', 'Substitution request fell back to generic carrier/protein language; add original sensory-role mapping before adapted cues.', context);
     }
     if (quality.includes('missed_minimum_cue_frame') || quality.includes('empty_text')) {
-      addGap(gaps, 'weak_sensory_signature', 'Model path did not surface a usable cue; internal sensory signatures may be too weak for this prompt bucket.', context);
+      addGap(gaps, 'weak_sensory_signature', 'Model path did not surface a usable cue; internal sensory signatures may be too weak for this mechanism class.', context);
     }
     if (/\b(?:buy|grocery|store|local sourcing|ordinary grocery)\b/i.test(text)
       && !/\b(?:pantry|already available|cheap|tiny)\b/i.test(text)) {
@@ -72,10 +73,10 @@ export function parseJsonl(text) {
 }
 
 function addGap(gaps, type, reason, context) {
-  const key = `${type}\u0000${context.prompt}`;
+  const key = `${type}\u0000${context.cueClass}`;
   const existing = gaps.get(key) ?? {
     type,
-    prompt: context.prompt,
+    cueClass: context.cueClass,
     count: 0,
     reason,
     examples: [],
@@ -87,10 +88,32 @@ function addGap(gaps, type, reason, context) {
       model: context.model,
       roundId: context.roundId,
       at: context.at,
+      prompt: context.prompt,
       tools: context.tools,
       quality: context.quality,
       excerpt: context.text.slice(0, 260),
     });
   }
   gaps.set(key, existing);
+}
+
+function classifyCueClass(prompt, text) {
+  const combined = `${prompt} ${text}`.toLowerCase();
+  if (/\b(?:sour|tart|pickle|brine|ferment|dill|herb|zurek|żurek|sorrel|potato|egg)\b/.test(combined)
+    && /\b(?:soup|broth|sip|liquid|body|chunks?|pieces?)\b/.test(combined)) {
+    return 'sour_herb_soup';
+  }
+  if (/\b(?:rice|cinnamon|barley|cebada|horchata|grain|agua|drink|beverage|sip|ice|lime)\b/.test(combined)) {
+    return 'grain_beverage';
+  }
+  if (/\b(?:carimanol|carimañol|caribañol|cassava|yuca|tapioca|fritter|plantain|panama|colombia)\b/.test(combined)) {
+    return 'cassava_fritter';
+  }
+  if (/\b(?:substitution|nut-free|vegan|halal|gluten-free|heart-healthier|cream|tomato|curry|cashew|butter|naan)\b/.test(combined)) {
+    return 'substitution_role_mapping';
+  }
+  if (/\b(?:coconut|sugar|crystal|grainy|festival|celebration|sweet|confection|candy)\b/.test(combined)) {
+    return 'sugar_confectionery';
+  }
+  return 'general_memory_mechanism';
 }
