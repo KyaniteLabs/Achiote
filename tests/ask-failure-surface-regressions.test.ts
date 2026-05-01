@@ -691,7 +691,7 @@ describe('/ask failure surface regressions', () => {
           finish_reason: toolCalls ? 'tool_calls' : 'stop',
           message: toolCalls
             ? { role: 'assistant', content: '', tool_calls: toolCalls }
-            : { role: 'assistant', content: 'Use 2 tbsp sour cream, 1/2 cup broth, one-cup water, half-cup rice milk, and 6 oz potato. Add half a teaspoon vinegar. Preheat oven to 350°F, then bring to a gentle simmer for 12-15 min before serving 4. Exact recipe follows.' },
+            : { role: 'assistant', content: 'Use 2 tbsp sour cream, 1/2 cup broth, ½ cup yogurt, one-cup water, half-cup rice milk, and 6 oz potato. Add half a teaspoon vinegar. Preheat oven to 350°F, then bring to a gentle simmer for 12-15 min before serving 4. Exact recipe follows.' },
         }],
       }));
     });
@@ -716,7 +716,7 @@ describe('/ask failure surface regressions', () => {
     expect(events.some((event) => event.event === 'error')).toBe(false);
     expect(events.at(-1)?.event).toBe('done');
     expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'recipe_measurement_sanitized' });
-    expect(finalText).not.toMatch(/\b(?:2\s*tbsp|1\/2\s*cup|one-cup|half-cup|6\s*oz|half a teaspoon|350\s*°?F|gentle simmer|12-15\s*min|serving\s+4|exact recipe)\b/i);
+    expect(finalText).not.toMatch(/\b(?:2\s*tbsp|1\/2\s*cup|½\s*cup|one-cup|half-cup|6\s*oz|half a teaspoon|350\s*°?F|gentle simmer|12-15\s*min|serving\s+4|exact recipe)\b/i);
     expect(finalText).not.toContain('amount of of');
     expect(finalText).toContain('first-pass verification bite');
   }, 20_000);
@@ -796,7 +796,7 @@ describe('/ask failure surface regressions', () => {
           finish_reason: toolCalls ? 'tool_calls' : 'stop',
           message: toolCalls
             ? { role: 'assistant', content: '', tool_calls: toolCalls }
-            : { role: 'assistant', content: 'I checked live grocery prices to keep this under $5. First-pass verification bite: warm broth, dill aroma, and a small sour note. Do not buy the exact suspected dish yet.' },
+            : { role: 'assistant', content: "I've browsed live grocery prices to keep this under $5. First-pass verification bite: warm broth, dill aroma, and a small sour note. Do not buy the exact suspected dish yet." },
         }],
       }));
     });
@@ -819,7 +819,7 @@ describe('/ask failure surface regressions', () => {
       .join('\n\n');
 
     expect(events.some((event) => event.event === 'error')).toBe(false);
-    expect(finalText).not.toMatch(/\b(?:I checked|checked|live grocery prices|live prices|under \$5)\b/i);
+    expect(finalText).not.toMatch(/\b(?:I've browsed|browsed|I checked|checked|live grocery prices|live prices|under \$5)\b/i);
     expect(finalText).toContain('first-pass verification bite');
     expect(events.at(-1)?.event).toBe('done');
     expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'trust_boundary_sanitized' });

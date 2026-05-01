@@ -87,6 +87,7 @@ const prompts = [
     text: 'Earlier I said it was Puerto Rican pastelay, but my aunt corrected me: it was actually a sour soup from my Polish neighbor. Keep my latest correction authoritative and give me the first cue.',
   },
 ];
+const promptById = Object.fromEntries(prompts.map((prompt) => [prompt.id, prompt.text]));
 
 const openRouterPriority = [
   'openai/gpt-oss-20b:free',
@@ -972,8 +973,8 @@ function writeMarketingSummary() {
 
 function marketingCandidate(naked, achiote) {
   const labels = [];
-  const nakedQuality = new Set(naked.quality || []);
-  const achioteQuality = new Set(achiote.quality || []);
+  const nakedQuality = effectiveQualitySet(naked);
+  const achioteQuality = effectiveQualitySet(achiote);
   if (nakedQuality.has('full_recipe_drift') && !achioteQuality.has('full_recipe_drift')) labels.push('prevents full-recipe drift');
   if (nakedQuality.has('overconfident_identity') && !achioteQuality.has('overconfident_identity')) labels.push('reduces false certainty');
   if (nakedQuality.has('false_browsing_claim') && !achioteQuality.has('false_browsing_claim')) labels.push('blocks fake browsing claims');
@@ -1004,6 +1005,13 @@ function marketingCandidate(naked, achiote) {
       ? `Achiote changes the same model input into a more bounded reconstruction path: ${labels.join('; ')}.`
       : 'This pair is retained for audit, but it is not a strong marketing example yet.',
   };
+}
+
+function effectiveQualitySet(result) {
+  return new Set([
+    ...(result.quality || []),
+    ...qualityFindings(result.text || '', promptById[result.prompt] || '', result.mode),
+  ]);
 }
 
 function extractReasoningTrace(text) {
