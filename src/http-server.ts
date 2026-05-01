@@ -603,6 +603,10 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
           console.warn(`[ask] normalized model tool name typo: ${correction.from} -> ${correction.to}`);
           send('status', { iteration: iterations, stage: 'tool_name_normalized', from: correction.from, to: correction.to });
         }
+        for (const dropped of normalizedToolCalls.droppedMalformed) {
+          console.warn(`[ask] dropped malformed provider tool-call envelope from tool name: ${dropped.name.slice(0, 160)}`);
+          send('status', { iteration: iterations, stage: 'malformed_tool_call_dropped', tool: dropped.name, reason: dropped.reason });
+        }
       }
       const toolNames = modelResponse.toolCalls.map((call) => call.name);
       console.log(`[ask] iteration=${iterations} calling tools: ${toolNames.join(', ')}`);
@@ -1765,16 +1769,26 @@ function sanitizeRecipeStyleCueLanguage(text: string): string {
 function normalizeModelToolCalls(toolCalls: AskModelResponse['toolCalls']): {
   toolCalls: AskModelResponse['toolCalls'];
   corrections: Array<{ from: string; to: string }>;
+  droppedMalformed: Array<{ name: string; reason: string }>;
   normalizedAny: boolean;
 } {
   const corrections: Array<{ from: string; to: string }> = [];
-  const normalized = toolCalls.map((call) => {
+  const droppedMalformed: Array<{ name: string; reason: string }> = [];
+  const normalized: AskModelResponse['toolCalls'] = [];
+  for (const call of toolCalls) {
     const toolName = normalizeModelToolName(call.name);
-    if (toolName === call.name) return call;
+    if (toolName === call.name && !KNOWN_TOOL_NAMES.has(toolName) && isMalformedToolNameEnvelope(toolName)) {
+      droppedMalformed.push({ name: call.name, reason: 'provider_tool_name_envelope' });
+      continue;
+    }
+    if (toolName === call.name) {
+      normalized.push(call);
+      continue;
+    }
     corrections.push({ from: call.name, to: toolName });
-    return { ...call, name: toolName };
-  });
-  return { toolCalls: normalized, corrections, normalizedAny: corrections.length > 0 };
+    normalized.push({ ...call, name: toolName });
+  }
+  return { toolCalls: normalized, corrections, droppedMalformed, normalizedAny: corrections.length > 0 || droppedMalformed.length > 0 };
 }
 
 function normalizeModelToolName(toolName: string): string {
@@ -1788,6 +1802,12 @@ function normalizeModelToolName(toolName: string): string {
   if (candidates.length === 1) return candidates[0].candidate;
   if (candidates.length > 1 && candidates[0].distance < candidates[1].distance) return candidates[0].candidate;
   return toolName;
+}
+
+function isMalformedToolNameEnvelope(toolName: string): boolean {
+  return /<\/?arg_(?:key|value)>/i.test(toolName)
+    || /<\/?(?:tool|function|tool_call|function_call)\b/i.test(toolName)
+    || (toolName.length > 80 && /[{}[\]":]/.test(toolName) && /<\//.test(toolName));
 }
 
 function boundedEditDistance(left: string, right: string, maxDistance: number): number {
