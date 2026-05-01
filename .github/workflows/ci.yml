@@ -9,13 +9,9 @@ permissions:
   contents: read
 
 jobs:
-  quality:
-    name: Node ${{ matrix.node }} quality gate
+  release-gate:
+    name: Node 22 release gate
     runs-on: blacksmith-2vcpu-ubuntu-2404
-    strategy:
-      fail-fast: false
-      matrix:
-        node: [22, 24]
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -23,7 +19,8 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v6
         with:
-          node-version: ${{ matrix.node }}
+          node-version: 22
+          cache: npm
 
       - name: Install locked dependencies
         run: npm ci
@@ -39,3 +36,22 @@ jobs:
 
       - name: Verify package contents
         run: npm pack --dry-run
+
+  compatibility-gate:
+    name: Node 24 compatibility gate
+    runs-on: blacksmith-2vcpu-ubuntu-2404
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Check runtime compatibility
+        run: npm run check:compat

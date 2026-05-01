@@ -2,9 +2,31 @@ import { describe, expect, it } from 'vitest';
 import fs from 'node:fs';
 
 describe('P1 launch hardening guardrails', () => {
-  it('runs the full local check script in CI so citation validation cannot drift', () => {
+  it('runs the full release check script in the Node 22 CI gate so citation validation cannot drift', () => {
     const ci = fs.readFileSync('.github/workflows/ci.yml', 'utf8');
-    expect(ci).toContain('npm run check');
+    const releaseJob = ci.slice(ci.indexOf('release-gate:'), ci.indexOf('compatibility-gate:'));
+    expect(ci).toContain('release-gate:');
+    expect(releaseJob).toContain('name: Node 22 release gate');
+    expect(releaseJob).toContain('node-version: 22');
+    expect(releaseJob).toMatch(/^\s+run: npm run check$/m);
+    expect(releaseJob).toContain('npm audit --audit-level=moderate');
+    expect(releaseJob).toContain('npm run package:smoke');
+    expect(releaseJob).toContain('npm pack --dry-run');
+  });
+
+  it('keeps Node 24 as a compatibility gate without duplicating release packaging work', () => {
+    const ci = fs.readFileSync('.github/workflows/ci.yml', 'utf8');
+
+    expect(ci).toContain('compatibility-gate:');
+    expect(ci).toContain('name: Node 24 compatibility gate');
+    expect(ci).toContain('node-version: 24');
+    expect(ci).toContain('npm run check:compat');
+    expect(ci).toContain('npm ci');
+
+    const compatibilityJob = ci.slice(ci.indexOf('compatibility-gate:'));
+    expect(compatibilityJob).not.toContain('npm run package:smoke');
+    expect(compatibilityJob).not.toContain('npm pack --dry-run');
+    expect(compatibilityJob).not.toContain('npm audit --audit-level=moderate');
   });
 
   it('fails citation validation when the landing page has no DOI citations', () => {
