@@ -4620,6 +4620,118 @@
           "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
         ]
       }
+    },
+    {
+      "id": "warm-beverage-barley-cebada-latin-america",
+      "seedId": "beverage-barley-cebada-latin-america",
+      "cacheTarget": {
+        "dishFamily": "grain-beverage",
+        "region": "Latin America"
+      },
+      "coverageTags": [
+        "foodForms.beverage",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "mechanisms.starch_texture"
+      ],
+      "qualityTriggers": [
+        "search_dependency",
+        "overbroad_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord distinguishes rice, barley, cinnamon, lime, sweetness, dilution, ice ritual, and alias uncertainty"
+      ],
+      "provenance": {
+        "sourceType": "final-canary cache-warming task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-cassava-fritter-caribbean-central-america",
+      "seedId": "cassava-fritter-caribbean-central-america",
+      "cacheTarget": {
+        "dishFamily": "cassava-fritter",
+        "region": "Panama and Colombia"
+      },
+      "coverageTags": [
+        "foodForms.snack_street_food",
+        "foodForms.dumpling_pocket",
+        "nameSystems.phonetic",
+        "mechanisms.starch_texture"
+      ],
+      "qualityTriggers": [
+        "search_dependency",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord captures carimanola/carimañola/caribañola aliases, cassava texture, fried surface, filling aroma, regional uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "final-canary cache-warming task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-confectionery-coconut-sugar-festival",
+      "seedId": "confectionery-coconut-sugar-festival",
+      "cacheTarget": {
+        "dishFamily": "coconut-sugar-confection",
+        "region": "Global diaspora"
+      },
+      "coverageTags": [
+        "foodForms.confectionery",
+        "foodForms.ceremonial_holiday",
+        "regionScopes.diaspora",
+        "mechanisms.sugar_crystal"
+      ],
+      "qualityTriggers": [
+        "overbroad_family",
+        "unknown_family",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord captures coconut aroma, sugar crystal texture, milk/caramel variants, festival context, regional uncertainty, and source metadata"
+      ],
+      "provenance": {
+        "sourceType": "final-canary cache-warming task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-curry-cream-tomato-substitution-roles",
+      "seedId": "curry-cream-tomato-substitution-roles",
+      "cacheTarget": {
+        "dishFamily": "cream-tomato-curry",
+        "region": "South Asia diaspora"
+      },
+      "coverageTags": [
+        "foodForms.protein_centered",
+        "foodForms.sauce_condiment",
+        "regionScopes.diaspora",
+        "mechanisms.sauce_balance"
+      ],
+      "qualityTriggers": [
+        "search_dependency",
+        "overbroad_family",
+        "fallback_guard"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord maps tomato body, cream/nut/dairy fat role, spice aroma, protein bite, starch carrier, and substitution constraints without safety claims"
+      ],
+      "provenance": {
+        "sourceType": "final-canary cache-warming task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
     }
   ]
 }

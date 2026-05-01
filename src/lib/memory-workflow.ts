@@ -1228,6 +1228,53 @@ function beverageCueProfile(signals: string, userLocation?: string, overallConfi
   };
 }
 
+function isSourHerbSoupSignal(signals: string): boolean {
+  return signalIncludes(signals, 'soup|broth|sip|warm')
+    && signalIncludes(signals, 'sour|tangy|acid|vinegar|pickle|brine|fermented|fermentation')
+    && signalIncludes(signals, 'dill|sorrel|herb|pickle|potato|egg|pale|chunks');
+}
+
+function sourHerbSoupCueProfile(signals: string, userLocation?: string, overallConfidence?: Confidence): FoodScienceCueProfile {
+  const hasDill = signalIncludes(signals, 'dill');
+  const acidCue = signalIncludes(signals, 'pickle|brine|fermented|fermentation')
+    ? 'pickle brine, sauerkraut brine, or mild vinegar diluted heavily in warm water or broth'
+    : 'mild vinegar, lemon, yogurt tang, or another safe sour cue diluted heavily in warm water or broth';
+  const bodyCue = signalIncludes(signals, 'egg')
+    ? 'a tiny piece of cooked egg or potato for pale body'
+    : 'a tiny piece of potato, rice, or cooked egg for pale starch/body';
+  return {
+    title: 'Minimum viable sour-herb soup cue',
+    goal: 'Test sourness source, dill or green-herb aroma, warm liquid body, and pale starch or egg texture before naming a specific soup.',
+    effortMinutes: 10,
+    format: 'sip',
+    ingredients: [
+      { item: 'warm water or light broth', amount: '1/4 cup', purpose: 'tests warm soup aroma release and body without making a pot' },
+      { item: hasDill ? 'fresh or dried dill' : 'dill, parsley, sorrel-like greens, or the remembered herb if safe', amount: 'pinch', purpose: 'tests the herb aroma that distinguishes sour dill, pickle, sorrel, and other sour-herb soup families' },
+      { item: acidCue, amount: 'drop to 1/4 teaspoon', purpose: 'tests whether the sourness is brine-like, vinegar-like, creamy-tangy, citrusy, or fermented' },
+      { item: bodyCue, amount: 'one tiny piece', purpose: 'tests the pale chunk, starch body, or egg-body memory without committing to the exact soup', optional: true },
+    ],
+    steps: [
+      'Warm only a tiny sip, not a full pot.',
+      'Smell the dill or herb over the warm liquid before adding more acid.',
+      'Add the sour cue in drops so brine, vinegar, dairy tang, or citrus does not overwhelm the herb.',
+      'Taste one sip with the pale potato, rice, or egg body if that texture is remembered.',
+      'If the herb is right but the sourness is wrong, change only the acid family before chasing a named soup.',
+    ],
+    preserves: ['dill or herb aroma', 'warm soup ritual', 'brine or fermented sourness', 'pale starch or egg body'],
+    doesNotPreserve: ['exact Polish, Ukrainian, Czech, or family-specific soup identity', 'long-cooked broth', 'full garnish set', 'complete recipe'],
+    accessibilityPrinciples: ['test one tiny warm sip', 'use pantry vinegar, pickle brine, lemon, yogurt tang, dill, potato, rice, or egg first', 'do not buy specialty sour soup ingredients until sourness and herb direction work'],
+    substituteLogic: [
+      'Sour-herb soups split into mechanisms: herb aroma, acid source, warm liquid body, and pale starch or egg texture.',
+      'Pickle brine, vinegar, dairy tang, citrus, and fermentation read differently; testing them separately prevents generic sour soup drift.',
+      'Potato, rice, or egg can test pale body without claiming a specific regional soup.',
+    ],
+    whyThisIsMinimum: 'A tiny warm sip tests the sour-herb mechanisms that caused the canary gap: dill/herb aroma, brine-like acid, warm body, and pale chunk texture.',
+    safetyNotes: ['Use only known edible herbs and acids.', 'Keep acid and salt tiny while testing.'],
+    followUpIfItWorks: ['Ask whether the sourness was pickle brine, dairy tang, citrus, vinegar, or fermentation.', 'Ask whether the pale chunks were potato, egg, flour dumpling, rice, or something else.', 'Ask which family region or language word comes to mind.'],
+    components: decomposeIntoComponents(signals, userLocation, overallConfidence),
+  };
+}
+
 function foodScienceCueProfile(signals: string, userLocation?: string, overallConfidence?: Confidence, forceProbe?: boolean): FoodScienceCueProfile {
   if (forceProbe) {
     return {
@@ -1272,6 +1319,10 @@ function foodScienceCueProfile(signals: string, userLocation?: string, overallCo
 
   if (hasBeverage) {
     return beverageCueProfile(signals, userLocation, overallConfidence);
+  }
+
+  if (isSourHerbSoupSignal(signals)) {
+    return sourHerbSoupCueProfile(signals, userLocation, overallConfidence);
   }
 
   if (hasConfectionery && (hasStrongConfectionery || !hasSavoryCueFamily)) {

@@ -42,6 +42,29 @@ describe('resolveDishName', () => {
     const result = resolveDishName('cabbage roll');
     expect(result.canonicalName).toBe('stuffed-vegetables');
   });
+
+  it('resolves final-canary alias gaps without search-first dependence', () => {
+    expect(resolveDishName('carimanolla')).toMatchObject({
+      canonicalName: 'cassava-fritter',
+      confidence: 'High',
+    });
+    expect(resolveDishName('agua de cebada')).toMatchObject({
+      canonicalName: 'grain-beverage',
+      confidence: 'High',
+    });
+    expect(resolveDishName('sour dill soup')).toMatchObject({
+      canonicalName: 'sour-herb-soup',
+      confidence: 'High',
+    });
+    expect(resolveDishName('coconut festival sweet')).toMatchObject({
+      canonicalName: 'coconut-sugar-confection',
+      confidence: 'High',
+    });
+    expect(resolveDishName('butter chicken')).toMatchObject({
+      canonicalName: 'cream-tomato-curry',
+      confidence: 'High',
+    });
+  });
 });
 
 describe('resolveDishName ambiguity-aware candidates', () => {

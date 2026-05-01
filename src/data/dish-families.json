@@ -2659,6 +2659,269 @@
       }
     },
     {
+      "canonicalName": "sour-herb-soup",
+      "aliases": [
+        "sour dill soup",
+        "pickle soup",
+        "zupa ogorkowa",
+        "zupa ogórkowa",
+        "ogorkowa",
+        "ogórkowa",
+        "zurek",
+        "żurek",
+        "sorrel soup",
+        "green sour soup",
+        "kulajda"
+      ],
+      "transliterations": {
+        "Polish": [
+          "zupa ogórkowa",
+          "żurek"
+        ],
+        "Ukrainian": [
+          "зелений борщ"
+        ],
+        "Russian": [
+          "щавелевый суп"
+        ]
+      },
+      "regions": [
+        "Poland",
+        "Ukraine",
+        "Eastern Europe",
+        "diaspora North America"
+      ],
+      "sharedElements": [
+        "sourness source such as pickle brine, fermentation, dairy tang, vinegar, or sorrel",
+        "dill or green-herb aroma",
+        "warm liquid body",
+        "pale starch, potato, egg, or dumpling texture"
+      ],
+      "divergentElements": [
+        "acid source",
+        "potato vs egg vs dumpling body",
+        "clear broth vs dairy-enriched body",
+        "regional name and family spelling"
+      ],
+      "nostalgiaTriggers": [
+        "dill aroma over warm sour liquid",
+        "pickle-brine or fermented sourness",
+        "soft pale chunks in the spoon"
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Added from final-canary knowledge-gap evidence for sparse sour dill soup prompts.",
+          "Use as a mechanism family; do not claim a specific regional soup without user or source confirmation."
+        ]
+      }
+    },
+    {
+      "canonicalName": "grain-beverage",
+      "aliases": [
+        "horchata",
+        "agua de arroz",
+        "rice cinnamon drink",
+        "rice-cinnamon drink",
+        "thin milky grain drink",
+        "agua de cebada",
+        "aguita de ceba",
+        "aguita de cebada",
+        "cebada",
+        "barley water",
+        "grain drink"
+      ],
+      "transliterations": {
+        "Spanish": [
+          "agua de arroz",
+          "agua de cebada",
+          "aguita de ceba"
+        ]
+      },
+      "regions": [
+        "Mexico",
+        "Central America",
+        "Latin America",
+        "diaspora United States"
+      ],
+      "sharedElements": [
+        "grain or starch body",
+        "cinnamon, barley, toasted grain, citrus, or vanilla aroma",
+        "sweetness level",
+        "cold dilution and ice ritual"
+      ],
+      "divergentElements": [
+        "rice vs barley vs seed or nut base",
+        "milky vs watery body",
+        "lime or citrus inclusion",
+        "warm vs cold serving"
+      ],
+      "nostalgiaTriggers": [
+        "thin starch body over ice",
+        "cinnamon or toasted-grain aroma",
+        "barely sweet cold sip"
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Added from final-canary evidence for horchata-like and cebada-like beverage memories.",
+          "Use to ground beverage mechanisms before any external search or exact identity claim."
+        ]
+      }
+    },
+    {
+      "canonicalName": "cassava-fritter",
+      "aliases": [
+        "carimanola",
+        "carimanolla",
+        "carimañola",
+        "carimañolas",
+        "carimanolas",
+        "caribañola",
+        "yuca fritter",
+        "cassava fritter",
+        "fried yuca roll"
+      ],
+      "transliterations": {
+        "Spanish": [
+          "carimañola",
+          "caribañola"
+        ]
+      },
+      "regions": [
+        "Panama",
+        "Colombia",
+        "Central America",
+        "Caribbean"
+      ],
+      "sharedElements": [
+        "cassava or yuca dough",
+        "fried crisp exterior",
+        "savory filling or picadillo aroma",
+        "oval croquette or roll format"
+      ],
+      "divergentElements": [
+        "filling type",
+        "home spelling or nickname",
+        "Panamanian vs Colombian family context",
+        "breakfast, snack, or street-food setting"
+      ],
+      "nostalgiaTriggers": [
+        "cassava chew with crisp fried edge",
+        "browned savory filling aroma",
+        "labor-intensive family preparation memory"
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Added from final-canary misspelled carimanola evidence.",
+          "Use as an alias family; keep original user spelling as evidence."
+        ]
+      }
+    },
+    {
+      "canonicalName": "cream-tomato-curry",
+      "aliases": [
+        "butter chicken",
+        "murgh makhani",
+        "tomato cream curry",
+        "cashew gravy curry",
+        "creamy tomato curry"
+      ],
+      "transliterations": {
+        "Hindi": [
+          "मुर्ग़ मखनी"
+        ],
+        "Punjabi": [
+          "ਮੁਰਗ ਮਖਨੀ"
+        ]
+      },
+      "regions": [
+        "Punjab",
+        "North India",
+        "South Asia",
+        "diaspora global"
+      ],
+      "sharedElements": [
+        "tomato base",
+        "cream, butter, cashew, or nut/dairy body",
+        "fat-soluble spice aroma",
+        "protein bite and bread or starch carrier"
+      ],
+      "divergentElements": [
+        "dairy vs nut body",
+        "protein or plant-protein adaptation",
+        "alcohol or halal constraint",
+        "naan vs rice or gluten-free carrier"
+      ],
+      "nostalgiaTriggers": [
+        "creamy tomato-spice sauce body",
+        "butter or fat-carried aroma",
+        "protein plus flatbread/starch bite"
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Added from final-canary substitution-pressure evidence.",
+          "Use to preserve original sensory roles before substitution adaptation."
+        ]
+      }
+    },
+    {
+      "canonicalName": "coconut-sugar-confection",
+      "aliases": [
+        "cocada",
+        "cocadas",
+        "kokada",
+        "coconut candy",
+        "coconut festival sweet",
+        "coconut sweet",
+        "grainy coconut sweet"
+      ],
+      "transliterations": {
+        "Spanish": [
+          "cocada"
+        ],
+        "Portuguese": [
+          "cocada"
+        ],
+        "Filipino": [
+          "bukayo"
+        ]
+      },
+      "regions": [
+        "Latin America",
+        "Caribbean",
+        "Philippines",
+        "West Africa",
+        "diaspora global"
+      ],
+      "sharedElements": [
+        "coconut fiber or flakes",
+        "sugar crystallization",
+        "chewy, grainy, sticky, or crumbly texture",
+        "festival, school, street, or celebration setting"
+      ],
+      "divergentElements": [
+        "white vs caramelized sugar",
+        "milk or condensed milk inclusion",
+        "ball, bar, spoon sweet, or shard format",
+        "regional name"
+      ],
+      "nostalgiaTriggers": [
+        "grainy sugar crunch",
+        "coconut aroma",
+        "festival sweet texture"
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Added from final-canary ambiguous festival sweet evidence.",
+          "Use as a broad coconut-sugar mechanism family, not an exact dish claim."
+        ]
+      }
+    },
+    {
       "canonicalName": "confection",
       "aliases": [
         "halva",

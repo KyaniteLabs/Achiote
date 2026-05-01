@@ -67,4 +67,16 @@ describe('reference seed planner', () => {
       'cache_unavailable',
     ]));
   });
+
+  it('contains seed targets for the final-canary knowledge-gap buckets', () => {
+    const seedIds = referenceSeedQueueData.seeds.map((seed) => seed.id);
+    expect(seedIds).toEqual(expect.arrayContaining([
+      'soup-sour-herb-eastern-europe',
+      'beverage-rice-cinnamon-latin-america',
+      'beverage-barley-cebada-latin-america',
+      'cassava-fritter-caribbean-central-america',
+      'confectionery-coconut-sugar-festival',
+      'curry-cream-tomato-substitution-roles',
+    ]));
+  });
 });

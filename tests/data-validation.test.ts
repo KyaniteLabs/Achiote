@@ -46,6 +46,7 @@ describe('bundled data validation', () => {
 
   it('rejects dish families with empty fields or duplicate family identifiers', () => {
     const data = cloneBundledData();
+    const duplicateIndex = data.dishFamilies.families.length;
     data.dishFamilies.meta.description = ' ';
     data.dishFamilies.families[0].aliases.push('dolma', ' ');
     data.dishFamilies.families.push({
@@ -58,7 +59,7 @@ describe('bundled data validation', () => {
     expectIssue(issues, 'dishFamilies.meta.description', 'non-empty string');
     expectIssue(issues, 'dishFamilies.families[0].aliases[12]', 'duplicate');
     expectIssue(issues, 'dishFamilies.families[0].aliases[13]', 'non-empty string');
-    expectIssue(issues, 'dishFamilies.families[40].canonicalName', 'duplicate');
+    expectIssue(issues, `dishFamilies.families[${duplicateIndex}].canonicalName`, 'duplicate');
   });
 
 

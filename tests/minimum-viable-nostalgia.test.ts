@@ -456,12 +456,32 @@ describe('minimum viable nostalgia cue', () => {
     const cue = generateMinimumViableNostalgiaCue({ dossier, maxEffortMinutes: 8 });
 
     expect(cue.effortMinutes).toBeLessThanOrEqual(8);
-    expect(cue.title).toContain('aroma-balance');
-    expect(cue.steps.join(' ')).toContain('single strongest sensory clue');
+    expect(cue.title).toContain('sour-herb soup');
+    expect(cue.steps.join(' ')).toMatch(/dill|herb|sour/i);
     expect(cue.confidence).toBe('Low');
 
     expect(cue.components.length).toBeGreaterThanOrEqual(1);
     expect(cue.components.every((c) => c.criticalElement.length > 0)).toBe(true);
+  });
+
+  it('uses sour-dill reference mechanisms instead of generic liquid placeholders', () => {
+    const memory = collectFoodMemory({ memoryText: 'Warm sour dill soup with pale chunks, maybe Polish or Ukrainian, give me the smallest cue.' });
+    const dossier = buildReconstructionDossier({
+      memory,
+      researchPlan: planDishResearch(memory),
+      researchedFacts: [
+        'Sour herb soups in Eastern Europe often separate pickle or fermented-brine sourness from dairy tang, herb aroma, and potato or egg body.',
+      ],
+      inferredFacts: ['The cue should test dill aroma, brine-like acid, warm liquid body, and pale starch/egg texture without naming the exact soup as certain.'],
+    });
+    const cue = generateMinimumViableNostalgiaCue({ dossier, maxEffortMinutes: 10 });
+    const recommendationText = fullCueText(cue);
+
+    expect(cue.format).toBe('sip');
+    expect(recommendationText).toMatch(/dill/);
+    expect(recommendationText).toMatch(/pickle|brine|ferment|vinegar|sour/);
+    expect(recommendationText).toMatch(/potato|egg|starch|pale/);
+    expect(recommendationText).not.toMatch(/dominant aromatic|neutral liquid carrier|another cheap neutral liquid carrier/);
   });
 
   it('does not route generic pork soup signals to the pasteles cue', () => {
@@ -509,6 +529,24 @@ describe('minimum viable nostalgia cue', () => {
     expect(recommendationText).toMatch(/ice|chill|temperature|dilution/);
     expect(recommendationText).toMatch(/sweetness|sugar/);
     expect(cue.components.some((component) => component.role === 'beverage')).toBe(true);
+  });
+
+  it('uses grain-drink aliases as reference signals instead of generic beverage language', () => {
+    const cue = generateMinimumViableNostalgiaCue({
+      dossier: beverageDossier(
+        'My family called it horchata, agua de arroz, or aguita de ceba. It was a cold thin rice-cinnamon or barley drink over ice.',
+        [
+          'The internal reference family is grain beverage: horchata-like rice-cinnamon drinks and cebada/barley-water memories share starch body, spice or grain aroma, sweetness, dilution, chill, and ice ritual.',
+        ],
+      ),
+      maxEffortMinutes: 10,
+    });
+    const recommendationText = fullCueText(cue);
+
+    expect(cue.title).toContain('beverage');
+    expect(recommendationText).toMatch(/horchata|agua de arroz|rice|cinnamon|barley|cebada|grain/);
+    expect(recommendationText).toMatch(/ice|cold|chill|dilution/);
+    expect(recommendationText).not.toMatch(/dominant beverage aroma|strongest remembered aroma/);
   });
 
   it('handles carbonated drink memories through fizz, acid, sugar, temperature, and aroma', () => {
