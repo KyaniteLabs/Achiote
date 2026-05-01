@@ -29,6 +29,7 @@ const jsonlPath = path.join(artifactDir, 'results.jsonl');
 const summaryPath = path.join(artifactDir, 'summary.md');
 const statePath = path.join(artifactDir, 'state.json');
 const logPath = path.join(artifactDir, 'runner.log');
+const manifestPath = path.join(artifactDir, 'run-manifest.json');
 
 const prompts = [
   {
@@ -92,6 +93,7 @@ const glmMatrix = [
 const liveChildren = new Set();
 
 fs.mkdirSync(artifactDir, { recursive: true });
+writeRunManifest();
 
 process.on('uncaughtException', (error) => {
   log(`uncaughtException ${error?.stack || error}`);
@@ -133,6 +135,73 @@ function sleep(ms) {
 
 function truncate(value, max = 900) {
   return String(value || '').replace(/\s+/g, ' ').trim().slice(0, max);
+}
+
+function redactDiagnosticText(value) {
+  return String(value || '')
+    .replace(/Bearer\s+[A-Za-z0-9._~+/-]+/gi, 'Bearer [redacted]')
+    .replace(/\bsk-[A-Za-z0-9_-]{12,}\b/g, '[redacted-key]')
+    .replace(/\bsk-or-[A-Za-z0-9_-]{12,}\b/g, '[redacted-openrouter-key]')
+    .replace(/("(?:api[_-]?key|authorization|token|secret)"\s*:\s*")[^"]+(")/gi, '$1[redacted]$2')
+    .replace(/((?:api[_-]?key|authorization|token|secret)\s*=\s*)\S+/gi, '$1[redacted]');
+}
+
+function safeDiagnosticPreview(value, max = 500) {
+  return truncate(redactDiagnosticText(value), max);
+}
+
+function timeoutClassForStatus(status, errorText = '') {
+  const combined = `${status} ${errorText}`;
+  if (status === 'timeout' || /timeout|aborted|AbortError/i.test(combined)) return 'provider_timeout';
+  if (/\b429\b|rate limit|temporarily overloaded|overloaded/i.test(combined)) return 'provider_rate_limit';
+  if (/\b(?:401|auth(?:entication|orization)?|token|api key|invalid key)\b/i.test(combined)) return 'provider_auth';
+  if (/\b5\d\d\b|server error|bad gateway|service unavailable/i.test(combined)) return 'provider_5xx';
+  return undefined;
+}
+
+function reasoningTokenCountFrom(body) {
+  const candidates = [
+    body?.usage?.reasoning_tokens,
+    body?.usage?.completion_tokens_details?.reasoning_tokens,
+    body?.usage?.output_tokens_details?.reasoning_tokens,
+    body?.stats?.reasoning_output_tokens,
+  ];
+  const found = candidates.find((value) => Number.isFinite(value));
+  return found === undefined ? undefined : found;
+}
+
+function parseJsonBody(rawBody) {
+  try {
+    return rawBody ? JSON.parse(rawBody) : {};
+  } catch {
+    return {};
+  }
+}
+
+function writeRunManifest(extra = {}) {
+  const manifest = {
+    generatedAt: new Date().toISOString(),
+    artifactDir,
+    timeoutBudget: {
+      nakedProviderTimeoutMs,
+      achioteAskTimeoutMs,
+      intervalMs,
+      endAt: endAt.toISOString(),
+    },
+    retryBudget: {
+      retryCount,
+      retryDelayMs,
+    },
+    keyAvailability: {
+      glm: Boolean(getGlmKey()),
+      openrouterConfigured: Boolean(getOpenRouterKey()),
+    },
+    promptIds: prompts.map((prompt) => prompt.id),
+    glmMatrix,
+    openRouterPriority,
+    ...extra,
+  };
+  fs.writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`);
 }
 
 function parseSse(text) {
@@ -334,18 +403,22 @@ async function nakedGlm(model, prompt, endpointStyle = 'anthropic-coding') {
         : { 'content-type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01' },
       body: JSON.stringify({ model, max_tokens: 900, messages: [{ role: 'user', content: prompt.text }] }),
     }, nakedProviderTimeoutMs);
-    const body = await response.json().catch(() => ({}));
+    const rawBody = await response.text();
+    const body = parseJsonBody(rawBody);
     const text = endpointStyle === 'openai-coding'
       ? (body.choices?.[0]?.message?.content || '')
       : (body.content || []).map((block) => block.text || '').join('\n');
     const error = body.error?.message || body.message || '';
     return {
       mode: 'naked', provider: 'glm', model, endpointStyle, baseUrl, prompt: prompt.id, status: response.status, ms: Date.now() - started,
-      text: truncate(text), errors: error ? [error] : [], classification: classifyProvider(response.status, error, text),
+      text: truncate(text), errors: error ? [safeDiagnosticPreview(error)] : [], classification: classifyProvider(response.status, error, text),
+      providerErrorPreview: error || response.status >= 400 ? safeDiagnosticPreview(rawBody) : undefined,
+      timeoutClass: timeoutClassForStatus(response.status, error),
+      reasoningTokenCount: reasoningTokenCountFrom(body),
       quality: qualityFindings(text, prompt.text, 'naked'),
     };
   } catch (error) {
-    return { mode: 'naked', provider: 'glm', model, endpointStyle, baseUrl, prompt: prompt.id, status: 'timeout', ms: Date.now() - started, text: '', errors: [error.message], classification: 'provider_rate_limited', quality: [] };
+    return { mode: 'naked', provider: 'glm', model, endpointStyle, baseUrl, prompt: prompt.id, status: 'timeout', ms: Date.now() - started, text: '', errors: [safeDiagnosticPreview(error.message)], providerErrorPreview: safeDiagnosticPreview(error.message), timeoutClass: 'provider_timeout', classification: 'provider_rate_limited', quality: [] };
   }
 }
 
@@ -363,16 +436,20 @@ async function nakedOpenRouter(model, prompt, key, capabilityMetadata = {}) {
       },
       body: JSON.stringify({ model, messages: [{ role: 'user', content: prompt.text }], max_tokens: 900 }),
     }, nakedProviderTimeoutMs);
-    const body = await response.json().catch(() => ({}));
+    const rawBody = await response.text();
+    const body = parseJsonBody(rawBody);
     const text = body.choices?.[0]?.message?.content || '';
     const error = body.error?.message || '';
     return {
       mode: 'naked', provider: 'openrouter', model, ...capabilityMetadata, prompt: prompt.id, status: response.status, ms: Date.now() - started,
-      text: truncate(text), errors: error ? [error] : [], classification: classifyProvider(response.status, error, text),
+      text: truncate(text), errors: error ? [safeDiagnosticPreview(error)] : [], classification: classifyProvider(response.status, error, text),
+      providerErrorPreview: error || response.status >= 400 ? safeDiagnosticPreview(rawBody) : undefined,
+      timeoutClass: timeoutClassForStatus(response.status, error),
+      reasoningTokenCount: reasoningTokenCountFrom(body),
       quality: qualityFindings(text, prompt.text, 'naked'),
     };
   } catch (error) {
-    return { mode: 'naked', provider: 'openrouter', model, ...capabilityMetadata, prompt: prompt.id, status: 'timeout', ms: Date.now() - started, text: '', errors: [error.message], classification: 'provider_rate_limited', quality: [] };
+    return { mode: 'naked', provider: 'openrouter', model, ...capabilityMetadata, prompt: prompt.id, status: 'timeout', ms: Date.now() - started, text: '', errors: [safeDiagnosticPreview(error.message)], providerErrorPreview: safeDiagnosticPreview(error.message), timeoutClass: 'provider_timeout', classification: 'provider_rate_limited', quality: [] };
   }
 }
 
@@ -449,12 +526,16 @@ async function achioteAsk({ provider, model, prompt, openRouterKey, endpointStyl
       mode: 'achiote', provider, model, ...(capabilityMetadata || {}), endpointStyle: endpointStyle || capabilityMetadata?.endpointStyle, baseUrl: baseUrl || capabilityMetadata?.baseUrl, prompt: prompt.id, status: response.status, ms: Date.now() - started,
       text: truncate(text), errors, tools, done,
       classification: errors.length > 0 ? classifyProvider(response.status, JSON.stringify(errors), text) : 'workflow_ok',
+      providerErrorPreview: errors.length > 0 ? safeDiagnosticPreview(JSON.stringify(errors)) : undefined,
+      timeoutClass: timeoutClassForStatus(response.status, JSON.stringify(errors)),
       quality: [...qualityFindings(text, prompt.text, 'achiote'), ...(tools.length === 0 ? ['missing_tool_workflow'] : [])],
     };
   } catch (error) {
     return {
       mode: 'achiote', provider, model, ...(capabilityMetadata || {}), endpointStyle: endpointStyle || capabilityMetadata?.endpointStyle, baseUrl: baseUrl || capabilityMetadata?.baseUrl, prompt: prompt.id, status: 'timeout', ms: Date.now() - started,
-      text: '', errors: [{ message: error.message, code: 'timeout_or_runtime' }], tools: [], done: null,
+      text: '', errors: [{ message: safeDiagnosticPreview(error.message), code: 'timeout_or_runtime' }], tools: [], done: null,
+      providerErrorPreview: safeDiagnosticPreview(error.message),
+      timeoutClass: 'provider_timeout',
       classification: 'provider_rate_limited', quality: [],
     };
   } finally {
@@ -527,6 +608,15 @@ async function runRound(roundIndex) {
     catalogError: catalog.error || null,
   };
   appendResult(catalogResult);
+  writeRunManifest({
+    lastRound: {
+      roundId,
+      openRouterCatalogCount: Array.isArray(catalog) ? catalog.length : 0,
+      selectedOpenRouter,
+      selectedModelCapabilities,
+      catalogError: catalog.error || null,
+    },
+  });
 
   const tests = [];
   for (let i = 0; i < glmMatrix.length; i += 1) {

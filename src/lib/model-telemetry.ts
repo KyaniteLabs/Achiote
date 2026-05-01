@@ -20,6 +20,9 @@ export interface NormalizedTelemetryEvent {
   compatibilitySource?: string;
   supportedParameters?: string[];
   contextLength?: number;
+  timeoutClass?: string;
+  providerErrorPreview?: string;
+  reasoningTokenCount?: number;
   findings: string[];
   quality: string[];
   errors: unknown[];
@@ -129,6 +132,9 @@ export function normalizeWeakCloudRow(row: unknown, artifactPath?: string): Norm
     compatibilitySource: stringField(object.compatibilitySource),
     supportedParameters,
     contextLength,
+    timeoutClass: stringField(object.timeoutClass),
+    providerErrorPreview: sanitizeDiagnosticPreview(stringField(object.providerErrorPreview)),
+    reasoningTokenCount: numberField(object.reasoningTokenCount),
     findings,
     quality,
     errors,
@@ -299,6 +305,10 @@ export function renderTelemetryMarkdown(input: {
     '',
     ...renderRepairScorecardLines(input.events),
     '',
+    '## Pre-Live Quality Gates',
+    '',
+    ...renderPreLiveQualityGateLines(input.events),
+    '',
     '## Meta Patterns',
     '',
   ];
@@ -330,6 +340,39 @@ export function renderTelemetryMarkdown(input: {
   }
 
   return `${lines.join('\n')}\n`;
+}
+
+function renderPreLiveQualityGateLines(events: NormalizedTelemetryEvent[]): string[] {
+  const gates = [
+    {
+      id: 'tool_workflow_skipped',
+      title: 'No skipped Achiote tool workflow',
+      match: (event: NormalizedTelemetryEvent) => event.mode === 'achiote' && combinedSignals(event).includes('tool_workflow_skipped'),
+    },
+    {
+      id: 'provider_identity_leak',
+      title: 'No provider/model identity leak',
+      match: (event: NormalizedTelemetryEvent) => event.mode === 'achiote' && combinedSignals(event).includes('provider_identity_leak'),
+    },
+    {
+      id: 'false_browsing_claim',
+      title: 'No false browsing claim',
+      match: (event: NormalizedTelemetryEvent) => event.mode === 'achiote' && combinedSignals(event).includes('false_browsing_claim'),
+    },
+    {
+      id: 'residual_achiote_issue',
+      title: 'No residual Achiote quality issue in paired runs',
+      match: (event: NormalizedTelemetryEvent) => event.mode === 'achiote' && issueSignalsForScorecard(event).length > 0,
+    },
+  ];
+
+  return gates.map((gate) => {
+    const failures = events.filter(gate.match);
+    const examples = failures.slice(0, 5)
+      .map((event) => `${event.provider}/${event.model}/${event.prompt}`)
+      .join('; ');
+    return `- ${failures.length > 0 ? 'FAIL' : 'PASS'} ${gate.id}: ${gate.title}${examples ? ` (${examples})` : ''}`;
+  });
 }
 
 function renderRepairScorecardLines(events: NormalizedTelemetryEvent[]): string[] {
@@ -446,6 +489,9 @@ function eventSignals(event: NormalizedTelemetryEvent): string[] {
     event.rateLimitSensitive ? 'rate_limit_sensitive' : undefined,
     event.compatibilitySource ? `compatibility:${event.compatibilitySource}` : undefined,
     event.contextLength ? `context_length:${event.contextLength}` : undefined,
+    event.timeoutClass ? `timeout:${event.timeoutClass}` : undefined,
+    event.providerErrorPreview ? `provider_error:${event.providerErrorPreview}` : undefined,
+    event.reasoningTokenCount !== undefined ? `reasoning_tokens:${event.reasoningTokenCount}` : undefined,
     ...(event.supportedParameters?.map((param) => `supports:${param}`) ?? []),
     ...event.findings,
     ...event.quality,
@@ -464,6 +510,9 @@ function combinedSignals(event: NormalizedTelemetryEvent): string {
     event.guardReason,
     event.textPreview,
     event.reasoningTracePreview,
+    event.timeoutClass,
+    event.providerErrorPreview,
+    event.reasoningTokenCount?.toString(),
     ...event.findings,
     ...event.quality,
     ...event.errors.map(stringifyUnknown),
@@ -477,6 +526,16 @@ function extractReasoningTrace(text: string): string | undefined {
 
 function clip(value: string, maxLength = 500): string {
   return value.length > maxLength ? `${value.slice(0, maxLength - 1)}…` : value;
+}
+
+function sanitizeDiagnosticPreview(value: string | undefined): string | undefined {
+  if (!value) return undefined;
+  return clip(value
+    .replace(/Bearer\s+[A-Za-z0-9._~+/-]+/gi, 'Bearer [redacted]')
+    .replace(/\bsk-or-[A-Za-z0-9_-]{12,}\b/g, '[redacted-openrouter-key]')
+    .replace(/\bsk-[A-Za-z0-9_-]{12,}\b/g, '[redacted-key]')
+    .replace(/("(?:api[_-]?key|authorization|token|secret)"\s*:\s*")[^"]+(")/gi, '$1[redacted]$2')
+    .replace(/((?:api[_-]?key|authorization|token|secret)\s*=\s*)\S+/gi, '$1[redacted]'));
 }
 
 function normalizeGuardReason(value: unknown): string | undefined {

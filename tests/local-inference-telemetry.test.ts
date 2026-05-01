@@ -217,6 +217,13 @@ describe('cross-provider model telemetry', () => {
   it('keeps OpenRouter catalog capabilities attached to weak-cloud runner rows', () => {
     const runner = fs.readFileSync('scripts/weak-cloud-overnight.mjs', 'utf8');
 
+    expect(runner).toContain('manifestPath');
+    expect(runner).toContain('writeRunManifest');
+    expect(runner).toContain('keyAvailability');
+    expect(runner).toContain('timeoutBudget');
+    expect(runner).toContain('retryBudget');
+    expect(runner).toContain('providerErrorPreview');
+    expect(runner).toContain('timeoutClass');
     expect(runner).toContain('openRouterCapabilityMetadata');
     expect(runner).toContain('selectedModelCapabilities');
     expect(runner).toContain('supported_parameters');
@@ -224,6 +231,29 @@ describe('cross-provider model telemetry', () => {
     expect(runner).toContain('nativeTools');
     expect(runner).toContain('nativeToolChoice');
     expect(runner).toContain('rateLimitSensitive');
+  });
+
+  it('normalizes safe provider diagnostics without leaking full raw bodies', () => {
+    const weak = normalizeWeakCloudRow({
+      mode: 'achiote',
+      provider: 'openrouter',
+      model: 'openai/gpt-oss-20b:free',
+      prompt: 'beverage_horchata_like',
+      status: 429,
+      classification: 'provider_rate_limited',
+      ms: 240000,
+      timeoutClass: 'provider_timeout',
+      providerErrorPreview: 'Provider returned 429 for sk-or-sensitive-token after retry budget.',
+      reasoningTokenCount: 17,
+      errors: [{ code: 'model_provider_failed', message: 'Provider returned error' }],
+      quality: [],
+    }, 'weak.jsonl:9');
+
+    expect(weak).toMatchObject({
+      timeoutClass: 'provider_timeout',
+      providerErrorPreview: 'Provider returned 429 for [redacted-openrouter-key] after retry budget.',
+      reasoningTokenCount: 17,
+    });
   });
 
   it('mines meta-patterns across local and cloud model telemetry', () => {
@@ -290,6 +320,18 @@ describe('cross-provider model telemetry', () => {
         text: 'Minimum viable sweet-texture cue',
         done: { guarded: 'explicit_minimum_cue_fallback' },
       }, 'local.json:4'),
+      normalizeWeakCloudRow({
+        mode: 'achiote',
+        provider: 'openrouter',
+        model: 'openai/gpt-oss-20b:free',
+        prompt: 'beverage_horchata_like',
+        status: 200,
+        classification: 'workflow_ok',
+        quality: ['provider_identity_leak'],
+        findings: ['tool_workflow_skipped'],
+        ms: 21000,
+        text: 'Provider detail leaked.',
+      }, 'weak.jsonl:5'),
     ];
 
     const patterns = mineTelemetryPatterns(events, { latencyOutlierMs: 120000 });
@@ -313,5 +355,9 @@ describe('cross-provider model telemetry', () => {
     expect(markdown).toContain('tool_workflow_fragility');
     expect(markdown).toContain('qwen3.5-4b');
     expect(markdown).toContain('Reasoning / Trace Signals');
+    expect(markdown).toContain('## Pre-Live Quality Gates');
+    expect(markdown).toContain('FAIL');
+    expect(markdown).toContain('tool_workflow_skipped');
+    expect(markdown).toContain('provider_identity_leak');
   });
 });
