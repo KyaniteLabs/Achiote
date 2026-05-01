@@ -488,9 +488,9 @@ export const toolRegistry = [
       if (needsSubstitutions) {
         steps.push({ tool: 'resolve_dish_name', reason: 'Identify the base dish to substitute for', required: true });
         steps.push({ tool: 'search_web', reason: 'Find authentic preparation details for the base dish', required: false });
-        steps.push({ tool: 'find_sensory_substitutes', reason: 'Find compound-matched substitutions for restricted ingredients', required: true });
-        steps.push({ tool: 'build_reconstruction_dossier', reason: 'Assemble evidence with substitutions integrated', required: true });
-        steps.push({ tool: 'generate_minimum_viable_nostalgia', reason: 'Create adapted test cue with substitutions', required: true });
+        steps.push({ tool: 'build_reconstruction_dossier', reason: 'Assemble the original evidence boundary before substitutions', required: true });
+        steps.push({ tool: 'generate_minimum_viable_nostalgia', reason: 'Create the original minimum cue that will become the substitution basis', required: true });
+        steps.push({ tool: 'find_sensory_substitutes', reason: 'Find compound-matched substitutions after the original cue is clear', required: true });
       } else if (detectedIntent === 'recipe_adaptation') {
         steps.push({ tool: 'resolve_dish_name', reason: 'Identify the target dish', required: true });
         steps.push({ tool: 'search_web', reason: 'Find current recipe approaches', required: false });

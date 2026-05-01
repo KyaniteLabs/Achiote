@@ -111,12 +111,15 @@ describe('/ask failure surface regressions', () => {
       'find_sensory_substitutes',
       'generate_minimum_viable_nostalgia',
     ]));
+    expect(toolNames.indexOf('generate_minimum_viable_nostalgia')).toBeLessThan(toolNames.indexOf('find_sensory_substitutes'));
     const finalText = events
       .filter((event) => event.event === 'text')
       .map((event) => JSON.parse(event.data))
       .join('\n\n');
     expect(events.at(-1)?.event).toBe('done');
-    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'explicit_minimum_cue_fallback' });
+    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'substitution_basis_deterministic_completion' });
+    expect(finalText).toMatch(/basis before substitutions/i);
+    expect(finalText).toMatch(/adapted cue/i);
     expect(finalText).not.toMatch(/\b(?:\d+\s*(?:cups?|tbsp|tablespoons?|teaspoons?|tsp|minutes?|mins?|servings?)|one-cup|half-cup|recipe)\b/i);
     expect(finalText).not.toMatch(/amount of (?:small amount|tiny)\b/i);
     expect(requestCount).toBe(1);
@@ -554,12 +557,16 @@ describe('/ask failure surface regressions', () => {
     expect(substituteInputs).toHaveLength(5);
     expect(substituteInputs).toEqual(expect.arrayContaining(['cashews', 'butter', 'cream', 'chicken', 'naan']));
     expect(events.some((event) => event.event === 'error')).toBe(false);
+    const toolNames = events.filter((event) => event.event === 'tool_call').map((event) => JSON.parse(event.data).name);
     const finalText = events
       .filter((event) => event.event === 'text')
       .map((event) => JSON.parse(event.data))
       .join('\n\n');
     expect(events.at(-1)?.event).toBe('done');
-    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'explicit_minimum_cue_fallback' });
+    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'substitution_basis_deterministic_completion' });
+    expect(toolNames.indexOf('generate_minimum_viable_nostalgia')).toBeLessThan(toolNames.indexOf('find_sensory_substitutes'));
+    expect(finalText).toMatch(/basis before substitutions/i);
+    expect(finalText).toMatch(/adapted cue/i);
     expect(finalText).not.toMatch(/\b(?:\d+\s*(?:cups?|tbsp|tablespoons?|teaspoons?|tsp|minutes?|mins?|servings?)|one-cup|half-cup|recipe)\b/i);
     expect(finalText).not.toMatch(/amount of (?:small amount|tiny)\b/i);
     expect(requestCount).toBeGreaterThanOrEqual(1);

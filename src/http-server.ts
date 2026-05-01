@@ -252,7 +252,7 @@ For EVERY user message, you MUST follow this workflow:
 1. The server runs \`plan_tool_workflow\` before your first turn and injects its result into your conversation context. Treat that result as already completed; do not call \`plan_tool_workflow\` again.
 2. Follow the injected \`workflowSteps\` from the plan exactly — call the tools in the order listed.
 3. Respect \`maxSearchCalls\` — the server enforces this cap. Do not call \`search_web\` more than the plan allows.
-4. If \`needsSubstitutions\` is true, call \`find_sensory_substitutes\` for each restricted ingredient.
+4. If \`needsSubstitutions\` is true, first complete the original reconstruction and minimum cue without substitutions; only then call \`find_sensory_substitutes\` for each restricted ingredient.
 5. After the tool chain completes, synthesize the results into your response.
 
 ### Standard pipeline after plan_tool_workflow:
@@ -710,6 +710,12 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       } catch (err) {
         const detail = err instanceof Error ? err.message : String(err);
         if (modelResponse.toolCalls.some((call) => call.name === 'generate_minimum_viable_nostalgia')) {
+          if (isSubstitutionPlan(toolPayloads)) {
+            await maybeRunPlannedSubstitutions({ userMessage, toolPayloads, calledTools, send });
+            if (maybeSendSubstitutionBasisResponse({ userMessage, toolPayloads, calledTools, send, finish })) {
+              return;
+            }
+          }
           console.warn(`[ask] final synthesis unavailable after minimum cue, using deterministic response: ${detail}`);
           const responseText = buildMinimumCueCompletedResponse(toolPayloads, userMessage);
           send('text', responseText);
@@ -724,7 +730,13 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
     }
 
     await maybeRunMissingResearchPlan({ userMessage, toolPayloads, calledTools, send });
+    await maybeRunOriginalSubstitutionBasisCue({ userMessage, toolPayloads, calledTools, send });
     await maybeRunPlannedSubstitutions({ userMessage, toolPayloads, calledTools, send });
+
+    if ((modelResponse.textBlocks.length === 0 || containsStalledFallbackText(modelResponse.textBlocks.join('\n\n')))
+      && maybeSendSubstitutionBasisResponse({ userMessage, toolPayloads, calledTools, send, finish })) {
+      return;
+    }
 
     if (!calledTools.has('collect_food_memory')) {
       console.warn('[ask] model called tools but skipped required memory collection, using deterministic recovery');
@@ -892,6 +904,15 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       return;
     }
 
+    if (!didSanitizeTrustBoundary && shouldReplaceWithSubstitutionBasisResponse(trustBoundedResponseText, toolPayloads, calledTools)) {
+      console.warn('[ask] replaced substitution response with explicit original-basis adaptation frame');
+      const responseText = buildSubstitutionBasisResponse(toolPayloads, userMessage);
+      send('text', responseText);
+      maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
+      finish({ guarded: 'substitution_basis_deterministic_completion' });
+      return;
+    }
+
     if (trustBoundedResponseText) send('text', trustBoundedResponseText);
     maybeSendMemoryReceipt({ toolPayloads, assistantText: trustBoundedResponseText, send });
     finish(didSanitizeTrustBoundary ? { guarded: 'trust_boundary_sanitized' } : {});
@@ -994,6 +1015,12 @@ async function executeAndStreamTool(
   validateToolOutput(toolName, result.payload);
   calledTools.add(toolName);
   toolPayloads[toolName] = result.payload;
+  if (toolName === 'find_sensory_substitutes') {
+    const existing = Array.isArray(toolPayloads.find_sensory_substitutes_all)
+      ? toolPayloads.find_sensory_substitutes_all
+      : [];
+    toolPayloads.find_sensory_substitutes_all = [...existing, result.payload];
+  }
   send('tool_result', { name: toolName, result: result.payload });
   return result.payload;
 }
@@ -1436,7 +1463,7 @@ function configureAvailableAskTools(
 }
 
 function nextAskToolNames(toolPayloads: Record<string, unknown>, calledTools: Set<string>): string[] {
-  const plan = toolPayloads.plan_tool_workflow as { workflowSteps?: Array<{ tool?: unknown }> } | undefined;
+  const plan = toolPayloads.plan_tool_workflow as { workflowSteps?: Array<{ tool?: unknown }>; needsSubstitutions?: boolean } | undefined;
   const plannedToolNames = (plan?.workflowSteps ?? [])
     .map((step) => step.tool)
     .filter((tool): tool is string => typeof tool === 'string' && KNOWN_TOOL_NAMES.has(tool) && tool !== 'plan_tool_workflow');
@@ -1446,6 +1473,7 @@ function nextAskToolNames(toolPayloads: Record<string, unknown>, calledTools: Se
   if (!calledTools.has('plan_dish_research') && plannedToolNames.includes('plan_dish_research')) return ['plan_dish_research'];
 
   const remaining = plannedToolNames.filter((name) => !calledTools.has(name));
+  if (plan?.needsSubstitutions && remaining.length > 0) return [remaining[0]];
   return [...new Set(remaining)];
 }
 
@@ -1474,7 +1502,12 @@ async function recoverFromInitialProviderFailure({
   }
 
   await maybeRunMissingResearchPlan({ userMessage, toolPayloads, calledTools, send });
+  await maybeRunOriginalSubstitutionBasisCue({ userMessage, toolPayloads, calledTools, send });
   await maybeRunPlannedSubstitutions({ userMessage, toolPayloads, calledTools, send });
+
+  if (maybeSendSubstitutionBasisResponse({ userMessage, toolPayloads, calledTools, send, finish })) {
+    return true;
+  }
 
   if (await maybeSendForcedMinimumCue({ userMessage, toolPayloads, calledTools, send, finish })) {
     return true;
@@ -1597,6 +1630,43 @@ async function maybeRunMissingResearchPlan({
   await executeAndStreamTool('plan_dish_research', { memory }, userMessage, send, calledTools, toolPayloads);
 }
 
+async function maybeRunOriginalSubstitutionBasisCue({
+  userMessage,
+  toolPayloads,
+  calledTools,
+  send,
+}: {
+  userMessage: string;
+  toolPayloads: Record<string, unknown>;
+  calledTools: Set<string>;
+  send: SseSender;
+}): Promise<void> {
+  if (!isSubstitutionPlan(toolPayloads) || calledTools.has('generate_minimum_viable_nostalgia')) return;
+
+  const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
+  const researchPlan = toolPayloads.plan_dish_research as DishResearchPlan | undefined;
+  if (!memory || !researchPlan) return;
+
+  let dossier = toolPayloads.build_reconstruction_dossier as ReconstructionDossier | undefined;
+  if (!dossier) {
+    send('status', { stage: 'calling_tools', tools: ['build_reconstruction_dossier'], deterministic: true, reason: 'substitution_original_basis' });
+    dossier = await executeAndStreamTool('build_reconstruction_dossier', {
+      memory,
+      researchPlan,
+      inferredFacts: [
+        'This is the original nostalgia basis before any dietary substitutions are applied.',
+      ],
+    }, userMessage, send, calledTools, toolPayloads) as ReconstructionDossier;
+  }
+
+  send('status', { stage: 'calling_tools', tools: ['generate_minimum_viable_nostalgia'], deterministic: true, reason: 'substitution_original_basis' });
+  await executeAndStreamTool('generate_minimum_viable_nostalgia', {
+    dossier,
+    userLocation: memory.userLocation,
+    maxEffortMinutes: 10,
+  }, userMessage, send, calledTools, toolPayloads);
+}
+
 async function maybeRunPlannedSubstitutions({
   userMessage,
   toolPayloads,
@@ -1620,6 +1690,97 @@ async function maybeRunPlannedSubstitutions({
   for (const ingredient of targets.slice(0, 5)) {
     await executeAndStreamTool('find_sensory_substitutes', { ingredient, location }, userMessage, send, calledTools, toolPayloads);
   }
+}
+
+function maybeSendSubstitutionBasisResponse({
+  userMessage,
+  toolPayloads,
+  calledTools,
+  send,
+  finish,
+}: {
+  userMessage: string;
+  toolPayloads: Record<string, unknown>;
+  calledTools: Set<string>;
+  send: SseSender;
+  finish: DoneSender;
+}): boolean {
+  if (!hasSubstitutionBasisReady(toolPayloads, calledTools)) return false;
+  const responseText = buildSubstitutionBasisResponse(toolPayloads, userMessage);
+  send('text', responseText);
+  maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
+  finish({ guarded: 'substitution_basis_deterministic_completion' });
+  return true;
+}
+
+function shouldReplaceWithSubstitutionBasisResponse(text: string, toolPayloads: Record<string, unknown>, calledTools: Set<string>): boolean {
+  if (!hasSubstitutionBasisReady(toolPayloads, calledTools)) return false;
+  return !/\bbasis before substitutions\b/i.test(text) || !/\badapted cue\b/i.test(text);
+}
+
+function hasSubstitutionBasisReady(toolPayloads: Record<string, unknown>, calledTools: Set<string>): boolean {
+  return isSubstitutionPlan(toolPayloads)
+    && calledTools.has('generate_minimum_viable_nostalgia')
+    && calledTools.has('find_sensory_substitutes');
+}
+
+function isSubstitutionPlan(toolPayloads: Record<string, unknown>): boolean {
+  const plan = toolPayloads.plan_tool_workflow as { needsSubstitutions?: boolean } | undefined;
+  return plan?.needsSubstitutions === true;
+}
+
+function buildSubstitutionBasisResponse(toolPayloads: Record<string, unknown>, userMessage: string): string {
+  const cue = toolPayloads.generate_minimum_viable_nostalgia as MinimumViableNostalgiaCue | undefined;
+  if (!cue) return buildClarificationOnlyResponse(toolPayloads);
+
+  const cueItems = cue.ingredients
+    .filter((ingredient) => !ingredient.optional)
+    .slice(0, 2)
+    .map((ingredient) => formatMinimumCueIngredientPhrase(ingredient));
+  const cuePhrase = cueItems.length > 0
+    ? cueItems.join(' plus ')
+    : 'one ordinary grocery or pantry cue that matches the remembered aroma, texture, or balance';
+  const substitutionLines = summarizeSubstitutionResults(toolPayloads);
+  const preserved = cue.preserves[0]
+    ? sanitizeMinimumCueFallbackText(cue.preserves[0]).replace(/\.$/, '')
+    : 'the strongest remembered aroma, texture, or sauce balance';
+  const firstStep = firstUsefulCueStep(cue);
+  const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
+  const localLine = memory?.userLocation
+    ? `Use ordinary grocery or pantry items near ${memory.userLocation}; do not buy the exact suspected dish for this first test.`
+    : 'Use ordinary grocery or pantry items first; do not buy the exact suspected dish for this first test.';
+
+  return sanitizeMinimumCueFallbackBlock([
+    'Basis before substitutions:',
+    `${cue.title}: ${cuePhrase}.`,
+    firstStep,
+    '',
+    'Adapted cue:',
+    substitutionLines.length > 0
+      ? `Keep that same sensory target, but swap constrained pieces by role: ${substitutionLines.join('; ')}.`
+      : `Keep that same sensory target, but choose substitutes by role: fat carrier, aroma base, starch texture, protein bite, acid, salt, and sauce body.`,
+    `Test the adapted version as a tiny bite or sip; if it loses ${preserved}, the substitute is wrong even if the restriction is satisfied.`,
+    localLine,
+    '',
+    'Next ask: tell me which part hit first after the adapted test: smell, texture, fat, starch, sauce, heat, or acidity.',
+  ].join('\n'));
+}
+
+function summarizeSubstitutionResults(toolPayloads: Record<string, unknown>): string[] {
+  const allResults = Array.isArray(toolPayloads.find_sensory_substitutes_all)
+    ? toolPayloads.find_sensory_substitutes_all
+    : [toolPayloads.find_sensory_substitutes].filter(Boolean);
+
+  return allResults.flatMap((entry) => {
+    if (!isRecord(entry)) return [];
+    const ingredient = typeof entry.ingredient === 'string' ? entry.ingredient : 'restricted ingredient';
+    const substitutes = Array.isArray(entry.substitutes) ? entry.substitutes : [];
+    const first = substitutes.find(isRecord);
+    if (!first) return [`${ingredient} -> match the original sensory role, then mark the result uncertain`];
+    const substitute = typeof first.substitute === 'string' ? first.substitute : 'role-matched substitute';
+    const reasoning = typeof first.reasoning === 'string' ? first.reasoning : '';
+    return [`${ingredient} -> ${substitute}${reasoning ? ` (${sanitizeMinimumCueFallbackText(reasoning).replace(/\.$/, '')})` : ''}`];
+  }).slice(0, 5);
 }
 
 function extractSubstitutionTargets(userMessage: string, collectedMemory: unknown): string[] {

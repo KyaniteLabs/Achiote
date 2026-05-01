@@ -221,9 +221,16 @@ describe('/ask deterministic completion after minimum cue', () => {
         'build_reconstruction_dossier',
         'generate_minimum_viable_nostalgia',
       ]));
+      expect(toolNames.indexOf('generate_minimum_viable_nostalgia')).toBeLessThan(toolNames.indexOf('find_sensory_substitutes'));
+      const finalText = events
+        .filter((event) => event.event === 'text')
+        .map((event) => JSON.parse(event.data))
+        .join('\n\n');
+      expect(finalText).toMatch(/basis before substitutions/i);
+      expect(finalText).toMatch(/adapted cue/i);
       expect(events.find((event) => event.event === 'receipt')).toBeDefined();
       expect(events.at(-1)?.event).toBe('done');
-      expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'explicit_minimum_cue_fallback' });
+      expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'substitution_basis_deterministic_completion' });
       expect(requestCount).toBe(1);
     } finally {
       achiote.kill('SIGINT');
@@ -624,8 +631,15 @@ describe('/ask deterministic completion after minimum cue', () => {
       expect(toolNames).toContain('plan_dish_research');
       expect(substituteInputs).toEqual(expect.arrayContaining(['cashews', 'butter']));
       expect(toolNames).toContain('generate_minimum_viable_nostalgia');
+      expect(toolNames.indexOf('generate_minimum_viable_nostalgia')).toBeLessThan(toolNames.indexOf('find_sensory_substitutes'));
+      const finalText = events
+        .filter((event) => event.event === 'text')
+        .map((event) => JSON.parse(event.data))
+        .join('\n\n');
+      expect(finalText).toMatch(/basis before substitutions/i);
+      expect(finalText).toMatch(/adapted cue/i);
       expect(events.at(-1)?.event).toBe('done');
-      expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'explicit_minimum_cue_fallback' });
+      expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'substitution_basis_deterministic_completion' });
       expect(requestCount).toBe(2);
     } finally {
       achiote.kill('SIGINT');
