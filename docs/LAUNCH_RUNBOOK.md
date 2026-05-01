@@ -111,7 +111,7 @@ GLM endpoint style matters too. Newer Coding Plan models default to `anthropic-c
 ACHIOTE_ASK_PROVIDER=glm ACHIOTE_ASK_MODEL=GLM-4.5-Air GLM_ENDPOINT_STYLE=openai-coding GLM_OPENAI_BASE_URL=https://api.z.ai/api/coding/paas/v4 npm run live:ask
 ```
 
-OpenRouter is OpenAI-compatible at the transport layer, but not model-homogeneous. Configure it as `ACHIOTE_ASK_PROVIDER=openai` with `OPENAI_BASE_URL=https://openrouter.ai/api/v1`; treat `:free` models as rate-limit sensitive with `OPENAI_TIMEOUT_MS=240000` or higher for QA, and rely on catalog metadata before assuming native tool support.
+OpenRouter is OpenAI-compatible at the transport layer, but not model-homogeneous. Configure it as `ACHIOTE_ASK_PROVIDER=openai` with `OPENAI_BASE_URL=https://openrouter.ai/api/v1`; treat `:free` models as rate-limit sensitive with `OPENAI_TIMEOUT_MS=240000` or higher for QA, and rely on catalog metadata before assuming native tool support. Weak-cloud rows should preserve each selected model's `supported_parameters`, `context_length`, tool/tool_choice posture, and free-model rate-limit posture so failures can be grouped by model capability rather than hand-waved as generic provider issues.
 
 Reasoning traces, `reasoning_tokens`, provider error bodies, and tool-argument parse failures are useful QA telemetry. Treat them as raw diagnostic output: keep artifact links for engineering analysis, do not present them as verified facts, and sanitize credential-looking or provider-identity text before any user-facing route.
 
