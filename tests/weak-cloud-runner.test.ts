@@ -48,6 +48,14 @@ describe('weak cloud runner hardening', () => {
     )).toContain('false_browsing_claim');
   });
 
+  it('does not classify successful content that mentions tools as provider compatibility failure', () => {
+    const runner = fs.readFileSync('scripts/weak-cloud-overnight.mjs', 'utf8');
+
+    expect(runner).toContain('const statusAndError = `${status} ${errorText}`;');
+    expect(runner).toContain("if (/\\b400\\b|provider returned error|unsupported|not support|tool/i.test(statusAndError)) return 'provider_compatibility';");
+    expect(runner).not.toContain("if (/\\b400\\b|provider returned error|unsupported|not support|tool/i.test(combined)) return 'provider_compatibility';");
+  });
+
   it('refuses to start another round when the remaining window is too small', async () => {
     const { shouldStartRound } = await import('../scripts/lib/weak-cloud-schedule.mjs');
     const endAt = new Date('2026-05-01T06:01:14.752Z');
