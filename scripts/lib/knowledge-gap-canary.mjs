@@ -14,6 +14,7 @@ export const EXCLUDED_EVIDENCE_REASONS = [
 export function analyzeKnowledgeGaps(rows) {
   const gaps = new Map();
   const excludedEvidence = [];
+  const regressionCandidates = [];
   for (const row of rows) {
     if (!row || row.kind || row.mode !== 'achiote') continue;
     const text = String(row.text ?? '');
@@ -34,7 +35,9 @@ export function analyzeKnowledgeGaps(rows) {
     };
 
     if (quality.includes('forbidden_tool:search_web')) {
-      excludedEvidence.push(excludedRow('control_flow_violation', 'Achiote used search_web when the prompt or harness marked search as forbidden; do not infer taxonomy gaps from this row.', context));
+      const excluded = excludedRow('control_flow_violation', 'Achiote used search_web when the prompt or harness marked search as forbidden; do not infer taxonomy gaps from this row.', context);
+      excludedEvidence.push(excluded);
+      regressionCandidates.push(regressionCandidate('control_flow_regression', 'Add a fake-provider regression that proves no-browse prompts cannot plan or execute search_web.', excluded));
       continue;
     }
     if (quality.includes('missed_minimum_cue_frame') || quality.includes('empty_text')) {
@@ -42,7 +45,9 @@ export function analyzeKnowledgeGaps(rows) {
       continue;
     }
     if (quality.includes('full_recipe_drift') || quality.includes('overconfident_identity') || quality.includes('false_browsing_claim')) {
-      excludedEvidence.push(excludedRow('wrapper_quality_regression', 'Achiote final text retained a quality failure that should become a fake-provider regression before taxonomy work.', context));
+      const excluded = excludedRow('wrapper_quality_regression', 'Achiote final text retained a quality failure that should become a fake-provider regression before taxonomy work.', context);
+      excludedEvidence.push(excluded);
+      regressionCandidates.push(regressionCandidate('wrapper_quality_regression', 'Add a fake-provider regression that reproduces the retained quality failure before taxonomy work.', excluded));
       continue;
     }
 
@@ -65,6 +70,7 @@ export function analyzeKnowledgeGaps(rows) {
   return {
     knowledgeGaps: [...gaps.values()].sort((a, b) => b.count - a.count || a.type.localeCompare(b.type)),
     excludedEvidence,
+    regressionCandidates,
   };
 }
 
@@ -114,6 +120,23 @@ function excludedRow(reason, detail, context) {
     tools: context.tools,
     quality: context.quality,
     excerpt: context.text.slice(0, 260),
+  };
+}
+
+function regressionCandidate(type, nextAction, excluded) {
+  return {
+    type,
+    reason: excluded.reason,
+    nextAction,
+    signature: excluded.signature,
+    provider: excluded.provider,
+    model: excluded.model,
+    roundId: excluded.roundId,
+    at: excluded.at,
+    prompt: excluded.prompt,
+    tools: excluded.tools,
+    quality: excluded.quality,
+    excerpt: excluded.excerpt,
   };
 }
 
