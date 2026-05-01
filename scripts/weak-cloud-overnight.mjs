@@ -227,14 +227,21 @@ function eventTools(events) {
   return events.filter((event) => event.event === 'tool_call').map((event) => parseData(event).name);
 }
 
-async function timedFetch(url, init, timeoutMs) {
+async function timedFetchText(url, init, timeoutMs) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(new Error(`timeout ${timeoutMs}ms`)), timeoutMs);
   try {
-    return await fetch(url, { ...init, signal: controller.signal });
+    const response = await fetch(url, { ...init, signal: controller.signal });
+    const body = await response.text();
+    return { response, body };
   } finally {
     clearTimeout(timer);
   }
+}
+
+async function timedFetchJson(url, init, timeoutMs) {
+  const { response, body } = await timedFetchText(url, init, timeoutMs);
+  return { response, body: parseJsonBody(body), rawBody: body };
 }
 
 function getGlmKey() {
@@ -280,7 +287,7 @@ async function validatedOpenRouterKey() {
   const key = getOpenRouterKey();
   if (!key) return '';
   try {
-    const response = await timedFetch('https://openrouter.ai/api/v1/auth/key', {
+    const { response } = await timedFetchText('https://openrouter.ai/api/v1/auth/key', {
       headers: { authorization: `Bearer ${key}` },
     }, 12_000);
     return response.ok ? key : '';
@@ -291,8 +298,7 @@ async function validatedOpenRouterKey() {
 
 async function openRouterCatalog() {
   try {
-    const response = await timedFetch('https://openrouter.ai/api/v1/models', {}, 20_000);
-    const body = await response.json();
+    const { body } = await timedFetchJson('https://openrouter.ai/api/v1/models', {}, 20_000);
     return (body.data || [])
       .filter((model) => /:free$/i.test(model.id) || /\(free\)/i.test(model.name || ''))
       .filter((model) => !/\bglm\b|z-ai|zai/i.test(`${model.id} ${model.name || ''}`));
@@ -394,7 +400,7 @@ async function nakedGlm(model, prompt, endpointStyle = 'anthropic-coding') {
     : 'https://api.z.ai/api/anthropic';
   if (!key) return { mode: 'naked', provider: 'glm', model, endpointStyle, baseUrl, status: 'missing_key', ms: 0, text: '', errors: ['missing_glm_key'], classification: 'provider_auth', quality: [] };
   try {
-    const response = await timedFetch(endpointStyle === 'openai-coding'
+    const { response, body, rawBody } = await timedFetchJson(endpointStyle === 'openai-coding'
       ? `${baseUrl}/chat/completions`
       : `${baseUrl}/v1/messages`, {
       method: 'POST',
@@ -403,8 +409,6 @@ async function nakedGlm(model, prompt, endpointStyle = 'anthropic-coding') {
         : { 'content-type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01' },
       body: JSON.stringify({ model, max_tokens: 900, messages: [{ role: 'user', content: prompt.text }] }),
     }, nakedProviderTimeoutMs);
-    const rawBody = await response.text();
-    const body = parseJsonBody(rawBody);
     const text = endpointStyle === 'openai-coding'
       ? (body.choices?.[0]?.message?.content || '')
       : (body.content || []).map((block) => block.text || '').join('\n');
@@ -426,7 +430,7 @@ async function nakedOpenRouter(model, prompt, key, capabilityMetadata = {}) {
   const started = Date.now();
   if (!key) return { mode: 'naked', provider: 'openrouter', model, ...capabilityMetadata, status: 'missing_key', ms: 0, text: '', errors: ['missing_openrouter_key'], classification: 'provider_auth', quality: [] };
   try {
-    const response = await timedFetch('https://openrouter.ai/api/v1/chat/completions', {
+    const { response, body, rawBody } = await timedFetchJson('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
         authorization: `Bearer ${key}`,
@@ -436,8 +440,6 @@ async function nakedOpenRouter(model, prompt, key, capabilityMetadata = {}) {
       },
       body: JSON.stringify({ model, messages: [{ role: 'user', content: prompt.text }], max_tokens: 900 }),
     }, nakedProviderTimeoutMs);
-    const rawBody = await response.text();
-    const body = parseJsonBody(rawBody);
     const text = body.choices?.[0]?.message?.content || '';
     const error = body.error?.message || '';
     return {
@@ -511,12 +513,11 @@ async function achioteAsk({ provider, model, prompt, openRouterKey, endpointStyl
   liveChildren.add(child);
   try {
     await waitForServer(child, port);
-    const response = await timedFetch(`http://127.0.0.1:${port}/ask`, {
+    const { response, body: raw } = await timedFetchText(`http://127.0.0.1:${port}/ask`, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ message: prompt.text }),
     }, achioteAskTimeoutMs + 30_000);
-    const raw = await response.text();
     const events = parseSse(raw);
     const text = eventText(events);
     const errors = events.filter((event) => event.event === 'error').map(parseData);

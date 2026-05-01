@@ -224,6 +224,10 @@ describe('cross-provider model telemetry', () => {
     expect(runner).toContain('retryBudget');
     expect(runner).toContain('providerErrorPreview');
     expect(runner).toContain('timeoutClass');
+    expect(runner).toContain('timedFetchText');
+    expect(runner).toContain('timedFetchJson');
+    expect(runner.match(/await response\.text\(/g)).toHaveLength(1);
+    expect(runner).not.toMatch(/await response\.json\(/);
     expect(runner).toContain('openRouterCapabilityMetadata');
     expect(runner).toContain('selectedModelCapabilities');
     expect(runner).toContain('supported_parameters');
