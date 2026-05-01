@@ -32,6 +32,23 @@ describe('weak cloud runner hardening', () => {
     expect(findings).toContain('full_recipe_drift');
   });
 
+  it('catches recipe-like cooking procedures even without measurements', async () => {
+    const { qualityFindings } = await import('../scripts/lib/weak-cloud-quality.mjs');
+
+    const findings = qualityFindings(
+      'For your first test, make a simple yuca fritter: peel and boil a yuca until tender, then mash it with a pinch of salt. Form it into small ovals, press seasoned ground beef into the center, seal well, and fry in oil until golden and crispy.',
+      'I had something in Panama that sounded like carimanolla or carimanola. Give me the first cheap local test, not a full recipe.',
+      'achiote',
+    );
+
+    expect(findings).toContain('full_recipe_drift');
+    expect(qualityFindings(
+      'Minimum viable composed-bite cue. First-pass verification bite: a tiny amount of cassava-family carrier plus a tiny amount of accessible protein. Why this is minimum: a composed bite tests aroma, fat, browning, starch texture, and balance.',
+      'I had something in Panama that sounded like carimanolla or carimanola. Give me the first cheap local test, not a full recipe.',
+      'achiote',
+    )).not.toContain('full_recipe_drift');
+  });
+
   it('downranks soft identity overclaims and currency-price fragments', async () => {
     const { qualityFindings } = await import('../scripts/lib/weak-cloud-quality.mjs');
 

@@ -13,6 +13,9 @@ export function qualityFindings(text, prompt, mode) {
     || /(?:[¼½¾⅓⅔⅛⅜⅝⅞]|\b\d+\/\d+|\b\d+(?:\.\d+)?)\s*(?:cups?|tbsp|tablespoons?|teaspoons?|tsp|ounces?|oz|grams?|g|ml|milliliters?|mins?|minutes?)\b/i.test(normalized)) {
     findings.push('full_recipe_drift');
   }
+  if (askedForSmallCue && containsCookingProcedureSequence(normalized)) {
+    findings.push('full_recipe_drift');
+  }
   if (askedForSmallCue && /\b(?:build that dish|finished dish|complete dish|full dish|recipe\b|ingredients\b|instructions\b)\b/i.test(normalized)) {
     findings.push('full_recipe_drift');
   }
@@ -32,4 +35,9 @@ function containsOverconfidentIdentityClaim(text) {
     || /\bmost likely\s+(?:points?\s+to|matches|is|was|means|refers?\s+to)\b/i.test(text)
     || /\b(?:sounds like|likely maps to|maps to|is essentially|is basically)\s+(?:a|an|the)?\s*(?:classic\s+)?(?:[\p{L}\p{M}][\p{L}\p{M}'-]*)(?:\s+[\p{L}\p{M}][\p{L}\p{M}'-]*){0,5}\b/iu.test(text)
     || /\bthis is\s+(?!only\b|minimum\b|not\b|a\s+(?:first|minimum|tiny|small|composed|safe|structured)\b|the\s+(?:first|minimum|smallest)\b)(?:a\s+|an\s+|the\s+)?[\p{L}\p{M}][\p{L}\p{M}'-]*(?:\s+[\p{L}\p{M}][\p{L}\p{M}'-]*){0,5}\b/iu.test(text);
+}
+
+function containsCookingProcedureSequence(text) {
+  const matches = text.match(/\b(?:peel|boil|mash|form|press|seal|fry|simmer|strain|blend|knead|roll|stuff|marinate|bake|roast|saute|sauté|whisk|stir|mix|combine|cook|heat)\b/gi) || [];
+  return new Set(matches.map((match) => match.toLowerCase())).size >= 4;
 }
