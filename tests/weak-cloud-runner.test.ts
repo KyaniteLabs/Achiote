@@ -73,6 +73,15 @@ describe('weak cloud runner hardening', () => {
     expect(runner).not.toContain("if (/\\b400\\b|provider returned error|unsupported|not support|tool/i.test(combined)) return 'provider_compatibility';");
   });
 
+  it('does not mark incomplete Achiote tool runs as workflow ok', () => {
+    const runner = fs.readFileSync('scripts/weak-cloud-overnight.mjs', 'utf8');
+
+    expect(runner).toContain('function classifyAchioteWorkflow');
+    expect(runner).toContain("return 'workflow_incomplete';");
+    expect(runner).toContain("if (!done?.guarded && quality.includes('missed_minimum_cue_frame')) return 'workflow_incomplete';");
+    expect(runner).toContain('classification: classifyAchioteWorkflow(response.status, errors, text, tools, done, quality)');
+  });
+
   it('refuses to start another round when the remaining window is too small', async () => {
     const { shouldStartRound } = await import('../scripts/lib/weak-cloud-schedule.mjs');
     const endAt = new Date('2026-05-01T06:01:14.752Z');

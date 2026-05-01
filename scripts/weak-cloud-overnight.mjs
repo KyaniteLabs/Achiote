@@ -429,6 +429,14 @@ function shouldRetryProviderResult(result) {
     || result?.status === 'timeout';
 }
 
+function classifyAchioteWorkflow(responseStatus, errors, text, tools, done, quality) {
+  if (errors.length > 0) return classifyProvider(responseStatus, JSON.stringify(errors), text);
+  if (!text?.trim()) return 'empty_visible_output';
+  if (tools.length === 0) return 'workflow_incomplete';
+  if (!done?.guarded && quality.includes('missed_minimum_cue_frame')) return 'workflow_incomplete';
+  return 'workflow_ok';
+}
+
 async function runWithRetries(label, fn) {
   let result;
   for (let attempt = 0; attempt <= retryCount; attempt += 1) {
@@ -610,13 +618,14 @@ async function achioteAsk({ provider, model, prompt, openRouterKey, endpointStyl
     const errors = events.filter((event) => event.event === 'error').map(parseData);
     const tools = eventTools(events);
     const done = events.filter((event) => event.event === 'done').map(parseData).at(-1) || null;
+    const quality = [...qualityFindings(text, prompt.text, 'achiote'), ...(tools.length === 0 ? ['missing_tool_workflow'] : [])];
     return {
       mode: 'achiote', provider, model, ...(capabilityMetadata || {}), endpointStyle: endpointStyle || capabilityMetadata?.endpointStyle, baseUrl: baseUrl || capabilityMetadata?.baseUrl, prompt: prompt.id, status: response.status, ms: Date.now() - started,
       text: truncate(text), errors, tools, done,
-      classification: errors.length > 0 ? classifyProvider(response.status, JSON.stringify(errors), text) : 'workflow_ok',
+      classification: classifyAchioteWorkflow(response.status, errors, text, tools, done, quality),
       providerErrorPreview: errors.length > 0 ? safeDiagnosticPreview(JSON.stringify(errors)) : undefined,
       timeoutClass: timeoutClassForStatus(response.status, JSON.stringify(errors)),
-      quality: [...qualityFindings(text, prompt.text, 'achiote'), ...(tools.length === 0 ? ['missing_tool_workflow'] : [])],
+      quality,
     };
   } catch (error) {
     return {
