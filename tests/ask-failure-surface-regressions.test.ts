@@ -1411,6 +1411,79 @@ describe('/ask failure surface regressions', () => {
     expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'latest_correction_sanitized' });
   }, 20_000);
 
+  it('replaces latest-correction cue-family drift with a corrected mechanism cue', async () => {
+    const fakePort = await getFreePort();
+    let requestCount = 0;
+    fakeOpenAi = createServer(async (req, res) => {
+      if (req.url !== '/v1/chat/completions' || req.method !== 'POST') {
+        res.writeHead(404).end();
+        return;
+      }
+      requestCount++;
+      await readBody(req);
+      const beverageDossier = {
+        title: 'Stale beverage dossier',
+        evidenceLedger: {
+          userSaid: ['The old memory was a cold rice-cinnamon drink.'],
+          researched: ['Rice-cinnamon drinks are beverage memories.'],
+          inferred: ['The cue should test a beverage.'],
+          unknown: [],
+        },
+        hypotheses: [{ name: 'rice-cinnamon drink', confidence: 'Medium' }],
+        nostalgiaCriticalElements: [],
+        recreationStrategy: [],
+        whatToAskFamily: [],
+        confidence: 'Medium',
+      };
+      const toolCallsByTurn = [
+        [{ id: 'call_1', type: 'function', function: { name: 'collect_food_memory', arguments: JSON.stringify({ memoryText: 'The old memory was a cold rice-cinnamon drink.' }) } }],
+        [{ id: 'call_2', type: 'function', function: { name: 'plan_dish_research', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_3', type: 'function', function: { name: 'build_reconstruction_dossier', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_4', type: 'function', function: { name: 'generate_minimum_viable_nostalgia', arguments: JSON.stringify({ dossier: beverageDossier }) } }],
+      ];
+      const toolCalls = toolCallsByTurn[requestCount - 1];
+      res.setHeader('content-type', 'application/json');
+      res.end(JSON.stringify({
+        choices: [{
+          finish_reason: toolCalls ? 'tool_calls' : 'stop',
+          message: toolCalls
+            ? { role: 'assistant', content: '', tool_calls: toolCalls }
+            : { role: 'assistant', content: 'The sweet rice drink cue is still the right first test.' },
+        }],
+      }));
+    });
+    await new Promise<void>((resolveListen) => fakeOpenAi?.listen(fakePort, '127.0.0.1', resolveListen));
+
+    const achiotePort = await getFreePort();
+    achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`);
+
+    const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        history: [
+          { role: 'user', content: 'My aunt made a cold rice-cinnamon drink.' },
+          { role: 'assistant', content: 'I can build a tiny beverage cue.' },
+        ],
+        message: 'Correction: I remembered wrong. It was not a drink; it was a sour soup from my Polish neighbor.',
+      }),
+    });
+
+    expect(response.status).toBe(200);
+    const events = parseSse(await response.text());
+    const finalText = events
+      .filter((event) => event.event === 'text')
+      .map((event) => JSON.parse(event.data))
+      .join('\n\n');
+
+    expect(events.some((event) => event.event === 'error')).toBe(false);
+    expect(finalText).toContain('Minimum viable corrected-memory cue');
+    expect(finalText).toMatch(/latest correction|corrected mechanism/i);
+    expect(finalText).not.toMatch(/\bbeverage-memory|exact drink|carbonation|foamy|over ice\b/i);
+    expect(events.at(-1)?.event).toBe('done');
+    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'latest_correction_sanitized' });
+  }, 20_000);
+
   it('clarifies broad uncertain memories instead of forcing a generic post-cue fallback', async () => {
     const fakePort = await getFreePort();
     let requestCount = 0;

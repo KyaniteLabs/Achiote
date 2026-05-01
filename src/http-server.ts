@@ -822,7 +822,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
 
     if (calledTools.has('generate_minimum_viable_nostalgia') && contradictsLatestCorrection(trustBoundedResponseText, userMessage)) {
       console.warn('[ask] replaced stale correction-conflicting response with deterministic minimum cue');
-      const responseText = sanitizeLatestCorrectionResponse(buildMinimumCueCompletedResponse(toolPayloads), userMessage);
+      const responseText = buildLatestCorrectionAlignedResponse(buildMinimumCueCompletedResponse(toolPayloads), userMessage, toolPayloads);
       send('text', responseText);
       maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
       finish({ guarded: 'latest_correction_sanitized' });
@@ -1128,6 +1128,37 @@ function sanitizeLatestCorrectionResponse(text: string, userMessage: string): st
     .join('\n')
     .replace(/\n{3,}/g, '\n\n')
     .trim();
+}
+
+function buildLatestCorrectionAlignedResponse(text: string, userMessage: string, toolPayloads: Record<string, unknown>): string {
+  const sanitized = sanitizeLatestCorrectionResponse(text, userMessage);
+  if (!latestCorrectionNeedsMechanismFallback(sanitized, userMessage)) return sanitized;
+
+  const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
+  const localLine = memory?.userLocation
+    ? `\n\nUse ordinary grocery or pantry items near ${memory.userLocation}; do not buy the exact suspected dish for this first test.`
+    : '';
+  return sanitizeMinimumCueFallbackBlock([
+    'Minimum viable corrected-memory cue',
+    '',
+    'First-pass verification bite: a tiny amount of a safe neutral carrier plus one tiny corrected sensory cue from the latest message.',
+    '',
+    'Keep it to one sip, smell, or bite that tests only the corrected aroma, acid, texture, temperature, or mouthfeel.',
+    'Do not buy the exact suspected dish yet; this is only the first check.',
+    '',
+    'Why this is minimum: The latest correction is the highest-trust evidence, so the first cue should test that corrected mechanism before reusing older assumptions.',
+    localLine.trim(),
+    'If it works, next ask: Ask which corrected detail hit first: smell, texture, acid, fat, starch, temperature, or serving ritual.',
+  ].filter((line) => line.length > 0).join('\n'));
+}
+
+function latestCorrectionNeedsMechanismFallback(text: string, userMessage: string): boolean {
+  if (!isLatestCorrectionMessage(userMessage)) return false;
+  if (text.length < 80 || !/\bminimum viable|first[-\s]?pass verification bite\b/i.test(text)) return true;
+  if (/\b(?:soup|broth|stew)\b/i.test(userMessage) && /\b(?:beverage-memory|carbonation|foamy|iced|over ice|exact drink)\b/i.test(text)) {
+    return true;
+  }
+  return false;
 }
 
 function normalizeResearchRecordInput(record: Record<string, unknown>, toolPayloads: Record<string, unknown>): unknown {
