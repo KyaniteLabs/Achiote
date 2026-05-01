@@ -2,8 +2,10 @@ import { describe, expect, it } from 'vitest';
 import fs from 'node:fs';
 import {
   buildLmStudioLoadPayload,
+  isProtectedLocalInferenceModel,
   lmStudioInferenceEndpointStyles,
   localInferenceProfiles,
+  parseProtectedLocalInferenceModels,
   profileApplicationSummary,
   summarizeLoadProfile,
 } from '../src/lib/local-inference-profiles.js';
@@ -97,6 +99,35 @@ describe('local inference load profiles', () => {
     const nativeBranch = profilerScript.match(/if \(targetEndpointStyle === 'native-chat'\) \{([\s\S]*?)\n  \}\n  return/)?.[1] ?? '';
     expect(nativeBranch).toContain('max_output_tokens: 512');
     expect(nativeBranch).not.toContain('max_tokens: 512');
+  });
+
+  it('can mark protected local inference models before load or unload operations', () => {
+    const protectedModels = parseProtectedLocalInferenceModels('repo-pipeline-qwen35-q8-prod, keep-warm-custom');
+
+    expect(isProtectedLocalInferenceModel('repo-pipeline-qwen35-q8-prod', protectedModels)).toBe(true);
+    expect(isProtectedLocalInferenceModel({ id: 'repo-pipeline-qwen35-q8-prod', loaded_instance_id: 'loaded-1' }, protectedModels)).toBe(true);
+    expect(isProtectedLocalInferenceModel({ key: 'my-keep-warm-custom-long-name' }, protectedModels)).toBe(true);
+    expect(isProtectedLocalInferenceModel('qwen3.5-0.8b', protectedModels)).toBe(false);
+  });
+
+  it('keeps the profiler guarded against protected-model load and unload paths', () => {
+    const profilerScript = fs.readFileSync('scripts/local-inference-profiler.mjs', 'utf8');
+
+    expect(profilerScript).toContain('LOCAL_INFERENCE_PROTECTED_MODELS');
+    expect(profilerScript).toContain('--protected-model');
+    expect(profilerScript).toContain('Refusing to load protected local inference model');
+    expect(profilerScript).toContain('Refusing to unload protected local inference model');
+    expect(profilerScript).toContain('skippedProtected');
+    expect(profilerScript).toContain('unload-after');
+  });
+
+  it('runs the local canary instead of only listing canary cases', () => {
+    const profilerScript = fs.readFileSync('scripts/local-inference-profiler.mjs', 'utf8');
+    const runLocalCanaryBody = profilerScript.match(/function runLocalCanary\(options\) \{([\s\S]*?)\n\}\n\nfunction extractReasoningTrace/)?.[1] ?? '';
+
+    expect(runLocalCanaryBody).toContain("['scripts/local-canary-qa.mjs']");
+    expect(runLocalCanaryBody).not.toContain('--list-json');
+    expect(runLocalCanaryBody).toContain('LOCAL_CANARY_ARTIFACT_DIR');
   });
 });
 

@@ -4,9 +4,12 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {
   buildLmStudioLoadPayload,
+  isProtectedLocalInferenceModel,
   isLocalInferenceProfileName,
   lmStudioInferenceEndpointStyles,
   localInferenceProfiles,
+  localInferenceModelIdentifiers,
+  parseProtectedLocalInferenceModels,
   profileApplicationSummary,
   summarizeLoadProfile,
 } from '../dist/lib/local-inference-profiles.js';
@@ -19,6 +22,7 @@ const profileName = profileArg();
 const endpointStyle = endpointStyleArg();
 const outputDir = stringArg('out') ?? path.join('artifacts', 'local-inference-profiler');
 const timeoutMs = numberArg('timeout-ms') ?? 180_000;
+const protectedModels = protectedModelArg();
 
 if (args.has('list-profiles')) {
   printJson({
@@ -35,6 +39,11 @@ if (args.has('list-profiles')) {
   process.exit(0);
 }
 
+if (args.has('list-models')) {
+  printJson(await inventoryModels(baseUrl, protectedModels, timeoutMs));
+  process.exit(0);
+}
+
 const startedAt = new Date().toISOString();
 const artifact = {
   generatedAt: startedAt,
@@ -45,17 +54,22 @@ const artifact = {
   endpointStyle,
   endpoint: lmStudioInferenceEndpointStyles[endpointStyle],
   intendedLoadPayload: buildLmStudioLoadPayload(model, profileName),
+  protectedModels,
   application: profileApplicationSummary(profileName),
   profileSummary: summarizeLoadProfile(profileName),
   events: [],
 };
 
 if (args.has('unload-all')) {
-  artifact.events.push(await timed('unload_all', () => unloadAll(baseUrl, timeoutMs)));
+  artifact.events.push(await timed('unload_all', () => unloadAll(baseUrl, protectedModels, timeoutMs)));
 }
 
+let loadResult;
 if (args.has('load') || args.has('probe') || args.has('canary')) {
-  artifact.events.push(await timed('load_model', () => loadModel(baseUrl, artifact.intendedLoadPayload, timeoutMs)));
+  artifact.events.push(await timed('load_model', async () => {
+    loadResult = await loadModel(baseUrl, artifact.intendedLoadPayload, protectedModels, timeoutMs);
+    return loadResult;
+  }));
 }
 
 if (args.has('probe')) {
@@ -66,12 +80,16 @@ if (args.has('canary')) {
   artifact.events.push(await timed('local_canary', () => runLocalCanary({ baseUrl, model, profileName, outputDir })));
 }
 
+if (args.has('unload-after')) {
+  artifact.events.push(await timed('unload_model', () => unloadModel(baseUrl, model, protectedModels, timeoutMs, loadResult)));
+}
+
 if (artifact.events.length === 0) {
   artifact.events.push({
     label: 'noop',
     ok: true,
     ms: 0,
-    note: 'Use --load, --probe, --canary, --unload-all, or --list-profiles.',
+    note: 'Use --load, --probe, --canary, --unload-after, --unload-all, --list-models, --list-profiles, and --protected-model <name>.',
   });
 }
 
@@ -145,22 +163,48 @@ async function timed(label, fn) {
   }
 }
 
-async function unloadAll(targetBaseUrl, requestTimeoutMs) {
+function protectedModelArg() {
+  return [
+    ...parseProtectedLocalInferenceModels(process.env.LOCAL_INFERENCE_PROTECTED_MODELS),
+    ...parseProtectedLocalInferenceModels(stringArg('protected-model')),
+  ];
+}
+
+async function inventoryModels(targetBaseUrl, protectedModelNames, requestTimeoutMs) {
+  const apiBase = managementBaseUrl(targetBaseUrl);
+  const [management, openai] = await Promise.allSettled([
+    fetchJson(`${apiBase}/models`, {}, requestTimeoutMs),
+    fetchJson(`${openAiBaseUrl(targetBaseUrl)}/models`, {}, requestTimeoutMs),
+  ]);
+  const managementModels = extractModelDescriptors(management.status === 'fulfilled' ? management.value : {});
+  const openAiModels = extractModelDescriptors(openai.status === 'fulfilled' ? openai.value : {});
+  return {
+    baseUrl: targetBaseUrl,
+    managementBaseUrl: apiBase,
+    protectedModels: protectedModelNames,
+    managementError: management.status === 'rejected' ? String(management.reason?.message ?? management.reason) : undefined,
+    openAiError: openai.status === 'rejected' ? String(openai.reason?.message ?? openai.reason) : undefined,
+    managementModels: markProtectedModels(managementModels, protectedModelNames),
+    openAiModels: markProtectedModels(openAiModels, protectedModelNames),
+  };
+}
+
+async function unloadAll(targetBaseUrl, protectedModelNames, requestTimeoutMs) {
   const apiBase = managementBaseUrl(targetBaseUrl);
   const models = await fetchJson(`${apiBase}/models`, {}, requestTimeoutMs);
-  const ids = Array.isArray(models.models)
-    ? models.models.map((entry) => entry?.key ?? entry?.id).filter((id) => typeof id === 'string')
-    : Array.isArray(models.data)
-      ? models.data.map((entry) => entry?.id).filter((id) => typeof id === 'string')
-      : [];
+  const descriptors = extractModelDescriptors(models);
+  const ids = descriptors.map((entry) => entry.key ?? entry.id).filter((id) => typeof id === 'string');
   const loadedIds = Array.isArray(models.models)
     ? models.models
       .filter((entry) => entry?.state === 'loaded' || entry?.loaded === true || entry?.loaded_instance_id)
       .map((entry) => entry?.loaded_instance_id ?? entry?.key ?? entry?.id)
       .filter((id) => typeof id === 'string')
     : [];
+  const candidates = loadedIds.length > 0 ? loadedIds : ids;
+  const safeCandidates = candidates.filter((id) => !isProtectedLocalInferenceModel(id, protectedModelNames));
+  const skippedProtected = candidates.filter((id) => isProtectedLocalInferenceModel(id, protectedModelNames));
   const responses = [];
-  for (const id of loadedIds.length > 0 ? loadedIds : ids) {
+  for (const id of safeCandidates) {
     try {
       responses.push(await fetchJson(`${apiBase}/models/unload`, {
         method: 'POST',
@@ -175,15 +219,67 @@ async function unloadAll(targetBaseUrl, requestTimeoutMs) {
       });
     }
   }
-  return { attempted: loadedIds.length > 0 ? loadedIds : ids, responses };
+  return { attempted: safeCandidates, skippedProtected, responses };
 }
 
-async function loadModel(targetBaseUrl, payload, requestTimeoutMs) {
+async function loadModel(targetBaseUrl, payload, protectedModelNames, requestTimeoutMs) {
+  if (isProtectedLocalInferenceModel(payload.model, protectedModelNames)) {
+    throw new Error(`Refusing to load protected local inference model: ${payload.model}`);
+  }
   return fetchJson(`${managementBaseUrl(targetBaseUrl)}/models/load`, {
     method: 'POST',
     headers: jsonHeaders(),
     body: JSON.stringify(payload),
   }, requestTimeoutMs);
+}
+
+async function unloadModel(targetBaseUrl, targetModel, protectedModelNames, requestTimeoutMs, loadResult) {
+  if (isProtectedLocalInferenceModel(targetModel, protectedModelNames)) {
+    throw new Error(`Refusing to unload protected local inference model: ${targetModel}`);
+  }
+  const candidates = [
+    targetModel,
+    ...localInferenceModelIdentifiers(loadResult && typeof loadResult === 'object' ? loadResult : {}),
+    ...localInferenceModelIdentifiers(loadResult?.model && typeof loadResult.model === 'object' ? loadResult.model : {}),
+  ].filter((value, index, all) => typeof value === 'string' && value.length > 0 && all.indexOf(value) === index);
+
+  const responses = [];
+  for (const id of candidates) {
+    if (isProtectedLocalInferenceModel(id, protectedModelNames)) {
+      responses.push({ id, skipped: true, reason: 'protected_model' });
+      continue;
+    }
+    responses.push(await tryUnloadIdentifier(targetBaseUrl, id, requestTimeoutMs));
+    if (responses.at(-1)?.ok === true) break;
+  }
+  return { candidates, responses };
+}
+
+async function tryUnloadIdentifier(targetBaseUrl, id, requestTimeoutMs) {
+  const apiBase = managementBaseUrl(targetBaseUrl);
+  const bodies = [
+    { instance_id: id },
+    { model_key: id },
+    { model: id },
+  ];
+  const errors = [];
+  for (const body of bodies) {
+    try {
+      return {
+        id,
+        body,
+        ok: true,
+        response: await fetchJson(`${apiBase}/models/unload`, {
+          method: 'POST',
+          headers: jsonHeaders(),
+          body: JSON.stringify(body),
+        }, requestTimeoutMs),
+      };
+    } catch (error) {
+      errors.push(error instanceof Error ? error.message : String(error));
+    }
+  }
+  return { id, ok: false, errors };
 }
 
 async function directProbe(targetBaseUrl, targetModel, targetEndpointStyle, requestTimeoutMs) {
@@ -201,6 +297,24 @@ async function directProbe(targetBaseUrl, targetModel, targetEndpointStyle, requ
     textPreview: typeof text === 'string' ? text.slice(0, 1200) : '',
     reasoningTracePreview: extractReasoningTrace(typeof text === 'string' ? text : ''),
   };
+}
+
+function extractModelDescriptors(models) {
+  if (Array.isArray(models.models)) return models.models;
+  if (Array.isArray(models.data)) return models.data;
+  return [];
+}
+
+function markProtectedModels(models, protectedModelNames) {
+  return models.map((entry) => ({
+    id: entry?.id ?? entry?.key ?? entry?.model ?? entry?.name,
+    key: entry?.key,
+    name: entry?.name,
+    state: entry?.state,
+    loaded: entry?.loaded,
+    loaded_instance_id: entry?.loaded_instance_id,
+    protected: isProtectedLocalInferenceModel(entry ?? {}, protectedModelNames),
+  }));
 }
 
 function probeUrl(targetBaseUrl, targetEndpointStyle) {
@@ -294,14 +408,14 @@ function anthropicBaseUrl(targetBaseUrl) {
 function runLocalCanary(options) {
   return new Promise((resolve, reject) => {
     const summaryPath = path.join(options.outputDir, `${slug(options.model)}-${options.profileName}-canary-summary.json`);
-    const child = spawn(process.execPath, ['scripts/local-canary-qa.mjs', '--list-json'], {
+    const child = spawn(process.execPath, ['scripts/local-canary-qa.mjs'], {
       cwd: process.cwd(),
       env: {
         ...process.env,
         LOCAL_CANARY_BASE_URL: options.baseUrl,
         LOCAL_CANARY_MODEL: options.model,
         LOCAL_CANARY_PROFILE: process.env.LOCAL_CANARY_PROFILE ?? 'core',
-        LOCAL_CANARY_SUMMARY_JSON: summaryPath,
+        LOCAL_CANARY_ARTIFACT_DIR: options.outputDir,
       },
       stdio: ['ignore', 'pipe', 'pipe'],
     });
