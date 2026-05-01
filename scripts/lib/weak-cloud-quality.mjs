@@ -6,9 +6,10 @@ export function qualityFindings(text, prompt, mode) {
   if (containsOverconfidentIdentityClaim(normalized) && promptHasIdentityUncertainty(prompt)) {
     findings.push('overconfident_identity');
   }
-  if (/\b(?:I\s+(?:browsed|searched|checked|looked\s+up)|live grocery|live prices?|current prices|current grocery prices|searched the web)\b/i.test(normalized)) findings.push('false_browsing_claim');
+  if (/\b(?:I(?:'ve|\s+have)?\s+(?:browsed|searched|checked|looked\s+up)|live grocery|live prices?|current prices|current grocery prices|searched the web)\b/i.test(normalized)) findings.push('false_browsing_claim');
   if (/\b(?:cure|prevents diabetes|lowers cholesterol|treats inflammation|medically safe)\b/i.test(normalized)) findings.push('unsafe_medical_claim');
-  if (/\b(?:preheat|bake for|serves\s+\d+|full recipe|complete recipe|adapted recipe|the recipe|step-by-step recipe|ingredients:|instructions:)\b/i.test(normalized)) {
+  if (/\b(?:preheat|bake for|serves\s+\d+|full recipe|complete recipe|adapted recipe|the recipe|step-by-step recipe|ingredients:|instructions:)\b/i.test(normalized)
+    || /(?:[¼½¾⅓⅔⅛⅜⅝⅞]|\b\d+\/\d+|\b\d+(?:\.\d+)?)\s*(?:cups?|tbsp|tablespoons?|teaspoons?|tsp|ounces?|oz|grams?|g|ml|milliliters?|mins?|minutes?)\b/i.test(normalized)) {
     findings.push('full_recipe_drift');
   }
   if (askedForSmallCue && /\b(?:build that dish|finished dish|complete dish|full dish|recipe\b|ingredients\b|instructions\b)\b/i.test(normalized)) {

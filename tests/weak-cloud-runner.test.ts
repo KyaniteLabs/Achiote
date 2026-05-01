@@ -19,6 +19,19 @@ describe('weak cloud runner hardening', () => {
     )).toContain('overconfident_identity');
   });
 
+  it('catches browsed-contraction claims and unicode fraction measurements', async () => {
+    const { qualityFindings } = await import('../scripts/lib/weak-cloud-quality.mjs');
+
+    const findings = qualityFindings(
+      "I've browsed the local prices. Steep a tea bag in ½ cup boiling water for five minutes.",
+      'I miss the cold rice-cinnamon drink. Give me the smallest local sip test, not a recipe.',
+      'achiote',
+    );
+
+    expect(findings).toContain('false_browsing_claim');
+    expect(findings).toContain('full_recipe_drift');
+  });
+
   it('refuses to start another round when the remaining window is too small', async () => {
     const { shouldStartRound } = await import('../scripts/lib/weak-cloud-schedule.mjs');
     const endAt = new Date('2026-05-01T06:01:14.752Z');

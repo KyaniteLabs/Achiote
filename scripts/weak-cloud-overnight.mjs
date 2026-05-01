@@ -415,9 +415,10 @@ function localCapabilityMetadata(modelId) {
 
 function classifyProvider(status, errorText, text) {
   const combined = `${status} ${errorText} ${text}`;
+  const statusAndError = `${status} ${errorText}`;
   if (/\b429\b|rate limit|temporarily overloaded|overloaded/i.test(combined)) return 'provider_rate_limited';
   if (/\b400\b|provider returned error|unsupported|not support|tool/i.test(combined)) return 'provider_compatibility';
-  if (/\b(?:401|auth(?:entication|orization)?|token|api key|invalid key)\b/i.test(combined)) return 'provider_auth';
+  if (/\b(?:401|403|auth(?:entication|orization)?|token|api key|invalid key)\b/i.test(statusAndError)) return 'provider_auth';
   if (!text?.trim()) return 'empty_visible_output';
   return 'provider_ok';
 }
