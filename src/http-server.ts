@@ -2058,7 +2058,7 @@ function containsRecipeMeasurementLanguage(text: string): boolean {
 }
 
 function containsRecipeProcedureOrAdaptationLanguage(text: string): boolean {
-  const cookingVerbs = text.match(/\b(?:peel|grate|boil|mash|form|press|seal|fry|shallow-fry|simmer|strain|blend|knead|roll|stuff|marinate|bake|roast|saute|sauté|whisk|stir|mix|combine|cook|heat|top|taste|add|serve|chill)\b/gi) || [];
+  const cookingVerbs = text.match(/\b(?:peel|grate|boil|mash|form|press|seal|fry|shallow-fry|simmer|strain|blend|knead|roll|stuff|marinate|bake|roast|saute|sauté|whisk|stir|mix|combine|cook|heat|top|taste|add|serve|chill|steep|sip)\b/gi) || [];
   const recipeBullets = text.match(/(?:^|\n)\s*[-*]\s*(?:simmer|add|serve|mix|blend|heat|stir|combine|cook)\b/gi) || [];
   if (recipeBullets.length >= 2) return true;
   if (new Set(cookingVerbs.map((match) => match.toLowerCase())).size >= 4) return true;
@@ -2070,6 +2070,7 @@ function containsRecipeProcedureOrAdaptationLanguage(text: string): boolean {
     || /\bbefore I give you\b[\s\S]{0,200}\bsubstitution map\b/i.test(text)
     || /\btry this simple version\b[\s\S]{0,500}\b(?:simmer|serve with|add|sauce)\b/i.test(text)
     || /\bmake a simple (?:broth|sauce|slurry|mixture|paste)\b[\s\S]{0,250}\b(?:dash|pinch|squeeze|spoon|sip|simmer|mix|blend|taste)\b/i.test(text)
+    || /\b(?:simple\s+)?tiny\s+sip\s+test\b[\s\S]{0,400}\b(?:boil|steep|cook|simmer|specific ingredients?)\b/i.test(text)
     || /\bminimum viable nostalgia bite\b[\s\S]{0,600}\btake\b[\s\S]{0,200}\btop\b[\s\S]{0,200}\btaste\b/i.test(text);
 }
 
