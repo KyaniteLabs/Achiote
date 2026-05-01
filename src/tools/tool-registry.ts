@@ -119,7 +119,12 @@ function memoryFromModelInput(rawMemory: unknown): Parameters<typeof planDishRes
 
 function stringArrayField(input: Input, preferred: string, fallback: string): string[] {
   const value = input[preferred] ?? input[fallback];
-  return Array.isArray(value) ? value.filter((entry): entry is string => typeof entry === 'string' && entry.trim().length > 0) : [];
+  return stringArrayValue(value);
+}
+
+function stringArrayValue(value: unknown): string[] {
+  if (Array.isArray(value)) return value.filter((entry): entry is string => typeof entry === 'string' && entry.trim().length > 0);
+  return typeof value === 'string' && value.trim().length > 0 ? [value.trim()] : [];
 }
 
 function confidenceFromModelInput(value: unknown): 'High' | 'Medium' | 'Low' {
@@ -662,8 +667,8 @@ export const toolRegistry = [
         ...buildReconstructionDossier({
           memory: memoryFromModelInput(input.memory),
           researchPlan: researchPlanFromModelInput(input),
-          researchedFacts: input.researchedFacts as string[] | undefined,
-          inferredFacts: input.inferredFacts as string[] | undefined,
+          researchedFacts: stringArrayValue(input.researchedFacts),
+          inferredFacts: stringArrayValue(input.inferredFacts),
         }),
       });
     },

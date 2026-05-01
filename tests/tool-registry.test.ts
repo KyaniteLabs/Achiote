@@ -165,6 +165,28 @@ describe('shared tool registry', () => {
     expect(dossier.payload.hypotheses.every((hypothesis: { researchRequired?: unknown }) => typeof hypothesis.researchRequired === 'boolean')).toBe(true);
   });
 
+  it('normalizes scalar model evidence before building reconstruction dossiers', async () => {
+    const memory = (await executeToolDefinition('collect_food_memory', {
+      memoryText: 'White chewy coconut sweet with grainy sugar crystals at a school festival.',
+    }, defaultToolExecutionContext)).payload;
+    const researchPlan = (await executeToolDefinition('plan_dish_research', { memory }, defaultToolExecutionContext)).payload;
+
+    const dossier = await executeToolDefinition('build_reconstruction_dossier', {
+      memory,
+      researchPlan,
+      researchedFacts: 'Coconut sweets can be chewy from coconut fiber and grainy from crystallized sugar.',
+      inferredFacts: 'The exact regional name is still uncertain.',
+    }, defaultToolExecutionContext);
+
+    expect(outputSchemas.build_reconstruction_dossier.safeParse(dossier.payload).success).toBe(true);
+    expect(dossier.payload.evidenceLedger.researched).toEqual([
+      'Coconut sweets can be chewy from coconut fiber and grainy from crystallized sugar.',
+    ]);
+    expect(dossier.payload.evidenceLedger.inferred).toEqual([
+      'The exact regional name is still uncertain.',
+    ]);
+  });
+
   it('builds a portable memory receipt from collected memory and research plan', async () => {
     const memory = (await executeToolDefinition('collect_food_memory', {
       memoryText: 'My abuela made something sour and herby.',
