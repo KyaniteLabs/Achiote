@@ -1583,7 +1583,7 @@ function formatMinimumCueFallback(cue: MinimumViableNostalgiaCue, userLocation?:
   const action = firstUsefulCueStep(cue);
   const followUp = cue.followUpIfItWorks[0] ? sanitizeMinimumCueFallbackText(cue.followUpIfItWorks[0]) : undefined;
   const localLine = userLocation
-    ? `Local sourcing: use ordinary grocery or pantry ingredients near ${userLocation}; do not buy the exact suspected dish for this first test.`
+    ? `Local sourcing: use ordinary grocery or pantry items near ${userLocation}; do not buy the exact suspected dish for this first test.`
     : '';
 
   return sanitizeMinimumCueFallbackBlock([
@@ -1644,7 +1644,7 @@ function ensureLocalCueLanguage(text: string, toolPayloads: Record<string, unkno
   const mentionsLocality = new RegExp(`\\b${escapeRegExp(location)}\\b`, 'i').test(text)
     || /\b(?:local|nearby|ordinary grocery|grocery-store|grocery store|pantry|available near)\b/i.test(text);
   if (mentionsLocality) return text;
-  return `${text.trim()}\n\nUse ordinary grocery or pantry ingredients near ${location}; do not buy the exact suspected dish for this first test.`;
+  return `${text.trim()}\n\nUse ordinary grocery or pantry items near ${location}; do not buy the exact suspected dish for this first test.`;
 }
 
 function ensureCueQualityLanguage(text: string, toolPayloads: Record<string, unknown>, calledTools: Set<string>): string {
@@ -1660,7 +1660,7 @@ function ensureCueQualityLanguage(text: string, toolPayloads: Record<string, unk
     }
   }
   if (/\b(?:verify|verification|narrow|first[-\s]?pass|tiny check|rule out|revise)\b/i.test(revised)) return revised;
-  revised = `${revised.trim()}\n\nThis is only a first-pass verification bite: if the aroma, texture, or aftertaste is wrong, we should revise the guess before chasing exact ingredients.`;
+  revised = `${revised.trim()}\n\nThis is only a first-pass verification bite: if the aroma, texture, or aftertaste is wrong, we should revise the guess before chasing exact components.`;
   return revised;
 }
 
@@ -1843,6 +1843,11 @@ function boundedEditDistance(left: string, right: string, maxDistance: number): 
 
 function sanitizeMinimumCueFallbackText(text: string): string {
   return sanitizeRecipeStyleCueLanguage(text)
+    .replace(/\btiny\s+sip\s+sip\b/gi, 'tiny sip')
+    .replace(/\bsip\s+sip\b/gi, 'sip')
+    .replace(/\bexact\s+ingredients\b/gi, 'exact components')
+    .replace(/\bordinary grocery or pantry ingredients\b/gi, 'ordinary grocery or pantry items')
+    .replace(/\bingredients?\b/gi, 'items')
     .replace(/\bnot an oven recipe\b/gi, 'not an oven meal')
     .replace(/\brecipe\b/gi, 'dish')
     .replace(/\bbriefly\s+min\b/gi, 'briefly')

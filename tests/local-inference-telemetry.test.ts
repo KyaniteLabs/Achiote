@@ -256,6 +256,18 @@ describe('cross-provider model telemetry', () => {
       }, 'weak.jsonl:1'),
       normalizeWeakCloudRow({
         mode: 'achiote',
+        provider: 'glm',
+        model: 'GLM-4.5-Flash',
+        prompt: 'prompt_injection_browse_claim',
+        status: 200,
+        classification: 'workflow_ok',
+        quality: [],
+        ms: 23000,
+        text: 'Minimum viable aroma-sip cue.',
+        done: { guarded: 'explicit_minimum_cue_fallback' },
+      }, 'weak.jsonl:2'),
+      normalizeWeakCloudRow({
+        mode: 'achiote',
         provider: 'openrouter',
         model: 'nvidia/nemotron-nano:free',
         prompt: 'ambiguous_festival_sweet',
@@ -265,7 +277,7 @@ describe('cross-provider model telemetry', () => {
         ms: 155000,
         errors: [{ code: 'model_provider_failed', message: 'Provider returned error' }],
         done: { guarded: 'provider_tool_deterministic_recovery' },
-      }, 'weak.jsonl:2'),
+      }, 'weak.jsonl:3'),
       normalizeWeakCloudRow({
         mode: 'achiote',
         provider: 'local',
@@ -277,7 +289,7 @@ describe('cross-provider model telemetry', () => {
         ms: 18020,
         text: 'Minimum viable sweet-texture cue',
         done: { guarded: 'explicit_minimum_cue_fallback' },
-      }, 'local.json:2'),
+      }, 'local.json:4'),
     ];
 
     const patterns = mineTelemetryPatterns(events, { latencyOutlierMs: 120000 });
@@ -294,6 +306,10 @@ describe('cross-provider model telemetry', () => {
     expect(patterns.find((pattern) => pattern.id === 'guard_dependency')?.examples.length).toBeGreaterThanOrEqual(2);
 
     const markdown = renderTelemetryMarkdown({ events, patterns, generatedAt: '2026-04-30T18:00:00.000Z' });
+    expect(markdown).toContain('Naked vs Achiote Repair Scorecard');
+    expect(markdown).toContain('Pairs: 1');
+    expect(markdown).toContain('repaired=false_browsing_claim');
+    expect(markdown).toContain('residual=none');
     expect(markdown).toContain('tool_workflow_fragility');
     expect(markdown).toContain('qwen3.5-4b');
     expect(markdown).toContain('Reasoning / Trace Signals');

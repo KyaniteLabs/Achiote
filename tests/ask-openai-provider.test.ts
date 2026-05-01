@@ -569,6 +569,7 @@ describe('/ask deterministic completion after minimum cue', () => {
       expect(text).toContain('Minimum viable');
       expect(text).toContain('composed bite');
       expect(text).toContain('First-pass verification bite');
+      expect(text).not.toMatch(/\b(?:ingredients|instructions|recipe|tiny sip sip|sip sip)\b/i);
       expect(text).not.toContain('\nUse:\n');
       expect(text).not.toContain('\nTry:\n');
       expect(events.find((event) => event.event === 'receipt')).toBeDefined();

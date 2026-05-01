@@ -295,6 +295,10 @@ export function renderTelemetryMarkdown(input: {
     `Events: ${input.events.length}`,
     `Models: ${uniqueSorted(input.events.map((event) => event.model)).join(', ') || 'none'}`,
     '',
+    '## Naked vs Achiote Repair Scorecard',
+    '',
+    ...renderRepairScorecardLines(input.events),
+    '',
     '## Meta Patterns',
     '',
   ];
@@ -326,6 +330,89 @@ export function renderTelemetryMarkdown(input: {
   }
 
   return `${lines.join('\n')}\n`;
+}
+
+function renderRepairScorecardLines(events: NormalizedTelemetryEvent[]): string[] {
+  const rows = buildRepairScorecardRows(events);
+  if (rows.length === 0) return ['No matched naked/Achiote pairs found in the normalized inputs.'];
+
+  const repaired = rows.filter((row) => row.repaired.length > 0).length;
+  const clean = rows.filter((row) => row.achioteIssues.length === 0).length;
+  const lines = [
+    `Pairs: ${rows.length}`,
+    `Pairs with repaired naked-model issues: ${repaired}`,
+    `Pairs with clean Achiote output: ${clean}`,
+    '',
+  ];
+
+  for (const row of rows.slice(0, 20)) {
+    const repairedText = row.repaired.length > 0 ? row.repaired.join(', ') : 'none';
+    const residualText = row.achioteIssues.length > 0 ? row.achioteIssues.join(', ') : 'none';
+    const guardText = row.guardReason ? `; guard=${row.guardReason}` : '';
+    lines.push(`- ${row.model} via ${row.provider}, ${row.prompt}${row.endpointStyle ? ` [${row.endpointStyle}]` : ''}: repaired=${repairedText}; residual=${residualText}${guardText}`);
+  }
+
+  return lines;
+}
+
+function buildRepairScorecardRows(events: NormalizedTelemetryEvent[]): Array<{
+  provider: string;
+  model: string;
+  prompt: string;
+  endpointStyle?: string;
+  repaired: string[];
+  achioteIssues: string[];
+  guardReason?: string;
+}> {
+  const groups = new Map<string, NormalizedTelemetryEvent[]>();
+  for (const event of events) {
+    const key = [
+      event.provider,
+      event.model,
+      event.prompt,
+      event.endpointStyle ?? '',
+      event.baseUrl ?? '',
+    ].join('\u0000');
+    groups.set(key, [...(groups.get(key) ?? []), event]);
+  }
+
+  const rows = [];
+  for (const groupEvents of groups.values()) {
+    const naked = groupEvents.find((event) => event.mode === 'naked');
+    const achiote = groupEvents.find((event) => event.mode === 'achiote');
+    if (!naked || !achiote) continue;
+    const nakedIssues = issueSignalsForScorecard(naked);
+    const achioteIssues = issueSignalsForScorecard(achiote);
+    rows.push({
+      provider: achiote.provider,
+      model: achiote.model,
+      prompt: achiote.prompt,
+      endpointStyle: achiote.endpointStyle,
+      repaired: nakedIssues.filter((issue) => !achioteIssues.includes(issue)),
+      achioteIssues,
+      guardReason: achiote.guardReason,
+    });
+  }
+
+  return rows.sort((left, right) => {
+    const repairedDelta = right.repaired.length - left.repaired.length;
+    if (repairedDelta !== 0) return repairedDelta;
+    const residualDelta = right.achioteIssues.length - left.achioteIssues.length;
+    if (residualDelta !== 0) return residualDelta;
+    return `${left.provider}/${left.model}/${left.prompt}`.localeCompare(`${right.provider}/${right.model}/${right.prompt}`);
+  });
+}
+
+function issueSignalsForScorecard(event: NormalizedTelemetryEvent): string[] {
+  const issues = [
+    ...event.quality,
+    ...event.findings.filter((finding) => /error|missing|failed|empty|unsafe|false|drift|leak|timeout|rate/i.test(finding)),
+  ];
+  if (event.providerFailure) issues.push('provider_failure');
+  if (event.errors.length > 0) issues.push('provider_or_tool_error');
+  if (event.classification && !['provider_ok', 'workflow_ok'].includes(event.classification)) issues.push(event.classification);
+  if (event.classification === 'empty_visible_output') issues.push('empty_visible_output');
+  return uniqueSorted(issues);
 }
 
 function hasToolWorkflowFragility(event: NormalizedTelemetryEvent): boolean {
