@@ -744,7 +744,7 @@ describe('/ask failure surface regressions', () => {
           finish_reason: toolCalls ? 'tool_calls' : 'stop',
           message: toolCalls
             ? { role: 'assistant', content: '', tool_calls: toolCalls }
-            : { role: 'assistant', content: 'Your drink sounds like a classic Horchata de Arroz. Steep cinnamon and rice, then serve the exact drink cold.' },
+            : { role: 'assistant', content: 'Your memory points strongly toward a classic Horchata de Arroz. Steep cinnamon and rice, then serve the exact drink cold.' },
         }],
       }));
     });
@@ -768,7 +768,7 @@ describe('/ask failure surface regressions', () => {
 
     expect(events.some((event) => event.event === 'error')).toBe(false);
     expect(finalText).toMatch(/first-pass verification (?:bite|sip)/i);
-    expect(finalText).not.toMatch(/\b(?:sounds like|most likely|almost certainly|Horchata de Arroz)\b/i);
+    expect(finalText).not.toMatch(/\b(?:points strongly toward|sounds like|most likely|almost certainly|Horchata de Arroz)\b/i);
     expect(events.at(-1)?.event).toBe('done');
     expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'overconfident_identity_sanitized' });
   }, 20_000);
