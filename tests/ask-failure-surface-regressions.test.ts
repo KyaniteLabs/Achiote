@@ -2092,7 +2092,7 @@ describe('/ask failure surface regressions', () => {
     expect(finalText).not.toMatch(/\b(?:Original role|Constraint|Stand-in|sunflower seed butter|silken tofu|gluten-free naan)\b/i);
   }, 20_000);
 
-  it('replaces post-cue mix-and-microwave test drift with a deterministic cue', async () => {
+  it('allows tiny post-cue mix-and-microwave sensory tests', async () => {
     const fakePort = await getFreePort();
     let requestCount = 0;
     fakeOpenAi = createServer(async (req, res) => {
@@ -2139,12 +2139,12 @@ describe('/ask failure surface regressions', () => {
 
     expect(events.some((event) => event.event === 'error')).toBe(false);
     expect(events.at(-1)?.event).toBe('done');
-    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'recipe_procedure_sanitized' });
-    expect(finalText).toContain('Minimum viable sweet-texture cue');
-    expect(finalText).not.toMatch(/\b(?:The test|Microwave|press into a small ball|few drops)\b/i);
+    expect(JSON.parse(events.at(-1)!.data)).not.toMatchObject({ guarded: 'recipe_procedure_sanitized' });
+    expect(finalText).toMatch(/first-pass verification bite/i);
+    expect(finalText).toMatch(/\b(?:The test|Microwave|press into a small ball)\b/i);
   }, 20_000);
 
-  it('replaces post-cue heat-and-sip test drift with a deterministic cue', async () => {
+  it('allows tiny post-cue heat-and-sip sensory tests', async () => {
     const fakePort = await getFreePort();
     let requestCount = 0;
     fakeOpenAi = createServer(async (req, res) => {
@@ -2191,9 +2191,9 @@ describe('/ask failure surface regressions', () => {
 
     expect(events.some((event) => event.event === 'error')).toBe(false);
     expect(events.at(-1)?.event).toBe('done');
-    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'recipe_procedure_sanitized' });
-    expect(finalText).toContain('Minimum viable aroma-sip cue');
-    expect(finalText).not.toMatch(/\b(?:smallest safe first test|Heat tiny sip|Sip it warm|confirm if the sour-dill)\b/i);
+    expect(JSON.parse(events.at(-1)!.data)).not.toMatchObject({ guarded: 'recipe_procedure_sanitized' });
+    expect(finalText).toMatch(/smallest safe first test|Heat tiny sip/i);
+    expect(finalText).toMatch(/Sip it warm/i);
   }, 20_000);
 
   it('replaces post-cue simple broth procedure drift with a deterministic cue', async () => {

@@ -25,6 +25,7 @@
     "canary:local": "npm run build && node scripts/local-canary-qa.mjs",
     "local:profile": "npm run build && node scripts/local-inference-profiler.mjs",
     "telemetry:models": "npm run build && node scripts/model-telemetry-report.mjs",
+    "knowledge:canary": "node scripts/knowledge-gap-canary.mjs",
     "torture:fake": "npm run build && node scripts/torture-smoke.mjs",
     "viability:smoke": "node scripts/viability-transcript-smoke.mjs",
     "reference:seeds": "npm run build && node scripts/reference-seed-operator.mjs"

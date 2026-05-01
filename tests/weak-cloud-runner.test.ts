@@ -49,6 +49,22 @@ describe('weak cloud runner hardening', () => {
     )).not.toContain('full_recipe_drift');
   });
 
+  it('allows tiny sensory-test procedures with useful measurements', async () => {
+    const { qualityFindings } = await import('../scripts/lib/weak-cloud-quality.mjs');
+
+    expect(qualityFindings(
+      'Here is a first-pass verification bite: Mix a small amount of shredded coconut with white sugar and a few drops of water. Microwave 15 seconds, stir, press into a small ball, and let it cool. Notice the grainy sugar crunch.',
+      'White coconut sweet with grainy sugar crystals. Give me the smallest first cue, not a recipe.',
+      'achiote',
+    )).not.toContain('full_recipe_drift');
+
+    expect(qualityFindings(
+      'Smallest safe first test: Heat a tiny sip of water with a small amount of white vinegar, salt, and fresh dill. Sip it warm and notice the sour tang and dill aroma.',
+      'Warm sour dill soup with pale chunks. Give me the smallest safe cue, not a recipe.',
+      'achiote',
+    )).not.toContain('full_recipe_drift');
+  });
+
   it('downranks soft identity overclaims and currency-price fragments', async () => {
     const { qualityFindings } = await import('../scripts/lib/weak-cloud-quality.mjs');
 
