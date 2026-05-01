@@ -48,6 +48,7 @@ const protectedLocalModels = parseCsv([
 ].filter(Boolean).join(','));
 
 const noWebSearchEnv = {
+  ACHIOTE_DISABLE_SEARCH_WEB: 'true',
   SERPER_API_KEY: '',
   BRAVE_API_KEY: '',
   TAVILY_API_KEY: '',
