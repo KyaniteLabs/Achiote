@@ -52,6 +52,15 @@ export interface LmStudioLoadPayload {
   echo_load_config: true;
 }
 
+export interface LmStudioModelDescriptor {
+  id?: unknown;
+  key?: unknown;
+  name?: unknown;
+  model?: unknown;
+  loaded_instance_id?: unknown;
+  instance_id?: unknown;
+}
+
 export const localInferenceProfiles: Record<LocalInferenceProfileName, LocalInferenceProfile> = {
   speed: {
     contextLength: 8192,
@@ -223,6 +232,35 @@ export function resolveLoadProfile(
 
 export function isLocalInferenceProfileName(value: string): value is LocalInferenceProfileName {
   return value === 'speed' || value === 'quality' || value === 'memory';
+}
+
+export function parseProtectedLocalInferenceModels(value: string | undefined): string[] {
+  return (value ?? '')
+    .split(',')
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+export function localInferenceModelIdentifiers(model: string | LmStudioModelDescriptor): string[] {
+  if (typeof model === 'string') return [model];
+  const identifiers = [
+    model.id,
+    model.key,
+    model.name,
+    model.model,
+    model.loaded_instance_id,
+    model.instance_id,
+  ].filter((value): value is string => typeof value === 'string' && value.trim().length > 0);
+  return [...new Set(identifiers)];
+}
+
+export function isProtectedLocalInferenceModel(model: string | LmStudioModelDescriptor, protectedModels: string[]): boolean {
+  if (protectedModels.length === 0) return false;
+  const identifiers = localInferenceModelIdentifiers(model).map((value) => value.toLowerCase());
+  return protectedModels.some((protectedModel) => {
+    const normalized = protectedModel.toLowerCase();
+    return identifiers.some((identifier) => identifier === normalized || identifier.includes(normalized));
+  });
 }
 
 function isMixtureOfExpertsModel(model: string): boolean {
