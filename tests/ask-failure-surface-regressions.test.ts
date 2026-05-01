@@ -1932,12 +1932,11 @@ describe('/ask failure surface regressions', () => {
 
     expect(events.some((event) => event.event === 'error')).toBe(false);
     expect(events.at(-1)?.event).toBe('done');
-    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'trust_boundary_sanitized' });
+    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'substitution_basis_deterministic_completion' });
     expect(finalText).not.toMatch(/\b(?:my model|cannot browse|browse|Achiote\s+(?:assistant|app|tool|toolset|workflow|model|server|searched|browsed)|toolset|workflow|OpenAI|gpt-4o|fake-hostile-model|provider|browsing|browsed|live web|current grocery prices|medically safe|heart-healthy|cure|lowers cholesterol|treats inflammation|prevents diabetes|legal advice|legally safe)\b/i);
     expect(finalText).not.toMatch(/\bI cannot give\b/i);
-    expect(finalText).toContain('first-pass verification bite');
-    expect(finalText).toContain('achiote paste');
-    expect(finalText).toContain('tiny treat feeling');
+    expect(finalText).toMatch(/basis before substitutions/i);
+    expect(finalText).toMatch(/adapted cue/i);
   }, 20_000);
 
   it('scrubs essential oils from edible final cue text', async () => {

@@ -923,7 +923,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       return;
     }
 
-    if (!didSanitizeTrustBoundary && shouldReplaceWithSubstitutionBasisResponse(trustBoundedResponseText, toolPayloads, calledTools)) {
+    if (shouldReplaceWithSubstitutionBasisResponse(trustBoundedResponseText, toolPayloads, calledTools)) {
       console.warn('[ask] replaced substitution response with explicit original-basis adaptation frame');
       const responseText = buildSubstitutionBasisResponse(toolPayloads, userMessage);
       send('text', responseText);
@@ -2241,6 +2241,7 @@ function containsBlockedRecipeToolSynthesis(text: string): boolean {
 function containsOverconfidentIdentityClaim(text: string): boolean {
   return /\b(?:almost certainly|definitely|clearly|you(?:'re| are) thinking of|your memory is spot[-\s]?on|it'?s called)\b/i.test(text)
     || /\bmost likely\s+(?:points?\s+to|matches|is|was|means|refers?\s+to)\b/i.test(text)
+    || /\bit\s+points?\s+(?:strongly\s+)?toward\b/i.test(text)
     || /\b(?:your\s+)?(?:memory|description|clues?)\s+(?:points?|pointed)\s+(?:strongly\s+)?(?:toward|to)\b/i.test(text)
     || /\b(?:sounds like|likely maps to|maps to|is essentially|is basically)\s+(?:a|an|the)?\s*(?:classic\s+)?(?:[\p{L}\p{M}][\p{L}\p{M}'-]*)(?:\s+[\p{L}\p{M}][\p{L}\p{M}'-]*){0,5}\b/iu.test(text);
 }
