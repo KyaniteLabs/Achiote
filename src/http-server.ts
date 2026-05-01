@@ -677,8 +677,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
               message: 'search_web is disabled for this Achiote run. Continue from collected memory, resolver, and internal reference data.',
             };
             console.warn('[ask] blocked search_web because ACHIOTE_DISABLE_SEARCH_WEB=true');
-            send('tool_call', { name: 'search_web', input: call.input, blocked: true, disabled: true });
-            send('tool_result', { name: 'search_web', result: resultPayload, blocked: true, disabled: true });
+            send('status', { iteration: iterations, stage: 'search_web_blocked', disabled: true });
             toolResults.push({ id: call.id, content: JSON.stringify(resultPayload) });
             toolCallHistory.push({ name: call.name, input: call.input });
             continue;
@@ -686,10 +685,15 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
           // Enforce search_web call cap — hard block, never falls through
           if (call.name === 'search_web' && searchCallCount >= getMaxSearchCalls()) {
             const cached = toolPayloads.search_web;
-            console.warn(`[ask] search_web cap hard-block (${searchCallCount}/${getMaxSearchCalls()}), ${cached ? 'reusing cached' : 'returning cap message'}`);
-            const resultPayload = cached ?? { capReached: true, message: `search_web capped at ${getMaxSearchCalls()} call(s). Use prior research results.` };
-            send('tool_call', { name: 'search_web', input: call.input, blocked: true });
-            send('tool_result', { name: 'search_web', result: resultPayload, blocked: true });
+            const maxSearchCalls = getMaxSearchCalls();
+            console.warn(`[ask] search_web cap hard-block (${searchCallCount}/${maxSearchCalls}), ${cached ? 'reusing cached' : 'returning cap message'}`);
+            const resultPayload = cached ?? { capReached: true, message: `search_web capped at ${maxSearchCalls} call(s). Use prior research results.` };
+            if (maxSearchCalls > 0) {
+              send('tool_call', { name: 'search_web', input: call.input, blocked: true });
+              send('tool_result', { name: 'search_web', result: resultPayload, blocked: true });
+            } else {
+              send('status', { iteration: iterations, stage: 'search_web_blocked', reason: 'no_search_plan' });
+            }
             toolResults.push({ id: call.id, content: JSON.stringify(resultPayload) });
             toolCallHistory.push({ name: call.name, input: call.input });
             continue;

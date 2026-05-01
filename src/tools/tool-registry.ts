@@ -457,6 +457,10 @@ export const toolRegistry = [
       const hasContradictionKeywords = /\b(?:but also|on the other hand|contradict|conflict|uncertain|not sure if|or was it|maybe it was|i think|actually|wait no)\b/i.test(msg);
       const hasDishName = /\b(?:curry|stew|soup|rice|bread|pasta|noodle|dumpling|pie|cake|taco|tamale|samosa|tagine|paella|risotto|biryani|ramen|pho|adobo|rendang|mole|gumbo|jambalaya|paella|lasagna|casserole|roast|grill|fry|bake|stew)\b/i.test(msg);
       const hasNothingConcrete = msg.length < 40 && !hasSensoryKeywords && !hasDishName;
+      const suppressSearchFromUserText = /\b(?:call|use|run|invoke)\s+search_web\b/i.test(msg)
+        || /\b(?:tell|say|claim)\s+(?:me\s+)?(?:you\s+)?(?:browsed|searched)\b[\s\S]{0,80}\b(?:live\s+)?(?:web|results|prices)\b/i.test(msg)
+        || /\bdo\s+not\s+(?:claim\s+)?(?:browse|search|use\s+live\s+web|claim\s+(?:you\s+)?(?:browsed|searched))\b/i.test(msg)
+        || /\b(?:do\s+not|don't)\s+claim\s+(?:you\s+)?(?:browsed|searched)\b/i.test(msg);
 
       let detectedIntent: string;
       const needsSubstitutions = (hasRestrictions || hasSubstitutionKeywords) && wantsAdaptation && !negatesSubstitutionNeed;
@@ -483,7 +487,7 @@ export const toolRegistry = [
       steps.push({ tool: 'collect_food_memory', reason: 'Parse user message into structured clues and missing information', required: true });
       steps.push({ tool: 'plan_dish_research', reason: 'Build hypotheses and identify what to research', required: true });
 
-      const searchWebDisabled = process.env.ACHIOTE_DISABLE_SEARCH_WEB === 'true';
+      const searchWebDisabled = process.env.ACHIOTE_DISABLE_SEARCH_WEB === 'true' || suppressSearchFromUserText;
       let maxSearchCalls = searchWebDisabled ? 0 : 1;
       const addSearchStep = (reason: string): void => {
         if (!searchWebDisabled) steps.push({ tool: 'search_web', reason, required: false });
