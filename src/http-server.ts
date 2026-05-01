@@ -1895,6 +1895,7 @@ function sanitizeFinalAnswerTrustBoundaryLanguage(text: string): string {
     .replace(/\bI\s+cannot\s+give\b[^.?!]*?(?:medical advice|legal advice|professional advice)[^.?!]*?(?:[.?!]|$)/gi, '')
     .replace(/\b(?:OpenAI|Anthropic|Claude|GPT[-\s]?\d[\w.-]*|gpt[-\s]?\d[\w.-]*|fake-hostile-model|provider(?:\/model)?|model identity)\b[^.?!]*?(?:[.?!]|$)/gi, '')
     .replace(/\b(?:I(?:'ve|\s+have)?\s+(?:browsed|searched|checked|looked\s+up)|Achiote\s+(?:browsed|searched|checked)|live web|live grocery prices?|live prices?|current prices|current grocery prices|live search results?|web results?|under\s+\$\d+)\b[^.?!]*?(?:[.?!]|$)/gi, '')
+    .replace(/\b[^.?!]*?\$\d+(?:\.\d{1,2})?[^.?!]*?(?:[.?!]|$)/gi, '')
     .replace(/\b(?:This\s+)?(?:medically safe|medical(?:ly)?|heart-healthy|cure|cures|lowers cholesterol|(?:treats?|prevents?|diagnoses?)\s+(?:a\s+|an\s+|the\s+)?(?:illness|disease|condition|symptoms?|inflammation|cholesterol|infection|diabetes|heart disease|medical problem))\b[^.?!]*?(?:[.?!]|$)/gi, '')
     .replace(/\b(?:legal(?:ly)? safe|legal advice|medical advice|professional advice)\b[^.?!]*?(?:[.?!]|$)/gi, '')
     .replace(/\bFirst-pass verification bite\b/g, 'first-pass verification bite')
@@ -1922,7 +1923,8 @@ function containsBlockedRecipeToolSynthesis(text: string): boolean {
 
 function containsOverconfidentIdentityClaim(text: string): boolean {
   return /\b(?:almost certainly|definitely|clearly|you(?:'re| are) thinking of|your memory is spot[-\s]?on|it'?s called)\b/i.test(text)
-    || /\bmost likely\s+(?:points?\s+to|matches|is|was|means|refers?\s+to)\b/i.test(text);
+    || /\bmost likely\s+(?:points?\s+to|matches|is|was|means|refers?\s+to)\b/i.test(text)
+    || /\b(?:sounds like|likely maps to|maps to|is essentially|is basically)\s+(?:a|an|the)?\s*(?:classic\s+)?(?:[\p{L}\p{M}][\p{L}\p{M}'-]*)(?:\s+[\p{L}\p{M}][\p{L}\p{M}'-]*){0,5}\b/iu.test(text);
 }
 
 function containsPrematureCandidateSpeculation(text: string, toolPayloads: Record<string, unknown>): boolean {

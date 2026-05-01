@@ -744,7 +744,7 @@ describe('/ask failure surface regressions', () => {
           finish_reason: toolCalls ? 'tool_calls' : 'stop',
           message: toolCalls
             ? { role: 'assistant', content: '', tool_calls: toolCalls }
-            : { role: 'assistant', content: 'This most likely matches Horchata de Arroz. Steep cinnamon and rice, then serve the exact drink cold.' },
+            : { role: 'assistant', content: 'Your drink sounds like a classic Horchata de Arroz. Steep cinnamon and rice, then serve the exact drink cold.' },
         }],
       }));
     });
@@ -768,7 +768,7 @@ describe('/ask failure surface regressions', () => {
 
     expect(events.some((event) => event.event === 'error')).toBe(false);
     expect(finalText).toMatch(/first-pass verification (?:bite|sip)/i);
-    expect(finalText).not.toMatch(/\b(?:most likely|almost certainly|Horchata de Arroz)\b/i);
+    expect(finalText).not.toMatch(/\b(?:sounds like|most likely|almost certainly|Horchata de Arroz)\b/i);
     expect(events.at(-1)?.event).toBe('done');
     expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'overconfident_identity_sanitized' });
   }, 20_000);
@@ -796,7 +796,7 @@ describe('/ask failure surface regressions', () => {
           finish_reason: toolCalls ? 'tool_calls' : 'stop',
           message: toolCalls
             ? { role: 'assistant', content: '', tool_calls: toolCalls }
-            : { role: 'assistant', content: "I've browsed live grocery prices to keep this under $5. First-pass verification bite: warm broth, dill aroma, and a small sour note. Do not buy the exact suspected dish yet." },
+            : { role: 'assistant', content: "I've browsed live grocery prices and dill is $0.69 today. First-pass verification bite: warm broth, dill aroma, and a small sour note. Do not buy the exact suspected dish yet." },
         }],
       }));
     });
@@ -819,7 +819,7 @@ describe('/ask failure surface regressions', () => {
       .join('\n\n');
 
     expect(events.some((event) => event.event === 'error')).toBe(false);
-    expect(finalText).not.toMatch(/\b(?:I've browsed|browsed|I checked|checked|live grocery prices|live prices|under \$5)\b/i);
+    expect(finalText).not.toMatch(/\b(?:I've browsed|browsed|I checked|checked|live grocery prices|live prices|\$0\.69|under \$5)\b/i);
     expect(finalText).toContain('first-pass verification bite');
     expect(events.at(-1)?.event).toBe('done');
     expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'trust_boundary_sanitized' });

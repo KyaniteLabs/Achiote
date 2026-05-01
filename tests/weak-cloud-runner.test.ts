@@ -32,6 +32,22 @@ describe('weak cloud runner hardening', () => {
     expect(findings).toContain('full_recipe_drift');
   });
 
+  it('downranks soft identity overclaims and currency-price fragments', async () => {
+    const { qualityFindings } = await import('../scripts/lib/weak-cloud-quality.mjs');
+
+    expect(qualityFindings(
+      'Your drink sounds like a classic agua de horchata de arroz.',
+      'I miss the cold rice-cinnamon drink, kind of like horchata but thinner.',
+      'achiote',
+    )).toContain('overconfident_identity');
+
+    expect(qualityFindings(
+      'Based on lemons at $0.69 each, warm broth and dill.',
+      'Warm sour dill soup. Do not claim current grocery prices.',
+      'achiote',
+    )).toContain('false_browsing_claim');
+  });
+
   it('refuses to start another round when the remaining window is too small', async () => {
     const { shouldStartRound } = await import('../scripts/lib/weak-cloud-schedule.mjs');
     const endAt = new Date('2026-05-01T06:01:14.752Z');
