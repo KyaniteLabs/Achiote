@@ -1901,7 +1901,7 @@ describe('/ask failure surface regressions', () => {
           finish_reason: toolCalls ? 'tool_calls' : 'stop',
           message: toolCalls
             ? { role: 'assistant', content: '', tool_calls: toolCalls }
-            : { role: 'assistant', content: 'After browsing Try making a quick tiny sip test: Heat a small amount of water with a small amount of vinegar, a small amount of salt, and a few drops of dill oil. Sip it warm.' },
+            : { role: 'assistant', content: 'I just checked. After browsing Try making a quick tiny sip test: Heat a small amount of water with a small amount of vinegar, a small amount of salt, and a few drops of dill oil. Sip it warm.' },
         }],
       }));
     });
@@ -1926,7 +1926,7 @@ describe('/ask failure surface regressions', () => {
     expect(events.some((event) => event.event === 'error')).toBe(false);
     expect(events.at(-1)?.event).toBe('done');
     expect(JSON.parse(events.at(-1)!.data).guarded).toMatch(/(?:trust_boundary|recipe_measurement)_sanitized/);
-    expect(finalText).not.toMatch(/\b(?:after browsing|browsing|dill oil|few drops?)\b/i);
+    expect(finalText).not.toMatch(/\b(?:I just checked|after browsing|browsing|dill oil|few drops?)\b/i);
     expect(finalText).toContain('crushed fresh or dried dill');
   }, 20_000);
 
@@ -1982,6 +1982,60 @@ describe('/ask failure surface regressions', () => {
     expect(finalText).toContain('Minimum viable');
     expect(finalText).toMatch(/first-pass verification bite/i);
     expect(finalText).not.toMatch(/\b(?:full substitution map|complex set of dietary needs|sunflower-seed cream|coconut-curry dal)\b/i);
+  }, 20_000);
+
+  it('replaces post-cue substitution tables with a deterministic cue', async () => {
+    const fakePort = await getFreePort();
+    let requestCount = 0;
+    fakeOpenAi = createServer(async (req, res) => {
+      if (req.url !== '/v1/chat/completions' || req.method !== 'POST') {
+        res.writeHead(404).end();
+        return;
+      }
+      requestCount++;
+      await readBody(req);
+      const toolCallsByTurn = [
+        [{ id: 'call_1', type: 'function', function: { name: 'collect_food_memory', arguments: JSON.stringify({ memoryText: 'Butter chicken with cashew gravy, butter, cream, whiskey, chicken, and naan.', userLocation: 'Seattle' }) } }],
+        [{ id: 'call_2', type: 'function', function: { name: 'plan_dish_research', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_3', type: 'function', function: { name: 'find_sensory_substitutes', arguments: JSON.stringify({ ingredient: 'cashew gravy', location: 'Seattle' }) } }],
+        [{ id: 'call_4', type: 'function', function: { name: 'build_reconstruction_dossier', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_5', type: 'function', function: { name: 'generate_minimum_viable_nostalgia', arguments: JSON.stringify({}) } }],
+      ];
+      const toolCalls = toolCallsByTurn[requestCount - 1];
+      res.setHeader('content-type', 'application/json');
+      res.end(JSON.stringify({
+        choices: [{
+          finish_reason: toolCalls ? 'tool_calls' : 'stop',
+          message: toolCalls
+            ? { role: 'assistant', content: '', tool_calls: toolCalls }
+            : { role: 'assistant', content: 'Your dish is butter chicken. Let us build the adapted first-pass bite. ### What the substitutions target | Original role | Constraint | Stand-in | |---|---|---| | Cashew paste | Nut-free | Sunflower seed butter or tahini | | Butter and cream | Vegan | Avocado oil and silken tofu | ### Smallest memory cue Blend a small amount of sunflower seed butter into tomato sauce, add tofu, and serve with gluten-free naan.' },
+        }],
+      }));
+    });
+    await new Promise<void>((resolveListen) => fakeOpenAi?.listen(fakePort, '127.0.0.1', resolveListen));
+
+    const achiotePort = await getFreePort();
+    achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`);
+
+    const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: 'Butter chicken with cashew gravy, butter, cream, whiskey, chicken, and naan. Adapt the smallest memory cue for nut-free, heart-healthier, halal, vegan, and gluten-free needs without medical advice.' }),
+    });
+
+    expect(response.status).toBe(200);
+    const events = parseSse(await response.text());
+    const finalText = events
+      .filter((event) => event.event === 'text')
+      .map((event) => JSON.parse(event.data))
+      .join('\n\n');
+
+    expect(events.some((event) => event.event === 'error')).toBe(false);
+    expect(events.at(-1)?.event).toBe('done');
+    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'recipe_procedure_sanitized' });
+    expect(finalText).toContain('Minimum viable');
+    expect(finalText).toMatch(/first-pass verification bite/i);
+    expect(finalText).not.toMatch(/\b(?:Original role|Constraint|Stand-in|sunflower seed butter|silken tofu|gluten-free naan)\b/i);
   }, 20_000);
 
   it('replaces post-cue simple broth procedure drift with a deterministic cue', async () => {

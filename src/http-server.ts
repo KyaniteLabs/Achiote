@@ -1869,6 +1869,9 @@ function containsRecipeProcedureOrAdaptationLanguage(text: string): boolean {
   if (new Set(cookingVerbs.map((match) => match.toLowerCase())).size >= 4) return true;
   return /\b(?:for your|adaptations?|replacement for|heart-healthier swaps?|halal chicken|vegan adaptation|gluten-free adaptations?|nut-free replacement)\b[\s\S]{0,500}\b(?:substitute|replace|swap|blend|certification|tofu|coconut cream|white beans|sunflower seeds)\b/i.test(text)
     || /\b(?:full substitution map|complex set of dietary needs|overlapping constraints|biggest challenges)\b/i.test(text)
+    || /\bwhat the substitutions target\b[\s\S]{0,400}\b(?:original role|constraint|stand-?in)\b/i.test(text)
+    || /\boriginal role\b[\s\S]{0,200}\bconstraint\b[\s\S]{0,200}\bstand-?in\b/i.test(text)
+    || /\b(?:smallest memory cue|adapted first-pass bite)\b[\s\S]{0,250}\b(?:blend|replace|serve with|gluten-free|silken tofu|sunflower seed butter)\b/i.test(text)
     || /\bbefore I give you\b[\s\S]{0,200}\bsubstitution map\b/i.test(text)
     || /\btry this simple version\b[\s\S]{0,500}\b(?:simmer|serve with|add|sauce)\b/i.test(text)
     || /\bmake a simple (?:broth|sauce|slurry|mixture|paste)\b[\s\S]{0,250}\b(?:dash|pinch|squeeze|spoon|sip|simmer|mix|blend|taste)\b/i.test(text)
@@ -1999,6 +2002,7 @@ function sanitizeFinalAnswerTrustBoundaryLanguage(text: string): string {
     .replace(/\bI\s+am\s+Achiote\b[^.?!]*?(?:[.?!]|$)/gi, '')
     .replace(/\bI\s+am\s+not\s+browsing\b[^.?!]*?(?:[.?!]|$)/gi, '')
     .replace(/\bI(?:'ve|\s+have)?\s+browsed\b[^.?!]*?(?:[.?!]|$)/gi, '')
+    .replace(/\bI\s+just\s+(?:checked|searched|looked\s+up|browsed)\b[^.?!]*?(?:[.?!]|$)/gi, '')
     .replace(/\bI\s+do\s+not\s+browse\b[^.?!]*?(?:[.?!]|$)/gi, '')
     .replace(/\bMy\s+model\b[^.?!]*?(?:[.?!]|$)/gi, '')
     .replace(/\bI\s+cannot\s+browse\b[^.?!]*?(?:[.?!]|$)/gi, '')
