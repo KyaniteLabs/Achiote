@@ -232,6 +232,122 @@ describe('/ask deterministic completion after minimum cue', () => {
     }
   }, 20_000);
 
+  it('recovers deterministically when the provider returns a broken assistant envelope', async () => {
+    const fakePort = await getFreePort();
+    let requestCount = 0;
+    const fakeOpenAi = createServer(async (req, res) => {
+      if (req.url !== '/v1/chat/completions' || req.method !== 'POST') {
+        res.writeHead(404).end();
+        return;
+      }
+      requestCount++;
+      await readBody(req);
+      res.setHeader('content-type', 'application/json');
+      res.end(JSON.stringify({
+        choices: [{ finish_reason: 'stop', message: null }],
+      }));
+    });
+    await new Promise<void>((resolveListen) => fakeOpenAi.listen(fakePort, '127.0.0.1', resolveListen));
+
+    const achiotePort = await getFreePort();
+    const achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`);
+    try {
+      const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: 'I remember a festival sweet with jaggery, sesame, and a crisp edge. Give me the smallest cue.',
+        }),
+      });
+
+      expect(response.status).toBe(200);
+      const events = parseSse(await response.text());
+      const toolNames = events.filter((event) => event.event === 'tool_call').map((event) => JSON.parse(event.data).name);
+
+      expect(events.some((event) => event.event === 'error')).toBe(false);
+      expect(events.some((event) => event.event === 'status' && JSON.parse(event.data).stage === 'deterministic_recovery')).toBe(true);
+      expect(toolNames).toEqual(expect.arrayContaining([
+        'collect_food_memory',
+        'plan_dish_research',
+        'generate_minimum_viable_nostalgia',
+      ]));
+      expect(events.at(-1)?.event).toBe('done');
+      expect(JSON.parse(events.at(-1)!.data).guarded).toMatch(/^(provider_context_deterministic_recovery|explicit_minimum_cue_fallback)$/);
+      expect(requestCount).toBe(1);
+    } finally {
+      achiote.kill('SIGINT');
+      fakeOpenAi.closeAllConnections();
+      await new Promise<void>((resolveClose) => fakeOpenAi.close(() => resolveClose()));
+    }
+  }, 20_000);
+
+  it('recovers deterministically when OpenRouter reports a downstream provider credential failure', async () => {
+    const fakePort = await getFreePort();
+    let requestCount = 0;
+    const fakeOpenAi = createServer(async (req, res) => {
+      if (req.url !== '/v1/chat/completions' || req.method !== 'POST') {
+        res.writeHead(404).end();
+        return;
+      }
+      requestCount++;
+      await readBody(req);
+      res.writeHead(400, { 'content-type': 'application/json' });
+      res.end(JSON.stringify({
+        error: {
+          message: 'Provider returned error',
+          code: 400,
+          metadata: {
+            raw: JSON.stringify({
+              error: {
+                code: 400,
+                message: 'API Key not found. Please pass a valid API key.',
+                status: 'INVALID_ARGUMENT',
+              },
+            }),
+            provider_name: 'Google',
+            is_byok: false,
+          },
+        },
+      }));
+    });
+    await new Promise<void>((resolveListen) => fakeOpenAi.listen(fakePort, '127.0.0.1', resolveListen));
+
+    const achiotePort = await getFreePort();
+    const achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`, {
+      ACHIOTE_ASK_PROVIDER: 'openai',
+      ACHIOTE_ASK_MODEL: 'google/gemma-4-26b-a4b-it:free',
+      OPENROUTER_MODEL_SUPPORTS_TOOLS: 'true',
+    });
+    try {
+      const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: 'I remember a festival sweet with jaggery, sesame, and a crisp edge. Give me the smallest cue.',
+        }),
+      });
+
+      expect(response.status).toBe(200);
+      const events = parseSse(await response.text());
+      const toolNames = events.filter((event) => event.event === 'tool_call').map((event) => JSON.parse(event.data).name);
+
+      expect(events.some((event) => event.event === 'error')).toBe(false);
+      expect(events.some((event) => event.event === 'status' && JSON.parse(event.data).stage === 'deterministic_recovery')).toBe(true);
+      expect(toolNames).toEqual(expect.arrayContaining([
+        'collect_food_memory',
+        'plan_dish_research',
+        'generate_minimum_viable_nostalgia',
+      ]));
+      expect(events.at(-1)?.event).toBe('done');
+      expect(JSON.parse(events.at(-1)!.data).guarded).toMatch(/^(provider_context_deterministic_recovery|explicit_minimum_cue_fallback)$/);
+      expect(requestCount).toBe(1);
+    } finally {
+      achiote.kill('SIGINT');
+      fakeOpenAi.closeAllConnections();
+      await new Promise<void>((resolveClose) => fakeOpenAi.close(() => resolveClose()));
+    }
+  }, 20_000);
+
   it('recovers deterministically when an OpenRouter-style endpoint rejects tool use', async () => {
     const fakePort = await getFreePort();
     let requestCount = 0;

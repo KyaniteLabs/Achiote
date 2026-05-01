@@ -1224,6 +1224,7 @@ function isProviderContextLimitError(err: unknown): boolean {
 function isRecoverableAskProviderFailure(err: unknown): boolean {
   if (isProviderContextLimitError(err)) return true;
   const message = err instanceof Error ? err.message : String(err);
+  if (isDownstreamProviderWrappedFailure(message)) return true;
   if (/\b(?:401|402|403|api[_ -]?key|invalid key|authorization|bearer|token|credential|secret|moderation|flagged|insufficient credits)\b/i.test(message)) {
     return false;
   }
@@ -1238,6 +1239,11 @@ function isRecoverableAskProviderFailure(err: unknown): boolean {
   }
 
   return /\b(?:429|5\d\d|rate limit|overloaded|temporarily unavailable|timeout|model provider failed)\b/i.test(message);
+}
+
+function isDownstreamProviderWrappedFailure(message: string): boolean {
+  return /\bProvider returned error\b/i.test(message)
+    && /\b(?:metadata|provider_name|is_byok|googleapis\.com|temporarily rate-limited upstream|google\.rpc\.ErrorInfo)\b/i.test(message);
 }
 
 function providerRecoveryLogSummary(err: unknown): string {
