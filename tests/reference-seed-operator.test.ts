@@ -204,7 +204,7 @@ describe('reference seed operator integration', () => {
 
     const report = buildReferencePantryFixtureReport(pantryFixtureData);
 
-    expect(report.totalFixtures).toBeGreaterThanOrEqual(18);
+    expect(report.totalFixtures).toBeGreaterThanOrEqual(800);
     expect(report.sourceIds).toEqual(['wikidata-structured-food-data']);
     expect(report.coverage.axes.foodForms).toMatchObject({ covered: 17, total: 17, missing: [] });
     expect(report.coverage.axes.cultureAreas).toMatchObject({ covered: 20, total: 20, missing: [] });
@@ -224,6 +224,22 @@ describe('reference seed operator integration', () => {
     expect(emptyReport.coverage.axes.cultureAreas).toMatchObject({ covered: 0, total: 20 });
     expect(emptyReport.coverage.axes.mechanisms).toMatchObject({ covered: 0, total: 12 });
     expect(emptyReport.coverage.axes.evidenceLevels).toMatchObject({ covered: 0, total: 4 });
+  });
+
+  it('keeps every bundled pantry family at the taxonomy population floor', () => {
+    const familyDepths = new Map<string, number>();
+    const targetKeys = new Set<string>();
+
+    for (const fixture of pantryFixtureData.fixtures) {
+      const family = fixture.cacheTarget.dishFamily;
+      const region = fixture.cacheTarget.region;
+      familyDepths.set(family, (familyDepths.get(family) ?? 0) + 1);
+      targetKeys.add(`${family}\u0000${region}`);
+    }
+
+    expect(targetKeys.size).toBe(pantryFixtureData.fixtures.length);
+    expect(familyDepths.size).toBeGreaterThanOrEqual(149);
+    expect([...familyDepths.values()].filter((count) => count < 5)).toEqual([]);
   });
 
   it('keeps the first pantry expansion balanced across every culture area and food-memory band', () => {

@@ -208,6 +208,10 @@ describe('bundled data validation', () => {
     const clusterIds = new Set(referenceFamilyTaxonomyData.clusters.map((cluster) => cluster.id));
     const mappedClusterIds = new Set(referenceFamilyTaxonomyData.familyMappings.map((mapping) => mapping.primaryCluster));
     const coveredTags = new Set(referenceFamilyTaxonomyData.familyMappings.flatMap((mapping) => mapping.coverageTags));
+    const recordsByCluster = new Map<string, number>();
+    for (const mapping of referenceFamilyTaxonomyData.familyMappings) {
+      recordsByCluster.set(mapping.primaryCluster, (recordsByCluster.get(mapping.primaryCluster) ?? 0) + mapping.currentRecordCount);
+    }
 
     expect(referenceFamilyTaxonomyData.clusterPolicy.coverageUniverse).toBe('open_world');
     expect(referenceFamilyTaxonomyData.clusterPolicy.currentCoverageAxesAreCompleteClaim).toBe(false);
@@ -226,6 +230,7 @@ describe('bundled data validation', () => {
     expect(referenceFamilyTaxonomyData.clusters.length).toBeGreaterThanOrEqual(8);
     expect([...clusterIds].every((clusterId) => mappedClusterIds.has(clusterId))).toBe(true);
     expect(mappedFamilies).toEqual(fixtureFamilies);
+    expect([...recordsByCluster.values()].filter((recordCount) => recordCount < referenceFamilyTaxonomyData.clusterPolicy.minimumTargetRecordsPerCluster)).toEqual([]);
 
     for (const axis of ['foodForms', 'cultureAreas', 'regionScopes', 'nameSystems', 'mechanisms']) {
       const expectedTags = globalCoverageMatrixData.axes[axis].values.map((value) => `${axis}.${value.id}`);
