@@ -10727,6 +10727,700 @@
         "confidence": "Medium",
         "createdAt": "2026-05-02T00:00:00.000Z"
       }
+    },
+    {
+      "seedId": "exp2-southeast_asia-pandan-coconut-layered-cake",
+      "cacheTarget": {
+        "dishFamily": "pandan-coconut-layered-cake",
+        "region": "Southeast Asia"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.starch_texture",
+        "mechanisms.texture_contrast",
+        "nameSystems.menu_name",
+        "regionScopes.macro_region"
+      ],
+      "record": {
+        "dishName": "pandan-coconut-layered-cake",
+        "query": "pandan cake kue lapis layered cake structured data",
+        "sources": [
+          {
+            "title": "kue lapis (Q159290) structured data",
+            "url": "https://www.wikidata.org/wiki/Q159290",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q159290 has English label \"kue lapis\".",
+              "Wikidata item Q159290 has English description: Malay layered cake.",
+              "Operator mapped aliases for canary grounding: pandan cake, layer cake."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "pandan-coconut-layered-cake",
+            "pandan cake",
+            "kue lapis",
+            "layer cake",
+            "pandan coconut layered sweet",
+            "green layered cake"
+          ],
+          "regions": [
+            "macro:Southeast Asia",
+            "diaspora:Global"
+          ],
+          "ingredients": [
+            "pandan aroma cue",
+            "coconut richness",
+            "rice or starch gel texture"
+          ],
+          "techniques": [
+            "layered sweet grounding",
+            "starch gel texture",
+            "aroma mapping"
+          ],
+          "sensoryDescriptors": [
+            "green leaf aroma",
+            "coconut fat aroma",
+            "springy layered texture",
+            "sweet bite"
+          ],
+          "culturalOccasions": [
+            "market sweet",
+            "festival or shared dessert cue"
+          ],
+          "regionalVariants": [
+            "Structured-data grounding starts from kue lapis; family-specific name, language, and serving context remain user-confirmed unknowns.",
+            "Expansion seed exp2-southeast_asia-pandan-coconut-layered-cake targets out-of-sample canary memories without copying prompt text into workflow logic."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, ingredient proportions, texture, serving ritual, and substitutions need user or family confirmation.",
+          "This expansion record is a starting context for small-model grounding, not a final dish identification."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp2-mexico-tamarind-chile-candy",
+      "cacheTarget": {
+        "dishFamily": "tamarind-chile-wrapper-candy",
+        "region": "Mexico and diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.confectionery",
+        "foodForms.snack_street_food",
+        "mechanisms.sauce_balance",
+        "mechanisms.sugar_crystal",
+        "nameSystems.menu_name",
+        "regionScopes.diaspora",
+        "regionScopes.nation"
+      ],
+      "record": {
+        "dishName": "tamarind-chile-wrapper-candy",
+        "query": "Pulparindo Mexican candy structured data",
+        "sources": [
+          {
+            "title": "Pulparindo (Q7259589) structured data",
+            "url": "https://www.wikidata.org/wiki/Q7259589",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q7259589 has English label \"Pulparindo\".",
+              "Wikidata item Q7259589 has English description: Mexican candy.",
+              "Operator mapped aliases for canary grounding: tamarind candy."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "tamarind-chile-wrapper-candy",
+            "Pulparindo",
+            "tamarind candy",
+            "chile tamarind candy",
+            "sour-salty candy"
+          ],
+          "regions": [
+            "nation:Mexico",
+            "diaspora:United States"
+          ],
+          "ingredients": [
+            "tamarind paste cue",
+            "sugar",
+            "chile heat",
+            "salt-sour balance"
+          ],
+          "techniques": [
+            "sour-salty-sweet balance",
+            "wrapped candy grounding"
+          ],
+          "sensoryDescriptors": [
+            "sticky dark candy texture",
+            "tamarind sourness",
+            "chile warmth",
+            "salted sweet finish"
+          ],
+          "culturalOccasions": [
+            "schoolyard candy memory",
+            "diaspora grocery cue"
+          ],
+          "regionalVariants": [
+            "Structured-data grounding starts from Pulparindo; family-specific name, language, and serving context remain user-confirmed unknowns.",
+            "Expansion seed exp2-mexico-tamarind-chile-candy targets out-of-sample canary memories without copying prompt text into workflow logic."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, ingredient proportions, texture, serving ritual, and substitutions need user or family confirmation.",
+          "This expansion record is a starting context for small-model grounding, not a final dish identification."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp2-global-bitter-melon-broth",
+      "cacheTarget": {
+        "dishFamily": "bitter-melon-egg-broth",
+        "region": "Global diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "cultureAreas.caribbean",
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.soup_broth",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.diaspora"
+      ],
+      "record": {
+        "dishName": "bitter-melon-egg-broth",
+        "query": "bitter melon vegetable structured data broth memory",
+        "sources": [
+          {
+            "title": "bitter melon (Q112758485) structured data",
+            "url": "https://www.wikidata.org/wiki/Q112758485",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q112758485 has English label \"bitter melon\".",
+              "Wikidata item Q112758485 has English description: the vegetable; fruit of Momordica charantia.",
+              "Operator mapped aliases for canary grounding: bitter gourd."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "bitter-melon-egg-broth",
+            "bitter melon",
+            "bitter gourd",
+            "bitter melon soup",
+            "pale green bitter broth"
+          ],
+          "regions": [
+            "macro:Southeast Asia",
+            "macro:Caribbean",
+            "diaspora:Global"
+          ],
+          "ingredients": [
+            "bitter melon or bitter gourd",
+            "egg ribbon or soft protein cue",
+            "clear broth"
+          ],
+          "techniques": [
+            "bitterness mapping",
+            "clear broth temperature cue",
+            "soft texture contrast"
+          ],
+          "sensoryDescriptors": [
+            "pale green bitter slice",
+            "clear warm broth",
+            "soft egg ribbon texture"
+          ],
+          "culturalOccasions": [
+            "home broth memory",
+            "childhood disliked-then-missed cue"
+          ],
+          "regionalVariants": [
+            "Structured-data grounding starts from bitter melon; family-specific name, language, and serving context remain user-confirmed unknowns.",
+            "Expansion seed exp2-global-bitter-melon-broth targets out-of-sample canary memories without copying prompt text into workflow logic."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, ingredient proportions, texture, serving ritual, and substitutions need user or family confirmation.",
+          "This expansion record is a starting context for small-model grounding, not a final dish identification."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp2-west_africa-fermented-cereal-porridge",
+      "cacheTarget": {
+        "dishFamily": "fermented-cereal-porridge-drink",
+        "region": "West Africa"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.west_africa",
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.fermentation_acid",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "nameSystems.transliteration",
+        "regionScopes.macro_region"
+      ],
+      "record": {
+        "dishName": "fermented-cereal-porridge-drink",
+        "query": "ogi fermented cereal pudding Nigeria structured data",
+        "sources": [
+          {
+            "title": "ogi (Q7080021) structured data",
+            "url": "https://www.wikidata.org/wiki/Q7080021",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q7080021 has English label \"ogi\".",
+              "Wikidata item Q7080021 has English description: fermented cereal pudding from Nigeria, typically made from maize, sorghum, or millet.",
+              "Operator mapped aliases for canary grounding: akamu."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "fermented-cereal-porridge-drink",
+            "ogi",
+            "akamu",
+            "koko",
+            "fermented cereal pudding",
+            "millet sorghum porridge"
+          ],
+          "regions": [
+            "macro:West Africa",
+            "diaspora:Global"
+          ],
+          "ingredients": [
+            "maize",
+            "sorghum",
+            "millet",
+            "fermented cereal starch"
+          ],
+          "techniques": [
+            "fermented cereal grounding",
+            "warm porridge texture",
+            "sip-spoon cue"
+          ],
+          "sensoryDescriptors": [
+            "slight sourness",
+            "grainy starch body",
+            "warm breakfast texture"
+          ],
+          "culturalOccasions": [
+            "breakfast porridge memory",
+            "family correction cue"
+          ],
+          "regionalVariants": [
+            "Structured-data grounding starts from ogi; family-specific name, language, and serving context remain user-confirmed unknowns.",
+            "Expansion seed exp2-west_africa-fermented-cereal-porridge targets out-of-sample canary memories without copying prompt text into workflow logic."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, ingredient proportions, texture, serving ritual, and substitutions need user or family confirmation.",
+          "This expansion record is a starting context for small-model grounding, not a final dish identification."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp2-east_asia-black-sesame-sweet",
+      "cacheTarget": {
+        "dishFamily": "black-sesame-seed-paste-sweet",
+        "region": "East Asia"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.starch_texture",
+        "nameSystems.menu_name",
+        "regionScopes.macro_region"
+      ],
+      "record": {
+        "dishName": "black-sesame-seed-paste-sweet",
+        "query": "black sesame soup Chinese dessert structured data",
+        "sources": [
+          {
+            "title": "black sesame soup (Q3135358) structured data",
+            "url": "https://www.wikidata.org/wiki/Q3135358",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q3135358 has English label \"black sesame soup\".",
+              "Wikidata item Q3135358 has English description: Chinese dessert.",
+              "Operator mapped aliases for canary grounding: black sesame dessert."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "black-sesame-seed-paste-sweet",
+            "black sesame soup",
+            "black sesame paste",
+            "seed paste dessert",
+            "smoky sesame sweet",
+            "black sesame dessert"
+          ],
+          "regions": [
+            "macro:East Asia",
+            "diaspora:Global"
+          ],
+          "ingredients": [
+            "black sesame",
+            "seed paste",
+            "sugar",
+            "soft bun or spoonable carrier"
+          ],
+          "techniques": [
+            "seed aroma mapping",
+            "fatty paste body",
+            "sweet dessert grounding"
+          ],
+          "sensoryDescriptors": [
+            "toasted black sesame aroma",
+            "dark seed paste color",
+            "nutty bitter edge",
+            "soft sweet texture"
+          ],
+          "culturalOccasions": [
+            "bakery bun memory",
+            "dessert soup memory"
+          ],
+          "regionalVariants": [
+            "Structured-data grounding starts from black sesame soup; family-specific name, language, and serving context remain user-confirmed unknowns.",
+            "Expansion seed exp2-east_asia-black-sesame-sweet targets out-of-sample canary memories without copying prompt text into workflow logic."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, ingredient proportions, texture, serving ritual, and substitutions need user or family confirmation.",
+          "This expansion record is a starting context for small-model grounding, not a final dish identification."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp2-vietnam-rice-paper-herb-roll",
+      "cacheTarget": {
+        "dishFamily": "rice-paper-herb-roll",
+        "region": "Vietnam and diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.snack_street_food",
+        "foodForms.vegetable_fungi",
+        "mechanisms.texture_contrast",
+        "mechanisms.sauce_balance",
+        "mechanisms.starch_texture",
+        "nameSystems.transliteration",
+        "regionScopes.diaspora",
+        "regionScopes.nation"
+      ],
+      "record": {
+        "dishName": "rice-paper-herb-roll",
+        "query": "goi cuon Vietnamese dish structured data rice paper roll",
+        "sources": [
+          {
+            "title": "gỏi cuốn (Q7799573) structured data",
+            "url": "https://www.wikidata.org/wiki/Q7799573",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q7799573 has English label \"gỏi cuốn\".",
+              "Wikidata item Q7799573 has English description: Vietnamese dish.",
+              "Operator mapped aliases for canary grounding: goi cuon, rice paper roll."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "rice-paper-herb-roll",
+            "gỏi cuốn",
+            "goi cuon",
+            "summer roll",
+            "fresh spring roll",
+            "rice paper roll"
+          ],
+          "regions": [
+            "nation:Vietnam",
+            "diaspora:Global"
+          ],
+          "ingredients": [
+            "rice paper wrapper",
+            "raw herbs",
+            "cold noodles",
+            "sweet-salty-sour dipping sauce"
+          ],
+          "techniques": [
+            "fresh wrapper texture",
+            "herb aroma mapping",
+            "dipping sauce balance"
+          ],
+          "sensoryDescriptors": [
+            "translucent chewy wrapper",
+            "raw herb aroma",
+            "cool noodle body",
+            "salty-sweet-sour sauce"
+          ],
+          "culturalOccasions": [
+            "shared handheld food",
+            "fresh market or family roll cue"
+          ],
+          "regionalVariants": [
+            "Structured-data grounding starts from gỏi cuốn; family-specific name, language, and serving context remain user-confirmed unknowns.",
+            "Expansion seed exp2-vietnam-rice-paper-herb-roll targets out-of-sample canary memories without copying prompt text into workflow logic."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, ingredient proportions, texture, serving ritual, and substitutions need user or family confirmation.",
+          "This expansion record is a starting context for small-model grounding, not a final dish identification."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp2-east_africa-cassava-leaf-stew",
+      "cacheTarget": {
+        "dishFamily": "cassava-leaf-stew",
+        "region": "East and Central Africa"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.east_africa",
+        "cultureAreas.central_africa",
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.aroma",
+        "nameSystems.menu_name",
+        "regionScopes.macro_region"
+      ],
+      "record": {
+        "dishName": "cassava-leaf-stew",
+        "query": "sombe Ugandan cassava leaf stew structured data",
+        "sources": [
+          {
+            "title": "sombe (Q124448968) structured data",
+            "url": "https://www.wikidata.org/wiki/Q124448968",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q124448968 has English label \"sombe\".",
+              "Wikidata item Q124448968 has English description: Ugandan stew made using pounded cassava leaves, palm oil and fish or meat.",
+              "Operator mapped aliases for canary grounding: cassava leaf stew."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "cassava-leaf-stew",
+            "sombe",
+            "cassava leaves",
+            "cassava leaf stew",
+            "pounded cassava leaves"
+          ],
+          "regions": [
+            "macro:East Africa",
+            "macro:Central Africa",
+            "diaspora:Global"
+          ],
+          "ingredients": [
+            "cassava leaves",
+            "palm oil",
+            "fish or meat cue",
+            "rice carrier"
+          ],
+          "techniques": [
+            "pounded leaf stew grounding",
+            "fat body mapping",
+            "leaf bitterness cue"
+          ],
+          "sensoryDescriptors": [
+            "dark green leaf body",
+            "smoky or savory aroma",
+            "oil-rounded stew texture",
+            "bitter green edge"
+          ],
+          "culturalOccasions": [
+            "rice-and-stew meal memory",
+            "leaf paste uncertainty cue"
+          ],
+          "regionalVariants": [
+            "Structured-data grounding starts from sombe; family-specific name, language, and serving context remain user-confirmed unknowns.",
+            "Expansion seed exp2-east_africa-cassava-leaf-stew targets out-of-sample canary memories without copying prompt text into workflow logic."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, ingredient proportions, texture, serving ritual, and substitutions need user or family confirmation.",
+          "This expansion record is a starting context for small-model grounding, not a final dish identification."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp2-middle_east-black-lime-sour-stew",
+      "cacheTarget": {
+        "dishFamily": "black-lime-sour-stew-cue",
+        "region": "Middle East and West Asia"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.stew_braise",
+        "foodForms.soup_broth",
+        "mechanisms.fermentation_acid",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "record": {
+        "dishName": "black-lime-sour-stew-cue",
+        "query": "black lime dried lime structured data sour stew memory",
+        "sources": [
+          {
+            "title": "Black lime (Q460570) structured data",
+            "url": "https://www.wikidata.org/wiki/Q460570",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q460570 has English label \"Black lime\".",
+              "Wikidata item Q460570 has English description: Dried lime.",
+              "Operator mapped aliases for canary grounding: dried lime, loomi."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "black-lime-sour-stew-cue",
+            "black lime",
+            "dried lime",
+            "loomi",
+            "sour earthy stew",
+            "dried lime tea",
+            "Black lime"
+          ],
+          "regions": [
+            "macro:Middle East and West Asia",
+            "diaspora:Global"
+          ],
+          "ingredients": [
+            "black lime",
+            "dried lime",
+            "lentil or bean stew cue",
+            "sour citrus aroma"
+          ],
+          "techniques": [
+            "dried citrus aroma mapping",
+            "sour-earthy stew balance",
+            "warm broth cue"
+          ],
+          "sensoryDescriptors": [
+            "dark earthy sourness",
+            "dried citrus aroma",
+            "bean or lentil body",
+            "warm stew texture"
+          ],
+          "culturalOccasions": [
+            "sour stew memory",
+            "pantry citrus cue"
+          ],
+          "regionalVariants": [
+            "Structured-data grounding starts from Black lime; family-specific name, language, and serving context remain user-confirmed unknowns.",
+            "Expansion seed exp2-middle_east-black-lime-sour-stew targets out-of-sample canary memories without copying prompt text into workflow logic."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, ingredient proportions, texture, serving ritual, and substitutions need user or family confirmation.",
+          "This expansion record is a starting context for small-model grounding, not a final dish identification."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
     }
   ]
 }

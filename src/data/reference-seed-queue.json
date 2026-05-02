@@ -7186,6 +7186,436 @@
           "Use for original-role mapping; not for medical or dietary safety claims."
         ]
       }
+    },
+    {
+      "id": "exp2-southeast_asia-pandan-coconut-layered-cake",
+      "forms": [
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "foodForms.ceremonial_holiday"
+      ],
+      "regions": [
+        "macro:Southeast Asia",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "pandan cake",
+        "kue lapis",
+        "layer cake",
+        "pandan coconut layered sweet",
+        "green layered cake"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.starch_texture",
+        "mechanisms.sugar_crystal",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "pandan cake kue lapis layered cake structured data",
+        "green coconut layered sweet pandan texture memory"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "pandan-coconut-layered-cake",
+          "region": "Southeast Asia"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.starch_texture",
+        "mechanisms.texture_contrast",
+        "nameSystems.menu_name",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Added during the first true database-fill expansion after prompt-bank rotation exposed harder out-of-sample memories.",
+          "Use as broad source-researched grounding; do not treat as family-confirmed identity."
+        ]
+      }
+    },
+    {
+      "id": "exp2-mexico-tamarind-chile-candy",
+      "forms": [
+        "foodForms.confectionery",
+        "foodForms.snack_street_food",
+        "foodForms.sauce_condiment"
+      ],
+      "regions": [
+        "nation:Mexico",
+        "diaspora:United States"
+      ],
+      "nameSignals": [
+        "Pulparindo",
+        "tamarind candy",
+        "chile tamarind candy",
+        "sour-salty candy"
+      ],
+      "mechanisms": [
+        "mechanisms.sauce_balance",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sugar_crystal",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "Pulparindo Mexican candy structured data",
+        "tamarind chile candy sour salty wrapper memory"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "tamarind-chile-wrapper-candy",
+          "region": "Mexico and diaspora"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.confectionery",
+        "foodForms.snack_street_food",
+        "mechanisms.sauce_balance",
+        "mechanisms.sugar_crystal",
+        "nameSystems.menu_name",
+        "regionScopes.diaspora",
+        "regionScopes.nation"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Added during the first true database-fill expansion after prompt-bank rotation exposed harder out-of-sample memories.",
+          "Use as broad source-researched grounding; do not treat as family-confirmed identity."
+        ]
+      }
+    },
+    {
+      "id": "exp2-global-bitter-melon-broth",
+      "forms": [
+        "foodForms.soup_broth",
+        "foodForms.vegetable_fungi",
+        "foodForms.protein_centered"
+      ],
+      "regions": [
+        "macro:Southeast Asia",
+        "macro:Caribbean",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "bitter melon",
+        "bitter gourd",
+        "bitter melon soup",
+        "pale green bitter broth"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "bitter melon vegetable structured data broth memory",
+        "bitter gourd soup egg ribbon sensory cue"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "bitter-melon-egg-broth",
+          "region": "Global diaspora"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "cultureAreas.caribbean",
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.soup_broth",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.diaspora"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Added during the first true database-fill expansion after prompt-bank rotation exposed harder out-of-sample memories.",
+          "Use as broad source-researched grounding; do not treat as family-confirmed identity."
+        ]
+      }
+    },
+    {
+      "id": "exp2-west_africa-fermented-cereal-porridge",
+      "forms": [
+        "foodForms.beverage",
+        "foodForms.grain_rice_noodle",
+        "foodForms.breakfast"
+      ],
+      "regions": [
+        "macro:West Africa",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "ogi",
+        "akamu",
+        "koko",
+        "fermented cereal pudding",
+        "millet sorghum porridge"
+      ],
+      "mechanisms": [
+        "mechanisms.fermentation_acid",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "ogi fermented cereal pudding Nigeria structured data",
+        "akamu koko millet sorghum porridge drink memory"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "fermented-cereal-porridge-drink",
+          "region": "West Africa"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.west_africa",
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.fermentation_acid",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "nameSystems.transliteration",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Added during the first true database-fill expansion after prompt-bank rotation exposed harder out-of-sample memories.",
+          "Use as broad source-researched grounding; do not treat as family-confirmed identity."
+        ]
+      }
+    },
+    {
+      "id": "exp2-east_asia-black-sesame-sweet",
+      "forms": [
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "foodForms.beverage"
+      ],
+      "regions": [
+        "macro:East Asia",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "black sesame soup",
+        "black sesame paste",
+        "seed paste dessert",
+        "smoky sesame sweet"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sugar_crystal",
+        "mechanisms.starch_texture"
+      ],
+      "querySeeds": [
+        "black sesame soup Chinese dessert structured data",
+        "black sesame paste bun smoky seed dessert memory"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "black-sesame-seed-paste-sweet",
+          "region": "East Asia"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.starch_texture",
+        "nameSystems.menu_name",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Added during the first true database-fill expansion after prompt-bank rotation exposed harder out-of-sample memories.",
+          "Use as broad source-researched grounding; do not treat as family-confirmed identity."
+        ]
+      }
+    },
+    {
+      "id": "exp2-vietnam-rice-paper-herb-roll",
+      "forms": [
+        "foodForms.snack_street_food",
+        "foodForms.dumpling_pocket",
+        "foodForms.vegetable_fungi"
+      ],
+      "regions": [
+        "nation:Vietnam",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "gỏi cuốn",
+        "goi cuon",
+        "summer roll",
+        "fresh spring roll",
+        "rice paper roll"
+      ],
+      "mechanisms": [
+        "mechanisms.texture_contrast",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "mechanisms.starch_texture"
+      ],
+      "querySeeds": [
+        "goi cuon Vietnamese dish structured data rice paper roll",
+        "fresh spring roll herbs fish sauce memory"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "rice-paper-herb-roll",
+          "region": "Vietnam and diaspora"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.snack_street_food",
+        "foodForms.vegetable_fungi",
+        "mechanisms.texture_contrast",
+        "mechanisms.sauce_balance",
+        "mechanisms.starch_texture",
+        "nameSystems.transliteration",
+        "regionScopes.diaspora",
+        "regionScopes.nation"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Added during the first true database-fill expansion after prompt-bank rotation exposed harder out-of-sample memories.",
+          "Use as broad source-researched grounding; do not treat as family-confirmed identity."
+        ]
+      }
+    },
+    {
+      "id": "exp2-east_africa-cassava-leaf-stew",
+      "forms": [
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "foodForms.protein_centered"
+      ],
+      "regions": [
+        "macro:East Africa",
+        "macro:Central Africa",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "sombe",
+        "cassava leaves",
+        "cassava leaf stew",
+        "pounded cassava leaves"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "sombe Ugandan cassava leaf stew structured data",
+        "cassava leaf stew smoky nutty body memory"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "cassava-leaf-stew",
+          "region": "East and Central Africa"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.east_africa",
+        "cultureAreas.central_africa",
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "nameSystems.menu_name",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Added during the first true database-fill expansion after prompt-bank rotation exposed harder out-of-sample memories.",
+          "Use as broad source-researched grounding; do not treat as family-confirmed identity."
+        ]
+      }
+    },
+    {
+      "id": "exp2-middle_east-black-lime-sour-stew",
+      "forms": [
+        "foodForms.stew_braise",
+        "foodForms.soup_broth",
+        "foodForms.sauce_condiment"
+      ],
+      "regions": [
+        "macro:Middle East and West Asia",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "black lime",
+        "dried lime",
+        "loomi",
+        "sour earthy stew",
+        "dried lime tea"
+      ],
+      "mechanisms": [
+        "mechanisms.fermentation_acid",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "mechanisms.temperature"
+      ],
+      "querySeeds": [
+        "black lime dried lime structured data sour stew memory",
+        "loomi dried citrus earthy sour aroma cue"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "black-lime-sour-stew-cue",
+          "region": "Middle East and West Asia"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.stew_braise",
+        "foodForms.soup_broth",
+        "mechanisms.fermentation_acid",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated expansion seed",
+        "notes": [
+          "Added during the first true database-fill expansion after prompt-bank rotation exposed harder out-of-sample memories.",
+          "Use as broad source-researched grounding; do not treat as family-confirmed identity."
+        ]
+      }
     }
   ]
 }
