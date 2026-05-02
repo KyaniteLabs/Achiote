@@ -151,7 +151,7 @@ describe('shared tool registry', () => {
     }
   });
 
-  it('keeps search available when bundled-family memories ask for exact source-backed identity', async () => {
+  it('uses bundled pantry knowledge before live search even when exact identity is requested', async () => {
     const messages = [
       'Someone served a tart green-herb broth with pale potato or egg pieces. What exact regional dish is this, and what sources confirm the name?',
       'Someone served a tart green-herb broth with pale potato or egg pieces. What is the safe exact regional identity from sources?',
@@ -161,9 +161,9 @@ describe('shared tool registry', () => {
     for (const userMessage of messages) {
       const plan = await executeToolDefinition('plan_tool_workflow', { userMessage }, defaultToolExecutionContext);
 
-      expect(plan.payload.maxSearchCalls).toBe(1);
-      expect(plan.payload.workflowSteps.map((step: { tool: string }) => step.tool)).toContain('search_web');
-      expect(plan.payload.confidenceNote).not.toContain('Bundled mechanism family');
+      expect(plan.payload.maxSearchCalls).toBe(0);
+      expect(plan.payload.workflowSteps.map((step: { tool: string }) => step.tool)).not.toContain('search_web');
+      expect(plan.payload.confidenceNote).toContain('Bundled mechanism family');
     }
   });
 

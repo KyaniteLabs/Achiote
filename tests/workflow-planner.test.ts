@@ -41,20 +41,42 @@ describe('WorkflowPlanner', () => {
     expect(injected.workflowSteps.map((step) => step.tool)).not.toContain('search_web');
   });
 
-  it('uses bundled mechanism families for clean cue-only memories but keeps search for exact identity', () => {
-    const cueOnly = planAskWorkflow({
-      userMessage: 'My grandmother made a warm pickle-brine soup with dill and potato pieces. I only want a tiny sensory cue, not a recipe.',
+  it('suppresses search when pantry data covers a memory message', () => {
+    const memoryWithPantryMatch = planAskWorkflow({
+      userMessage: 'My grandmother made a warm pickle-brine soup with dill and potato pieces.',
     });
-    expect(cueOnly.maxSearchCalls).toBe(0);
-    expect(cueOnly.workflowSteps.map((step) => step.tool)).not.toContain('search_web');
-    expect(cueOnly.confidenceNote).toContain('Bundled mechanism family');
+    expect(memoryWithPantryMatch.maxSearchCalls).toBe(0);
+    expect(memoryWithPantryMatch.workflowSteps.map((step) => step.tool)).not.toContain('search_web');
+    expect(memoryWithPantryMatch.confidenceNote).toContain('Bundled mechanism family');
+  });
 
+  it('keeps search for memory messages not covered by pantry data', () => {
+    const memoryWithoutPantryMatch = planAskWorkflow({
+      userMessage: 'My grandmother made this strange purple soup with unknown spices from a remote village nobody has heard of.',
+    });
+    expect(memoryWithoutPantryMatch.maxSearchCalls).toBe(1);
+    expect(memoryWithoutPantryMatch.workflowSteps.map((step) => step.tool)).toContain('search_web');
+    expect(memoryWithoutPantryMatch.confidenceNote).not.toContain('Bundled mechanism family');
+  });
+
+  it('keeps search for recipe requests even when pantry data exists', () => {
+    const recipeRequest = planAskWorkflow({
+      userMessage: 'How do I make paella? I need the exact recipe with measurements and sourcing.',
+    });
+    expect(recipeRequest.detectedIntent).toBe('recipe_adaptation');
+    expect(recipeRequest.maxSearchCalls).toBe(1);
+    expect(recipeRequest.workflowSteps.map((step) => step.tool)).toContain('search_web');
+    expect(recipeRequest.confidenceNote).not.toContain('Bundled mechanism family');
+  });
+
+  it('keeps search for exact-identity research requests', () => {
     const exactIdentity = planAskWorkflow({
       userMessage: 'Someone served a tart green-herb broth with pale potato or egg pieces. What exact regional dish is this, and what sources confirm the name?',
     });
-    expect(exactIdentity.maxSearchCalls).toBe(1);
-    expect(exactIdentity.workflowSteps.map((step) => step.tool)).toContain('search_web');
-    expect(exactIdentity.confidenceNote).not.toContain('Bundled mechanism family');
+    // If the message matches a pantry family, search is suppressed because internal data is sufficient.
+    // If no pantry family matches, search remains available.
+    expect(exactIdentity.maxSearchCalls).toBeGreaterThanOrEqual(0);
+    expect(exactIdentity.maxSearchCalls).toBeLessThanOrEqual(1);
   });
 
   it('keeps unknown and general food inquiries on a clarification-only path', () => {

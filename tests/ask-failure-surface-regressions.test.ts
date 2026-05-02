@@ -530,11 +530,11 @@ describe('/ask failure surface regressions', () => {
       requestCount++;
       await readBody(req);
       const toolCalls = requestCount === 1
-        ? [{ id: 'call_1', type: 'function', function: { name: 'collect_food_memory', arguments: JSON.stringify({ memoryText: 'Warm sour soup with dill and soft pale chunks.' }) } }]
+        ? [{ id: 'call_1', type: 'function', function: { name: 'collect_food_memory', arguments: JSON.stringify({ memoryText: 'Thick grey soup with mysterious spices and floating seeds.' }) } }]
         : requestCount === 2
           ? [{ id: 'call_2', type: 'function', function: { name: 'plan_dish_research', arguments: JSON.stringify({}) } }]
           : requestCount === 3
-            ? [{ id: 'call_3', type: 'function', function: { name: 'search_web', arguments: JSON.stringify({ query: 'warm dill sour soup soft pale chunks Sichuan' }) } }]
+            ? [{ id: 'call_3', type: 'function', function: { name: 'search_web', arguments: JSON.stringify({ query: 'thick grey soup mysterious spices floating seeds Sichuan' }) } }]
             : undefined;
       res.setHeader('content-type', 'application/json');
       res.end(JSON.stringify({
@@ -555,7 +555,7 @@ describe('/ask failure surface regressions', () => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        message: 'I remember a warm sour soup with dill and soft pale chunks. I do not know the country or name.',
+        message: 'I remember a thick grey soup with mysterious spices and floating seeds. I do not know the country or name.',
       }),
     });
 
@@ -566,7 +566,7 @@ describe('/ask failure surface regressions', () => {
       .map((event) => JSON.parse(event.data))
       .find((event) => event.name === 'search_web');
 
-    expect(searchCall?.input.query).toMatch(/\b(?:sour|dill|soft|pale|chunks)\b/i);
+    expect(searchCall?.input.query).toMatch(/\b(?:thick|grey|soup|mysterious|spices|floating|seeds)\b/i);
     expect(searchCall?.input.query).not.toMatch(/Sichuan/i);
   }, 45_000);
 

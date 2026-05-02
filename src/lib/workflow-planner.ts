@@ -1,4 +1,5 @@
 import dishFamiliesData from '../data/dish-families.json' with { type: 'json' };
+import pantryFixturesData from '../data/reference-pantry-fixtures.json' with { type: 'json' };
 import type { planToolWorkflowOutputSchema } from '../schemas/tool-schemas.js';
 import type { z } from 'zod';
 
@@ -39,7 +40,8 @@ export function planAskWorkflow(input: AskWorkflowPlannerInput): AskWorkflowPlan
   const wantsAdaptation = /\b(?:substitut\w*|adapt(?:ing|ed|s)?(?:\s+(?:the\s+)?(?:recipe|dish|version))?|make\s+it\s+(?:work|safe|for)|can\s+(?:all\s+)?(?:eat|have)|version\s+(?:that\s+)?work|without\b[\s\S]{0,80}\bbut\s+still|honou?r\b[\s\S]{0,80}\b(?:restrictions?|dietary|allergy|allergies|needs?))\b/i.test(msg);
   const negatesSubstitutionNeed = /\b(?:do\s+not|don't|does\s+not|doesn't|not|no)\s+(?:need|want|looking\s+for|asking\s+for)?[\s\S]{0,160}\b(?:substitut\w*|adapt(?:ation|ed|ing)?|dietary\s+(?:help|adaptation)|restriction\s+help)\b/i.test(msg)
     || /\b(?:only|just)\s+(?:want|need)[\s\S]{0,120}\b(?:memory cue|nostalgia cue|sensory cue|smallest memory cue)\b/i.test(msg);
-  const hasRecipeKeywords = /\b(?:recipe|how to make|how do i|cook|bake|prepare|instructions|steps|ingredients)\b/i.test(msg);
+  const hasRecipeKeywords = /\b(?:recipe|how to make|how do i|cook|bake|prepare|instructions|steps|ingredients)\b/i.test(msg)
+    && !/\b(?:not|no|don't|doesn't|never)\s+(?:a\s+|any\s+)?(?:recipe|full\s+recipe|instructions)\b/i.test(msg);
   const hasRitualKeywords = /\b(?:ceremony|ritual|tradition|festival|holiday|celebration|wedding|funeral|birth|death|coming of age|bar mitzvah|bat mitzvah|quinceañera|diwali|eid|christmas|ramadan|passover|lunar new year|day of the dead)\b/i.test(msg);
   const hasMultilingualKeywords = /[-￿]{3,}/.test(msg) && /[a-z]{3,}/i.test(msg);
   const hasContradictionKeywords = /\b(?:but also|on the other hand|contradict|conflict|uncertain|not sure if|or was it|maybe it was|i think|actually|wait no)\b/i.test(msg);
@@ -67,8 +69,9 @@ export function planAskWorkflow(input: AskWorkflowPlannerInput): AskWorkflowPlan
     { tool: 'plan_dish_research', reason: 'Build hypotheses and identify what to research', required: true },
   ];
 
+  const isMemoryIntent = detectedIntent === 'nostalgic_memory' || detectedIntent === 'ritual_ceremony' || detectedIntent === 'multilingual_inquiry' || detectedIntent === 'contradictory_memory';
   const searchWebDisabled = input.searchDisabled === true || suppressSearchFromUserText;
-  const bundledMechanismFamily = searchWebDisabled ? null : bundledMechanismFamilyFor(userMessage);
+  const bundledMechanismFamily = searchWebDisabled || !isMemoryIntent ? null : bundledMechanismFamilyFor(userMessage);
   let maxSearchCalls = searchWebDisabled ? 0 : 1;
   const addSearchStep = (reason: string): void => {
     if (!searchWebDisabled && !bundledMechanismFamily) steps.push({ tool: 'search_web', reason, required: false });
@@ -153,16 +156,17 @@ function termParts(value: string): string[] {
     .filter((part) => part.length >= 4);
 }
 
+const PANTRY_FAMILIES = new Set(
+  pantryFixturesData.fixtures
+    .map((f) => f.cacheTarget?.dishFamily)
+    .filter((f): f is string => typeof f === 'string'),
+);
+
 function bundledMechanismFamilyFor(userMessage: string): string | null {
   const normalized = normalizeKnowledgeText(userMessage);
-  const cueOnly = /\b(?:smallest|tiny|sip|cue|test|not recipe|not a recipe|not full recipe|without pretending)\b/i.test(userMessage)
-    || /\b(?:first|safe|local)\s+(?:cue|test|sip|bite)\b/i.test(userMessage);
-  if (!cueOnly) return null;
 
   for (const family of dishFamiliesData.families) {
-    const provenanceNotes = family.provenance?.notes ?? [];
-    const isKnowledgeGapFamily = provenanceNotes.some((note) => /knowledge-gap evidence/i.test(note));
-    if (!isKnowledgeGapFamily) continue;
+    if (!PANTRY_FAMILIES.has(family.canonicalName)) continue;
 
     const aliasMatch = family.aliases.some((alias) => hasPhrase(normalized, alias));
     const mechanismTerms = [
