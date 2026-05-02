@@ -6,8 +6,8 @@ import { createServer, type IncomingMessage, type ServerResponse } from 'node:ht
 import { dirname, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import Anthropic from '@anthropic-ai/sdk';
-import { createAnthropicAskSession, createOpenAICompatibleAskSession, isLocalInferenceUrl, isOpenRouterUrl, openAIBaseUrlFromEnv, openAICompatibleProviderReady, resolveAskModel, resolveAskProviderKind, anthropicBaseUrlFromEnv, resolveProviderCapabilityProfile } from './lib/ask-provider.js';
-import type { AskHistoryItem, AskImage, AskModelResponse } from './lib/ask-provider.js';
+import { isLocalInferenceUrl, anthropicBaseUrlFromEnv } from './lib/ask-provider.js';
+import type { AskHistoryItem, AskImage, AskModelResponse, AskSession } from './lib/ask-provider.js';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { isInitializeRequest } from '@modelcontextprotocol/sdk/types.js';
 import { createAchioteServer } from './server.js';
@@ -22,6 +22,7 @@ import { getHttpReadiness, getRequestRateLimitIdentity, isAnonymousAskAllowed, s
 import { resolveLocalSpeechConfig, synthesizeWithLocalSpeech, transcribeWithLocalSpeech, validateSpeechAudioPayload, validateSpeechTextPayload } from './lib/local-speech.js';
 import { buildMemoryReceipt } from './lib/memory-receipt.js';
 import { buildAskQualitySignal, emptyQualitySignalReport, inferAskCacheOutcome, recordQualitySignal } from './lib/quality-signals.js';
+import { createProviderRuntime } from './lib/provider-runtime.js';
 import { buildReferenceSeedOperatorReport } from './lib/reference-seed-operator.js';
 import { filterRepeatedToolCalls } from './lib/tool-loop.js';
 import type { Tier } from './lib/auth.js';
@@ -44,13 +45,9 @@ const ALLOW_ANON_ASK = process.env.ACHIOTE_ALLOW_ANON_ASK === 'true';
 const ANON_WEB_RECONSTRUCTIONS = parsePositiveInteger(process.env.ACHIOTE_ANON_WEB_RECONSTRUCTIONS);
 
 const PORT = parseInt(process.env.PORT || '3000', 10);
-const ASK_PROVIDER_KIND = resolveAskProviderKind();
-const ASK_MODEL = resolveAskModel();
 const ANTHROPIC_TIMEOUT_MS = parseInt(process.env.ANTHROPIC_TIMEOUT_MS || process.env.API_TIMEOUT_MS || '120000', 10);
 const OPENAI_TIMEOUT_MS = parseInt(process.env.LOCAL_INFERENCE_TIMEOUT_MS || process.env.OPENAI_TIMEOUT_MS || process.env.LMSTUDIO_TIMEOUT_MS || process.env.GLM_TIMEOUT_MS || process.env.ZHIPU_TIMEOUT_MS || process.env.API_TIMEOUT_MS || '180000', 10);
 const FINAL_SYNTHESIS_TIMEOUT_MS = parsePositiveInteger(process.env.ACHIOTE_FINAL_SYNTHESIS_TIMEOUT_MS) ?? 20_000;
-const OPENAI_BASE_URL = openAIBaseUrlFromEnv();
-const PROVIDER_CAPABILITY_PROFILE = resolveProviderCapabilityProfile();
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const STATIC_DIR = resolve(__dirname, '..', 'docs', 'landing');
 const ALLOWED_ORIGINS = (process.env.ACHIOTE_ALLOWED_ORIGINS || 'http://localhost:3000,http://127.0.0.1:3000,https://achiote.kyanitelabs.tech')
@@ -220,32 +217,6 @@ function isSameHostOrigin(req: IncomingMessage, origin: string | undefined): boo
   }
 }
 
-function createAskSession(userMessage: string, history?: AskHistoryItem[], images?: AskImage[]) {
-  if (ASK_PROVIDER_KIND === 'openai') {
-    return createOpenAICompatibleAskSession({
-      model: ASK_MODEL,
-      systemPrompt: SYSTEM_PROMPT,
-      userMessage,
-      tools: ASK_TOOLS,
-      baseUrl: OPENAI_BASE_URL,
-      apiKey: process.env.LOCAL_INFERENCE_API_KEY || process.env.OPENAI_API_KEY || process.env.GLM_API_KEY || process.env.ZHIPU_API_KEY || process.env.LMSTUDIO_API_KEY || process.env.LM_STUDIO_API_KEY || null,
-      timeoutMs: OPENAI_TIMEOUT_MS,
-      history,
-      images,
-    });
-  }
-
-  return createAnthropicAskSession({
-    client: anthropic,
-    model: ASK_MODEL,
-    systemPrompt: SYSTEM_PROMPT,
-    userMessage,
-    tools: ASK_TOOLS,
-    history,
-    images,
-  });
-}
-
 const SYSTEM_PROMPT = `You are a food memory assistant built into Achiote. You MUST use the provided tools — never answer from memory alone. This applies to ALL user messages: nostalgic memories, recipe adaptation requests, dietary substitution questions, and cooking guidance.
 
 ## TOOL WORKFLOW
@@ -313,6 +284,13 @@ Then include one targeted follow-up that would most reduce uncertainty if they w
 - Keep responses under 220 words.
 - Be warm and direct, like a knowledgeable friend who wants to help them taste the memory again.
 - If the user shares a photo, describe what you see in the image and combine it with any text description they provide before calling tools.`;
+
+const providerRuntime = createProviderRuntime({
+  anthropicClient: anthropic,
+  systemPrompt: SYSTEM_PROMPT,
+  tools: ASK_TOOLS,
+  openAITimeoutMs: OPENAI_TIMEOUT_MS,
+});
 
 // ── Tool execution ──────────────────────────────────────────────────────────
 
@@ -519,7 +497,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
   };
 
   try {
-    const askSession = createAskSession(userMessage, history, images.value);
+    const askSession = providerRuntime.createAskSession({ userMessage, history, images: images.value });
     const askTurn = createAskTurnState(userMessage);
     const { calledTools, toolPayloads, deterministicPlanInput } = askTurn;
     const finish: DoneSender = (data = {}) => {
@@ -536,7 +514,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       send,
     });
 
-    const nativeToolSupport = await selectedProviderSupportsNativeTools();
+    const nativeToolSupport = await providerRuntime.selectedProviderSupportsNativeTools();
     if (nativeToolSupport === false) {
       console.warn('[ask] selected provider/model does not advertise native tool support, using deterministic workflow');
       if (await recoverFromInitialProviderFailure({ userMessage, toolPayloads, calledTools, send, finish, guarded: 'provider_tool_deterministic_recovery' })) return;
@@ -1342,7 +1320,7 @@ function parsePositiveInteger(value: string | undefined): number | undefined {
 }
 
 async function createWithTimeout(
-  askSession: ReturnType<typeof createAskSession>,
+  askSession: AskSession,
   maxTokens: number,
   timeoutMs: number,
 ): Promise<AskModelResponse> {
@@ -1378,7 +1356,7 @@ function isRecoverableAskProviderFailure(err: unknown): boolean {
     return true;
   }
 
-  if (ASK_PROVIDER_KIND === 'openai') {
+  if (providerRuntime.providerKind === 'openai') {
     return /\bOpenAI-compatible provider returned (?:400|404|408|429|5\d\d)\b/i.test(message)
       || /\b(?:No endpoints found that support tool use|unsupported.*tool|tool use|provider returned error|model provider failed|rate limit)\b/i.test(message);
   }
@@ -1403,49 +1381,6 @@ function providerRecoveryLogSummary(err: unknown): string {
   return 'provider_unavailable';
 }
 
-let openRouterToolsSupportPromise: Promise<boolean | undefined> | undefined;
-
-function parseBooleanEnv(value: string | undefined): boolean | undefined {
-  if (!value) return undefined;
-  const normalized = value.trim().toLowerCase();
-  if (['1', 'true', 'yes', 'y', 'on'].includes(normalized)) return true;
-  if (['0', 'false', 'no', 'n', 'off'].includes(normalized)) return false;
-  return undefined;
-}
-
-async function selectedProviderSupportsNativeTools(): Promise<boolean | undefined> {
-  const explicit = parseBooleanEnv(process.env.ACHIOTE_ASK_MODEL_SUPPORTS_TOOLS)
-    ?? parseBooleanEnv(process.env.OPENROUTER_MODEL_SUPPORTS_TOOLS);
-  if (explicit !== undefined) return explicit;
-
-  if (ASK_PROVIDER_KIND !== 'openai' || !isOpenRouterUrl(OPENAI_BASE_URL)) return undefined;
-
-  openRouterToolsSupportPromise ??= fetchOpenRouterModelSupportsTools();
-  return openRouterToolsSupportPromise;
-}
-
-async function fetchOpenRouterModelSupportsTools(): Promise<boolean | undefined> {
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 7_500);
-  try {
-    const response = await fetch('https://openrouter.ai/api/v1/models?supported_parameters=tools', {
-      signal: controller.signal,
-      headers: { Accept: 'application/json' },
-    });
-    if (!response.ok) return undefined;
-    const catalog = await response.json() as unknown;
-    const profile = resolveProviderCapabilityProfile(process.env, catalog);
-    if (profile.nativeTools === 'supported') return true;
-    if (profile.nativeTools === 'unsupported') return false;
-    return undefined;
-  } catch (err) {
-    console.warn('[ask] OpenRouter tool capability lookup failed:', err instanceof Error ? err.message : String(err));
-    return undefined;
-  } finally {
-    clearTimeout(timeout);
-  }
-}
-
 function sanitizeAskError(err: unknown): { message: string; code?: string } {
   const message = err instanceof Error ? err.message : String(err);
   if (isModelProviderErrorMessage(message)) {
@@ -1464,7 +1399,7 @@ function isModelProviderErrorMessage(message: string): boolean {
 }
 
 function configureAvailableAskTools(
-  askSession: ReturnType<typeof createAskSession>,
+  askSession: AskSession,
   toolPayloads: Record<string, unknown>,
   calledTools: Set<string>,
 ): void {
@@ -2560,14 +2495,15 @@ const server = createServer(async (req, res) => {
   }
 
   if (pathname === '/health' || pathname === '/ready') {
+    const providerReadiness = providerRuntime.readinessCredentials();
     const readiness = getHttpReadiness({
       authEnabled: AUTH_ENABLED,
       apiKeyCount: configuredApiKeys.length,
       demoPasswordConfigured: Boolean(DEMO_PASSWORD),
       billingEnabled: Boolean(billingConfig),
-      anthropicApiKey: ASK_PROVIDER_KIND === 'openai' && openAICompatibleProviderReady(OPENAI_BASE_URL, process.env.LOCAL_INFERENCE_API_KEY || process.env.OPENAI_API_KEY || process.env.LMSTUDIO_API_KEY || process.env.LM_STUDIO_API_KEY) ? 'openai-compatible-provider' : ASK_PROVIDER_KIND === 'openai' ? undefined : (process.env.ANTHROPIC_API_KEY || process.env.GLM_API_KEY || process.env.ZHIPU_API_KEY || undefined),
-      anthropicAuthToken: ASK_PROVIDER_KIND === 'openai' ? undefined : process.env.ANTHROPIC_AUTH_TOKEN,
-      openaiProviderReady: ASK_PROVIDER_KIND === 'openai' && openAICompatibleProviderReady(OPENAI_BASE_URL, process.env.LOCAL_INFERENCE_API_KEY || process.env.OPENAI_API_KEY || process.env.LMSTUDIO_API_KEY || process.env.LM_STUDIO_API_KEY),
+      anthropicApiKey: providerReadiness.anthropicApiKey,
+      anthropicAuthToken: providerReadiness.anthropicAuthToken,
+      openaiProviderReady: providerReadiness.openaiProviderReady,
       cacheAvailable: cache !== null && !cacheState.fallbackUsed,
       rateLimitPersistenceConfigured: Boolean(process.env.ACHIOTE_RATE_LIMIT_DB),
     });
@@ -2579,13 +2515,13 @@ const server = createServer(async (req, res) => {
       readiness,
       uptime: process.uptime(),
       provider: {
-        kind: PROVIDER_CAPABILITY_PROFILE.providerKind,
-        provider: PROVIDER_CAPABILITY_PROFILE.provider,
-        model: PROVIDER_CAPABILITY_PROFILE.model,
-        endpointStyle: PROVIDER_CAPABILITY_PROFILE.endpointStyle,
-        nativeTools: PROVIDER_CAPABILITY_PROFILE.nativeTools,
-        rateLimitSensitive: PROVIDER_CAPABILITY_PROFILE.rateLimitSensitive,
-        compatibilitySource: PROVIDER_CAPABILITY_PROFILE.compatibilitySource,
+        kind: providerRuntime.profile.providerKind,
+        provider: providerRuntime.profile.provider,
+        model: providerRuntime.profile.model,
+        endpointStyle: providerRuntime.profile.endpointStyle,
+        nativeTools: providerRuntime.profile.nativeTools,
+        rateLimitSensitive: providerRuntime.profile.rateLimitSensitive,
+        compatibilitySource: providerRuntime.profile.compatibilitySource,
       },
     });
     return;
