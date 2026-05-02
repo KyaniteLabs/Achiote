@@ -405,7 +405,7 @@ const scenarios = [
       for (const ingredient of ['cashews', 'butter', 'cream', 'chicken', 'naan']) {
         if (!substitutes.includes(ingredient)) findings.push(`missing planned substitution for ${ingredient}`);
       }
-      if (donePayload(result)?.guarded !== 'explicit_minimum_cue_fallback') findings.push(`expected explicit_minimum_cue_fallback, got ${JSON.stringify(donePayload(result))}`);
+      if (!['explicit_minimum_cue_fallback', 'substitution_basis_deterministic_completion'].includes(donePayload(result)?.guarded)) findings.push(`expected explicit_minimum_cue_fallback or substitution_basis_deterministic_completion, got ${JSON.stringify(donePayload(result))}`);
       return findings;
     },
   },

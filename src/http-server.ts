@@ -636,10 +636,9 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
             const maxSearchCalls = getMaxSearchCalls();
             console.warn(`[ask] search_web cap hard-block (${searchCallCount}/${maxSearchCalls}), ${cached ? 'reusing cached' : 'returning cap message'}`);
             const resultPayload = cached ?? { capReached: true, message: `search_web capped at ${maxSearchCalls} call(s). Use prior research results.` };
-            if (maxSearchCalls > 0) {
-              send('tool_call', { name: 'search_web', input: call.input, blocked: true });
-              send('tool_result', { name: 'search_web', result: resultPayload, blocked: true });
-            } else {
+            send('tool_call', { name: 'search_web', input: call.input, blocked: true });
+            send('tool_result', { name: 'search_web', result: resultPayload, blocked: true });
+            if (maxSearchCalls === 0) {
               send('status', { iteration: iterations, stage: 'search_web_blocked', reason: 'no_search_plan' });
             }
             toolResults.push({ id: call.id, content: JSON.stringify(resultPayload) });
@@ -731,7 +730,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
         console.log('[ask] follow-up with substantive anchors — skipping missing_research_plan_clarification guard');
       } else {
         console.warn('[ask] replaced response that skipped research planning with structured clarification');
-        const responseText = buildClarificationOnlyResponse(toolPayloads);
+        const responseText = buildClarificationOnlyResponse(toolPayloads, userMessage);
         send('text', responseText);
         maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
         finish({ guarded: 'missing_research_plan_clarification' });
@@ -748,7 +747,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
         console.log('[ask] follow-up with substantive anchors — skipping stalled_planning_clarification guard');
       } else {
         console.warn('[ask] replaced stalled post-plan response with structured clarification');
-        const responseText = buildClarificationOnlyResponse(toolPayloads);
+        const responseText = buildClarificationOnlyResponse(toolPayloads, userMessage);
         send('text', responseText);
         maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
         finish({ guarded: 'missing_research_plan_clarification' });
@@ -758,7 +757,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
 
     if (!calledTools.has('generate_minimum_viable_nostalgia') && containsConcreteFoodCue(modelResponse.textBlocks.join('\n\n'))) {
       console.warn('[ask] suppressed concrete cue before minimum viable nostalgia tool');
-      const responseText = buildClarificationOnlyResponse(toolPayloads);
+      const responseText = buildClarificationOnlyResponse(toolPayloads, userMessage);
       send('text', responseText);
       maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
       finish({ guarded: 'premature_concrete_cue' });
@@ -767,7 +766,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
 
     if (!calledTools.has('generate_minimum_viable_nostalgia') && containsGenericUncertaintyWaffle(modelResponse.textBlocks.join('\n\n'))) {
       console.warn('[ask] replaced generic uncertainty prose with structured clarification');
-      const responseText = buildClarificationOnlyResponse(toolPayloads);
+      const responseText = buildClarificationOnlyResponse(toolPayloads, userMessage);
       send('text', responseText);
       maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
       finish({ guarded: 'generic_uncertainty_clarification' });
@@ -776,7 +775,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
 
     if (!calledTools.has('generate_minimum_viable_nostalgia') && containsPrematureCandidateSpeculation(modelResponse.textBlocks.join('\n\n'), toolPayloads)) {
       console.warn('[ask] replaced premature candidate list with structured clarification');
-      const responseText = buildClarificationOnlyResponse(toolPayloads);
+      const responseText = buildClarificationOnlyResponse(toolPayloads, userMessage);
       send('text', responseText);
       maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
       finish({ guarded: 'premature_candidate_speculation' });
@@ -785,7 +784,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
 
     if (calledTools.has('generate_minimum_viable_nostalgia') && shouldClarifyBroadUncertainMemory(userMessage, toolPayloads)) {
       console.warn('[ask] replaced broad uncertain post-cue response with structured clarification');
-      const responseText = buildClarificationOnlyResponse(toolPayloads);
+      const responseText = buildClarificationOnlyResponse(toolPayloads, userMessage);
       send('text', responseText);
       maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
       finish({ guarded: 'broad_memory_clarification' });
@@ -794,7 +793,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
 
     if (calledTools.has('generate_minimum_viable_nostalgia') && shouldClarifySparseUnanchoredMemory(userMessage, toolPayloads)) {
       console.warn('[ask] replaced sparse unanchored post-cue response with structured clarification');
-      const responseText = buildClarificationOnlyResponse(toolPayloads);
+      const responseText = buildClarificationOnlyResponse(toolPayloads, userMessage);
       send('text', responseText);
       maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
       finish({ guarded: 'generic_uncertainty_clarification' });
@@ -1233,7 +1232,9 @@ function buildUserMessageMechanismCueResponse(userMessage: string, toolPayloads:
   const cuePhrase = /\b(?:soup|broth|stew)\b/i.test(userMessage)
     ? 'a tiny amount of safe neutral liquid carrier plus one tiny remembered aroma, acid, herb, or texture cue from the user message'
     : 'a tiny amount of a safe neutral carrier plus one tiny remembered aroma, fat, acid, texture, or mouthfeel cue from the user message';
+  const preamble = buildEvidencePreamble(toolPayloads, userMessage);
   return sanitizeMinimumCueFallbackBlock([
+    preamble,
     'Minimum viable memory-family cue',
     '',
     `First-pass verification bite: ${cuePhrase}.`,
@@ -1456,7 +1457,7 @@ async function recoverFromInitialProviderFailure({
     return true;
   }
 
-  const responseText = buildClarificationOnlyResponse(toolPayloads);
+  const responseText = buildClarificationOnlyResponse(toolPayloads, userMessage);
   send('text', responseText);
   maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
   finish({ guarded });
@@ -1675,7 +1676,7 @@ function isSubstitutionPlan(toolPayloads: Record<string, unknown>): boolean {
 
 function buildSubstitutionBasisResponse(toolPayloads: Record<string, unknown>, userMessage: string): string {
   const cue = toolPayloads.generate_minimum_viable_nostalgia as MinimumViableNostalgiaCue | undefined;
-  if (!cue) return buildClarificationOnlyResponse(toolPayloads);
+  if (!cue) return buildClarificationOnlyResponse(toolPayloads, userMessage);
 
   const cueItems = cue.ingredients
     .filter((ingredient) => !ingredient.optional)
@@ -1684,7 +1685,8 @@ function buildSubstitutionBasisResponse(toolPayloads: Record<string, unknown>, u
   const cuePhrase = cueItems.length > 0
     ? cueItems.join(' plus ')
     : 'one ordinary grocery or pantry cue that matches the remembered aroma, texture, or balance';
-  const substitutionLines = summarizeSubstitutionResults(toolPayloads);
+  const constraints = inferSafetyConstraints(userMessage);
+  const substitutionLines = summarizeSubstitutionResults(toolPayloads, constraints.length > 0);
   const preserved = cue.preserves[0]
     ? sanitizeMinimumCueFallbackText(cue.preserves[0]).replace(/\.$/, '')
     : 'the strongest remembered aroma, texture, or sauce balance';
@@ -1693,8 +1695,10 @@ function buildSubstitutionBasisResponse(toolPayloads: Record<string, unknown>, u
   const localLine = memory?.userLocation
     ? `Use ordinary grocery or pantry items near ${memory.userLocation}; do not buy the exact suspected dish for this first test.`
     : 'Use ordinary grocery or pantry items first; do not buy the exact suspected dish for this first test.';
+  const preamble = buildEvidencePreamble(toolPayloads, userMessage);
 
   return sanitizeMinimumCueFallbackBlock([
+    preamble,
     'Basis before substitutions:',
     `${cue.title}: ${cuePhrase}.`,
     firstStep,
@@ -1707,17 +1711,18 @@ function buildSubstitutionBasisResponse(toolPayloads: Record<string, unknown>, u
     localLine,
     '',
     'Next ask: tell me which part hit first after the adapted test: smell, texture, fat, starch, sauce, heat, or acidity.',
-  ].join('\n'));
+  ].filter(Boolean).join('\n'));
 }
 
-function summarizeSubstitutionResults(toolPayloads: Record<string, unknown>): string[] {
+function summarizeSubstitutionResults(toolPayloads: Record<string, unknown>, maskAsRestricted = false): string[] {
   const allResults = Array.isArray(toolPayloads.find_sensory_substitutes_all)
     ? toolPayloads.find_sensory_substitutes_all
     : [toolPayloads.find_sensory_substitutes].filter(Boolean);
 
   return allResults.flatMap((entry) => {
     if (!isRecord(entry)) return [];
-    const ingredient = typeof entry.ingredient === 'string' ? entry.ingredient : 'restricted ingredient';
+    const rawIngredient = typeof entry.ingredient === 'string' ? entry.ingredient : 'restricted ingredient';
+    const ingredient = maskAsRestricted ? 'the restricted ingredient' : rawIngredient;
     const substitutes = Array.isArray(entry.substitutes) ? entry.substitutes : [];
     const first = substitutes.find(isRecord);
     if (!first) return [`${ingredient} -> match the original sensory role, then mark the result uncertain`];
@@ -1867,6 +1872,11 @@ function buildEvidenceBoundedMinimumCueResponse(toolPayloads: Record<string, unk
   return sanitizeMinimumCueFallbackBlock([preamble, body].filter(Boolean).join('\n\n'));
 }
 
+function extractNegatedTerms(text: string): string[] {
+  const matches = [...text.matchAll(/\b(?:not|no|without|wasn['']?t|was not|isn['']?t|is not|aren['']?t|are not)\b[^.:?!;]{0,48}\b[\p{L}\p{M}]+(?:\s+[\p{L}\p{M}]+){0,3}\b/giu)];
+  return [...new Set(matches.map((m) => m[0].trim()))].filter((m) => m.length > 4).slice(0, 4);
+}
+
 function buildEvidencePreamble(toolPayloads: Record<string, unknown>, userMessage?: string): string {
   const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
   const plan = toolPayloads.plan_dish_research as DishResearchPlan | undefined;
@@ -1886,11 +1896,15 @@ function buildEvidencePreamble(toolPayloads: Record<string, unknown>, userMessag
   const correction = userMessage && /\b(?:spelling|wrong|mistake|sound(?:ed)? like|called it)\b/i.test(userMessage) && top && !/^Unidentified\b/i.test(top.name)
     ? ` Likely correction: your fragment points toward ${top.name}; keep that as a research start, not a final identity.`
     : '';
+  const negated = userMessage ? extractNegatedTerms(userMessage) : [];
+  const constraints = userMessage ? inferSafetyConstraints(userMessage) : [];
 
-  if (userAnchors.length === 0 && inferred.length === 0) return '';
+  if (userAnchors.length === 0 && inferred.length === 0 && negated.length === 0 && constraints.length === 0) return '';
   return [
     `User-said anchors: ${userAnchors.length > 0 ? userAnchors.join(', ') : 'not enough yet'}.`,
+    negated.length > 0 ? `Negated/corrected: ${negated.join('; ')}.` : '',
     inferred.length > 0 ? `Inferred research start: ${inferred.join('; ')}.${correction}` : '',
+    constraints.length > 0 ? `Constraints: ${constraints.join(', ')}.` : '',
     `Unknown: ${unknown}.`,
   ].filter(Boolean).join('\n');
 }
@@ -2186,7 +2200,16 @@ function containsOverconfidentIdentityClaim(text: string): boolean {
     || /\bmost likely\s+(?:points?\s+to|matches|is|was|means|refers?\s+to)\b/i.test(text)
     || /\bit\s+points?\s+(?:strongly\s+)?toward\b/i.test(text)
     || /\b(?:your\s+)?(?:memory|description|clues?)\s+(?:points?|pointed)\s+(?:strongly\s+)?(?:toward|to)\b/i.test(text)
-    || /\b(?:sounds like|likely maps to|maps to|is essentially|is basically)\s+(?:a|an|the)?\s*(?:classic\s+)?(?:[\p{L}\p{M}][\p{L}\p{M}'-]*)(?:\s+[\p{L}\p{M}][\p{L}\p{M}'-]*){0,5}\b/iu.test(text);
+    || /\b(?:sounds like|likely maps to|maps to|is essentially|is basically)\s+(?:a|an|the)?\s*(?:classic\s+)?(?:[\p{L}\p{M}][\p{L}\p{M}'-]*)(?:\s+[\p{L}\p{M}][\p{L}\p{M}'-]*){0,5}\b/iu.test(text)
+    || /\b(?:your dish is|you're remembering|you are remembering)\b/iu.test(text)
+    || /\byour (?:\S+ )?dish is\b/iu.test(text)
+    || /\bthis is\s+(?:a|an|the)?\s*(?:classic|traditional|iconic|famous)\s+[\p{L}\p{M}]/iu.test(text)
+    || /\b(?:your|the)\s+(?:\S+\s+){0,2}(?:was making|made|served|prepared)\s+(?:a|an|the)?\s*[\p{L}\p{M}]/iu.test(text)
+    || /\beverything you described matches\b/iu.test(text)
+    || /\bthis is exactly\s+(?:what|how|the)\b/iu.test(text)
+    || /\bthat's\s+\*\*/iu.test(text)
+    || /\byour description matches\b/iu.test(text)
+    || /\bmatches it perfectly\b/iu.test(text);
 }
 
 function containsPrematureCandidateSpeculation(text: string, toolPayloads: Record<string, unknown>): boolean {
@@ -2265,7 +2288,7 @@ function getStringArray(value: unknown, key: string): string[] {
   return Array.isArray(item) ? item.filter((entry): entry is string => typeof entry === 'string' && entry.trim().length > 0) : [];
 }
 
-function buildClarificationOnlyResponse(toolPayloads: Record<string, unknown>): string {
+function buildClarificationOnlyResponse(toolPayloads: Record<string, unknown>, userMessage?: string): string {
   const memoryQuestions = getStringArray(toolPayloads.collect_food_memory, 'nextQuestions');
   const planQuestions = getStringArray(toolPayloads.plan_dish_research, 'questionsForUser');
   const questions = [...new Set([...planQuestions, ...memoryQuestions])].slice(0, 3);
@@ -2293,8 +2316,10 @@ function buildClarificationOnlyResponse(toolPayloads: Record<string, unknown>): 
     preamble = 'Before I give you a tasting cue, I need one or two details so I do not fake certainty.';
   }
 
+  const evidencePreamble = buildEvidencePreamble(toolPayloads, userMessage);
+  const parts = evidencePreamble ? [evidencePreamble, '', preamble] : [preamble];
   return [
-    preamble,
+    ...parts,
     '',
     ...selectedQuestions.map((question, index) => `${index + 1}. ${question}`),
     '',
