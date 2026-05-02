@@ -96,12 +96,75 @@ export function buildTaxonomyRemediationQueue(analysis, options = {}) {
   };
 }
 
+export function reconcileTaxonomyRemediationQueue(queue, coverage = {}) {
+  const items = Array.isArray(queue?.items) ? queue.items : [];
+  const reconciledItems = items.map((item) => reconcileTaxonomyItem(item, coverage));
+  const landedCount = reconciledItems.filter((item) => item.status === 'landed_in_taxonomy').length;
+
+  return {
+    ...queue,
+    landedIn: landedCount > 0 ? String(coverage.landedIn ?? queue.landedIn ?? '') : queue.landedIn,
+    reconciledAt: String(coverage.reconciledAt ?? new Date().toISOString()),
+    summary: landedCount === 0
+      ? 'No remediation items have complete bundled taxonomy coverage yet.'
+      : `${landedCount} remediation item${landedCount === 1 ? ' has' : 's have'} bundled taxonomy coverage.`,
+    items: reconciledItems,
+  };
+}
+
 export function parseJsonl(text) {
   return text
     .split(/\r?\n/)
     .map((line) => line.trim())
     .filter(Boolean)
     .map((line) => JSON.parse(line));
+}
+
+function reconcileTaxonomyItem(item, coverage) {
+  const candidateSeedIds = Array.isArray(item?.candidateSeedIds) ? item.candidateSeedIds.map(String) : [];
+  const seedIds = new Set((coverage.referenceSeedQueue?.seeds ?? [])
+    .map((seed) => String(seed?.id ?? ''))
+    .filter(Boolean));
+  const fixtureBySeed = new Map();
+  for (const fixture of coverage.referencePantryFixtures?.fixtures ?? []) {
+    const seedId = String(fixture?.seedId ?? '');
+    if (!seedId) continue;
+    const existing = fixtureBySeed.get(seedId) ?? [];
+    existing.push(fixture);
+    fixtureBySeed.set(seedId, existing);
+  }
+  const dishFamilies = new Set((coverage.dishFamilies?.families ?? [])
+    .map((family) => String(family?.canonicalName ?? ''))
+    .filter(Boolean));
+
+  const coveredSeedIds = candidateSeedIds.filter((seedId) => seedIds.has(seedId));
+  const coveredFixtures = coveredSeedIds.flatMap((seedId) => fixtureBySeed.get(seedId) ?? []);
+  const coveredFixtureTargets = coveredFixtures
+    .map((fixture) => {
+      const family = String(fixture?.cacheTarget?.dishFamily ?? '');
+      const region = String(fixture?.cacheTarget?.region ?? '');
+      return family && region ? `${family}:${region}` : '';
+    })
+    .filter(Boolean);
+  const coveredDishFamilies = unique(coveredFixtures
+    .map((fixture) => String(fixture?.cacheTarget?.dishFamily ?? ''))
+    .filter((family) => family && dishFamilies.has(family)));
+
+  const complete = candidateSeedIds.length > 0
+    && coveredSeedIds.length === candidateSeedIds.length
+    && coveredFixtureTargets.length >= candidateSeedIds.length
+    && coveredDishFamilies.length > 0;
+
+  return {
+    ...item,
+    status: complete ? 'landed_in_taxonomy' : item.status,
+    landedIn: complete ? String(coverage.landedIn ?? item.landedIn ?? '') : item.landedIn,
+    coverageEvidence: {
+      seedIds: coveredSeedIds,
+      dishFamilies: coveredDishFamilies,
+      fixtureTargets: coveredFixtureTargets,
+    },
+  };
 }
 
 function taxonomyRemediationItem(gap) {
@@ -232,6 +295,10 @@ function slug(value) {
     .replace(/_/g, '-')
     .replace(/[^a-z0-9-]+/g, '-')
     .replace(/^-+|-+$/g, '');
+}
+
+function unique(values) {
+  return [...new Set(values)];
 }
 
 function addGap(gaps, type, reason, context) {

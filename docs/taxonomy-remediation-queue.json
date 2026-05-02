@@ -2,8 +2,8 @@
   "source": "knowledge-gap-canary",
   "sourceArtifact": "artifacts/weak-cloud-post-pr153-final-clean/results.jsonl",
   "generatedAt": "2026-05-02T00:32:22.135Z",
-  "landedIn": "4ad2791",
-  "summary": "2 clean taxonomy remediation items ready for review.",
+  "landedIn": "6b6ebdc",
+  "summary": "2 remediation items have bundled taxonomy coverage.",
   "blockedByRegressionCandidates": false,
   "knowledgeGapCount": 2,
   "excludedEvidenceCount": 0,
@@ -11,7 +11,7 @@
   "items": [
     {
       "id": "search-dependency-gap-sour-herb-soup",
-      "status": "ready_for_taxonomy",
+      "status": "landed_in_taxonomy",
       "gapType": "search_dependency_gap",
       "mechanismSignature": "sour_herb_soup",
       "count": 2,
@@ -55,11 +55,23 @@
           "usedSearchWeb": true,
           "excerpt": "Basis before substitutions: Minimum viable composed-bite cue: a tiny amount of cheap grocery-store carrier matching the remembered base: starch, bread, potato, rice, bean, noodle, or cooked vegetable plus a tiny amount o"
         }
-      ]
+      ],
+      "landedIn": "6b6ebdc",
+      "coverageEvidence": {
+        "seedIds": [
+          "soup-sour-herb-eastern-europe"
+        ],
+        "dishFamilies": [
+          "sour-herb-soup"
+        ],
+        "fixtureTargets": [
+          "sour-herb-soup:Eastern Europe"
+        ]
+      }
     },
     {
       "id": "search-dependency-gap-grain-beverage",
-      "status": "ready_for_taxonomy",
+      "status": "landed_in_taxonomy",
       "gapType": "search_dependency_gap",
       "mechanismSignature": "grain_beverage",
       "count": 1,
@@ -95,7 +107,22 @@
           "usedSearchWeb": true,
           "excerpt": "Minimum viable beverage-memory cue First-pass verification bite: a tiny amount of barley water, toasted barley tea, or water with a tiny barley/oat/rice-starch slurry plus a tiny amount of toasted barley, barley tea, ric"
         }
-      ]
+      ],
+      "coverageEvidence": {
+        "seedIds": [
+          "beverage-rice-cinnamon-latin-america",
+          "beverage-barley-cebada-latin-america"
+        ],
+        "dishFamilies": [
+          "grain-beverage"
+        ],
+        "fixtureTargets": [
+          "rice-cinnamon-beverage:Mexico",
+          "grain-beverage:Latin America"
+        ]
+      },
+      "landedIn": "6b6ebdc"
     }
-  ]
+  ],
+  "reconciledAt": "2026-05-02T00:41:35.419Z"
 }

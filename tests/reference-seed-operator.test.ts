@@ -122,6 +122,26 @@ describe('reference seed operator integration', () => {
     expect(validateReferenceSeedFixtures(fixture)).toEqual([]);
   });
 
+  it('ships the canary-remediated barley cebada fixture as bundled taxonomy evidence', () => {
+    const fixture = pantryFixtureData.fixtures.find((entry) => entry.seedId === 'beverage-barley-cebada-latin-america');
+
+    expect(fixture).toMatchObject({
+      cacheTarget: { dishFamily: 'grain-beverage', region: 'Latin America' },
+      sourceIds: ['wikidata-structured-food-data'],
+    });
+    expect(fixture?.record.extractedFacts.namesAndAliases).toEqual(expect.arrayContaining([
+      'agua de cebada',
+      'barley water',
+      'cebada',
+    ]));
+    expect(fixture?.record.extractedFacts.sensoryDescriptors).toEqual(expect.arrayContaining([
+      'starch texture',
+      'temperature',
+      'serving ritual',
+    ]));
+    expect(JSON.stringify(fixture)).not.toMatch(/rawMemory|memoryText|prompt_text|recipe instructions|live web/i);
+  });
+
   it('rejects fixture records whose seed target or research record is malformed', () => {
     const issues = validateReferenceSeedFixtures({
       fixtures: [

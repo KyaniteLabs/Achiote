@@ -296,11 +296,52 @@ describe('knowledge-gap canary', () => {
     expect(queue.summary).toBe('No clean taxonomy gaps were found in this canary artifact.');
   });
 
+  it('reconciles queue items that have generalized taxonomy, seed, and fixture coverage', async () => {
+    const { reconcileTaxonomyRemediationQueue } = await import('../scripts/lib/knowledge-gap-canary.mjs');
+
+    const queue = {
+      source: 'knowledge-gap-canary',
+      items: [
+        {
+          id: 'search-dependency-gap-sour-herb-soup',
+          status: 'ready_for_taxonomy',
+          mechanismSignature: 'sour_herb_soup',
+          candidateSeedIds: ['soup-sour-herb-eastern-europe'],
+        },
+      ],
+    };
+    const reconciled = reconcileTaxonomyRemediationQueue(queue, {
+      landedIn: '6b6ebdc',
+      referenceSeedQueue: { seeds: [{ id: 'soup-sour-herb-eastern-europe' }] },
+      referencePantryFixtures: {
+        fixtures: [
+          {
+            seedId: 'soup-sour-herb-eastern-europe',
+            cacheTarget: { dishFamily: 'sour-herb-soup', region: 'Eastern Europe' },
+          },
+        ],
+      },
+      dishFamilies: { families: [{ canonicalName: 'sour-herb-soup' }] },
+    });
+
+    expect(reconciled.items[0]).toMatchObject({
+      status: 'landed_in_taxonomy',
+      landedIn: '6b6ebdc',
+      coverageEvidence: {
+        seedIds: ['soup-sour-herb-eastern-europe'],
+        dishFamilies: ['sour-herb-soup'],
+        fixtureTargets: ['sour-herb-soup:Eastern Europe'],
+      },
+    });
+    expect(reconciled.summary).toBe('1 remediation item has bundled taxonomy coverage.');
+  });
+
   it('exposes a no-provider CLI over existing JSONL artifacts', () => {
     const script = fs.readFileSync('scripts/knowledge-gap-canary.mjs', 'utf8');
 
     expect(script).toContain('--results');
     expect(script).toContain('--taxonomy-queue');
+    expect(script).toContain('--reconcile-taxonomy');
     expect(script).toContain('buildTaxonomyRemediationQueue');
     expect(script).toContain('analyzeKnowledgeGaps');
     expect(script).not.toMatch(/fetch\(|https?:\/\//);
