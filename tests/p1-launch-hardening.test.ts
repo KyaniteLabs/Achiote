@@ -35,6 +35,12 @@ describe('P1 launch hardening guardrails', () => {
     expect(script).not.toContain('No citations found");\n    process.exit(0);');
   });
 
+  it('keeps flaky doi.org network resolution secondary to Crossref metadata', () => {
+    const script = fs.readFileSync('scripts/validate-citations.mjs', 'utf8');
+    expect(script).toContain('relying on Crossref');
+    expect(script).not.toContain('errors.push(`DOI resolution failed: ${e.message}`)');
+  });
+
   it('does not accept API keys in query strings in production code or docs', () => {
     const combined = [
       fs.readFileSync('src/http-server.ts', 'utf8'),

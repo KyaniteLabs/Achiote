@@ -3,7 +3,7 @@
  * Validates DOI citations in docs/landing/index.html against Crossref metadata.
  *
  * Checks:
- *   - DOI resolves via doi.org
+ *   - DOI does not return a hard 404 via doi.org
  *   - Title matches Crossref record (fuzzy ≥ 75%)
  *   - Year matches Crossref record
  *   - First author surname appears in citation
@@ -128,7 +128,9 @@ async function validateDOI(citation) {
       console.log(`   ⚠️  DOI resolution returned HTTP ${res.status} (likely bot protection; relying on Crossref)`);
     }
   } catch (e) {
-    errors.push(`DOI resolution failed: ${e.message}`);
+    // Network failures here usually come from publisher/CDN/TLS bot protection.
+    // Crossref metadata below remains the authoritative citation check.
+    console.log(`   ⚠️  DOI resolution failed (${e.message}); relying on Crossref`);
   }
 
   // 2. Crossref metadata

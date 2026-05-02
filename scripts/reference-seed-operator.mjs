@@ -3,6 +3,7 @@
 import fs from 'node:fs';
 import { resolve } from 'node:path';
 import { ResearchCache } from '../dist/lib/research-cache.js';
+import { auditReferencePantryPopulation } from '../dist/lib/reference-pantry-population.js';
 import { bundledGlobalReferenceSeeds } from '../dist/lib/reference-seed-planner.js';
 import {
   buildReferenceSeedOperatorReport,
@@ -13,10 +14,11 @@ function usage() {
   return [
     'Usage:',
     '  node scripts/reference-seed-operator.mjs [--quality-report quality.json] [--limit 10]',
+    '  node scripts/reference-seed-operator.mjs --population-audit',
     '  node scripts/reference-seed-operator.mjs --fixture approved-fixture.json --cache-path /path/to/cache.db',
     '  node scripts/reference-seed-operator.mjs --fixture bundled --cache-path /path/to/cache.db',
     '',
-    'This script does not browse. It only prints host-research tasks or stores approved typed ResearchRecord fixtures.',
+    'This script does not browse. It prints host-research tasks, audits bundled population density, or stores approved typed ResearchRecord fixtures.',
   ].join('\n');
 }
 
@@ -25,6 +27,7 @@ function parseArgs(argv) {
   for (let i = 0; i < argv.length; i += 1) {
     const arg = argv[i];
     if (arg === '--quality-report') args.qualityReport = argv[++i];
+    else if (arg === '--population-audit') args.populationAudit = true;
     else if (arg === '--fixture') args.fixture = argv[++i];
     else if (arg === '--cache-path') args.cachePath = argv[++i];
     else if (arg === '--limit') args.limit = Number.parseInt(argv[++i] ?? '', 10);
@@ -70,6 +73,8 @@ try {
   if (args.fixture || args.cachePath) {
     if (!args.fixture || !args.cachePath) throw new Error('--fixture and --cache-path must be provided together');
     console.log(JSON.stringify(writeApprovedFixtures(args.fixture, args.cachePath), null, 2));
+  } else if (args.populationAudit) {
+    console.log(JSON.stringify(auditReferencePantryPopulation(bundledGlobalReferenceSeeds), null, 2));
   } else {
     const report = args.qualityReport ? readJson(args.qualityReport) : emptyQualityReport();
     console.log(JSON.stringify(buildReferenceSeedOperatorReport(report, { limit: args.limit }), null, 2));
