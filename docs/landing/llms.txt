@@ -7,7 +7,7 @@ AI search summary URL: https://achiote.kyanitelabs.tech/ai-search
 Live app URL: https://achiote.kyanitelabs.tech/app
 Support: support@kyanitelabs.tech
 License: Business Source License 1.1 (BUSL-1.1)
-Repository: https://github.com/Pastorsimon1798/achiote
+Repository: https://github.com/KyaniteLabs/Achiote
 
 ## What Achiote Is
 

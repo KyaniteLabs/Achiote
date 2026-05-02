@@ -15,12 +15,12 @@ describe('package distribution metadata', () => {
     });
     expect(pkg.repository).toEqual({
       type: 'git',
-      url: 'git+https://github.com/Pastorsimon1798/achiote.git',
+      url: 'git+https://github.com/KyaniteLabs/Achiote.git',
     });
     expect(pkg.bugs).toEqual({
-      url: 'https://github.com/Pastorsimon1798/achiote/issues',
+      url: 'https://github.com/KyaniteLabs/Achiote/issues',
     });
-    expect(pkg.homepage).toBe('https://github.com/Pastorsimon1798/achiote#readme');
+    expect(pkg.homepage).toBe('https://github.com/KyaniteLabs/Achiote#readme');
     expect(pkg.engines.node).toBe('>=22.0.0');
   });
 

@@ -7,7 +7,7 @@ set -euo pipefail
 # Configuration
 CONTAINER_NAME="achiote-app"  # adjust if your container has a different name
 IMAGE_NAME="achiote:latest"
-REPO_DIR="/root/member-berries"  # adjust to where you clone the repo
+REPO_DIR="/root/achiote"  # adjust to where you clone the repo
 BRANCH="master"
 ENV_FILE="${ACHIOTE_ENV_FILE:-$REPO_DIR/.env}"
 
@@ -22,7 +22,7 @@ warn() { echo -e "${YELLOW}[WARN]${NC} $*"; }
 error() { echo -e "${RED}[ERROR]${NC} $*"; exit 1; }
 
 # 1. Pull latest code
-log "Pulling latest code from git@github.com:Pastorsimon1798/achiote.git branch $BRANCH"
+log "Pulling latest code from git@github.com:KyaniteLabs/Achiote.git branch $BRANCH"
 cd "$REPO_DIR"
 git fetch origin
 git reset --hard origin/$BRANCH

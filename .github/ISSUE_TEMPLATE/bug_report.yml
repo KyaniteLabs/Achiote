@@ -1,5 +1,5 @@
 name: Bug report
-description: Report a reproducible Member Berries issue
+description: Report a reproducible Achiote issue
 title: "bug: "
 labels: [bug]
 body:
@@ -35,6 +35,6 @@ body:
         - Node:
         - npm:
         - OS:
-        - Member Berries version/commit:
+        - Achiote version/commit:
     validations:
       required: true

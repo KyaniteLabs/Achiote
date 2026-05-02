@@ -97,12 +97,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Pastorsimon1798/achiote.git"
+    "url": "git+https://github.com/KyaniteLabs/Achiote.git"
   },
   "bugs": {
-    "url": "https://github.com/Pastorsimon1798/achiote/issues"
+    "url": "https://github.com/KyaniteLabs/Achiote/issues"
   },
-  "homepage": "https://github.com/Pastorsimon1798/achiote#readme",
+  "homepage": "https://github.com/KyaniteLabs/Achiote#readme",
   "keywords": [
     "mcp",
     "model-context-protocol",

@@ -23,7 +23,7 @@ For this repo, using a self-hosted runner is acceptable only under this threat m
 The commands below register the runner against this repository and install the current GitHub Actions runner release for your OS and CPU.
 
 ```bash
-REPO="Pastorsimon1798/achiote"
+REPO="KyaniteLabs/Achiote"
 
 TOKEN="$(gh api --method POST "repos/$REPO/actions/runners/registration-token" --jq .token)"
 TAG="$(gh api repos/actions/runner/releases/latest --jq .tag_name)"
@@ -90,14 +90,14 @@ sudo ./svc.sh status
 Check the repository runner inventory with the GitHub API:
 
 ```bash
-gh api repos/Pastorsimon1798/achiote/actions/runners \
+gh api repos/KyaniteLabs/Achiote/actions/runners \
   --jq '.runners[] | {name, status, busy, labels: [.labels[].name]}'
 ```
 
 For a quick count:
 
 ```bash
-gh api repos/Pastorsimon1798/achiote/actions/runners --jq .total_count
+gh api repos/KyaniteLabs/Achiote/actions/runners --jq .total_count
 ```
 
 If the runner is registered correctly, you should see:
@@ -111,7 +111,7 @@ If the runner is registered correctly, you should see:
 List queued workflow runs for this repository:
 
 ```bash
-gh run list --repo Pastorsimon1798/achiote --status queued --limit 10
+gh run list --repo KyaniteLabs/Achiote --status queued --limit 10
 ```
 
 If a job stays queued, compare these three things:
@@ -133,8 +133,7 @@ For this repo, the current workflow only requires `self-hosted`. A label mismatc
 ## 6) Fast recovery checklist
 
 ```bash
-gh api repos/Pastorsimon1798/achiote/actions/runners --jq .total_count
-gh run list --repo Pastorsimon1798/achiote --status queued --limit 10
+gh api repos/KyaniteLabs/Achiote/actions/runners --jq .total_count
+gh run list --repo KyaniteLabs/Achiote --status queued --limit 10
 ./svc.sh status
 ```
-
