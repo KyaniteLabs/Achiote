@@ -58,7 +58,7 @@ export function analyzeKnowledgeGaps(rows) {
       addGap(gaps, 'mechanism_signature_gap', 'Final cue stayed at a generic mechanism level; add or refine reusable taxonomy axes for aroma, body, acid, fat, starch, texture, or disambiguation.', context);
     }
     if (/\b(?:where did you eat it|country|region|from|grandmother|neighbor|aunt|specific place)\b/i.test(text)
-      && !/\b(?:minimum viable|first-pass verification)\b/i.test(text)) {
+      && !/\b(?:minimum viable|first-pass verification|tiny\s+(?:amount|sip|bite|cue|test)|first\s+(?:cue|test)|do not buy the exact suspected dish)\b/i.test(text)) {
       addGap(gaps, 'insufficient_disambiguators', 'The answer needed a disambiguator but did not pair it with a useful minimum cue.', context);
     }
     if (/\b(?:buy|grocery|store|local sourcing|ordinary grocery)\b/i.test(text)
@@ -142,11 +142,14 @@ function regressionCandidate(type, nextAction, excluded) {
 
 function classifyMechanismSignature(prompt, text) {
   const combined = `${prompt} ${text}`.toLowerCase();
+  if (/\b(?:coconut|sugar|crystal|grainy|festival|celebration|sweet|confection|candy)\b/.test(combined)) {
+    return 'sugar_confectionery';
+  }
   if (/\b(?:sour|tart|pickle|brine|ferment|dill|herb|zurek|żurek|sorrel|potato|egg)\b/.test(combined)
     && /\b(?:soup|broth|sip|liquid|body|chunks?|pieces?)\b/.test(combined)) {
     return 'sour_herb_soup';
   }
-  if (/\b(?:rice|cinnamon|barley|cebada|horchata|grain|agua|drink|beverage|sip|ice|lime)\b/.test(combined)) {
+  if (/\b(?:rice|cinnamon|barley|cebada|horchata|grain|agua|drink|beverage|ice|lime)\b/.test(combined)) {
     return 'grain_beverage';
   }
   if (/\b(?:carimanol|carimañol|caribañol|cassava|yuca|tapioca|fritter|plantain|panama|colombia)\b/.test(combined)) {
@@ -154,9 +157,6 @@ function classifyMechanismSignature(prompt, text) {
   }
   if (/\b(?:substitution|nut-free|vegan|halal|gluten-free|heart-healthier|cream|tomato|curry|cashew|butter|naan)\b/.test(combined)) {
     return 'substitution_role_mapping';
-  }
-  if (/\b(?:coconut|sugar|crystal|grainy|festival|celebration|sweet|confection|candy)\b/.test(combined)) {
-    return 'sugar_confectionery';
   }
   return 'general_memory_mechanism';
 }

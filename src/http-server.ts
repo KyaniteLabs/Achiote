@@ -896,6 +896,15 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       return;
     }
 
+    if (shouldReplaceWithSubstitutionBasisResponse(trustBoundedResponseText, toolPayloads, calledTools)) {
+      console.warn('[ask] replaced substitution response with explicit original-basis adaptation frame');
+      const responseText = buildSubstitutionBasisResponse(toolPayloads, userMessage);
+      send('text', responseText);
+      maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
+      finish({ guarded: 'substitution_basis_deterministic_completion' });
+      return;
+    }
+
     if (calledTools.has('generate_minimum_viable_nostalgia') && containsOverconfidentIdentityClaim(trustBoundedResponseText)) {
       console.warn('[ask] replaced overconfident identity claim with deterministic minimum cue');
       const responseText = buildMinimumCueCompletedResponse(toolPayloads, userMessage);
@@ -920,15 +929,6 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       send('text', sanitized);
       maybeSendMemoryReceipt({ toolPayloads, assistantText: sanitized, send });
       finish({ guarded: 'recipe_measurement_sanitized' });
-      return;
-    }
-
-    if (shouldReplaceWithSubstitutionBasisResponse(trustBoundedResponseText, toolPayloads, calledTools)) {
-      console.warn('[ask] replaced substitution response with explicit original-basis adaptation frame');
-      const responseText = buildSubstitutionBasisResponse(toolPayloads, userMessage);
-      send('text', responseText);
-      maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
-      finish({ guarded: 'substitution_basis_deterministic_completion' });
       return;
     }
 
@@ -1738,7 +1738,7 @@ function shouldReplaceWithSubstitutionBasisResponse(text: string, toolPayloads: 
 }
 
 function hasSubstitutionBasisReady(toolPayloads: Record<string, unknown>, calledTools: Set<string>): boolean {
-  return isSubstitutionPlan(toolPayloads)
+  return (isSubstitutionPlan(toolPayloads) || calledTools.has('find_sensory_substitutes'))
     && calledTools.has('generate_minimum_viable_nostalgia')
     && calledTools.has('find_sensory_substitutes');
 }

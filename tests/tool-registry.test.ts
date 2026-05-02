@@ -118,6 +118,55 @@ describe('shared tool registry', () => {
     expect(plan.payload.workflowSteps.map((step: { tool: string }) => step.tool)).not.toContain('search_web');
   });
 
+  it('uses bundled sour-herb soup knowledge before live search for clean cue-only memories', async () => {
+    const messages = [
+      'Someone served a tart green-herb broth with pale potato or egg pieces. I do not know the name. What is the smallest safe cue to test first?',
+      'Earlier I said it was masa, but my aunt corrected me: it was a sour dill broth from a neighbor with soft pale chunks. Keep the correction authoritative and give me the first cue.',
+      'Earlier I said it was a wrapped holiday masa dish, but my aunt corrected me: it was actually a tart herb broth from a neighbor. Keep my latest correction authoritative and give me the first cue.',
+      'My grandmother made a warm pickle-brine soup with dill and potato pieces. I only want a tiny sensory cue, not a recipe.',
+    ];
+
+    for (const userMessage of messages) {
+      const plan = await executeToolDefinition('plan_tool_workflow', { userMessage }, defaultToolExecutionContext);
+
+      expect(plan.payload.maxSearchCalls).toBe(0);
+      expect(plan.payload.workflowSteps.map((step: { tool: string }) => step.tool)).not.toContain('search_web');
+      expect(plan.payload.confidenceNote).toContain('Bundled mechanism family');
+    }
+  });
+
+  it('uses bundled grain-beverage knowledge before live search for clean sip-cue memories', async () => {
+    const messages = [
+      'I miss a cold pale grain drink from a street stand: watery, barely sweet, maybe barley or rice, with lime nearby. Give me the smallest local sip test, not a recipe.',
+      'Cold rice-cinnamon drink like horchata but thinner. I want a tiny sip cue, not exact measurements.',
+      'It was iced barley water, barely sweet, maybe with lime. Give me the smallest first sip test.',
+    ];
+
+    for (const userMessage of messages) {
+      const plan = await executeToolDefinition('plan_tool_workflow', { userMessage }, defaultToolExecutionContext);
+
+      expect(plan.payload.maxSearchCalls).toBe(0);
+      expect(plan.payload.workflowSteps.map((step: { tool: string }) => step.tool)).not.toContain('search_web');
+      expect(plan.payload.confidenceNote).toContain('Bundled mechanism family');
+    }
+  });
+
+  it('keeps search available when bundled-family memories ask for exact source-backed identity', async () => {
+    const messages = [
+      'Someone served a tart green-herb broth with pale potato or egg pieces. What exact regional dish is this, and what sources confirm the name?',
+      'Someone served a tart green-herb broth with pale potato or egg pieces. What is the safe exact regional identity from sources?',
+      'I miss a cold pale grain drink, maybe barley or rice. Please identify the exact drink and verify the regional spelling from sources.',
+    ];
+
+    for (const userMessage of messages) {
+      const plan = await executeToolDefinition('plan_tool_workflow', { userMessage }, defaultToolExecutionContext);
+
+      expect(plan.payload.maxSearchCalls).toBe(1);
+      expect(plan.payload.workflowSteps.map((step: { tool: string }) => step.tool)).toContain('search_web');
+      expect(plan.payload.confidenceNote).not.toContain('Bundled mechanism family');
+    }
+  });
+
   it('recovers research planning when a model passes only normalized memory text', async () => {
     const plan = await executeToolDefinition('plan_dish_research', {
       memory: { normalizedMemory: "Grandma's sour dill soup with pale chunks" },
