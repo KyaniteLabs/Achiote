@@ -56,9 +56,11 @@ describe('P1 launch hardening guardrails', () => {
 
   it('makes frontend HTTP errors actionable instead of generic Server N messages', () => {
     const app = fs.readFileSync('docs/landing/app.js', 'utf8');
-    expect(app).toContain('Authentication required');
-    expect(app).toContain('Rate limit exceeded');
-    expect(app).toContain('Could not parse server response');
+    const productApp = fs.readFileSync('docs/landing/product-app.js', 'utf8');
+    expect(app).toContain('ProductApp.explainHttpStatus');
+    expect(productApp).toContain('Authentication required');
+    expect(productApp).toContain('Rate limit exceeded');
+    expect(productApp).toContain('Could not parse server response');
   });
 
   it('extends package smoke to exercise the packaged HTTP server', () => {
@@ -85,9 +87,11 @@ describe('P1 launch hardening guardrails', () => {
 
   it('does not silently drop chat history updates in the frontend SSE parser', () => {
     const app = fs.readFileSync('docs/landing/app.js', 'utf8');
+    const productApp = fs.readFileSync('docs/landing/product-app.js', 'utf8');
 
     expect(app).toContain('streamResponse(res, aiEl, val)');
-    expect(app).toContain('chatHistory.push({ role: \'user\', content: userMessage })');
+    expect(app).toContain('ProductApp.appendChatTurn(chatHistory, userMessage, text, 20)');
+    expect(productApp).toContain("{ role: 'user', content: String(userMessage || '') }");
     expect(app).toContain('console.warn');
     expect(app).not.toContain('content: val');
     expect(app).not.toContain('catch { /* skip */ }');
