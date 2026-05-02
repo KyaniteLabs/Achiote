@@ -116,6 +116,111 @@
       }
     },
     {
+      "seedId": "beverage-barley-cebada-latin-america",
+      "cacheTarget": {
+        "dishFamily": "grain-beverage",
+        "region": "Latin America"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.diaspora",
+        "regionScopes.macro_region"
+      ],
+      "record": {
+        "dishName": "grain-beverage",
+        "query": "agua de cebada barley drink regional variants | cold barley water Latin America family memory | cebada drink lime ice diaspora variations",
+        "sources": [
+          {
+            "title": "Barley water (Q397762) structured data",
+            "url": "https://www.wikidata.org/wiki/Q397762",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q397762 has English label \"Barley water\".",
+              "Wikidata item Q397762 has English description: Drink.",
+              "Wikidata item Q397762 has Spanish sitelink \"Agua de cebada\".",
+              "Wikidata item Q397762 lists barley as a part."
+            ]
+          },
+          {
+            "title": "barley (Q61665121) structured data",
+            "url": "https://www.wikidata.org/wiki/Q61665121",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q61665121 has English label \"barley\".",
+              "Wikidata item Q61665121 has English description: cereal grain."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "grain-beverage",
+            "agua de cebada",
+            "aguita de ceba",
+            "aguita de cebada",
+            "barley water",
+            "cebada",
+            "cold grain drink"
+          ],
+          "regions": [
+            "macro:Latin America",
+            "macro:Central America",
+            "diaspora:United States",
+            "central america",
+            "diaspora global"
+          ],
+          "ingredients": [
+            "barley"
+          ],
+          "techniques": [
+            "starch texture",
+            "aroma",
+            "temperature",
+            "serving ritual"
+          ],
+          "sensoryDescriptors": [
+            "starch texture",
+            "toasted grain aroma",
+            "temperature",
+            "serving ritual",
+            "dilution",
+            "citrus uncertainty"
+          ],
+          "culturalOccasions": [
+            "beverage"
+          ],
+          "regionalVariants": [
+            "Wikidata item Q397762 has English label \"Barley water\".",
+            "Wikidata item Q397762 has Spanish sitelink \"Agua de cebada\".",
+            "Barley-water memories should keep barley, dilution, temperature, sweetness, citrus, and household naming uncertain until confirmed by the user or further cited research."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "The Latin America and diaspora framing comes from Achiote's aggregate seed target and needs user or source confirmation for any exact country or household identity.",
+          "Specific sweetness, lime or citrus use, toasted-grain intensity, serving temperature, and local name remain uncertain.",
+          "This pantry record is a starting context for small-model grounding, not a final drink identification."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
       "seedId": "soup-sour-herb-eastern-europe",
       "cacheTarget": {
         "dishFamily": "sour-herb-soup",
