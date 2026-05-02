@@ -134,6 +134,55 @@ function confidenceFromModelInput(value: unknown): 'High' | 'Medium' | 'Low' {
   return 'Low';
 }
 
+function normalizeKnowledgeText(value: string): string {
+  return value
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '')
+    .replace(/[^\p{L}\p{N}]+/gu, ' ')
+    .trim();
+}
+
+function hasPhrase(textValue: string, phrase: string): boolean {
+  const normalizedPhrase = normalizeKnowledgeText(phrase);
+  if (!normalizedPhrase) return false;
+  const escaped = normalizedPhrase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '\\s+');
+  return new RegExp(`(?:^|\\b)${escaped}(?:$|\\b)`, 'i').test(textValue);
+}
+
+function termParts(value: string): string[] {
+  return normalizeKnowledgeText(value)
+    .split(/\s+/)
+    .filter((part) => part.length >= 4);
+}
+
+function bundledMechanismFamilyFor(userMessage: string): string | null {
+  const normalized = normalizeKnowledgeText(userMessage);
+  const cueOnly = /\b(?:smallest|tiny|sip|cue|test|not recipe|not a recipe|not full recipe|without pretending)\b/i.test(userMessage)
+    || /\b(?:first|safe|local)\s+(?:cue|test|sip|bite)\b/i.test(userMessage);
+  if (!cueOnly) return null;
+
+  for (const family of dishFamiliesData.families) {
+    const provenanceNotes = family.provenance?.notes ?? [];
+    const isKnowledgeGapFamily = provenanceNotes.some((note) => /knowledge-gap evidence/i.test(note));
+    if (!isKnowledgeGapFamily) continue;
+
+    const aliasMatch = family.aliases.some((alias) => hasPhrase(normalized, alias));
+    const mechanismTerms = [
+      ...family.sharedElements,
+      ...family.divergentElements,
+      ...family.nostalgiaTriggers,
+    ].flatMap(termParts);
+    const matchedMechanismTerms = new Set(mechanismTerms.filter((term) => hasPhrase(normalized, term)));
+
+    if (aliasMatch || matchedMechanismTerms.size >= 3) {
+      return family.canonicalName;
+    }
+  }
+
+  return null;
+}
+
 
 function dossierFromModelInput(rawDossier: unknown): Parameters<typeof generateMinimumViableNostalgiaCue>[0]['dossier'] {
   const parsedDossier = buildReconstructionDossierOutputSchema.safeParse(rawDossier);
@@ -488,9 +537,10 @@ export const toolRegistry = [
       steps.push({ tool: 'plan_dish_research', reason: 'Build hypotheses and identify what to research', required: true });
 
       const searchWebDisabled = process.env.ACHIOTE_DISABLE_SEARCH_WEB === 'true' || suppressSearchFromUserText;
+      const bundledMechanismFamily = searchWebDisabled ? null : bundledMechanismFamilyFor(text(input.userMessage));
       let maxSearchCalls = searchWebDisabled ? 0 : 1;
       const addSearchStep = (reason: string): void => {
-        if (!searchWebDisabled) steps.push({ tool: 'search_web', reason, required: false });
+        if (!searchWebDisabled && !bundledMechanismFamily) steps.push({ tool: 'search_web', reason, required: false });
       };
 
       if (needsSubstitutions) {
@@ -515,7 +565,11 @@ export const toolRegistry = [
         steps.push({ tool: 'generate_minimum_viable_nostalgia', reason: 'Create first sensory test cue', required: true });
       }
 
+      if (bundledMechanismFamily) maxSearchCalls = 0;
       const needsResolve = steps.some(s => s.tool === 'resolve_dish_name');
+      const bundledMechanismNote = bundledMechanismFamily
+        ? ` Bundled mechanism family: ${bundledMechanismFamily}; live search deferred until the user asks for exact identity or source-backed details.`
+        : '';
 
       return output({
         detectedIntent,
@@ -524,7 +578,7 @@ export const toolRegistry = [
         needsSubstitutions,
         detectedRestrictions,
         needsResolve,
-        confidenceNote: `Intent: ${detectedIntent}. Dietary restrictions: ${detectedRestrictions.length > 0 ? detectedRestrictions.join(', ') : 'none detected'}. Max search_web calls: ${maxSearchCalls}.`,
+        confidenceNote: `Intent: ${detectedIntent}. Dietary restrictions: ${detectedRestrictions.length > 0 ? detectedRestrictions.join(', ') : 'none detected'}. Max search_web calls: ${maxSearchCalls}.${bundledMechanismNote}`,
       } as ToolPayload);
     },
   }),

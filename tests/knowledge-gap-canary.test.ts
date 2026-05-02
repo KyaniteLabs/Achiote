@@ -147,6 +147,24 @@ describe('knowledge-gap canary', () => {
     expect(report.knowledgeGaps.find((gap: { type: string }) => gap.type === 'search_dependency_gap')?.reason).toMatch(/taxonomy|reference/i);
   });
 
+  it('does not misclassify sugar-confection cue text as a grain-beverage disambiguator gap', async () => {
+    const { analyzeKnowledgeGaps } = await import('../scripts/lib/knowledge-gap-canary.mjs');
+
+    const report = analyzeKnowledgeGaps([
+      {
+        mode: 'achiote',
+        provider: 'glm',
+        model: 'glm-test',
+        prompt: 'I remember a white coconut sweet from a school festival abroad. Grainy sugar crystals, a little chewy, not chocolate.',
+        text: 'Based on your memory of a white coconut sweet with grainy sugar crystals and a chewy texture, I recommend testing with a tiny amount of toasted coconut flakes mixed with a tiny sip or bite of granulated sugar. What specific country or region was this school festival in? That would help narrow down whether this might be a common sweet from that area. Use ordinary grocery or pantry items near Ohio; do not buy the exact suspected dish for this first test.',
+        tools: ['plan_tool_workflow', 'collect_food_memory', 'plan_dish_research', 'build_reconstruction_dossier', 'generate_minimum_viable_nostalgia'],
+        quality: [],
+      },
+    ]);
+
+    expect(report.knowledgeGaps).toEqual([]);
+  });
+
   it('keeps provider and wrapper failures out of knowledge-gap inference', async () => {
     const { analyzeKnowledgeGaps } = await import('../scripts/lib/knowledge-gap-canary.mjs');
 

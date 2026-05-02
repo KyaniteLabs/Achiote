@@ -160,10 +160,10 @@ describe('/ask OpenAI-compatible provider mode', () => {
     expect(exposedToolNames[1]).toEqual(['plan_dish_research']);
     expect(exposedToolNames[2]).toEqual([
       'resolve_dish_name',
-      'search_web',
       'build_reconstruction_dossier',
       'generate_minimum_viable_nostalgia',
     ]);
+    expect(exposedToolNames[2]).not.toContain('search_web');
     expect(exposedToolNames[2]).not.toContain('plan_tool_workflow');
     expect(exposedToolNames[2]).not.toContain('generate_recipe');
     expect(exposedToolNames[2]).not.toContain('validate_recipe_output');
@@ -816,6 +816,66 @@ describe('/ask deterministic completion after minimum cue', () => {
       expect(text).toMatch(/basis before substitutions/i);
       expect(text).toMatch(/adapted cue/i);
       expect(text).not.toMatch(/\b(?:exact base recipe|heart-healthy version)\b/i);
+      expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'substitution_basis_deterministic_completion' });
+      expect(requestCount).toBe(6);
+    } finally {
+      achiote.kill('SIGINT');
+      fakeOpenAi.closeAllConnections();
+      await new Promise<void>((resolveClose) => fakeOpenAi.close(() => resolveClose()));
+    }
+  }, 20_000);
+
+  it('keeps the substitution basis frame when final text contains recipe measurements', async () => {
+    const fakePort = await getFreePort();
+    let requestCount = 0;
+    const fakeOpenAi = createServer(async (req, res) => {
+      if (req.url !== '/v1/chat/completions' || req.method !== 'POST') {
+        res.writeHead(404).end();
+        return;
+      }
+      requestCount++;
+      await readBody(req);
+      const toolCallsByTurn = [
+        [{ id: 'call_1', type: 'function', function: { name: 'collect_food_memory', arguments: JSON.stringify({ memoryText: 'Creamy tomato-spice curry with nut body, dairy fat, chicken-like bite, and flatbread.' }) } }],
+        [{ id: 'call_2', type: 'function', function: { name: 'plan_dish_research', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_3', type: 'function', function: { name: 'build_reconstruction_dossier', arguments: JSON.stringify({ researchedFacts: ['User remembers a creamy tomato-spice curry mechanism.'] }) } }],
+        [{ id: 'call_4', type: 'function', function: { name: 'generate_minimum_viable_nostalgia', arguments: JSON.stringify({ maxEffortMinutes: 10 }) } }],
+        [{ id: 'call_5', type: 'function', function: { name: 'find_sensory_substitutes', arguments: JSON.stringify({ ingredient: 'cashew cream', constraints: ['nut-free'] }) } }],
+      ];
+      const toolCalls = toolCallsByTurn[requestCount - 1];
+      res.setHeader('content-type', 'application/json');
+      res.end(JSON.stringify({
+        choices: [{
+          finish_reason: toolCalls ? 'tool_calls' : 'stop',
+          message: toolCalls
+            ? { role: 'assistant', content: '', tool_calls: toolCalls }
+            : {
+                role: 'assistant',
+                content: 'Based on your creamy tomato-spice curry memory with nut body, dairy fat, chicken-like bite, and flatbread, I will create a minimum test. Smallest memory cue to try now: Stir a tiny sip or bite of tomato paste with 1 tsp turmeric, 1 tsp cumin, and a drizzle of neutral oil. This helps before building out a full adapted recipe.',
+              },
+        }],
+      }));
+    });
+    await new Promise<void>((resolveListen) => fakeOpenAi.listen(fakePort, '127.0.0.1', resolveListen));
+
+    const achiotePort = await getFreePort();
+    const achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`);
+    try {
+      const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: 'A creamy tomato-spice curry memory had nut body, dairy fat, chicken-like bite, and flatbread. My family needs nut-free, heart-healthier, halal, vegan, and gluten-free substitutions. Can you adapt the smallest memory cue without pretending it is medical advice?',
+        }),
+      });
+
+      expect(response.status).toBe(200);
+      const events = parseSse(await response.text());
+      const text = events.filter((event) => event.event === 'text').map((event) => JSON.parse(event.data)).join('\n\n');
+
+      expect(text).toMatch(/basis before substitutions/i);
+      expect(text).toMatch(/adapted cue/i);
+      expect(text).not.toMatch(/\b(?:1 tsp turmeric|1 tsp cumin|full adapted recipe)\b/i);
       expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'substitution_basis_deterministic_completion' });
       expect(requestCount).toBe(6);
     } finally {

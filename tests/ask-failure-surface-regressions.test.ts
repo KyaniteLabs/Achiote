@@ -2092,9 +2092,9 @@ describe('/ask failure surface regressions', () => {
 
     expect(events.some((event) => event.event === 'error')).toBe(false);
     expect(events.at(-1)?.event).toBe('done');
-    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'recipe_procedure_sanitized' });
+    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'substitution_basis_deterministic_completion' });
     expect(finalText).toContain('Minimum viable');
-    expect(finalText).toMatch(/first-pass verification bite/i);
+    expect(finalText).toMatch(/adapted cue/i);
     expect(finalText).not.toMatch(/\b(?:full substitution map|complex set of dietary needs|sunflower-seed cream|coconut-curry dal)\b/i);
   }, 20_000);
 
@@ -2146,9 +2146,9 @@ describe('/ask failure surface regressions', () => {
 
     expect(events.some((event) => event.event === 'error')).toBe(false);
     expect(events.at(-1)?.event).toBe('done');
-    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'recipe_procedure_sanitized' });
+    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'substitution_basis_deterministic_completion' });
     expect(finalText).toContain('Minimum viable');
-    expect(finalText).toMatch(/first-pass verification bite/i);
+    expect(finalText).toMatch(/adapted cue/i);
     expect(finalText).not.toMatch(/\b(?:Original role|Constraint|Stand-in|sunflower seed butter|silken tofu|gluten-free naan)\b/i);
   }, 20_000);
 
@@ -2199,7 +2199,7 @@ describe('/ask failure surface regressions', () => {
 
     expect(events.some((event) => event.event === 'error')).toBe(false);
     expect(events.at(-1)?.event).toBe('done');
-    expect(JSON.parse(events.at(-1)!.data)).not.toMatchObject({ guarded: 'recipe_procedure_sanitized' });
+    expect(JSON.parse(events.at(-1)!.data)).not.toMatchObject({ guarded: 'substitution_basis_deterministic_completion' });
     expect(finalText).toMatch(/first-pass verification bite/i);
     expect(finalText).toMatch(/\b(?:The test|Microwave|press into a small ball)\b/i);
   }, 20_000);
@@ -2251,7 +2251,7 @@ describe('/ask failure surface regressions', () => {
 
     expect(events.some((event) => event.event === 'error')).toBe(false);
     expect(events.at(-1)?.event).toBe('done');
-    expect(JSON.parse(events.at(-1)!.data)).not.toMatchObject({ guarded: 'recipe_procedure_sanitized' });
+    expect(JSON.parse(events.at(-1)!.data)).not.toMatchObject({ guarded: 'substitution_basis_deterministic_completion' });
     expect(finalText).toMatch(/smallest safe first test|Heat tiny sip/i);
     expect(finalText).toMatch(/Sip it warm/i);
   }, 20_000);
@@ -2357,7 +2357,7 @@ describe('/ask failure surface regressions', () => {
 
     expect(events.some((event) => event.event === 'error')).toBe(false);
     expect(events.at(-1)?.event).toBe('done');
-    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'recipe_procedure_sanitized' });
+    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'substitution_basis_deterministic_completion' });
     expect(finalText).toContain('Minimum viable');
     expect(finalText).not.toMatch(/\b(?:try this simple version|simmer canned tomato sauce|serve with)\b/i);
   }, 20_000);
