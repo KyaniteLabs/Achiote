@@ -9,8 +9,15 @@ import referenceSeedQueueData from '../src/data/reference-seed-queue.json' with 
 import cacheWarmingManifestData from '../src/data/cache-warming-manifest.json' with { type: 'json' };
 import referenceSourceRegistryData from '../src/data/reference-source-registry.json' with { type: 'json' };
 import referenceFamilyTaxonomyData from '../src/data/reference-family-taxonomy.json' with { type: 'json' };
+import referencePantryFixturesData from '../src/data/reference-pantry-fixtures.json' with { type: 'json' };
 import inferenceBurdenInventoryData from '../src/data/inference-burden-inventory.json' with { type: 'json' };
-import { validateBundledData, type BundledDataSet } from '../src/lib/data-schemas.js';
+import {
+  validateBundledData,
+  validateCoreFoodData,
+  validateInferenceBurdenData,
+  validateReferencePantryData,
+  type BundledDataSet,
+} from '../src/lib/data-schemas.js';
 
 const bundledData: BundledDataSet = {
   dishFamilies: dishFamiliesData,
@@ -23,6 +30,7 @@ const bundledData: BundledDataSet = {
   cacheWarmingManifest: cacheWarmingManifestData,
   referenceSourceRegistry: referenceSourceRegistryData,
   referenceFamilyTaxonomy: referenceFamilyTaxonomyData,
+  referencePantryFixtures: referencePantryFixturesData,
   inferenceBurdenInventory: inferenceBurdenInventoryData,
 };
 
@@ -44,6 +52,12 @@ function expectIssue(issues: ReturnType<typeof validateBundledData>, path: strin
 describe('bundled data validation', () => {
   it('accepts the committed bundled JSON data files', () => {
     expect(validateBundledData(bundledData)).toEqual([]);
+  });
+
+  it('allows narrow validators to validate independently owned data surfaces', () => {
+    expect(validateCoreFoodData(bundledData)).toEqual([]);
+    expect(validateReferencePantryData(bundledData)).toEqual([]);
+    expect(validateInferenceBurdenData(bundledData)).toEqual([]);
   });
 
   it('keeps production reference data framed as generalized mechanisms, not canary prompt fixtures', () => {
@@ -236,6 +250,18 @@ describe('bundled data validation', () => {
       const expectedTags = globalCoverageMatrixData.axes[axis].values.map((value) => `${axis}.${value.id}`);
       expect([...coveredTags].filter((tag) => tag.startsWith(`${axis}.`)).sort()).toEqual(expectedTags.sort());
     }
+  });
+
+  it('rejects reference pantry fixture and taxonomy count drift', () => {
+    const data = cloneBundledData();
+    const duplicateFixtureIndex = data.referencePantryFixtures!.fixtures.length;
+    data.referencePantryFixtures!.fixtures.push(structuredClone(data.referencePantryFixtures!.fixtures[0]));
+    data.referenceFamilyTaxonomy.familyMappings[0].currentRecordCount += 1;
+
+    const issues = validateReferencePantryData(data);
+
+    expectIssue(issues, `referencePantryFixtures.fixtures[${duplicateFixtureIndex}].cacheTarget`, 'duplicate fixture cache target');
+    expectIssue(issues, 'referenceFamilyTaxonomy.familyMappings[0].currentRecordCount', 'fixtures contain');
   });
 
   it('rejects malformed global coverage axes and duplicate values', () => {

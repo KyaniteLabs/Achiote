@@ -251,6 +251,7 @@ export type BundledDataSet = {
   cacheWarmingManifest: CacheWarmingManifest;
   referenceSourceRegistry: ReferenceSourceRegistry;
   referenceFamilyTaxonomy: ReferenceFamilyTaxonomy;
+  referencePantryFixtures?: ReferencePantryFixtureBatch;
   inferenceBurdenInventory: InferenceBurdenInventory;
 };
 
@@ -997,21 +998,76 @@ function validateInferenceBurdenInventory(issues: ValidationIssue[], data: Infer
   });
 }
 
-export function validateBundledData(data: BundledDataSet): ValidationIssue[] {
+export function validateCoreFoodData(data: Pick<BundledDataSet,
+  'dishFamilies' |
+  'ingredients' |
+  'regionalAvailability' |
+  'sensoryProfiles' |
+  'memoryHints'
+>): ValidationIssue[] {
   const issues: ValidationIssue[] = [];
   validateDishFamilies(issues, data.dishFamilies);
   validateIngredients(issues, data.ingredients);
   validateRegionalAvailability(issues, data.regionalAvailability);
   validateSensoryProfiles(issues, data.sensoryProfiles);
   validateMemoryHints(issues, data.memoryHints);
+  return issues;
+}
+
+export function validateOperatorData(data: Pick<BundledDataSet,
+  'globalCoverageMatrix' |
+  'referenceSeedQueue' |
+  'cacheWarmingManifest' |
+  'referenceSourceRegistry'
+>): ValidationIssue[] {
+  const issues: ValidationIssue[] = [];
   const validTags = validateGlobalCoverageMatrix(issues, data.globalCoverageMatrix);
   const seedIds = validateReferenceSeedQueue(issues, data.referenceSeedQueue, validTags);
   validateCacheWarmingManifest(issues, data.cacheWarmingManifest, validTags, seedIds);
   validateReferenceSourceRegistry(issues, data.referenceSourceRegistry);
+  return issues;
+}
+
+export function validateReferencePantryData(data: Pick<BundledDataSet,
+  'globalCoverageMatrix' |
+  'referenceSeedQueue' |
+  'cacheWarmingManifest' |
+  'referenceSourceRegistry' |
+  'referenceFamilyTaxonomy' |
+  'referencePantryFixtures'
+>): ValidationIssue[] {
+  const issues: ValidationIssue[] = [];
+  const validTags = validateGlobalCoverageMatrix(issues, data.globalCoverageMatrix);
+  const seedIds = validateReferenceSeedQueue(issues, data.referenceSeedQueue, validTags);
+  validateCacheWarmingManifest(issues, data.cacheWarmingManifest, validTags, seedIds);
+  validateReferenceSourceRegistry(issues, data.referenceSourceRegistry);
+  const fixtureFamilies = referencePantryFixtureFamilies(data);
+  validateReferenceFamilyTaxonomy(issues, data.referenceFamilyTaxonomy, validTags, fixtureFamilies);
+  validateReferencePantryPopulationSync(issues, data);
+  return issues;
+}
+
+export function validateInferenceBurdenData(data: Pick<BundledDataSet, 'inferenceBurdenInventory'>): ValidationIssue[] {
+  const issues: ValidationIssue[] = [];
+  validateInferenceBurdenInventory(issues, data.inferenceBurdenInventory);
+  return issues;
+}
+
+export function validateBundledData(data: BundledDataSet): ValidationIssue[] {
+  return [
+    ...validateCoreFoodData(data),
+    ...validateReferencePantryData(data),
+    ...validateInferenceBurdenData(data),
+  ];
+}
+
+function referencePantryFixtureFamilies(data: Pick<BundledDataSet,
+  'cacheWarmingManifest' |
+  'referencePantryFixtures'
+>): Set<string> {
   const fixtureFamilies = new Set<string>();
-  const dataWithFixtures = data as unknown as { referencePantryFixtures?: ReferencePantryFixtureBatch };
-  if (Array.isArray(dataWithFixtures.referencePantryFixtures?.fixtures)) {
-    for (const fixture of dataWithFixtures.referencePantryFixtures.fixtures) {
+  if (Array.isArray(data.referencePantryFixtures?.fixtures)) {
+    for (const fixture of data.referencePantryFixtures.fixtures) {
       if (isRecord(fixture.cacheTarget) && isNonEmptyString(fixture.cacheTarget.dishFamily)) {
         fixtureFamilies.add(fixture.cacheTarget.dishFamily);
       }
@@ -1023,9 +1079,40 @@ export function validateBundledData(data: BundledDataSet): ValidationIssue[] {
       }
     }
   }
-  validateReferenceFamilyTaxonomy(issues, data.referenceFamilyTaxonomy, validTags, fixtureFamilies);
-  validateInferenceBurdenInventory(issues, data.inferenceBurdenInventory);
-  return issues;
+  return fixtureFamilies;
+}
+
+function validateReferencePantryPopulationSync(
+  issues: ValidationIssue[],
+  data: Pick<BundledDataSet, 'referenceFamilyTaxonomy' | 'referencePantryFixtures'>,
+): void {
+  if (!Array.isArray(data.referencePantryFixtures?.fixtures)) return;
+  const fixtureCounts = new Map<string, number>();
+  const targetKeys = new Set<string>();
+  data.referencePantryFixtures.fixtures.forEach((fixture, index) => {
+    const cacheTarget = isRecord(fixture.cacheTarget) ? fixture.cacheTarget : {};
+    const dishFamily = isNonEmptyString(cacheTarget.dishFamily) ? cacheTarget.dishFamily : '';
+    const region = isNonEmptyString(cacheTarget.region) ? cacheTarget.region : '';
+    if (!dishFamily || !region) return;
+    const targetKey = `${dishFamily}\u0000${region}`;
+    if (targetKeys.has(targetKey)) {
+      pushIssue(issues, `referencePantryFixtures.fixtures[${index}].cacheTarget`, 'duplicate fixture cache target');
+    }
+    targetKeys.add(targetKey);
+    fixtureCounts.set(dishFamily, (fixtureCounts.get(dishFamily) ?? 0) + 1);
+  });
+
+  for (const [index, mapping] of data.referenceFamilyTaxonomy.familyMappings.entries()) {
+    if (!isNonEmptyString(mapping.dishFamily)) continue;
+    const fixtureCount = fixtureCounts.get(mapping.dishFamily) ?? 0;
+    if (typeof mapping.currentRecordCount === 'number' && mapping.currentRecordCount !== fixtureCount) {
+      pushIssue(
+        issues,
+        `referenceFamilyTaxonomy.familyMappings[${index}].currentRecordCount`,
+        `taxonomy says ${mapping.currentRecordCount}, fixtures contain ${fixtureCount}`,
+      );
+    }
+  }
 }
 
 export function validateCrossReferences(data: BundledDataSet): ValidationIssue[] {
