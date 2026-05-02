@@ -78,9 +78,12 @@ describe('QA artifact pipeline', () => {
     expect(second.rotatedAfterReferenceUpdate).toBe(true);
   });
 
-  it('wires local and weak-cloud runners to the shared manifest contract', () => {
+  it('wires canary, profiler, telemetry, and knowledge-gap adapters to the shared manifest contract', () => {
     const localCanary = fs.readFileSync('scripts/local-canary-qa.mjs', 'utf8');
     const weakCloud = fs.readFileSync('scripts/weak-cloud-overnight.mjs', 'utf8');
+    const profiler = fs.readFileSync('scripts/local-inference-profiler.mjs', 'utf8');
+    const telemetry = fs.readFileSync('scripts/model-telemetry-report.mjs', 'utf8');
+    const knowledgeGap = fs.readFileSync('scripts/knowledge-gap-canary.mjs', 'utf8');
 
     expect(localCanary).toContain("from './lib/qa-artifact-pipeline.mjs'");
     expect(localCanary).toContain('writeQaRunManifest');
@@ -90,5 +93,14 @@ describe('QA artifact pipeline', () => {
     expect(weakCloud).toContain('buildQaRunManifest');
     expect(weakCloud).toContain("runKind: 'weak-cloud-overnight'");
     expect(weakCloud).toContain('excludedEvidenceReasons');
+    expect(profiler).toContain("from './lib/qa-artifact-pipeline.mjs'");
+    expect(profiler).toContain("runKind: 'local-inference-profiler'");
+    expect(profiler).toContain('excludedEvidenceReasons');
+    expect(telemetry).toContain("from './lib/qa-artifact-pipeline.mjs'");
+    expect(telemetry).toContain("runKind: 'model-telemetry-report'");
+    expect(telemetry).toContain('manifestPath');
+    expect(knowledgeGap).toContain("from './lib/qa-artifact-pipeline.mjs'");
+    expect(knowledgeGap).toContain("runKind: 'knowledge-gap-canary'");
+    expect(knowledgeGap).toContain('clean_rows_only');
   });
 });

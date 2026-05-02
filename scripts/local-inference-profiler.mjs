@@ -2,6 +2,7 @@
 import { spawn } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
+import { QA_ARTIFACT_MANIFEST_FILE, writeQaRunManifest } from './lib/qa-artifact-pipeline.mjs';
 import {
   buildLmStudioLoadPayload,
   isProtectedLocalInferenceModel,
@@ -96,6 +97,21 @@ if (artifact.events.length === 0) {
 fs.mkdirSync(outputDir, { recursive: true });
 const artifactPath = path.join(outputDir, `${slug(model)}-${profileName}-${Date.now()}.json`);
 fs.writeFileSync(artifactPath, `${JSON.stringify(artifact, null, 2)}\n`);
+const manifestPath = path.join(outputDir, QA_ARTIFACT_MANIFEST_FILE);
+writeQaRunManifest(manifestPath, {
+  artifactDir: outputDir,
+  runKind: 'local-inference-profiler',
+  stopCondition: 'Profiler operations completed or recorded per-event failures.',
+  sampleCount: artifact.events.length,
+  providers: ['local'],
+  models: [model],
+  profile: profileName,
+  endpointStyle,
+  excludedEvidenceReasons: artifact.events
+    .filter((event) => !event.ok)
+    .map((event) => `${event.label}: ${event.error?.message ?? event.error ?? 'event failed'}`),
+  outputs: { artifactPath },
+});
 printJson({ artifactPath, ...artifact });
 
 function parseArgs(argv) {

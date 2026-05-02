@@ -1,13 +1,14 @@
 #!/usr/bin/env node
 
 import fs from 'node:fs';
-import { resolve } from 'node:path';
+import { dirname, resolve } from 'node:path';
 import {
   analyzeKnowledgeGaps,
   buildTaxonomyRemediationQueue,
   parseJsonl,
   reconcileTaxonomyRemediationQueue,
 } from './lib/knowledge-gap-canary.mjs';
+import { QA_ARTIFACT_MANIFEST_FILE, writeQaRunManifest } from './lib/qa-artifact-pipeline.mjs';
 
 function usage() {
   return [
@@ -76,6 +77,23 @@ try {
   if (args.taxonomyQueue) {
     fs.writeFileSync(resolve(args.taxonomyQueue), `${JSON.stringify(taxonomyRemediationQueue, null, 2)}\n`);
   }
+  if (args.out) {
+    const outPath = resolve(args.out);
+    writeQaRunManifest(resolve(dirname(outPath), QA_ARTIFACT_MANIFEST_FILE), {
+      artifactDir: dirname(outPath),
+      runKind: 'knowledge-gap-canary',
+      stopCondition: 'Clean rows analyzed; provider/control-flow failures excluded from taxonomy inference.',
+      promptIds: rows.map((row) => String(row?.prompt ?? row?.id ?? '')).filter(Boolean),
+      providers: unique(rows.map((row) => row?.provider)),
+      models: unique(rows.map((row) => row?.model)),
+      excludedEvidenceReasons: unique(analysis.excludedEvidence.map((entry) => entry.reason)),
+      requiredLabels: ['clean_rows_only'],
+      outputs: {
+        reportPath: outPath,
+        taxonomyQueuePath: args.taxonomyQueue ? resolve(args.taxonomyQueue) : '',
+      },
+    });
+  }
 } catch (error) {
   console.error(error instanceof Error ? error.message : String(error));
   console.error(usage());
@@ -84,4 +102,8 @@ try {
 
 function readJson(filePath) {
   return JSON.parse(fs.readFileSync(resolve(filePath), 'utf8'));
+}
+
+function unique(values) {
+  return [...new Set(values.map((value) => String(value ?? '')).filter(Boolean))].sort();
 }

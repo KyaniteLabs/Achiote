@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import fs from 'node:fs';
 import path from 'node:path';
+import { QA_ARTIFACT_MANIFEST_FILE, writeQaRunManifest } from './lib/qa-artifact-pipeline.mjs';
 import {
   mineTelemetryPatterns,
   normalizeLocalCanarySummary,
@@ -37,8 +38,19 @@ const markdown = renderTelemetryMarkdown({ events, patterns, generatedAt });
 fs.mkdirSync(outputDir, { recursive: true });
 const jsonPath = path.join(outputDir, 'summary.json');
 const markdownPath = path.join(outputDir, 'summary.md');
+const manifestPath = path.join(outputDir, QA_ARTIFACT_MANIFEST_FILE);
 fs.writeFileSync(jsonPath, `${JSON.stringify(report, null, 2)}\n`);
 fs.writeFileSync(markdownPath, markdown);
+writeQaRunManifest(manifestPath, {
+  artifactDir: outputDir,
+  runKind: 'model-telemetry-report',
+  stopCondition: 'Telemetry inputs normalized and report artifacts written.',
+  sampleCount: events.length,
+  providers: unique(events.map((event) => event.provider)),
+  models: unique(events.map((event) => event.model)),
+  excludedEvidenceReasons: skipped.map((entry) => `${entry.file}: ${entry.error}`),
+  outputs: { jsonPath, markdownPath },
+});
 
 process.stdout.write(`${JSON.stringify({
   generatedAt,
@@ -48,6 +60,7 @@ process.stdout.write(`${JSON.stringify({
   patterns: patterns.map((pattern) => ({ id: pattern.id, count: pattern.count })),
   jsonPath,
   markdownPath,
+  manifestPath,
 }, null, 2)}\n`);
 
 function readTelemetryFile(file) {
@@ -172,4 +185,8 @@ function numberArg(name) {
 
 function positionalArgs() {
   return args.positionals;
+}
+
+function unique(values) {
+  return [...new Set(values.map((value) => String(value ?? '')).filter(Boolean))].sort();
 }
