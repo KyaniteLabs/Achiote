@@ -1,7 +1,7 @@
 import type { CueComponent } from './types.js';
 import type { FoodScienceCueProfile } from './cue-profile-engine.js';
 
-export type ConstraintClass = 'vegan' | 'vegetarian' | 'gluten-free' | 'nut-allergy' | 'halal' | 'kosher' | 'dairy-free' | 'pork-free';
+export type ConstraintClass = 'vegan' | 'vegetarian' | 'gluten-free' | 'nut-allergy' | 'halal' | 'kosher' | 'dairy-free' | 'pork-free' | 'soy-allergy';
 
 export type ConstraintGuidance = Pick<FoodScienceCueProfile, 'accessibilityPrinciples' | 'substituteLogic' | 'safetyNotes'>;
 
@@ -16,6 +16,7 @@ const CONSTRAINT_PATTERNS: Array<[ConstraintClass, RegExp]> = [
   ['vegetarian', /\bvegetarian\b|\bmeat[-\s]?free\b|\bno meat\b/i],
   ['gluten-free', /\bgluten[-\s]?free\b|\bceliac\b|\bcoeliac\b|\bno gluten\b|\bwheat[-\s]?free\b/i],
   ['nut-allergy', /\bnut allerg|\bpeanut allerg|\btree nuts?\b|\bpeanut[-\s]?free\b|\bnut[-\s]?free\b|\bno peanuts?\b|\bno nuts?\b|\ballergic to (?:peanuts?|tree nuts?|nuts?)\b/i],
+  ['soy-allergy', /\bsoy allerg|\bsoy[-\s]?free\b|\bno soy\b|\ballergic to soy\b/i],
   ['halal', /\bhalal\b/i],
   ['kosher', /\bkosher\b/i],
   ['dairy-free', /\bdairy[-\s]?free\b|\blactose[-\s]?free\b|\bno dairy\b|\blactose intolerant\b|\bmilk allerg|\bno milk\b/i],
@@ -98,6 +99,12 @@ function enforceKnownConstraintTerms(text: string, classes: Set<ConstraintClass>
     ]);
   }
 
+  if (classes.has('soy-allergy')) {
+    rewritten = replaceConstraintText(rewritten, [
+      [/\bfirm tofu\b|\btofu\b|\btempeh\b|\bsoy sauce\b|\bsoy\b/gi, 'soy-free mushroom, bean, potato, yuca, or roasted vegetable carrier'],
+    ]);
+  }
+
   return rewritten;
 }
 
@@ -126,10 +133,13 @@ export function rewriteCueIngredientForConstraints(item: string, classes: Set<Co
   }
 
   if (hasAnyConstraint(classes, ['vegan', 'vegetarian'])) {
+    const plantProtein = classes.has('soy-allergy')
+      ? 'beans, mushrooms, roasted potato, yuca, or olive oil'
+      : 'beans, mushrooms, tofu, or olive oil';
     rewritten = replaceConstraintText(rewritten, [
       [
         'small amount of accessible protein, fat, dairy, mushroom, bean, or plant-based substitute if relevant',
-        'small amount of plant-based umami/fat carrier such as beans, mushrooms, tofu, or olive oil',
+        `small amount of plant-based umami/fat carrier such as ${plantProtein}`,
       ],
       [
         'safe liquid from the remembered family: water for watery/cold clues, broth for savory soup clues, milk or plant milk only when body was remembered',
@@ -160,6 +170,9 @@ export function rewriteCueIngredientForConstraints(item: string, classes: Set<Co
   }
 
   if (classes.has('dairy-free')) {
+    const dairyFreeProtein = classes.has('soy-allergy')
+      ? 'mushroom, bean, roasted potato, yuca, or olive oil'
+      : 'mushroom, bean, tofu, or olive oil';
     rewritten = replaceConstraintText(rewritten, [
       [
         'safe liquid from the remembered family: water for watery/cold clues, broth for savory soup clues, milk or plant milk only when body was remembered',
@@ -171,7 +184,7 @@ export function rewriteCueIngredientForConstraints(item: string, classes: Set<Co
       ],
       [
         'small amount of accessible protein, fat, dairy, mushroom, bean, or plant-based substitute if relevant',
-        'small amount of accessible plant-based protein/fat carrier such as mushroom, bean, tofu, or olive oil',
+        `small amount of accessible plant-based protein/fat carrier such as ${dairyFreeProtein}`,
       ],
       [
         'pantry sauce base matching the researched direction: tomato, dairy, oil, vinegar, fruit, chile, or stock',
@@ -197,10 +210,13 @@ export function rewriteCueComponentsForConstraints(components: CueComponent[], c
     }
 
     if (hasAnyConstraint(classes, ['vegan', 'vegetarian'])) {
+      const plantProtein = classes.has('soy-allergy')
+        ? 'mushrooms, beans, or roasted potato pan-seared in oil'
+        : 'firm tofu, mushrooms, or beans pan-seared in oil';
       localTestWith = replaceConstraintText(localTestWith, [
         [
           'any accessible protein: ground pork, chicken thigh, or firm tofu pan-seared in oil',
-          'any accessible plant-based protein: firm tofu, mushrooms, or beans pan-seared in oil',
+          `any accessible plant-based protein: ${plantProtein}`,
         ],
         ['grocery-store salsa, tomato paste with vinegar and sugar, or yogurt with herbs', 'grocery-store salsa, tomato paste with vinegar and sugar, or oil-herb sauce'],
         ['any warm broth or stock with a pinch of the remembered spice', 'any warm vegetable broth with a pinch of the remembered spice'],

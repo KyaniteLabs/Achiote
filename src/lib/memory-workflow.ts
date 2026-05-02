@@ -23,6 +23,8 @@ const RESEARCH_STOPWORDS = new Set([
   'my', 'mom', 'grandma', 'grandmother', 'auntie', 'friend',
   'said', 'sounded', 'mentioned', 'called', 'something', 'like',
   'thing', 'with', 'from', 'and', 'or', 'the', 'that', 'a', 'of', 'in', 'it',
+  'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday',
+  'chilled', 'cold', 'hot', 'warm',
   // Spanish
   'de', 'la', 'el', 'en', 'con', 'del', 'por', 'para', 'que', 'un', 'una',
   // French
@@ -69,9 +71,21 @@ function normalizeForLooseMatch(value: string): string {
     .trim();
 }
 
+function isBroadRegionalHint(hint: string): boolean {
+  return /\b(?:latin\s+america|hispanic|spanish-speaking|asia|europe|africa|middle\s+east|mediterranean|caribbean|south\s+america|central\s+america)\b/i.test(hint);
+}
+
 function matchesWordOrPhrase(text: string, hint: string): boolean {
   const pattern = escapeRegExp(hint).replace(/\s+/g, '\\s+');
   return new RegExp(`(?:^|\\b)${pattern}(?:$|\\b)`, 'i').test(text);
+}
+
+function isNegatedMention(text: string, phrase: string): boolean {
+  const pattern = escapeRegExp(phrase).replace(/\s+/g, '\\s+');
+  return new RegExp(
+    `\\b(?:not|no|without|wasn['’]?t|was\\s+not|isn['’]?t|is\\s+not|aren['’]?t|are\\s+not)\\b[^.:?!;]{0,48}\\b${pattern}\\b`,
+    'i',
+  ).test(text);
 }
 
 function likelyDishPhrases(text: string): string[] {
@@ -97,7 +111,9 @@ function likelyDishPhrases(text: string): string[] {
 function extractPossibleNames(text: string): string[] {
   const quoted = [...text.matchAll(/[“\"]([^”\"]+)[”\"]/g)].map((match) => match[1]);
   const phoneticFragments = [...text.matchAll(/\b[\p{L}\p{M}]+(?:-[\p{L}\p{M}]+){1,}\b/gu)].map((match) => match[0]);
-  return unique([...quoted, ...likelyDishPhrases(text), ...phoneticFragments]);
+  return unique([...quoted, ...likelyDishPhrases(text), ...phoneticFragments])
+    .filter((name) => !RESEARCH_STOPWORDS.has(name.toLowerCase()))
+    .filter((name) => !isNegatedMention(text.toLowerCase(), name));
 }
 
 function extractCookingMethodHints(text: string): string[] {
@@ -270,9 +286,14 @@ function extractRegionHints(lowerText: string, originalText: string): string[] {
   const hints: string[] = [];
 
   for (const { pattern, label } of REGION_PATTERNS) {
-    if (pattern.test(lowerText)) {
+    pattern.lastIndex = 0;
+    if (pattern.test(lowerText) && !isNegatedMention(lowerText, label)) {
       hints.push(label);
     }
+  }
+
+  if (/\bponce\b/i.test(originalText) && !isNegatedMention(lowerText, 'puerto rico')) {
+    hints.push('Puerto Rican');
   }
 
   for (const { source, flags } of GEOGRAPHIC_CONTEXT_PATTERN_SOURCES) {
@@ -280,7 +301,7 @@ function extractRegionHints(lowerText: string, originalText: string): string[] {
     const matches = [...originalText.matchAll(pattern)];
     for (const match of matches) {
       const place = match[1] ? trimGeographicContext(match[1]) : '';
-      if (place && place.length > 1 && !/^(the|a|an|my|his|her|our|their|this|that|it|we|they|she|he)\s/i.test(place)) {
+      if (place && place.length > 1 && !/^(the|a|an|my|his|her|our|their|this|that|it|we|they|she|he)\s/i.test(place) && !isNegatedMention(lowerText, place)) {
         hints.push(place);
       }
     }
@@ -335,7 +356,10 @@ export function collectFoodMemory(input: FoodMemoryInput): CollectedFoodMemory {
     input.knownRegion,
     ...extractRegionHints(lower, normalized),
   ].filter((value): value is string => Boolean(value)));
-  const rememberedIngredients = INGREDIENT_HINTS.filter((ingredient) => matchesWordOrPhrase(lower, ingredient));
+  const rememberedIngredients = unique([
+    ...INGREDIENT_HINTS.filter((ingredient) => matchesWordOrPhrase(lower, ingredient) && !isNegatedMention(lower, ingredient)),
+    includesAny(lower, ['acorn jelly', 'acorn']) && !isNegatedMention(lower, 'acorn') ? 'acorn jelly' : '',
+  ]);
   const cookingMethodHints = extractCookingMethodHints(lower);
   const sensoryClues = unique([
     includesAny(lower, ['sour', 'tangy', 'tart']) ? 'sour/tangy' : '',
@@ -343,8 +367,11 @@ export function collectFoodMemory(input: FoodMemoryInput): CollectedFoodMemory {
     includesAny(lower, ['spicy', 'hot', 'pepper', 'chile', 'chili', 'piquant']) ? 'spicy/peppery' : '',
     includesAny(lower, ['crispy', 'crunchy', 'fried', 'crackling', 'crust']) ? 'crispy/fried texture' : '',
     includesAny(lower, ['soft', 'mushy', 'melt', 'melting', 'tender']) ? 'soft texture' : '',
+    includesAny(lower, ['slippery', 'slick', 'gelatinous', 'jelly']) ? 'slippery/gelled texture' : '',
     includesAny(lower, ['chewy', 'stretchy', 'elastic', 'bouncy']) ? 'chewy texture' : '',
+    includesAny(lower, ['nutty', 'toasty nut', 'roasted nut']) ? 'nutty aroma' : '',
     includesAny(lower, ['smell', 'aroma', 'fragrant', 'scent', 'stink']) ? 'remembered aroma' : '',
+    includesAny(lower, ['herb', 'herby', 'green', 'grassy', 'dill', 'parsley', 'cilantro', 'sorrel']) ? 'herby/green aroma' : '',
     includesAny(lower, ['sauce', 'gravy', 'broth', 'juice', 'wet']) ? 'sauce/gravy' : '',
     includesAny(lower, ['bitter', 'burnt', 'toasted', 'charred', 'roasted']) ? 'bitter/roasted' : '',
     includesAny(lower, ['rich', 'creamy', 'buttery', 'heavy', 'fatty', 'greasy']) ? 'rich/creamy' : '',
@@ -619,18 +646,22 @@ function buildDescriptiveHypothesis(memory: CollectedFoodMemory): DishHypothesis
 
   // Detect food format from text and sensory clues
   const isSweet = sensory.some((s) => s.includes('sweet')) || text.includes('sweet') || text.includes('sugar') || text.includes('caramel');
+  const isSavory = ingredients.some((ingredient) => /meat|beef|pork|chicken|fish|cheese|olive|garlic|oregano|vinegar|sesame|soy/.test(ingredient))
+    || sensory.some((s) => /savory|umami|peppery/.test(s))
+    || /\b(?:savory|meat|beef|pork|chicken|fish|cheese|olive|garlic|oregano|vinegar|sesame|soy)\b/i.test(text);
   const isSoup = sensory.some((s) => s.includes('soup') || s.includes('broth')) || text.includes('soup') || text.includes('broth');
   const isFried = sensory.some((s) => s.includes('fried') || s.includes('crispy')) || text.includes('fried') || text.includes('crispy');
   const isBread = text.includes('bread') || text.includes('loaf') || text.includes('roll') || text.includes('bun');
   const isCandy = isSweet && (text.includes('candy') || text.includes('wrapped') || text.includes('paper') || text.includes('rectangle') || sensory.some((s) => s.includes('grainy') || s.includes('crystalline') || s.includes('chewy')));
   const isCookie = text.includes('cookie') || text.includes('biscuit') || sensory.some((s) => s.includes('cookie'));
   const isCake = text.includes('cake') || text.includes('pastry');
-  const isDrink = text.includes('drink') || text.includes('beverage') || text.includes('juice');
+  const isDrink = /\b(?:drink|beverage|sip|foamy|not curdled|over ice|soda|tea|coffee|juice drink)\b/i.test(text);
 
   const regionPhrase = region || 'the region';
 
   let descriptor = '';
-  if (isCandy) descriptor = 'candy or confection';
+  if (isSweet && isSavory) descriptor = 'sweet-savory composed dish';
+  else if (isCandy) descriptor = 'candy or confection';
   else if (isCookie) descriptor = 'cookie or biscuit';
   else if (isCake) descriptor = 'cake or pastry';
   else if (isBread) descriptor = 'bread or baked good';
@@ -663,7 +694,7 @@ function buildDescriptiveHypothesis(memory: CollectedFoodMemory): DishHypothesis
       'Not enough detail to name the dish yet, but we can still test the memory with a small sensory cue.',
     ],
     whatWouldConfirm: ['exact dish name or local nickname', 'how it was made or served', 'who made it or on what occasion'],
-    confidence: sensory.length >= 2 && region ? 'Medium' : 'Low',
+    confidence: sensory.length >= 2 && region && !isBroadRegionalHint(region) ? 'Medium' : 'Low',
     researchRequired: true,
   };
 }
@@ -838,19 +869,25 @@ export function generateFamilyFollowupQuestions(input: {
 
 
 function textSignals(input: MinimumViableNostalgiaInput): string {
-  return [
+  return stripNegatedSignalTerms([
     input.dossier.evidenceLedger.userSaid.join(' '),
     input.dossier.evidenceLedger.researched.join(' '),
     input.dossier.evidenceLedger.inferred.join(' '),
     input.researchFindings?.researchedFacts.join(' ') ?? '',
     input.researchFindings?.inferredFacts.join(' ') ?? '',
     input.dossier.hypotheses.map((hypothesis) => hypothesis.name).join(' '),
-  ].join(' ').toLowerCase();
+  ].join(' ').toLowerCase());
+}
+
+function stripNegatedSignalTerms(text: string): string {
+  return text
+    .replace(/\b(?:not|no)\s+[\p{L}\p{M}\s'-]{1,80}?(?=(?:[:;,.!?]|$))/giu, ' ')
+    .replace(/\b(?:without|wasn['’]?t|weren['’]?t|isn['’]?t|aren['’]?t|was\s+not|were\s+not|is\s+not|are\s+not)\s+[\p{L}\p{M}\s'-]{1,80}?(?=(?:[:;,.!?]|$))/giu, ' ');
 }
 
 const COMPONENT_ROLES = {
   starch: {
-    keywords: 'rice|potato|potatoes|mash|masa|dough|bread|yuca|cassava|plantain|dumpling|noodle|bean|beans|starch|tortilla|cake',
+    keywords: 'rice|potato|potatoes|mash|masa|dough|bread|yuca|cassava|plantain|dumpling|noodle|bean|beans|starch|tortilla|cake|acorn|jelly|gelled',
     criticalElement: 'gelatinized texture and sauce absorption',
     flavorProfile: 'neutral to slightly sweet, soft or chewy mouthfeel',
     localTestWith: 'any grocery-store starch: potato, rice, bread, or flour tortilla',
@@ -885,7 +922,7 @@ const COMPONENT_ROLES = {
     substitutionReason: 'Warm liquid releases volatile aromatics the same way regardless of the stock base; the nostalgia is in the aroma chemistry',
   },
   beverage: {
-    keywords: 'drink|beverage|juice|soda|fizzy|carbonated|sparkling|seltzer|horchata|agua fresca|agua de cebada|cebada|ceba|barley|atole|champurrado|lassi|chai|tea|coffee|espresso|cocoa|mate|milkshake|smoothie|tepache|sorrel|mauby|akasan|pinol|pinole|kombucha|over ice',
+    keywords: 'drink|beverage|soda|fizzy|carbonated|sparkling|seltzer|horchata|agua fresca|agua de cebada|cebada|ceba|barley|atole|champurrado|lassi|chai|tea|coffee|espresso|cocoa|mate|milkshake|smoothie|tepache|sorrel|mauby|akasan|pinol|pinole|kombucha|over ice',
     criticalElement: 'serving temperature, dilution, aroma extraction, dissolved body, and sip ritual',
     flavorProfile: 'balanced sweetness, acid, bitterness or spice, carried by water, dairy, grain starch, fruit, or carbonation',
     localTestWith: 'one small sip from water, milk or plant milk, seltzer, or juice plus a pantry aroma cue',
@@ -943,11 +980,22 @@ function decomposeIntoComponents(signals: string, userLocation?: string, overall
   }
 
   const confectionerySignals = signals.replace(/\b(?:not|rather than|instead of)\s+(?:a |an )?(?:candy|dessert|confection(?:ery)?|cookie|biscuit|sweet(?:ness)?|sweet-texture)(?:\s+or\s+(?:a |an )?(?:candy|dessert|confection(?:ery)?|cookie|biscuit|sweet(?:ness)?|sweet-texture))*\b/gi, '');
-  const hasStrongConfectionery = hasAnySignal(confectionerySignals, [wordSignal('caramel|dulce de leche|manjar|fudge|barfi|halva|baklava|mochi|candy|dessert|confection|cookie|biscuit|nougat|turrón|taffy|melcocha|cocada|flan|custard|pudding|chocolate|pastillas|milk candy|grainy/crystalline texture')]);
+  const hasStrongConfectionery = hasAnySignal(confectionerySignals, [wordSignal('caramel|dulce de leche|manjar|fudge|barfi|halva|baklava|mochi|candy|dessert|confection|cookie|biscuit|nougat|turrón|taffy|melcocha|cocada|flan|custard|pudding|chocolate|pastillas|milk candy|grainy/crystalline texture|powdery')]);
   const hasSavoryCueFamily = components.some((component) => ['starch', 'protein', 'sauce', 'vegetable', 'broth'].includes(component.role))
     || hasAnySignal(signals, [wordSignal('savory|curry|gravy|spiced|seasoned')]);
   if (!hasStrongConfectionery && hasSavoryCueFamily) {
     components = components.filter((component) => component.role !== 'confectionery');
+  }
+
+  if (components.length === 0) {
+    components.push({
+      role: 'overall',
+      criticalElement: 'the dominant sensory mechanism — aroma, texture, sauce, fat, acid, or contrast',
+      flavorProfile: 'unknown until one variable is isolated and tested',
+      localTestWith: `one safe pantry ingredient ${locationPhrase}`,
+      substitutionReason: 'Without a known mechanism, any substitution is guesswork; isolate one sensory variable first',
+      confidence: 'Low',
+    });
   }
 
   return components;
@@ -986,6 +1034,9 @@ function specificCriticalElement(role: ComponentRole, signals: string, fallback:
   if (role === 'starch' && signalIncludes(signals, 'yuca|cassava|tapioca')) {
     return 'cassava-family chew, gelatinized starch body, and crisp fried surface';
   }
+  if (role === 'starch' && signalIncludes(signals, 'acorn|jelly|gelled|slippery')) {
+    return 'cool gel texture, slippery bite, nutty grain aroma, and sauce cling';
+  }
   if (role === 'protein' && signalIncludes(signals, 'fish|shark')) {
     return 'fried fish richness, browned edge aroma, and sauce-carrying fat';
   }
@@ -1011,6 +1062,9 @@ function specificFlavorProfile(role: ComponentRole, signals: string, fallback: s
   if (role === 'starch' && signalIncludes(signals, 'yuca|cassava|tapioca')) {
     return 'neutral-sweet cassava chew with a crisp exterior and soft starchy middle';
   }
+  if (role === 'starch' && signalIncludes(signals, 'acorn|jelly|gelled|slippery')) {
+    return 'cool, slippery, softly gelled, lightly nutty, and carried by salty-acid dressing';
+  }
   if (role === 'protein' && signalIncludes(signals, 'fish|shark')) {
     return 'savory white-fish richness, browned oil aroma, salt, and a clean surface for sharp sauce';
   }
@@ -1035,6 +1089,9 @@ function specificFlavorProfile(role: ComponentRole, signals: string, fallback: s
 function specificLocalTestWith(role: ComponentRole, signals: string, fallback: string): string {
   if (role === 'starch' && signalIncludes(signals, 'yuca|cassava|tapioca')) {
     return 'frozen yuca/cassava, canned yuca, tapioca-starch paste, or plantain crisped in oil';
+  }
+  if (role === 'starch' && signalIncludes(signals, 'acorn|jelly|gelled|slippery')) {
+    return 'a tiny chilled cube of plain gelatin, agar, mung-bean jelly, or another safe neutral gel with sesame-vinegar dressing';
   }
   if (role === 'protein' && signalIncludes(signals, 'fish|shark')) {
     return 'a small piece of white fish, canned fish, or firm tofu pan-seared in oil';
@@ -1063,6 +1120,9 @@ function specificLocalTestWith(role: ComponentRole, signals: string, fallback: s
 function composedCarrierIngredient(signals: string): string {
   if (signalIncludes(signals, 'yuca|cassava|tapioca')) {
     return 'cassava-family carrier matching the remembered base: frozen yuca/cassava, canned yuca, tapioca-starch paste, or plantain crisped in oil';
+  }
+  if (signalIncludes(signals, 'acorn|jelly|gelled|slippery')) {
+    return 'cool gel carrier matching the remembered texture: plain gelatin, agar, mung-bean jelly, or another safe neutral gel';
   }
   return 'cheap grocery-store carrier matching the remembered base: starch, bread, potato, rice, bean, noodle, or cooked vegetable';
 }
@@ -1108,7 +1168,7 @@ function composedBiteSteps(signals: string): string[] {
 }
 
 function isBeverageSignal(signals: string): boolean {
-  return signalIncludes(signals, 'juice|soda|fizzy|carbonated|sparkling|seltzer|horchata|agua fresca|agua de cebada|ceba|atole|champurrado|lassi|chai|tea|coffee|espresso|cocoa|mate|milkshake|smoothie|tepache|sorrel|mauby|akasan|pinol|pinole|kombucha|over ice')
+  return signalIncludes(signals, 'drink|beverage|soda|fizzy|carbonated|sparkling|seltzer|horchata|agua fresca|agua de cebada|ceba|atole|champurrado|lassi|chai|tea|coffee|espresso|cocoa|mate|milkshake|smoothie|tepache|sorrel|mauby|akasan|pinol|pinole|kombucha|over ice|foamy')
     || conceptIncludes(signals, ['beverage', 'barley', 'rice', 'cinnamon']);
 }
 
@@ -1272,20 +1332,20 @@ function foodScienceCueProfile(signals: string, userLocation?: string, overallCo
       components: decomposeIntoComponents(signals, userLocation, overallConfidence),
     };
   }
-  const hasProteinOrFat = hasAnySignal(signals, [wordSignal('meat|sausage|fish|shark|beef|pork|chicken|lamb|cheese|fat|butter|oil|fried')]);
-  const hasStarchOrBase = hasAnySignal(signals, [wordSignal('starch|rice|potato|potatoes|mash|masa|dough|bread|yuca|cassava|plantain|dumpling|noodle|bean|beans')]);
-  const hasSauceOrCondiment = hasAnySignal(signals, [wordSignal('sauce|gravy|relish|chutney|salsa|condiment|dip|orange|creamy')]);
+  const hasProteinOrFat = signalIncludes(signals, 'meat|sausage|fish|shark|beef|pork|chicken|lamb|cheese|fat|butter|oil|fried|mushroom');
+  const hasStarchOrBase = signalIncludes(signals, 'starch|rice|potato|potatoes|mash|masa|dough|bread|yuca|cassava|plantain|dumpling|noodle|bean|beans|acorn|jelly');
+  const hasSauceOrCondiment = signalIncludes(signals, 'sauce|gravy|relish|chutney|salsa|condiment|dip|orange|creamy|soy|vinegar');
   const hasBeverage = isBeverageSignal(signals);
-  const hasLiquid = hasAnySignal(signals, [wordSignal('soup|stew|broth|sip|porridge')]);
-  const hasAroma = hasAnySignal(signals, [wordSignal('aroma|smell|spice|spiced|seasoned|garlic|onion|herb|pepper|cumin|coriander|clove|nutmeg|cinnamon')]);
-  const hasTextureContrast = hasAnySignal(signals, [wordSignal('crispy|crunchy|chewy|creamy|soft|tender|stretchy|crisp|fried|grilled|charred|brown|golden')]);
-  const hasAcidOrSweet = hasAnySignal(signals, [wordSignal('sour|tangy|acid|vinegar|citrus|lime|lemon|fermented|sweet|syrup|molasses|sugar')]);
+  const hasLiquid = signalIncludes(signals, 'soup|stew|broth|sip|porridge');
+  const hasAroma = signalIncludes(signals, 'aroma|smell|spice|spiced|seasoned|garlic|onion|herb|pepper|cumin|coriander|clove|nutmeg|cinnamon|oregano|sesame|nutty');
+  const hasTextureContrast = signalIncludes(signals, 'crispy|crunchy|chewy|creamy|soft|tender|stretchy|crisp|fried|grilled|charred|brown|golden|slippery|gelled|jelly|layered');
+  const hasAcidOrSweet = signalIncludes(signals, 'sour|tangy|acid|vinegar|citrus|lime|lemon|fermented|sweet|syrup|molasses|sugar');
   const confectionerySignals = signals.replace(/\b(?:not|rather than|instead of)\s+(?:a |an )?(?:candy|dessert|confection(?:ery)?|cookie|biscuit|sweet(?:ness)?|sweet-texture)(?:\s+or\s+(?:a |an )?(?:candy|dessert|confection(?:ery)?|cookie|biscuit|sweet(?:ness)?|sweet-texture))*\b/gi, '');
-  const hasStrongConfectionery = hasAnySignal(confectionerySignals, [wordSignal('caramel|dulce de leche|manjar|fudge|barfi|halva|baklava|mochi|candy|dessert|confection|cookie|biscuit|nougat|turrón|taffy|melcocha|cocada|flan|custard|pudding|chocolate|pastillas|milk candy|grainy/crystalline texture')]);
+  const hasStrongConfectionery = hasAnySignal(confectionerySignals, [wordSignal('caramel|dulce de leche|manjar|fudge|barfi|halva|baklava|mochi|candy|dessert|confection|cookie|biscuit|nougat|turrón|taffy|melcocha|cocada|flan|custard|pudding|chocolate|pastillas|milk candy|grainy/crystalline texture|powdery')]);
   const hasConfectionery = hasStrongConfectionery || hasAnySignal(confectionerySignals, [wordSignal('sweet|sugar')]);
-  const hasSavoryCueFamily = hasProteinOrFat || hasSauceOrCondiment || (hasStarchOrBase && hasAroma) || hasAnySignal(signals, [wordSignal('savory|curry|gravy|spiced|seasoned')]);
+  const hasSavoryCueFamily = hasProteinOrFat || hasSauceOrCondiment || (hasStarchOrBase && hasAroma) || signalIncludes(signals, 'savory|curry|gravy|spiced|seasoned|umami');
 
-  if (hasBeverage) {
+  if (hasBeverage && !hasProteinOrFat && !hasSauceOrCondiment && !signalIncludes(signals, 'not rice|not cinnamon|not horchata')) {
     return beverageCueProfile(signals, userLocation, overallConfidence);
   }
 

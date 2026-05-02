@@ -658,6 +658,70 @@ describe('minimum viable nostalgia cue', () => {
     expect(cue.safetyNotes.join(' ').toLowerCase()).toContain('halal');
   });
 
+  it('keeps sweet-savory plantain memories out of confectionery fallback', () => {
+    const memory = collectFoodMemory({
+      memoryText: 'Mi abuela in Ponce made sweet ripe plantains, savory ground beef with olives, sometimes cheese, baked in layers.',
+    });
+    const cue = generateMinimumViableNostalgiaCue({
+      dossier: buildReconstructionDossier({ memory, researchPlan: planDishResearch(memory) }),
+      maxEffortMinutes: 10,
+    });
+
+    expect(memory.extractedClues.culturalOrRegionalHints).toContain('Puerto Rican');
+    expect(cue.title).toBe('Minimum viable composed-bite cue');
+    expect(fullCueText(cue)).toMatch(/plantain|beef|protein|savory|starch/i);
+    expect(cue.title).not.toContain('sweet-texture');
+  });
+
+  it('respects explicit non-Latin Korean anchors and gel texture', () => {
+    const memory = collectFoodMemory({
+      memoryText: 'This is not Caribbean or Latin: my Korean neighbor made a chilled acorn jelly salad, slippery and nutty with soy-sesame dressing.',
+    });
+    const cue = generateMinimumViableNostalgiaCue({
+      dossier: buildReconstructionDossier({ memory, researchPlan: planDishResearch(memory) }),
+      maxEffortMinutes: 10,
+    });
+    const recommendationText = fullCueText(cue);
+
+    expect(memory.extractedClues.culturalOrRegionalHints).toContain('Korean');
+    expect(memory.extractedClues.culturalOrRegionalHints).not.toContain('Caribbean');
+    expect(memory.extractedClues.rememberedIngredients).toContain('acorn jelly');
+    expect(cue.title).toBe('Minimum viable composed-bite cue');
+    expect(recommendationText).toMatch(/gel|jelly|sesame|vinegar|slippery/i);
+  });
+
+  it('keeps vegetarian soy-allergy cues soy-free', () => {
+    const memory = collectFoodMemory({
+      memoryText: "Sunday pork shoulder smell from dad's kitchen: garlic, oregano, vinegar, and tray juices.",
+    });
+    const cue = generateMinimumViableNostalgiaCue({
+      dossier: buildReconstructionDossier({ memory, researchPlan: planDishResearch(memory) }),
+      constraints: ['vegetarian', 'soy allergy'],
+      maxEffortMinutes: 10,
+    });
+    const recommendationText = fullCueText(cue);
+
+    expect(recommendationText).toMatch(/mushroom|bean|potato|yuca|olive oil/i);
+    expect(recommendationText).not.toMatch(/tofu|tempeh|pork shoulder/);
+    expect(cue.safetyNotes.join(' ')).toContain('soy allergy');
+  });
+
+  it('does not let latest-correction negations create a horchata beverage cue', () => {
+    const memory = collectFoodMemory({
+      memoryText: 'Correction: not rice or cinnamon, not horchata. It was hot at a Filipino Christmas party, purple and thick, maybe with coconut.',
+    });
+    const cue = generateMinimumViableNostalgiaCue({
+      dossier: buildReconstructionDossier({ memory, researchPlan: planDishResearch(memory) }),
+      maxEffortMinutes: 10,
+    });
+    const recommendationText = fullCueText(cue);
+
+    expect(memory.extractedClues.rememberedIngredients).not.toContain('rice');
+    expect(memory.extractedClues.rememberedIngredients).not.toContain('horchata');
+    expect(cue.title).not.toContain('beverage');
+    expect(recommendationText).not.toMatch(/horchata|cinnamon|rice-starch slurry/i);
+  });
+
   it('qualifies animal proteins instead of naming pork or chicken for halal constraints', () => {
     const cue = generateMinimumViableNostalgiaCue({
       dossier: spicedSausageMashDossier(),

@@ -1064,9 +1064,27 @@ function normalizeDependentToolInput(toolName: string, input: unknown, userMessa
       ...record,
       dossier: toolPayloads.build_reconstruction_dossier,
       ...(typeof record.userLocation === 'string' || !memory?.userLocation ? {} : { userLocation: memory.userLocation }),
+      ...(Array.isArray(record.constraints) ? {} : { constraints: inferSafetyConstraints(userMessage) }),
     };
   }
+  if (toolName === 'generate_minimum_viable_nostalgia' && !Array.isArray(record.constraints)) {
+    return { ...record, constraints: inferSafetyConstraints(userMessage) };
+  }
   return input;
+}
+
+function inferSafetyConstraints(userMessage: string): string[] {
+  const constraints: string[] = [];
+  if (/\bvegan\b|\bplant[-\s]?based\b|\bno animal products?\b/i.test(userMessage)) constraints.push('vegan');
+  if (/\bvegetarian\b|\bmeat[-\s]?free\b|\bno meat\b/i.test(userMessage)) constraints.push('vegetarian');
+  if (/\bsoy allerg|\ballergic to soy\b|\bno soy\b|\bsoy[-\s]?free\b/i.test(userMessage)) constraints.push('soy allergy');
+  if (/\bpeanut allerg|\btree nut allerg|\bnut allerg|\bno nuts?\b|\bnut[-\s]?free\b/i.test(userMessage)) constraints.push('nut allergy');
+  if (/\bdairy[-\s]?free\b|\bno dairy\b|\bmilk allerg|\blactose\b/i.test(userMessage)) constraints.push('dairy-free');
+  if (/\bgluten[-\s]?free\b|\bno gluten\b|\bceliac\b|\bcoeliac\b/i.test(userMessage)) constraints.push('gluten-free');
+  if (/\bhalal\b/i.test(userMessage)) constraints.push('halal');
+  if (/\bkosher\b/i.test(userMessage)) constraints.push('kosher');
+  if (/\bno pork\b|\bpork[-\s]?free\b/i.test(userMessage)) constraints.push('pork-free');
+  return [...new Set(constraints)];
 }
 
 function buildGroundedSearchQuery(collectedMemory: unknown, resolvedDish: unknown): string {
@@ -1113,7 +1131,7 @@ function buildCorrectedMemoryText(modelMemoryText: string, userMessage: string, 
 }
 
 function sanitizeLatestCorrectionMemoryText(userMessage: string): string {
-  return userMessage
+  return stripNegatedCorrectionTerms(userMessage)
     .replace(/\b(?:not|no|wasn['’]?t|weren['’]?t|isn['’]?t|aren['’]?t|was\s+not|were\s+not|is\s+not|are\s+not)\s+(?:milky|creamy|cream|thick|warm|hot|sweet)(?:\s+or\s+(?:milky|creamy|cream|thick|warm|hot|sweet))*[;,.]?\s*/gi, '')
     .replace(/\b(was|were|is|are)\s+(?:;|,)\s+/gi, '$1 ')
     .replace(/\b(was|were|is|are)\s+(it|this|that|they)\s+\1\b/gi, '$1')
@@ -1121,8 +1139,14 @@ function sanitizeLatestCorrectionMemoryText(userMessage: string): string {
     .trim();
 }
 
+function stripNegatedCorrectionTerms(text: string): string {
+  return text
+    .replace(/\b(?:not|no)\s+[\p{L}\p{M}\s'-]{1,80}?(?=(?:[;,.!?]|$))/giu, ' ')
+    .replace(/\b(?:wasn['’]?t|weren['’]?t|isn['’]?t|aren['’]?t|was\s+not|were\s+not|is\s+not|are\s+not)\s+[\p{L}\p{M}\s'-]{1,80}?(?=(?:[;,.!?]|$))/giu, ' ');
+}
+
 function sanitizeStaleModelMemoryText(modelMemoryText: string, userMessage: string): string {
-  let sanitized = modelMemoryText;
+  let sanitized = stripNegatedCorrectionTerms(modelMemoryText);
   const rejectsPreviousDescription = /\b(?:correction:\s*)?no,?\s+I\s+remembered\s+wrong\b/i.test(userMessage);
   for (const descriptor of ['milky', 'creamy', 'cream', 'milk-forward', 'thick', 'warm', 'hot', 'sweet']) {
     const isContradicted = rejectsPreviousDescription
@@ -1490,10 +1514,11 @@ async function maybeSendForcedMinimumCue({
   const cue = await executeAndStreamTool('generate_minimum_viable_nostalgia', {
     dossier,
     userLocation: memory.userLocation,
+    constraints: inferSafetyConstraints(userMessage),
     maxEffortMinutes: 10,
   }, userMessage, send, calledTools, toolPayloads) as MinimumViableNostalgiaCue;
 
-  const responseText = formatMinimumCueFallback(cue, memory.userLocation);
+  const responseText = buildEvidenceBoundedMinimumCueResponse(toolPayloads, userMessage);
   send('text', responseText);
   maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
   finish({ guarded: 'explicit_minimum_cue_fallback' });
@@ -1824,16 +1849,50 @@ function compactMinimumCueWhy(text: string): string {
 }
 
 function buildMinimumCueCompletedResponse(toolPayloads: Record<string, unknown>, userMessage?: string): string {
+  const responseText = buildEvidenceBoundedMinimumCueResponse(toolPayloads, userMessage);
+  if (userMessage && containsCueFamilyMismatch(responseText, userMessage)) {
+    return buildUserMessageMechanismCueResponse(userMessage, toolPayloads);
+  }
+  return responseText;
+}
+
+function buildEvidenceBoundedMinimumCueResponse(toolPayloads: Record<string, unknown>, userMessage?: string): string {
   const cue = toolPayloads.generate_minimum_viable_nostalgia as MinimumViableNostalgiaCue | undefined;
   if (!cue) {
     return 'I completed the structured Achiote tool workflow, but the final synthesis model did not return in time. Try again with a shorter prompt or a faster provider.';
   }
   const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
-  const responseText = ensureCueQualityLanguage(formatMinimumCueFallback(cue, memory?.userLocation), toolPayloads, new Set(['generate_minimum_viable_nostalgia']));
-  if (userMessage && containsCueFamilyMismatch(responseText, userMessage)) {
-    return buildUserMessageMechanismCueResponse(userMessage, toolPayloads);
-  }
-  return responseText;
+  const body = ensureCueQualityLanguage(formatMinimumCueFallback(cue, memory?.userLocation), toolPayloads, new Set(['generate_minimum_viable_nostalgia']));
+  const preamble = buildEvidencePreamble(toolPayloads, userMessage);
+  return sanitizeMinimumCueFallbackBlock([preamble, body].filter(Boolean).join('\n\n'));
+}
+
+function buildEvidencePreamble(toolPayloads: Record<string, unknown>, userMessage?: string): string {
+  const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
+  const plan = toolPayloads.plan_dish_research as DishResearchPlan | undefined;
+  const top = plan?.hypotheses?.[0];
+  const clues = memory?.extractedClues;
+  const userAnchors = [
+    ...(clues?.culturalOrRegionalHints ?? []),
+    ...(clues?.possibleDishNames ?? []),
+    ...(clues?.rememberedIngredients ?? []),
+    ...(clues?.sensoryClues ?? []),
+  ].filter((anchor) => !isBroadRegionalHint(anchor)).slice(0, 8);
+  const inferred = [
+    top && !/^Unidentified\b/i.test(top.name) ? top.name : '',
+    ...(top?.whatWouldConfirm ?? []).slice(0, 3),
+  ].filter(Boolean);
+  const unknown = top?.confidence === 'Low' || !top ? 'exact name and family version' : 'family version and exact proportions';
+  const correction = userMessage && /\b(?:spelling|wrong|mistake|sound(?:ed)? like|called it)\b/i.test(userMessage) && top && !/^Unidentified\b/i.test(top.name)
+    ? ` Likely correction: your fragment points toward ${top.name}; keep that as a research start, not a final identity.`
+    : '';
+
+  if (userAnchors.length === 0 && inferred.length === 0) return '';
+  return [
+    `User-said anchors: ${userAnchors.length > 0 ? userAnchors.join(', ') : 'not enough yet'}.`,
+    inferred.length > 0 ? `Inferred research start: ${inferred.join('; ')}.${correction}` : '',
+    `Unknown: ${unknown}.`,
+  ].filter(Boolean).join('\n');
 }
 
 function ensureLocalCueLanguage(text: string, toolPayloads: Record<string, unknown>, calledTools: Set<string>): string {
