@@ -3,7 +3,7 @@
 import fs from 'node:fs';
 import { resolve } from 'node:path';
 import { ResearchCache } from '../dist/lib/research-cache.js';
-import { auditReferencePantryPopulation } from '../dist/lib/reference-pantry-population.js';
+import { applyReferencePantryAppend, auditReferencePantryPopulation } from '../dist/lib/reference-pantry-population.js';
 import { bundledGlobalReferenceSeeds } from '../dist/lib/reference-seed-planner.js';
 import {
   buildReferenceSeedOperatorReport,
@@ -15,6 +15,7 @@ function usage() {
     'Usage:',
     '  node scripts/reference-seed-operator.mjs [--quality-report quality.json] [--limit 10]',
     '  node scripts/reference-seed-operator.mjs --population-audit',
+    '  node scripts/reference-seed-operator.mjs --append append-plan.json [--write]',
     '  node scripts/reference-seed-operator.mjs --fixture approved-fixture.json --cache-path /path/to/cache.db',
     '  node scripts/reference-seed-operator.mjs --fixture bundled --cache-path /path/to/cache.db',
     '',
@@ -28,6 +29,8 @@ function parseArgs(argv) {
     const arg = argv[i];
     if (arg === '--quality-report') args.qualityReport = argv[++i];
     else if (arg === '--population-audit') args.populationAudit = true;
+    else if (arg === '--append') args.append = argv[++i];
+    else if (arg === '--write') args.write = true;
     else if (arg === '--fixture') args.fixture = argv[++i];
     else if (arg === '--cache-path') args.cachePath = argv[++i];
     else if (arg === '--limit') args.limit = Number.parseInt(argv[++i] ?? '', 10);
@@ -64,6 +67,35 @@ function writeApprovedFixtures(fixturePath, cachePath) {
   }
 }
 
+function writeJson(relativePath, value) {
+  fs.writeFileSync(resolve(relativePath), `${JSON.stringify(value, null, 2)}\n`);
+}
+
+function applyAppendPlan(appendPath, write) {
+  const plan = readJson(appendPath);
+  const result = applyReferencePantryAppend(bundledGlobalReferenceSeeds, plan, { dryRun: !write });
+  if (write && result.ok) {
+    writeJson('src/data/reference-pantry-fixtures.json', result.data.referencePantryFixtures);
+    writeJson('src/data/reference-family-taxonomy.json', result.data.referenceFamilyTaxonomy);
+    writeJson('src/data/reference-seed-queue.json', result.data.referenceSeedQueue);
+    writeJson('src/data/cache-warming-manifest.json', result.data.cacheWarmingManifest);
+  }
+  return {
+    ok: result.ok,
+    dryRun: result.dryRun,
+    appendedFixtureCount: result.appendedFixtureCount,
+    changedFamilies: result.changedFamilies,
+    summary: result.summary,
+    issues: result.issues,
+    wroteFiles: write && result.ok ? [
+      'src/data/reference-pantry-fixtures.json',
+      'src/data/reference-family-taxonomy.json',
+      'src/data/reference-seed-queue.json',
+      'src/data/cache-warming-manifest.json',
+    ] : [],
+  };
+}
+
 try {
   const args = parseArgs(process.argv.slice(2));
   if (args.help) {
@@ -73,6 +105,10 @@ try {
   if (args.fixture || args.cachePath) {
     if (!args.fixture || !args.cachePath) throw new Error('--fixture and --cache-path must be provided together');
     console.log(JSON.stringify(writeApprovedFixtures(args.fixture, args.cachePath), null, 2));
+  } else if (args.append) {
+    const result = applyAppendPlan(args.append, args.write === true);
+    console.log(JSON.stringify(result, null, 2));
+    if (!result.ok) process.exitCode = 1;
   } else if (args.populationAudit) {
     console.log(JSON.stringify(auditReferencePantryPopulation(bundledGlobalReferenceSeeds), null, 2));
   } else {

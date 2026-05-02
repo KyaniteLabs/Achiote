@@ -11,7 +11,7 @@ export { createAchioteServer } from './server.js';
 export { bundledGlobalReferenceSeeds, prioritizeReferenceSeeds } from './lib/reference-seed-planner.js';
 export { getBundledReferenceResearch, getReferenceResearch } from './lib/reference-pantry.js';
 export { buildInferenceBurdenSummary, findPromptOffloadCandidates, listInferenceBurdens } from './lib/inference-burden-inventory.js';
-export { auditReferencePantryPopulation } from './lib/reference-pantry-population.js';
+export { applyReferencePantryAppend, auditReferencePantryPopulation } from './lib/reference-pantry-population.js';
 export { buildReferencePantryFixtureReport, buildReferenceSeedOperatorReport, validateReferenceSeedFixtures, writeReferenceSeedFixturesToCache } from './lib/reference-seed-operator.js';
 export type { AchioteServerOptions } from './server.js';
 export type { InferenceBurden, InferenceBurdenSummary, InferenceBurdenType, PromptOffloadCandidateOptions } from './lib/inference-burden-inventory.js';
@@ -23,6 +23,9 @@ export type {
   ReferencePantryPopulationData,
   ReferencePantryPopulationIssue,
   ReferencePantryTaxonomyCountDrift,
+  ReferencePantryAppendItem,
+  ReferencePantryAppendPlan,
+  ReferencePantryAppendResult,
 } from './lib/reference-pantry-population.js';
 export type { ReferencePantryFixtureReport, ReferenceSeedOperatorReport, ReferenceSeedOperatorTask } from './lib/reference-seed-operator.js';
 
