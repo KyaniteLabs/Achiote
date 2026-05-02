@@ -204,7 +204,7 @@ describe('reference seed operator integration', () => {
 
     const report = buildReferencePantryFixtureReport(pantryFixtureData);
 
-    expect(report.totalFixtures).toBeGreaterThanOrEqual(851);
+    expect(report.totalFixtures).toBeGreaterThanOrEqual(960);
     expect(report.sourceIds).toEqual(['usda-fooddata-central', 'wikidata-structured-food-data']);
     expect(report.coverage.axes.foodForms).toMatchObject({ covered: 17, total: 17, missing: [] });
     expect(report.coverage.axes.cultureAreas).toMatchObject({ covered: 20, total: 20, missing: [] });
@@ -239,7 +239,7 @@ describe('reference seed operator integration', () => {
 
     expect(targetKeys.size).toBe(pantryFixtureData.fixtures.length);
     expect(familyDepths.size).toBeGreaterThanOrEqual(149);
-    expect([...familyDepths.values()].filter((count) => count < 5)).toEqual([]);
+    expect([...familyDepths.values()].filter((count) => count < 6)).toEqual([]);
   });
 
   it('keeps the first pantry expansion balanced across every culture area and food-memory band', () => {

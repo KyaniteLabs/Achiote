@@ -31430,6 +31430,3814 @@
           "Warm only from public-domain FoodData Central metadata or approved typed fixtures."
         ]
       }
+    },
+    {
+      "id": "warm-exp10-mechanism-ac-ka",
+      "seedId": "exp10-mechanism-ac-ka",
+      "cacheTarget": {
+        "dishFamily": "ac-ka",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.central_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-akara",
+      "seedId": "exp10-mechanism-akara",
+      "cacheTarget": {
+        "dishFamily": "akara",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-alaskan-ice-cream",
+      "seedId": "exp10-mechanism-alaskan-ice-cream",
+      "cacheTarget": {
+        "dishFamily": "alaskan-ice-cream",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.arctic_subarctic",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-bagel",
+      "seedId": "exp10-mechanism-bagel",
+      "cacheTarget": {
+        "dishFamily": "bagel",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.diaspora"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-bammy",
+      "seedId": "exp10-mechanism-bammy",
+      "cacheTarget": {
+        "dishFamily": "bammy",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-bannock",
+      "seedId": "exp10-mechanism-bannock",
+      "cacheTarget": {
+        "dishFamily": "bannock",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.arctic_subarctic",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-basbousa",
+      "seedId": "exp10-mechanism-basbousa",
+      "cacheTarget": {
+        "dishFamily": "basbousa",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-beignet",
+      "seedId": "exp10-mechanism-beignet",
+      "cacheTarget": {
+        "dishFamily": "beignet",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.central_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-besbarmaq",
+      "seedId": "exp10-mechanism-besbarmaq",
+      "cacheTarget": {
+        "dishFamily": "besbarmaq",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.central_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-bitter-melon-egg-broth",
+      "seedId": "exp10-mechanism-bitter-melon-egg-broth",
+      "cacheTarget": {
+        "dishFamily": "bitter-melon-egg-broth",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "cultureAreas.diaspora_global",
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.soup_broth",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.diaspora"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-black-lime-sour-stew",
+      "seedId": "exp10-mechanism-black-lime-sour-stew",
+      "cacheTarget": {
+        "dishFamily": "black-lime-sour-stew",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.middle_east_west_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.soup_broth",
+        "foodForms.stew_braise",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-black-sesame-seed-paste-sweet",
+      "seedId": "exp10-mechanism-black-sesame-seed-paste-sweet",
+      "cacheTarget": {
+        "dishFamily": "black-sesame-seed-paste-sweet",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.east_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.starch_texture",
+        "nameSystems.menu_name",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-bobotie",
+      "seedId": "exp10-mechanism-bobotie",
+      "cacheTarget": {
+        "dishFamily": "bobotie",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.southern_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-borscht",
+      "seedId": "exp10-mechanism-borscht",
+      "cacheTarget": {
+        "dishFamily": "borscht",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.europe",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-breakfast-grain-porridge",
+      "seedId": "exp10-mechanism-breakfast-grain-porridge",
+      "cacheTarget": {
+        "dishFamily": "breakfast-grain-porridge",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "cultureAreas.east_africa",
+        "cultureAreas.east_asia",
+        "cultureAreas.europe",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.breakfast",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-brigadeiro",
+      "seedId": "exp10-mechanism-brigadeiro",
+      "cacheTarget": {
+        "dishFamily": "brigadeiro",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.south_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-brik",
+      "seedId": "exp10-mechanism-brik",
+      "cacheTarget": {
+        "dishFamily": "brik",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-bubble-tea",
+      "seedId": "exp10-mechanism-bubble-tea",
+      "cacheTarget": {
+        "dishFamily": "bubble-tea",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.diaspora"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-bunny-chow",
+      "seedId": "exp10-mechanism-bunny-chow",
+      "cacheTarget": {
+        "dishFamily": "bunny-chow",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.southern_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-burrito",
+      "seedId": "exp10-mechanism-burrito",
+      "cacheTarget": {
+        "dishFamily": "burrito",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.borderland_trade_routes",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.borderland"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-cakcak",
+      "seedId": "exp10-mechanism-cakcak",
+      "cacheTarget": {
+        "dishFamily": "cakcak",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.central_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-cassava",
+      "seedId": "exp10-mechanism-cassava",
+      "cacheTarget": {
+        "dishFamily": "cassava",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.central_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-cassava-fritter",
+      "seedId": "exp10-mechanism-cassava-fritter",
+      "cacheTarget": {
+        "dishFamily": "cassava-fritter",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "cultureAreas.central_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.aroma",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "nameSystems.phonetic",
+        "regionScopes.nation"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-cassava-leaf-stew",
+      "seedId": "exp10-mechanism-cassava-leaf-stew",
+      "cacheTarget": {
+        "dishFamily": "cassava-leaf-stew",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.central_africa",
+        "cultureAreas.diaspora_global",
+        "cultureAreas.east_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "nameSystems.menu_name",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-chair",
+      "seedId": "exp10-mechanism-chair",
+      "cacheTarget": {
+        "dishFamily": "chair",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.east_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-chakalaka",
+      "seedId": "exp10-mechanism-chakalaka",
+      "cacheTarget": {
+        "dishFamily": "chakalaka",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.southern_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-chicken-moambe",
+      "seedId": "exp10-mechanism-chicken-moambe",
+      "cacheTarget": {
+        "dishFamily": "chicken-moambe",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.central_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-chile-vinegar-condiment",
+      "seedId": "exp10-mechanism-chile-vinegar-condiment",
+      "cacheTarget": {
+        "dishFamily": "chile-vinegar-condiment",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "mechanisms.serving_ritual",
+        "nameSystems.menu_name",
+        "nameSystems.phonetic",
+        "regionScopes.macro_region",
+        "regionScopes.nation"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-chili",
+      "seedId": "exp10-mechanism-chili",
+      "cacheTarget": {
+        "dishFamily": "chili",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.borderland_trade_routes",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.borderland"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-chin-chin",
+      "seedId": "exp10-mechanism-chin-chin",
+      "cacheTarget": {
+        "dishFamily": "chin-chin",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-chutney",
+      "seedId": "exp10-mechanism-chutney",
+      "cacheTarget": {
+        "dishFamily": "chutney",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-coconut-sugar-confection",
+      "seedId": "exp10-mechanism-coconut-sugar-confection",
+      "cacheTarget": {
+        "dishFamily": "coconut-sugar-confection",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.diaspora",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-coconut-taro-earth-oven-foodway",
+      "seedId": "exp10-mechanism-coconut-taro-earth-oven-foodway",
+      "cacheTarget": {
+        "dishFamily": "coconut-taro-earth-oven-foodway",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.indigenous_first_peoples",
+        "cultureAreas.oceania_pacific",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.protein_centered",
+        "foodForms.vegetable_fungi",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.serving_ritual",
+        "mechanisms.smoke",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.indigenous",
+        "regionScopes.subregion"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-cornbread",
+      "seedId": "exp10-mechanism-cornbread",
+      "cacheTarget": {
+        "dishFamily": "cornbread",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.north_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-cranberry-sauce",
+      "seedId": "exp10-mechanism-cranberry-sauce",
+      "cacheTarget": {
+        "dishFamily": "cranberry-sauce",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.indigenous_first_peoples",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.indigenous"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-cream-tomato-curry",
+      "seedId": "exp10-mechanism-cream-tomato-curry",
+      "cacheTarget": {
+        "dishFamily": "cream-tomato-curry",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.starch_texture",
+        "nameSystems.menu_name",
+        "regionScopes.diaspora"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-curry-goat",
+      "seedId": "exp10-mechanism-curry-goat",
+      "cacheTarget": {
+        "dishFamily": "curry-goat",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-doner-kebab",
+      "seedId": "exp10-mechanism-doner-kebab",
+      "cacheTarget": {
+        "dishFamily": "doner-kebab",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-doro-wat",
+      "seedId": "exp10-mechanism-doro-wat",
+      "cacheTarget": {
+        "dishFamily": "doro-wat",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.east_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-dried-fish",
+      "seedId": "exp10-mechanism-dried-fish",
+      "cacheTarget": {
+        "dishFamily": "dried-fish",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.arctic_subarctic",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-dumpling",
+      "seedId": "exp10-mechanism-dumpling",
+      "cacheTarget": {
+        "dishFamily": "dumpling",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.borderland_trade_routes",
+        "cultureAreas.central_asia",
+        "cultureAreas.east_asia",
+        "cultureAreas.europe",
+        "cultureAreas.south_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "mechanisms.sauce_balance",
+        "mechanisms.serving_ritual",
+        "mechanisms.starch_texture",
+        "mechanisms.texture_contrast",
+        "nameSystems.phonetic",
+        "nameSystems.transliteration",
+        "regionScopes.borderland",
+        "regionScopes.migration_corridor"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-feijoada",
+      "seedId": "exp10-mechanism-feijoada",
+      "cacheTarget": {
+        "dishFamily": "feijoada",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.south_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-fermented-cereal-porridge-drink",
+      "seedId": "exp10-mechanism-fermented-cereal-porridge-drink",
+      "cacheTarget": {
+        "dishFamily": "fermented-cereal-porridge-drink",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.fermentation_acid",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "nameSystems.transliteration",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-fermented-fish",
+      "seedId": "exp10-mechanism-fermented-fish",
+      "cacheTarget": {
+        "dishFamily": "fermented-fish",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.arctic_subarctic",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-fermented-vegetable-pickle",
+      "seedId": "exp10-mechanism-fermented-vegetable-pickle",
+      "cacheTarget": {
+        "dishFamily": "fermented-vegetable-pickle",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.east_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast",
+        "nameSystems.script_form",
+        "nameSystems.transliteration",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-flatbread",
+      "seedId": "exp10-mechanism-flatbread",
+      "cacheTarget": {
+        "dishFamily": "flatbread",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.borderland_trade_routes",
+        "cultureAreas.east_africa",
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.north_africa",
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "mechanisms.alkaline_processing",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.borderland",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-fried-starch-street-snack",
+      "seedId": "exp10-mechanism-fried-starch-street-snack",
+      "cacheTarget": {
+        "dishFamily": "fried-starch-street-snack",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "cultureAreas.south_asia",
+        "cultureAreas.southeast_asia",
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.starch_texture",
+        "mechanisms.texture_contrast",
+        "nameSystems.typo",
+        "regionScopes.city"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-frybread",
+      "seedId": "exp10-mechanism-frybread",
+      "cacheTarget": {
+        "dishFamily": "frybread",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.indigenous_first_peoples",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.indigenous"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-goulash",
+      "seedId": "exp10-mechanism-goulash",
+      "cacheTarget": {
+        "dishFamily": "goulash",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.europe",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-grain-beverage",
+      "seedId": "exp10-mechanism-grain-beverage",
+      "cacheTarget": {
+        "dishFamily": "grain-beverage",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.diaspora",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-grain-rice-noodle-staple",
+      "seedId": "exp10-mechanism-grain-rice-noodle-staple",
+      "cacheTarget": {
+        "dishFamily": "grain-rice-noodle-staple",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.south_asia",
+        "cultureAreas.southeast_asia",
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-green-tea",
+      "seedId": "exp10-mechanism-green-tea",
+      "cacheTarget": {
+        "dishFamily": "green-tea",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-gulab-jamun",
+      "seedId": "exp10-mechanism-gulab-jamun",
+      "cacheTarget": {
+        "dishFamily": "gulab-jamun",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-gyoza",
+      "seedId": "exp10-mechanism-gyoza",
+      "cacheTarget": {
+        "dishFamily": "gyoza",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-halo-halo",
+      "seedId": "exp10-mechanism-halo-halo",
+      "cacheTarget": {
+        "dishFamily": "halo-halo",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-halva",
+      "seedId": "exp10-mechanism-halva",
+      "cacheTarget": {
+        "dishFamily": "halva",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.east_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-hamburger",
+      "seedId": "exp10-mechanism-hamburger",
+      "cacheTarget": {
+        "dishFamily": "hamburger",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.north_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-jamaican-patty",
+      "seedId": "exp10-mechanism-jamaican-patty",
+      "cacheTarget": {
+        "dishFamily": "jamaican-patty",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-kachumbari",
+      "seedId": "exp10-mechanism-kachumbari",
+      "cacheTarget": {
+        "dishFamily": "kachumbari",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.east_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-kibbeh",
+      "seedId": "exp10-mechanism-kibbeh",
+      "cacheTarget": {
+        "dishFamily": "kibbeh",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-kumis",
+      "seedId": "exp10-mechanism-kumis",
+      "cacheTarget": {
+        "dishFamily": "kumis",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.central_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-kwanga",
+      "seedId": "exp10-mechanism-kwanga",
+      "cacheTarget": {
+        "dishFamily": "kwanga",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.central_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-labrador-tea",
+      "seedId": "exp10-mechanism-labrador-tea",
+      "cacheTarget": {
+        "dishFamily": "labrador-tea",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.indigenous_first_peoples",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.indigenous"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-laksa",
+      "seedId": "exp10-mechanism-laksa",
+      "cacheTarget": {
+        "dishFamily": "laksa",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-lomi-salmon",
+      "seedId": "exp10-mechanism-lomi-salmon",
+      "cacheTarget": {
+        "dishFamily": "lomi-salmon",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.oceania_pacific",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-mageu",
+      "seedId": "exp10-mechanism-mageu",
+      "cacheTarget": {
+        "dishFamily": "mageu",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.southern_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-malva-pudding",
+      "seedId": "exp10-mechanism-malva-pudding",
+      "cacheTarget": {
+        "dishFamily": "malva-pudding",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.southern_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-mandazi",
+      "seedId": "exp10-mechanism-mandazi",
+      "cacheTarget": {
+        "dishFamily": "mandazi",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.east_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-manti",
+      "seedId": "exp10-mechanism-manti",
+      "cacheTarget": {
+        "dishFamily": "manti",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.central_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-maple-syrup",
+      "seedId": "exp10-mechanism-maple-syrup",
+      "cacheTarget": {
+        "dishFamily": "maple-syrup",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.indigenous_first_peoples",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.indigenous"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-mapo-doufu",
+      "seedId": "exp10-mechanism-mapo-doufu",
+      "cacheTarget": {
+        "dishFamily": "mapo-doufu",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-meat-pie",
+      "seedId": "exp10-mechanism-meat-pie",
+      "cacheTarget": {
+        "dishFamily": "meat-pie",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.oceania_pacific",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-mielie-meal",
+      "seedId": "exp10-mechanism-mielie-meal",
+      "cacheTarget": {
+        "dishFamily": "mielie-meal",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.southern_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-milk-custard-pudding-dessert",
+      "seedId": "exp10-mechanism-milk-custard-pudding-dessert",
+      "cacheTarget": {
+        "dishFamily": "milk-custard-pudding-dessert",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.south_america",
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-mochi",
+      "seedId": "exp10-mechanism-mochi",
+      "cacheTarget": {
+        "dishFamily": "mochi",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-mooncake",
+      "seedId": "exp10-mechanism-mooncake",
+      "cacheTarget": {
+        "dishFamily": "mooncake",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.diaspora"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-muktuk",
+      "seedId": "exp10-mechanism-muktuk",
+      "cacheTarget": {
+        "dishFamily": "muktuk",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.arctic_subarctic",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-mustard",
+      "seedId": "exp10-mechanism-mustard",
+      "cacheTarget": {
+        "dishFamily": "mustard",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.europe",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-nasi-lemak",
+      "seedId": "exp10-mechanism-nasi-lemak",
+      "cacheTarget": {
+        "dishFamily": "nasi-lemak",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-navajo-taco",
+      "seedId": "exp10-mechanism-navajo-taco",
+      "cacheTarget": {
+        "dishFamily": "navajo-taco",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.indigenous_first_peoples",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.indigenous"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-nut-sugar-confectionery",
+      "seedId": "exp10-mechanism-nut-sugar-confectionery",
+      "cacheTarget": {
+        "dishFamily": "nut-sugar-confectionery",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.south_america",
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.confectionery",
+        "mechanisms.aroma",
+        "mechanisms.sugar_crystal",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.diaspora"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-ota-ika",
+      "seedId": "exp10-mechanism-ota-ika",
+      "cacheTarget": {
+        "dishFamily": "ota-ika",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.oceania_pacific",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-palm-nut-soup",
+      "seedId": "exp10-mechanism-palm-nut-soup",
+      "cacheTarget": {
+        "dishFamily": "palm-nut-soup",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.central_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-pan-de-muerto",
+      "seedId": "exp10-mechanism-pan-de-muerto",
+      "cacheTarget": {
+        "dishFamily": "pan-de-muerto",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.borderland_trade_routes",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.borderland"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-pandan-coconut-layered-cake",
+      "seedId": "exp10-mechanism-pandan-coconut-layered-cake",
+      "cacheTarget": {
+        "dishFamily": "pandan-coconut-layered-cake",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.starch_texture",
+        "mechanisms.texture_contrast",
+        "nameSystems.menu_name",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-panettone",
+      "seedId": "exp10-mechanism-panettone",
+      "cacheTarget": {
+        "dishFamily": "panettone",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.europe",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-pavlova",
+      "seedId": "exp10-mechanism-pavlova",
+      "cacheTarget": {
+        "dishFamily": "pavlova",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.oceania_pacific",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-pepian",
+      "seedId": "exp10-mechanism-pepian",
+      "cacheTarget": {
+        "dishFamily": "pepian",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-pikliz",
+      "seedId": "exp10-mechanism-pikliz",
+      "cacheTarget": {
+        "dishFamily": "pikliz",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-pita",
+      "seedId": "exp10-mechanism-pita",
+      "cacheTarget": {
+        "dishFamily": "pita",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-popiah",
+      "seedId": "exp10-mechanism-popiah",
+      "cacheTarget": {
+        "dishFamily": "popiah",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-pot-roast",
+      "seedId": "exp10-mechanism-pot-roast",
+      "cacheTarget": {
+        "dishFamily": "pot-roast",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.north_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-pupusa",
+      "seedId": "exp10-mechanism-pupusa",
+      "cacheTarget": {
+        "dishFamily": "pupusa",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-rice-paper-herb-roll",
+      "seedId": "exp10-mechanism-rice-paper-herb-roll",
+      "cacheTarget": {
+        "dishFamily": "rice-paper-herb-roll",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.snack_street_food",
+        "foodForms.vegetable_fungi",
+        "mechanisms.sauce_balance",
+        "mechanisms.starch_texture",
+        "mechanisms.texture_contrast",
+        "nameSystems.transliteration",
+        "regionScopes.diaspora",
+        "regionScopes.nation"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-roselle-juice",
+      "seedId": "exp10-mechanism-roselle-juice",
+      "cacheTarget": {
+        "dishFamily": "roselle-juice",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-rum-cake",
+      "seedId": "exp10-mechanism-rum-cake",
+      "cacheTarget": {
+        "dishFamily": "rum-cake",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-salsa",
+      "seedId": "exp10-mechanism-salsa",
+      "cacheTarget": {
+        "dishFamily": "salsa",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.borderland_trade_routes",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.borderland"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-shito",
+      "seedId": "exp10-mechanism-shito",
+      "cacheTarget": {
+        "dishFamily": "shito",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-simmered-vegetable-greens",
+      "seedId": "exp10-mechanism-simmered-vegetable-greens",
+      "cacheTarget": {
+        "dishFamily": "simmered-vegetable-greens",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.central_africa",
+        "cultureAreas.east_asia",
+        "cultureAreas.north_america",
+        "cultureAreas.south_asia",
+        "cultureAreas.southern_africa",
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.fermentation_acid",
+        "mechanisms.texture_contrast",
+        "nameSystems.family_nickname",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-single-ingredient-nostalgia",
+      "seedId": "exp10-mechanism-single-ingredient-nostalgia",
+      "cacheTarget": {
+        "dishFamily": "single-ingredient-nostalgia",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.north_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pantry_single_ingredient",
+        "mechanisms.aroma",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.serving_ritual",
+        "nameSystems.family_nickname",
+        "regionScopes.city"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-smoked-fish-berry-preserve-foodway",
+      "seedId": "exp10-mechanism-smoked-fish-berry-preserve-foodway",
+      "cacheTarget": {
+        "dishFamily": "smoked-fish-berry-preserve-foodway",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.arctic_subarctic",
+        "cultureAreas.europe",
+        "cultureAreas.indigenous_first_peoples",
+        "cultureAreas.north_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.pantry_single_ingredient",
+        "foodForms.protein_centered",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.serving_ritual",
+        "mechanisms.smoke",
+        "mechanisms.temperature",
+        "nameSystems.family_nickname",
+        "regionScopes.indigenous",
+        "regionScopes.subregion"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-sour-herb-soup",
+      "seedId": "exp10-mechanism-sour-herb-soup",
+      "cacheTarget": {
+        "dishFamily": "sour-herb-soup",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.europe",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-spiced-protein-braise",
+      "seedId": "exp10-mechanism-spiced-protein-braise",
+      "cacheTarget": {
+        "dishFamily": "spiced-protein-braise",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.south_asia",
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "mechanisms.aroma",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "regionScopes.diaspora"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-sweet-beignet",
+      "seedId": "exp10-mechanism-sweet-beignet",
+      "cacheTarget": {
+        "dishFamily": "sweet-beignet",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.central_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-tajine",
+      "seedId": "exp10-mechanism-tajine",
+      "cacheTarget": {
+        "dishFamily": "tajine",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-tamarind-chile-wrapper-candy",
+      "seedId": "exp10-mechanism-tamarind-chile-wrapper-candy",
+      "cacheTarget": {
+        "dishFamily": "tamarind-chile-wrapper-candy",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.confectionery",
+        "foodForms.snack_street_food",
+        "mechanisms.sauce_balance",
+        "mechanisms.sugar_crystal",
+        "nameSystems.menu_name",
+        "regionScopes.diaspora",
+        "regionScopes.nation"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-taro",
+      "seedId": "exp10-mechanism-taro",
+      "cacheTarget": {
+        "dishFamily": "taro",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.oceania_pacific",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-ugali",
+      "seedId": "exp10-mechanism-ugali",
+      "cacheTarget": {
+        "dishFamily": "ugali",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.east_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp10-mechanism-wheat-tortilla",
+      "seedId": "exp10-mechanism-wheat-tortilla",
+      "cacheTarget": {
+        "dishFamily": "wheat-tortilla",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "cultureAreas.borderland_trade_routes",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.borderland"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "sensory_mechanism_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, sensory mechanisms, uncertainty boundaries, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming mechanism-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
+        ]
+      }
     }
   ]
 }

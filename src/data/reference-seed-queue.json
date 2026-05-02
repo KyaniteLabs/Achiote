@@ -46183,6 +46183,5813 @@
           "This does not make nutrition or medical claims."
         ]
       }
+    },
+    {
+      "id": "exp10-mechanism-ac-ka",
+      "forms": [
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "ac-ka",
+        "ac-ka mechanism grounding",
+        "ac ka sensory context",
+        "ac-ka retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "ac-ka sensory mechanism reference grounding",
+        "ac-ka aroma texture temperature retrieval context",
+        "ac-ka source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "ac-ka",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-akara",
+      "forms": [
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "akara",
+        "akara mechanism grounding",
+        "akara sensory context",
+        "akara retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "akara sensory mechanism reference grounding",
+        "akara aroma texture temperature retrieval context",
+        "akara source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "akara",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-alaskan-ice-cream",
+      "forms": [
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "alaskan-ice-cream",
+        "alaskan-ice-cream mechanism grounding",
+        "alaskan ice cream sensory context",
+        "alaskan-ice-cream retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal"
+      ],
+      "querySeeds": [
+        "alaskan-ice-cream sensory mechanism reference grounding",
+        "alaskan-ice-cream aroma texture temperature retrieval context",
+        "alaskan-ice-cream source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "alaskan-ice-cream",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.arctic_subarctic",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-bagel",
+      "forms": [
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "bagel",
+        "bagel mechanism grounding",
+        "bagel sensory context",
+        "bagel retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.starch_texture"
+      ],
+      "querySeeds": [
+        "bagel sensory mechanism reference grounding",
+        "bagel aroma texture temperature retrieval context",
+        "bagel source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "bagel",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.diaspora"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-bammy",
+      "forms": [
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "bammy",
+        "bammy mechanism grounding",
+        "bammy sensory context",
+        "bammy retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.starch_texture"
+      ],
+      "querySeeds": [
+        "bammy sensory mechanism reference grounding",
+        "bammy aroma texture temperature retrieval context",
+        "bammy source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "bammy",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-bannock",
+      "forms": [
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "bannock",
+        "bannock mechanism grounding",
+        "bannock sensory context",
+        "bannock retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.starch_texture"
+      ],
+      "querySeeds": [
+        "bannock sensory mechanism reference grounding",
+        "bannock aroma texture temperature retrieval context",
+        "bannock source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "bannock",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.arctic_subarctic",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-basbousa",
+      "forms": [
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "basbousa",
+        "basbousa mechanism grounding",
+        "basbousa sensory context",
+        "basbousa retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal"
+      ],
+      "querySeeds": [
+        "basbousa sensory mechanism reference grounding",
+        "basbousa aroma texture temperature retrieval context",
+        "basbousa source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "basbousa",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-beignet",
+      "forms": [
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "beignet",
+        "beignet mechanism grounding",
+        "beignet sensory context",
+        "beignet retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "beignet sensory mechanism reference grounding",
+        "beignet aroma texture temperature retrieval context",
+        "beignet source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "beignet",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-besbarmaq",
+      "forms": [
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "besbarmaq",
+        "besbarmaq mechanism grounding",
+        "besbarmaq sensory context",
+        "besbarmaq retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "besbarmaq sensory mechanism reference grounding",
+        "besbarmaq aroma texture temperature retrieval context",
+        "besbarmaq source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "besbarmaq",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-bitter-melon-egg-broth",
+      "forms": [
+        "foodForms.soup_broth",
+        "foodForms.vegetable_fungi"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "bitter-melon-egg-broth",
+        "bitter-melon-egg-broth mechanism grounding",
+        "bitter melon egg broth sensory context",
+        "bitter-melon-egg-broth retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "bitter-melon-egg-broth sensory mechanism reference grounding",
+        "bitter-melon-egg-broth aroma texture temperature retrieval context",
+        "bitter-melon-egg-broth source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "bitter-melon-egg-broth",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "cultureAreas.diaspora_global",
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.soup_broth",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.diaspora"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-black-lime-sour-stew",
+      "forms": [
+        "foodForms.soup_broth",
+        "foodForms.stew_braise"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "black-lime-sour-stew",
+        "black-lime-sour-stew mechanism grounding",
+        "black lime sour stew sensory context",
+        "black-lime-sour-stew retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "black-lime-sour-stew sensory mechanism reference grounding",
+        "black-lime-sour-stew aroma texture temperature retrieval context",
+        "black-lime-sour-stew source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "black-lime-sour-stew",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.middle_east_west_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.soup_broth",
+        "foodForms.stew_braise",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-black-sesame-seed-paste-sweet",
+      "forms": [
+        "foodForms.confectionery",
+        "foodForms.dessert"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "black-sesame-seed-paste-sweet",
+        "black-sesame-seed-paste-sweet mechanism grounding",
+        "black sesame seed paste sweet sensory context",
+        "black-sesame-seed-paste-sweet retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.starch_texture"
+      ],
+      "querySeeds": [
+        "black-sesame-seed-paste-sweet sensory mechanism reference grounding",
+        "black-sesame-seed-paste-sweet aroma texture temperature retrieval context",
+        "black-sesame-seed-paste-sweet source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "black-sesame-seed-paste-sweet",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.east_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.starch_texture",
+        "nameSystems.menu_name",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-bobotie",
+      "forms": [
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "bobotie",
+        "bobotie mechanism grounding",
+        "bobotie sensory context",
+        "bobotie retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "bobotie sensory mechanism reference grounding",
+        "bobotie aroma texture temperature retrieval context",
+        "bobotie source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "bobotie",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.southern_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-borscht",
+      "forms": [
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "borscht",
+        "borscht mechanism grounding",
+        "borscht sensory context",
+        "borscht retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature"
+      ],
+      "querySeeds": [
+        "borscht sensory mechanism reference grounding",
+        "borscht aroma texture temperature retrieval context",
+        "borscht source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "borscht",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.europe",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-breakfast-grain-porridge",
+      "forms": [
+        "foodForms.breakfast",
+        "foodForms.grain_rice_noodle"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "breakfast-grain-porridge",
+        "breakfast-grain-porridge mechanism grounding",
+        "breakfast grain porridge sensory context",
+        "breakfast-grain-porridge retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature"
+      ],
+      "querySeeds": [
+        "breakfast-grain-porridge sensory mechanism reference grounding",
+        "breakfast-grain-porridge aroma texture temperature retrieval context",
+        "breakfast-grain-porridge source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "breakfast-grain-porridge",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "cultureAreas.east_africa",
+        "cultureAreas.east_asia",
+        "cultureAreas.europe",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.breakfast",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-brigadeiro",
+      "forms": [
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "brigadeiro",
+        "brigadeiro mechanism grounding",
+        "brigadeiro sensory context",
+        "brigadeiro retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal"
+      ],
+      "querySeeds": [
+        "brigadeiro sensory mechanism reference grounding",
+        "brigadeiro aroma texture temperature retrieval context",
+        "brigadeiro source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "brigadeiro",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.south_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-brik",
+      "forms": [
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "brik",
+        "brik mechanism grounding",
+        "brik sensory context",
+        "brik retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "brik sensory mechanism reference grounding",
+        "brik aroma texture temperature retrieval context",
+        "brik source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "brik",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-bubble-tea",
+      "forms": [
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "bubble-tea",
+        "bubble-tea mechanism grounding",
+        "bubble tea sensory context",
+        "bubble-tea retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature"
+      ],
+      "querySeeds": [
+        "bubble-tea sensory mechanism reference grounding",
+        "bubble-tea aroma texture temperature retrieval context",
+        "bubble-tea source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "bubble-tea",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.diaspora"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-bunny-chow",
+      "forms": [
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "bunny-chow",
+        "bunny-chow mechanism grounding",
+        "bunny chow sensory context",
+        "bunny-chow retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "bunny-chow sensory mechanism reference grounding",
+        "bunny-chow aroma texture temperature retrieval context",
+        "bunny-chow source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "bunny-chow",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.southern_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-burrito",
+      "forms": [
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "burrito",
+        "burrito mechanism grounding",
+        "burrito sensory context",
+        "burrito retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "burrito sensory mechanism reference grounding",
+        "burrito aroma texture temperature retrieval context",
+        "burrito source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "burrito",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.borderland_trade_routes",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.borderland"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-cakcak",
+      "forms": [
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "cakcak",
+        "cakcak mechanism grounding",
+        "cakcak sensory context",
+        "cakcak retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal"
+      ],
+      "querySeeds": [
+        "cakcak sensory mechanism reference grounding",
+        "cakcak aroma texture temperature retrieval context",
+        "cakcak source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "cakcak",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-cassava",
+      "forms": [
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "cassava",
+        "cassava mechanism grounding",
+        "cassava sensory context",
+        "cassava retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "cassava sensory mechanism reference grounding",
+        "cassava aroma texture temperature retrieval context",
+        "cassava source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "cassava",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-cassava-fritter",
+      "forms": [
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "cassava-fritter",
+        "cassava-fritter mechanism grounding",
+        "cassava fritter sensory context",
+        "cassava-fritter retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "cassava-fritter sensory mechanism reference grounding",
+        "cassava-fritter aroma texture temperature retrieval context",
+        "cassava-fritter source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "cassava-fritter",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "cultureAreas.central_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.aroma",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "nameSystems.phonetic",
+        "regionScopes.nation"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-cassava-leaf-stew",
+      "forms": [
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "cassava-leaf-stew",
+        "cassava-leaf-stew mechanism grounding",
+        "cassava leaf stew sensory context",
+        "cassava-leaf-stew retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel"
+      ],
+      "querySeeds": [
+        "cassava-leaf-stew sensory mechanism reference grounding",
+        "cassava-leaf-stew aroma texture temperature retrieval context",
+        "cassava-leaf-stew source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "cassava-leaf-stew",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_africa",
+        "cultureAreas.diaspora_global",
+        "cultureAreas.east_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "nameSystems.menu_name",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-chair",
+      "forms": [
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "chair",
+        "chair mechanism grounding",
+        "chair sensory context",
+        "chair retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature"
+      ],
+      "querySeeds": [
+        "chair sensory mechanism reference grounding",
+        "chair aroma texture temperature retrieval context",
+        "chair source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "chair",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.east_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-chakalaka",
+      "forms": [
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "chakalaka",
+        "chakalaka mechanism grounding",
+        "chakalaka sensory context",
+        "chakalaka retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "chakalaka sensory mechanism reference grounding",
+        "chakalaka aroma texture temperature retrieval context",
+        "chakalaka source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "chakalaka",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.southern_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-chicken-moambe",
+      "forms": [
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "chicken-moambe",
+        "chicken-moambe mechanism grounding",
+        "chicken moambe sensory context",
+        "chicken-moambe retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "chicken-moambe sensory mechanism reference grounding",
+        "chicken-moambe aroma texture temperature retrieval context",
+        "chicken-moambe source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "chicken-moambe",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-chile-vinegar-condiment",
+      "forms": [
+        "foodForms.sauce_condiment"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "chile-vinegar-condiment",
+        "chile-vinegar-condiment mechanism grounding",
+        "chile vinegar condiment sensory context",
+        "chile-vinegar-condiment retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "chile-vinegar-condiment sensory mechanism reference grounding",
+        "chile-vinegar-condiment aroma texture temperature retrieval context",
+        "chile-vinegar-condiment source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "chile-vinegar-condiment",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "mechanisms.serving_ritual",
+        "nameSystems.menu_name",
+        "nameSystems.phonetic",
+        "regionScopes.macro_region",
+        "regionScopes.nation"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-chili",
+      "forms": [
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "chili",
+        "chili mechanism grounding",
+        "chili sensory context",
+        "chili retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "chili sensory mechanism reference grounding",
+        "chili aroma texture temperature retrieval context",
+        "chili source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "chili",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.borderland_trade_routes",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.borderland"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-chin-chin",
+      "forms": [
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "chin-chin",
+        "chin-chin mechanism grounding",
+        "chin chin sensory context",
+        "chin-chin retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal"
+      ],
+      "querySeeds": [
+        "chin-chin sensory mechanism reference grounding",
+        "chin-chin aroma texture temperature retrieval context",
+        "chin-chin source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "chin-chin",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-chutney",
+      "forms": [
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "chutney",
+        "chutney mechanism grounding",
+        "chutney sensory context",
+        "chutney retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "chutney sensory mechanism reference grounding",
+        "chutney aroma texture temperature retrieval context",
+        "chutney source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "chutney",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-coconut-sugar-confection",
+      "forms": [
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "coconut-sugar-confection",
+        "coconut-sugar-confection mechanism grounding",
+        "coconut sugar confection sensory context",
+        "coconut-sugar-confection retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "coconut-sugar-confection sensory mechanism reference grounding",
+        "coconut-sugar-confection aroma texture temperature retrieval context",
+        "coconut-sugar-confection source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "coconut-sugar-confection",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.diaspora",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-coconut-taro-earth-oven-foodway",
+      "forms": [
+        "foodForms.ceremonial_holiday",
+        "foodForms.protein_centered",
+        "foodForms.vegetable_fungi"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "coconut-taro-earth-oven-foodway",
+        "coconut-taro-earth-oven-foodway mechanism grounding",
+        "coconut taro earth oven foodway sensory context",
+        "coconut-taro-earth-oven-foodway retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.serving_ritual",
+        "mechanisms.smoke",
+        "mechanisms.starch_texture"
+      ],
+      "querySeeds": [
+        "coconut-taro-earth-oven-foodway sensory mechanism reference grounding",
+        "coconut-taro-earth-oven-foodway aroma texture temperature retrieval context",
+        "coconut-taro-earth-oven-foodway source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "coconut-taro-earth-oven-foodway",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.indigenous_first_peoples",
+        "cultureAreas.oceania_pacific",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.protein_centered",
+        "foodForms.vegetable_fungi",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.serving_ritual",
+        "mechanisms.smoke",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.indigenous",
+        "regionScopes.subregion"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-cornbread",
+      "forms": [
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "cornbread",
+        "cornbread mechanism grounding",
+        "cornbread sensory context",
+        "cornbread retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.starch_texture"
+      ],
+      "querySeeds": [
+        "cornbread sensory mechanism reference grounding",
+        "cornbread aroma texture temperature retrieval context",
+        "cornbread source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "cornbread",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.north_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-cranberry-sauce",
+      "forms": [
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "cranberry-sauce",
+        "cranberry-sauce mechanism grounding",
+        "cranberry sauce sensory context",
+        "cranberry-sauce retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "cranberry-sauce sensory mechanism reference grounding",
+        "cranberry-sauce aroma texture temperature retrieval context",
+        "cranberry-sauce source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "cranberry-sauce",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.indigenous_first_peoples",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.indigenous"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-cream-tomato-curry",
+      "forms": [
+        "foodForms.protein_centered",
+        "foodForms.sauce_condiment"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "cream-tomato-curry",
+        "cream-tomato-curry mechanism grounding",
+        "cream tomato curry sensory context",
+        "cream-tomato-curry retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.starch_texture"
+      ],
+      "querySeeds": [
+        "cream-tomato-curry sensory mechanism reference grounding",
+        "cream-tomato-curry aroma texture temperature retrieval context",
+        "cream-tomato-curry source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "cream-tomato-curry",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.starch_texture",
+        "nameSystems.menu_name",
+        "regionScopes.diaspora"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-curry-goat",
+      "forms": [
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "curry-goat",
+        "curry-goat mechanism grounding",
+        "curry goat sensory context",
+        "curry-goat retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "curry-goat sensory mechanism reference grounding",
+        "curry-goat aroma texture temperature retrieval context",
+        "curry-goat source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "curry-goat",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-doner-kebab",
+      "forms": [
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "doner-kebab",
+        "doner-kebab mechanism grounding",
+        "doner kebab sensory context",
+        "doner-kebab retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "doner-kebab sensory mechanism reference grounding",
+        "doner-kebab aroma texture temperature retrieval context",
+        "doner-kebab source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "doner-kebab",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-doro-wat",
+      "forms": [
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "doro-wat",
+        "doro-wat mechanism grounding",
+        "doro wat sensory context",
+        "doro-wat retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "doro-wat sensory mechanism reference grounding",
+        "doro-wat aroma texture temperature retrieval context",
+        "doro-wat source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "doro-wat",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.east_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-dried-fish",
+      "forms": [
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "dried-fish",
+        "dried-fish mechanism grounding",
+        "dried fish sensory context",
+        "dried-fish retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "dried-fish sensory mechanism reference grounding",
+        "dried-fish aroma texture temperature retrieval context",
+        "dried-fish source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "dried-fish",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.arctic_subarctic",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-dumpling",
+      "forms": [
+        "foodForms.dumpling_pocket"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "dumpling",
+        "dumpling mechanism grounding",
+        "dumpling sensory context",
+        "dumpling retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.sauce_balance",
+        "mechanisms.serving_ritual",
+        "mechanisms.starch_texture",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "dumpling sensory mechanism reference grounding",
+        "dumpling aroma texture temperature retrieval context",
+        "dumpling source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "dumpling",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.borderland_trade_routes",
+        "cultureAreas.central_asia",
+        "cultureAreas.east_asia",
+        "cultureAreas.europe",
+        "cultureAreas.south_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "mechanisms.sauce_balance",
+        "mechanisms.serving_ritual",
+        "mechanisms.starch_texture",
+        "mechanisms.texture_contrast",
+        "nameSystems.phonetic",
+        "nameSystems.transliteration",
+        "regionScopes.borderland",
+        "regionScopes.migration_corridor"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-feijoada",
+      "forms": [
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "feijoada",
+        "feijoada mechanism grounding",
+        "feijoada sensory context",
+        "feijoada retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "feijoada sensory mechanism reference grounding",
+        "feijoada aroma texture temperature retrieval context",
+        "feijoada source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "feijoada",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.south_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-fermented-cereal-porridge-drink",
+      "forms": [
+        "foodForms.beverage",
+        "foodForms.grain_rice_noodle"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "fermented-cereal-porridge-drink",
+        "fermented-cereal-porridge-drink mechanism grounding",
+        "fermented cereal porridge drink sensory context",
+        "fermented-cereal-porridge-drink retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.fermentation_acid",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature"
+      ],
+      "querySeeds": [
+        "fermented-cereal-porridge-drink sensory mechanism reference grounding",
+        "fermented-cereal-porridge-drink aroma texture temperature retrieval context",
+        "fermented-cereal-porridge-drink source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "fermented-cereal-porridge-drink",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.fermentation_acid",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "nameSystems.transliteration",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-fermented-fish",
+      "forms": [
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "fermented-fish",
+        "fermented-fish mechanism grounding",
+        "fermented fish sensory context",
+        "fermented-fish retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "fermented-fish sensory mechanism reference grounding",
+        "fermented-fish aroma texture temperature retrieval context",
+        "fermented-fish source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "fermented-fish",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.arctic_subarctic",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-fermented-vegetable-pickle",
+      "forms": [
+        "foodForms.pickle_ferment"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "fermented-vegetable-pickle",
+        "fermented-vegetable-pickle mechanism grounding",
+        "fermented vegetable pickle sensory context",
+        "fermented-vegetable-pickle retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "fermented-vegetable-pickle sensory mechanism reference grounding",
+        "fermented-vegetable-pickle aroma texture temperature retrieval context",
+        "fermented-vegetable-pickle source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "fermented-vegetable-pickle",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.east_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast",
+        "nameSystems.script_form",
+        "nameSystems.transliteration",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-flatbread",
+      "forms": [
+        "foodForms.bread_flatbread"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "flatbread",
+        "flatbread mechanism grounding",
+        "flatbread sensory context",
+        "flatbread retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.alkaline_processing",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.starch_texture"
+      ],
+      "querySeeds": [
+        "flatbread sensory mechanism reference grounding",
+        "flatbread aroma texture temperature retrieval context",
+        "flatbread source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "flatbread",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.borderland_trade_routes",
+        "cultureAreas.east_africa",
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.north_africa",
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "mechanisms.alkaline_processing",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.borderland",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-fried-starch-street-snack",
+      "forms": [
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "fried-starch-street-snack",
+        "fried-starch-street-snack mechanism grounding",
+        "fried starch street snack sensory context",
+        "fried-starch-street-snack retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.starch_texture",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "fried-starch-street-snack sensory mechanism reference grounding",
+        "fried-starch-street-snack aroma texture temperature retrieval context",
+        "fried-starch-street-snack source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "fried-starch-street-snack",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "cultureAreas.south_asia",
+        "cultureAreas.southeast_asia",
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.starch_texture",
+        "mechanisms.texture_contrast",
+        "nameSystems.typo",
+        "regionScopes.city"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-frybread",
+      "forms": [
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "frybread",
+        "frybread mechanism grounding",
+        "frybread sensory context",
+        "frybread retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.starch_texture"
+      ],
+      "querySeeds": [
+        "frybread sensory mechanism reference grounding",
+        "frybread aroma texture temperature retrieval context",
+        "frybread source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "frybread",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.indigenous_first_peoples",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.indigenous"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-goulash",
+      "forms": [
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "goulash",
+        "goulash mechanism grounding",
+        "goulash sensory context",
+        "goulash retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "goulash sensory mechanism reference grounding",
+        "goulash aroma texture temperature retrieval context",
+        "goulash source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "goulash",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.europe",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-grain-beverage",
+      "forms": [
+        "foodForms.beverage"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "grain-beverage",
+        "grain-beverage mechanism grounding",
+        "grain beverage sensory context",
+        "grain-beverage retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature"
+      ],
+      "querySeeds": [
+        "grain-beverage sensory mechanism reference grounding",
+        "grain-beverage aroma texture temperature retrieval context",
+        "grain-beverage source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "grain-beverage",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.diaspora",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-grain-rice-noodle-staple",
+      "forms": [
+        "foodForms.grain_rice_noodle"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "grain-rice-noodle-staple",
+        "grain-rice-noodle-staple mechanism grounding",
+        "grain rice noodle staple sensory context",
+        "grain-rice-noodle-staple retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature"
+      ],
+      "querySeeds": [
+        "grain-rice-noodle-staple sensory mechanism reference grounding",
+        "grain-rice-noodle-staple aroma texture temperature retrieval context",
+        "grain-rice-noodle-staple source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "grain-rice-noodle-staple",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.south_asia",
+        "cultureAreas.southeast_asia",
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-green-tea",
+      "forms": [
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "green-tea",
+        "green-tea mechanism grounding",
+        "green tea sensory context",
+        "green-tea retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature"
+      ],
+      "querySeeds": [
+        "green-tea sensory mechanism reference grounding",
+        "green-tea aroma texture temperature retrieval context",
+        "green-tea source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "green-tea",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-gulab-jamun",
+      "forms": [
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "gulab-jamun",
+        "gulab-jamun mechanism grounding",
+        "gulab jamun sensory context",
+        "gulab-jamun retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal"
+      ],
+      "querySeeds": [
+        "gulab-jamun sensory mechanism reference grounding",
+        "gulab-jamun aroma texture temperature retrieval context",
+        "gulab-jamun source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "gulab-jamun",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-gyoza",
+      "forms": [
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "gyoza",
+        "gyoza mechanism grounding",
+        "gyoza sensory context",
+        "gyoza retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "gyoza sensory mechanism reference grounding",
+        "gyoza aroma texture temperature retrieval context",
+        "gyoza source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "gyoza",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-halo-halo",
+      "forms": [
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "halo-halo",
+        "halo-halo mechanism grounding",
+        "halo halo sensory context",
+        "halo-halo retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal"
+      ],
+      "querySeeds": [
+        "halo-halo sensory mechanism reference grounding",
+        "halo-halo aroma texture temperature retrieval context",
+        "halo-halo source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "halo-halo",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-halva",
+      "forms": [
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "halva",
+        "halva mechanism grounding",
+        "halva sensory context",
+        "halva retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal"
+      ],
+      "querySeeds": [
+        "halva sensory mechanism reference grounding",
+        "halva aroma texture temperature retrieval context",
+        "halva source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "halva",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.east_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-hamburger",
+      "forms": [
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "hamburger",
+        "hamburger mechanism grounding",
+        "hamburger sensory context",
+        "hamburger retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "hamburger sensory mechanism reference grounding",
+        "hamburger aroma texture temperature retrieval context",
+        "hamburger source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "hamburger",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.north_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-jamaican-patty",
+      "forms": [
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "jamaican-patty",
+        "jamaican-patty mechanism grounding",
+        "jamaican patty sensory context",
+        "jamaican-patty retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "jamaican-patty sensory mechanism reference grounding",
+        "jamaican-patty aroma texture temperature retrieval context",
+        "jamaican-patty source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "jamaican-patty",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-kachumbari",
+      "forms": [
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "kachumbari",
+        "kachumbari mechanism grounding",
+        "kachumbari sensory context",
+        "kachumbari retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "kachumbari sensory mechanism reference grounding",
+        "kachumbari aroma texture temperature retrieval context",
+        "kachumbari source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "kachumbari",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.east_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-kibbeh",
+      "forms": [
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "kibbeh",
+        "kibbeh mechanism grounding",
+        "kibbeh sensory context",
+        "kibbeh retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "kibbeh sensory mechanism reference grounding",
+        "kibbeh aroma texture temperature retrieval context",
+        "kibbeh source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "kibbeh",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-kumis",
+      "forms": [
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "kumis",
+        "kumis mechanism grounding",
+        "kumis sensory context",
+        "kumis retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature"
+      ],
+      "querySeeds": [
+        "kumis sensory mechanism reference grounding",
+        "kumis aroma texture temperature retrieval context",
+        "kumis source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "kumis",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-kwanga",
+      "forms": [
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "kwanga",
+        "kwanga mechanism grounding",
+        "kwanga sensory context",
+        "kwanga retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.starch_texture"
+      ],
+      "querySeeds": [
+        "kwanga sensory mechanism reference grounding",
+        "kwanga aroma texture temperature retrieval context",
+        "kwanga source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "kwanga",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-labrador-tea",
+      "forms": [
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "labrador-tea",
+        "labrador-tea mechanism grounding",
+        "labrador tea sensory context",
+        "labrador-tea retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature"
+      ],
+      "querySeeds": [
+        "labrador-tea sensory mechanism reference grounding",
+        "labrador-tea aroma texture temperature retrieval context",
+        "labrador-tea source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "labrador-tea",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.indigenous_first_peoples",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.indigenous"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-laksa",
+      "forms": [
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "laksa",
+        "laksa mechanism grounding",
+        "laksa sensory context",
+        "laksa retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature"
+      ],
+      "querySeeds": [
+        "laksa sensory mechanism reference grounding",
+        "laksa aroma texture temperature retrieval context",
+        "laksa source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "laksa",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-lomi-salmon",
+      "forms": [
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "lomi-salmon",
+        "lomi-salmon mechanism grounding",
+        "lomi salmon sensory context",
+        "lomi-salmon retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "lomi-salmon sensory mechanism reference grounding",
+        "lomi-salmon aroma texture temperature retrieval context",
+        "lomi-salmon source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "lomi-salmon",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.oceania_pacific",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-mageu",
+      "forms": [
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "mageu",
+        "mageu mechanism grounding",
+        "mageu sensory context",
+        "mageu retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature"
+      ],
+      "querySeeds": [
+        "mageu sensory mechanism reference grounding",
+        "mageu aroma texture temperature retrieval context",
+        "mageu source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "mageu",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.southern_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-malva-pudding",
+      "forms": [
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "malva-pudding",
+        "malva-pudding mechanism grounding",
+        "malva pudding sensory context",
+        "malva-pudding retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal"
+      ],
+      "querySeeds": [
+        "malva-pudding sensory mechanism reference grounding",
+        "malva-pudding aroma texture temperature retrieval context",
+        "malva-pudding source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "malva-pudding",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.southern_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-mandazi",
+      "forms": [
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "mandazi",
+        "mandazi mechanism grounding",
+        "mandazi sensory context",
+        "mandazi retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "mandazi sensory mechanism reference grounding",
+        "mandazi aroma texture temperature retrieval context",
+        "mandazi source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "mandazi",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.east_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-manti",
+      "forms": [
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "manti",
+        "manti mechanism grounding",
+        "manti sensory context",
+        "manti retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "manti sensory mechanism reference grounding",
+        "manti aroma texture temperature retrieval context",
+        "manti source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "manti",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-maple-syrup",
+      "forms": [
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "maple-syrup",
+        "maple-syrup mechanism grounding",
+        "maple syrup sensory context",
+        "maple-syrup retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal"
+      ],
+      "querySeeds": [
+        "maple-syrup sensory mechanism reference grounding",
+        "maple-syrup aroma texture temperature retrieval context",
+        "maple-syrup source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "maple-syrup",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.indigenous_first_peoples",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.indigenous"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-mapo-doufu",
+      "forms": [
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "mapo-doufu",
+        "mapo-doufu mechanism grounding",
+        "mapo doufu sensory context",
+        "mapo-doufu retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "mapo-doufu sensory mechanism reference grounding",
+        "mapo-doufu aroma texture temperature retrieval context",
+        "mapo-doufu source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "mapo-doufu",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-meat-pie",
+      "forms": [
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "meat-pie",
+        "meat-pie mechanism grounding",
+        "meat pie sensory context",
+        "meat-pie retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "meat-pie sensory mechanism reference grounding",
+        "meat-pie aroma texture temperature retrieval context",
+        "meat-pie source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "meat-pie",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.oceania_pacific",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-mielie-meal",
+      "forms": [
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "mielie-meal",
+        "mielie-meal mechanism grounding",
+        "mielie meal sensory context",
+        "mielie-meal retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.starch_texture"
+      ],
+      "querySeeds": [
+        "mielie-meal sensory mechanism reference grounding",
+        "mielie-meal aroma texture temperature retrieval context",
+        "mielie-meal source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "mielie-meal",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.southern_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-milk-custard-pudding-dessert",
+      "forms": [
+        "foodForms.dessert"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "milk-custard-pudding-dessert",
+        "milk-custard-pudding-dessert mechanism grounding",
+        "milk custard pudding dessert sensory context",
+        "milk-custard-pudding-dessert retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature"
+      ],
+      "querySeeds": [
+        "milk-custard-pudding-dessert sensory mechanism reference grounding",
+        "milk-custard-pudding-dessert aroma texture temperature retrieval context",
+        "milk-custard-pudding-dessert source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "milk-custard-pudding-dessert",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.south_america",
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-mochi",
+      "forms": [
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "mochi",
+        "mochi mechanism grounding",
+        "mochi sensory context",
+        "mochi retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal"
+      ],
+      "querySeeds": [
+        "mochi sensory mechanism reference grounding",
+        "mochi aroma texture temperature retrieval context",
+        "mochi source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "mochi",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-mooncake",
+      "forms": [
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "mooncake",
+        "mooncake mechanism grounding",
+        "mooncake sensory context",
+        "mooncake retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal"
+      ],
+      "querySeeds": [
+        "mooncake sensory mechanism reference grounding",
+        "mooncake aroma texture temperature retrieval context",
+        "mooncake source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "mooncake",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.diaspora"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-muktuk",
+      "forms": [
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "muktuk",
+        "muktuk mechanism grounding",
+        "muktuk sensory context",
+        "muktuk retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "muktuk sensory mechanism reference grounding",
+        "muktuk aroma texture temperature retrieval context",
+        "muktuk source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "muktuk",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.arctic_subarctic",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-mustard",
+      "forms": [
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "mustard",
+        "mustard mechanism grounding",
+        "mustard sensory context",
+        "mustard retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "mustard sensory mechanism reference grounding",
+        "mustard aroma texture temperature retrieval context",
+        "mustard source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "mustard",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.europe",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-nasi-lemak",
+      "forms": [
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "nasi-lemak",
+        "nasi-lemak mechanism grounding",
+        "nasi lemak sensory context",
+        "nasi-lemak retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.starch_texture"
+      ],
+      "querySeeds": [
+        "nasi-lemak sensory mechanism reference grounding",
+        "nasi-lemak aroma texture temperature retrieval context",
+        "nasi-lemak source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "nasi-lemak",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-navajo-taco",
+      "forms": [
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "navajo-taco",
+        "navajo-taco mechanism grounding",
+        "navajo taco sensory context",
+        "navajo-taco retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "navajo-taco sensory mechanism reference grounding",
+        "navajo-taco aroma texture temperature retrieval context",
+        "navajo-taco source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "navajo-taco",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.indigenous_first_peoples",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.indigenous"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-nut-sugar-confectionery",
+      "forms": [
+        "foodForms.confectionery"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "nut-sugar-confectionery",
+        "nut-sugar-confectionery mechanism grounding",
+        "nut sugar confectionery sensory context",
+        "nut-sugar-confectionery retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.sugar_crystal",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "nut-sugar-confectionery sensory mechanism reference grounding",
+        "nut-sugar-confectionery aroma texture temperature retrieval context",
+        "nut-sugar-confectionery source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "nut-sugar-confectionery",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.south_america",
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.confectionery",
+        "mechanisms.aroma",
+        "mechanisms.sugar_crystal",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.diaspora"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-ota-ika",
+      "forms": [
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "ota-ika",
+        "ota-ika mechanism grounding",
+        "ota ika sensory context",
+        "ota-ika retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "ota-ika sensory mechanism reference grounding",
+        "ota-ika aroma texture temperature retrieval context",
+        "ota-ika source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "ota-ika",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.oceania_pacific",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-palm-nut-soup",
+      "forms": [
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "palm-nut-soup",
+        "palm-nut-soup mechanism grounding",
+        "palm nut soup sensory context",
+        "palm-nut-soup retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature"
+      ],
+      "querySeeds": [
+        "palm-nut-soup sensory mechanism reference grounding",
+        "palm-nut-soup aroma texture temperature retrieval context",
+        "palm-nut-soup source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "palm-nut-soup",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-pan-de-muerto",
+      "forms": [
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "pan-de-muerto",
+        "pan-de-muerto mechanism grounding",
+        "pan de muerto sensory context",
+        "pan-de-muerto retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal"
+      ],
+      "querySeeds": [
+        "pan-de-muerto sensory mechanism reference grounding",
+        "pan-de-muerto aroma texture temperature retrieval context",
+        "pan-de-muerto source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "pan-de-muerto",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.borderland_trade_routes",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.borderland"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-pandan-coconut-layered-cake",
+      "forms": [
+        "foodForms.confectionery",
+        "foodForms.dessert"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "pandan-coconut-layered-cake",
+        "pandan-coconut-layered-cake mechanism grounding",
+        "pandan coconut layered cake sensory context",
+        "pandan-coconut-layered-cake retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.starch_texture",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "pandan-coconut-layered-cake sensory mechanism reference grounding",
+        "pandan-coconut-layered-cake aroma texture temperature retrieval context",
+        "pandan-coconut-layered-cake source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "pandan-coconut-layered-cake",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.starch_texture",
+        "mechanisms.texture_contrast",
+        "nameSystems.menu_name",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-panettone",
+      "forms": [
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "panettone",
+        "panettone mechanism grounding",
+        "panettone sensory context",
+        "panettone retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal"
+      ],
+      "querySeeds": [
+        "panettone sensory mechanism reference grounding",
+        "panettone aroma texture temperature retrieval context",
+        "panettone source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "panettone",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.europe",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-pavlova",
+      "forms": [
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "pavlova",
+        "pavlova mechanism grounding",
+        "pavlova sensory context",
+        "pavlova retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal"
+      ],
+      "querySeeds": [
+        "pavlova sensory mechanism reference grounding",
+        "pavlova aroma texture temperature retrieval context",
+        "pavlova source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "pavlova",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.oceania_pacific",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-pepian",
+      "forms": [
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "pepian",
+        "pepian mechanism grounding",
+        "pepian sensory context",
+        "pepian retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "pepian sensory mechanism reference grounding",
+        "pepian aroma texture temperature retrieval context",
+        "pepian source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "pepian",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-pikliz",
+      "forms": [
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "pikliz",
+        "pikliz mechanism grounding",
+        "pikliz sensory context",
+        "pikliz retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "pikliz sensory mechanism reference grounding",
+        "pikliz aroma texture temperature retrieval context",
+        "pikliz source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "pikliz",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-pita",
+      "forms": [
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "pita",
+        "pita mechanism grounding",
+        "pita sensory context",
+        "pita retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.starch_texture"
+      ],
+      "querySeeds": [
+        "pita sensory mechanism reference grounding",
+        "pita aroma texture temperature retrieval context",
+        "pita source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "pita",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-popiah",
+      "forms": [
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "popiah",
+        "popiah mechanism grounding",
+        "popiah sensory context",
+        "popiah retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "popiah sensory mechanism reference grounding",
+        "popiah aroma texture temperature retrieval context",
+        "popiah source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "popiah",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-pot-roast",
+      "forms": [
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "pot-roast",
+        "pot-roast mechanism grounding",
+        "pot roast sensory context",
+        "pot-roast retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "pot-roast sensory mechanism reference grounding",
+        "pot-roast aroma texture temperature retrieval context",
+        "pot-roast source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "pot-roast",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.north_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-pupusa",
+      "forms": [
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "pupusa",
+        "pupusa mechanism grounding",
+        "pupusa sensory context",
+        "pupusa retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "pupusa sensory mechanism reference grounding",
+        "pupusa aroma texture temperature retrieval context",
+        "pupusa source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "pupusa",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-rice-paper-herb-roll",
+      "forms": [
+        "foodForms.snack_street_food",
+        "foodForms.vegetable_fungi"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "rice-paper-herb-roll",
+        "rice-paper-herb-roll mechanism grounding",
+        "rice paper herb roll sensory context",
+        "rice-paper-herb-roll retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.sauce_balance",
+        "mechanisms.starch_texture",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "rice-paper-herb-roll sensory mechanism reference grounding",
+        "rice-paper-herb-roll aroma texture temperature retrieval context",
+        "rice-paper-herb-roll source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "rice-paper-herb-roll",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.snack_street_food",
+        "foodForms.vegetable_fungi",
+        "mechanisms.sauce_balance",
+        "mechanisms.starch_texture",
+        "mechanisms.texture_contrast",
+        "nameSystems.transliteration",
+        "regionScopes.diaspora",
+        "regionScopes.nation"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-roselle-juice",
+      "forms": [
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "roselle-juice",
+        "roselle-juice mechanism grounding",
+        "roselle juice sensory context",
+        "roselle-juice retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature"
+      ],
+      "querySeeds": [
+        "roselle-juice sensory mechanism reference grounding",
+        "roselle-juice aroma texture temperature retrieval context",
+        "roselle-juice source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "roselle-juice",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-rum-cake",
+      "forms": [
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "rum-cake",
+        "rum-cake mechanism grounding",
+        "rum cake sensory context",
+        "rum-cake retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal"
+      ],
+      "querySeeds": [
+        "rum-cake sensory mechanism reference grounding",
+        "rum-cake aroma texture temperature retrieval context",
+        "rum-cake source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "rum-cake",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-salsa",
+      "forms": [
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "salsa",
+        "salsa mechanism grounding",
+        "salsa sensory context",
+        "salsa retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "salsa sensory mechanism reference grounding",
+        "salsa aroma texture temperature retrieval context",
+        "salsa source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "salsa",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.borderland_trade_routes",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.borderland"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-shito",
+      "forms": [
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "shito",
+        "shito mechanism grounding",
+        "shito sensory context",
+        "shito retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "shito sensory mechanism reference grounding",
+        "shito aroma texture temperature retrieval context",
+        "shito source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "shito",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-simmered-vegetable-greens",
+      "forms": [
+        "foodForms.vegetable_fungi"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "simmered-vegetable-greens",
+        "simmered-vegetable-greens mechanism grounding",
+        "simmered vegetable greens sensory context",
+        "simmered-vegetable-greens retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.fermentation_acid",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "simmered-vegetable-greens sensory mechanism reference grounding",
+        "simmered-vegetable-greens aroma texture temperature retrieval context",
+        "simmered-vegetable-greens source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "simmered-vegetable-greens",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_africa",
+        "cultureAreas.east_asia",
+        "cultureAreas.north_america",
+        "cultureAreas.south_asia",
+        "cultureAreas.southern_africa",
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.fermentation_acid",
+        "mechanisms.texture_contrast",
+        "nameSystems.family_nickname",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-single-ingredient-nostalgia",
+      "forms": [
+        "foodForms.pantry_single_ingredient"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "single-ingredient-nostalgia",
+        "single-ingredient-nostalgia mechanism grounding",
+        "single ingredient nostalgia sensory context",
+        "single-ingredient-nostalgia retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "single-ingredient-nostalgia sensory mechanism reference grounding",
+        "single-ingredient-nostalgia aroma texture temperature retrieval context",
+        "single-ingredient-nostalgia source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "single-ingredient-nostalgia",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.north_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pantry_single_ingredient",
+        "mechanisms.aroma",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.serving_ritual",
+        "nameSystems.family_nickname",
+        "regionScopes.city"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-smoked-fish-berry-preserve-foodway",
+      "forms": [
+        "foodForms.ceremonial_holiday",
+        "foodForms.pantry_single_ingredient",
+        "foodForms.protein_centered"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "smoked-fish-berry-preserve-foodway",
+        "smoked-fish-berry-preserve-foodway mechanism grounding",
+        "smoked fish berry preserve foodway sensory context",
+        "smoked-fish-berry-preserve-foodway retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.serving_ritual",
+        "mechanisms.smoke",
+        "mechanisms.temperature"
+      ],
+      "querySeeds": [
+        "smoked-fish-berry-preserve-foodway sensory mechanism reference grounding",
+        "smoked-fish-berry-preserve-foodway aroma texture temperature retrieval context",
+        "smoked-fish-berry-preserve-foodway source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "smoked-fish-berry-preserve-foodway",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.arctic_subarctic",
+        "cultureAreas.europe",
+        "cultureAreas.indigenous_first_peoples",
+        "cultureAreas.north_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.pantry_single_ingredient",
+        "foodForms.protein_centered",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.serving_ritual",
+        "mechanisms.smoke",
+        "mechanisms.temperature",
+        "nameSystems.family_nickname",
+        "regionScopes.indigenous",
+        "regionScopes.subregion"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-sour-herb-soup",
+      "forms": [
+        "foodForms.soup_broth"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "sour-herb-soup",
+        "sour-herb-soup mechanism grounding",
+        "sour herb soup sensory context",
+        "sour-herb-soup retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature"
+      ],
+      "querySeeds": [
+        "sour-herb-soup sensory mechanism reference grounding",
+        "sour-herb-soup aroma texture temperature retrieval context",
+        "sour-herb-soup source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "sour-herb-soup",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.europe",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-spiced-protein-braise",
+      "forms": [
+        "foodForms.protein_centered",
+        "foodForms.stew_braise"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "spiced-protein-braise",
+        "spiced-protein-braise mechanism grounding",
+        "spiced protein braise sensory context",
+        "spiced-protein-braise retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "spiced-protein-braise sensory mechanism reference grounding",
+        "spiced-protein-braise aroma texture temperature retrieval context",
+        "spiced-protein-braise source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "spiced-protein-braise",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.south_asia",
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "mechanisms.aroma",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "regionScopes.diaspora"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-sweet-beignet",
+      "forms": [
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "sweet-beignet",
+        "sweet-beignet mechanism grounding",
+        "sweet beignet sensory context",
+        "sweet-beignet retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal"
+      ],
+      "querySeeds": [
+        "sweet-beignet sensory mechanism reference grounding",
+        "sweet-beignet aroma texture temperature retrieval context",
+        "sweet-beignet source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "sweet-beignet",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-tajine",
+      "forms": [
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "tajine",
+        "tajine mechanism grounding",
+        "tajine sensory context",
+        "tajine retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "tajine sensory mechanism reference grounding",
+        "tajine aroma texture temperature retrieval context",
+        "tajine source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "tajine",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-tamarind-chile-wrapper-candy",
+      "forms": [
+        "foodForms.confectionery",
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "tamarind-chile-wrapper-candy",
+        "tamarind-chile-wrapper-candy mechanism grounding",
+        "tamarind chile wrapper candy sensory context",
+        "tamarind-chile-wrapper-candy retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.sauce_balance",
+        "mechanisms.sugar_crystal"
+      ],
+      "querySeeds": [
+        "tamarind-chile-wrapper-candy sensory mechanism reference grounding",
+        "tamarind-chile-wrapper-candy aroma texture temperature retrieval context",
+        "tamarind-chile-wrapper-candy source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "tamarind-chile-wrapper-candy",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.confectionery",
+        "foodForms.snack_street_food",
+        "mechanisms.sauce_balance",
+        "mechanisms.sugar_crystal",
+        "nameSystems.menu_name",
+        "regionScopes.diaspora",
+        "regionScopes.nation"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-taro",
+      "forms": [
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "taro",
+        "taro mechanism grounding",
+        "taro sensory context",
+        "taro retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.starch_texture"
+      ],
+      "querySeeds": [
+        "taro sensory mechanism reference grounding",
+        "taro aroma texture temperature retrieval context",
+        "taro source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "taro",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.oceania_pacific",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-ugali",
+      "forms": [
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "ugali",
+        "ugali mechanism grounding",
+        "ugali sensory context",
+        "ugali retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.starch_texture"
+      ],
+      "querySeeds": [
+        "ugali sensory mechanism reference grounding",
+        "ugali aroma texture temperature retrieval context",
+        "ugali source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "ugali",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.east_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
+    },
+    {
+      "id": "exp10-mechanism-wheat-tortilla",
+      "forms": [
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle"
+      ],
+      "regions": [
+        "Sensory mechanism context",
+        "source:Wikidata structured food data"
+      ],
+      "nameSignals": [
+        "wheat-tortilla",
+        "wheat-tortilla mechanism grounding",
+        "wheat tortilla sensory context",
+        "wheat-tortilla retrieval texture aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.starch_texture"
+      ],
+      "querySeeds": [
+        "wheat-tortilla sensory mechanism reference grounding",
+        "wheat-tortilla aroma texture temperature retrieval context",
+        "wheat-tortilla source-bounded mechanism record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "wheat-tortilla",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.borderland_trade_routes",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.borderland"
+      ],
+      "provenance": {
+        "sourceType": "operator curated mechanism-density seed",
+        "notes": [
+          "Adds a sixth source-bounded retrieval angle for every family that remained at the five-record floor.",
+          "Mechanism records summarize taxonomy-backed sensory dimensions and keep household certainty unknown."
+        ]
+      }
     }
   ]
 }
