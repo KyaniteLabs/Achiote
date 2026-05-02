@@ -45,11 +45,18 @@ function extractLandingExamples(): string[] {
 }
 
 function extractCanaryPrompts(): Array<{ source: string; text: string }> {
-  const sources = ['scripts/local-canary-qa.mjs', 'scripts/weak-cloud-overnight.mjs', 'scripts/preview-ask-smoke.mjs'];
+  const sources = ['scripts/local-canary-qa.mjs', 'scripts/lib/canary-prompt-bank.mjs', 'scripts/preview-ask-smoke.mjs'];
   return sources.flatMap((source) => (
     [...read(source).matchAll(/\b(?:message|text): '([^']+)'/g)]
       .map((match) => ({ source, text: match[1] }))
   ));
+}
+
+function extractDefaultCanaryText(): string {
+  return [
+    'scripts/local-canary-qa.mjs',
+    'scripts/lib/canary-prompt-bank.mjs',
+  ].map(read).join('\n');
 }
 
 describe('overfitting guardrails', () => {
@@ -94,5 +101,26 @@ describe('overfitting guardrails', () => {
     ).filter((overlap) => overlap.score >= 0.72 && overlap.shared.length >= 5);
 
     expect(overlaps).toEqual([]);
+  });
+
+  it('does not let the default canary bank regress to stale solved memories', () => {
+    const defaultCanaryText = extractDefaultCanaryText();
+
+    expect(defaultCanaryText).not.toMatch(/\b(?:sparse_sour_dill_soup|misspelled_carimanola|baseline_food_memory|beverage_horchata_like)\b/i);
+    expect(defaultCanaryText).not.toMatch(/\b(?:carima[nñ]ola|caribanyola|tart green-herb broth|soft potato or egg bits|thinner than horchata|agua de cebada|aguita de ceb[aá])\b/i);
+  });
+
+  it('keeps multiple hard prompt cohorts available for post-seed reruns', async () => {
+    const { weakCloudPromptBanks } = await import('../scripts/lib/canary-prompt-bank.mjs');
+    const promptIds = weakCloudPromptBanks.flatMap((bank: { prompts: Array<{ id: string }> }) => bank.prompts.map((prompt) => prompt.id));
+
+    expect(weakCloudPromptBanks.length).toBeGreaterThanOrEqual(3);
+    expect(new Set(promptIds).size).toBe(promptIds.length);
+    expect(promptIds).not.toEqual(expect.arrayContaining([
+      'sparse_sour_dill_soup',
+      'misspelled_carimanola',
+      'beverage_horchata_like',
+    ]));
+    expect(weakCloudPromptBanks.every((bank: { prompts: unknown[] }) => bank.prompts.length >= 7)).toBe(true);
   });
 });

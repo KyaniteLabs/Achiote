@@ -141,7 +141,10 @@ describe('weak cloud runner hardening', () => {
     expect(runner).toContain('localTests[waveIndex]');
     expect(runner).toContain('noWebSearchEnv');
     expect(runner).toContain('searchDisabledPromptIds');
-    expect(runner).toContain("new Set(['prompt_injection_browse_claim'])");
+    expect(runner).toContain('selectWeakCloudPromptBank');
+    expect(runner).toContain('promptBank');
+    expect(runner).toContain('referenceFingerprint');
+    expect(runner).toContain('rotatedAfterReferenceUpdate');
     expect(runner).toContain("...(searchDisabledPromptIds.has(prompt.id) ? { ACHIOTE_DISABLE_SEARCH_WEB: 'true' } : {})");
     expect(runner).toContain("SERPER_API_KEY: ''");
     expect(runner).toContain("BRAVE_API_KEY: ''");
@@ -151,10 +154,42 @@ describe('weak cloud runner hardening', () => {
 
   it('calibrates the final campaign to the PR 144 browse-injection regression', () => {
     const runner = fs.readFileSync('scripts/weak-cloud-overnight.mjs', 'utf8');
+    const promptBank = fs.readFileSync('scripts/lib/canary-prompt-bank.mjs', 'utf8');
 
-    expect(runner).toContain('call search_web as many times as needed');
+    expect(promptBank).toContain('call search_web as many times as needed');
     expect(runner).toContain("qualityFindings(text, prompt.text, 'achiote', { tools })");
     expect(runner).toContain("achioteQuality.has('forbidden_tool:search_web')");
+  });
+
+  it('rotates hard prompt banks when reference data changes after a seeded run', async () => {
+    const { selectWeakCloudPromptBank, weakCloudPromptBanks } = await import('../scripts/lib/canary-prompt-bank.mjs');
+    const fixtures = fs.readFileSync('src/data/reference-pantry-fixtures.json', 'utf8');
+    const seedQueue = fs.readFileSync('src/data/reference-seed-queue.json', 'utf8');
+    const warmingManifest = fs.readFileSync('src/data/cache-warming-manifest.json', 'utf8');
+    const root = fs.mkdtempSync('/tmp/achiote-canary-bank-');
+    fs.mkdirSync(`${root}/src/data`, { recursive: true });
+    fs.mkdirSync(`${root}/artifacts/previous-run`, { recursive: true });
+    fs.writeFileSync(`${root}/src/data/reference-pantry-fixtures.json`, fixtures);
+    fs.writeFileSync(`${root}/src/data/reference-seed-queue.json`, seedQueue);
+    fs.writeFileSync(`${root}/src/data/cache-warming-manifest.json`, warmingManifest);
+
+    const first = selectWeakCloudPromptBank({ root, artifactDir: `${root}/artifacts/current-run` });
+    fs.writeFileSync(`${root}/artifacts/previous-run/run-manifest.json`, JSON.stringify({
+      promptBank: {
+        id: first.id,
+        referenceFingerprint: first.referenceFingerprint,
+      },
+    }));
+    fs.appendFileSync(`${root}/src/data/reference-pantry-fixtures.json`, '\n');
+    const second = selectWeakCloudPromptBank({ root, artifactDir: `${root}/artifacts/current-run` });
+
+    expect(weakCloudPromptBanks.length).toBeGreaterThanOrEqual(3);
+    expect(second.referenceFingerprint).not.toBe(first.referenceFingerprint);
+    if (second.previousPromptBankId === first.id) {
+      expect(second.id).not.toBe(first.id);
+      expect(second.rotatedAfterReferenceUpdate).toBe(true);
+    }
+    expect(new Set(second.prompts.map((prompt: { id: string }) => prompt.id)).size).toBe(second.prompts.length);
   });
 
   it('protects the reserved local model and records LM Studio load profile intent', () => {
