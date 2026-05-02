@@ -11421,6 +11421,2662 @@
         "confidence": "Medium",
         "createdAt": "2026-05-02T00:00:00.000Z"
       }
+    },
+    {
+      "seedId": "exp3-depth-pandan-coconut-layered-cake-malaysia",
+      "cacheTarget": {
+        "dishFamily": "pandan-coconut-layered-cake",
+        "region": "Malaysia"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.starch_texture",
+        "mechanisms.texture_contrast",
+        "nameSystems.menu_name",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "pandan-coconut-layered-cake",
+        "query": "kue lapis Malaysia sensory variant structured data",
+        "sources": [
+          {
+            "title": "kue lapis (Q159290) structured data",
+            "url": "https://www.wikidata.org/wiki/Q159290",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q159290 has English label \"kue lapis\".",
+              "Wikidata item Q159290 has English description: Malay layered cake.",
+              "Operator mapped aliases for depth grounding: pandan cake, layer cake.",
+              "Operator depth context for retrieval: Malaysia."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "pandan-coconut-layered-cake",
+            "kue lapis",
+            "pandan cake",
+            "layer cake",
+            "Malay layered cake naming",
+            "market sweet context",
+            "coconut-rich bite"
+          ],
+          "regions": [
+            "nation:Malaysia"
+          ],
+          "ingredients": [
+            "coconut-rich bite"
+          ],
+          "techniques": [
+            "regional variant grounding",
+            "sensory disambiguation",
+            "minimum-cue retrieval support"
+          ],
+          "sensoryDescriptors": [
+            "Malay layered cake naming",
+            "market sweet context",
+            "coconut-rich bite"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "diaspora or regional variant cue"
+          ],
+          "regionalVariants": [
+            "Malaysia is stored as a retrieval context for pandan-coconut-layered-cake.",
+            "This depth record reuses approved structured labels while keeping household certainty unknown."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "The regional context is a retrieval/disambiguation layer and must not override user-provided origin, language, or family correction.",
+          "Specific household ingredients, proportions, texture, serving ritual, and substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp3-depth-pandan-coconut-layered-cake-indonesia",
+      "cacheTarget": {
+        "dishFamily": "pandan-coconut-layered-cake",
+        "region": "Indonesia"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.starch_texture",
+        "mechanisms.texture_contrast",
+        "nameSystems.menu_name",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "pandan-coconut-layered-cake",
+        "query": "kue lapis Indonesia sensory variant structured data",
+        "sources": [
+          {
+            "title": "kue lapis (Q159290) structured data",
+            "url": "https://www.wikidata.org/wiki/Q159290",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q159290 has English label \"kue lapis\".",
+              "Wikidata item Q159290 has English description: Malay layered cake.",
+              "Operator mapped aliases for depth grounding: pandan cake, layer cake.",
+              "Operator depth context for retrieval: Indonesia."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "pandan-coconut-layered-cake",
+            "kue lapis",
+            "pandan cake",
+            "layer cake",
+            "layered cake cue",
+            "sticky rice or starch texture",
+            "green leaf aroma"
+          ],
+          "regions": [
+            "nation:Indonesia"
+          ],
+          "ingredients": [
+            "sticky rice or starch texture",
+            "green leaf aroma"
+          ],
+          "techniques": [
+            "regional variant grounding",
+            "sensory disambiguation",
+            "minimum-cue retrieval support"
+          ],
+          "sensoryDescriptors": [
+            "layered cake cue",
+            "sticky rice or starch texture",
+            "green leaf aroma"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "diaspora or regional variant cue"
+          ],
+          "regionalVariants": [
+            "Indonesia is stored as a retrieval context for pandan-coconut-layered-cake.",
+            "This depth record reuses approved structured labels while keeping household certainty unknown."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "The regional context is a retrieval/disambiguation layer and must not override user-provided origin, language, or family correction.",
+          "Specific household ingredients, proportions, texture, serving ritual, and substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp3-depth-pandan-coconut-layered-cake-singapore-diaspora",
+      "cacheTarget": {
+        "dishFamily": "pandan-coconut-layered-cake",
+        "region": "Singapore diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.starch_texture",
+        "mechanisms.texture_contrast",
+        "nameSystems.menu_name",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "pandan-coconut-layered-cake",
+        "query": "kue lapis Singapore diaspora sensory variant structured data",
+        "sources": [
+          {
+            "title": "kue lapis (Q159290) structured data",
+            "url": "https://www.wikidata.org/wiki/Q159290",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q159290 has English label \"kue lapis\".",
+              "Wikidata item Q159290 has English description: Malay layered cake.",
+              "Operator mapped aliases for depth grounding: pandan cake, layer cake.",
+              "Operator depth context for retrieval: Singapore diaspora."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "pandan-coconut-layered-cake",
+            "kue lapis",
+            "pandan cake",
+            "layer cake",
+            "diaspora bakery cue",
+            "pandan aroma",
+            "springy layered texture"
+          ],
+          "regions": [
+            "diaspora:Singapore"
+          ],
+          "ingredients": [
+            "pandan aroma"
+          ],
+          "techniques": [
+            "regional variant grounding",
+            "sensory disambiguation",
+            "minimum-cue retrieval support"
+          ],
+          "sensoryDescriptors": [
+            "diaspora bakery cue",
+            "pandan aroma",
+            "springy layered texture"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "diaspora or regional variant cue"
+          ],
+          "regionalVariants": [
+            "Singapore diaspora is stored as a retrieval context for pandan-coconut-layered-cake.",
+            "This depth record reuses approved structured labels while keeping household certainty unknown."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "The regional context is a retrieval/disambiguation layer and must not override user-provided origin, language, or family correction.",
+          "Specific household ingredients, proportions, texture, serving ritual, and substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp3-depth-pandan-coconut-layered-cake-global-diaspora",
+      "cacheTarget": {
+        "dishFamily": "pandan-coconut-layered-cake",
+        "region": "Global diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.starch_texture",
+        "mechanisms.texture_contrast",
+        "nameSystems.menu_name",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "pandan-coconut-layered-cake",
+        "query": "kue lapis Global diaspora sensory variant structured data",
+        "sources": [
+          {
+            "title": "kue lapis (Q159290) structured data",
+            "url": "https://www.wikidata.org/wiki/Q159290",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q159290 has English label \"kue lapis\".",
+              "Wikidata item Q159290 has English description: Malay layered cake.",
+              "Operator mapped aliases for depth grounding: pandan cake, layer cake.",
+              "Operator depth context for retrieval: Global diaspora."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "pandan-coconut-layered-cake",
+            "kue lapis",
+            "pandan cake",
+            "layer cake",
+            "pandan-coconut flavor memory",
+            "green-white visual cue",
+            "dessert table context"
+          ],
+          "regions": [
+            "diaspora:Global"
+          ],
+          "ingredients": [
+            "pandan-coconut flavor memory"
+          ],
+          "techniques": [
+            "regional variant grounding",
+            "sensory disambiguation",
+            "minimum-cue retrieval support"
+          ],
+          "sensoryDescriptors": [
+            "pandan-coconut flavor memory",
+            "green-white visual cue",
+            "dessert table context"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "diaspora or regional variant cue"
+          ],
+          "regionalVariants": [
+            "Global diaspora is stored as a retrieval context for pandan-coconut-layered-cake.",
+            "This depth record reuses approved structured labels while keeping household certainty unknown."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "The regional context is a retrieval/disambiguation layer and must not override user-provided origin, language, or family correction.",
+          "Specific household ingredients, proportions, texture, serving ritual, and substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp3-depth-tamarind-chile-wrapper-candy-mexico",
+      "cacheTarget": {
+        "dishFamily": "tamarind-chile-wrapper-candy",
+        "region": "Mexico"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "cultureAreas.diaspora_global",
+        "foodForms.confectionery",
+        "foodForms.snack_street_food",
+        "mechanisms.sauce_balance",
+        "mechanisms.sugar_crystal",
+        "nameSystems.menu_name",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "tamarind-chile-wrapper-candy",
+        "query": "Pulparindo Mexico sensory variant structured data",
+        "sources": [
+          {
+            "title": "Pulparindo (Q7259589) structured data",
+            "url": "https://www.wikidata.org/wiki/Q7259589",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q7259589 has English label \"Pulparindo\".",
+              "Wikidata item Q7259589 has English description: Mexican candy.",
+              "Operator mapped aliases for depth grounding: tamarind candy.",
+              "Operator depth context for retrieval: Mexico."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "tamarind-chile-wrapper-candy",
+            "Pulparindo",
+            "tamarind candy",
+            "wrapped Mexican candy",
+            "tamarind sourness",
+            "chile-salt balance"
+          ],
+          "regions": [
+            "nation:Mexico"
+          ],
+          "ingredients": [
+            "tamarind sourness"
+          ],
+          "techniques": [
+            "regional variant grounding",
+            "sensory disambiguation",
+            "minimum-cue retrieval support"
+          ],
+          "sensoryDescriptors": [
+            "wrapped Mexican candy",
+            "tamarind sourness",
+            "chile-salt balance"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "diaspora or regional variant cue"
+          ],
+          "regionalVariants": [
+            "Mexico is stored as a retrieval context for tamarind-chile-wrapper-candy.",
+            "This depth record reuses approved structured labels while keeping household certainty unknown."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "The regional context is a retrieval/disambiguation layer and must not override user-provided origin, language, or family correction.",
+          "Specific household ingredients, proportions, texture, serving ritual, and substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp3-depth-tamarind-chile-wrapper-candy-us-diaspora",
+      "cacheTarget": {
+        "dishFamily": "tamarind-chile-wrapper-candy",
+        "region": "United States diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "cultureAreas.diaspora_global",
+        "foodForms.confectionery",
+        "foodForms.snack_street_food",
+        "mechanisms.sauce_balance",
+        "mechanisms.sugar_crystal",
+        "nameSystems.menu_name",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "tamarind-chile-wrapper-candy",
+        "query": "Pulparindo United States diaspora sensory variant structured data",
+        "sources": [
+          {
+            "title": "Pulparindo (Q7259589) structured data",
+            "url": "https://www.wikidata.org/wiki/Q7259589",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q7259589 has English label \"Pulparindo\".",
+              "Wikidata item Q7259589 has English description: Mexican candy.",
+              "Operator mapped aliases for depth grounding: tamarind candy.",
+              "Operator depth context for retrieval: United States diaspora."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "tamarind-chile-wrapper-candy",
+            "Pulparindo",
+            "tamarind candy",
+            "diaspora grocery candy aisle",
+            "schoolyard wrapper cue",
+            "sticky sour-salty bite"
+          ],
+          "regions": [
+            "diaspora:United States"
+          ],
+          "ingredients": [
+            "schoolyard wrapper cue"
+          ],
+          "techniques": [
+            "regional variant grounding",
+            "sensory disambiguation",
+            "minimum-cue retrieval support"
+          ],
+          "sensoryDescriptors": [
+            "diaspora grocery candy aisle",
+            "schoolyard wrapper cue",
+            "sticky sour-salty bite"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "diaspora or regional variant cue"
+          ],
+          "regionalVariants": [
+            "United States diaspora is stored as a retrieval context for tamarind-chile-wrapper-candy.",
+            "This depth record reuses approved structured labels while keeping household certainty unknown."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "The regional context is a retrieval/disambiguation layer and must not override user-provided origin, language, or family correction.",
+          "Specific household ingredients, proportions, texture, serving ritual, and substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp3-depth-tamarind-chile-wrapper-candy-borderland",
+      "cacheTarget": {
+        "dishFamily": "tamarind-chile-wrapper-candy",
+        "region": "US-Mexico borderlands"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "cultureAreas.diaspora_global",
+        "foodForms.confectionery",
+        "foodForms.snack_street_food",
+        "mechanisms.sauce_balance",
+        "mechanisms.sugar_crystal",
+        "nameSystems.menu_name",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "tamarind-chile-wrapper-candy",
+        "query": "Pulparindo US-Mexico borderlands sensory variant structured data",
+        "sources": [
+          {
+            "title": "Pulparindo (Q7259589) structured data",
+            "url": "https://www.wikidata.org/wiki/Q7259589",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q7259589 has English label \"Pulparindo\".",
+              "Wikidata item Q7259589 has English description: Mexican candy.",
+              "Operator mapped aliases for depth grounding: tamarind candy.",
+              "Operator depth context for retrieval: US-Mexico borderlands."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "tamarind-chile-wrapper-candy",
+            "Pulparindo",
+            "tamarind candy",
+            "borderland snack cue",
+            "chile heat",
+            "sweet-sour paste texture"
+          ],
+          "regions": [
+            "borderland:US-Mexico"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "regional variant grounding",
+            "sensory disambiguation",
+            "minimum-cue retrieval support"
+          ],
+          "sensoryDescriptors": [
+            "borderland snack cue",
+            "chile heat",
+            "sweet-sour paste texture"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "diaspora or regional variant cue"
+          ],
+          "regionalVariants": [
+            "US-Mexico borderlands is stored as a retrieval context for tamarind-chile-wrapper-candy.",
+            "This depth record reuses approved structured labels while keeping household certainty unknown."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "The regional context is a retrieval/disambiguation layer and must not override user-provided origin, language, or family correction.",
+          "Specific household ingredients, proportions, texture, serving ritual, and substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp3-depth-tamarind-chile-wrapper-candy-latin-america-comparison",
+      "cacheTarget": {
+        "dishFamily": "tamarind-chile-wrapper-candy",
+        "region": "Latin America comparison"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "cultureAreas.diaspora_global",
+        "foodForms.confectionery",
+        "foodForms.snack_street_food",
+        "mechanisms.sauce_balance",
+        "mechanisms.sugar_crystal",
+        "nameSystems.menu_name",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "tamarind-chile-wrapper-candy",
+        "query": "Pulparindo Latin America comparison sensory variant structured data",
+        "sources": [
+          {
+            "title": "Pulparindo (Q7259589) structured data",
+            "url": "https://www.wikidata.org/wiki/Q7259589",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q7259589 has English label \"Pulparindo\".",
+              "Wikidata item Q7259589 has English description: Mexican candy.",
+              "Operator mapped aliases for depth grounding: tamarind candy.",
+              "Operator depth context for retrieval: Latin America comparison."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "tamarind-chile-wrapper-candy",
+            "Pulparindo",
+            "tamarind candy",
+            "tamarind versus salted plum disambiguation",
+            "dark sticky candy texture",
+            "acid-salt-sugar balance"
+          ],
+          "regions": [
+            "macro:Latin America"
+          ],
+          "ingredients": [
+            "tamarind versus salted plum disambiguation"
+          ],
+          "techniques": [
+            "regional variant grounding",
+            "sensory disambiguation",
+            "minimum-cue retrieval support"
+          ],
+          "sensoryDescriptors": [
+            "tamarind versus salted plum disambiguation",
+            "dark sticky candy texture",
+            "acid-salt-sugar balance"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "diaspora or regional variant cue"
+          ],
+          "regionalVariants": [
+            "Latin America comparison is stored as a retrieval context for tamarind-chile-wrapper-candy.",
+            "This depth record reuses approved structured labels while keeping household certainty unknown."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "The regional context is a retrieval/disambiguation layer and must not override user-provided origin, language, or family correction.",
+          "Specific household ingredients, proportions, texture, serving ritual, and substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp3-depth-bitter-melon-egg-broth-southeast-asia",
+      "cacheTarget": {
+        "dishFamily": "bitter-melon-egg-broth",
+        "region": "Southeast Asia"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "cultureAreas.caribbean",
+        "cultureAreas.diaspora_global",
+        "foodForms.soup_broth",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "bitter-melon-egg-broth",
+        "query": "bitter melon Southeast Asia sensory variant structured data",
+        "sources": [
+          {
+            "title": "bitter melon (Q112758485) structured data",
+            "url": "https://www.wikidata.org/wiki/Q112758485",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q112758485 has English label \"bitter melon\".",
+              "Wikidata item Q112758485 has English description: the vegetable; fruit of Momordica charantia.",
+              "Operator mapped aliases for depth grounding: bitter gourd.",
+              "Operator depth context for retrieval: Southeast Asia."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "bitter-melon-egg-broth",
+            "bitter melon",
+            "bitter gourd",
+            "clear broth cue",
+            "pale green bitter slices",
+            "soft egg ribbon texture"
+          ],
+          "regions": [
+            "macro:Southeast Asia"
+          ],
+          "ingredients": [
+            "clear broth cue",
+            "soft egg ribbon texture"
+          ],
+          "techniques": [
+            "regional variant grounding",
+            "sensory disambiguation",
+            "minimum-cue retrieval support"
+          ],
+          "sensoryDescriptors": [
+            "clear broth cue",
+            "pale green bitter slices",
+            "soft egg ribbon texture"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "diaspora or regional variant cue"
+          ],
+          "regionalVariants": [
+            "Southeast Asia is stored as a retrieval context for bitter-melon-egg-broth.",
+            "This depth record reuses approved structured labels while keeping household certainty unknown."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "The regional context is a retrieval/disambiguation layer and must not override user-provided origin, language, or family correction.",
+          "Specific household ingredients, proportions, texture, serving ritual, and substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp3-depth-bitter-melon-egg-broth-caribbean",
+      "cacheTarget": {
+        "dishFamily": "bitter-melon-egg-broth",
+        "region": "Caribbean"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "cultureAreas.caribbean",
+        "cultureAreas.diaspora_global",
+        "foodForms.soup_broth",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "bitter-melon-egg-broth",
+        "query": "bitter melon Caribbean sensory variant structured data",
+        "sources": [
+          {
+            "title": "bitter melon (Q112758485) structured data",
+            "url": "https://www.wikidata.org/wiki/Q112758485",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q112758485 has English label \"bitter melon\".",
+              "Wikidata item Q112758485 has English description: the vegetable; fruit of Momordica charantia.",
+              "Operator mapped aliases for depth grounding: bitter gourd.",
+              "Operator depth context for retrieval: Caribbean."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "bitter-melon-egg-broth",
+            "bitter melon",
+            "bitter gourd",
+            "bitter gourd naming",
+            "home broth context",
+            "soft protein contrast"
+          ],
+          "regions": [
+            "macro:Caribbean"
+          ],
+          "ingredients": [
+            "home broth context"
+          ],
+          "techniques": [
+            "regional variant grounding",
+            "sensory disambiguation",
+            "minimum-cue retrieval support"
+          ],
+          "sensoryDescriptors": [
+            "bitter gourd naming",
+            "home broth context",
+            "soft protein contrast"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "diaspora or regional variant cue"
+          ],
+          "regionalVariants": [
+            "Caribbean is stored as a retrieval context for bitter-melon-egg-broth.",
+            "This depth record reuses approved structured labels while keeping household certainty unknown."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "The regional context is a retrieval/disambiguation layer and must not override user-provided origin, language, or family correction.",
+          "Specific household ingredients, proportions, texture, serving ritual, and substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp3-depth-bitter-melon-egg-broth-south-asia-diaspora",
+      "cacheTarget": {
+        "dishFamily": "bitter-melon-egg-broth",
+        "region": "South Asia diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "cultureAreas.caribbean",
+        "cultureAreas.diaspora_global",
+        "foodForms.soup_broth",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "bitter-melon-egg-broth",
+        "query": "bitter melon South Asia diaspora sensory variant structured data",
+        "sources": [
+          {
+            "title": "bitter melon (Q112758485) structured data",
+            "url": "https://www.wikidata.org/wiki/Q112758485",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q112758485 has English label \"bitter melon\".",
+              "Wikidata item Q112758485 has English description: the vegetable; fruit of Momordica charantia.",
+              "Operator mapped aliases for depth grounding: bitter gourd.",
+              "Operator depth context for retrieval: South Asia diaspora."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "bitter-melon-egg-broth",
+            "bitter melon",
+            "bitter gourd",
+            "bitter gourd alias",
+            "bitter vegetable memory",
+            "warm broth or sauté disambiguation"
+          ],
+          "regions": [
+            "diaspora:South Asia"
+          ],
+          "ingredients": [
+            "warm broth or sauté disambiguation"
+          ],
+          "techniques": [
+            "regional variant grounding",
+            "sensory disambiguation",
+            "minimum-cue retrieval support"
+          ],
+          "sensoryDescriptors": [
+            "bitter gourd alias",
+            "bitter vegetable memory",
+            "warm broth or sauté disambiguation"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "diaspora or regional variant cue"
+          ],
+          "regionalVariants": [
+            "South Asia diaspora is stored as a retrieval context for bitter-melon-egg-broth.",
+            "This depth record reuses approved structured labels while keeping household certainty unknown."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "The regional context is a retrieval/disambiguation layer and must not override user-provided origin, language, or family correction.",
+          "Specific household ingredients, proportions, texture, serving ritual, and substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp3-depth-fermented-cereal-porridge-drink-nigeria",
+      "cacheTarget": {
+        "dishFamily": "fermented-cereal-porridge-drink",
+        "region": "Nigeria"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.west_africa",
+        "cultureAreas.diaspora_global",
+        "foodForms.beverage",
+        "foodForms.grain_rice_noodle",
+        "foodForms.breakfast",
+        "mechanisms.fermentation_acid",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "nameSystems.transliteration",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "fermented-cereal-porridge-drink",
+        "query": "ogi Nigeria sensory variant structured data",
+        "sources": [
+          {
+            "title": "ogi (Q7080021) structured data",
+            "url": "https://www.wikidata.org/wiki/Q7080021",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q7080021 has English label \"ogi\".",
+              "Wikidata item Q7080021 has English description: fermented cereal pudding from Nigeria, typically made from maize, sorghum, or millet.",
+              "Operator mapped aliases for depth grounding: akamu.",
+              "Operator depth context for retrieval: Nigeria."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "fermented-cereal-porridge-drink",
+            "ogi",
+            "akamu",
+            "ogi naming",
+            "akamu alias",
+            "maize sour-starch body"
+          ],
+          "regions": [
+            "nation:Nigeria"
+          ],
+          "ingredients": [
+            "maize sour-starch body"
+          ],
+          "techniques": [
+            "regional variant grounding",
+            "sensory disambiguation",
+            "minimum-cue retrieval support"
+          ],
+          "sensoryDescriptors": [
+            "ogi naming",
+            "akamu alias",
+            "maize sour-starch body"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "diaspora or regional variant cue"
+          ],
+          "regionalVariants": [
+            "Nigeria is stored as a retrieval context for fermented-cereal-porridge-drink.",
+            "This depth record reuses approved structured labels while keeping household certainty unknown."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "The regional context is a retrieval/disambiguation layer and must not override user-provided origin, language, or family correction.",
+          "Specific household ingredients, proportions, texture, serving ritual, and substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp3-depth-fermented-cereal-porridge-drink-ghana",
+      "cacheTarget": {
+        "dishFamily": "fermented-cereal-porridge-drink",
+        "region": "Ghana comparison"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.west_africa",
+        "cultureAreas.diaspora_global",
+        "foodForms.beverage",
+        "foodForms.grain_rice_noodle",
+        "foodForms.breakfast",
+        "mechanisms.fermentation_acid",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "nameSystems.transliteration",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "fermented-cereal-porridge-drink",
+        "query": "ogi Ghana comparison sensory variant structured data",
+        "sources": [
+          {
+            "title": "ogi (Q7080021) structured data",
+            "url": "https://www.wikidata.org/wiki/Q7080021",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q7080021 has English label \"ogi\".",
+              "Wikidata item Q7080021 has English description: fermented cereal pudding from Nigeria, typically made from maize, sorghum, or millet.",
+              "Operator mapped aliases for depth grounding: akamu.",
+              "Operator depth context for retrieval: Ghana comparison."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "fermented-cereal-porridge-drink",
+            "ogi",
+            "akamu",
+            "koko-style comparison cue",
+            "warm breakfast porridge",
+            "millet or maize body"
+          ],
+          "regions": [
+            "nation:Ghana"
+          ],
+          "ingredients": [
+            "millet or maize body"
+          ],
+          "techniques": [
+            "regional variant grounding",
+            "sensory disambiguation",
+            "minimum-cue retrieval support"
+          ],
+          "sensoryDescriptors": [
+            "koko-style comparison cue",
+            "warm breakfast porridge",
+            "millet or maize body"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "diaspora or regional variant cue"
+          ],
+          "regionalVariants": [
+            "Ghana comparison is stored as a retrieval context for fermented-cereal-porridge-drink.",
+            "This depth record reuses approved structured labels while keeping household certainty unknown."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "The regional context is a retrieval/disambiguation layer and must not override user-provided origin, language, or family correction.",
+          "Specific household ingredients, proportions, texture, serving ritual, and substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp3-depth-fermented-cereal-porridge-drink-west-africa-diaspora",
+      "cacheTarget": {
+        "dishFamily": "fermented-cereal-porridge-drink",
+        "region": "West Africa diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.west_africa",
+        "cultureAreas.diaspora_global",
+        "foodForms.beverage",
+        "foodForms.grain_rice_noodle",
+        "foodForms.breakfast",
+        "mechanisms.fermentation_acid",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "nameSystems.transliteration",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "fermented-cereal-porridge-drink",
+        "query": "ogi West Africa diaspora sensory variant structured data",
+        "sources": [
+          {
+            "title": "ogi (Q7080021) structured data",
+            "url": "https://www.wikidata.org/wiki/Q7080021",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q7080021 has English label \"ogi\".",
+              "Wikidata item Q7080021 has English description: fermented cereal pudding from Nigeria, typically made from maize, sorghum, or millet.",
+              "Operator mapped aliases for depth grounding: akamu.",
+              "Operator depth context for retrieval: West Africa diaspora."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "fermented-cereal-porridge-drink",
+            "ogi",
+            "akamu",
+            "diaspora breakfast cue",
+            "sour fermented cereal aroma",
+            "sip-spoon texture"
+          ],
+          "regions": [
+            "diaspora:West Africa"
+          ],
+          "ingredients": [
+            "sour fermented cereal aroma"
+          ],
+          "techniques": [
+            "regional variant grounding",
+            "sensory disambiguation",
+            "minimum-cue retrieval support"
+          ],
+          "sensoryDescriptors": [
+            "diaspora breakfast cue",
+            "sour fermented cereal aroma",
+            "sip-spoon texture"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "diaspora or regional variant cue"
+          ],
+          "regionalVariants": [
+            "West Africa diaspora is stored as a retrieval context for fermented-cereal-porridge-drink.",
+            "This depth record reuses approved structured labels while keeping household certainty unknown."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "The regional context is a retrieval/disambiguation layer and must not override user-provided origin, language, or family correction.",
+          "Specific household ingredients, proportions, texture, serving ritual, and substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp3-depth-fermented-cereal-porridge-drink-millet-sorghum",
+      "cacheTarget": {
+        "dishFamily": "fermented-cereal-porridge-drink",
+        "region": "Millet and sorghum variants"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.west_africa",
+        "cultureAreas.diaspora_global",
+        "foodForms.beverage",
+        "foodForms.grain_rice_noodle",
+        "foodForms.breakfast",
+        "mechanisms.fermentation_acid",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "nameSystems.transliteration",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "fermented-cereal-porridge-drink",
+        "query": "ogi Millet and sorghum variants sensory variant structured data",
+        "sources": [
+          {
+            "title": "ogi (Q7080021) structured data",
+            "url": "https://www.wikidata.org/wiki/Q7080021",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q7080021 has English label \"ogi\".",
+              "Wikidata item Q7080021 has English description: fermented cereal pudding from Nigeria, typically made from maize, sorghum, or millet.",
+              "Operator mapped aliases for depth grounding: akamu.",
+              "Operator depth context for retrieval: Millet and sorghum variants."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "fermented-cereal-porridge-drink",
+            "ogi",
+            "akamu",
+            "millet variant",
+            "sorghum variant",
+            "slightly sour warm drink"
+          ],
+          "regions": [
+            "macro:West Africa"
+          ],
+          "ingredients": [
+            "millet variant",
+            "sorghum variant"
+          ],
+          "techniques": [
+            "regional variant grounding",
+            "sensory disambiguation",
+            "minimum-cue retrieval support"
+          ],
+          "sensoryDescriptors": [
+            "millet variant",
+            "sorghum variant",
+            "slightly sour warm drink"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "diaspora or regional variant cue"
+          ],
+          "regionalVariants": [
+            "Millet and sorghum variants is stored as a retrieval context for fermented-cereal-porridge-drink.",
+            "This depth record reuses approved structured labels while keeping household certainty unknown."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "The regional context is a retrieval/disambiguation layer and must not override user-provided origin, language, or family correction.",
+          "Specific household ingredients, proportions, texture, serving ritual, and substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp3-depth-black-sesame-seed-paste-sweet-china",
+      "cacheTarget": {
+        "dishFamily": "black-sesame-seed-paste-sweet",
+        "region": "China"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.starch_texture",
+        "nameSystems.menu_name",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "black-sesame-seed-paste-sweet",
+        "query": "black sesame soup China sensory variant structured data",
+        "sources": [
+          {
+            "title": "black sesame soup (Q3135358) structured data",
+            "url": "https://www.wikidata.org/wiki/Q3135358",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q3135358 has English label \"black sesame soup\".",
+              "Wikidata item Q3135358 has English description: Chinese dessert.",
+              "Operator mapped aliases for depth grounding: black sesame dessert.",
+              "Operator depth context for retrieval: China."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "black-sesame-seed-paste-sweet",
+            "black sesame soup",
+            "black sesame dessert",
+            "black sesame soup naming",
+            "dark spoonable dessert",
+            "toasted seed aroma"
+          ],
+          "regions": [
+            "nation:China"
+          ],
+          "ingredients": [
+            "black sesame soup naming"
+          ],
+          "techniques": [
+            "regional variant grounding",
+            "sensory disambiguation",
+            "minimum-cue retrieval support"
+          ],
+          "sensoryDescriptors": [
+            "black sesame soup naming",
+            "dark spoonable dessert",
+            "toasted seed aroma"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "diaspora or regional variant cue"
+          ],
+          "regionalVariants": [
+            "China is stored as a retrieval context for black-sesame-seed-paste-sweet.",
+            "This depth record reuses approved structured labels while keeping household certainty unknown."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "The regional context is a retrieval/disambiguation layer and must not override user-provided origin, language, or family correction.",
+          "Specific household ingredients, proportions, texture, serving ritual, and substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp3-depth-black-sesame-seed-paste-sweet-east-asia-bakery",
+      "cacheTarget": {
+        "dishFamily": "black-sesame-seed-paste-sweet",
+        "region": "East Asian bakery diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.starch_texture",
+        "nameSystems.menu_name",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "black-sesame-seed-paste-sweet",
+        "query": "black sesame soup East Asian bakery diaspora sensory variant structured data",
+        "sources": [
+          {
+            "title": "black sesame soup (Q3135358) structured data",
+            "url": "https://www.wikidata.org/wiki/Q3135358",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q3135358 has English label \"black sesame soup\".",
+              "Wikidata item Q3135358 has English description: Chinese dessert.",
+              "Operator mapped aliases for depth grounding: black sesame dessert.",
+              "Operator depth context for retrieval: East Asian bakery diaspora."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "black-sesame-seed-paste-sweet",
+            "black sesame soup",
+            "black sesame dessert",
+            "soft bun carrier",
+            "black seed paste filling",
+            "not chocolate disambiguator"
+          ],
+          "regions": [
+            "diaspora:East Asia"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "regional variant grounding",
+            "sensory disambiguation",
+            "minimum-cue retrieval support"
+          ],
+          "sensoryDescriptors": [
+            "soft bun carrier",
+            "black seed paste filling",
+            "not chocolate disambiguator"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "diaspora or regional variant cue"
+          ],
+          "regionalVariants": [
+            "East Asian bakery diaspora is stored as a retrieval context for black-sesame-seed-paste-sweet.",
+            "This depth record reuses approved structured labels while keeping household certainty unknown."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "The regional context is a retrieval/disambiguation layer and must not override user-provided origin, language, or family correction.",
+          "Specific household ingredients, proportions, texture, serving ritual, and substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp3-depth-black-sesame-seed-paste-sweet-hong-kong-diaspora",
+      "cacheTarget": {
+        "dishFamily": "black-sesame-seed-paste-sweet",
+        "region": "Hong Kong diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.starch_texture",
+        "nameSystems.menu_name",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "black-sesame-seed-paste-sweet",
+        "query": "black sesame soup Hong Kong diaspora sensory variant structured data",
+        "sources": [
+          {
+            "title": "black sesame soup (Q3135358) structured data",
+            "url": "https://www.wikidata.org/wiki/Q3135358",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q3135358 has English label \"black sesame soup\".",
+              "Wikidata item Q3135358 has English description: Chinese dessert.",
+              "Operator mapped aliases for depth grounding: black sesame dessert.",
+              "Operator depth context for retrieval: Hong Kong diaspora."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "black-sesame-seed-paste-sweet",
+            "black sesame soup",
+            "black sesame dessert",
+            "dessert soup cue",
+            "smooth paste body",
+            "roasted sesame bitterness"
+          ],
+          "regions": [
+            "diaspora:Hong Kong"
+          ],
+          "ingredients": [
+            "roasted sesame bitterness"
+          ],
+          "techniques": [
+            "regional variant grounding",
+            "sensory disambiguation",
+            "minimum-cue retrieval support"
+          ],
+          "sensoryDescriptors": [
+            "dessert soup cue",
+            "smooth paste body",
+            "roasted sesame bitterness"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "diaspora or regional variant cue"
+          ],
+          "regionalVariants": [
+            "Hong Kong diaspora is stored as a retrieval context for black-sesame-seed-paste-sweet.",
+            "This depth record reuses approved structured labels while keeping household certainty unknown."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "The regional context is a retrieval/disambiguation layer and must not override user-provided origin, language, or family correction.",
+          "Specific household ingredients, proportions, texture, serving ritual, and substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp3-depth-black-sesame-seed-paste-sweet-global-diaspora",
+      "cacheTarget": {
+        "dishFamily": "black-sesame-seed-paste-sweet",
+        "region": "Global diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.starch_texture",
+        "nameSystems.menu_name",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "black-sesame-seed-paste-sweet",
+        "query": "black sesame soup Global diaspora sensory variant structured data",
+        "sources": [
+          {
+            "title": "black sesame soup (Q3135358) structured data",
+            "url": "https://www.wikidata.org/wiki/Q3135358",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q3135358 has English label \"black sesame soup\".",
+              "Wikidata item Q3135358 has English description: Chinese dessert.",
+              "Operator mapped aliases for depth grounding: black sesame dessert.",
+              "Operator depth context for retrieval: Global diaspora."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "black-sesame-seed-paste-sweet",
+            "black sesame soup",
+            "black sesame dessert",
+            "seed paste versus bean paste cue",
+            "smoky nutty aroma",
+            "soft sweet texture"
+          ],
+          "regions": [
+            "diaspora:Global"
+          ],
+          "ingredients": [
+            "seed paste versus bean paste cue"
+          ],
+          "techniques": [
+            "regional variant grounding",
+            "sensory disambiguation",
+            "minimum-cue retrieval support"
+          ],
+          "sensoryDescriptors": [
+            "seed paste versus bean paste cue",
+            "smoky nutty aroma",
+            "soft sweet texture"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "diaspora or regional variant cue"
+          ],
+          "regionalVariants": [
+            "Global diaspora is stored as a retrieval context for black-sesame-seed-paste-sweet.",
+            "This depth record reuses approved structured labels while keeping household certainty unknown."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "The regional context is a retrieval/disambiguation layer and must not override user-provided origin, language, or family correction.",
+          "Specific household ingredients, proportions, texture, serving ritual, and substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp3-depth-rice-paper-herb-roll-vietnam",
+      "cacheTarget": {
+        "dishFamily": "rice-paper-herb-roll",
+        "region": "Vietnam"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.snack_street_food",
+        "foodForms.vegetable_fungi",
+        "mechanisms.texture_contrast",
+        "mechanisms.sauce_balance",
+        "mechanisms.starch_texture",
+        "nameSystems.transliteration",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "rice-paper-herb-roll",
+        "query": "gỏi cuốn Vietnam sensory variant structured data",
+        "sources": [
+          {
+            "title": "gỏi cuốn (Q7799573) structured data",
+            "url": "https://www.wikidata.org/wiki/Q7799573",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q7799573 has English label \"gỏi cuốn\".",
+              "Wikidata item Q7799573 has English description: Vietnamese dish.",
+              "Operator mapped aliases for depth grounding: goi cuon, rice paper roll.",
+              "Operator depth context for retrieval: Vietnam."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "rice-paper-herb-roll",
+            "gỏi cuốn",
+            "goi cuon",
+            "rice paper roll",
+            "gỏi cuốn naming",
+            "rice paper wrapper",
+            "raw herb aroma"
+          ],
+          "regions": [
+            "nation:Vietnam"
+          ],
+          "ingredients": [
+            "rice paper wrapper"
+          ],
+          "techniques": [
+            "regional variant grounding",
+            "sensory disambiguation",
+            "minimum-cue retrieval support"
+          ],
+          "sensoryDescriptors": [
+            "gỏi cuốn naming",
+            "rice paper wrapper",
+            "raw herb aroma"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "diaspora or regional variant cue"
+          ],
+          "regionalVariants": [
+            "Vietnam is stored as a retrieval context for rice-paper-herb-roll.",
+            "This depth record reuses approved structured labels while keeping household certainty unknown."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "The regional context is a retrieval/disambiguation layer and must not override user-provided origin, language, or family correction.",
+          "Specific household ingredients, proportions, texture, serving ritual, and substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp3-depth-rice-paper-herb-roll-us-diaspora",
+      "cacheTarget": {
+        "dishFamily": "rice-paper-herb-roll",
+        "region": "United States diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.snack_street_food",
+        "foodForms.vegetable_fungi",
+        "mechanisms.texture_contrast",
+        "mechanisms.sauce_balance",
+        "mechanisms.starch_texture",
+        "nameSystems.transliteration",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "rice-paper-herb-roll",
+        "query": "gỏi cuốn United States diaspora sensory variant structured data",
+        "sources": [
+          {
+            "title": "gỏi cuốn (Q7799573) structured data",
+            "url": "https://www.wikidata.org/wiki/Q7799573",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q7799573 has English label \"gỏi cuốn\".",
+              "Wikidata item Q7799573 has English description: Vietnamese dish.",
+              "Operator mapped aliases for depth grounding: goi cuon, rice paper roll.",
+              "Operator depth context for retrieval: United States diaspora."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "rice-paper-herb-roll",
+            "gỏi cuốn",
+            "goi cuon",
+            "rice paper roll",
+            "fresh spring roll menu name",
+            "cold noodle texture",
+            "dipping sauce balance"
+          ],
+          "regions": [
+            "diaspora:United States"
+          ],
+          "ingredients": [
+            "dipping sauce balance"
+          ],
+          "techniques": [
+            "regional variant grounding",
+            "sensory disambiguation",
+            "minimum-cue retrieval support"
+          ],
+          "sensoryDescriptors": [
+            "fresh spring roll menu name",
+            "cold noodle texture",
+            "dipping sauce balance"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "diaspora or regional variant cue"
+          ],
+          "regionalVariants": [
+            "United States diaspora is stored as a retrieval context for rice-paper-herb-roll.",
+            "This depth record reuses approved structured labels while keeping household certainty unknown."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "The regional context is a retrieval/disambiguation layer and must not override user-provided origin, language, or family correction.",
+          "Specific household ingredients, proportions, texture, serving ritual, and substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp3-depth-rice-paper-herb-roll-southeast-asia-comparison",
+      "cacheTarget": {
+        "dishFamily": "rice-paper-herb-roll",
+        "region": "Southeast Asia comparison"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.snack_street_food",
+        "foodForms.vegetable_fungi",
+        "mechanisms.texture_contrast",
+        "mechanisms.sauce_balance",
+        "mechanisms.starch_texture",
+        "nameSystems.transliteration",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "rice-paper-herb-roll",
+        "query": "gỏi cuốn Southeast Asia comparison sensory variant structured data",
+        "sources": [
+          {
+            "title": "gỏi cuốn (Q7799573) structured data",
+            "url": "https://www.wikidata.org/wiki/Q7799573",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q7799573 has English label \"gỏi cuốn\".",
+              "Wikidata item Q7799573 has English description: Vietnamese dish.",
+              "Operator mapped aliases for depth grounding: goi cuon, rice paper roll.",
+              "Operator depth context for retrieval: Southeast Asia comparison."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "rice-paper-herb-roll",
+            "gỏi cuốn",
+            "goi cuon",
+            "rice paper roll",
+            "translucent wrapper cue",
+            "herb-heavy bite",
+            "sweet-salty-sour sauce"
+          ],
+          "regions": [
+            "macro:Southeast Asia"
+          ],
+          "ingredients": [
+            "translucent wrapper cue",
+            "sweet-salty-sour sauce"
+          ],
+          "techniques": [
+            "regional variant grounding",
+            "sensory disambiguation",
+            "minimum-cue retrieval support"
+          ],
+          "sensoryDescriptors": [
+            "translucent wrapper cue",
+            "herb-heavy bite",
+            "sweet-salty-sour sauce"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "diaspora or regional variant cue"
+          ],
+          "regionalVariants": [
+            "Southeast Asia comparison is stored as a retrieval context for rice-paper-herb-roll.",
+            "This depth record reuses approved structured labels while keeping household certainty unknown."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "The regional context is a retrieval/disambiguation layer and must not override user-provided origin, language, or family correction.",
+          "Specific household ingredients, proportions, texture, serving ritual, and substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp3-depth-rice-paper-herb-roll-global-diaspora",
+      "cacheTarget": {
+        "dishFamily": "rice-paper-herb-roll",
+        "region": "Global diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.snack_street_food",
+        "foodForms.vegetable_fungi",
+        "mechanisms.texture_contrast",
+        "mechanisms.sauce_balance",
+        "mechanisms.starch_texture",
+        "nameSystems.transliteration",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "rice-paper-herb-roll",
+        "query": "gỏi cuốn Global diaspora sensory variant structured data",
+        "sources": [
+          {
+            "title": "gỏi cuốn (Q7799573) structured data",
+            "url": "https://www.wikidata.org/wiki/Q7799573",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q7799573 has English label \"gỏi cuốn\".",
+              "Wikidata item Q7799573 has English description: Vietnamese dish.",
+              "Operator mapped aliases for depth grounding: goi cuon, rice paper roll.",
+              "Operator depth context for retrieval: Global diaspora."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "rice-paper-herb-roll",
+            "gỏi cuốn",
+            "goi cuon",
+            "rice paper roll",
+            "rice paper roll alias",
+            "cool handheld food",
+            "fish sauce or peanut sauce disambiguator"
+          ],
+          "regions": [
+            "diaspora:Global"
+          ],
+          "ingredients": [
+            "rice paper roll alias",
+            "fish sauce or peanut sauce disambiguator"
+          ],
+          "techniques": [
+            "regional variant grounding",
+            "sensory disambiguation",
+            "minimum-cue retrieval support"
+          ],
+          "sensoryDescriptors": [
+            "rice paper roll alias",
+            "cool handheld food",
+            "fish sauce or peanut sauce disambiguator"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "diaspora or regional variant cue"
+          ],
+          "regionalVariants": [
+            "Global diaspora is stored as a retrieval context for rice-paper-herb-roll.",
+            "This depth record reuses approved structured labels while keeping household certainty unknown."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "The regional context is a retrieval/disambiguation layer and must not override user-provided origin, language, or family correction.",
+          "Specific household ingredients, proportions, texture, serving ritual, and substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp3-depth-cassava-leaf-stew-uganda",
+      "cacheTarget": {
+        "dishFamily": "cassava-leaf-stew",
+        "region": "Uganda"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.east_africa",
+        "cultureAreas.central_africa",
+        "cultureAreas.diaspora_global",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.menu_name",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "cassava-leaf-stew",
+        "query": "sombe Uganda sensory variant structured data",
+        "sources": [
+          {
+            "title": "sombe (Q124448968) structured data",
+            "url": "https://www.wikidata.org/wiki/Q124448968",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q124448968 has English label \"sombe\".",
+              "Wikidata item Q124448968 has English description: Ugandan stew made using pounded cassava leaves, palm oil and fish or meat.",
+              "Operator mapped aliases for depth grounding: cassava leaf stew.",
+              "Operator depth context for retrieval: Uganda."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "cassava-leaf-stew",
+            "sombe",
+            "cassava leaf stew",
+            "sombe naming",
+            "pounded cassava leaves",
+            "palm oil body"
+          ],
+          "regions": [
+            "nation:Uganda"
+          ],
+          "ingredients": [
+            "pounded cassava leaves"
+          ],
+          "techniques": [
+            "regional variant grounding",
+            "sensory disambiguation",
+            "minimum-cue retrieval support"
+          ],
+          "sensoryDescriptors": [
+            "sombe naming",
+            "pounded cassava leaves",
+            "palm oil body"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "diaspora or regional variant cue"
+          ],
+          "regionalVariants": [
+            "Uganda is stored as a retrieval context for cassava-leaf-stew.",
+            "This depth record reuses approved structured labels while keeping household certainty unknown."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "The regional context is a retrieval/disambiguation layer and must not override user-provided origin, language, or family correction.",
+          "Specific household ingredients, proportions, texture, serving ritual, and substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp3-depth-cassava-leaf-stew-central-africa",
+      "cacheTarget": {
+        "dishFamily": "cassava-leaf-stew",
+        "region": "Central Africa"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.east_africa",
+        "cultureAreas.central_africa",
+        "cultureAreas.diaspora_global",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.menu_name",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "cassava-leaf-stew",
+        "query": "sombe Central Africa sensory variant structured data",
+        "sources": [
+          {
+            "title": "sombe (Q124448968) structured data",
+            "url": "https://www.wikidata.org/wiki/Q124448968",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q124448968 has English label \"sombe\".",
+              "Wikidata item Q124448968 has English description: Ugandan stew made using pounded cassava leaves, palm oil and fish or meat.",
+              "Operator mapped aliases for depth grounding: cassava leaf stew.",
+              "Operator depth context for retrieval: Central Africa."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "cassava-leaf-stew",
+            "sombe",
+            "cassava leaf stew",
+            "cassava leaf stew family",
+            "dark green leaf body",
+            "fish or meat umami cue"
+          ],
+          "regions": [
+            "macro:Central Africa"
+          ],
+          "ingredients": [
+            "cassava leaf stew family",
+            "dark green leaf body"
+          ],
+          "techniques": [
+            "regional variant grounding",
+            "sensory disambiguation",
+            "minimum-cue retrieval support"
+          ],
+          "sensoryDescriptors": [
+            "cassava leaf stew family",
+            "dark green leaf body",
+            "fish or meat umami cue"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "diaspora or regional variant cue"
+          ],
+          "regionalVariants": [
+            "Central Africa is stored as a retrieval context for cassava-leaf-stew.",
+            "This depth record reuses approved structured labels while keeping household certainty unknown."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "The regional context is a retrieval/disambiguation layer and must not override user-provided origin, language, or family correction.",
+          "Specific household ingredients, proportions, texture, serving ritual, and substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp3-depth-cassava-leaf-stew-east-africa-diaspora",
+      "cacheTarget": {
+        "dishFamily": "cassava-leaf-stew",
+        "region": "East Africa diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.east_africa",
+        "cultureAreas.central_africa",
+        "cultureAreas.diaspora_global",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.menu_name",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "cassava-leaf-stew",
+        "query": "sombe East Africa diaspora sensory variant structured data",
+        "sources": [
+          {
+            "title": "sombe (Q124448968) structured data",
+            "url": "https://www.wikidata.org/wiki/Q124448968",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q124448968 has English label \"sombe\".",
+              "Wikidata item Q124448968 has English description: Ugandan stew made using pounded cassava leaves, palm oil and fish or meat.",
+              "Operator mapped aliases for depth grounding: cassava leaf stew.",
+              "Operator depth context for retrieval: East Africa diaspora."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "cassava-leaf-stew",
+            "sombe",
+            "cassava leaf stew",
+            "rice-and-stew serving cue",
+            "leaf paste texture",
+            "oil-rounded sauce"
+          ],
+          "regions": [
+            "diaspora:East Africa"
+          ],
+          "ingredients": [
+            "rice-and-stew serving cue",
+            "leaf paste texture",
+            "oil-rounded sauce"
+          ],
+          "techniques": [
+            "regional variant grounding",
+            "sensory disambiguation",
+            "minimum-cue retrieval support"
+          ],
+          "sensoryDescriptors": [
+            "rice-and-stew serving cue",
+            "leaf paste texture",
+            "oil-rounded sauce"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "diaspora or regional variant cue"
+          ],
+          "regionalVariants": [
+            "East Africa diaspora is stored as a retrieval context for cassava-leaf-stew.",
+            "This depth record reuses approved structured labels while keeping household certainty unknown."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "The regional context is a retrieval/disambiguation layer and must not override user-provided origin, language, or family correction.",
+          "Specific household ingredients, proportions, texture, serving ritual, and substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp3-depth-cassava-leaf-stew-nut-free-comparison",
+      "cacheTarget": {
+        "dishFamily": "cassava-leaf-stew",
+        "region": "Nut-free comparison"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.east_africa",
+        "cultureAreas.central_africa",
+        "cultureAreas.diaspora_global",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.menu_name",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "cassava-leaf-stew",
+        "query": "sombe Nut-free comparison sensory variant structured data",
+        "sources": [
+          {
+            "title": "sombe (Q124448968) structured data",
+            "url": "https://www.wikidata.org/wiki/Q124448968",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q124448968 has English label \"sombe\".",
+              "Wikidata item Q124448968 has English description: Ugandan stew made using pounded cassava leaves, palm oil and fish or meat.",
+              "Operator mapped aliases for depth grounding: cassava leaf stew.",
+              "Operator depth context for retrieval: Nut-free comparison."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "cassava-leaf-stew",
+            "sombe",
+            "cassava leaf stew",
+            "leaf body without peanut",
+            "smoky savory aroma",
+            "safe substitution disambiguator"
+          ],
+          "regions": [
+            "diaspora:Global"
+          ],
+          "ingredients": [
+            "leaf body without peanut"
+          ],
+          "techniques": [
+            "regional variant grounding",
+            "sensory disambiguation",
+            "minimum-cue retrieval support"
+          ],
+          "sensoryDescriptors": [
+            "leaf body without peanut",
+            "smoky savory aroma",
+            "safe substitution disambiguator"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "diaspora or regional variant cue"
+          ],
+          "regionalVariants": [
+            "Nut-free comparison is stored as a retrieval context for cassava-leaf-stew.",
+            "This depth record reuses approved structured labels while keeping household certainty unknown."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "The regional context is a retrieval/disambiguation layer and must not override user-provided origin, language, or family correction.",
+          "Specific household ingredients, proportions, texture, serving ritual, and substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp3-depth-black-lime-sour-stew-cue-iraq",
+      "cacheTarget": {
+        "dishFamily": "black-lime-sour-stew-cue",
+        "region": "Iraq"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.stew_braise",
+        "foodForms.soup_broth",
+        "mechanisms.fermentation_acid",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "black-lime-sour-stew-cue",
+        "query": "Black lime Iraq sensory variant structured data",
+        "sources": [
+          {
+            "title": "Black lime (Q460570) structured data",
+            "url": "https://www.wikidata.org/wiki/Q460570",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q460570 has English label \"Black lime\".",
+              "Wikidata item Q460570 has English description: Dried lime.",
+              "Operator mapped aliases for depth grounding: dried lime, loomi.",
+              "Operator depth context for retrieval: Iraq."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "black-lime-sour-stew-cue",
+            "Black lime",
+            "dried lime",
+            "loomi",
+            "black lime sourness",
+            "bean or lentil body",
+            "warm stew context"
+          ],
+          "regions": [
+            "nation:Iraq"
+          ],
+          "ingredients": [
+            "black lime sourness",
+            "bean or lentil body",
+            "warm stew context"
+          ],
+          "techniques": [
+            "regional variant grounding",
+            "sensory disambiguation",
+            "minimum-cue retrieval support"
+          ],
+          "sensoryDescriptors": [
+            "black lime sourness",
+            "bean or lentil body",
+            "warm stew context"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "diaspora or regional variant cue"
+          ],
+          "regionalVariants": [
+            "Iraq is stored as a retrieval context for black-lime-sour-stew-cue.",
+            "This depth record reuses approved structured labels while keeping household certainty unknown."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "The regional context is a retrieval/disambiguation layer and must not override user-provided origin, language, or family correction.",
+          "Specific household ingredients, proportions, texture, serving ritual, and substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp3-depth-black-lime-sour-stew-cue-iran-gulf-comparison",
+      "cacheTarget": {
+        "dishFamily": "black-lime-sour-stew-cue",
+        "region": "Iran and Gulf comparison"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.stew_braise",
+        "foodForms.soup_broth",
+        "mechanisms.fermentation_acid",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "black-lime-sour-stew-cue",
+        "query": "Black lime Iran and Gulf comparison sensory variant structured data",
+        "sources": [
+          {
+            "title": "Black lime (Q460570) structured data",
+            "url": "https://www.wikidata.org/wiki/Q460570",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q460570 has English label \"Black lime\".",
+              "Wikidata item Q460570 has English description: Dried lime.",
+              "Operator mapped aliases for depth grounding: dried lime, loomi.",
+              "Operator depth context for retrieval: Iran and Gulf comparison."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "black-lime-sour-stew-cue",
+            "Black lime",
+            "dried lime",
+            "loomi",
+            "loomi alias",
+            "dried citrus aroma",
+            "sour-earthy stew balance"
+          ],
+          "regions": [
+            "macro:Middle East and West Asia"
+          ],
+          "ingredients": [
+            "dried citrus aroma",
+            "sour-earthy stew balance"
+          ],
+          "techniques": [
+            "regional variant grounding",
+            "sensory disambiguation",
+            "minimum-cue retrieval support"
+          ],
+          "sensoryDescriptors": [
+            "loomi alias",
+            "dried citrus aroma",
+            "sour-earthy stew balance"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "diaspora or regional variant cue"
+          ],
+          "regionalVariants": [
+            "Iran and Gulf comparison is stored as a retrieval context for black-lime-sour-stew-cue.",
+            "This depth record reuses approved structured labels while keeping household certainty unknown."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "The regional context is a retrieval/disambiguation layer and must not override user-provided origin, language, or family correction.",
+          "Specific household ingredients, proportions, texture, serving ritual, and substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp3-depth-black-lime-sour-stew-cue-gulf-diaspora",
+      "cacheTarget": {
+        "dishFamily": "black-lime-sour-stew-cue",
+        "region": "Gulf diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.stew_braise",
+        "foodForms.soup_broth",
+        "mechanisms.fermentation_acid",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "black-lime-sour-stew-cue",
+        "query": "Black lime Gulf diaspora sensory variant structured data",
+        "sources": [
+          {
+            "title": "Black lime (Q460570) structured data",
+            "url": "https://www.wikidata.org/wiki/Q460570",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q460570 has English label \"Black lime\".",
+              "Wikidata item Q460570 has English description: Dried lime.",
+              "Operator mapped aliases for depth grounding: dried lime, loomi.",
+              "Operator depth context for retrieval: Gulf diaspora."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "black-lime-sour-stew-cue",
+            "Black lime",
+            "dried lime",
+            "loomi",
+            "pantry dried lime cue",
+            "dark citrus aroma",
+            "sour broth memory"
+          ],
+          "regions": [
+            "diaspora:Gulf Arab"
+          ],
+          "ingredients": [
+            "pantry dried lime cue",
+            "dark citrus aroma",
+            "sour broth memory"
+          ],
+          "techniques": [
+            "regional variant grounding",
+            "sensory disambiguation",
+            "minimum-cue retrieval support"
+          ],
+          "sensoryDescriptors": [
+            "pantry dried lime cue",
+            "dark citrus aroma",
+            "sour broth memory"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "diaspora or regional variant cue"
+          ],
+          "regionalVariants": [
+            "Gulf diaspora is stored as a retrieval context for black-lime-sour-stew-cue.",
+            "This depth record reuses approved structured labels while keeping household certainty unknown."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "The regional context is a retrieval/disambiguation layer and must not override user-provided origin, language, or family correction.",
+          "Specific household ingredients, proportions, texture, serving ritual, and substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp3-depth-black-lime-sour-stew-cue-global-diaspora",
+      "cacheTarget": {
+        "dishFamily": "black-lime-sour-stew-cue",
+        "region": "Global diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.stew_braise",
+        "foodForms.soup_broth",
+        "mechanisms.fermentation_acid",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "black-lime-sour-stew-cue",
+        "query": "Black lime Global diaspora sensory variant structured data",
+        "sources": [
+          {
+            "title": "Black lime (Q460570) structured data",
+            "url": "https://www.wikidata.org/wiki/Q460570",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q460570 has English label \"Black lime\".",
+              "Wikidata item Q460570 has English description: Dried lime.",
+              "Operator mapped aliases for depth grounding: dried lime, loomi.",
+              "Operator depth context for retrieval: Global diaspora."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "black-lime-sour-stew-cue",
+            "Black lime",
+            "dried lime",
+            "loomi",
+            "black lime versus fresh lime disambiguator",
+            "earthy sourness",
+            "lentil or bean stew texture"
+          ],
+          "regions": [
+            "diaspora:Global"
+          ],
+          "ingredients": [
+            "black lime versus fresh lime disambiguator",
+            "lentil or bean stew texture"
+          ],
+          "techniques": [
+            "regional variant grounding",
+            "sensory disambiguation",
+            "minimum-cue retrieval support"
+          ],
+          "sensoryDescriptors": [
+            "black lime versus fresh lime disambiguator",
+            "earthy sourness",
+            "lentil or bean stew texture"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "diaspora or regional variant cue"
+          ],
+          "regionalVariants": [
+            "Global diaspora is stored as a retrieval context for black-lime-sour-stew-cue.",
+            "This depth record reuses approved structured labels while keeping household certainty unknown."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "The regional context is a retrieval/disambiguation layer and must not override user-provided origin, language, or family correction.",
+          "Specific household ingredients, proportions, texture, serving ritual, and substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp3-depth-bitter-melon-egg-broth-global-diaspora",
+      "cacheTarget": {
+        "dishFamily": "bitter-melon-egg-broth",
+        "region": "Bitter melon global comparison"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "cultureAreas.caribbean",
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.soup_broth",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias"
+      ],
+      "record": {
+        "dishName": "bitter-melon-egg-broth",
+        "query": "bitter melon global comparison sensory variant structured data",
+        "sources": [
+          {
+            "title": "bitter melon (Q112758485) structured data",
+            "url": "https://www.wikidata.org/wiki/Q112758485",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q112758485 has English label \"bitter melon\".",
+              "Wikidata item Q112758485 has English description: the vegetable; fruit of Momordica charantia.",
+              "Operator mapped aliases for depth grounding: bitter gourd.",
+              "Operator depth context for retrieval: Bitter melon global comparison."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "bitter-melon-egg-broth",
+            "bitter melon",
+            "bitter gourd",
+            "global bitter melon comparison",
+            "bitter gourd broth disambiguator"
+          ],
+          "regions": [
+            "diaspora:Global"
+          ],
+          "ingredients": [
+            "bitter melon or bitter gourd",
+            "clear broth",
+            "egg ribbon or soft protein cue"
+          ],
+          "techniques": [
+            "regional variant grounding",
+            "sensory disambiguation",
+            "minimum-cue retrieval support"
+          ],
+          "sensoryDescriptors": [
+            "bitter vegetable edge",
+            "pale green slice",
+            "warm clear broth",
+            "soft egg or protein texture"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "diaspora or regional variant cue"
+          ],
+          "regionalVariants": [
+            "Bitter melon global comparison is stored as a retrieval context for bitter-melon-egg-broth.",
+            "This depth record reuses approved structured labels while keeping household certainty unknown."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "The regional context is a retrieval/disambiguation layer and must not override user-provided origin, language, or family correction.",
+          "Specific household ingredients, proportions, texture, serving ritual, and substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
     }
   ]
 }

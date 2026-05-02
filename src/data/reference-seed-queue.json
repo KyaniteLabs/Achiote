@@ -7616,6 +7616,1708 @@
           "Use as broad source-researched grounding; do not treat as family-confirmed identity."
         ]
       }
+    },
+    {
+      "id": "exp3-depth-pandan-coconut-layered-cake-malaysia",
+      "forms": [
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "foodForms.ceremonial_holiday"
+      ],
+      "regions": [
+        "nation:Malaysia"
+      ],
+      "nameSignals": [
+        "pandan-coconut-layered-cake",
+        "kue lapis",
+        "pandan cake",
+        "layer cake",
+        "Malay layered cake naming",
+        "market sweet context",
+        "coconut-rich bite"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.starch_texture",
+        "mechanisms.texture_contrast",
+        "mechanisms.sugar_crystal"
+      ],
+      "querySeeds": [
+        "kue lapis Malaysia sensory variant structured data",
+        "pandan-coconut-layered-cake Malaysia memory cue aliases texture aroma"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "pandan-coconut-layered-cake",
+          "region": "Malaysia"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.starch_texture",
+        "mechanisms.texture_contrast",
+        "nameSystems.menu_name",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth seed",
+        "notes": [
+          "Added to increase records-per-family depth for hard canary families after the breadth-first pantry proved too thin.",
+          "Region strings are retrieval/disambiguation contexts; they do not claim family-specific certainty."
+        ]
+      }
+    },
+    {
+      "id": "exp3-depth-pandan-coconut-layered-cake-indonesia",
+      "forms": [
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "foodForms.ceremonial_holiday"
+      ],
+      "regions": [
+        "nation:Indonesia"
+      ],
+      "nameSignals": [
+        "pandan-coconut-layered-cake",
+        "kue lapis",
+        "pandan cake",
+        "layer cake",
+        "layered cake cue",
+        "sticky rice or starch texture",
+        "green leaf aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.starch_texture",
+        "mechanisms.texture_contrast",
+        "mechanisms.sugar_crystal"
+      ],
+      "querySeeds": [
+        "kue lapis Indonesia sensory variant structured data",
+        "pandan-coconut-layered-cake Indonesia memory cue aliases texture aroma"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "pandan-coconut-layered-cake",
+          "region": "Indonesia"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.starch_texture",
+        "mechanisms.texture_contrast",
+        "nameSystems.menu_name",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth seed",
+        "notes": [
+          "Added to increase records-per-family depth for hard canary families after the breadth-first pantry proved too thin.",
+          "Region strings are retrieval/disambiguation contexts; they do not claim family-specific certainty."
+        ]
+      }
+    },
+    {
+      "id": "exp3-depth-pandan-coconut-layered-cake-singapore-diaspora",
+      "forms": [
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "foodForms.ceremonial_holiday"
+      ],
+      "regions": [
+        "diaspora:Singapore"
+      ],
+      "nameSignals": [
+        "pandan-coconut-layered-cake",
+        "kue lapis",
+        "pandan cake",
+        "layer cake",
+        "diaspora bakery cue",
+        "pandan aroma",
+        "springy layered texture"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.starch_texture",
+        "mechanisms.texture_contrast",
+        "mechanisms.sugar_crystal"
+      ],
+      "querySeeds": [
+        "kue lapis Singapore diaspora sensory variant structured data",
+        "pandan-coconut-layered-cake Singapore diaspora memory cue aliases texture aroma"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "pandan-coconut-layered-cake",
+          "region": "Singapore diaspora"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.starch_texture",
+        "mechanisms.texture_contrast",
+        "nameSystems.menu_name",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth seed",
+        "notes": [
+          "Added to increase records-per-family depth for hard canary families after the breadth-first pantry proved too thin.",
+          "Region strings are retrieval/disambiguation contexts; they do not claim family-specific certainty."
+        ]
+      }
+    },
+    {
+      "id": "exp3-depth-pandan-coconut-layered-cake-global-diaspora",
+      "forms": [
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "foodForms.ceremonial_holiday"
+      ],
+      "regions": [
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "pandan-coconut-layered-cake",
+        "kue lapis",
+        "pandan cake",
+        "layer cake",
+        "pandan-coconut flavor memory",
+        "green-white visual cue",
+        "dessert table context"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.starch_texture",
+        "mechanisms.texture_contrast",
+        "mechanisms.sugar_crystal"
+      ],
+      "querySeeds": [
+        "kue lapis Global diaspora sensory variant structured data",
+        "pandan-coconut-layered-cake Global diaspora memory cue aliases texture aroma"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "pandan-coconut-layered-cake",
+          "region": "Global diaspora"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.starch_texture",
+        "mechanisms.texture_contrast",
+        "nameSystems.menu_name",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth seed",
+        "notes": [
+          "Added to increase records-per-family depth for hard canary families after the breadth-first pantry proved too thin.",
+          "Region strings are retrieval/disambiguation contexts; they do not claim family-specific certainty."
+        ]
+      }
+    },
+    {
+      "id": "exp3-depth-tamarind-chile-wrapper-candy-mexico",
+      "forms": [
+        "foodForms.confectionery",
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "nation:Mexico"
+      ],
+      "nameSignals": [
+        "tamarind-chile-wrapper-candy",
+        "Pulparindo",
+        "tamarind candy",
+        "wrapped Mexican candy",
+        "tamarind sourness",
+        "chile-salt balance"
+      ],
+      "mechanisms": [
+        "mechanisms.sauce_balance",
+        "mechanisms.sugar_crystal",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "Pulparindo Mexico sensory variant structured data",
+        "tamarind-chile-wrapper-candy Mexico memory cue aliases texture aroma"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "tamarind-chile-wrapper-candy",
+          "region": "Mexico"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "cultureAreas.diaspora_global",
+        "foodForms.confectionery",
+        "foodForms.snack_street_food",
+        "mechanisms.sauce_balance",
+        "mechanisms.sugar_crystal",
+        "nameSystems.menu_name",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth seed",
+        "notes": [
+          "Added to increase records-per-family depth for hard canary families after the breadth-first pantry proved too thin.",
+          "Region strings are retrieval/disambiguation contexts; they do not claim family-specific certainty."
+        ]
+      }
+    },
+    {
+      "id": "exp3-depth-tamarind-chile-wrapper-candy-us-diaspora",
+      "forms": [
+        "foodForms.confectionery",
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "diaspora:United States"
+      ],
+      "nameSignals": [
+        "tamarind-chile-wrapper-candy",
+        "Pulparindo",
+        "tamarind candy",
+        "diaspora grocery candy aisle",
+        "schoolyard wrapper cue",
+        "sticky sour-salty bite"
+      ],
+      "mechanisms": [
+        "mechanisms.sauce_balance",
+        "mechanisms.sugar_crystal",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "Pulparindo United States diaspora sensory variant structured data",
+        "tamarind-chile-wrapper-candy United States diaspora memory cue aliases texture aroma"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "tamarind-chile-wrapper-candy",
+          "region": "United States diaspora"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "cultureAreas.diaspora_global",
+        "foodForms.confectionery",
+        "foodForms.snack_street_food",
+        "mechanisms.sauce_balance",
+        "mechanisms.sugar_crystal",
+        "nameSystems.menu_name",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth seed",
+        "notes": [
+          "Added to increase records-per-family depth for hard canary families after the breadth-first pantry proved too thin.",
+          "Region strings are retrieval/disambiguation contexts; they do not claim family-specific certainty."
+        ]
+      }
+    },
+    {
+      "id": "exp3-depth-tamarind-chile-wrapper-candy-borderland",
+      "forms": [
+        "foodForms.confectionery",
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "borderland:US-Mexico"
+      ],
+      "nameSignals": [
+        "tamarind-chile-wrapper-candy",
+        "Pulparindo",
+        "tamarind candy",
+        "borderland snack cue",
+        "chile heat",
+        "sweet-sour paste texture"
+      ],
+      "mechanisms": [
+        "mechanisms.sauce_balance",
+        "mechanisms.sugar_crystal",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "Pulparindo US-Mexico borderlands sensory variant structured data",
+        "tamarind-chile-wrapper-candy US-Mexico borderlands memory cue aliases texture aroma"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "tamarind-chile-wrapper-candy",
+          "region": "US-Mexico borderlands"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "cultureAreas.diaspora_global",
+        "foodForms.confectionery",
+        "foodForms.snack_street_food",
+        "mechanisms.sauce_balance",
+        "mechanisms.sugar_crystal",
+        "nameSystems.menu_name",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth seed",
+        "notes": [
+          "Added to increase records-per-family depth for hard canary families after the breadth-first pantry proved too thin.",
+          "Region strings are retrieval/disambiguation contexts; they do not claim family-specific certainty."
+        ]
+      }
+    },
+    {
+      "id": "exp3-depth-tamarind-chile-wrapper-candy-latin-america-comparison",
+      "forms": [
+        "foodForms.confectionery",
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "macro:Latin America"
+      ],
+      "nameSignals": [
+        "tamarind-chile-wrapper-candy",
+        "Pulparindo",
+        "tamarind candy",
+        "tamarind versus salted plum disambiguation",
+        "dark sticky candy texture",
+        "acid-salt-sugar balance"
+      ],
+      "mechanisms": [
+        "mechanisms.sauce_balance",
+        "mechanisms.sugar_crystal",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "Pulparindo Latin America comparison sensory variant structured data",
+        "tamarind-chile-wrapper-candy Latin America comparison memory cue aliases texture aroma"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "tamarind-chile-wrapper-candy",
+          "region": "Latin America comparison"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "cultureAreas.diaspora_global",
+        "foodForms.confectionery",
+        "foodForms.snack_street_food",
+        "mechanisms.sauce_balance",
+        "mechanisms.sugar_crystal",
+        "nameSystems.menu_name",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth seed",
+        "notes": [
+          "Added to increase records-per-family depth for hard canary families after the breadth-first pantry proved too thin.",
+          "Region strings are retrieval/disambiguation contexts; they do not claim family-specific certainty."
+        ]
+      }
+    },
+    {
+      "id": "exp3-depth-bitter-melon-egg-broth-southeast-asia",
+      "forms": [
+        "foodForms.soup_broth",
+        "foodForms.vegetable_fungi",
+        "foodForms.protein_centered"
+      ],
+      "regions": [
+        "macro:Southeast Asia"
+      ],
+      "nameSignals": [
+        "bitter-melon-egg-broth",
+        "bitter melon",
+        "bitter gourd",
+        "clear broth cue",
+        "pale green bitter slices",
+        "soft egg ribbon texture"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "bitter melon Southeast Asia sensory variant structured data",
+        "bitter-melon-egg-broth Southeast Asia memory cue aliases texture aroma"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "bitter-melon-egg-broth",
+          "region": "Southeast Asia"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "cultureAreas.caribbean",
+        "cultureAreas.diaspora_global",
+        "foodForms.soup_broth",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth seed",
+        "notes": [
+          "Added to increase records-per-family depth for hard canary families after the breadth-first pantry proved too thin.",
+          "Region strings are retrieval/disambiguation contexts; they do not claim family-specific certainty."
+        ]
+      }
+    },
+    {
+      "id": "exp3-depth-bitter-melon-egg-broth-caribbean",
+      "forms": [
+        "foodForms.soup_broth",
+        "foodForms.vegetable_fungi",
+        "foodForms.protein_centered"
+      ],
+      "regions": [
+        "macro:Caribbean"
+      ],
+      "nameSignals": [
+        "bitter-melon-egg-broth",
+        "bitter melon",
+        "bitter gourd",
+        "bitter gourd naming",
+        "home broth context",
+        "soft protein contrast"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "bitter melon Caribbean sensory variant structured data",
+        "bitter-melon-egg-broth Caribbean memory cue aliases texture aroma"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "bitter-melon-egg-broth",
+          "region": "Caribbean"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "cultureAreas.caribbean",
+        "cultureAreas.diaspora_global",
+        "foodForms.soup_broth",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth seed",
+        "notes": [
+          "Added to increase records-per-family depth for hard canary families after the breadth-first pantry proved too thin.",
+          "Region strings are retrieval/disambiguation contexts; they do not claim family-specific certainty."
+        ]
+      }
+    },
+    {
+      "id": "exp3-depth-bitter-melon-egg-broth-south-asia-diaspora",
+      "forms": [
+        "foodForms.soup_broth",
+        "foodForms.vegetable_fungi",
+        "foodForms.protein_centered"
+      ],
+      "regions": [
+        "diaspora:South Asia"
+      ],
+      "nameSignals": [
+        "bitter-melon-egg-broth",
+        "bitter melon",
+        "bitter gourd",
+        "bitter gourd alias",
+        "bitter vegetable memory",
+        "warm broth or sauté disambiguation"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "bitter melon South Asia diaspora sensory variant structured data",
+        "bitter-melon-egg-broth South Asia diaspora memory cue aliases texture aroma"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "bitter-melon-egg-broth",
+          "region": "South Asia diaspora"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "cultureAreas.caribbean",
+        "cultureAreas.diaspora_global",
+        "foodForms.soup_broth",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth seed",
+        "notes": [
+          "Added to increase records-per-family depth for hard canary families after the breadth-first pantry proved too thin.",
+          "Region strings are retrieval/disambiguation contexts; they do not claim family-specific certainty."
+        ]
+      }
+    },
+    {
+      "id": "exp3-depth-bitter-melon-egg-broth-global-diaspora",
+      "forms": [
+        "foodForms.soup_broth",
+        "foodForms.vegetable_fungi",
+        "foodForms.protein_centered"
+      ],
+      "regions": [
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "bitter-melon-egg-broth",
+        "bitter melon",
+        "bitter gourd",
+        "childhood disliked bitterness",
+        "clear broth temperature",
+        "egg or pork bit texture",
+        "global bitter melon comparison",
+        "bitter gourd broth disambiguator"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "bitter melon Global diaspora sensory variant structured data",
+        "bitter-melon-egg-broth Global diaspora memory cue aliases texture aroma"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "bitter-melon-egg-broth",
+          "region": "Bitter melon global comparison"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "cultureAreas.caribbean",
+        "cultureAreas.diaspora_global",
+        "foodForms.soup_broth",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth seed",
+        "notes": [
+          "Added to increase records-per-family depth for hard canary families after the breadth-first pantry proved too thin.",
+          "Region strings are retrieval/disambiguation contexts; they do not claim family-specific certainty."
+        ]
+      }
+    },
+    {
+      "id": "exp3-depth-fermented-cereal-porridge-drink-nigeria",
+      "forms": [
+        "foodForms.beverage",
+        "foodForms.grain_rice_noodle",
+        "foodForms.breakfast"
+      ],
+      "regions": [
+        "nation:Nigeria"
+      ],
+      "nameSignals": [
+        "fermented-cereal-porridge-drink",
+        "ogi",
+        "akamu",
+        "ogi naming",
+        "akamu alias",
+        "maize sour-starch body"
+      ],
+      "mechanisms": [
+        "mechanisms.fermentation_acid",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "ogi Nigeria sensory variant structured data",
+        "fermented-cereal-porridge-drink Nigeria memory cue aliases texture aroma"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "fermented-cereal-porridge-drink",
+          "region": "Nigeria"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.west_africa",
+        "cultureAreas.diaspora_global",
+        "foodForms.beverage",
+        "foodForms.grain_rice_noodle",
+        "foodForms.breakfast",
+        "mechanisms.fermentation_acid",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "nameSystems.transliteration",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth seed",
+        "notes": [
+          "Added to increase records-per-family depth for hard canary families after the breadth-first pantry proved too thin.",
+          "Region strings are retrieval/disambiguation contexts; they do not claim family-specific certainty."
+        ]
+      }
+    },
+    {
+      "id": "exp3-depth-fermented-cereal-porridge-drink-ghana",
+      "forms": [
+        "foodForms.beverage",
+        "foodForms.grain_rice_noodle",
+        "foodForms.breakfast"
+      ],
+      "regions": [
+        "nation:Ghana"
+      ],
+      "nameSignals": [
+        "fermented-cereal-porridge-drink",
+        "ogi",
+        "akamu",
+        "koko-style comparison cue",
+        "warm breakfast porridge",
+        "millet or maize body"
+      ],
+      "mechanisms": [
+        "mechanisms.fermentation_acid",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "ogi Ghana comparison sensory variant structured data",
+        "fermented-cereal-porridge-drink Ghana comparison memory cue aliases texture aroma"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "fermented-cereal-porridge-drink",
+          "region": "Ghana comparison"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.west_africa",
+        "cultureAreas.diaspora_global",
+        "foodForms.beverage",
+        "foodForms.grain_rice_noodle",
+        "foodForms.breakfast",
+        "mechanisms.fermentation_acid",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "nameSystems.transliteration",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth seed",
+        "notes": [
+          "Added to increase records-per-family depth for hard canary families after the breadth-first pantry proved too thin.",
+          "Region strings are retrieval/disambiguation contexts; they do not claim family-specific certainty."
+        ]
+      }
+    },
+    {
+      "id": "exp3-depth-fermented-cereal-porridge-drink-west-africa-diaspora",
+      "forms": [
+        "foodForms.beverage",
+        "foodForms.grain_rice_noodle",
+        "foodForms.breakfast"
+      ],
+      "regions": [
+        "diaspora:West Africa"
+      ],
+      "nameSignals": [
+        "fermented-cereal-porridge-drink",
+        "ogi",
+        "akamu",
+        "diaspora breakfast cue",
+        "sour fermented cereal aroma",
+        "sip-spoon texture"
+      ],
+      "mechanisms": [
+        "mechanisms.fermentation_acid",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "ogi West Africa diaspora sensory variant structured data",
+        "fermented-cereal-porridge-drink West Africa diaspora memory cue aliases texture aroma"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "fermented-cereal-porridge-drink",
+          "region": "West Africa diaspora"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.west_africa",
+        "cultureAreas.diaspora_global",
+        "foodForms.beverage",
+        "foodForms.grain_rice_noodle",
+        "foodForms.breakfast",
+        "mechanisms.fermentation_acid",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "nameSystems.transliteration",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth seed",
+        "notes": [
+          "Added to increase records-per-family depth for hard canary families after the breadth-first pantry proved too thin.",
+          "Region strings are retrieval/disambiguation contexts; they do not claim family-specific certainty."
+        ]
+      }
+    },
+    {
+      "id": "exp3-depth-fermented-cereal-porridge-drink-millet-sorghum",
+      "forms": [
+        "foodForms.beverage",
+        "foodForms.grain_rice_noodle",
+        "foodForms.breakfast"
+      ],
+      "regions": [
+        "macro:West Africa"
+      ],
+      "nameSignals": [
+        "fermented-cereal-porridge-drink",
+        "ogi",
+        "akamu",
+        "millet variant",
+        "sorghum variant",
+        "slightly sour warm drink"
+      ],
+      "mechanisms": [
+        "mechanisms.fermentation_acid",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "ogi Millet and sorghum variants sensory variant structured data",
+        "fermented-cereal-porridge-drink Millet and sorghum variants memory cue aliases texture aroma"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "fermented-cereal-porridge-drink",
+          "region": "Millet and sorghum variants"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.west_africa",
+        "cultureAreas.diaspora_global",
+        "foodForms.beverage",
+        "foodForms.grain_rice_noodle",
+        "foodForms.breakfast",
+        "mechanisms.fermentation_acid",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "nameSystems.transliteration",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth seed",
+        "notes": [
+          "Added to increase records-per-family depth for hard canary families after the breadth-first pantry proved too thin.",
+          "Region strings are retrieval/disambiguation contexts; they do not claim family-specific certainty."
+        ]
+      }
+    },
+    {
+      "id": "exp3-depth-black-sesame-seed-paste-sweet-china",
+      "forms": [
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "foodForms.beverage"
+      ],
+      "regions": [
+        "nation:China"
+      ],
+      "nameSignals": [
+        "black-sesame-seed-paste-sweet",
+        "black sesame soup",
+        "black sesame dessert",
+        "black sesame soup naming",
+        "dark spoonable dessert",
+        "toasted seed aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.starch_texture",
+        "mechanisms.sugar_crystal"
+      ],
+      "querySeeds": [
+        "black sesame soup China sensory variant structured data",
+        "black-sesame-seed-paste-sweet China memory cue aliases texture aroma"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "black-sesame-seed-paste-sweet",
+          "region": "China"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.starch_texture",
+        "nameSystems.menu_name",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth seed",
+        "notes": [
+          "Added to increase records-per-family depth for hard canary families after the breadth-first pantry proved too thin.",
+          "Region strings are retrieval/disambiguation contexts; they do not claim family-specific certainty."
+        ]
+      }
+    },
+    {
+      "id": "exp3-depth-black-sesame-seed-paste-sweet-east-asia-bakery",
+      "forms": [
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "foodForms.beverage"
+      ],
+      "regions": [
+        "diaspora:East Asia"
+      ],
+      "nameSignals": [
+        "black-sesame-seed-paste-sweet",
+        "black sesame soup",
+        "black sesame dessert",
+        "soft bun carrier",
+        "black seed paste filling",
+        "not chocolate disambiguator"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.starch_texture",
+        "mechanisms.sugar_crystal"
+      ],
+      "querySeeds": [
+        "black sesame soup East Asian bakery diaspora sensory variant structured data",
+        "black-sesame-seed-paste-sweet East Asian bakery diaspora memory cue aliases texture aroma"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "black-sesame-seed-paste-sweet",
+          "region": "East Asian bakery diaspora"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.starch_texture",
+        "nameSystems.menu_name",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth seed",
+        "notes": [
+          "Added to increase records-per-family depth for hard canary families after the breadth-first pantry proved too thin.",
+          "Region strings are retrieval/disambiguation contexts; they do not claim family-specific certainty."
+        ]
+      }
+    },
+    {
+      "id": "exp3-depth-black-sesame-seed-paste-sweet-hong-kong-diaspora",
+      "forms": [
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "foodForms.beverage"
+      ],
+      "regions": [
+        "diaspora:Hong Kong"
+      ],
+      "nameSignals": [
+        "black-sesame-seed-paste-sweet",
+        "black sesame soup",
+        "black sesame dessert",
+        "dessert soup cue",
+        "smooth paste body",
+        "roasted sesame bitterness"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.starch_texture",
+        "mechanisms.sugar_crystal"
+      ],
+      "querySeeds": [
+        "black sesame soup Hong Kong diaspora sensory variant structured data",
+        "black-sesame-seed-paste-sweet Hong Kong diaspora memory cue aliases texture aroma"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "black-sesame-seed-paste-sweet",
+          "region": "Hong Kong diaspora"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.starch_texture",
+        "nameSystems.menu_name",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth seed",
+        "notes": [
+          "Added to increase records-per-family depth for hard canary families after the breadth-first pantry proved too thin.",
+          "Region strings are retrieval/disambiguation contexts; they do not claim family-specific certainty."
+        ]
+      }
+    },
+    {
+      "id": "exp3-depth-black-sesame-seed-paste-sweet-global-diaspora",
+      "forms": [
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "foodForms.beverage"
+      ],
+      "regions": [
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "black-sesame-seed-paste-sweet",
+        "black sesame soup",
+        "black sesame dessert",
+        "seed paste versus bean paste cue",
+        "smoky nutty aroma",
+        "soft sweet texture"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.starch_texture",
+        "mechanisms.sugar_crystal"
+      ],
+      "querySeeds": [
+        "black sesame soup Global diaspora sensory variant structured data",
+        "black-sesame-seed-paste-sweet Global diaspora memory cue aliases texture aroma"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "black-sesame-seed-paste-sweet",
+          "region": "Global diaspora"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.starch_texture",
+        "nameSystems.menu_name",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth seed",
+        "notes": [
+          "Added to increase records-per-family depth for hard canary families after the breadth-first pantry proved too thin.",
+          "Region strings are retrieval/disambiguation contexts; they do not claim family-specific certainty."
+        ]
+      }
+    },
+    {
+      "id": "exp3-depth-rice-paper-herb-roll-vietnam",
+      "forms": [
+        "foodForms.snack_street_food",
+        "foodForms.vegetable_fungi",
+        "foodForms.dumpling_pocket"
+      ],
+      "regions": [
+        "nation:Vietnam"
+      ],
+      "nameSignals": [
+        "rice-paper-herb-roll",
+        "gỏi cuốn",
+        "goi cuon",
+        "rice paper roll",
+        "gỏi cuốn naming",
+        "rice paper wrapper",
+        "raw herb aroma"
+      ],
+      "mechanisms": [
+        "mechanisms.texture_contrast",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "mechanisms.starch_texture"
+      ],
+      "querySeeds": [
+        "gỏi cuốn Vietnam sensory variant structured data",
+        "rice-paper-herb-roll Vietnam memory cue aliases texture aroma"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "rice-paper-herb-roll",
+          "region": "Vietnam"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.snack_street_food",
+        "foodForms.vegetable_fungi",
+        "mechanisms.texture_contrast",
+        "mechanisms.sauce_balance",
+        "mechanisms.starch_texture",
+        "nameSystems.transliteration",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth seed",
+        "notes": [
+          "Added to increase records-per-family depth for hard canary families after the breadth-first pantry proved too thin.",
+          "Region strings are retrieval/disambiguation contexts; they do not claim family-specific certainty."
+        ]
+      }
+    },
+    {
+      "id": "exp3-depth-rice-paper-herb-roll-us-diaspora",
+      "forms": [
+        "foodForms.snack_street_food",
+        "foodForms.vegetable_fungi",
+        "foodForms.dumpling_pocket"
+      ],
+      "regions": [
+        "diaspora:United States"
+      ],
+      "nameSignals": [
+        "rice-paper-herb-roll",
+        "gỏi cuốn",
+        "goi cuon",
+        "rice paper roll",
+        "fresh spring roll menu name",
+        "cold noodle texture",
+        "dipping sauce balance"
+      ],
+      "mechanisms": [
+        "mechanisms.texture_contrast",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "mechanisms.starch_texture"
+      ],
+      "querySeeds": [
+        "gỏi cuốn United States diaspora sensory variant structured data",
+        "rice-paper-herb-roll United States diaspora memory cue aliases texture aroma"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "rice-paper-herb-roll",
+          "region": "United States diaspora"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.snack_street_food",
+        "foodForms.vegetable_fungi",
+        "mechanisms.texture_contrast",
+        "mechanisms.sauce_balance",
+        "mechanisms.starch_texture",
+        "nameSystems.transliteration",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth seed",
+        "notes": [
+          "Added to increase records-per-family depth for hard canary families after the breadth-first pantry proved too thin.",
+          "Region strings are retrieval/disambiguation contexts; they do not claim family-specific certainty."
+        ]
+      }
+    },
+    {
+      "id": "exp3-depth-rice-paper-herb-roll-southeast-asia-comparison",
+      "forms": [
+        "foodForms.snack_street_food",
+        "foodForms.vegetable_fungi",
+        "foodForms.dumpling_pocket"
+      ],
+      "regions": [
+        "macro:Southeast Asia"
+      ],
+      "nameSignals": [
+        "rice-paper-herb-roll",
+        "gỏi cuốn",
+        "goi cuon",
+        "rice paper roll",
+        "translucent wrapper cue",
+        "herb-heavy bite",
+        "sweet-salty-sour sauce"
+      ],
+      "mechanisms": [
+        "mechanisms.texture_contrast",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "mechanisms.starch_texture"
+      ],
+      "querySeeds": [
+        "gỏi cuốn Southeast Asia comparison sensory variant structured data",
+        "rice-paper-herb-roll Southeast Asia comparison memory cue aliases texture aroma"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "rice-paper-herb-roll",
+          "region": "Southeast Asia comparison"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.snack_street_food",
+        "foodForms.vegetable_fungi",
+        "mechanisms.texture_contrast",
+        "mechanisms.sauce_balance",
+        "mechanisms.starch_texture",
+        "nameSystems.transliteration",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth seed",
+        "notes": [
+          "Added to increase records-per-family depth for hard canary families after the breadth-first pantry proved too thin.",
+          "Region strings are retrieval/disambiguation contexts; they do not claim family-specific certainty."
+        ]
+      }
+    },
+    {
+      "id": "exp3-depth-rice-paper-herb-roll-global-diaspora",
+      "forms": [
+        "foodForms.snack_street_food",
+        "foodForms.vegetable_fungi",
+        "foodForms.dumpling_pocket"
+      ],
+      "regions": [
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "rice-paper-herb-roll",
+        "gỏi cuốn",
+        "goi cuon",
+        "rice paper roll",
+        "rice paper roll alias",
+        "cool handheld food",
+        "fish sauce or peanut sauce disambiguator"
+      ],
+      "mechanisms": [
+        "mechanisms.texture_contrast",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "mechanisms.starch_texture"
+      ],
+      "querySeeds": [
+        "gỏi cuốn Global diaspora sensory variant structured data",
+        "rice-paper-herb-roll Global diaspora memory cue aliases texture aroma"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "rice-paper-herb-roll",
+          "region": "Global diaspora"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.snack_street_food",
+        "foodForms.vegetable_fungi",
+        "mechanisms.texture_contrast",
+        "mechanisms.sauce_balance",
+        "mechanisms.starch_texture",
+        "nameSystems.transliteration",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth seed",
+        "notes": [
+          "Added to increase records-per-family depth for hard canary families after the breadth-first pantry proved too thin.",
+          "Region strings are retrieval/disambiguation contexts; they do not claim family-specific certainty."
+        ]
+      }
+    },
+    {
+      "id": "exp3-depth-cassava-leaf-stew-uganda",
+      "forms": [
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "foodForms.protein_centered"
+      ],
+      "regions": [
+        "nation:Uganda"
+      ],
+      "nameSignals": [
+        "cassava-leaf-stew",
+        "sombe",
+        "cassava leaf stew",
+        "sombe naming",
+        "pounded cassava leaves",
+        "palm oil body"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "sombe Uganda sensory variant structured data",
+        "cassava-leaf-stew Uganda memory cue aliases texture aroma"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "cassava-leaf-stew",
+          "region": "Uganda"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.east_africa",
+        "cultureAreas.central_africa",
+        "cultureAreas.diaspora_global",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.menu_name",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth seed",
+        "notes": [
+          "Added to increase records-per-family depth for hard canary families after the breadth-first pantry proved too thin.",
+          "Region strings are retrieval/disambiguation contexts; they do not claim family-specific certainty."
+        ]
+      }
+    },
+    {
+      "id": "exp3-depth-cassava-leaf-stew-central-africa",
+      "forms": [
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "foodForms.protein_centered"
+      ],
+      "regions": [
+        "macro:Central Africa"
+      ],
+      "nameSignals": [
+        "cassava-leaf-stew",
+        "sombe",
+        "cassava leaf stew",
+        "cassava leaf stew family",
+        "dark green leaf body",
+        "fish or meat umami cue"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "sombe Central Africa sensory variant structured data",
+        "cassava-leaf-stew Central Africa memory cue aliases texture aroma"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "cassava-leaf-stew",
+          "region": "Central Africa"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.east_africa",
+        "cultureAreas.central_africa",
+        "cultureAreas.diaspora_global",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.menu_name",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth seed",
+        "notes": [
+          "Added to increase records-per-family depth for hard canary families after the breadth-first pantry proved too thin.",
+          "Region strings are retrieval/disambiguation contexts; they do not claim family-specific certainty."
+        ]
+      }
+    },
+    {
+      "id": "exp3-depth-cassava-leaf-stew-east-africa-diaspora",
+      "forms": [
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "foodForms.protein_centered"
+      ],
+      "regions": [
+        "diaspora:East Africa"
+      ],
+      "nameSignals": [
+        "cassava-leaf-stew",
+        "sombe",
+        "cassava leaf stew",
+        "rice-and-stew serving cue",
+        "leaf paste texture",
+        "oil-rounded sauce"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "sombe East Africa diaspora sensory variant structured data",
+        "cassava-leaf-stew East Africa diaspora memory cue aliases texture aroma"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "cassava-leaf-stew",
+          "region": "East Africa diaspora"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.east_africa",
+        "cultureAreas.central_africa",
+        "cultureAreas.diaspora_global",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.menu_name",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth seed",
+        "notes": [
+          "Added to increase records-per-family depth for hard canary families after the breadth-first pantry proved too thin.",
+          "Region strings are retrieval/disambiguation contexts; they do not claim family-specific certainty."
+        ]
+      }
+    },
+    {
+      "id": "exp3-depth-cassava-leaf-stew-nut-free-comparison",
+      "forms": [
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "foodForms.protein_centered"
+      ],
+      "regions": [
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "cassava-leaf-stew",
+        "sombe",
+        "cassava leaf stew",
+        "leaf body without peanut",
+        "smoky savory aroma",
+        "safe substitution disambiguator"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "sombe Nut-free comparison sensory variant structured data",
+        "cassava-leaf-stew Nut-free comparison memory cue aliases texture aroma"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "cassava-leaf-stew",
+          "region": "Nut-free comparison"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.east_africa",
+        "cultureAreas.central_africa",
+        "cultureAreas.diaspora_global",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.menu_name",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth seed",
+        "notes": [
+          "Added to increase records-per-family depth for hard canary families after the breadth-first pantry proved too thin.",
+          "Region strings are retrieval/disambiguation contexts; they do not claim family-specific certainty."
+        ]
+      }
+    },
+    {
+      "id": "exp3-depth-black-lime-sour-stew-cue-iraq",
+      "forms": [
+        "foodForms.stew_braise",
+        "foodForms.soup_broth",
+        "foodForms.sauce_condiment"
+      ],
+      "regions": [
+        "nation:Iraq"
+      ],
+      "nameSignals": [
+        "black-lime-sour-stew-cue",
+        "Black lime",
+        "dried lime",
+        "loomi",
+        "black lime sourness",
+        "bean or lentil body",
+        "warm stew context"
+      ],
+      "mechanisms": [
+        "mechanisms.fermentation_acid",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "mechanisms.temperature"
+      ],
+      "querySeeds": [
+        "Black lime Iraq sensory variant structured data",
+        "black-lime-sour-stew-cue Iraq memory cue aliases texture aroma"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "black-lime-sour-stew-cue",
+          "region": "Iraq"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.stew_braise",
+        "foodForms.soup_broth",
+        "mechanisms.fermentation_acid",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth seed",
+        "notes": [
+          "Added to increase records-per-family depth for hard canary families after the breadth-first pantry proved too thin.",
+          "Region strings are retrieval/disambiguation contexts; they do not claim family-specific certainty."
+        ]
+      }
+    },
+    {
+      "id": "exp3-depth-black-lime-sour-stew-cue-iran-gulf-comparison",
+      "forms": [
+        "foodForms.stew_braise",
+        "foodForms.soup_broth",
+        "foodForms.sauce_condiment"
+      ],
+      "regions": [
+        "macro:Middle East and West Asia"
+      ],
+      "nameSignals": [
+        "black-lime-sour-stew-cue",
+        "Black lime",
+        "dried lime",
+        "loomi",
+        "loomi alias",
+        "dried citrus aroma",
+        "sour-earthy stew balance"
+      ],
+      "mechanisms": [
+        "mechanisms.fermentation_acid",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "mechanisms.temperature"
+      ],
+      "querySeeds": [
+        "Black lime Iran and Gulf comparison sensory variant structured data",
+        "black-lime-sour-stew-cue Iran and Gulf comparison memory cue aliases texture aroma"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "black-lime-sour-stew-cue",
+          "region": "Iran and Gulf comparison"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.stew_braise",
+        "foodForms.soup_broth",
+        "mechanisms.fermentation_acid",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth seed",
+        "notes": [
+          "Added to increase records-per-family depth for hard canary families after the breadth-first pantry proved too thin.",
+          "Region strings are retrieval/disambiguation contexts; they do not claim family-specific certainty."
+        ]
+      }
+    },
+    {
+      "id": "exp3-depth-black-lime-sour-stew-cue-gulf-diaspora",
+      "forms": [
+        "foodForms.stew_braise",
+        "foodForms.soup_broth",
+        "foodForms.sauce_condiment"
+      ],
+      "regions": [
+        "diaspora:Gulf Arab"
+      ],
+      "nameSignals": [
+        "black-lime-sour-stew-cue",
+        "Black lime",
+        "dried lime",
+        "loomi",
+        "pantry dried lime cue",
+        "dark citrus aroma",
+        "sour broth memory"
+      ],
+      "mechanisms": [
+        "mechanisms.fermentation_acid",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "mechanisms.temperature"
+      ],
+      "querySeeds": [
+        "Black lime Gulf diaspora sensory variant structured data",
+        "black-lime-sour-stew-cue Gulf diaspora memory cue aliases texture aroma"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "black-lime-sour-stew-cue",
+          "region": "Gulf diaspora"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.stew_braise",
+        "foodForms.soup_broth",
+        "mechanisms.fermentation_acid",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth seed",
+        "notes": [
+          "Added to increase records-per-family depth for hard canary families after the breadth-first pantry proved too thin.",
+          "Region strings are retrieval/disambiguation contexts; they do not claim family-specific certainty."
+        ]
+      }
+    },
+    {
+      "id": "exp3-depth-black-lime-sour-stew-cue-global-diaspora",
+      "forms": [
+        "foodForms.stew_braise",
+        "foodForms.soup_broth",
+        "foodForms.sauce_condiment"
+      ],
+      "regions": [
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "black-lime-sour-stew-cue",
+        "Black lime",
+        "dried lime",
+        "loomi",
+        "black lime versus fresh lime disambiguator",
+        "earthy sourness",
+        "lentil or bean stew texture"
+      ],
+      "mechanisms": [
+        "mechanisms.fermentation_acid",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "mechanisms.temperature"
+      ],
+      "querySeeds": [
+        "Black lime Global diaspora sensory variant structured data",
+        "black-lime-sour-stew-cue Global diaspora memory cue aliases texture aroma"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "black-lime-sour-stew-cue",
+          "region": "Global diaspora"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.stew_braise",
+        "foodForms.soup_broth",
+        "mechanisms.fermentation_acid",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth seed",
+        "notes": [
+          "Added to increase records-per-family depth for hard canary families after the breadth-first pantry proved too thin.",
+          "Region strings are retrieval/disambiguation contexts; they do not claim family-specific certainty."
+        ]
+      }
     }
   ]
 }

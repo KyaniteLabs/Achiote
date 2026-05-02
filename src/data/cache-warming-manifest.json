@@ -4972,6 +4972,998 @@
           "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
         ]
       }
+    },
+    {
+      "id": "warm-exp3-depth-pandan-coconut-layered-cake-malaysia",
+      "seedId": "exp3-depth-pandan-coconut-layered-cake-malaysia",
+      "cacheTarget": {
+        "dishFamily": "pandan-coconut-layered-cake",
+        "region": "Malaysia"
+      },
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.starch_texture"
+      ],
+      "qualityTriggers": [
+        "cache_unavailable",
+        "unknown_family",
+        "fallback_guard",
+        "thin_family_depth"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord captures the regional/variant cue, aliases, sensory mechanism, uncertainty, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth cache-warming task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp3-depth-pandan-coconut-layered-cake-indonesia",
+      "seedId": "exp3-depth-pandan-coconut-layered-cake-indonesia",
+      "cacheTarget": {
+        "dishFamily": "pandan-coconut-layered-cake",
+        "region": "Indonesia"
+      },
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.starch_texture"
+      ],
+      "qualityTriggers": [
+        "cache_unavailable",
+        "unknown_family",
+        "fallback_guard",
+        "thin_family_depth"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord captures the regional/variant cue, aliases, sensory mechanism, uncertainty, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth cache-warming task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp3-depth-pandan-coconut-layered-cake-singapore-diaspora",
+      "seedId": "exp3-depth-pandan-coconut-layered-cake-singapore-diaspora",
+      "cacheTarget": {
+        "dishFamily": "pandan-coconut-layered-cake",
+        "region": "Singapore diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.starch_texture"
+      ],
+      "qualityTriggers": [
+        "cache_unavailable",
+        "unknown_family",
+        "fallback_guard",
+        "thin_family_depth"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord captures the regional/variant cue, aliases, sensory mechanism, uncertainty, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth cache-warming task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp3-depth-pandan-coconut-layered-cake-global-diaspora",
+      "seedId": "exp3-depth-pandan-coconut-layered-cake-global-diaspora",
+      "cacheTarget": {
+        "dishFamily": "pandan-coconut-layered-cake",
+        "region": "Global diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.starch_texture"
+      ],
+      "qualityTriggers": [
+        "cache_unavailable",
+        "unknown_family",
+        "fallback_guard",
+        "thin_family_depth"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord captures the regional/variant cue, aliases, sensory mechanism, uncertainty, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth cache-warming task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp3-depth-tamarind-chile-wrapper-candy-mexico",
+      "seedId": "exp3-depth-tamarind-chile-wrapper-candy-mexico",
+      "cacheTarget": {
+        "dishFamily": "tamarind-chile-wrapper-candy",
+        "region": "Mexico"
+      },
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "cultureAreas.diaspora_global",
+        "foodForms.confectionery",
+        "foodForms.snack_street_food",
+        "mechanisms.sauce_balance",
+        "mechanisms.sugar_crystal"
+      ],
+      "qualityTriggers": [
+        "cache_unavailable",
+        "unknown_family",
+        "fallback_guard",
+        "thin_family_depth"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord captures the regional/variant cue, aliases, sensory mechanism, uncertainty, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth cache-warming task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp3-depth-tamarind-chile-wrapper-candy-us-diaspora",
+      "seedId": "exp3-depth-tamarind-chile-wrapper-candy-us-diaspora",
+      "cacheTarget": {
+        "dishFamily": "tamarind-chile-wrapper-candy",
+        "region": "United States diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "cultureAreas.diaspora_global",
+        "foodForms.confectionery",
+        "foodForms.snack_street_food",
+        "mechanisms.sauce_balance",
+        "mechanisms.sugar_crystal"
+      ],
+      "qualityTriggers": [
+        "cache_unavailable",
+        "unknown_family",
+        "fallback_guard",
+        "thin_family_depth"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord captures the regional/variant cue, aliases, sensory mechanism, uncertainty, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth cache-warming task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp3-depth-tamarind-chile-wrapper-candy-borderland",
+      "seedId": "exp3-depth-tamarind-chile-wrapper-candy-borderland",
+      "cacheTarget": {
+        "dishFamily": "tamarind-chile-wrapper-candy",
+        "region": "US-Mexico borderlands"
+      },
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "cultureAreas.diaspora_global",
+        "foodForms.confectionery",
+        "foodForms.snack_street_food",
+        "mechanisms.sauce_balance",
+        "mechanisms.sugar_crystal"
+      ],
+      "qualityTriggers": [
+        "cache_unavailable",
+        "unknown_family",
+        "fallback_guard",
+        "thin_family_depth"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord captures the regional/variant cue, aliases, sensory mechanism, uncertainty, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth cache-warming task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp3-depth-tamarind-chile-wrapper-candy-latin-america-comparison",
+      "seedId": "exp3-depth-tamarind-chile-wrapper-candy-latin-america-comparison",
+      "cacheTarget": {
+        "dishFamily": "tamarind-chile-wrapper-candy",
+        "region": "Latin America comparison"
+      },
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "cultureAreas.diaspora_global",
+        "foodForms.confectionery",
+        "foodForms.snack_street_food",
+        "mechanisms.sauce_balance",
+        "mechanisms.sugar_crystal"
+      ],
+      "qualityTriggers": [
+        "cache_unavailable",
+        "unknown_family",
+        "fallback_guard",
+        "thin_family_depth"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord captures the regional/variant cue, aliases, sensory mechanism, uncertainty, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth cache-warming task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp3-depth-bitter-melon-egg-broth-southeast-asia",
+      "seedId": "exp3-depth-bitter-melon-egg-broth-southeast-asia",
+      "cacheTarget": {
+        "dishFamily": "bitter-melon-egg-broth",
+        "region": "Southeast Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "cultureAreas.caribbean",
+        "cultureAreas.diaspora_global",
+        "foodForms.soup_broth",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma"
+      ],
+      "qualityTriggers": [
+        "cache_unavailable",
+        "unknown_family",
+        "fallback_guard",
+        "thin_family_depth"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord captures the regional/variant cue, aliases, sensory mechanism, uncertainty, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth cache-warming task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp3-depth-bitter-melon-egg-broth-caribbean",
+      "seedId": "exp3-depth-bitter-melon-egg-broth-caribbean",
+      "cacheTarget": {
+        "dishFamily": "bitter-melon-egg-broth",
+        "region": "Caribbean"
+      },
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "cultureAreas.caribbean",
+        "cultureAreas.diaspora_global",
+        "foodForms.soup_broth",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma"
+      ],
+      "qualityTriggers": [
+        "cache_unavailable",
+        "unknown_family",
+        "fallback_guard",
+        "thin_family_depth"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord captures the regional/variant cue, aliases, sensory mechanism, uncertainty, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth cache-warming task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp3-depth-bitter-melon-egg-broth-south-asia-diaspora",
+      "seedId": "exp3-depth-bitter-melon-egg-broth-south-asia-diaspora",
+      "cacheTarget": {
+        "dishFamily": "bitter-melon-egg-broth",
+        "region": "South Asia diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "cultureAreas.caribbean",
+        "cultureAreas.diaspora_global",
+        "foodForms.soup_broth",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma"
+      ],
+      "qualityTriggers": [
+        "cache_unavailable",
+        "unknown_family",
+        "fallback_guard",
+        "thin_family_depth"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord captures the regional/variant cue, aliases, sensory mechanism, uncertainty, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth cache-warming task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp3-depth-bitter-melon-egg-broth-global-diaspora",
+      "seedId": "exp3-depth-bitter-melon-egg-broth-global-diaspora",
+      "cacheTarget": {
+        "dishFamily": "bitter-melon-egg-broth",
+        "region": "Bitter melon global comparison"
+      },
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "cultureAreas.caribbean",
+        "cultureAreas.diaspora_global",
+        "foodForms.soup_broth",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma"
+      ],
+      "qualityTriggers": [
+        "cache_unavailable",
+        "unknown_family",
+        "fallback_guard",
+        "thin_family_depth"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord captures the regional/variant cue, aliases, sensory mechanism, uncertainty, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth cache-warming task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp3-depth-fermented-cereal-porridge-drink-nigeria",
+      "seedId": "exp3-depth-fermented-cereal-porridge-drink-nigeria",
+      "cacheTarget": {
+        "dishFamily": "fermented-cereal-porridge-drink",
+        "region": "Nigeria"
+      },
+      "coverageTags": [
+        "cultureAreas.west_africa",
+        "cultureAreas.diaspora_global",
+        "foodForms.beverage",
+        "foodForms.grain_rice_noodle",
+        "foodForms.breakfast",
+        "mechanisms.fermentation_acid"
+      ],
+      "qualityTriggers": [
+        "cache_unavailable",
+        "unknown_family",
+        "fallback_guard",
+        "thin_family_depth"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord captures the regional/variant cue, aliases, sensory mechanism, uncertainty, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth cache-warming task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp3-depth-fermented-cereal-porridge-drink-ghana",
+      "seedId": "exp3-depth-fermented-cereal-porridge-drink-ghana",
+      "cacheTarget": {
+        "dishFamily": "fermented-cereal-porridge-drink",
+        "region": "Ghana comparison"
+      },
+      "coverageTags": [
+        "cultureAreas.west_africa",
+        "cultureAreas.diaspora_global",
+        "foodForms.beverage",
+        "foodForms.grain_rice_noodle",
+        "foodForms.breakfast",
+        "mechanisms.fermentation_acid"
+      ],
+      "qualityTriggers": [
+        "cache_unavailable",
+        "unknown_family",
+        "fallback_guard",
+        "thin_family_depth"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord captures the regional/variant cue, aliases, sensory mechanism, uncertainty, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth cache-warming task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp3-depth-fermented-cereal-porridge-drink-west-africa-diaspora",
+      "seedId": "exp3-depth-fermented-cereal-porridge-drink-west-africa-diaspora",
+      "cacheTarget": {
+        "dishFamily": "fermented-cereal-porridge-drink",
+        "region": "West Africa diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.west_africa",
+        "cultureAreas.diaspora_global",
+        "foodForms.beverage",
+        "foodForms.grain_rice_noodle",
+        "foodForms.breakfast",
+        "mechanisms.fermentation_acid"
+      ],
+      "qualityTriggers": [
+        "cache_unavailable",
+        "unknown_family",
+        "fallback_guard",
+        "thin_family_depth"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord captures the regional/variant cue, aliases, sensory mechanism, uncertainty, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth cache-warming task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp3-depth-fermented-cereal-porridge-drink-millet-sorghum",
+      "seedId": "exp3-depth-fermented-cereal-porridge-drink-millet-sorghum",
+      "cacheTarget": {
+        "dishFamily": "fermented-cereal-porridge-drink",
+        "region": "Millet and sorghum variants"
+      },
+      "coverageTags": [
+        "cultureAreas.west_africa",
+        "cultureAreas.diaspora_global",
+        "foodForms.beverage",
+        "foodForms.grain_rice_noodle",
+        "foodForms.breakfast",
+        "mechanisms.fermentation_acid"
+      ],
+      "qualityTriggers": [
+        "cache_unavailable",
+        "unknown_family",
+        "fallback_guard",
+        "thin_family_depth"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord captures the regional/variant cue, aliases, sensory mechanism, uncertainty, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth cache-warming task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp3-depth-black-sesame-seed-paste-sweet-china",
+      "seedId": "exp3-depth-black-sesame-seed-paste-sweet-china",
+      "cacheTarget": {
+        "dishFamily": "black-sesame-seed-paste-sweet",
+        "region": "China"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel"
+      ],
+      "qualityTriggers": [
+        "cache_unavailable",
+        "unknown_family",
+        "fallback_guard",
+        "thin_family_depth"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord captures the regional/variant cue, aliases, sensory mechanism, uncertainty, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth cache-warming task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp3-depth-black-sesame-seed-paste-sweet-east-asia-bakery",
+      "seedId": "exp3-depth-black-sesame-seed-paste-sweet-east-asia-bakery",
+      "cacheTarget": {
+        "dishFamily": "black-sesame-seed-paste-sweet",
+        "region": "East Asian bakery diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel"
+      ],
+      "qualityTriggers": [
+        "cache_unavailable",
+        "unknown_family",
+        "fallback_guard",
+        "thin_family_depth"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord captures the regional/variant cue, aliases, sensory mechanism, uncertainty, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth cache-warming task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp3-depth-black-sesame-seed-paste-sweet-hong-kong-diaspora",
+      "seedId": "exp3-depth-black-sesame-seed-paste-sweet-hong-kong-diaspora",
+      "cacheTarget": {
+        "dishFamily": "black-sesame-seed-paste-sweet",
+        "region": "Hong Kong diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel"
+      ],
+      "qualityTriggers": [
+        "cache_unavailable",
+        "unknown_family",
+        "fallback_guard",
+        "thin_family_depth"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord captures the regional/variant cue, aliases, sensory mechanism, uncertainty, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth cache-warming task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp3-depth-black-sesame-seed-paste-sweet-global-diaspora",
+      "seedId": "exp3-depth-black-sesame-seed-paste-sweet-global-diaspora",
+      "cacheTarget": {
+        "dishFamily": "black-sesame-seed-paste-sweet",
+        "region": "Global diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel"
+      ],
+      "qualityTriggers": [
+        "cache_unavailable",
+        "unknown_family",
+        "fallback_guard",
+        "thin_family_depth"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord captures the regional/variant cue, aliases, sensory mechanism, uncertainty, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth cache-warming task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp3-depth-rice-paper-herb-roll-vietnam",
+      "seedId": "exp3-depth-rice-paper-herb-roll-vietnam",
+      "cacheTarget": {
+        "dishFamily": "rice-paper-herb-roll",
+        "region": "Vietnam"
+      },
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.snack_street_food",
+        "foodForms.vegetable_fungi",
+        "mechanisms.texture_contrast",
+        "mechanisms.sauce_balance"
+      ],
+      "qualityTriggers": [
+        "cache_unavailable",
+        "unknown_family",
+        "fallback_guard",
+        "thin_family_depth"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord captures the regional/variant cue, aliases, sensory mechanism, uncertainty, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth cache-warming task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp3-depth-rice-paper-herb-roll-us-diaspora",
+      "seedId": "exp3-depth-rice-paper-herb-roll-us-diaspora",
+      "cacheTarget": {
+        "dishFamily": "rice-paper-herb-roll",
+        "region": "United States diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.snack_street_food",
+        "foodForms.vegetable_fungi",
+        "mechanisms.texture_contrast",
+        "mechanisms.sauce_balance"
+      ],
+      "qualityTriggers": [
+        "cache_unavailable",
+        "unknown_family",
+        "fallback_guard",
+        "thin_family_depth"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord captures the regional/variant cue, aliases, sensory mechanism, uncertainty, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth cache-warming task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp3-depth-rice-paper-herb-roll-southeast-asia-comparison",
+      "seedId": "exp3-depth-rice-paper-herb-roll-southeast-asia-comparison",
+      "cacheTarget": {
+        "dishFamily": "rice-paper-herb-roll",
+        "region": "Southeast Asia comparison"
+      },
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.snack_street_food",
+        "foodForms.vegetable_fungi",
+        "mechanisms.texture_contrast",
+        "mechanisms.sauce_balance"
+      ],
+      "qualityTriggers": [
+        "cache_unavailable",
+        "unknown_family",
+        "fallback_guard",
+        "thin_family_depth"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord captures the regional/variant cue, aliases, sensory mechanism, uncertainty, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth cache-warming task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp3-depth-rice-paper-herb-roll-global-diaspora",
+      "seedId": "exp3-depth-rice-paper-herb-roll-global-diaspora",
+      "cacheTarget": {
+        "dishFamily": "rice-paper-herb-roll",
+        "region": "Global diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.snack_street_food",
+        "foodForms.vegetable_fungi",
+        "mechanisms.texture_contrast",
+        "mechanisms.sauce_balance"
+      ],
+      "qualityTriggers": [
+        "cache_unavailable",
+        "unknown_family",
+        "fallback_guard",
+        "thin_family_depth"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord captures the regional/variant cue, aliases, sensory mechanism, uncertainty, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth cache-warming task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp3-depth-cassava-leaf-stew-uganda",
+      "seedId": "exp3-depth-cassava-leaf-stew-uganda",
+      "cacheTarget": {
+        "dishFamily": "cassava-leaf-stew",
+        "region": "Uganda"
+      },
+      "coverageTags": [
+        "cultureAreas.east_africa",
+        "cultureAreas.central_africa",
+        "cultureAreas.diaspora_global",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma"
+      ],
+      "qualityTriggers": [
+        "cache_unavailable",
+        "unknown_family",
+        "fallback_guard",
+        "thin_family_depth"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord captures the regional/variant cue, aliases, sensory mechanism, uncertainty, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth cache-warming task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp3-depth-cassava-leaf-stew-central-africa",
+      "seedId": "exp3-depth-cassava-leaf-stew-central-africa",
+      "cacheTarget": {
+        "dishFamily": "cassava-leaf-stew",
+        "region": "Central Africa"
+      },
+      "coverageTags": [
+        "cultureAreas.east_africa",
+        "cultureAreas.central_africa",
+        "cultureAreas.diaspora_global",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma"
+      ],
+      "qualityTriggers": [
+        "cache_unavailable",
+        "unknown_family",
+        "fallback_guard",
+        "thin_family_depth"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord captures the regional/variant cue, aliases, sensory mechanism, uncertainty, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth cache-warming task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp3-depth-cassava-leaf-stew-east-africa-diaspora",
+      "seedId": "exp3-depth-cassava-leaf-stew-east-africa-diaspora",
+      "cacheTarget": {
+        "dishFamily": "cassava-leaf-stew",
+        "region": "East Africa diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.east_africa",
+        "cultureAreas.central_africa",
+        "cultureAreas.diaspora_global",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma"
+      ],
+      "qualityTriggers": [
+        "cache_unavailable",
+        "unknown_family",
+        "fallback_guard",
+        "thin_family_depth"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord captures the regional/variant cue, aliases, sensory mechanism, uncertainty, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth cache-warming task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp3-depth-cassava-leaf-stew-nut-free-comparison",
+      "seedId": "exp3-depth-cassava-leaf-stew-nut-free-comparison",
+      "cacheTarget": {
+        "dishFamily": "cassava-leaf-stew",
+        "region": "Nut-free comparison"
+      },
+      "coverageTags": [
+        "cultureAreas.east_africa",
+        "cultureAreas.central_africa",
+        "cultureAreas.diaspora_global",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma"
+      ],
+      "qualityTriggers": [
+        "cache_unavailable",
+        "unknown_family",
+        "fallback_guard",
+        "thin_family_depth"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord captures the regional/variant cue, aliases, sensory mechanism, uncertainty, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth cache-warming task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp3-depth-black-lime-sour-stew-cue-iraq",
+      "seedId": "exp3-depth-black-lime-sour-stew-cue-iraq",
+      "cacheTarget": {
+        "dishFamily": "black-lime-sour-stew-cue",
+        "region": "Iraq"
+      },
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.stew_braise",
+        "foodForms.soup_broth",
+        "mechanisms.fermentation_acid",
+        "mechanisms.aroma"
+      ],
+      "qualityTriggers": [
+        "cache_unavailable",
+        "unknown_family",
+        "fallback_guard",
+        "thin_family_depth"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord captures the regional/variant cue, aliases, sensory mechanism, uncertainty, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth cache-warming task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp3-depth-black-lime-sour-stew-cue-iran-gulf-comparison",
+      "seedId": "exp3-depth-black-lime-sour-stew-cue-iran-gulf-comparison",
+      "cacheTarget": {
+        "dishFamily": "black-lime-sour-stew-cue",
+        "region": "Iran and Gulf comparison"
+      },
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.stew_braise",
+        "foodForms.soup_broth",
+        "mechanisms.fermentation_acid",
+        "mechanisms.aroma"
+      ],
+      "qualityTriggers": [
+        "cache_unavailable",
+        "unknown_family",
+        "fallback_guard",
+        "thin_family_depth"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord captures the regional/variant cue, aliases, sensory mechanism, uncertainty, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth cache-warming task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp3-depth-black-lime-sour-stew-cue-gulf-diaspora",
+      "seedId": "exp3-depth-black-lime-sour-stew-cue-gulf-diaspora",
+      "cacheTarget": {
+        "dishFamily": "black-lime-sour-stew-cue",
+        "region": "Gulf diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.stew_braise",
+        "foodForms.soup_broth",
+        "mechanisms.fermentation_acid",
+        "mechanisms.aroma"
+      ],
+      "qualityTriggers": [
+        "cache_unavailable",
+        "unknown_family",
+        "fallback_guard",
+        "thin_family_depth"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord captures the regional/variant cue, aliases, sensory mechanism, uncertainty, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth cache-warming task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp3-depth-black-lime-sour-stew-cue-global-diaspora",
+      "seedId": "exp3-depth-black-lime-sour-stew-cue-global-diaspora",
+      "cacheTarget": {
+        "dishFamily": "black-lime-sour-stew-cue",
+        "region": "Global diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.diaspora_global",
+        "foodForms.stew_braise",
+        "foodForms.soup_broth",
+        "mechanisms.fermentation_acid",
+        "mechanisms.aroma"
+      ],
+      "qualityTriggers": [
+        "cache_unavailable",
+        "unknown_family",
+        "fallback_guard",
+        "thin_family_depth"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord captures the regional/variant cue, aliases, sensory mechanism, uncertainty, and source metadata without recipe prose"
+      ],
+      "provenance": {
+        "sourceType": "operator curated depth cache-warming task",
+        "notes": [
+          "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
+        ]
+      }
     }
   ]
 }
