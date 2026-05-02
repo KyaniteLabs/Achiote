@@ -167,7 +167,7 @@ async function assertPackagedHttpServerStarts(installDir, tempRoot) {
 
   try {
     await withTimeout(waitForServer(child, port), 12_000, 'packaged HTTP startup');
-    for (const pathPart of ['/health', '/about', '/privacy', '/privacy/', '/terms', '/support', '/safety', '/ai-search', '/ai-search/', '/compare', '/compare/', '/llms.txt', '/sitemap.xml', '/robots.txt']) {
+    for (const pathPart of ['/health', '/about', '/about/', '/pricing', '/roadmap', '/changelog', '/status', '/blog', '/receipt', '/receipt.js', '/privacy', '/privacy/', '/terms', '/support', '/safety', '/ai-search', '/ai-search/', '/compare', '/compare/', '/llms.txt', '/sitemap.xml', '/robots.txt']) {
       const res = await withTimeout(fetch(`http://127.0.0.1:${port}${pathPart}`), 5_000, `GET ${pathPart}`);
       if (!res.ok) throw new Error(`GET ${pathPart} returned ${res.status}`);
       if (pathPart !== '/health' && !res.headers.get('x-content-type-options')) {

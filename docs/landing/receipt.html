@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Memory Receipt | Achiote</title>
+  <meta name="description" content="A shareable Achiote Memory Receipt rendered from a private link fragment." />
+  <link rel="canonical" href="https://achiote.kyanitelabs.tech/receipt" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #2a1a0e; background: #fff8f0; line-height: 1.65; }
+    nav, main, footer { width: calc(100% - 32px); max-width: 980px; margin: 0 auto; }
+    nav, footer { padding: 20px 0; }
+    main { padding: 36px 0 72px; }
+    a { color: #8b3210; font-weight: 700; }
+    h1 { font-size: clamp(2.2rem, 8vw, 4.4rem); line-height: 1; margin: 24px 0; }
+    .panel { background: #fffdfc; border: 1px solid rgba(181, 69, 27, .18); border-radius: 12px; padding: 20px; margin: 16px 0; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+    .label { color: #7a300f; font-weight: 800; text-transform: uppercase; font-size: .78rem; letter-spacing: .08em; }
+    .empty { color: #6b5744; }
+    @media (max-width: 720px) { .grid { grid-template-columns: 1fr; } h1 { font-size: 2.4rem; } }
+  </style>
+  <script defer src="/receipt.js"></script>
+</head>
+<body>
+  <nav><a href="/">Achiote</a> / Memory Receipt</nav>
+  <main>
+    <h1>Achiote Memory Receipt</h1>
+    <p class="empty" id="receipt-note">Receipt links keep the receipt data in the URL fragment. The fragment is not sent to the server; anyone with the link can read what you share.</p>
+    <section id="receipt-root" class="panel">
+      <p class="empty">No receipt data found. Create a receipt in the app, then copy a share link.</p>
+    </section>
+  </main>
+  <footer>
+    <a href="/app">Create another receipt</a> · <a href="/privacy">Privacy</a> · <a href="/support">Support</a>
+  </footer>
+</body>
+</html>

@@ -543,12 +543,14 @@ function addReceiptActions(el) {
   actions.innerHTML = [
     '<button type="button" data-receipt-action="download">Download Memory Receipt</button>',
     '<button type="button" data-receipt-action="questions">Copy Family Questions</button>',
+    '<button type="button" data-receipt-action="share">Copy Share Link</button>',
   ].join('');
   actions.addEventListener('click', async (event) => {
     const target = event.target;
     if (!(target instanceof HTMLButtonElement)) return;
     if (target.dataset.receiptAction === 'download') downloadMemoryReceipt(lastReceipt);
     if (target.dataset.receiptAction === 'questions') await copyFamilyQuestions(lastReceipt, target);
+    if (target.dataset.receiptAction === 'share') await copyReceiptShareLink(lastReceipt, target);
   });
   el.appendChild(actions);
 }
@@ -607,6 +609,19 @@ async function copyFamilyQuestions(receipt, button) {
   await navigator.clipboard.writeText(text);
   button.textContent = 'Questions copied';
   trackEvent('family_questions_copied', { route: '/app' });
+}
+
+function encodeReceiptForShare(receipt) {
+  return btoa(unescape(encodeURIComponent(JSON.stringify(receipt))));
+}
+
+async function copyReceiptShareLink(receipt, button) {
+  if (!receipt) return;
+  const url = new URL('/receipt', window.location.origin);
+  url.hash = `data=${encodeReceiptForShare(receipt)}`;
+  await navigator.clipboard.writeText(url.toString());
+  button.textContent = 'Share link copied';
+  trackEvent('receipt_share_copied', { route: '/app' });
 }
 
 function escapeHtml(s) {

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Status | Achiote</title>
+  <meta name="description" content="Achiote service status for the hosted app, MCP/API, billing, and support channels." />
+  <link rel="canonical" href="https://achiote.kyanitelabs.tech/status" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #2a1a0e; background: #fff8f0; line-height: 1.65; }
+    nav, main, footer { width: calc(100% - 32px); max-width: 980px; margin: 0 auto; }
+    nav, footer { padding: 20px 0; }
+    main { padding: 36px 0 72px; }
+    a { color: #8b3210; font-weight: 700; }
+    h1 { font-size: clamp(2.2rem, 8vw, 4.4rem); line-height: 1; margin: 24px 0; }
+    .panel { background: #fffdfc; border: 1px solid rgba(181, 69, 27, .18); border-radius: 12px; padding: 20px; margin: 16px 0; }
+    .ok { color: #235f3b; font-weight: 800; }
+    dl { display: grid; grid-template-columns: 180px 1fr; gap: 10px 18px; }
+    dt { font-weight: 800; }
+    @media (max-width: 640px) { dl { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <nav><a href="/">Achiote</a> / Status</nav>
+  <main>
+    <h1>Service status</h1>
+    <section class="panel">
+      <p class="ok">All listed launch surfaces are operational unless noted here.</p>
+      <dl>
+        <dt>Hosted app</dt><dd>Operational</dd>
+        <dt>MCP/API</dt><dd>Operational for configured hosted access; self-hosted users control their own runtime.</dd>
+        <dt>Billing</dt><dd>Operational through Stripe Checkout when configured.</dd>
+        <dt>Support</dt><dd>Email support at <a href="mailto:support@kyanitelabs.tech">support@kyanitelabs.tech</a>.</dd>
+      </dl>
+    </section>
+    <section class="panel">
+      <h2>Incident policy</h2>
+      <p>During launch, material incidents are documented here with start time, affected surface, user impact, mitigation, and resolution notes. Operational telemetry is private; this public page reports user-facing availability only.</p>
+    </section>
+  </main>
+  <footer>
+    <a href="/support">Support</a> · <a href="/privacy">Privacy</a> · <a href="/roadmap">Roadmap</a>
+  </footer>
+</body>
+</html>

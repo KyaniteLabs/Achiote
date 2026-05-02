@@ -10,11 +10,14 @@ const server = () => fs.readFileSync('src/http-server.ts', 'utf8');
 
 describe('launch business hardening', () => {
   it('publishes trust, legal, safety, and support pages linked from public surfaces', () => {
-    for (const page of ['privacy.html', 'terms.html', 'support.html', 'safety.html', 'ai-search.html', 'llms.txt']) {
+    for (const page of ['about.html', 'pricing.html', 'roadmap.html', 'changelog.html', 'status.html', 'blog.html', 'receipt.html', 'receipt.js', 'privacy.html', 'terms.html', 'support.html', 'safety.html', 'ai-search.html', 'llms.txt']) {
       expect(fs.existsSync(`docs/landing/${page}`)).toBe(true);
     }
 
     const publicSurfaces = `${landing()}\n${app()}`;
+    expect(publicSurfaces).toContain('/pricing');
+    expect(publicSurfaces).toContain('/roadmap');
+    expect(publicSurfaces).toContain('/blog');
     expect(publicSurfaces).toContain('/privacy');
     expect(publicSurfaces).toContain('/terms');
     expect(publicSurfaces).toContain('/support');
@@ -83,7 +86,12 @@ describe('launch business hardening', () => {
     expect(appJs()).not.toContain('feedback_helpful');
     expect(appJs()).not.toContain('feedback_generic');
     expect(server()).toContain("'receipt_downloaded'");
+    expect(server()).toContain("'receipt_share_copied'");
     expect(server()).toContain("'family_questions_copied'");
+    expect(server()).toContain("'waitlist_submitted'");
+    expect(landing()).toContain('id="waitlist-form"');
+    expect(fs.readFileSync('docs/landing/index.js', 'utf8')).toContain("trackEvent('waitlist_submitted'");
+    expect(fs.readFileSync('docs/landing/index.js', 'utf8')).toContain('emailDomain');
     expect(appJs()).toContain("navigator.sendBeacon('/events'");
     expect(appJs()).not.toContain("prompt_text");
 
@@ -103,6 +111,23 @@ describe('launch business hardening', () => {
     expect(server()).toContain('quality: qualitySignalReport');
     expect(server()).toContain("sendJson(res, 404, { error: 'Not found' })");
     expect(server()).not.toContain('event.payload');
+  });
+
+  it('removes fake testimonials and ships launch growth routes', () => {
+    const page = landing();
+    const sitemap = fs.readFileSync('docs/landing/sitemap.xml', 'utf8');
+    const routes = server();
+    const receiptPage = fs.readFileSync('docs/landing/receipt.html', 'utf8');
+
+    expect(page).not.toContain('Simon G., first memory reconstructed');
+    expect(page).not.toContain('Beta user, family recipe recovery');
+    for (const route of ['/pricing', '/roadmap', '/changelog', '/status', '/blog', '/receipt']) {
+      expect(routes).toContain(`'${route}':`);
+      expect(sitemap).toContain(`https://achiote.kyanitelabs.tech${route}`);
+    }
+    expect(receiptPage).toContain('URL fragment');
+    expect(appJs()).toContain('Copy Share Link');
+    expect(appJs()).toContain("new URL('/receipt', window.location.origin)");
   });
 
   it('gives first-time users a concrete memory prompt scaffold', () => {

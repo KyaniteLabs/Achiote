@@ -51,7 +51,9 @@ describe('package distribution metadata', () => {
       'docs/landing/app.html',
       'docs/landing/product-app.js',
       'docs/landing/app.js',
+      'docs/landing/blog.html',
       'docs/landing/billing-success.html',
+      'docs/landing/changelog.html',
       'docs/landing/compare.html',
       'docs/landing/fonts/',
       'docs/landing/hero-image.jpg',
@@ -61,11 +63,16 @@ describe('package distribution metadata', () => {
       'docs/landing/llms.txt',
       'docs/landing/manifest.json',
       'docs/landing/og-image.jpg',
+      'docs/landing/pricing.html',
       'docs/landing/privacy.html',
+      'docs/landing/receipt.html',
+      'docs/landing/receipt.js',
       'docs/landing/robots.txt',
+      'docs/landing/roadmap.html',
       'docs/landing/safety.html',
       'docs/landing/sample-reconstruction-artifact.md',
       'docs/landing/sitemap.xml',
+      'docs/landing/status.html',
       'docs/landing/support.html',
       'docs/landing/terms.html',
       'README.md',
@@ -203,16 +210,18 @@ describe('package distribution metadata', () => {
   it('allows the /ask model to be overridden for Anthropic-compatible providers', () => {
     const httpServer = fs.readFileSync('src/http-server.ts', 'utf8');
     const askProvider = fs.readFileSync('src/lib/ask-provider.ts', 'utf8');
+    const providerRuntime = fs.readFileSync('src/lib/provider-runtime.ts', 'utf8');
 
-    expect(httpServer).toContain('const ASK_MODEL');
-    expect(httpServer).toContain('resolveAskModel()');
+    expect(providerRuntime).toContain('const model = resolveAskModel(env)');
+    expect(providerRuntime).toContain('createOpenAICompatibleAskSession');
+    expect(providerRuntime).toContain('createAnthropicAskSession');
     expect(askProvider).toContain('ANTHROPIC_DEFAULT_SONNET_MODEL');
     expect(askProvider).toContain('ANTHROPIC_MODEL');
     expect(httpServer).toContain('ANTHROPIC_TIMEOUT_MS');
     expect(httpServer).toContain('API_TIMEOUT_MS');
     expect(httpServer).toContain('anthropicClientOptions');
     expect(httpServer).toContain('authToken');
-    expect(httpServer).toContain('createOpenAICompatibleAskSession');
+    expect(httpServer).toContain('createProviderRuntime');
     expect(askProvider).toContain('OPENAI_BASE_URL');
     expect(askProvider).toContain('LM_STUDIO_MODEL');
     expect(askProvider).toContain('glm-5v-turbo');

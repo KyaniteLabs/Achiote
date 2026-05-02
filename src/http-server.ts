@@ -170,9 +170,11 @@ const allowedTelemetryEvents = new Set([
   'feedback_missed_correction',
   'feedback_missed_name_correction',
   'receipt_downloaded',
+  'receipt_share_copied',
   'family_questions_copied',
+  'waitlist_submitted',
 ]);
-const allowedTelemetryProperties = new Set(['route', 'source', 'category', 'tier', 'mode', 'billing', 'reason', 'hasHistory']);
+const allowedTelemetryProperties = new Set(['route', 'source', 'category', 'tier', 'mode', 'billing', 'reason', 'hasHistory', 'emailDomain']);
 const MAX_TELEMETRY_VALUES_PER_PROPERTY = 25;
 const OTHER_TELEMETRY_VALUE = 'other';
 const telemetryCounters = new Map<string, number>();
@@ -2324,6 +2326,12 @@ async function serveStatic(req: IncomingMessage, res: ServerResponse): Promise<b
     '/': 'index.html',
     '/app': 'app.html',
     '/about': 'about.html',
+    '/pricing': 'pricing.html',
+    '/roadmap': 'roadmap.html',
+    '/changelog': 'changelog.html',
+    '/status': 'status.html',
+    '/blog': 'blog.html',
+    '/receipt': 'receipt.html',
     '/privacy': 'privacy.html',
     '/terms': 'terms.html',
     '/support': 'support.html',

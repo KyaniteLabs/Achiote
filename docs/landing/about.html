@@ -1,17 +1,52 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About — Achiote</title>
-  <meta http-equiv="refresh" content="0; url=/">
-  <link rel="canonical" href="https://achiote.kyanitelabs.tech/">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>About | Achiote</title>
+  <meta name="description" content="Achiote is food-memory forensics by Kyanite Labs: evidence-separated reconstruction for family dishes and drinks." />
+  <link rel="canonical" href="https://achiote.kyanitelabs.tech/about" />
   <style>
-    body { font-family: Georgia, serif; background: #FFF7E8; color: #2A1810; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
-    a { color: #C75B3A; }
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #2a1a0e; background: #fff8f0; line-height: 1.65; }
+    nav, main, footer { width: calc(100% - 32px); max-width: 1040px; margin: 0 auto; }
+    nav, footer { padding: 20px 0; }
+    main { padding: 36px 0 72px; }
+    a { color: #8b3210; font-weight: 700; }
+    h1 { font-size: clamp(2.2rem, 8vw, 4.4rem); line-height: 1; margin: 24px 0; max-width: 860px; }
+    h2 { margin-top: 0; }
+    .lede { font-size: clamp(1.15rem, 3vw, 1.45rem); max-width: 780px; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin: 28px 0; }
+    .panel { background: #fffdfc; border: 1px solid rgba(181, 69, 27, .18); border-radius: 12px; padding: 20px; }
+    footer { color: #6b5744; }
+    @media (max-width: 760px) { .grid { grid-template-columns: 1fr; } h1 { font-size: 2.4rem; } }
   </style>
 </head>
 <body>
-  <p>Redirecting to <a href="/">Achiote</a>...</p>
+  <nav><a href="/">Achiote</a> / About</nav>
+  <main>
+    <h1>Food-memory forensics, built for families and agents.</h1>
+    <p class="lede">Achiote exists because a lost dish or drink rarely starts with a clean recipe name. It starts with a smell, a texture, a sound-alike word, a person, and a lot of uncertainty.</p>
+
+    <div class="grid">
+      <section class="panel">
+        <h2>Who is behind it</h2>
+        <p>Achiote is published by Kyanite Labs and maintained as a source-available Model Context Protocol server plus hosted food-memory app.</p>
+        <p>Contact: <a href="mailto:support@kyanitelabs.tech">support@kyanitelabs.tech</a>.</p>
+      </section>
+      <section class="panel">
+        <h2>What we protect</h2>
+        <p>We separate what the user said, what research supports, what the model inferred, and what remains unknown. That evidence boundary is the product.</p>
+      </section>
+    </div>
+
+    <section class="panel">
+      <h2>Why Achiote exists</h2>
+      <p>Generic AI can be fluent too early. Recipe search assumes you already know the name. Achiote slows the answer down long enough to ask better questions, preserve provenance, and test the smallest bite or sip before anyone spends money or cooks a full dish.</p>
+    </section>
+  </main>
+  <footer>
+    <a href="/app">Try the memory detective</a> · <a href="/pricing">Pricing</a> · <a href="/support">Support</a>
+  </footer>
 </body>
 </html>

@@ -32,6 +32,18 @@ function trackEvent(event, properties = {}) {
 
 trackEvent('page_view', { route: '/' });
 
+const waitlistForm = document.getElementById('waitlist-form');
+if (waitlistForm) {
+  waitlistForm.addEventListener('submit', () => {
+    const input = document.getElementById('waitlist-email');
+    const email = input instanceof HTMLInputElement ? input.value.trim() : '';
+    const domain = email.includes('@') ? email.split('@').pop().toLowerCase() : 'unknown';
+    trackEvent('waitlist_submitted', { route: '/', source: 'hero', emailDomain: domain });
+    const note = document.getElementById('waitlist-note');
+    if (note) note.textContent = 'Thanks. Your email app will open so you can send the launch request.';
+  });
+}
+
 // Dark mode
 const themeToggle = document.getElementById('theme-toggle');
 const html = document.documentElement;
