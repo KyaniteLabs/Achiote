@@ -10631,6 +10631,102 @@
         "confidence": "Medium",
         "createdAt": "2026-04-30T00:00:00.000Z"
       }
+    },
+    {
+      "seedId": "curry-cream-tomato-substitution-roles",
+      "cacheTarget": {
+        "dishFamily": "cream-tomato-curry",
+        "region": "South Asia diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.starch_texture",
+        "nameSystems.menu_name",
+        "regionScopes.diaspora"
+      ],
+      "record": {
+        "dishName": "cream-tomato-curry",
+        "query": "butter chicken murgh makhani tomato cream curry substitution sensory role mapping structured data",
+        "sources": [
+          {
+            "title": "butter chicken (Q1322549) structured data",
+            "url": "https://www.wikidata.org/wiki/Q1322549",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q1322549 has English label \"butter chicken\".",
+              "Wikidata item Q1322549 lists \"murgh makhani\" as an alias.",
+              "Wikidata item Q1322549 describes an Indian curry."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "cream-tomato-curry",
+            "butter chicken",
+            "murgh makhani",
+            "tomato cream curry",
+            "makhani gravy",
+            "creamy curry"
+          ],
+          "regions": [
+            "macro:South Asia",
+            "diaspora:Global",
+            "South Asia diaspora"
+          ],
+          "ingredients": [
+            "tomato",
+            "cream or dairy fat",
+            "butter or ghee",
+            "cashew or nut body",
+            "chicken or protein bite",
+            "flatbread or rice carrier"
+          ],
+          "techniques": [
+            "sauce balance",
+            "fat mouthfeel",
+            "spice aroma",
+            "starch carrier pairing",
+            "substitution role mapping"
+          ],
+          "sensoryDescriptors": [
+            "tomato acidity and sweetness",
+            "cream or nut body",
+            "warm spice aroma",
+            "fat-rounded sauce",
+            "protein bite",
+            "starch carrier texture"
+          ],
+          "culturalOccasions": [
+            "restaurant menu memory",
+            "diaspora comfort-food cue",
+            "family adaptation request"
+          ],
+          "regionalVariants": [
+            "Structured-data grounding covers broad butter chicken and murgh makhani naming, not household-specific sauce balance.",
+            "Use this record to preserve sensory jobs before substitutions: tomato body, fat, spice aroma, protein bite, and starch carrier."
+          ]
+        },
+        "uncertainty": [
+          "This record maps sensory roles for substitution planning; it is not dietary, medical, halal, vegan, nut-free, or gluten-free safety advice.",
+          "Exact household spice blend, dairy or nut role, protein choice, and starch carrier must come from the user or family confirmation.",
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
     }
   ]
 }

@@ -181,14 +181,17 @@ describe('weak cloud runner hardening', () => {
       },
     }));
     fs.appendFileSync(`${root}/src/data/reference-pantry-fixtures.json`, '\n');
-    const second = selectWeakCloudPromptBank({ root, artifactDir: `${root}/artifacts/current-run` });
+    const second = selectWeakCloudPromptBank({
+      root,
+      artifactDir: `${root}/artifacts/current-run`,
+      requestedBankId: first.id,
+    });
 
     expect(weakCloudPromptBanks.length).toBeGreaterThanOrEqual(3);
     expect(second.referenceFingerprint).not.toBe(first.referenceFingerprint);
-    if (second.previousPromptBankId === first.id) {
-      expect(second.id).not.toBe(first.id);
-      expect(second.rotatedAfterReferenceUpdate).toBe(true);
-    }
+    expect(second.previousPromptBankId).toBe(first.id);
+    expect(second.id).not.toBe(first.id);
+    expect(second.rotatedAfterReferenceUpdate).toBe(true);
     expect(new Set(second.prompts.map((prompt: { id: string }) => prompt.id)).size).toBe(second.prompts.length);
   });
 
