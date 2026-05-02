@@ -4,6 +4,7 @@ import { createServer as createNetServer } from 'node:net';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import { writeQaRunManifest } from './lib/qa-artifact-pipeline.mjs';
 
 const DEFAULT_MODEL = 'qwen3.5-0.8b';
 const DEFAULT_BASE_URL = 'http://100.66.225.85:1234/v1';
@@ -462,9 +463,24 @@ function writeArtifacts(summary) {
   const baseName = `${stamp}-${model.replace(/[^a-zA-Z0-9._-]/g, '-')}`;
   const jsonPath = path.join(artifactRoot, `${baseName}.json`);
   const markdownPath = path.join(artifactRoot, `${baseName}.md`);
+  const manifestPath = path.join(artifactRoot, 'run-manifest.json');
   fs.writeFileSync(jsonPath, JSON.stringify(summary, null, 2));
   fs.writeFileSync(markdownPath, renderMarkdown(summary, jsonPath));
-  return { jsonPath, markdownPath };
+  writeQaRunManifest(manifestPath, {
+    root,
+    artifactDir: artifactRoot,
+    runKind: 'local-canary-qa',
+    stopCondition: 'Stop after selected local canary cases or provider/runtime failure threshold.',
+    promptIds: summary.results.map((result) => result.id),
+    sampleCount: summary.total,
+    providers: ['local'],
+    models: [summary.model],
+    profile: canaryProfile,
+    endpointStyle: 'openai-chat-completions',
+    forbiddenLabels: ['false_browsing_claim', 'full_recipe_drift', 'overconfident_identity', 'forbidden_tool:search_web'],
+    outputs: { jsonPath, markdownPath },
+  });
+  return { jsonPath, markdownPath, manifestPath };
 }
 
 function renderMarkdown(summary, jsonPath) {

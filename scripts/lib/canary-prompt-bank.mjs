@@ -1,6 +1,5 @@
-import { createHash } from 'node:crypto';
-import fs from 'node:fs';
 import path from 'node:path';
+import { latestPriorQaManifest, referenceDataFingerprint } from './qa-artifact-pipeline.mjs';
 
 export const weakCloudPromptBanks = [
   {
@@ -114,7 +113,7 @@ export function selectWeakCloudPromptBank(options = {}) {
   const root = options.root ?? process.cwd();
   const artifactDir = options.artifactDir ? path.resolve(options.artifactDir) : undefined;
   const referenceFingerprint = referenceDataFingerprint(root);
-  const priorManifest = latestPriorWeakCloudManifest(root, artifactDir);
+  const priorManifest = latestPriorQaManifest(root, artifactDir);
   const requestedBankId = options.requestedBankId || process.env.ACHIOTE_CANARY_PROMPT_BANK;
   const baseBank = requestedBankId
     ? promptBankById(requestedBankId)
@@ -153,57 +152,4 @@ function rotateAfterReferenceUpdate(bank, priorManifest, referenceFingerprint) {
   }
   const index = weakCloudPromptBanks.findIndex((item) => item.id === bank.id);
   return weakCloudPromptBanks[(index + 1) % weakCloudPromptBanks.length];
-}
-
-function latestPriorWeakCloudManifest(root, artifactDir) {
-  const artifactsRoot = path.join(root, 'artifacts');
-  if (!fs.existsSync(artifactsRoot)) return undefined;
-  const manifestPaths = findManifestPaths(artifactsRoot)
-    .filter((manifestPath) => !artifactDir || !manifestPath.startsWith(`${artifactDir}${path.sep}`));
-  const manifests = manifestPaths
-    .map((manifestPath) => ({ manifestPath, stat: safeStat(manifestPath) }))
-    .filter((item) => item.stat)
-    .sort((left, right) => right.stat.mtimeMs - left.stat.mtimeMs);
-  for (const item of manifests) {
-    try {
-      const parsed = JSON.parse(fs.readFileSync(item.manifestPath, 'utf8'));
-      if (parsed?.promptBank?.id) return parsed;
-    } catch {
-      // Ignore incomplete or stale artifacts.
-    }
-  }
-  return undefined;
-}
-
-function findManifestPaths(root) {
-  const entries = fs.readdirSync(root, { withFileTypes: true });
-  return entries.flatMap((entry) => {
-    const entryPath = path.join(root, entry.name);
-    if (entry.isDirectory()) return findManifestPaths(entryPath);
-    return entry.name === 'run-manifest.json' ? [entryPath] : [];
-  });
-}
-
-function safeStat(filePath) {
-  try {
-    return fs.statSync(filePath);
-  } catch {
-    return undefined;
-  }
-}
-
-function referenceDataFingerprint(root) {
-  const hasher = createHash('sha256');
-  for (const relativePath of [
-    'src/data/reference-pantry-fixtures.json',
-    'src/data/reference-seed-queue.json',
-    'src/data/cache-warming-manifest.json',
-  ]) {
-    const absolutePath = path.join(root, relativePath);
-    hasher.update(relativePath);
-    hasher.update('\0');
-    hasher.update(fs.existsSync(absolutePath) ? fs.readFileSync(absolutePath) : '');
-    hasher.update('\0');
-  }
-  return hasher.digest('hex').slice(0, 16);
 }

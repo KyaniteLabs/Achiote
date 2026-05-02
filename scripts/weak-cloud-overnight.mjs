@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { selectWeakCloudPromptBank } from './lib/canary-prompt-bank.mjs';
+import { buildQaRunManifest } from './lib/qa-artifact-pipeline.mjs';
 import { qualityFindings } from './lib/weak-cloud-quality.mjs';
 import { shouldStartRound } from './lib/weak-cloud-schedule.mjs';
 
@@ -196,9 +197,26 @@ function parseJsonBody(rawBody) {
 }
 
 function writeRunManifest(extra = {}) {
+  const sharedManifest = buildQaRunManifest({
+    root,
+    artifactDir,
+    runKind: 'weak-cloud-overnight',
+    stopCondition: `Run waves until ${endAt.toISOString()} or until shutdown.`,
+    promptBank: selectedPromptBank,
+    promptIds: prompts.map((prompt) => prompt.id),
+    searchDisabledPromptIds: [...searchDisabledPromptIds],
+    providers: ['local', 'openrouter', 'glm'],
+    models: [...localPriority, ...openRouterPriority, ...glmMatrix.map((entry) => entry.model)],
+    profile: localProfile,
+    endpointStyle: localEndpointStyle,
+    excludedEvidenceReasons: ['control_flow_violation', 'provider_path_failure', 'wrapper_quality_regression'],
+    outputs: { jsonlPath, summaryPath, statePath, logPath, marketingPath },
+  });
   const manifest = {
+    ...sharedManifest,
     generatedAt: new Date().toISOString(),
     artifactDir,
+    qaArtifactPipeline: sharedManifest,
     timeoutBudget: {
       nakedProviderTimeoutMs,
       achioteAskTimeoutMs,
