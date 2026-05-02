@@ -20,7 +20,8 @@ import { createAccountAccess, rateLimitHeaders, type AuthedRequest } from './lib
 import { BillingDb, defaultBillingDbPath } from './lib/billing-db.js';
 import { BillingStripe, loadBillingConfigFromEnv, type CheckoutTier } from './lib/billing-stripe.js';
 import { getHttpReadiness, getRequestRateLimitIdentity, shouldApplyRateLimit } from './lib/http-runtime.js';
-import { resolveLocalSpeechConfig, synthesizeWithLocalSpeech, transcribeWithLocalSpeech, validateSpeechAudioPayload, validateSpeechTextPayload } from './lib/local-speech.js';
+import { resolveLocalSpeechConfig } from './lib/local-speech.js';
+import { createLocalSpeechController } from './lib/local-speech-controller.js';
 import { buildMemoryReceipt } from './lib/memory-receipt.js';
 import { buildAskQualitySignal, emptyQualitySignalReport, inferAskCacheOutcome, recordQualitySignal } from './lib/quality-signals.js';
 import { createProviderRuntime } from './lib/provider-runtime.js';
@@ -134,6 +135,7 @@ const billingDb = billingConfig
   : null;
 const billingStripe = billingConfig ? new BillingStripe(billingConfig) : null;
 const localSpeechConfig = resolveLocalSpeechConfig();
+const localSpeechController = createLocalSpeechController(localSpeechConfig);
 
 const AUTH_ENABLED = process.env.ACHIOTE_AUTH_ENABLED !== 'false';
 const DEMO_PASSWORD = process.env.ACHIOTE_DEMO_PASSWORD?.trim();
@@ -1906,32 +1908,16 @@ async function handleVoiceTranscribe(req: IncomingMessage, res: ServerResponse):
   if (!authenticateVoiceRequest(req, res)) return;
   const parsed = await readJsonBody(req, res, MAX_SPEECH_REQUEST_BYTES);
   if (parsed === null) return;
-  const payload = validateSpeechAudioPayload(parsed);
-  if (!payload.ok) { sendJson(res, 400, { error: payload.error }); return; }
-  if (!localSpeechConfig.stt.ready) { sendJson(res, 503, { error: localSpeechConfig.stt.reason || 'speech-to-text is not ready' }); return; }
-
-  try {
-    const transcript = await transcribeWithLocalSpeech(localSpeechConfig, payload);
-    sendJson(res, 200, transcript);
-  } catch (err) {
-    sendJson(res, 502, { error: err instanceof Error ? err.message : 'Local transcription failed' });
-  }
+  const response = await localSpeechController.transcribe(parsed);
+  sendJson(res, response.status, response.body);
 }
 
 async function handleVoiceSynthesize(req: IncomingMessage, res: ServerResponse): Promise<void> {
   if (!authenticateVoiceRequest(req, res)) return;
   const parsed = await readJsonBody(req, res, 32_000);
   if (parsed === null) return;
-  const payload = validateSpeechTextPayload(parsed);
-  if (!payload.ok) { sendJson(res, 400, { error: payload.error }); return; }
-  if (!localSpeechConfig.tts.ready) { sendJson(res, 503, { error: localSpeechConfig.tts.reason || 'text-to-speech is not ready' }); return; }
-
-  try {
-    const speech = await synthesizeWithLocalSpeech(localSpeechConfig, payload);
-    sendJson(res, 200, speech);
-  } catch (err) {
-    sendJson(res, 502, { error: err instanceof Error ? err.message : 'Local speech synthesis failed' });
-  }
+  const response = await localSpeechController.synthesize(parsed);
+  sendJson(res, response.status, response.body);
 }
 
 function containsConcreteFoodCue(text: string): boolean {
@@ -2513,7 +2499,7 @@ const server = createServer(async (req, res) => {
   }
 
   if (pathname === '/voice/status') {
-    sendJson(res, 200, localSpeechConfig);
+    sendJson(res, 200, localSpeechController.status());
     return;
   }
 
