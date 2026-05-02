@@ -11,6 +11,7 @@ import type { AskHistoryItem, AskImage, AskModelResponse } from './lib/ask-provi
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { isInitializeRequest } from '@modelcontextprotocol/sdk/types.js';
 import { createAchioteServer } from './server.js';
+import { createAskTurnState, runDeterministicWorkflowPlan } from './lib/ask-controller.js';
 import { buildAskCaseFile, formatAskCaseFileForModel } from './lib/ask-case-file.js';
 import { createCacheWithStatus } from './lib/cache-path.js';
 import { createAuthenticator, loadKeysFromEnv } from './lib/auth.js';
@@ -519,31 +520,21 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
 
   try {
     const askSession = createAskSession(userMessage, history, images.value);
-    const calledTools = new Set<string>();
-    const toolPayloads: Record<string, unknown> = {};
-    const deterministicPlanInput = { userMessage };
-    let didInjectPlanToolResult = false;
+    const askTurn = createAskTurnState(userMessage);
+    const { calledTools, toolPayloads, deterministicPlanInput } = askTurn;
     const finish: DoneSender = (data = {}) => {
       recordAskCompletion(toolPayloads, calledTools, data, consent);
       send('done', data);
     };
 
-    // Execute plan_tool_workflow deterministically — do not rely on the model to call it.
-    send('status', { stage: 'routing', tool: 'plan_tool_workflow' });
-    try {
-      const planResult = await executeToolDefinition('plan_tool_workflow', deterministicPlanInput, toolContext);
-      calledTools.add('plan_tool_workflow');
-      toolPayloads.plan_tool_workflow = planResult.payload;
-      askSession.injectDeterministicToolResult('deterministic_plan_tool_workflow', 'plan_tool_workflow', deterministicPlanInput, planResult.payload);
-      didInjectPlanToolResult = true;
-      configureAvailableAskTools(askSession, toolPayloads, calledTools);
-      send('tool_call', { name: 'plan_tool_workflow', input: deterministicPlanInput, deterministic: true });
-      send('tool_result', { name: 'plan_tool_workflow', result: planResult.payload, deterministic: true });
-      console.log(`[ask] plan_tool_workflow: intent=${(planResult.payload as Record<string, unknown>)?.detectedIntent} maxSearch=${(planResult.payload as Record<string, unknown>)?.maxSearchCalls}`);
-    } catch (err) {
-      console.warn('[ask] plan_tool_workflow failed, using defaults:', err instanceof Error ? err.message : String(err));
-      configureAvailableAskTools(askSession, toolPayloads, calledTools);
-    }
+    await runDeterministicWorkflowPlan({
+      askSession,
+      state: askTurn,
+      toolContext,
+      executeTool: executeToolDefinition,
+      configureAvailableTools: configureAvailableAskTools,
+      send,
+    });
 
     const nativeToolSupport = await selectedProviderSupportsNativeTools();
     if (nativeToolSupport === false) {
@@ -584,7 +575,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
     }
 
     let iterations = 0;
-    const toolCallHistory: Array<{ name: string; input: unknown }> = didInjectPlanToolResult
+    const toolCallHistory: Array<{ name: string; input: unknown }> = askTurn.didInjectPlanToolResult
       ? [{ name: 'plan_tool_workflow', input: deterministicPlanInput }]
       : [];
     const MAX_TOOL_CALLS_PER_NAME = 5;
