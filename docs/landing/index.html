@@ -820,17 +820,12 @@
         <div class="container hero-grid">
           <div>
             <div class="eyebrow"><span>Food Memory Detective</span></div>
-            <h1>Remember the dish. Or the drink. <span class="accent">Find the taste. Test one bite or sip.</span></h1>
-            <p>Turn fragile clues into a Memory Receipt — then one cheap taste test before a full recipe or drink.</p>
+            <h1>The dish you remember but can't name.</h1>
+            <p>Describe what you remember — a smell, a texture, a nickname, who made it. Achiote turns fragments into a research plan and suggests one small taste test before you cook a full recipe.</p>
             <div class="cta-row">
-              <a class="button primary" href="/app">Reconstruct a memory</a>
+              <a class="button primary" href="/app">Find my dish</a>
               <a class="button secondary" href="/sample-reconstruction-artifact.md">See a Memory Receipt</a>
             </div>
-            <form class="waitlist-form" id="waitlist-form" action="mailto:hello@kyanitelabs.tech" method="post" enctype="text/plain">
-              <input id="waitlist-email" name="email" type="email" autocomplete="email" placeholder="Email for launch updates" aria-label="Email for launch updates" required />
-              <button type="submit">Get launch updates</button>
-            </form>
-            <p class="waitlist-note" id="waitlist-note">Low-volume launch updates. No family memory text belongs in this field.</p>
           </div>
           <aside class="memory-card" aria-label="Example food memory card">
             <div class="note-label">The kind of input it handles</div>
@@ -994,7 +989,7 @@
           <div class="grid-3">
             <article class="card reveal"><span class="tag">Evidence first</span><h3>Memory Receipt</h3><p>Every answer can leave behind a receipt separating User-said, Inferred, Researched, and Unknown evidence so the family can correct it.</p></article>
             <article class="card reveal"><span class="tag">Smallest proof</span><h3>First tiny taste test</h3><p>Before a full recipe, Achiote asks what tiny bite, aroma, sauce, starch, acid, or texture would prove the trail is worth following.</p></article>
-            <article class="card reveal"><span class="tag">Comparison</span><h3>Why not just use ChatGPT or Google?</h3><p><a href="/compare" style="color: var(--achiote); text-decoration: underline;">See the product comparison</a> for where Achiote adds structure, receipts, and feedback loops.</p></article>
+            <article class="card reveal"><span class="tag">Built for fragments</span><h3>When the name is missing</h3><p>Recipe search works when you know the dish. Achiote works when the memory is wrong, borrowed, half-forgotten, or in a language you don't speak. <a href="/compare" style="color: var(--achiote); text-decoration: underline;">See how it differs</a>.</p></article>
           </div>
         </div>
       </section>
@@ -1007,10 +1002,10 @@
           </div>
           <div class="workflow">
             <div class="step reveal"><span class="step-number">1</span><div><h3>Collect the memory</h3><p>Achiote structures the input; your AI asks gentle follow-up questions. Capture rough names, region clues, ingredients, sensory details, and the gaps in what someone remembers.</p></div></div>
-            <div class="step reveal"><span class="step-number">2</span><div><h3>Research before guessing</h3><p>Your host AI can search the web; Achiote plans the research strategy. Turn clues into hypotheses, facts to verify, and the right questions to ask family members.</p></div></div>
-            <div class="step reveal"><span class="step-number">3</span><div><h3>Keep the picture honest</h3><p>Achiote labels every claim: what someone said, what research found, what the AI guessed, and what's still unknown — all visible, nothing pretending to be certain.</p></div></div>
-            <div class="step reveal"><span class="step-number">4</span><div><h3>Find the smallest taste that proves it</h3><p>Achiote generates a grocery-store cue — a single bite, sip, or aroma — to test whether the memory is on the right track, before anyone commits to a full recipe or drink.</p></div></div>
-            <div class="step reveal"><span class="step-number">5</span><div><h3>Help them find it nearby</h3><p>Once a cue works, Achiote suggests where to source ingredients and what to substitute. Your AI helps the user find shops near where they live now.</p></div></div>
+            <div class="step reveal"><span class="step-number">2</span><div><h3>Research before guessing</h3><p>Achiote turns your fragments into a research plan — what to look up, what to ask family members, and what facts still need verification.</p></div></div>
+            <div class="step reveal"><span class="step-number">3</span><div><h3>Keep the picture honest</h3><p>Every claim gets a label: what you said, what research found, what was inferred, and what's still unknown. Nothing pretends to be certain.</p></div></div>
+            <div class="step reveal"><span class="step-number">4</span><div><h3>Find the smallest taste that proves it</h3><p>Achiote suggests a grocery-store cue — a single bite, sip, or aroma — to test whether you're on the right track, before you commit to a full recipe.</p></div></div>
+            <div class="step reveal"><span class="step-number">5</span><div><h3>Find ingredients nearby</h3><p>Once a cue works, Achiote suggests where to source ingredients and what pantry substitutes to try if the original items aren't available.</p></div></div>
           </div>
         </div>
       </section>
@@ -1141,8 +1136,8 @@ startup_timeout_sec = <span class="tk-num">10</span></pre>
       <section>
         <div class="container">
           <div class="trust reveal">
-            <h2>Honesty is part of the experience.</h2>
-            <p>Achiote makes your AI more useful by making uncertainty visible and the next test smaller.</p>
+            <h2>Know what you know. See what you don't.</h2>
+            <p>Achiote labels every claim so family members can correct the record — and no guess pretends to be a fact.</p>
             <ul>
               <li>Your AI does the live research. Achiote structures it.</li>
               <li>What someone remembers, what research found, what the AI guessed, and what's unknown — all labeled.</li>
@@ -1265,6 +1260,17 @@ startup_timeout_sec = <span class="tk-num">10</span></pre>
               <h3>Is Achiote free?</h3>
               <p>Achiote is source-available under the Business Source License 1.1. The hosted app includes 3 guided memories per month. Personal is $9/month or $59/year, Memory Pack is $49 one-time for 25 guided memories with no subscription, Family Archive is $39/month, and Commercial starts from $299/month with pilots from $1,500. Hosted API and MCP access require a commercial license.</p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section style="padding: 64px 0; background: linear-gradient(135deg, rgba(242,184,75,.08), rgba(207,232,216,.12), rgba(155,74,27,.04)); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);">
+        <div class="container" style="text-align: center;">
+          <h2 style="margin: 0 0 16px; font-size: clamp(1.6rem, 3.5vw, 2.8rem); letter-spacing: -0.04em;">Ready to find the dish you thought was lost?</h2>
+          <p style="margin: 0 0 28px; color: var(--muted); font-size: 1.05rem; max-width: 520px; margin-left: auto; margin-right: auto;">Start with what you remember. Even a smell, a texture, or half a name is enough.</p>
+          <div class="cta-row" style="justify-content: center;">
+            <a class="button primary" href="/app">Find my dish</a>
+            <a class="button secondary" href="/sample-reconstruction-artifact.md">See a Memory Receipt</a>
           </div>
         </div>
       </section>

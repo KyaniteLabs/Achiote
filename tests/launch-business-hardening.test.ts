@@ -30,11 +30,11 @@ describe('launch business hardening', () => {
     const page = landing();
     const appPage = app();
 
-    expect(page).toContain('Remember the dish. Or the drink.');
+    expect(page).toContain("The dish you remember but can't name.");
     expect(page).toContain('food-memory forensics');
     expect(page).toContain('Memory Receipt');
-    expect(page).toContain('one cheap taste test before a full recipe or drink');
-    expect(page.indexOf('Remember the dish. Or the drink.')).toBeLessThan(page.indexOf('MCP'));
+    expect(page).toContain('one small taste test before you cook a full recipe');
+    expect(page.indexOf("The dish you remember but can't name.")).toBeLessThan(page.indexOf('MCP'));
     expect(appPage).toContain('Food Memory Detective');
     expect(page).not.toContain('AI Food Memory Reconstruction | Source-Available MCP Server');
   });
@@ -89,7 +89,6 @@ describe('launch business hardening', () => {
     expect(server()).toContain("'receipt_share_copied'");
     expect(server()).toContain("'family_questions_copied'");
     expect(server()).toContain("'waitlist_submitted'");
-    expect(landing()).toContain('id="waitlist-form"');
     expect(fs.readFileSync('docs/landing/index.js', 'utf8')).toContain("trackEvent('waitlist_submitted'");
     expect(fs.readFileSync('docs/landing/index.js', 'utf8')).toContain('emailDomain');
     expect(appJs()).toContain("navigator.sendBeacon('/events'");

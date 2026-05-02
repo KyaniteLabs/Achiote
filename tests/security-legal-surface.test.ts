@@ -21,7 +21,7 @@ describe('security and legal surface guardrails', () => {
     const readme = read('README.md');
     const architecture = read('docs/ARCHITECTURE.md');
 
-    expect(landing).toContain('Your host AI can search the web; Achiote plans the research strategy.');
+    expect(landing).toContain('Your AI does the live research');
     expect(copyProposal).toContain('Your host AI can search the web; Achiote plans the research strategy');
     expect(auditProposal).toContain('Your host AI can search the web; Achiote plans the research strategy');
     expect(`${landing}\n${auditProposal}\n${copyProposal}\n${readme}\n${architecture}`).not.toMatch(/\bAchiote\s+(?:searches|browses|scrapes)\s+(?:the\s+)?web\b/i);
