@@ -29607,6 +29607,452 @@
           "Warm only from approved typed ResearchRecord fixtures or host-led public research artifacts."
         ]
       }
+    },
+    {
+      "id": "warm-exp8-source-usda-warm-spice-aroma",
+      "seedId": "exp8-source-usda-warm-spice-aroma",
+      "cacheTarget": {
+        "dishFamily": "warm-spice-aroma",
+        "region": "Ingredient composition context"
+      },
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "cultureAreas.diaspora_global",
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pantry_single_ingredient",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "nameSystems.family_nickname",
+        "regionScopes.city",
+        "regionScopes.diaspora",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "source_diversity",
+        "ingredient_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has ingredient or commodity names, uncertainty, source metadata, and no nutrient or health interpretation"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming USDA source-diversity task",
+        "notes": [
+          "Warm only from public-domain FoodData Central metadata or approved typed fixtures."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp8-source-usda-seed-spice-toasting",
+      "seedId": "exp8-source-usda-seed-spice-toasting",
+      "cacheTarget": {
+        "dishFamily": "seed-spice-toasting",
+        "region": "Ingredient composition context"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.south_asia",
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pantry_single_ingredient",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "nameSystems.alias",
+        "regionScopes.city",
+        "regionScopes.diaspora",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "source_diversity",
+        "ingredient_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has ingredient or commodity names, uncertainty, source metadata, and no nutrient or health interpretation"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming USDA source-diversity task",
+        "notes": [
+          "Warm only from public-domain FoodData Central metadata or approved typed fixtures."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp8-source-usda-dried-herb-aroma",
+      "seedId": "exp8-source-usda-dried-herb-aroma",
+      "cacheTarget": {
+        "dishFamily": "dried-herb-aroma",
+        "region": "Ingredient composition context"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.south_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pantry_single_ingredient",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "nameSystems.family_nickname",
+        "regionScopes.city",
+        "regionScopes.diaspora",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "source_diversity",
+        "ingredient_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has ingredient or commodity names, uncertainty, source metadata, and no nutrient or health interpretation"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming USDA source-diversity task",
+        "notes": [
+          "Warm only from public-domain FoodData Central metadata or approved typed fixtures."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp8-source-usda-chile-powder-heat",
+      "seedId": "exp8-source-usda-chile-powder-heat",
+      "cacheTarget": {
+        "dishFamily": "chile-powder-heat",
+        "region": "Ingredient composition context"
+      },
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "cultureAreas.diaspora_global",
+        "cultureAreas.south_asia",
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pantry_single_ingredient",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "mechanisms.serving_ritual",
+        "nameSystems.alias",
+        "nameSystems.family_nickname",
+        "regionScopes.diaspora",
+        "regionScopes.macro_region",
+        "regionScopes.nation"
+      ],
+      "qualityTriggers": [
+        "source_diversity",
+        "ingredient_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has ingredient or commodity names, uncertainty, source metadata, and no nutrient or health interpretation"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming USDA source-diversity task",
+        "notes": [
+          "Warm only from public-domain FoodData Central metadata or approved typed fixtures."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp8-source-usda-cooking-fat-aroma",
+      "seedId": "exp8-source-usda-cooking-fat-aroma",
+      "cacheTarget": {
+        "dishFamily": "cooking-fat-aroma",
+        "region": "Ingredient composition context"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pantry_single_ingredient",
+        "mechanisms.aroma",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "nameSystems.alias",
+        "nameSystems.family_nickname",
+        "regionScopes.city",
+        "regionScopes.diaspora",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "source_diversity",
+        "ingredient_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has ingredient or commodity names, uncertainty, source metadata, and no nutrient or health interpretation"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming USDA source-diversity task",
+        "notes": [
+          "Warm only from public-domain FoodData Central metadata or approved typed fixtures."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp8-source-usda-fermented-paste-umami",
+      "seedId": "exp8-source-usda-fermented-paste-umami",
+      "cacheTarget": {
+        "dishFamily": "fermented-paste-umami",
+        "region": "Ingredient composition context"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.east_asia",
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pantry_single_ingredient",
+        "foodForms.sauce_condiment",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "nameSystems.script_form",
+        "nameSystems.transliteration",
+        "regionScopes.city",
+        "regionScopes.diaspora",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "source_diversity",
+        "ingredient_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has ingredient or commodity names, uncertainty, source metadata, and no nutrient or health interpretation"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming USDA source-diversity task",
+        "notes": [
+          "Warm only from public-domain FoodData Central metadata or approved typed fixtures."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp8-source-usda-dried-fruit-preserve",
+      "seedId": "exp8-source-usda-dried-fruit-preserve",
+      "cacheTarget": {
+        "dishFamily": "dried-fruit-preserve",
+        "region": "Ingredient composition context"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.north_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.pantry_single_ingredient",
+        "mechanisms.aroma",
+        "mechanisms.sugar_crystal",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "nameSystems.family_nickname",
+        "regionScopes.diaspora",
+        "regionScopes.macro_region",
+        "regionScopes.religious_ritual"
+      ],
+      "qualityTriggers": [
+        "source_diversity",
+        "ingredient_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has ingredient or commodity names, uncertainty, source metadata, and no nutrient or health interpretation"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming USDA source-diversity task",
+        "notes": [
+          "Warm only from public-domain FoodData Central metadata or approved typed fixtures."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp8-source-usda-lentil-soup",
+      "seedId": "exp8-source-usda-lentil-soup",
+      "cacheTarget": {
+        "dishFamily": "lentil-soup",
+        "region": "Ingredient composition context"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.soup_broth",
+        "foodForms.stew_braise",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "nameSystems.transliteration",
+        "regionScopes.city",
+        "regionScopes.diaspora",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "source_diversity",
+        "ingredient_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has ingredient or commodity names, uncertainty, source metadata, and no nutrient or health interpretation"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming USDA source-diversity task",
+        "notes": [
+          "Warm only from public-domain FoodData Central metadata or approved typed fixtures."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp8-source-usda-noodle-broth",
+      "seedId": "exp8-source-usda-noodle-broth",
+      "cacheTarget": {
+        "dishFamily": "noodle-broth",
+        "region": "Ingredient composition context"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.east_asia",
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.grain_rice_noodle",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "nameSystems.menu_name",
+        "nameSystems.transliteration",
+        "regionScopes.city",
+        "regionScopes.diaspora",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "source_diversity",
+        "ingredient_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has ingredient or commodity names, uncertainty, source metadata, and no nutrient or health interpretation"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming USDA source-diversity task",
+        "notes": [
+          "Warm only from public-domain FoodData Central metadata or approved typed fixtures."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp8-source-usda-fish-broth",
+      "seedId": "exp8-source-usda-fish-broth",
+      "cacheTarget": {
+        "dishFamily": "fish-broth",
+        "region": "Ingredient composition context"
+      },
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "cultureAreas.diaspora_global",
+        "cultureAreas.europe",
+        "cultureAreas.southeast_asia",
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "nameSystems.family_nickname",
+        "regionScopes.diaspora",
+        "regionScopes.macro_region",
+        "regionScopes.subregion"
+      ],
+      "qualityTriggers": [
+        "source_diversity",
+        "ingredient_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has ingredient or commodity names, uncertainty, source metadata, and no nutrient or health interpretation"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming USDA source-diversity task",
+        "notes": [
+          "Warm only from public-domain FoodData Central metadata or approved typed fixtures."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp8-source-usda-bean-soup",
+      "seedId": "exp8-source-usda-bean-soup",
+      "cacheTarget": {
+        "dishFamily": "bean-soup",
+        "region": "Ingredient composition context"
+      },
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "cultureAreas.central_america",
+        "cultureAreas.diaspora_global",
+        "cultureAreas.europe",
+        "cultureAreas.north_america",
+        "cultureAreas.south_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.soup_broth",
+        "foodForms.stew_braise",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "nameSystems.family_nickname",
+        "regionScopes.diaspora",
+        "regionScopes.macro_region",
+        "regionScopes.nation"
+      ],
+      "qualityTriggers": [
+        "source_diversity",
+        "ingredient_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has ingredient or commodity names, uncertainty, source metadata, and no nutrient or health interpretation"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming USDA source-diversity task",
+        "notes": [
+          "Warm only from public-domain FoodData Central metadata or approved typed fixtures."
+        ]
+      }
     }
   ]
 }

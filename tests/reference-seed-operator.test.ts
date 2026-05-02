@@ -204,8 +204,8 @@ describe('reference seed operator integration', () => {
 
     const report = buildReferencePantryFixtureReport(pantryFixtureData);
 
-    expect(report.totalFixtures).toBeGreaterThanOrEqual(800);
-    expect(report.sourceIds).toEqual(['wikidata-structured-food-data']);
+    expect(report.totalFixtures).toBeGreaterThanOrEqual(811);
+    expect(report.sourceIds).toEqual(['usda-fooddata-central', 'wikidata-structured-food-data']);
     expect(report.coverage.axes.foodForms).toMatchObject({ covered: 17, total: 17, missing: [] });
     expect(report.coverage.axes.cultureAreas).toMatchObject({ covered: 20, total: 20, missing: [] });
     expect(report.coverage.axes.regionScopes).toMatchObject({ covered: 9, total: 9, missing: [] });

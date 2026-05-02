@@ -5461,10 +5461,11 @@
       "dishFamily": "warm-spice-aroma",
       "primaryCluster": "pantry-aroma-preserved-and-single-ingredient-cues",
       "supportClusters": [],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "Global pantry",
         "Home baking pantry",
+        "Ingredient composition context",
         "Latin America pantry",
         "Middle East pantry",
         "South Asia pantry"
@@ -5499,10 +5500,11 @@
       "dishFamily": "seed-spice-toasting",
       "primaryCluster": "pantry-aroma-preserved-and-single-ingredient-cues",
       "supportClusters": [],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "Global pantry",
         "Home skillet context",
+        "Ingredient composition context",
         "Middle East pantry",
         "South Asia pantry",
         "West Africa pantry"
@@ -5537,11 +5539,12 @@
       "dishFamily": "dried-herb-aroma",
       "primaryCluster": "pantry-aroma-preserved-and-single-ingredient-cues",
       "supportClusters": [],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "European pantry",
         "Global pantry",
         "Home soup context",
+        "Ingredient composition context",
         "Latin America pantry",
         "Mediterranean pantry"
       ],
@@ -5576,10 +5579,11 @@
       "dishFamily": "chile-powder-heat",
       "primaryCluster": "pantry-aroma-preserved-and-single-ingredient-cues",
       "supportClusters": [],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "Family table context",
         "Global pantry",
+        "Ingredient composition context",
         "Mexico pantry",
         "South Asia pantry",
         "West Africa pantry"
@@ -5615,11 +5619,12 @@
       "dishFamily": "cooking-fat-aroma",
       "primaryCluster": "pantry-aroma-preserved-and-single-ingredient-cues",
       "supportClusters": [],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "European pantry",
         "Global pantry",
         "Home skillet context",
+        "Ingredient composition context",
         "Mediterranean pantry",
         "South Asia pantry"
       ],
@@ -5653,12 +5658,13 @@
       "dishFamily": "fermented-paste-umami",
       "primaryCluster": "pantry-aroma-preserved-and-single-ingredient-cues",
       "supportClusters": [],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "East Asia pantry",
         "Family soup base context",
         "Global diaspora",
         "Home refrigerator context",
+        "Ingredient composition context",
         "Southeast Asia pantry"
       ],
       "coverageTags": [
@@ -5693,11 +5699,12 @@
       "dishFamily": "dried-fruit-preserve",
       "primaryCluster": "pantry-aroma-preserved-and-single-ingredient-cues",
       "supportClusters": [],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "European pantry",
         "Global pantry",
         "Holiday pantry context",
+        "Ingredient composition context",
         "Middle East pantry",
         "North Africa pantry"
       ],
@@ -5733,11 +5740,12 @@
       "dishFamily": "lentil-soup",
       "primaryCluster": "soups-broths-and-sour-liquids",
       "supportClusters": [],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "Europe",
         "Global diaspora",
         "Home lunch context",
+        "Ingredient composition context",
         "Middle East and West Asia",
         "South Asia"
       ],
@@ -5773,11 +5781,12 @@
       "dishFamily": "noodle-broth",
       "primaryCluster": "soups-broths-and-sour-liquids",
       "supportClusters": [],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "East Asia",
         "Global diaspora",
         "Home bowl context",
+        "Ingredient composition context",
         "Night market context",
         "Southeast Asia"
       ],
@@ -5813,12 +5822,13 @@
       "dishFamily": "fish-broth",
       "primaryCluster": "soups-broths-and-sour-liquids",
       "supportClusters": [],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "Caribbean",
         "Coastal West Africa",
         "Europe coastal context",
         "Global diaspora",
+        "Ingredient composition context",
         "Southeast Asia"
       ],
       "coverageTags": [
@@ -5854,11 +5864,12 @@
       "dishFamily": "bean-soup",
       "primaryCluster": "soups-broths-and-sour-liquids",
       "supportClusters": [],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "Caribbean",
         "Europe",
         "Global diaspora",
+        "Ingredient composition context",
         "Latin America",
         "North America"
       ],

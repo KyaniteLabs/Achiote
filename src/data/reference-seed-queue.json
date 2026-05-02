@@ -43425,6 +43425,683 @@
           "Uses approved structured-data source metadata; not household confirmation."
         ]
       }
+    },
+    {
+      "id": "exp8-source-usda-warm-spice-aroma",
+      "forms": [
+        "foodForms.pantry_single_ingredient"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "warm-spice-aroma",
+        "cinnamon",
+        "cardamom",
+        "clove",
+        "warm spice smell",
+        "sweet baking spice",
+        "warm-spice-aroma global pantry"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature"
+      ],
+      "querySeeds": [
+        "warm-spice-aroma USDA FoodData Central ingredient commodity grounding",
+        "warm-spice-aroma ingredient composition context public domain",
+        "warm-spice-aroma commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "warm-spice-aroma",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "cultureAreas.diaspora_global",
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pantry_single_ingredient",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "nameSystems.family_nickname",
+        "regionScopes.city",
+        "regionScopes.diaspora",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp8-source-usda-seed-spice-toasting",
+      "forms": [
+        "foodForms.pantry_single_ingredient",
+        "foodForms.sauce_condiment"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "seed-spice-toasting",
+        "cumin",
+        "coriander seed",
+        "sesame",
+        "toasted seed aroma",
+        "bloomed spice",
+        "seed-spice-toasting global pantry"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "seed-spice-toasting USDA FoodData Central ingredient commodity grounding",
+        "seed-spice-toasting ingredient composition context public domain",
+        "seed-spice-toasting commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "seed-spice-toasting",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.south_asia",
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pantry_single_ingredient",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "nameSystems.alias",
+        "regionScopes.city",
+        "regionScopes.diaspora",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp8-source-usda-dried-herb-aroma",
+      "forms": [
+        "foodForms.pantry_single_ingredient",
+        "foodForms.soup_broth"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "dried-herb-aroma",
+        "oregano",
+        "thyme",
+        "bay leaf",
+        "dried herb smell",
+        "soup leaf aroma",
+        "dried-herb-aroma global pantry"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature"
+      ],
+      "querySeeds": [
+        "dried-herb-aroma USDA FoodData Central ingredient commodity grounding",
+        "dried-herb-aroma ingredient composition context public domain",
+        "dried-herb-aroma commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "dried-herb-aroma",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.south_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pantry_single_ingredient",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "nameSystems.family_nickname",
+        "regionScopes.city",
+        "regionScopes.diaspora",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp8-source-usda-chile-powder-heat",
+      "forms": [
+        "foodForms.pantry_single_ingredient",
+        "foodForms.sauce_condiment"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "chile-powder-heat",
+        "chili powder",
+        "paprika",
+        "red chile powder",
+        "table heat",
+        "dry red spice",
+        "chile-powder-heat global pantry"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "chile-powder-heat USDA FoodData Central ingredient commodity grounding",
+        "chile-powder-heat ingredient composition context public domain",
+        "chile-powder-heat commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "chile-powder-heat",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "cultureAreas.diaspora_global",
+        "cultureAreas.south_asia",
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pantry_single_ingredient",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "mechanisms.serving_ritual",
+        "nameSystems.alias",
+        "nameSystems.family_nickname",
+        "regionScopes.diaspora",
+        "regionScopes.macro_region",
+        "regionScopes.nation"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp8-source-usda-cooking-fat-aroma",
+      "forms": [
+        "foodForms.pantry_single_ingredient"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "cooking-fat-aroma",
+        "ghee",
+        "olive oil",
+        "lard",
+        "cooking fat smell",
+        "fat bloom aroma",
+        "cooking-fat-aroma global pantry"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel"
+      ],
+      "querySeeds": [
+        "cooking-fat-aroma USDA FoodData Central ingredient commodity grounding",
+        "cooking-fat-aroma ingredient composition context public domain",
+        "cooking-fat-aroma commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "cooking-fat-aroma",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pantry_single_ingredient",
+        "mechanisms.aroma",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "nameSystems.alias",
+        "nameSystems.family_nickname",
+        "regionScopes.city",
+        "regionScopes.diaspora",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp8-source-usda-fermented-paste-umami",
+      "forms": [
+        "foodForms.pantry_single_ingredient",
+        "foodForms.sauce_condiment",
+        "foodForms.soup_broth"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "fermented-paste-umami",
+        "miso",
+        "shrimp paste",
+        "doenjang",
+        "fermented paste",
+        "umami paste",
+        "fermented-paste-umami east asia pantry"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "fermented-paste-umami USDA FoodData Central ingredient commodity grounding",
+        "fermented-paste-umami ingredient composition context public domain",
+        "fermented-paste-umami commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "fermented-paste-umami",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.east_asia",
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pantry_single_ingredient",
+        "foodForms.sauce_condiment",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "nameSystems.script_form",
+        "nameSystems.transliteration",
+        "regionScopes.city",
+        "regionScopes.diaspora",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp8-source-usda-dried-fruit-preserve",
+      "forms": [
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.pantry_single_ingredient"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "dried-fruit-preserve",
+        "raisin",
+        "prune",
+        "date fruit",
+        "dried fruit",
+        "sticky sweet pantry fruit",
+        "dried-fruit-preserve global pantry"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.sugar_crystal",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "dried-fruit-preserve USDA FoodData Central ingredient commodity grounding",
+        "dried-fruit-preserve ingredient composition context public domain",
+        "dried-fruit-preserve commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "dried-fruit-preserve",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.north_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.pantry_single_ingredient",
+        "mechanisms.aroma",
+        "mechanisms.sugar_crystal",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "nameSystems.family_nickname",
+        "regionScopes.diaspora",
+        "regionScopes.macro_region",
+        "regionScopes.religious_ritual"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp8-source-usda-lentil-soup",
+      "forms": [
+        "foodForms.soup_broth",
+        "foodForms.stew_braise"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "lentil-soup",
+        "lentil soup",
+        "dal soup",
+        "lentil broth",
+        "soft lentil bowl",
+        "lentil-soup south asia"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature"
+      ],
+      "querySeeds": [
+        "lentil-soup USDA FoodData Central ingredient commodity grounding",
+        "lentil-soup ingredient composition context public domain",
+        "lentil-soup commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "lentil-soup",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.soup_broth",
+        "foodForms.stew_braise",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "nameSystems.transliteration",
+        "regionScopes.city",
+        "regionScopes.diaspora",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp8-source-usda-noodle-broth",
+      "forms": [
+        "foodForms.grain_rice_noodle",
+        "foodForms.soup_broth"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "noodle-broth",
+        "noodle soup",
+        "noodle broth",
+        "soup noodles",
+        "brothy noodle bowl",
+        "noodle-broth east asia"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature"
+      ],
+      "querySeeds": [
+        "noodle-broth USDA FoodData Central ingredient commodity grounding",
+        "noodle-broth ingredient composition context public domain",
+        "noodle-broth commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "noodle-broth",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.east_asia",
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.grain_rice_noodle",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "nameSystems.menu_name",
+        "nameSystems.transliteration",
+        "regionScopes.city",
+        "regionScopes.diaspora",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp8-source-usda-fish-broth",
+      "forms": [
+        "foodForms.protein_centered",
+        "foodForms.soup_broth"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "fish-broth",
+        "fish soup",
+        "fish broth",
+        "seafood broth",
+        "coastal soup",
+        "fish-broth coastal west africa"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.temperature"
+      ],
+      "querySeeds": [
+        "fish-broth USDA FoodData Central ingredient commodity grounding",
+        "fish-broth ingredient composition context public domain",
+        "fish-broth commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "fish-broth",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "cultureAreas.diaspora_global",
+        "cultureAreas.europe",
+        "cultureAreas.southeast_asia",
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "nameSystems.family_nickname",
+        "regionScopes.diaspora",
+        "regionScopes.macro_region",
+        "regionScopes.subregion"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp8-source-usda-bean-soup",
+      "forms": [
+        "foodForms.soup_broth",
+        "foodForms.stew_braise"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "bean-soup",
+        "bean soup",
+        "black bean soup",
+        "white bean soup",
+        "soft bean broth",
+        "bean-soup latin america"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature"
+      ],
+      "querySeeds": [
+        "bean-soup USDA FoodData Central ingredient commodity grounding",
+        "bean-soup ingredient composition context public domain",
+        "bean-soup commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "bean-soup",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "cultureAreas.central_america",
+        "cultureAreas.diaspora_global",
+        "cultureAreas.europe",
+        "cultureAreas.north_america",
+        "cultureAreas.south_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.soup_broth",
+        "foodForms.stew_braise",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "nameSystems.family_nickname",
+        "regionScopes.diaspora",
+        "regionScopes.macro_region",
+        "regionScopes.nation"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
     }
   ]
 }
