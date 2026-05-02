@@ -49,6 +49,7 @@ describe('package distribution metadata', () => {
       'docs/landing/about.html',
       'docs/landing/ai-search.html',
       'docs/landing/app.html',
+      'docs/landing/product-app.js',
       'docs/landing/app.js',
       'docs/landing/billing-success.html',
       'docs/landing/compare.html',
@@ -141,6 +142,31 @@ describe('package distribution metadata', () => {
     expect(smokeScript).toContain('packaged-reference-pantry.db');
     expect(smokeScript).toContain("const exited = new Promise((resolve) => child.once('exit', resolve));");
     expect(smokeScript).toContain("await withTimeout(exited, 5_000, 'packaged HTTP shutdown');");
+  });
+
+  it('declares the package surface as a single release contract', async () => {
+    const { PACKAGE_SURFACE, assertPackageSurfaceFiles } = await import('../scripts/lib/package-surface.mjs');
+    const smokeScript = fs.readFileSync('scripts/package-smoke.mjs', 'utf8');
+
+    expect(PACKAGE_SURFACE.runtimeEntrypoints).toEqual(expect.arrayContaining([
+      'bin/achiote.mjs',
+      'dist/index.js',
+      'dist/http-server.js',
+    ]));
+    expect(PACKAGE_SURFACE.productAppAssets).toContain('docs/landing/product-app.js');
+    expect(PACKAGE_SURFACE.helperScripts).toContain('scripts/reference-seed-operator.mjs');
+    expect(assertPackageSurfaceFiles([
+      ...PACKAGE_SURFACE.runtimeEntrypoints,
+      ...PACKAGE_SURFACE.productAppAssets,
+      ...PACKAGE_SURFACE.publicDocs,
+      ...PACKAGE_SURFACE.helperScripts,
+      'artifacts/private.json',
+    ])).toMatchObject({
+      missing: [],
+      forbidden: ['artifacts/private.json'],
+    });
+    expect(smokeScript).toContain('assertPackageSurfaceFiles');
+    expect(smokeScript).toContain('Package surface mismatch');
   });
 
 

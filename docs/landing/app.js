@@ -9,6 +9,7 @@ const micBtn = document.getElementById('mic-btn');
 const readBtn = document.getElementById('read-btn');
 const CONSENT_ANALYTICS_KEY = 'achiote-consent-analytics';
 const CONSENT_QUALITY_KEY = 'achiote-consent-quality';
+const ProductApp = window.AchioteProductApp;
 let busy = false;
 let chatHistory = [];
 let currentAskSource = 'typed';
@@ -300,11 +301,7 @@ async function explainHttpError(res) {
     detail = 'Could not parse server response';
   }
 
-  if (res.status === 401) return `Authentication required. Enter your API key or demo password. ${detail}`.trim();
-  if (res.status === 429) return `Rate limit exceeded. ${detail}`.trim();
-  if (res.status === 413) return `Message is too large. ${detail}`.trim();
-  if (res.status === 415) return `Server expected JSON but received a different content type. ${detail}`.trim();
-  return `Server error ${res.status}. ${detail || 'Could not parse server response'}`.trim();
+  return ProductApp.explainHttpStatus(res.status, detail);
 }
 
 function addMsg(role, html) {
@@ -463,56 +460,47 @@ async function streamResponse(res, el, userMessage) {
   while (true) {
     const { done, value } = await reader.read();
     if (done) break;
-    pending += decoder.decode(value, { stream: true });
 
-    const lines = pending.split('\n');
-    pending = lines.pop() ?? '';
+    const parsed = ProductApp.parseSseChunk(pending, decoder.decode(value, { stream: true }));
+    pending = parsed.pending;
 
-    let eventType = '';
-    for (const line of lines) {
-      if (line.startsWith('event: ')) {
-        eventType = line.slice(7);
-      } else if (line.startsWith('data: ')) {
-        try {
-          const d = JSON.parse(line.slice(6));
-          if (eventType === 'error') {
-            hasError = true;
-            text += d.message || d.error || JSON.stringify(d);
-            if (trace) addTraceItem(trace, 'error', d);
-          } else if (eventType === 'text') {
-            if (typeof d === 'string') text += d;
-            else text += d.message || d.text || JSON.stringify(d);
-          } else if (eventType === 'done') {
-            if (text) {
-              lastAssistantText = text;
-              chatHistory.push({ role: 'user', content: userMessage });
-              chatHistory.push({ role: 'assistant', content: text });
-              // Keep history bounded to last 10 turns to avoid token bloat
-              if (chatHistory.length > 20) chatHistory = chatHistory.slice(-20);
-              if (hasError) {
-                trackEvent('ask_failed', { route: '/app', source: currentAskSource, category: currentAskCategory, reason: 'model_or_tool' });
-              } else {
-                trackEvent('ask_succeeded', { route: '/app', source: currentAskSource, category: currentAskCategory });
-                addFeedback(el);
-                addReceiptActions(el);
-              }
+    for (const event of parsed.events) {
+      try {
+        const d = JSON.parse(event.data);
+        if (event.type === 'error') {
+          hasError = true;
+          text += d.message || d.error || JSON.stringify(d);
+          if (trace) addTraceItem(trace, 'error', d);
+        } else if (event.type === 'text') {
+          if (typeof d === 'string') text += d;
+          else text += d.message || d.text || JSON.stringify(d);
+        } else if (event.type === 'done') {
+          if (text) {
+            lastAssistantText = text;
+            chatHistory = ProductApp.appendChatTurn(chatHistory, userMessage, text, 20);
+            if (hasError) {
+              trackEvent('ask_failed', { route: '/app', source: currentAskSource, category: currentAskCategory, reason: 'model_or_tool' });
+            } else {
+              trackEvent('ask_succeeded', { route: '/app', source: currentAskSource, category: currentAskCategory });
+              addFeedback(el);
+              addReceiptActions(el);
             }
-          } else if (eventType === 'receipt') {
-            lastReceipt = d;
-          } else if (eventType === 'tool_call') {
-            if (!trace) trace = createTracePanel(el);
-            addTraceItem(trace, 'tool_call', d);
-          } else if (eventType === 'tool_result') {
-            if (!trace) trace = createTracePanel(el);
-            addTraceItem(trace, 'tool_result', d);
-          } else if (eventType === 'status') {
-            if (!trace) trace = createTracePanel(el);
-            addTraceItem(trace, 'status', d);
           }
-        } catch (err) {
-          console.warn('Skipping malformed SSE event', err);
-          if (trace) addTraceItem(trace, 'error', { message: 'Skipped malformed server event' });
+        } else if (event.type === 'receipt') {
+          lastReceipt = d;
+        } else if (event.type === 'tool_call') {
+          if (!trace) trace = createTracePanel(el);
+          addTraceItem(trace, 'tool_call', d);
+        } else if (event.type === 'tool_result') {
+          if (!trace) trace = createTracePanel(el);
+          addTraceItem(trace, 'tool_result', d);
+        } else if (event.type === 'status') {
+          if (!trace) trace = createTracePanel(el);
+          addTraceItem(trace, 'status', d);
         }
+      } catch (err) {
+        console.warn('Skipping malformed SSE event', err);
+        if (trace) addTraceItem(trace, 'error', { message: 'Skipped malformed server event' });
       }
     }
     if (text) ensureContentEl().innerHTML = formatMd(text);

@@ -146,7 +146,7 @@ describe('launch business hardening', () => {
     const js = appJs();
 
     expect(page).toContain('.receipt-actions');
-    expect(js).toContain("eventType === 'receipt'");
+    expect(js).toContain("event.type === 'receipt'");
     expect(js).toContain('downloadMemoryReceipt');
     expect(js).toContain('copyFamilyQuestions');
     expect(js).toContain('Achiote Memory Receipt');

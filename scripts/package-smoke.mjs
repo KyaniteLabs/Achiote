@@ -7,6 +7,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
+import { assertPackageSurfaceFiles, PACKAGE_SURFACE } from './lib/package-surface.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, '..');
@@ -236,6 +237,10 @@ async function main() {
     console.log(`Packing achiote into ${tempRoot}`);
     const packResult = run(npmCommand, ['pack', '--json', '--pack-destination', tempRoot]);
     const pack = parsePackJson(packResult.stdout ?? '');
+    const packageSurface = assertPackageSurfaceFiles((pack.files ?? []).map((file) => file.path));
+    if (packageSurface.missing.length > 0 || packageSurface.forbidden.length > 0) {
+      throw new Error(`Package surface mismatch\nMissing: ${packageSurface.missing.join(', ') || 'none'}\nForbidden: ${packageSurface.forbidden.join(', ') || 'none'}`);
+    }
     const tarballPath = path.isAbsolute(pack.filename) ? pack.filename : path.join(tempRoot, pack.filename);
 
     if (!fs.existsSync(tarballPath)) {
@@ -255,7 +260,7 @@ async function main() {
     console.log('Checking packaged helper scripts');
     assertPackagedHelperScripts(installDir, tempRoot);
 
-    console.log('Checking packaged HTTP server health, trust, and launch metadata responses');
+    console.log(`Checking packaged HTTP server health, trust, and ${PACKAGE_SURFACE.productAppAssets.length} product app assets`);
     await assertPackagedHttpServerStarts(installDir, tempRoot);
 
     console.log(`Package smoke passed: installed tarball CLI listed ${expectedTools.length} MCP tools and HTTP smoke responded.`);
