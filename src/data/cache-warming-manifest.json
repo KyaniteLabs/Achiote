@@ -35238,6 +35238,5637 @@
           "Warm from approved structured source metadata and taxonomy-backed sensory mechanism fields only."
         ]
       }
+    },
+    {
+      "id": "warm-exp11-naming-ac-ka",
+      "seedId": "exp11-naming-ac-ka",
+      "cacheTarget": {
+        "dishFamily": "ac-ka",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.central_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-akara",
+      "seedId": "exp11-naming-akara",
+      "cacheTarget": {
+        "dishFamily": "akara",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-alaskan-ice-cream",
+      "seedId": "exp11-naming-alaskan-ice-cream",
+      "cacheTarget": {
+        "dishFamily": "alaskan-ice-cream",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.arctic_subarctic",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-apple-pie",
+      "seedId": "exp11-naming-apple-pie",
+      "cacheTarget": {
+        "dishFamily": "apple-pie",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.north_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-arepa",
+      "seedId": "exp11-naming-arepa",
+      "cacheTarget": {
+        "dishFamily": "arepa",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.south_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-atole",
+      "seedId": "exp11-naming-atole",
+      "cacheTarget": {
+        "dishFamily": "atole",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-ayran",
+      "seedId": "exp11-naming-ayran",
+      "cacheTarget": {
+        "dishFamily": "ayran",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-bagel",
+      "seedId": "exp11-naming-bagel",
+      "cacheTarget": {
+        "dishFamily": "bagel",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.diaspora"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-baklava",
+      "seedId": "exp11-naming-baklava",
+      "cacheTarget": {
+        "dishFamily": "baklava",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-bammy",
+      "seedId": "exp11-naming-bammy",
+      "cacheTarget": {
+        "dishFamily": "bammy",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-bannock",
+      "seedId": "exp11-naming-bannock",
+      "cacheTarget": {
+        "dishFamily": "bannock",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.arctic_subarctic",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-barbecue-sauce",
+      "seedId": "exp11-naming-barbecue-sauce",
+      "cacheTarget": {
+        "dishFamily": "barbecue-sauce",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.north_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-basbousa",
+      "seedId": "exp11-naming-basbousa",
+      "cacheTarget": {
+        "dishFamily": "basbousa",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-bean-soup",
+      "seedId": "exp11-naming-bean-soup",
+      "cacheTarget": {
+        "dishFamily": "bean-soup",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "cultureAreas.central_america",
+        "cultureAreas.diaspora_global",
+        "cultureAreas.europe",
+        "cultureAreas.north_america",
+        "cultureAreas.south_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.soup_broth",
+        "foodForms.stew_braise",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "nameSystems.family_nickname",
+        "regionScopes.diaspora",
+        "regionScopes.macro_region",
+        "regionScopes.nation"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-beignet",
+      "seedId": "exp11-naming-beignet",
+      "cacheTarget": {
+        "dishFamily": "beignet",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.central_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-besbarmaq",
+      "seedId": "exp11-naming-besbarmaq",
+      "cacheTarget": {
+        "dishFamily": "besbarmaq",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.central_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-bitter-melon-egg-broth",
+      "seedId": "exp11-naming-bitter-melon-egg-broth",
+      "cacheTarget": {
+        "dishFamily": "bitter-melon-egg-broth",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "cultureAreas.diaspora_global",
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.soup_broth",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.diaspora"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-black-lime-sour-stew",
+      "seedId": "exp11-naming-black-lime-sour-stew",
+      "cacheTarget": {
+        "dishFamily": "black-lime-sour-stew",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.middle_east_west_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.soup_broth",
+        "foodForms.stew_braise",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-black-sesame-seed-paste-sweet",
+      "seedId": "exp11-naming-black-sesame-seed-paste-sweet",
+      "cacheTarget": {
+        "dishFamily": "black-sesame-seed-paste-sweet",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.east_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.starch_texture",
+        "nameSystems.menu_name",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-bobotie",
+      "seedId": "exp11-naming-bobotie",
+      "cacheTarget": {
+        "dishFamily": "bobotie",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.southern_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-borscht",
+      "seedId": "exp11-naming-borscht",
+      "cacheTarget": {
+        "dishFamily": "borscht",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.europe",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-breakfast-grain-porridge",
+      "seedId": "exp11-naming-breakfast-grain-porridge",
+      "cacheTarget": {
+        "dishFamily": "breakfast-grain-porridge",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "cultureAreas.east_africa",
+        "cultureAreas.east_asia",
+        "cultureAreas.europe",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.breakfast",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-brigadeiro",
+      "seedId": "exp11-naming-brigadeiro",
+      "cacheTarget": {
+        "dishFamily": "brigadeiro",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.south_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-brik",
+      "seedId": "exp11-naming-brik",
+      "cacheTarget": {
+        "dishFamily": "brik",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-bubble-tea",
+      "seedId": "exp11-naming-bubble-tea",
+      "cacheTarget": {
+        "dishFamily": "bubble-tea",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.diaspora"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-bunny-chow",
+      "seedId": "exp11-naming-bunny-chow",
+      "cacheTarget": {
+        "dishFamily": "bunny-chow",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.southern_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-burrito",
+      "seedId": "exp11-naming-burrito",
+      "cacheTarget": {
+        "dishFamily": "burrito",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.borderland_trade_routes",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.borderland"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-cakcak",
+      "seedId": "exp11-naming-cakcak",
+      "cacheTarget": {
+        "dishFamily": "cakcak",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.central_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-cassava",
+      "seedId": "exp11-naming-cassava",
+      "cacheTarget": {
+        "dishFamily": "cassava",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.central_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-cassava-fritter",
+      "seedId": "exp11-naming-cassava-fritter",
+      "cacheTarget": {
+        "dishFamily": "cassava-fritter",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "cultureAreas.central_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.aroma",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "nameSystems.phonetic",
+        "regionScopes.nation"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-cassava-leaf-stew",
+      "seedId": "exp11-naming-cassava-leaf-stew",
+      "cacheTarget": {
+        "dishFamily": "cassava-leaf-stew",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.central_africa",
+        "cultureAreas.diaspora_global",
+        "cultureAreas.east_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "nameSystems.menu_name",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-ceremonial-wrapped-food",
+      "seedId": "exp11-naming-ceremonial-wrapped-food",
+      "cacheTarget": {
+        "dishFamily": "ceremonial-wrapped-food",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "cultureAreas.diaspora_global",
+        "cultureAreas.east_asia",
+        "cultureAreas.middle_east_west_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.starch_texture",
+        "mechanisms.texture_contrast",
+        "nameSystems.colonial_postcolonial_name",
+        "regionScopes.religious_ritual",
+        "regionScopes.subregion"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-chair",
+      "seedId": "exp11-naming-chair",
+      "cacheTarget": {
+        "dishFamily": "chair",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.east_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-chakalaka",
+      "seedId": "exp11-naming-chakalaka",
+      "cacheTarget": {
+        "dishFamily": "chakalaka",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.southern_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-champurrado",
+      "seedId": "exp11-naming-champurrado",
+      "cacheTarget": {
+        "dishFamily": "champurrado",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.borderland_trade_routes",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.borderland"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-chapati",
+      "seedId": "exp11-naming-chapati",
+      "cacheTarget": {
+        "dishFamily": "chapati",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-chicken-moambe",
+      "seedId": "exp11-naming-chicken-moambe",
+      "cacheTarget": {
+        "dishFamily": "chicken-moambe",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.central_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-chicken-soup",
+      "seedId": "exp11-naming-chicken-soup",
+      "cacheTarget": {
+        "dishFamily": "chicken-soup",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.north_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-chile-powder-heat",
+      "seedId": "exp11-naming-chile-powder-heat",
+      "cacheTarget": {
+        "dishFamily": "chile-powder-heat",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "cultureAreas.diaspora_global",
+        "cultureAreas.south_asia",
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pantry_single_ingredient",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "mechanisms.serving_ritual",
+        "nameSystems.alias",
+        "nameSystems.family_nickname",
+        "regionScopes.diaspora",
+        "regionScopes.macro_region",
+        "regionScopes.nation"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-chile-vinegar-condiment",
+      "seedId": "exp11-naming-chile-vinegar-condiment",
+      "cacheTarget": {
+        "dishFamily": "chile-vinegar-condiment",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "mechanisms.serving_ritual",
+        "nameSystems.menu_name",
+        "nameSystems.phonetic",
+        "regionScopes.macro_region",
+        "regionScopes.nation"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-chili",
+      "seedId": "exp11-naming-chili",
+      "cacheTarget": {
+        "dishFamily": "chili",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.borderland_trade_routes",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.borderland"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-chimichurri",
+      "seedId": "exp11-naming-chimichurri",
+      "cacheTarget": {
+        "dishFamily": "chimichurri",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.south_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-chin-chin",
+      "seedId": "exp11-naming-chin-chin",
+      "cacheTarget": {
+        "dishFamily": "chin-chin",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-chutney",
+      "seedId": "exp11-naming-chutney",
+      "cacheTarget": {
+        "dishFamily": "chutney",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-coconut-sugar-confection",
+      "seedId": "exp11-naming-coconut-sugar-confection",
+      "cacheTarget": {
+        "dishFamily": "coconut-sugar-confection",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.diaspora",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-coconut-taro-earth-oven-foodway",
+      "seedId": "exp11-naming-coconut-taro-earth-oven-foodway",
+      "cacheTarget": {
+        "dishFamily": "coconut-taro-earth-oven-foodway",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.indigenous_first_peoples",
+        "cultureAreas.oceania_pacific",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.protein_centered",
+        "foodForms.vegetable_fungi",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.serving_ritual",
+        "mechanisms.smoke",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.indigenous",
+        "regionScopes.subregion"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-comfort-broth",
+      "seedId": "exp11-naming-comfort-broth",
+      "cacheTarget": {
+        "dishFamily": "comfort-broth",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.arctic_subarctic",
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "regionScopes.diaspora"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-congee",
+      "seedId": "exp11-naming-congee",
+      "cacheTarget": {
+        "dishFamily": "congee",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-cooking-fat-aroma",
+      "seedId": "exp11-naming-cooking-fat-aroma",
+      "cacheTarget": {
+        "dishFamily": "cooking-fat-aroma",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pantry_single_ingredient",
+        "mechanisms.aroma",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "nameSystems.alias",
+        "nameSystems.family_nickname",
+        "regionScopes.city",
+        "regionScopes.diaspora",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-corn-tortilla",
+      "seedId": "exp11-naming-corn-tortilla",
+      "cacheTarget": {
+        "dishFamily": "corn-tortilla",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-cornbread",
+      "seedId": "exp11-naming-cornbread",
+      "cacheTarget": {
+        "dishFamily": "cornbread",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.north_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-couscous",
+      "seedId": "exp11-naming-couscous",
+      "cacheTarget": {
+        "dishFamily": "couscous",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-cranberry-sauce",
+      "seedId": "exp11-naming-cranberry-sauce",
+      "cacheTarget": {
+        "dishFamily": "cranberry-sauce",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.indigenous_first_peoples",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.indigenous"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-cream-tomato-curry",
+      "seedId": "exp11-naming-cream-tomato-curry",
+      "cacheTarget": {
+        "dishFamily": "cream-tomato-curry",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.starch_texture",
+        "nameSystems.menu_name",
+        "regionScopes.diaspora"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-curry-goat",
+      "seedId": "exp11-naming-curry-goat",
+      "cacheTarget": {
+        "dishFamily": "curry-goat",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-curtido",
+      "seedId": "exp11-naming-curtido",
+      "cacheTarget": {
+        "dishFamily": "curtido",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-dal",
+      "seedId": "exp11-naming-dal",
+      "cacheTarget": {
+        "dishFamily": "dal",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-doner-kebab",
+      "seedId": "exp11-naming-doner-kebab",
+      "cacheTarget": {
+        "dishFamily": "doner-kebab",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-doro-wat",
+      "seedId": "exp11-naming-doro-wat",
+      "cacheTarget": {
+        "dishFamily": "doro-wat",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.east_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-dried-fish",
+      "seedId": "exp11-naming-dried-fish",
+      "cacheTarget": {
+        "dishFamily": "dried-fish",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.arctic_subarctic",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-dried-fruit-preserve",
+      "seedId": "exp11-naming-dried-fruit-preserve",
+      "cacheTarget": {
+        "dishFamily": "dried-fruit-preserve",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.north_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.pantry_single_ingredient",
+        "mechanisms.aroma",
+        "mechanisms.sugar_crystal",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "nameSystems.family_nickname",
+        "regionScopes.diaspora",
+        "regionScopes.macro_region",
+        "regionScopes.religious_ritual"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-dried-herb-aroma",
+      "seedId": "exp11-naming-dried-herb-aroma",
+      "cacheTarget": {
+        "dishFamily": "dried-herb-aroma",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.south_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pantry_single_ingredient",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "nameSystems.family_nickname",
+        "regionScopes.city",
+        "regionScopes.diaspora",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-dumpling",
+      "seedId": "exp11-naming-dumpling",
+      "cacheTarget": {
+        "dishFamily": "dumpling",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.borderland_trade_routes",
+        "cultureAreas.central_asia",
+        "cultureAreas.east_asia",
+        "cultureAreas.europe",
+        "cultureAreas.south_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "mechanisms.sauce_balance",
+        "mechanisms.serving_ritual",
+        "mechanisms.starch_texture",
+        "mechanisms.texture_contrast",
+        "nameSystems.phonetic",
+        "nameSystems.transliteration",
+        "regionScopes.borderland",
+        "regionScopes.migration_corridor"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-egusi-soup",
+      "seedId": "exp11-naming-egusi-soup",
+      "cacheTarget": {
+        "dishFamily": "egusi-soup",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-empanada",
+      "seedId": "exp11-naming-empanada",
+      "cacheTarget": {
+        "dishFamily": "empanada",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.south_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-falafel",
+      "seedId": "exp11-naming-falafel",
+      "cacheTarget": {
+        "dishFamily": "falafel",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.diaspora"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-feijoada",
+      "seedId": "exp11-naming-feijoada",
+      "cacheTarget": {
+        "dishFamily": "feijoada",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.south_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-fermented-cereal-porridge-drink",
+      "seedId": "exp11-naming-fermented-cereal-porridge-drink",
+      "cacheTarget": {
+        "dishFamily": "fermented-cereal-porridge-drink",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.fermentation_acid",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "nameSystems.transliteration",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-fermented-fish",
+      "seedId": "exp11-naming-fermented-fish",
+      "cacheTarget": {
+        "dishFamily": "fermented-fish",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.arctic_subarctic",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-fermented-paste-umami",
+      "seedId": "exp11-naming-fermented-paste-umami",
+      "cacheTarget": {
+        "dishFamily": "fermented-paste-umami",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.east_asia",
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pantry_single_ingredient",
+        "foodForms.sauce_condiment",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "nameSystems.script_form",
+        "nameSystems.transliteration",
+        "regionScopes.city",
+        "regionScopes.diaspora",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-fermented-vegetable-pickle",
+      "seedId": "exp11-naming-fermented-vegetable-pickle",
+      "cacheTarget": {
+        "dishFamily": "fermented-vegetable-pickle",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.east_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast",
+        "nameSystems.script_form",
+        "nameSystems.transliteration",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-fish-broth",
+      "seedId": "exp11-naming-fish-broth",
+      "cacheTarget": {
+        "dishFamily": "fish-broth",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "cultureAreas.diaspora_global",
+        "cultureAreas.europe",
+        "cultureAreas.southeast_asia",
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "nameSystems.family_nickname",
+        "regionScopes.diaspora",
+        "regionScopes.macro_region",
+        "regionScopes.subregion"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-flatbread",
+      "seedId": "exp11-naming-flatbread",
+      "cacheTarget": {
+        "dishFamily": "flatbread",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.borderland_trade_routes",
+        "cultureAreas.east_africa",
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.north_africa",
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "mechanisms.alkaline_processing",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.borderland",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-fried-starch-street-snack",
+      "seedId": "exp11-naming-fried-starch-street-snack",
+      "cacheTarget": {
+        "dishFamily": "fried-starch-street-snack",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "cultureAreas.south_asia",
+        "cultureAreas.southeast_asia",
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.starch_texture",
+        "mechanisms.texture_contrast",
+        "nameSystems.typo",
+        "regionScopes.city"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-frybread",
+      "seedId": "exp11-naming-frybread",
+      "cacheTarget": {
+        "dishFamily": "frybread",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.indigenous_first_peoples",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.indigenous"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-fufu",
+      "seedId": "exp11-naming-fufu",
+      "cacheTarget": {
+        "dishFamily": "fufu",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-goulash",
+      "seedId": "exp11-naming-goulash",
+      "cacheTarget": {
+        "dishFamily": "goulash",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.europe",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-grain-beverage",
+      "seedId": "exp11-naming-grain-beverage",
+      "cacheTarget": {
+        "dishFamily": "grain-beverage",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.diaspora",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-grain-rice-noodle-staple",
+      "seedId": "exp11-naming-grain-rice-noodle-staple",
+      "cacheTarget": {
+        "dishFamily": "grain-rice-noodle-staple",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.south_asia",
+        "cultureAreas.southeast_asia",
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-green-tea",
+      "seedId": "exp11-naming-green-tea",
+      "cacheTarget": {
+        "dishFamily": "green-tea",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-gulab-jamun",
+      "seedId": "exp11-naming-gulab-jamun",
+      "cacheTarget": {
+        "dishFamily": "gulab-jamun",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-gyoza",
+      "seedId": "exp11-naming-gyoza",
+      "cacheTarget": {
+        "dishFamily": "gyoza",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-halo-halo",
+      "seedId": "exp11-naming-halo-halo",
+      "cacheTarget": {
+        "dishFamily": "halo-halo",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-halva",
+      "seedId": "exp11-naming-halva",
+      "cacheTarget": {
+        "dishFamily": "halva",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.east_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-hamburger",
+      "seedId": "exp11-naming-hamburger",
+      "cacheTarget": {
+        "dishFamily": "hamburger",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.north_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-harira",
+      "seedId": "exp11-naming-harira",
+      "cacheTarget": {
+        "dishFamily": "harira",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-harissa",
+      "seedId": "exp11-naming-harissa",
+      "cacheTarget": {
+        "dishFamily": "harissa",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-hibiscus-tea",
+      "seedId": "exp11-naming-hibiscus-tea",
+      "cacheTarget": {
+        "dishFamily": "hibiscus-tea",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-jamaican-patty",
+      "seedId": "exp11-naming-jamaican-patty",
+      "cacheTarget": {
+        "dishFamily": "jamaican-patty",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-jerk-chicken",
+      "seedId": "exp11-naming-jerk-chicken",
+      "cacheTarget": {
+        "dishFamily": "jerk-chicken",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.diaspora"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-kachumbari",
+      "seedId": "exp11-naming-kachumbari",
+      "cacheTarget": {
+        "dishFamily": "kachumbari",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.east_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-kava",
+      "seedId": "exp11-naming-kava",
+      "cacheTarget": {
+        "dishFamily": "kava",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.oceania_pacific",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-kibbeh",
+      "seedId": "exp11-naming-kibbeh",
+      "cacheTarget": {
+        "dishFamily": "kibbeh",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-kimchi",
+      "seedId": "exp11-naming-kimchi",
+      "cacheTarget": {
+        "dishFamily": "kimchi",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-kumis",
+      "seedId": "exp11-naming-kumis",
+      "cacheTarget": {
+        "dishFamily": "kumis",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.central_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-kwanga",
+      "seedId": "exp11-naming-kwanga",
+      "cacheTarget": {
+        "dishFamily": "kwanga",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.central_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-labrador-tea",
+      "seedId": "exp11-naming-labrador-tea",
+      "cacheTarget": {
+        "dishFamily": "labrador-tea",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.indigenous_first_peoples",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.indigenous"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-laksa",
+      "seedId": "exp11-naming-laksa",
+      "cacheTarget": {
+        "dishFamily": "laksa",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-lassi",
+      "seedId": "exp11-naming-lassi",
+      "cacheTarget": {
+        "dishFamily": "lassi",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-lentil-soup",
+      "seedId": "exp11-naming-lentil-soup",
+      "cacheTarget": {
+        "dishFamily": "lentil-soup",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.soup_broth",
+        "foodForms.stew_braise",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "nameSystems.transliteration",
+        "regionScopes.city",
+        "regionScopes.diaspora",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-lomi-salmon",
+      "seedId": "exp11-naming-lomi-salmon",
+      "cacheTarget": {
+        "dishFamily": "lomi-salmon",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.oceania_pacific",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-mageu",
+      "seedId": "exp11-naming-mageu",
+      "cacheTarget": {
+        "dishFamily": "mageu",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.southern_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-malva-pudding",
+      "seedId": "exp11-naming-malva-pudding",
+      "cacheTarget": {
+        "dishFamily": "malva-pudding",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.southern_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-mandazi",
+      "seedId": "exp11-naming-mandazi",
+      "cacheTarget": {
+        "dishFamily": "mandazi",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.east_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-mango-pickle",
+      "seedId": "exp11-naming-mango-pickle",
+      "cacheTarget": {
+        "dishFamily": "mango-pickle",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.diaspora"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-manti",
+      "seedId": "exp11-naming-manti",
+      "cacheTarget": {
+        "dishFamily": "manti",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.central_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-maple-syrup",
+      "seedId": "exp11-naming-maple-syrup",
+      "cacheTarget": {
+        "dishFamily": "maple-syrup",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.indigenous_first_peoples",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.indigenous"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-mapo-doufu",
+      "seedId": "exp11-naming-mapo-doufu",
+      "cacheTarget": {
+        "dishFamily": "mapo-doufu",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-meat-pie",
+      "seedId": "exp11-naming-meat-pie",
+      "cacheTarget": {
+        "dishFamily": "meat-pie",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.oceania_pacific",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-mielie-meal",
+      "seedId": "exp11-naming-mielie-meal",
+      "cacheTarget": {
+        "dishFamily": "mielie-meal",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.southern_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-milk-custard-pudding-dessert",
+      "seedId": "exp11-naming-milk-custard-pudding-dessert",
+      "cacheTarget": {
+        "dishFamily": "milk-custard-pudding-dessert",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.south_america",
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-mochi",
+      "seedId": "exp11-naming-mochi",
+      "cacheTarget": {
+        "dishFamily": "mochi",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-momo",
+      "seedId": "exp11-naming-momo",
+      "cacheTarget": {
+        "dishFamily": "momo",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-mooncake",
+      "seedId": "exp11-naming-mooncake",
+      "cacheTarget": {
+        "dishFamily": "mooncake",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.diaspora"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-muktuk",
+      "seedId": "exp11-naming-muktuk",
+      "cacheTarget": {
+        "dishFamily": "muktuk",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.arctic_subarctic",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-mustard",
+      "seedId": "exp11-naming-mustard",
+      "cacheTarget": {
+        "dishFamily": "mustard",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.europe",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-naan",
+      "seedId": "exp11-naming-naan",
+      "cacheTarget": {
+        "dishFamily": "naan",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.central_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-nasi-lemak",
+      "seedId": "exp11-naming-nasi-lemak",
+      "cacheTarget": {
+        "dishFamily": "nasi-lemak",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-navajo-taco",
+      "seedId": "exp11-naming-navajo-taco",
+      "cacheTarget": {
+        "dishFamily": "navajo-taco",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.indigenous_first_peoples",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.indigenous"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-noodle-broth",
+      "seedId": "exp11-naming-noodle-broth",
+      "cacheTarget": {
+        "dishFamily": "noodle-broth",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.east_asia",
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.grain_rice_noodle",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "nameSystems.menu_name",
+        "nameSystems.transliteration",
+        "regionScopes.city",
+        "regionScopes.diaspora",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-nut-sugar-confectionery",
+      "seedId": "exp11-naming-nut-sugar-confectionery",
+      "cacheTarget": {
+        "dishFamily": "nut-sugar-confectionery",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.south_america",
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.confectionery",
+        "mechanisms.aroma",
+        "mechanisms.sugar_crystal",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.diaspora"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-ota-ika",
+      "seedId": "exp11-naming-ota-ika",
+      "cacheTarget": {
+        "dishFamily": "ota-ika",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.oceania_pacific",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-palm-nut-soup",
+      "seedId": "exp11-naming-palm-nut-soup",
+      "cacheTarget": {
+        "dishFamily": "palm-nut-soup",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.central_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-pan-de-muerto",
+      "seedId": "exp11-naming-pan-de-muerto",
+      "cacheTarget": {
+        "dishFamily": "pan-de-muerto",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.borderland_trade_routes",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.borderland"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-pandan-coconut-layered-cake",
+      "seedId": "exp11-naming-pandan-coconut-layered-cake",
+      "cacheTarget": {
+        "dishFamily": "pandan-coconut-layered-cake",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.starch_texture",
+        "mechanisms.texture_contrast",
+        "nameSystems.menu_name",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-panettone",
+      "seedId": "exp11-naming-panettone",
+      "cacheTarget": {
+        "dishFamily": "panettone",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.europe",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-pavlova",
+      "seedId": "exp11-naming-pavlova",
+      "cacheTarget": {
+        "dishFamily": "pavlova",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.oceania_pacific",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-pepian",
+      "seedId": "exp11-naming-pepian",
+      "cacheTarget": {
+        "dishFamily": "pepian",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-pierogi",
+      "seedId": "exp11-naming-pierogi",
+      "cacheTarget": {
+        "dishFamily": "pierogi",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.europe",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-pikliz",
+      "seedId": "exp11-naming-pikliz",
+      "cacheTarget": {
+        "dishFamily": "pikliz",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-pita",
+      "seedId": "exp11-naming-pita",
+      "cacheTarget": {
+        "dishFamily": "pita",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-polenta",
+      "seedId": "exp11-naming-polenta",
+      "cacheTarget": {
+        "dishFamily": "polenta",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.europe",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-popiah",
+      "seedId": "exp11-naming-popiah",
+      "cacheTarget": {
+        "dishFamily": "popiah",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-pot-roast",
+      "seedId": "exp11-naming-pot-roast",
+      "cacheTarget": {
+        "dishFamily": "pot-roast",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.north_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-pupusa",
+      "seedId": "exp11-naming-pupusa",
+      "cacheTarget": {
+        "dishFamily": "pupusa",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-rendang",
+      "seedId": "exp11-naming-rendang",
+      "cacheTarget": {
+        "dishFamily": "rendang",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-rice-cinnamon-beverage",
+      "seedId": "exp11-naming-rice-cinnamon-beverage",
+      "cacheTarget": {
+        "dishFamily": "rice-cinnamon-beverage",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "cultureAreas.diaspora_global",
+        "cultureAreas.north_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.diaspora",
+        "regionScopes.nation"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-rice-paper-herb-roll",
+      "seedId": "exp11-naming-rice-paper-herb-roll",
+      "cacheTarget": {
+        "dishFamily": "rice-paper-herb-roll",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.snack_street_food",
+        "foodForms.vegetable_fungi",
+        "mechanisms.sauce_balance",
+        "mechanisms.starch_texture",
+        "mechanisms.texture_contrast",
+        "nameSystems.transliteration",
+        "regionScopes.diaspora",
+        "regionScopes.nation"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-roselle-juice",
+      "seedId": "exp11-naming-roselle-juice",
+      "cacheTarget": {
+        "dishFamily": "roselle-juice",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-rum-cake",
+      "seedId": "exp11-naming-rum-cake",
+      "cacheTarget": {
+        "dishFamily": "rum-cake",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-salsa",
+      "seedId": "exp11-naming-salsa",
+      "cacheTarget": {
+        "dishFamily": "salsa",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.borderland_trade_routes",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.borderland"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-sambal",
+      "seedId": "exp11-naming-sambal",
+      "cacheTarget": {
+        "dishFamily": "sambal",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-seed-spice-toasting",
+      "seedId": "exp11-naming-seed-spice-toasting",
+      "cacheTarget": {
+        "dishFamily": "seed-spice-toasting",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.south_asia",
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pantry_single_ingredient",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "nameSystems.alias",
+        "regionScopes.city",
+        "regionScopes.diaspora",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-shito",
+      "seedId": "exp11-naming-shito",
+      "cacheTarget": {
+        "dishFamily": "shito",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-simmered-vegetable-greens",
+      "seedId": "exp11-naming-simmered-vegetable-greens",
+      "cacheTarget": {
+        "dishFamily": "simmered-vegetable-greens",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.central_africa",
+        "cultureAreas.east_asia",
+        "cultureAreas.north_america",
+        "cultureAreas.south_asia",
+        "cultureAreas.southern_africa",
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.fermentation_acid",
+        "mechanisms.texture_contrast",
+        "nameSystems.family_nickname",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-single-ingredient-nostalgia",
+      "seedId": "exp11-naming-single-ingredient-nostalgia",
+      "cacheTarget": {
+        "dishFamily": "single-ingredient-nostalgia",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.north_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pantry_single_ingredient",
+        "mechanisms.aroma",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.serving_ritual",
+        "nameSystems.family_nickname",
+        "regionScopes.city"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-smoked-fish-berry-preserve-foodway",
+      "seedId": "exp11-naming-smoked-fish-berry-preserve-foodway",
+      "cacheTarget": {
+        "dishFamily": "smoked-fish-berry-preserve-foodway",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.arctic_subarctic",
+        "cultureAreas.europe",
+        "cultureAreas.indigenous_first_peoples",
+        "cultureAreas.north_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.pantry_single_ingredient",
+        "foodForms.protein_centered",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.serving_ritual",
+        "mechanisms.smoke",
+        "mechanisms.temperature",
+        "nameSystems.family_nickname",
+        "regionScopes.indigenous",
+        "regionScopes.subregion"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-sour-herb-soup",
+      "seedId": "exp11-naming-sour-herb-soup",
+      "cacheTarget": {
+        "dishFamily": "sour-herb-soup",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.europe",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-spiced-protein-braise",
+      "seedId": "exp11-naming-spiced-protein-braise",
+      "cacheTarget": {
+        "dishFamily": "spiced-protein-braise",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.south_asia",
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "mechanisms.aroma",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "regionScopes.diaspora"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-sweet-beignet",
+      "seedId": "exp11-naming-sweet-beignet",
+      "cacheTarget": {
+        "dishFamily": "sweet-beignet",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.central_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-tajine",
+      "seedId": "exp11-naming-tajine",
+      "cacheTarget": {
+        "dishFamily": "tajine",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-tamarind-chile-wrapper-candy",
+      "seedId": "exp11-naming-tamarind-chile-wrapper-candy",
+      "cacheTarget": {
+        "dishFamily": "tamarind-chile-wrapper-candy",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.confectionery",
+        "foodForms.snack_street_food",
+        "mechanisms.sauce_balance",
+        "mechanisms.sugar_crystal",
+        "nameSystems.menu_name",
+        "regionScopes.diaspora",
+        "regionScopes.nation"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-taro",
+      "seedId": "exp11-naming-taro",
+      "cacheTarget": {
+        "dishFamily": "taro",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.oceania_pacific",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-three-sisters-soup",
+      "seedId": "exp11-naming-three-sisters-soup",
+      "cacheTarget": {
+        "dishFamily": "three-sisters-soup",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.indigenous_first_peoples",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.indigenous"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-toum",
+      "seedId": "exp11-naming-toum",
+      "cacheTarget": {
+        "dishFamily": "toum",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-tres-leches-cake",
+      "seedId": "exp11-naming-tres-leches-cake",
+      "cacheTarget": {
+        "dishFamily": "tres-leches-cake",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-ugali",
+      "seedId": "exp11-naming-ugali",
+      "cacheTarget": {
+        "dishFamily": "ugali",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.east_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-warm-spice-aroma",
+      "seedId": "exp11-naming-warm-spice-aroma",
+      "cacheTarget": {
+        "dishFamily": "warm-spice-aroma",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "cultureAreas.diaspora_global",
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pantry_single_ingredient",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "nameSystems.family_nickname",
+        "regionScopes.city",
+        "regionScopes.diaspora",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-wheat-tortilla",
+      "seedId": "exp11-naming-wheat-tortilla",
+      "cacheTarget": {
+        "dishFamily": "wheat-tortilla",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.borderland_trade_routes",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.borderland"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
+    },
+    {
+      "id": "warm-exp11-naming-yerba-mate-beverage",
+      "seedId": "exp11-naming-yerba-mate-beverage",
+      "cacheTarget": {
+        "dishFamily": "yerba-mate-beverage",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "cultureAreas.south_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "qualityTriggers": [
+        "family_depth_floor",
+        "name_alias_grounding",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has family label, naming-system boundaries, uncertainty, and source metadata without copied prose"
+      ],
+      "provenance": {
+        "sourceType": "operator cache-warming naming-density task",
+        "notes": [
+          "Warm from approved structured source metadata and taxonomy-backed naming fields only."
+        ]
+      }
     }
   ]
 }
