@@ -15,7 +15,9 @@ import {
   validateBundledData,
   validateCoreFoodData,
   validateInferenceBurdenData,
+  validateOperatorData,
   validateReferencePantryData,
+  validateCrossReferences,
   type BundledDataSet,
 } from '../src/lib/data-schemas.js';
 
@@ -388,5 +390,42 @@ describe('bundled data validation', () => {
     expectIssue(issues, `inferenceBurdenInventory.burdens[${badIndex}].promptRemovalTargets`, 'non-empty array');
     expectIssue(issues, `inferenceBurdenInventory.burdens[${badIndex}].preserveLatitude`, 'at least 2');
     expectIssue(issues, `inferenceBurdenInventory.burdens[${badIndex}].modelKeeps`, 'non-empty array');
+  });
+
+  it('allows operator data to be validated independently', () => {
+    expect(validateOperatorData(bundledData)).toEqual([]);
+  });
+
+  it('rejects operator data errors independently of the full bundle', () => {
+    const data = cloneBundledData();
+    data.referenceSeedQueue.seeds[0].id = '';
+    data.cacheWarmingManifest.tasks[0].seedId = 'missing-seed';
+    data.referenceSourceRegistry.sources[0].license.id = '';
+
+    const issues = validateOperatorData(data);
+
+    expectIssue(issues, 'referenceSeedQueue.seeds[0].id', 'non-empty string');
+    expectIssue(issues, 'cacheWarmingManifest.tasks[0].seedId', 'unknown seed id');
+    expectIssue(issues, 'referenceSourceRegistry.sources[0].license.id', 'non-empty string');
+  });
+
+  it('warns on single-member substitution groups via cross-reference validation', () => {
+    const issues = validateCrossReferences(bundledData);
+
+    expect(issues.length).toBeGreaterThan(0);
+    for (const issue of issues) {
+      expect(issue.path).toMatch(/ingredients\.ingredients\.[\w-]+\.substitutionGroup/);
+      expect(issue.message).toContain('substitutions will be limited');
+    }
+  });
+
+  it('accepts well-formed cross-references when all groups have multiple members', () => {
+    const data = cloneBundledData();
+    data.ingredients.ingredients['cumin-seeds'].substitutionGroup = 'test-group-multi';
+    data.ingredients.ingredients['coriander-seeds'].substitutionGroup = 'test-group-multi';
+
+    const issues = validateCrossReferences(data);
+    const singleMemberIssues = issues.filter((i) => i.message.includes('test-group-multi'));
+    expect(singleMemberIssues).toEqual([]);
   });
 });

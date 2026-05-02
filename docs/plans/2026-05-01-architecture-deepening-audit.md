@@ -14,7 +14,7 @@ This audit has been largely remediated on `master`. Keep the original findings b
 - Finding 2: `WorkflowPlanner` exists in `src/lib/workflow-planner.ts`.
 - Finding 3: `CueProfileEngine` and `ConstraintAdapter` exist in `src/lib/cue-profile-engine.ts` and `src/lib/constraint-adapter.ts`.
 - Finding 4: `ReferencePantryPopulation` exists in `src/lib/reference-pantry-population.ts`.
-- Finding 5: bundled data validation is still an identified future cleanup candidate.
+- Finding 5: bundled data validation split into `validateCoreFoodData`, `validateReferencePantryData`, `validateOperatorData`, and `validateInferenceBurdenData`; `validateCrossReferences` is tested; all family validators have regression coverage.
 - Finding 6: `PackageSurface` exists in `scripts/lib/package-surface.mjs`.
 - Additional boundaries landed after the audit: `ProviderRuntime`, `AccountAccess`, `LocalSpeechController`, and `ProductApp`.
 - Domain docs and ADR setup now exist in `CONTEXT.md`, `docs/adr/`, and `docs/agents/`.

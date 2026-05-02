@@ -9,19 +9,27 @@
  *   - First author surname appears in citation
  *
  * Usage:
- *   node scripts/validate-citations.mjs
+ *   node scripts/validate-citations.mjs [--no-cache] [--tolerant]
  *
  * Exit codes:
- *   0 = all citations verified
+ *   0 = all citations verified (or tolerant mode absorbed network failures)
  *   1 = one or more citations failed
  */
 
-import { readFileSync } from "node:fs";
+import { readFileSync, writeFileSync, existsSync } from "node:fs";
+import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const LANDING_PATH = join(__dirname, "..", "docs", "landing", "index.html");
+const CACHE_PATH = join(__dirname, "..", "artifacts", "citation-validation-cache.json");
+
+/* ── CLI flags ───────────────────────────────────────────────────────── */
+
+const args = process.argv.slice(2);
+const NO_CACHE = args.includes("--no-cache");
+const TOLERANT = args.includes("--tolerant");
 
 /* ── helpers ─────────────────────────────────────────────────────────── */
 
@@ -50,29 +58,79 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+function hashCitation(raw) {
+  return createHash("sha256").update(raw).digest("hex").slice(0, 16);
+}
+
+/* ── cache ───────────────────────────────────────────────────────────── */
+
+function loadCache() {
+  if (NO_CACHE || !existsSync(CACHE_PATH)) return {};
+  try {
+    return JSON.parse(readFileSync(CACHE_PATH, "utf-8"));
+  } catch {
+    return {};
+  }
+}
+
+function saveCache(cache) {
+  try {
+    writeFileSync(CACHE_PATH, JSON.stringify(cache, null, 2) + "\n");
+  } catch {
+    // Cache write is best-effort
+  }
+}
+
+function cacheKey(citation) {
+  return `${citation.doi}@${hashCitation(citation.raw)}`;
+}
+
+/* ── network ─────────────────────────────────────────────────────────── */
+
+class NetworkError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "NetworkError";
+  }
+}
+
 async function fetchCrossrefWork(doi) {
   const retryableStatuses = new Set([429, 500, 502, 503, 504]);
   let lastStatus = 0;
+  let lastError = null;
 
   for (let attempt = 0; attempt < 4; attempt++) {
     if (attempt > 0) {
       await sleep(500 * attempt);
     }
 
-    const res = await fetch(`https://api.crossref.org/works/${doi}`, {
-      headers: {
-        "User-Agent": "Achiote-CitationValidator/1.0 (mailto:hello@achiote.dev)",
-        Accept: "application/json",
-      },
-    });
-    lastStatus = res.status;
-    if (res.ok) return res.json();
-    if (!retryableStatuses.has(res.status)) {
-      throw new Error(`Crossref API returned ${res.status}`);
+    try {
+      const res = await fetch(`https://api.crossref.org/works/${doi}`, {
+        headers: {
+          "User-Agent": "Achiote-CitationValidator/1.0 (mailto:hello@achiote.dev)",
+          Accept: "application/json",
+        },
+      });
+      lastStatus = res.status;
+      if (res.ok) return res.json();
+      if (!retryableStatuses.has(res.status)) {
+        throw new Error(`Crossref API returned ${res.status}`);
+      }
+    } catch (e) {
+      lastError = e;
+      // Network-level errors (fetch failed, connection reset, etc.) are retryable
+      if (e.name === "TypeError" || e.message?.includes("fetch") || e.message?.includes("connect") || e.code) {
+        continue;
+      }
+      // Re-throw non-retryable errors immediately
+      throw e;
     }
   }
 
-  throw new Error(`Crossref API returned ${lastStatus} after retries`);
+  if (lastError) {
+    throw new NetworkError(`Crossref lookup failed: ${lastError.message}`);
+  }
+  throw new NetworkError(`Crossref API returned ${lastStatus} after retries`);
 }
 
 /* ── extraction ──────────────────────────────────────────────────────── */
@@ -107,8 +165,14 @@ function extractCitations(html) {
 
 /* ── validation ──────────────────────────────────────────────────────── */
 
-async function validateDOI(citation) {
+async function validateDOI(citation, cache) {
+  const key = cacheKey(citation);
+  if (!NO_CACHE && cache[key]) {
+    return { errors: [], cached: true };
+  }
+
   const errors = [];
+  let networkWarning = null;
 
   // 1. Resolve DOI (secondary sanity check; Crossref is the source of truth)
   try {
@@ -175,11 +239,18 @@ async function validateDOI(citation) {
         );
       }
     }
+
+    // Success — cache it
+    cache[key] = { verifiedAt: new Date().toISOString() };
   } catch (e) {
-    errors.push(`Crossref lookup failed: ${e.message}`);
+    if (e instanceof NetworkError && TOLERANT) {
+      networkWarning = e.message;
+    } else {
+      errors.push(e.message);
+    }
   }
 
-  return errors;
+  return { errors, cached: false, networkWarning };
 }
 
 /* ── main ────────────────────────────────────────────────────────────── */
@@ -189,6 +260,7 @@ async function main() {
 
   const html = readFileSync(LANDING_PATH, "utf-8");
   const citations = extractCitations(html);
+  const cache = loadCache();
 
   if (citations.length === 0) {
     console.error("❌ No DOI citations found in landing page sources");
@@ -196,11 +268,23 @@ async function main() {
   }
 
   let failures = 0;
+  let warnings = 0;
 
   for (const c of citations) {
-    const errors = await validateDOI(c);
+    const { errors, cached, networkWarning } = await validateDOI(c, cache);
+
+    if (cached) {
+      console.log(`✅ ${c.doi} (cached)`);
+      continue;
+    }
+
     if (errors.length === 0) {
-      console.log(`✅ ${c.doi}`);
+      if (networkWarning) {
+        warnings++;
+        console.log(`⚠️  ${c.doi} (${networkWarning}; tolerated)`);
+      } else {
+        console.log(`✅ ${c.doi}`);
+      }
     } else {
       failures++;
       console.log(`❌ ${c.doi}`);
@@ -210,12 +294,18 @@ async function main() {
     }
   }
 
+  saveCache(cache);
+
   console.log("");
   if (failures) {
     console.log(`❌ ${failures}/${citations.length} citations failed validation`);
     process.exit(1);
   }
-  console.log(`✅ All ${citations.length} citations verified against Crossref`);
+  if (warnings) {
+    console.log(`⚠️  All ${citations.length} citations OK (${warnings} network warning${warnings > 1 ? "s" : ""} tolerated)`);
+  } else {
+    console.log(`✅ All ${citations.length} citations verified against Crossref`);
+  }
 }
 
 main().catch((e) => {
