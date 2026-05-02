@@ -157,6 +157,41 @@ export type ReferencePantryFixtureBatch = {
   fixtures: ReferencePantryFixtureEntry[];
 };
 
+type ReferenceFamilyCluster = {
+  id?: unknown;
+  label?: unknown;
+  description?: unknown;
+  primaryCoverageTags?: unknown;
+  anchorMechanisms?: unknown;
+  targetRecordFloor?: unknown;
+  populationStrategy?: unknown;
+};
+
+type ReferenceFamilyMapping = {
+  dishFamily?: unknown;
+  primaryCluster?: unknown;
+  supportClusters?: unknown;
+  currentRecordCount?: unknown;
+  currentRegions?: unknown;
+  coverageTags?: unknown;
+  targetRecordFloor?: unknown;
+  targetDiversity?: unknown;
+  populationPriority?: unknown;
+};
+
+export type ReferenceFamilyTaxonomy = {
+  meta: Meta;
+  clusterPolicy: {
+    familyCountIsNotSuccessMetric?: unknown;
+    minimumTargetRecordsPerFamily?: unknown;
+    minimumTargetRecordsPerCluster?: unknown;
+    requiredCoverageAxes?: unknown;
+    populationOrder?: unknown;
+  };
+  clusters: ReferenceFamilyCluster[];
+  familyMappings: ReferenceFamilyMapping[];
+};
+
 export type InferenceBurdenType =
   | 'normalization'
   | 'intent_routing'
@@ -211,6 +246,7 @@ export type BundledDataSet = {
   referenceSeedQueue: ReferenceSeedQueue;
   cacheWarmingManifest: CacheWarmingManifest;
   referenceSourceRegistry: ReferenceSourceRegistry;
+  referenceFamilyTaxonomy: ReferenceFamilyTaxonomy;
   inferenceBurdenInventory: InferenceBurdenInventory;
 };
 
@@ -241,6 +277,7 @@ const VALID_INFERENCE_OWNERS = new Set([
   'consent_gate',
 ]);
 const VALID_INFERENCE_STATUSES = new Set(['candidate', 'partially_supported', 'ready_to_extract']);
+const VALID_POPULATION_PRIORITIES = new Set(['high', 'medium', 'maintain']);
 const ARTIFICIAL_CACHE_FAMILY_PATTERN = /(?:-liquids-and-comfort|-protein-vegetable-mains|-sweet-ritual-foods|-handheld-social-foods|-staple-starches|-acid-heat-condiment|-cue)$/;
 const ARTIFICIAL_CACHE_REGION_PATTERN = /\b(?:comparison|variants?|cue)\b/i;
 
@@ -786,6 +823,108 @@ function validateReferenceSourceRegistry(issues: ValidationIssue[], data: Refere
   });
 }
 
+function validateReferenceFamilyTaxonomy(
+  issues: ValidationIssue[],
+  data: ReferenceFamilyTaxonomy,
+  validTags: Set<string>,
+  fixtureFamilies: Set<string>,
+): void {
+  validateMeta(issues, 'referenceFamilyTaxonomy.meta', data.meta);
+
+  const policy = data.clusterPolicy;
+  if (!isRecord(policy)) {
+    pushIssue(issues, 'referenceFamilyTaxonomy.clusterPolicy', 'must be an object');
+  } else {
+    if (policy.familyCountIsNotSuccessMetric !== true) {
+      pushIssue(issues, 'referenceFamilyTaxonomy.clusterPolicy.familyCountIsNotSuccessMetric', 'must be true');
+    }
+    validateNumberRange(issues, 'referenceFamilyTaxonomy.clusterPolicy.minimumTargetRecordsPerFamily', policy.minimumTargetRecordsPerFamily, 1, 100);
+    validateNumberRange(issues, 'referenceFamilyTaxonomy.clusterPolicy.minimumTargetRecordsPerCluster', policy.minimumTargetRecordsPerCluster, 1, 1000);
+    validateStringArray(issues, 'referenceFamilyTaxonomy.clusterPolicy.requiredCoverageAxes', policy.requiredCoverageAxes, {
+      requireNonEmpty: true,
+      unique: true,
+    });
+    validateStringArray(issues, 'referenceFamilyTaxonomy.clusterPolicy.populationOrder', policy.populationOrder, {
+      requireNonEmpty: true,
+      unique: true,
+    });
+  }
+
+  if (!Array.isArray(data.clusters)) {
+    pushIssue(issues, 'referenceFamilyTaxonomy.clusters', 'must be an array');
+    return;
+  }
+  if (data.clusters.length === 0) pushIssue(issues, 'referenceFamilyTaxonomy.clusters', 'must be a non-empty array');
+
+  const clusterIds = new Set<string>();
+  data.clusters.forEach((cluster, index) => {
+    const base = `referenceFamilyTaxonomy.clusters[${index}]`;
+    validateNonEmptyString(issues, `${base}.id`, cluster.id);
+    if (isNonEmptyString(cluster.id)) {
+      if (clusterIds.has(cluster.id)) pushIssue(issues, `${base}.id`, 'duplicate cluster id');
+      clusterIds.add(cluster.id);
+    }
+    validateNonEmptyString(issues, `${base}.label`, cluster.label);
+    validateNonEmptyString(issues, `${base}.description`, cluster.description);
+    validateCoverageTags(issues, `${base}.primaryCoverageTags`, cluster.primaryCoverageTags, validTags);
+    validateCoverageTags(issues, `${base}.anchorMechanisms`, cluster.anchorMechanisms, validTags);
+    validateNumberRange(issues, `${base}.targetRecordFloor`, cluster.targetRecordFloor, 1, 1000);
+    validateStringArray(issues, `${base}.populationStrategy`, cluster.populationStrategy, { requireNonEmpty: true, unique: true });
+  });
+
+  if (!Array.isArray(data.familyMappings)) {
+    pushIssue(issues, 'referenceFamilyTaxonomy.familyMappings', 'must be an array');
+    return;
+  }
+  if (data.familyMappings.length === 0) pushIssue(issues, 'referenceFamilyTaxonomy.familyMappings', 'must be a non-empty array');
+
+  const mappedFamilies = new Set<string>();
+  const clustersWithFamilies = new Set<string>();
+  data.familyMappings.forEach((mapping, index) => {
+    const base = `referenceFamilyTaxonomy.familyMappings[${index}]`;
+    validateNonEmptyString(issues, `${base}.dishFamily`, mapping.dishFamily);
+    if (isNonEmptyString(mapping.dishFamily)) {
+      if (mappedFamilies.has(mapping.dishFamily)) pushIssue(issues, `${base}.dishFamily`, 'duplicate dish family mapping');
+      mappedFamilies.add(mapping.dishFamily);
+      if (!fixtureFamilies.has(mapping.dishFamily)) {
+        pushIssue(issues, `${base}.dishFamily`, 'must reference a bundled fixture family');
+      }
+    }
+    validateNonEmptyString(issues, `${base}.primaryCluster`, mapping.primaryCluster);
+    if (isNonEmptyString(mapping.primaryCluster)) {
+      if (!clusterIds.has(mapping.primaryCluster)) pushIssue(issues, `${base}.primaryCluster`, 'must reference a known family cluster');
+      clustersWithFamilies.add(mapping.primaryCluster);
+    }
+    validateStringArray(issues, `${base}.supportClusters`, mapping.supportClusters, { unique: true });
+    if (Array.isArray(mapping.supportClusters)) {
+      mapping.supportClusters.forEach((clusterId, clusterIndex) => {
+        if (isNonEmptyString(clusterId) && !clusterIds.has(clusterId)) {
+          pushIssue(issues, `${base}.supportClusters[${clusterIndex}]`, 'must reference a known family cluster');
+        }
+      });
+    }
+    validateNumberRange(issues, `${base}.currentRecordCount`, mapping.currentRecordCount, 1, 10000);
+    validateStringArray(issues, `${base}.currentRegions`, mapping.currentRegions, { requireNonEmpty: true, unique: true });
+    validateCoverageTags(issues, `${base}.coverageTags`, mapping.coverageTags, validTags);
+    validateNumberRange(issues, `${base}.targetRecordFloor`, mapping.targetRecordFloor, 1, 100);
+    validateStringArray(issues, `${base}.targetDiversity`, mapping.targetDiversity, { requireNonEmpty: true, unique: true });
+    if (!isNonEmptyString(mapping.populationPriority) || !VALID_POPULATION_PRIORITIES.has(mapping.populationPriority)) {
+      pushIssue(issues, `${base}.populationPriority`, 'must be high, medium, or maintain');
+    }
+  });
+
+  for (const family of fixtureFamilies) {
+    if (!mappedFamilies.has(family)) {
+      pushIssue(issues, 'referenceFamilyTaxonomy.familyMappings', `missing fixture family mapping: ${family}`);
+    }
+  }
+  for (const clusterId of clusterIds) {
+    if (!clustersWithFamilies.has(clusterId)) {
+      pushIssue(issues, `referenceFamilyTaxonomy.clusters.${clusterId}`, 'must map at least one fixture family');
+    }
+  }
+}
+
 function validateInferenceBurdenInventory(issues: ValidationIssue[], data: InferenceBurdenInventory): void {
   validateMeta(issues, 'inferenceBurdenInventory.meta', data.meta);
   validateStringArray(issues, 'inferenceBurdenInventory.burdenTypes', data.burdenTypes, { requireNonEmpty: true, unique: true });
@@ -854,6 +993,22 @@ export function validateBundledData(data: BundledDataSet): ValidationIssue[] {
   const seedIds = validateReferenceSeedQueue(issues, data.referenceSeedQueue, validTags);
   validateCacheWarmingManifest(issues, data.cacheWarmingManifest, validTags, seedIds);
   validateReferenceSourceRegistry(issues, data.referenceSourceRegistry);
+  const fixtureFamilies = new Set<string>();
+  const dataWithFixtures = data as unknown as { referencePantryFixtures?: ReferencePantryFixtureBatch };
+  if (Array.isArray(dataWithFixtures.referencePantryFixtures?.fixtures)) {
+    for (const fixture of dataWithFixtures.referencePantryFixtures.fixtures) {
+      if (isRecord(fixture.cacheTarget) && isNonEmptyString(fixture.cacheTarget.dishFamily)) {
+        fixtureFamilies.add(fixture.cacheTarget.dishFamily);
+      }
+    }
+  } else {
+    for (const task of data.cacheWarmingManifest.tasks ?? []) {
+      if (isRecord(task.cacheTarget) && isNonEmptyString(task.cacheTarget.dishFamily)) {
+        fixtureFamilies.add(task.cacheTarget.dishFamily);
+      }
+    }
+  }
+  validateReferenceFamilyTaxonomy(issues, data.referenceFamilyTaxonomy, validTags, fixtureFamilies);
   validateInferenceBurdenInventory(issues, data.inferenceBurdenInventory);
   return issues;
 }

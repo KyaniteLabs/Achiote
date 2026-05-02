@@ -3,10 +3,12 @@ import referenceSeedQueueData from '../data/reference-seed-queue.json' with { ty
 import cacheWarmingManifestData from '../data/cache-warming-manifest.json' with { type: 'json' };
 import referenceSourceRegistryData from '../data/reference-source-registry.json' with { type: 'json' };
 import referencePantryFixturesData from '../data/reference-pantry-fixtures.json' with { type: 'json' };
+import referenceFamilyTaxonomyData from '../data/reference-family-taxonomy.json' with { type: 'json' };
 import type { QualitySignalReport } from './quality-signals.js';
 import type {
   CacheWarmingManifest,
   GlobalCoverageMatrix,
+  ReferenceFamilyTaxonomy,
   ReferencePantryFixtureBatch,
   ReferenceSourceRegistry,
   ReferenceSeedEntry,
@@ -33,6 +35,7 @@ export const bundledGlobalReferenceSeeds = {
   cacheWarmingManifest: cacheWarmingManifestData as CacheWarmingManifest,
   referenceSourceRegistry: referenceSourceRegistryData as ReferenceSourceRegistry,
   referencePantryFixtures: referencePantryFixturesData as ReferencePantryFixtureBatch,
+  referenceFamilyTaxonomy: referenceFamilyTaxonomyData as ReferenceFamilyTaxonomy,
 };
 
 const MEMORY_TYPE_TO_FORM_TAGS: Record<string, string[]> = {

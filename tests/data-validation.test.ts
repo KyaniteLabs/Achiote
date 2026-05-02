@@ -8,6 +8,7 @@ import globalCoverageMatrixData from '../src/data/global-coverage-matrix.json' w
 import referenceSeedQueueData from '../src/data/reference-seed-queue.json' with { type: 'json' };
 import cacheWarmingManifestData from '../src/data/cache-warming-manifest.json' with { type: 'json' };
 import referenceSourceRegistryData from '../src/data/reference-source-registry.json' with { type: 'json' };
+import referenceFamilyTaxonomyData from '../src/data/reference-family-taxonomy.json' with { type: 'json' };
 import inferenceBurdenInventoryData from '../src/data/inference-burden-inventory.json' with { type: 'json' };
 import { validateBundledData, type BundledDataSet } from '../src/lib/data-schemas.js';
 
@@ -21,6 +22,7 @@ const bundledData: BundledDataSet = {
   referenceSeedQueue: referenceSeedQueueData,
   cacheWarmingManifest: cacheWarmingManifestData,
   referenceSourceRegistry: referenceSourceRegistryData,
+  referenceFamilyTaxonomy: referenceFamilyTaxonomyData,
   inferenceBurdenInventory: inferenceBurdenInventoryData,
 };
 
@@ -198,6 +200,27 @@ describe('bundled data validation', () => {
 
   it('accepts committed global coverage, reference seed queue, and cache warming manifest data', () => {
     expect(validateBundledData(bundledData)).toEqual([]);
+  });
+
+  it('keeps the reference family taxonomy broad, mapped, and population-oriented', () => {
+    const fixtureFamilies = new Set(cacheWarmingManifestData.tasks.map((task) => task.cacheTarget.dishFamily));
+    const mappedFamilies = new Set(referenceFamilyTaxonomyData.familyMappings.map((mapping) => mapping.dishFamily));
+    const clusterIds = new Set(referenceFamilyTaxonomyData.clusters.map((cluster) => cluster.id));
+    const mappedClusterIds = new Set(referenceFamilyTaxonomyData.familyMappings.map((mapping) => mapping.primaryCluster));
+    const coveredTags = new Set(referenceFamilyTaxonomyData.familyMappings.flatMap((mapping) => mapping.coverageTags));
+
+    expect(referenceFamilyTaxonomyData.clusterPolicy.familyCountIsNotSuccessMetric).toBe(true);
+    expect(referenceFamilyTaxonomyData.clusterPolicy.populationOrder).toEqual(expect.arrayContaining([
+      'add region, diaspora, naming, ingredient, and sensory variants under existing families before creating new families',
+    ]));
+    expect(referenceFamilyTaxonomyData.clusters.length).toBeGreaterThanOrEqual(8);
+    expect([...clusterIds].every((clusterId) => mappedClusterIds.has(clusterId))).toBe(true);
+    expect(mappedFamilies).toEqual(fixtureFamilies);
+
+    for (const axis of ['foodForms', 'cultureAreas', 'regionScopes', 'nameSystems', 'mechanisms']) {
+      const expectedTags = globalCoverageMatrixData.axes[axis].values.map((value) => `${axis}.${value.id}`);
+      expect([...coveredTags].filter((tag) => tag.startsWith(`${axis}.`)).sort()).toEqual(expectedTags.sort());
+    }
   });
 
   it('rejects malformed global coverage axes and duplicate values', () => {
