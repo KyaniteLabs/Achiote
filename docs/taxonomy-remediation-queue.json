@@ -1,0 +1,101 @@
+{
+  "source": "knowledge-gap-canary",
+  "sourceArtifact": "artifacts/weak-cloud-post-pr153-final-clean/results.jsonl",
+  "generatedAt": "2026-05-02T00:32:22.135Z",
+  "landedIn": "4ad2791",
+  "summary": "2 clean taxonomy remediation items ready for review.",
+  "blockedByRegressionCandidates": false,
+  "knowledgeGapCount": 2,
+  "excludedEvidenceCount": 0,
+  "regressionCandidateCount": 0,
+  "items": [
+    {
+      "id": "search-dependency-gap-sour-herb-soup",
+      "status": "ready_for_taxonomy",
+      "gapType": "search_dependency_gap",
+      "mechanismSignature": "sour_herb_soup",
+      "count": 2,
+      "reason": "Achiote used search_web on a clean path; identify the missing taxonomy/reference signal that would let the workflow proceed without live search.",
+      "priority": "medium",
+      "candidateSeedIds": [
+        "soup-sour-herb-eastern-europe"
+      ],
+      "taxonomyTargets": [
+        "Identify bundled taxonomy or reference-seed coverage that should let clean minimum-cue paths proceed without live search.",
+        "Differentiate acid source, herb aroma, starch/body, egg/dairy cues, and warm-vs-cold serving temperature.",
+        "Map pantry-first proxy cues for sour liquid, dill/herb aroma, potato body, and optional egg richness."
+      ],
+      "acceptanceCriteria": [
+        "A clean canary for sour_herb_soup avoids search_web unless the user asks for exact source-backed identity or research.",
+        "The cue remains a cheap, tiny, food-science-grounded verification step rather than a recipe or shopping mission.",
+        "The implementation keeps userSaid, researched facts, inferred facts, and unknowns separate."
+      ],
+      "guardrails": [
+        "Do not copy canary prompt text into production taxonomy; use generalized mechanisms, aliases, and sourced reference records.",
+        "Do not convert provider, wrapper, or control-flow failures into taxonomy tasks.",
+        "Keep search optional: exact/source-backed research paths may still search, but minimum-cue paths should not require it.",
+        "Add or update regression coverage before closing the remediation item."
+      ],
+      "examples": [
+        {
+          "provider": "glm",
+          "model": "GLM-5.1",
+          "roundId": "round-00-2026-05-01T22-23-02-431Z",
+          "at": "2026-05-01T22:24:29.675Z",
+          "promptRef": "sparse_sour_dill_soup",
+          "usedSearchWeb": true,
+          "excerpt": "Minimum viable memory-family cue First-pass verification bite: a tiny amount of safe neutral liquid carrier plus one tiny remembered aroma, acid, herb, or texture cue from the user message. Keep it to one sip, smell, or "
+        },
+        {
+          "provider": "glm",
+          "model": "GLM-4.5-Air",
+          "roundId": "round-00-2026-05-01T22-23-02-431Z",
+          "at": "2026-05-01T22:28:41.226Z",
+          "promptRef": "substitution_pressure",
+          "usedSearchWeb": true,
+          "excerpt": "Basis before substitutions: Minimum viable composed-bite cue: a tiny amount of cheap grocery-store carrier matching the remembered base: starch, bread, potato, rice, bean, noodle, or cooked vegetable plus a tiny amount o"
+        }
+      ]
+    },
+    {
+      "id": "search-dependency-gap-grain-beverage",
+      "status": "ready_for_taxonomy",
+      "gapType": "search_dependency_gap",
+      "mechanismSignature": "grain_beverage",
+      "count": 1,
+      "reason": "Achiote used search_web on a clean path; identify the missing taxonomy/reference signal that would let the workflow proceed without live search.",
+      "priority": "medium",
+      "candidateSeedIds": [
+        "beverage-rice-cinnamon-latin-america",
+        "beverage-barley-cebada-latin-america"
+      ],
+      "taxonomyTargets": [
+        "Identify bundled taxonomy or reference-seed coverage that should let clean minimum-cue paths proceed without live search.",
+        "Differentiate rice, barley, oat, sesame/nut, cinnamon, lime, toasted grain, and starch-body cues.",
+        "Map cold beverage memory cues to cheap pantry tests before exact drink identity or sourcing."
+      ],
+      "acceptanceCriteria": [
+        "A clean canary for grain_beverage avoids search_web unless the user asks for exact source-backed identity or research.",
+        "The cue remains a cheap, tiny, food-science-grounded verification step rather than a recipe or shopping mission.",
+        "The implementation keeps userSaid, researched facts, inferred facts, and unknowns separate."
+      ],
+      "guardrails": [
+        "Do not copy canary prompt text into production taxonomy; use generalized mechanisms, aliases, and sourced reference records.",
+        "Do not convert provider, wrapper, or control-flow failures into taxonomy tasks.",
+        "Keep search optional: exact/source-backed research paths may still search, but minimum-cue paths should not require it.",
+        "Add or update regression coverage before closing the remediation item."
+      ],
+      "examples": [
+        {
+          "provider": "glm",
+          "model": "GLM-4.7",
+          "roundId": "round-00-2026-05-01T22-23-02-431Z",
+          "at": "2026-05-01T22:26:14.411Z",
+          "promptRef": "beverage_horchata_like",
+          "usedSearchWeb": true,
+          "excerpt": "Minimum viable beverage-memory cue First-pass verification bite: a tiny amount of barley water, toasted barley tea, or water with a tiny barley/oat/rice-starch slurry plus a tiny amount of toasted barley, barley tea, ric"
+        }
+      ]
+    }
+  ]
+}
