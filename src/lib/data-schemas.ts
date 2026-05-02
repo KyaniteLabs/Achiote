@@ -241,6 +241,8 @@ const VALID_INFERENCE_OWNERS = new Set([
   'consent_gate',
 ]);
 const VALID_INFERENCE_STATUSES = new Set(['candidate', 'partially_supported', 'ready_to_extract']);
+const ARTIFICIAL_CACHE_FAMILY_PATTERN = /(?:-liquids-and-comfort|-protein-vegetable-mains|-sweet-ritual-foods|-handheld-social-foods|-staple-starches|-acid-heat-condiment|-cue)$/;
+const ARTIFICIAL_CACHE_REGION_PATTERN = /\b(?:comparison|variants?|cue)\b/i;
 
 function isNonEmptyString(value: unknown): value is string {
   return typeof value === 'string' && value.trim().length > 0;
@@ -657,6 +659,12 @@ function validateCacheTarget(issues: ValidationIssue[], path: string, value: unk
   }
   validateNonEmptyString(issues, `${path}.dishFamily`, value.dishFamily);
   validateNonEmptyString(issues, `${path}.region`, value.region);
+  if (isNonEmptyString(value.dishFamily) && ARTIFICIAL_CACHE_FAMILY_PATTERN.test(value.dishFamily.trim())) {
+    pushIssue(issues, `${path}.dishFamily`, 'must not encode coverage band or canary cue taxonomy');
+  }
+  if (isNonEmptyString(value.region) && ARTIFICIAL_CACHE_REGION_PATTERN.test(value.region.trim())) {
+    pushIssue(issues, `${path}.region`, 'must not encode comparison, variant, or cue context');
+  }
 }
 
 function validateCacheTargets(issues: ValidationIssue[], path: string, value: unknown): void {

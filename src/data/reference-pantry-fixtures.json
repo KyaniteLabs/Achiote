@@ -1995,7 +1995,7 @@
     {
       "seedId": "pantry-single-ingredient-aroma",
       "cacheTarget": {
-        "dishFamily": "single-ingredient-nostalgia-cue",
+        "dishFamily": "single-ingredient-nostalgia",
         "region": "Global"
       },
       "sourceIds": [
@@ -2329,7 +2329,7 @@
       "seedId": "exp1-north_africa-staple_starches-couscous",
       "expansionBand": "staple_starches",
       "cacheTarget": {
-        "dishFamily": "couscous-staple-starches",
+        "dishFamily": "couscous",
         "region": "North Africa"
       },
       "sourceIds": [
@@ -2396,7 +2396,7 @@
       "seedId": "exp1-north_africa-liquids_and_comfort-harira",
       "expansionBand": "liquids_and_comfort",
       "cacheTarget": {
-        "dishFamily": "harira-liquids-and-comfort",
+        "dishFamily": "harira",
         "region": "North Africa"
       },
       "sourceIds": [
@@ -2465,7 +2465,7 @@
       "seedId": "exp1-north_africa-acid_heat_condiment-harissa",
       "expansionBand": "acid_heat_condiment",
       "cacheTarget": {
-        "dishFamily": "harissa-acid-heat-condiment",
+        "dishFamily": "harissa",
         "region": "North Africa"
       },
       "sourceIds": [
@@ -2533,7 +2533,7 @@
       "seedId": "exp1-north_africa-protein_vegetable_mains-tajine",
       "expansionBand": "protein_vegetable_mains",
       "cacheTarget": {
-        "dishFamily": "tajine-protein-vegetable-mains",
+        "dishFamily": "tajine",
         "region": "North Africa"
       },
       "sourceIds": [
@@ -2603,7 +2603,7 @@
       "seedId": "exp1-north_africa-handheld_social_foods-brik",
       "expansionBand": "handheld_social_foods",
       "cacheTarget": {
-        "dishFamily": "brik-handheld-social-foods",
+        "dishFamily": "brik",
         "region": "North Africa"
       },
       "sourceIds": [
@@ -2673,7 +2673,7 @@
       "seedId": "exp1-north_africa-sweet_ritual_foods-basbousa",
       "expansionBand": "sweet_ritual_foods",
       "cacheTarget": {
-        "dishFamily": "basbousa-sweet-ritual-foods",
+        "dishFamily": "basbousa",
         "region": "North Africa"
       },
       "sourceIds": [
@@ -2744,7 +2744,7 @@
       "seedId": "exp1-west_africa-staple_starches-fufu",
       "expansionBand": "staple_starches",
       "cacheTarget": {
-        "dishFamily": "fufu-staple-starches",
+        "dishFamily": "fufu",
         "region": "West Africa"
       },
       "sourceIds": [
@@ -2811,7 +2811,7 @@
       "seedId": "exp1-west_africa-liquids_and_comfort-roselle-juice",
       "expansionBand": "liquids_and_comfort",
       "cacheTarget": {
-        "dishFamily": "roselle-juice-liquids-and-comfort",
+        "dishFamily": "roselle-juice",
         "region": "West Africa"
       },
       "sourceIds": [
@@ -2881,7 +2881,7 @@
       "seedId": "exp1-west_africa-acid_heat_condiment-shito",
       "expansionBand": "acid_heat_condiment",
       "cacheTarget": {
-        "dishFamily": "shito-acid-heat-condiment",
+        "dishFamily": "shito",
         "region": "West Africa"
       },
       "sourceIds": [
@@ -2949,7 +2949,7 @@
       "seedId": "exp1-west_africa-protein_vegetable_mains-egusi-soup",
       "expansionBand": "protein_vegetable_mains",
       "cacheTarget": {
-        "dishFamily": "egusi-soup-protein-vegetable-mains",
+        "dishFamily": "egusi-soup",
         "region": "West Africa"
       },
       "sourceIds": [
@@ -3018,7 +3018,7 @@
       "seedId": "exp1-west_africa-handheld_social_foods-akara",
       "expansionBand": "handheld_social_foods",
       "cacheTarget": {
-        "dishFamily": "akara-handheld-social-foods",
+        "dishFamily": "akara",
         "region": "West Africa"
       },
       "sourceIds": [
@@ -3088,7 +3088,7 @@
       "seedId": "exp1-west_africa-sweet_ritual_foods-chin-chin",
       "expansionBand": "sweet_ritual_foods",
       "cacheTarget": {
-        "dishFamily": "chin-chin-sweet-ritual-foods",
+        "dishFamily": "chin-chin",
         "region": "West Africa"
       },
       "sourceIds": [
@@ -3159,7 +3159,7 @@
       "seedId": "exp1-central_africa-staple_starches-kwanga",
       "expansionBand": "staple_starches",
       "cacheTarget": {
-        "dishFamily": "kwanga-staple-starches",
+        "dishFamily": "kwanga",
         "region": "Central Africa"
       },
       "sourceIds": [
@@ -3227,7 +3227,7 @@
       "seedId": "exp1-central_africa-liquids_and_comfort-palm-nut-soup",
       "expansionBand": "liquids_and_comfort",
       "cacheTarget": {
-        "dishFamily": "palm-nut-soup-liquids-and-comfort",
+        "dishFamily": "palm-nut-soup",
         "region": "Central Africa"
       },
       "sourceIds": [
@@ -3296,7 +3296,7 @@
       "seedId": "exp1-central_africa-acid_heat_condiment-chicken-moambe",
       "expansionBand": "acid_heat_condiment",
       "cacheTarget": {
-        "dishFamily": "chicken-moambe-acid-heat-condiment",
+        "dishFamily": "chicken-moambe",
         "region": "Central Africa"
       },
       "sourceIds": [
@@ -3365,7 +3365,7 @@
       "seedId": "exp1-central_africa-protein_vegetable_mains-cassava",
       "expansionBand": "protein_vegetable_mains",
       "cacheTarget": {
-        "dishFamily": "cassava-protein-vegetable-mains",
+        "dishFamily": "cassava",
         "region": "Central Africa"
       },
       "sourceIds": [
@@ -3435,7 +3435,7 @@
       "seedId": "exp1-central_africa-handheld_social_foods-beignet",
       "expansionBand": "handheld_social_foods",
       "cacheTarget": {
-        "dishFamily": "beignet-handheld-social-foods",
+        "dishFamily": "beignet",
         "region": "Central Africa"
       },
       "sourceIds": [
@@ -3505,7 +3505,7 @@
       "seedId": "exp1-central_africa-sweet_ritual_foods-beignet",
       "expansionBand": "sweet_ritual_foods",
       "cacheTarget": {
-        "dishFamily": "beignet-sweet-ritual-foods",
+        "dishFamily": "sweet-beignet",
         "region": "Central Africa"
       },
       "sourceIds": [
@@ -3577,7 +3577,7 @@
       "seedId": "exp1-east_africa-staple_starches-ugali",
       "expansionBand": "staple_starches",
       "cacheTarget": {
-        "dishFamily": "ugali-staple-starches",
+        "dishFamily": "ugali",
         "region": "East Africa"
       },
       "sourceIds": [
@@ -3644,7 +3644,7 @@
       "seedId": "exp1-east_africa-liquids_and_comfort-chair",
       "expansionBand": "liquids_and_comfort",
       "cacheTarget": {
-        "dishFamily": "chair-liquids-and-comfort",
+        "dishFamily": "chair",
         "region": "East Africa"
       },
       "sourceIds": [
@@ -3714,7 +3714,7 @@
       "seedId": "exp1-east_africa-acid_heat_condiment-kachumbari",
       "expansionBand": "acid_heat_condiment",
       "cacheTarget": {
-        "dishFamily": "kachumbari-acid-heat-condiment",
+        "dishFamily": "kachumbari",
         "region": "East Africa"
       },
       "sourceIds": [
@@ -3782,7 +3782,7 @@
       "seedId": "exp1-east_africa-protein_vegetable_mains-doro-wat",
       "expansionBand": "protein_vegetable_mains",
       "cacheTarget": {
-        "dishFamily": "doro-wat-protein-vegetable-mains",
+        "dishFamily": "doro-wat",
         "region": "East Africa"
       },
       "sourceIds": [
@@ -3851,7 +3851,7 @@
       "seedId": "exp1-east_africa-handheld_social_foods-mandazi",
       "expansionBand": "handheld_social_foods",
       "cacheTarget": {
-        "dishFamily": "mandazi-handheld-social-foods",
+        "dishFamily": "mandazi",
         "region": "East Africa"
       },
       "sourceIds": [
@@ -3921,7 +3921,7 @@
       "seedId": "exp1-east_africa-sweet_ritual_foods-halva",
       "expansionBand": "sweet_ritual_foods",
       "cacheTarget": {
-        "dishFamily": "halva-sweet-ritual-foods",
+        "dishFamily": "halva",
         "region": "East Africa"
       },
       "sourceIds": [
@@ -3992,7 +3992,7 @@
       "seedId": "exp1-southern_africa-staple_starches-mielie-meal",
       "expansionBand": "staple_starches",
       "cacheTarget": {
-        "dishFamily": "mielie-meal-staple-starches",
+        "dishFamily": "mielie-meal",
         "region": "Southern Africa"
       },
       "sourceIds": [
@@ -4060,7 +4060,7 @@
       "seedId": "exp1-southern_africa-liquids_and_comfort-mageu",
       "expansionBand": "liquids_and_comfort",
       "cacheTarget": {
-        "dishFamily": "mageu-liquids-and-comfort",
+        "dishFamily": "mageu",
         "region": "Southern Africa"
       },
       "sourceIds": [
@@ -4129,7 +4129,7 @@
       "seedId": "exp1-southern_africa-acid_heat_condiment-chakalaka",
       "expansionBand": "acid_heat_condiment",
       "cacheTarget": {
-        "dishFamily": "chakalaka-acid-heat-condiment",
+        "dishFamily": "chakalaka",
         "region": "Southern Africa"
       },
       "sourceIds": [
@@ -4197,7 +4197,7 @@
       "seedId": "exp1-southern_africa-protein_vegetable_mains-bobotie",
       "expansionBand": "protein_vegetable_mains",
       "cacheTarget": {
-        "dishFamily": "bobotie-protein-vegetable-mains",
+        "dishFamily": "bobotie",
         "region": "Southern Africa"
       },
       "sourceIds": [
@@ -4266,7 +4266,7 @@
       "seedId": "exp1-southern_africa-handheld_social_foods-bunny-chow",
       "expansionBand": "handheld_social_foods",
       "cacheTarget": {
-        "dishFamily": "bunny-chow-handheld-social-foods",
+        "dishFamily": "bunny-chow",
         "region": "Southern Africa"
       },
       "sourceIds": [
@@ -4336,7 +4336,7 @@
       "seedId": "exp1-southern_africa-sweet_ritual_foods-malva-pudding",
       "expansionBand": "sweet_ritual_foods",
       "cacheTarget": {
-        "dishFamily": "malva-pudding-sweet-ritual-foods",
+        "dishFamily": "malva-pudding",
         "region": "Southern Africa"
       },
       "sourceIds": [
@@ -4407,7 +4407,7 @@
       "seedId": "exp1-middle_east_west_asia-staple_starches-pita",
       "expansionBand": "staple_starches",
       "cacheTarget": {
-        "dishFamily": "pita-staple-starches",
+        "dishFamily": "pita",
         "region": "Middle East and West Asia"
       },
       "sourceIds": [
@@ -4474,7 +4474,7 @@
       "seedId": "exp1-middle_east_west_asia-liquids_and_comfort-ayran",
       "expansionBand": "liquids_and_comfort",
       "cacheTarget": {
-        "dishFamily": "ayran-liquids-and-comfort",
+        "dishFamily": "ayran",
         "region": "Middle East and West Asia"
       },
       "sourceIds": [
@@ -4543,7 +4543,7 @@
       "seedId": "exp1-middle_east_west_asia-acid_heat_condiment-toum",
       "expansionBand": "acid_heat_condiment",
       "cacheTarget": {
-        "dishFamily": "toum-acid-heat-condiment",
+        "dishFamily": "toum",
         "region": "Middle East and West Asia"
       },
       "sourceIds": [
@@ -4611,7 +4611,7 @@
       "seedId": "exp1-middle_east_west_asia-protein_vegetable_mains-doner-kebab",
       "expansionBand": "protein_vegetable_mains",
       "cacheTarget": {
-        "dishFamily": "doner-kebab-protein-vegetable-mains",
+        "dishFamily": "doner-kebab",
         "region": "Middle East and West Asia"
       },
       "sourceIds": [
@@ -4681,7 +4681,7 @@
       "seedId": "exp1-middle_east_west_asia-handheld_social_foods-kibbeh",
       "expansionBand": "handheld_social_foods",
       "cacheTarget": {
-        "dishFamily": "kibbeh-handheld-social-foods",
+        "dishFamily": "kibbeh",
         "region": "Middle East and West Asia"
       },
       "sourceIds": [
@@ -4751,7 +4751,7 @@
       "seedId": "exp1-middle_east_west_asia-sweet_ritual_foods-baklava",
       "expansionBand": "sweet_ritual_foods",
       "cacheTarget": {
-        "dishFamily": "baklava-sweet-ritual-foods",
+        "dishFamily": "baklava",
         "region": "Middle East and West Asia"
       },
       "sourceIds": [
@@ -4822,7 +4822,7 @@
       "seedId": "exp1-central_asia-staple_starches-naan",
       "expansionBand": "staple_starches",
       "cacheTarget": {
-        "dishFamily": "naan-staple-starches",
+        "dishFamily": "naan",
         "region": "Central Asia"
       },
       "sourceIds": [
@@ -4889,7 +4889,7 @@
       "seedId": "exp1-central_asia-liquids_and_comfort-kumis",
       "expansionBand": "liquids_and_comfort",
       "cacheTarget": {
-        "dishFamily": "kumis-liquids-and-comfort",
+        "dishFamily": "kumis",
         "region": "Central Asia"
       },
       "sourceIds": [
@@ -4958,7 +4958,7 @@
       "seedId": "exp1-central_asia-acid_heat_condiment-ac-ka",
       "expansionBand": "acid_heat_condiment",
       "cacheTarget": {
-        "dishFamily": "ac-ka-acid-heat-condiment",
+        "dishFamily": "ac-ka",
         "region": "Central Asia"
       },
       "sourceIds": [
@@ -5027,7 +5027,7 @@
       "seedId": "exp1-central_asia-protein_vegetable_mains-besbarmaq",
       "expansionBand": "protein_vegetable_mains",
       "cacheTarget": {
-        "dishFamily": "besbarmaq-protein-vegetable-mains",
+        "dishFamily": "besbarmaq",
         "region": "Central Asia"
       },
       "sourceIds": [
@@ -5097,7 +5097,7 @@
       "seedId": "exp1-central_asia-handheld_social_foods-turkish-mant",
       "expansionBand": "handheld_social_foods",
       "cacheTarget": {
-        "dishFamily": "turkish-mant-handheld-social-foods",
+        "dishFamily": "manti",
         "region": "Central Asia"
       },
       "sourceIds": [
@@ -5168,7 +5168,7 @@
       "seedId": "exp1-central_asia-sweet_ritual_foods-cakcak",
       "expansionBand": "sweet_ritual_foods",
       "cacheTarget": {
-        "dishFamily": "cakcak-sweet-ritual-foods",
+        "dishFamily": "cakcak",
         "region": "Central Asia"
       },
       "sourceIds": [
@@ -5240,7 +5240,7 @@
       "seedId": "exp1-south_asia-staple_starches-chapati",
       "expansionBand": "staple_starches",
       "cacheTarget": {
-        "dishFamily": "chapati-staple-starches",
+        "dishFamily": "chapati",
         "region": "South Asia"
       },
       "sourceIds": [
@@ -5307,7 +5307,7 @@
       "seedId": "exp1-south_asia-liquids_and_comfort-lassi",
       "expansionBand": "liquids_and_comfort",
       "cacheTarget": {
-        "dishFamily": "lassi-liquids-and-comfort",
+        "dishFamily": "lassi",
         "region": "South Asia"
       },
       "sourceIds": [
@@ -5376,7 +5376,7 @@
       "seedId": "exp1-south_asia-acid_heat_condiment-chutney",
       "expansionBand": "acid_heat_condiment",
       "cacheTarget": {
-        "dishFamily": "chutney-acid-heat-condiment",
+        "dishFamily": "chutney",
         "region": "South Asia"
       },
       "sourceIds": [
@@ -5444,7 +5444,7 @@
       "seedId": "exp1-south_asia-protein_vegetable_mains-dal",
       "expansionBand": "protein_vegetable_mains",
       "cacheTarget": {
-        "dishFamily": "dal-protein-vegetable-mains",
+        "dishFamily": "dal",
         "region": "South Asia"
       },
       "sourceIds": [
@@ -5514,7 +5514,7 @@
       "seedId": "exp1-south_asia-handheld_social_foods-momo",
       "expansionBand": "handheld_social_foods",
       "cacheTarget": {
-        "dishFamily": "momo-handheld-social-foods",
+        "dishFamily": "momo",
         "region": "South Asia"
       },
       "sourceIds": [
@@ -5585,7 +5585,7 @@
       "seedId": "exp1-south_asia-sweet_ritual_foods-gulab-jamun",
       "expansionBand": "sweet_ritual_foods",
       "cacheTarget": {
-        "dishFamily": "gulab-jamun-sweet-ritual-foods",
+        "dishFamily": "gulab-jamun",
         "region": "South Asia"
       },
       "sourceIds": [
@@ -5656,7 +5656,7 @@
       "seedId": "exp1-east_asia-staple_starches-congee",
       "expansionBand": "staple_starches",
       "cacheTarget": {
-        "dishFamily": "congee-staple-starches",
+        "dishFamily": "congee",
         "region": "East Asia"
       },
       "sourceIds": [
@@ -5723,7 +5723,7 @@
       "seedId": "exp1-east_asia-liquids_and_comfort-green-tea",
       "expansionBand": "liquids_and_comfort",
       "cacheTarget": {
-        "dishFamily": "green-tea-liquids-and-comfort",
+        "dishFamily": "green-tea",
         "region": "East Asia"
       },
       "sourceIds": [
@@ -5792,7 +5792,7 @@
       "seedId": "exp1-east_asia-acid_heat_condiment-kimchi",
       "expansionBand": "acid_heat_condiment",
       "cacheTarget": {
-        "dishFamily": "kimchi-acid-heat-condiment",
+        "dishFamily": "kimchi",
         "region": "East Asia"
       },
       "sourceIds": [
@@ -5860,7 +5860,7 @@
       "seedId": "exp1-east_asia-protein_vegetable_mains-mapo-doufu",
       "expansionBand": "protein_vegetable_mains",
       "cacheTarget": {
-        "dishFamily": "mapo-doufu-protein-vegetable-mains",
+        "dishFamily": "mapo-doufu",
         "region": "East Asia"
       },
       "sourceIds": [
@@ -5930,7 +5930,7 @@
       "seedId": "exp1-east_asia-handheld_social_foods-gyoza",
       "expansionBand": "handheld_social_foods",
       "cacheTarget": {
-        "dishFamily": "gyoza-handheld-social-foods",
+        "dishFamily": "gyoza",
         "region": "East Asia"
       },
       "sourceIds": [
@@ -6000,7 +6000,7 @@
       "seedId": "exp1-east_asia-sweet_ritual_foods-mochi",
       "expansionBand": "sweet_ritual_foods",
       "cacheTarget": {
-        "dishFamily": "mochi-sweet-ritual-foods",
+        "dishFamily": "mochi",
         "region": "East Asia"
       },
       "sourceIds": [
@@ -6071,7 +6071,7 @@
       "seedId": "exp1-southeast_asia-staple_starches-nasi-lemak",
       "expansionBand": "staple_starches",
       "cacheTarget": {
-        "dishFamily": "nasi-lemak-staple-starches",
+        "dishFamily": "nasi-lemak",
         "region": "Southeast Asia"
       },
       "sourceIds": [
@@ -6138,7 +6138,7 @@
       "seedId": "exp1-southeast_asia-liquids_and_comfort-laksa",
       "expansionBand": "liquids_and_comfort",
       "cacheTarget": {
-        "dishFamily": "laksa-liquids-and-comfort",
+        "dishFamily": "laksa",
         "region": "Southeast Asia"
       },
       "sourceIds": [
@@ -6207,7 +6207,7 @@
       "seedId": "exp1-southeast_asia-acid_heat_condiment-sambal",
       "expansionBand": "acid_heat_condiment",
       "cacheTarget": {
-        "dishFamily": "sambal-acid-heat-condiment",
+        "dishFamily": "sambal",
         "region": "Southeast Asia"
       },
       "sourceIds": [
@@ -6275,7 +6275,7 @@
       "seedId": "exp1-southeast_asia-protein_vegetable_mains-rendang",
       "expansionBand": "protein_vegetable_mains",
       "cacheTarget": {
-        "dishFamily": "rendang-protein-vegetable-mains",
+        "dishFamily": "rendang",
         "region": "Southeast Asia"
       },
       "sourceIds": [
@@ -6344,7 +6344,7 @@
       "seedId": "exp1-southeast_asia-handheld_social_foods-popiah",
       "expansionBand": "handheld_social_foods",
       "cacheTarget": {
-        "dishFamily": "popiah-handheld-social-foods",
+        "dishFamily": "popiah",
         "region": "Southeast Asia"
       },
       "sourceIds": [
@@ -6415,7 +6415,7 @@
       "seedId": "exp1-southeast_asia-sweet_ritual_foods-halo-halo",
       "expansionBand": "sweet_ritual_foods",
       "cacheTarget": {
-        "dishFamily": "halo-halo-sweet-ritual-foods",
+        "dishFamily": "halo-halo",
         "region": "Southeast Asia"
       },
       "sourceIds": [
@@ -6486,7 +6486,7 @@
       "seedId": "exp1-oceania_pacific-staple_starches-colocasia-esculenta",
       "expansionBand": "staple_starches",
       "cacheTarget": {
-        "dishFamily": "colocasia-esculenta-staple-starches",
+        "dishFamily": "taro",
         "region": "Oceania and Pacific"
       },
       "sourceIds": [
@@ -6554,7 +6554,7 @@
       "seedId": "exp1-oceania_pacific-liquids_and_comfort-kava-drinking-as-practised-by-the-papuans-and-polynesians",
       "expansionBand": "liquids_and_comfort",
       "cacheTarget": {
-        "dishFamily": "kava-drinking-as-practised-by-the-papuans-and-polynesians-liquids-and-comfort",
+        "dishFamily": "kava",
         "region": "Oceania and Pacific"
       },
       "sourceIds": [
@@ -6624,7 +6624,7 @@
       "seedId": "exp1-oceania_pacific-acid_heat_condiment-ota-ika",
       "expansionBand": "acid_heat_condiment",
       "cacheTarget": {
-        "dishFamily": "ota-ika-acid-heat-condiment",
+        "dishFamily": "ota-ika",
         "region": "Oceania and Pacific"
       },
       "sourceIds": [
@@ -6693,7 +6693,7 @@
       "seedId": "exp1-oceania_pacific-protein_vegetable_mains-lomi-salmon",
       "expansionBand": "protein_vegetable_mains",
       "cacheTarget": {
-        "dishFamily": "lomi-salmon-protein-vegetable-mains",
+        "dishFamily": "lomi-salmon",
         "region": "Oceania and Pacific"
       },
       "sourceIds": [
@@ -6762,7 +6762,7 @@
       "seedId": "exp1-oceania_pacific-handheld_social_foods-meat-pie",
       "expansionBand": "handheld_social_foods",
       "cacheTarget": {
-        "dishFamily": "meat-pie-handheld-social-foods",
+        "dishFamily": "meat-pie",
         "region": "Oceania and Pacific"
       },
       "sourceIds": [
@@ -6832,7 +6832,7 @@
       "seedId": "exp1-oceania_pacific-sweet_ritual_foods-pavlova",
       "expansionBand": "sweet_ritual_foods",
       "cacheTarget": {
-        "dishFamily": "pavlova-sweet-ritual-foods",
+        "dishFamily": "pavlova",
         "region": "Oceania and Pacific"
       },
       "sourceIds": [
@@ -6903,7 +6903,7 @@
       "seedId": "exp1-europe-staple_starches-polenta",
       "expansionBand": "staple_starches",
       "cacheTarget": {
-        "dishFamily": "polenta-staple-starches",
+        "dishFamily": "polenta",
         "region": "Europe"
       },
       "sourceIds": [
@@ -6970,7 +6970,7 @@
       "seedId": "exp1-europe-liquids_and_comfort-borscht",
       "expansionBand": "liquids_and_comfort",
       "cacheTarget": {
-        "dishFamily": "borscht-liquids-and-comfort",
+        "dishFamily": "borscht",
         "region": "Europe"
       },
       "sourceIds": [
@@ -7039,7 +7039,7 @@
       "seedId": "exp1-europe-acid_heat_condiment-mustard",
       "expansionBand": "acid_heat_condiment",
       "cacheTarget": {
-        "dishFamily": "mustard-acid-heat-condiment",
+        "dishFamily": "mustard",
         "region": "Europe"
       },
       "sourceIds": [
@@ -7108,7 +7108,7 @@
       "seedId": "exp1-europe-protein_vegetable_mains-goulash",
       "expansionBand": "protein_vegetable_mains",
       "cacheTarget": {
-        "dishFamily": "goulash-protein-vegetable-mains",
+        "dishFamily": "goulash",
         "region": "Europe"
       },
       "sourceIds": [
@@ -7177,7 +7177,7 @@
       "seedId": "exp1-europe-handheld_social_foods-pierogi",
       "expansionBand": "handheld_social_foods",
       "cacheTarget": {
-        "dishFamily": "pierogi-handheld-social-foods",
+        "dishFamily": "pierogi",
         "region": "Europe"
       },
       "sourceIds": [
@@ -7247,7 +7247,7 @@
       "seedId": "exp1-europe-sweet_ritual_foods-panettone",
       "expansionBand": "sweet_ritual_foods",
       "cacheTarget": {
-        "dishFamily": "panettone-sweet-ritual-foods",
+        "dishFamily": "panettone",
         "region": "Europe"
       },
       "sourceIds": [
@@ -7318,7 +7318,7 @@
       "seedId": "exp1-caribbean-staple_starches-bammy",
       "expansionBand": "staple_starches",
       "cacheTarget": {
-        "dishFamily": "bammy-staple-starches",
+        "dishFamily": "bammy",
         "region": "Caribbean"
       },
       "sourceIds": [
@@ -7385,7 +7385,7 @@
       "seedId": "exp1-caribbean-liquids_and_comfort-hibiscus-tea",
       "expansionBand": "liquids_and_comfort",
       "cacheTarget": {
-        "dishFamily": "hibiscus-tea-liquids-and-comfort",
+        "dishFamily": "hibiscus-tea",
         "region": "Caribbean"
       },
       "sourceIds": [
@@ -7454,7 +7454,7 @@
       "seedId": "exp1-caribbean-acid_heat_condiment-pikliz",
       "expansionBand": "acid_heat_condiment",
       "cacheTarget": {
-        "dishFamily": "pikliz-acid-heat-condiment",
+        "dishFamily": "pikliz",
         "region": "Caribbean"
       },
       "sourceIds": [
@@ -7522,7 +7522,7 @@
       "seedId": "exp1-caribbean-protein_vegetable_mains-curry-goat",
       "expansionBand": "protein_vegetable_mains",
       "cacheTarget": {
-        "dishFamily": "curry-goat-protein-vegetable-mains",
+        "dishFamily": "curry-goat",
         "region": "Caribbean"
       },
       "sourceIds": [
@@ -7591,7 +7591,7 @@
       "seedId": "exp1-caribbean-handheld_social_foods-jamaican-patty",
       "expansionBand": "handheld_social_foods",
       "cacheTarget": {
-        "dishFamily": "jamaican-patty-handheld-social-foods",
+        "dishFamily": "jamaican-patty",
         "region": "Caribbean"
       },
       "sourceIds": [
@@ -7661,7 +7661,7 @@
       "seedId": "exp1-caribbean-sweet_ritual_foods-rum-cake",
       "expansionBand": "sweet_ritual_foods",
       "cacheTarget": {
-        "dishFamily": "rum-cake-sweet-ritual-foods",
+        "dishFamily": "rum-cake",
         "region": "Caribbean"
       },
       "sourceIds": [
@@ -7732,7 +7732,7 @@
       "seedId": "exp1-central_america-staple_starches-corn-tortilla",
       "expansionBand": "staple_starches",
       "cacheTarget": {
-        "dishFamily": "corn-tortilla-staple-starches",
+        "dishFamily": "corn-tortilla",
         "region": "Central America"
       },
       "sourceIds": [
@@ -7799,7 +7799,7 @@
       "seedId": "exp1-central_america-liquids_and_comfort-atole",
       "expansionBand": "liquids_and_comfort",
       "cacheTarget": {
-        "dishFamily": "atole-liquids-and-comfort",
+        "dishFamily": "atole",
         "region": "Central America"
       },
       "sourceIds": [
@@ -7868,7 +7868,7 @@
       "seedId": "exp1-central_america-acid_heat_condiment-curtido",
       "expansionBand": "acid_heat_condiment",
       "cacheTarget": {
-        "dishFamily": "curtido-acid-heat-condiment",
+        "dishFamily": "curtido",
         "region": "Central America"
       },
       "sourceIds": [
@@ -7936,7 +7936,7 @@
       "seedId": "exp1-central_america-protein_vegetable_mains-pepian",
       "expansionBand": "protein_vegetable_mains",
       "cacheTarget": {
-        "dishFamily": "pepian-protein-vegetable-mains",
+        "dishFamily": "pepian",
         "region": "Central America"
       },
       "sourceIds": [
@@ -8006,7 +8006,7 @@
       "seedId": "exp1-central_america-handheld_social_foods-pupusa",
       "expansionBand": "handheld_social_foods",
       "cacheTarget": {
-        "dishFamily": "pupusa-handheld-social-foods",
+        "dishFamily": "pupusa",
         "region": "Central America"
       },
       "sourceIds": [
@@ -8076,7 +8076,7 @@
       "seedId": "exp1-central_america-sweet_ritual_foods-tres-leches-cake",
       "expansionBand": "sweet_ritual_foods",
       "cacheTarget": {
-        "dishFamily": "tres-leches-cake-sweet-ritual-foods",
+        "dishFamily": "tres-leches-cake",
         "region": "Central America"
       },
       "sourceIds": [
@@ -8147,7 +8147,7 @@
       "seedId": "exp1-south_america-staple_starches-arepa",
       "expansionBand": "staple_starches",
       "cacheTarget": {
-        "dishFamily": "arepa-staple-starches",
+        "dishFamily": "arepa",
         "region": "South America"
       },
       "sourceIds": [
@@ -8214,7 +8214,7 @@
       "seedId": "exp1-south_america-liquids_and_comfort-yerba-mate-beverage",
       "expansionBand": "liquids_and_comfort",
       "cacheTarget": {
-        "dishFamily": "yerba-mate-beverage-liquids-and-comfort",
+        "dishFamily": "yerba-mate-beverage",
         "region": "South America"
       },
       "sourceIds": [
@@ -8284,7 +8284,7 @@
       "seedId": "exp1-south_america-acid_heat_condiment-chimichurri",
       "expansionBand": "acid_heat_condiment",
       "cacheTarget": {
-        "dishFamily": "chimichurri-acid-heat-condiment",
+        "dishFamily": "chimichurri",
         "region": "South America"
       },
       "sourceIds": [
@@ -8352,7 +8352,7 @@
       "seedId": "exp1-south_america-protein_vegetable_mains-feijoada",
       "expansionBand": "protein_vegetable_mains",
       "cacheTarget": {
-        "dishFamily": "feijoada-protein-vegetable-mains",
+        "dishFamily": "feijoada",
         "region": "South America"
       },
       "sourceIds": [
@@ -8421,7 +8421,7 @@
       "seedId": "exp1-south_america-handheld_social_foods-empanada",
       "expansionBand": "handheld_social_foods",
       "cacheTarget": {
-        "dishFamily": "empanada-handheld-social-foods",
+        "dishFamily": "empanada",
         "region": "South America"
       },
       "sourceIds": [
@@ -8491,7 +8491,7 @@
       "seedId": "exp1-south_america-sweet_ritual_foods-brigadeiro",
       "expansionBand": "sweet_ritual_foods",
       "cacheTarget": {
-        "dishFamily": "brigadeiro-sweet-ritual-foods",
+        "dishFamily": "brigadeiro",
         "region": "South America"
       },
       "sourceIds": [
@@ -8562,7 +8562,7 @@
       "seedId": "exp1-north_america-staple_starches-cornbread",
       "expansionBand": "staple_starches",
       "cacheTarget": {
-        "dishFamily": "cornbread-staple-starches",
+        "dishFamily": "cornbread",
         "region": "North America"
       },
       "sourceIds": [
@@ -8629,7 +8629,7 @@
       "seedId": "exp1-north_america-liquids_and_comfort-chicken-soup",
       "expansionBand": "liquids_and_comfort",
       "cacheTarget": {
-        "dishFamily": "chicken-soup-liquids-and-comfort",
+        "dishFamily": "chicken-soup",
         "region": "North America"
       },
       "sourceIds": [
@@ -8698,7 +8698,7 @@
       "seedId": "exp1-north_america-acid_heat_condiment-barbecue-sauce",
       "expansionBand": "acid_heat_condiment",
       "cacheTarget": {
-        "dishFamily": "barbecue-sauce-acid-heat-condiment",
+        "dishFamily": "barbecue-sauce",
         "region": "North America"
       },
       "sourceIds": [
@@ -8766,7 +8766,7 @@
       "seedId": "exp1-north_america-protein_vegetable_mains-pot-roast",
       "expansionBand": "protein_vegetable_mains",
       "cacheTarget": {
-        "dishFamily": "pot-roast-protein-vegetable-mains",
+        "dishFamily": "pot-roast",
         "region": "North America"
       },
       "sourceIds": [
@@ -8835,7 +8835,7 @@
       "seedId": "exp1-north_america-handheld_social_foods-hamburger",
       "expansionBand": "handheld_social_foods",
       "cacheTarget": {
-        "dishFamily": "hamburger-handheld-social-foods",
+        "dishFamily": "hamburger",
         "region": "North America"
       },
       "sourceIds": [
@@ -8905,7 +8905,7 @@
       "seedId": "exp1-north_america-sweet_ritual_foods-apple-pie",
       "expansionBand": "sweet_ritual_foods",
       "cacheTarget": {
-        "dishFamily": "apple-pie-sweet-ritual-foods",
+        "dishFamily": "apple-pie",
         "region": "North America"
       },
       "sourceIds": [
@@ -8976,7 +8976,7 @@
       "seedId": "exp1-indigenous_first_peoples-staple_starches-frybread",
       "expansionBand": "staple_starches",
       "cacheTarget": {
-        "dishFamily": "frybread-staple-starches",
+        "dishFamily": "frybread",
         "region": "Indigenous and First Peoples"
       },
       "sourceIds": [
@@ -9043,7 +9043,7 @@
       "seedId": "exp1-indigenous_first_peoples-liquids_and_comfort-labrador-tea",
       "expansionBand": "liquids_and_comfort",
       "cacheTarget": {
-        "dishFamily": "labrador-tea-liquids-and-comfort",
+        "dishFamily": "labrador-tea",
         "region": "Indigenous and First Peoples"
       },
       "sourceIds": [
@@ -9112,7 +9112,7 @@
       "seedId": "exp1-indigenous_first_peoples-acid_heat_condiment-cranberry-sauce",
       "expansionBand": "acid_heat_condiment",
       "cacheTarget": {
-        "dishFamily": "cranberry-sauce-acid-heat-condiment",
+        "dishFamily": "cranberry-sauce",
         "region": "Indigenous and First Peoples"
       },
       "sourceIds": [
@@ -9180,7 +9180,7 @@
       "seedId": "exp1-indigenous_first_peoples-protein_vegetable_mains-three-sisters-soup",
       "expansionBand": "protein_vegetable_mains",
       "cacheTarget": {
-        "dishFamily": "three-sisters-soup-protein-vegetable-mains",
+        "dishFamily": "three-sisters-soup",
         "region": "Indigenous and First Peoples"
       },
       "sourceIds": [
@@ -9249,7 +9249,7 @@
       "seedId": "exp1-indigenous_first_peoples-handheld_social_foods-navajo-taco",
       "expansionBand": "handheld_social_foods",
       "cacheTarget": {
-        "dishFamily": "navajo-taco-handheld-social-foods",
+        "dishFamily": "navajo-taco",
         "region": "Indigenous and First Peoples"
       },
       "sourceIds": [
@@ -9319,7 +9319,7 @@
       "seedId": "exp1-indigenous_first_peoples-sweet_ritual_foods-maple-syrup",
       "expansionBand": "sweet_ritual_foods",
       "cacheTarget": {
-        "dishFamily": "maple-syrup-sweet-ritual-foods",
+        "dishFamily": "maple-syrup",
         "region": "Indigenous and First Peoples"
       },
       "sourceIds": [
@@ -9390,7 +9390,7 @@
       "seedId": "exp1-diaspora_global-staple_starches-bagel",
       "expansionBand": "staple_starches",
       "cacheTarget": {
-        "dishFamily": "bagel-staple-starches",
+        "dishFamily": "bagel",
         "region": "Global diaspora"
       },
       "sourceIds": [
@@ -9457,7 +9457,7 @@
       "seedId": "exp1-diaspora_global-liquids_and_comfort-bubble-tea",
       "expansionBand": "liquids_and_comfort",
       "cacheTarget": {
-        "dishFamily": "bubble-tea-liquids-and-comfort",
+        "dishFamily": "bubble-tea",
         "region": "Global diaspora"
       },
       "sourceIds": [
@@ -9526,7 +9526,7 @@
       "seedId": "exp1-diaspora_global-acid_heat_condiment-mango-pickle",
       "expansionBand": "acid_heat_condiment",
       "cacheTarget": {
-        "dishFamily": "mango-pickle-acid-heat-condiment",
+        "dishFamily": "mango-pickle",
         "region": "Global diaspora"
       },
       "sourceIds": [
@@ -9594,7 +9594,7 @@
       "seedId": "exp1-diaspora_global-protein_vegetable_mains-jerk-chicken",
       "expansionBand": "protein_vegetable_mains",
       "cacheTarget": {
-        "dishFamily": "jerk-chicken-protein-vegetable-mains",
+        "dishFamily": "jerk-chicken",
         "region": "Global diaspora"
       },
       "sourceIds": [
@@ -9663,7 +9663,7 @@
       "seedId": "exp1-diaspora_global-handheld_social_foods-falafel",
       "expansionBand": "handheld_social_foods",
       "cacheTarget": {
-        "dishFamily": "falafel-handheld-social-foods",
+        "dishFamily": "falafel",
         "region": "Global diaspora"
       },
       "sourceIds": [
@@ -9733,7 +9733,7 @@
       "seedId": "exp1-diaspora_global-sweet_ritual_foods-mooncake",
       "expansionBand": "sweet_ritual_foods",
       "cacheTarget": {
-        "dishFamily": "mooncake-sweet-ritual-foods",
+        "dishFamily": "mooncake",
         "region": "Global diaspora"
       },
       "sourceIds": [
@@ -9804,7 +9804,7 @@
       "seedId": "exp1-borderland_trade_routes-staple_starches-wheat-tortilla",
       "expansionBand": "staple_starches",
       "cacheTarget": {
-        "dishFamily": "wheat-tortilla-staple-starches",
+        "dishFamily": "wheat-tortilla",
         "region": "Borderlands and trade routes"
       },
       "sourceIds": [
@@ -9872,7 +9872,7 @@
       "seedId": "exp1-borderland_trade_routes-liquids_and_comfort-champurrado",
       "expansionBand": "liquids_and_comfort",
       "cacheTarget": {
-        "dishFamily": "champurrado-liquids-and-comfort",
+        "dishFamily": "champurrado",
         "region": "Borderlands and trade routes"
       },
       "sourceIds": [
@@ -9941,7 +9941,7 @@
       "seedId": "exp1-borderland_trade_routes-acid_heat_condiment-salsa-food-group",
       "expansionBand": "acid_heat_condiment",
       "cacheTarget": {
-        "dishFamily": "salsa-food-group-acid-heat-condiment",
+        "dishFamily": "salsa",
         "region": "Borderlands and trade routes"
       },
       "sourceIds": [
@@ -10010,7 +10010,7 @@
       "seedId": "exp1-borderland_trade_routes-protein_vegetable_mains-chili",
       "expansionBand": "protein_vegetable_mains",
       "cacheTarget": {
-        "dishFamily": "chili-protein-vegetable-mains",
+        "dishFamily": "chili",
         "region": "Borderlands and trade routes"
       },
       "sourceIds": [
@@ -10080,7 +10080,7 @@
       "seedId": "exp1-borderland_trade_routes-handheld_social_foods-burrito",
       "expansionBand": "handheld_social_foods",
       "cacheTarget": {
-        "dishFamily": "burrito-handheld-social-foods",
+        "dishFamily": "burrito",
         "region": "Borderlands and trade routes"
       },
       "sourceIds": [
@@ -10150,7 +10150,7 @@
       "seedId": "exp1-borderland_trade_routes-sweet_ritual_foods-pan-de-muerto",
       "expansionBand": "sweet_ritual_foods",
       "cacheTarget": {
-        "dishFamily": "pan-de-muerto-sweet-ritual-foods",
+        "dishFamily": "pan-de-muerto",
         "region": "Borderlands and trade routes"
       },
       "sourceIds": [
@@ -10221,7 +10221,7 @@
       "seedId": "exp1-arctic_subarctic-staple_starches-bannock",
       "expansionBand": "staple_starches",
       "cacheTarget": {
-        "dishFamily": "bannock-staple-starches",
+        "dishFamily": "bannock",
         "region": "Arctic and Subarctic"
       },
       "sourceIds": [
@@ -10288,7 +10288,7 @@
       "seedId": "exp1-arctic_subarctic-liquids_and_comfort-labrador-tea",
       "expansionBand": "liquids_and_comfort",
       "cacheTarget": {
-        "dishFamily": "labrador-tea-liquids-and-comfort",
+        "dishFamily": "labrador-tea",
         "region": "Arctic and Subarctic"
       },
       "sourceIds": [
@@ -10357,7 +10357,7 @@
       "seedId": "exp1-arctic_subarctic-acid_heat_condiment-fermented-fish",
       "expansionBand": "acid_heat_condiment",
       "cacheTarget": {
-        "dishFamily": "fermented-fish-acid-heat-condiment",
+        "dishFamily": "fermented-fish",
         "region": "Arctic and Subarctic"
       },
       "sourceIds": [
@@ -10425,7 +10425,7 @@
       "seedId": "exp1-arctic_subarctic-protein_vegetable_mains-muktuk",
       "expansionBand": "protein_vegetable_mains",
       "cacheTarget": {
-        "dishFamily": "muktuk-protein-vegetable-mains",
+        "dishFamily": "muktuk",
         "region": "Arctic and Subarctic"
       },
       "sourceIds": [
@@ -10494,7 +10494,7 @@
       "seedId": "exp1-arctic_subarctic-handheld_social_foods-dried-fish",
       "expansionBand": "handheld_social_foods",
       "cacheTarget": {
-        "dishFamily": "dried-fish-handheld-social-foods",
+        "dishFamily": "dried-fish",
         "region": "Arctic and Subarctic"
       },
       "sourceIds": [
@@ -10564,7 +10564,7 @@
       "seedId": "exp1-arctic_subarctic-sweet_ritual_foods-alaskan-ice-cream",
       "expansionBand": "sweet_ritual_foods",
       "cacheTarget": {
-        "dishFamily": "alaskan-ice-cream-sweet-ritual-foods",
+        "dishFamily": "alaskan-ice-cream",
         "region": "Arctic and Subarctic"
       },
       "sourceIds": [
@@ -10818,7 +10818,7 @@
       "seedId": "exp2-mexico-tamarind-chile-candy",
       "cacheTarget": {
         "dishFamily": "tamarind-chile-wrapper-candy",
-        "region": "Mexico and diaspora"
+        "region": "Mexico diaspora"
       },
       "sourceIds": [
         "wikidata-structured-food-data"
@@ -11162,7 +11162,7 @@
       "seedId": "exp2-vietnam-rice-paper-herb-roll",
       "cacheTarget": {
         "dishFamily": "rice-paper-herb-roll",
-        "region": "Vietnam and diaspora"
+        "region": "Vietnam diaspora"
       },
       "sourceIds": [
         "wikidata-structured-food-data"
@@ -11337,7 +11337,7 @@
     {
       "seedId": "exp2-middle_east-black-lime-sour-stew",
       "cacheTarget": {
-        "dishFamily": "black-lime-sour-stew-cue",
+        "dishFamily": "black-lime-sour-stew",
         "region": "Middle East and West Asia"
       },
       "sourceIds": [
@@ -11357,7 +11357,7 @@
         "regionScopes.macro_region"
       ],
       "record": {
-        "dishName": "black-lime-sour-stew-cue",
+        "dishName": "black-lime-sour-stew",
         "query": "black lime dried lime structured data sour stew memory",
         "sources": [
           {
@@ -11375,7 +11375,7 @@
         ],
         "extractedFacts": {
           "namesAndAliases": [
-            "black-lime-sour-stew-cue",
+            "black-lime-sour-stew",
             "black lime",
             "dried lime",
             "loomi",
@@ -11997,10 +11997,10 @@
       }
     },
     {
-      "seedId": "exp3-depth-tamarind-chile-wrapper-candy-latin-america-comparison",
+      "seedId": "exp3-depth-tamarind-chile-wrapper-candy-latin-america",
       "cacheTarget": {
         "dishFamily": "tamarind-chile-wrapper-candy",
-        "region": "Latin America comparison"
+        "region": "Latin America"
       },
       "sourceIds": [
         "wikidata-structured-food-data"
@@ -12018,7 +12018,7 @@
       ],
       "record": {
         "dishName": "tamarind-chile-wrapper-candy",
-        "query": "Pulparindo Latin America comparison sensory variant structured data",
+        "query": "Pulparindo Latin America sensory variant structured data",
         "sources": [
           {
             "title": "Pulparindo (Q7259589) structured data",
@@ -12030,7 +12030,7 @@
               "Wikidata item Q7259589 has English label \"Pulparindo\".",
               "Wikidata item Q7259589 has English description: Mexican candy.",
               "Operator mapped aliases for depth grounding: tamarind candy.",
-              "Operator depth context for retrieval: Latin America comparison."
+              "Operator depth context for retrieval: Latin America."
             ]
           }
         ],
@@ -12064,7 +12064,7 @@
             "diaspora or regional variant cue"
           ],
           "regionalVariants": [
-            "Latin America comparison is stored as a retrieval context for tamarind-chile-wrapper-candy.",
+            "Latin America is stored as a retrieval context for tamarind-chile-wrapper-candy.",
             "This depth record reuses approved structured labels while keeping household certainty unknown."
           ]
         },
@@ -12414,7 +12414,7 @@
       "seedId": "exp3-depth-fermented-cereal-porridge-drink-ghana",
       "cacheTarget": {
         "dishFamily": "fermented-cereal-porridge-drink",
-        "region": "Ghana comparison"
+        "region": "Ghana"
       },
       "sourceIds": [
         "wikidata-structured-food-data"
@@ -12434,7 +12434,7 @@
       ],
       "record": {
         "dishName": "fermented-cereal-porridge-drink",
-        "query": "ogi Ghana comparison sensory variant structured data",
+        "query": "ogi Ghana sensory variant structured data",
         "sources": [
           {
             "title": "ogi (Q7080021) structured data",
@@ -12446,7 +12446,7 @@
               "Wikidata item Q7080021 has English label \"ogi\".",
               "Wikidata item Q7080021 has English description: fermented cereal pudding from Nigeria, typically made from maize, sorghum, or millet.",
               "Operator mapped aliases for depth grounding: akamu.",
-              "Operator depth context for retrieval: Ghana comparison."
+              "Operator depth context for retrieval: Ghana."
             ]
           }
         ],
@@ -12455,7 +12455,7 @@
             "fermented-cereal-porridge-drink",
             "ogi",
             "akamu",
-            "koko-style comparison cue",
+            "koko-style contrast cue",
             "warm breakfast porridge",
             "millet or maize body"
           ],
@@ -12471,7 +12471,7 @@
             "minimum-cue retrieval support"
           ],
           "sensoryDescriptors": [
-            "koko-style comparison cue",
+            "koko-style contrast cue",
             "warm breakfast porridge",
             "millet or maize body"
           ],
@@ -12480,7 +12480,7 @@
             "diaspora or regional variant cue"
           ],
           "regionalVariants": [
-            "Ghana comparison is stored as a retrieval context for fermented-cereal-porridge-drink.",
+            "Ghana is stored as a retrieval context for fermented-cereal-porridge-drink.",
             "This depth record reuses approved structured labels while keeping household certainty unknown."
           ]
         },
@@ -12580,7 +12580,7 @@
       "seedId": "exp3-depth-fermented-cereal-porridge-drink-millet-sorghum",
       "cacheTarget": {
         "dishFamily": "fermented-cereal-porridge-drink",
-        "region": "Millet and sorghum variants"
+        "region": "West Africa millet-sorghum"
       },
       "sourceIds": [
         "wikidata-structured-food-data"
@@ -12600,7 +12600,7 @@
       ],
       "record": {
         "dishName": "fermented-cereal-porridge-drink",
-        "query": "ogi Millet and sorghum variants sensory variant structured data",
+        "query": "ogi West Africa millet-sorghum sensory variant structured data",
         "sources": [
           {
             "title": "ogi (Q7080021) structured data",
@@ -12612,7 +12612,7 @@
               "Wikidata item Q7080021 has English label \"ogi\".",
               "Wikidata item Q7080021 has English description: fermented cereal pudding from Nigeria, typically made from maize, sorghum, or millet.",
               "Operator mapped aliases for depth grounding: akamu.",
-              "Operator depth context for retrieval: Millet and sorghum variants."
+              "Operator depth context for retrieval: West Africa millet-sorghum."
             ]
           }
         ],
@@ -12647,7 +12647,7 @@
             "diaspora or regional variant cue"
           ],
           "regionalVariants": [
-            "Millet and sorghum variants is stored as a retrieval context for fermented-cereal-porridge-drink.",
+            "West Africa millet-sorghum is stored as a retrieval context for fermented-cereal-porridge-drink.",
             "This depth record reuses approved structured labels while keeping household certainty unknown."
           ]
         },
@@ -12746,7 +12746,7 @@
       "seedId": "exp3-depth-black-sesame-seed-paste-sweet-east-asia-bakery",
       "cacheTarget": {
         "dishFamily": "black-sesame-seed-paste-sweet",
-        "region": "East Asian bakery diaspora"
+        "region": "East Asia bakery diaspora"
       },
       "sourceIds": [
         "wikidata-structured-food-data"
@@ -13153,10 +13153,10 @@
       }
     },
     {
-      "seedId": "exp3-depth-rice-paper-herb-roll-southeast-asia-comparison",
+      "seedId": "exp3-depth-rice-paper-herb-roll-southeast-asia",
       "cacheTarget": {
         "dishFamily": "rice-paper-herb-roll",
-        "region": "Southeast Asia comparison"
+        "region": "Southeast Asia"
       },
       "sourceIds": [
         "wikidata-structured-food-data"
@@ -13175,7 +13175,7 @@
       ],
       "record": {
         "dishName": "rice-paper-herb-roll",
-        "query": "gỏi cuốn Southeast Asia comparison sensory variant structured data",
+        "query": "gỏi cuốn Southeast Asia sensory variant structured data",
         "sources": [
           {
             "title": "gỏi cuốn (Q7799573) structured data",
@@ -13187,7 +13187,7 @@
               "Wikidata item Q7799573 has English label \"gỏi cuốn\".",
               "Wikidata item Q7799573 has English description: Vietnamese dish.",
               "Operator mapped aliases for depth grounding: goi cuon, rice paper roll.",
-              "Operator depth context for retrieval: Southeast Asia comparison."
+              "Operator depth context for retrieval: Southeast Asia."
             ]
           }
         ],
@@ -13223,7 +13223,7 @@
             "diaspora or regional variant cue"
           ],
           "regionalVariants": [
-            "Southeast Asia comparison is stored as a retrieval context for rice-paper-herb-roll.",
+            "Southeast Asia is stored as a retrieval context for rice-paper-herb-roll.",
             "This depth record reuses approved structured labels while keeping household certainty unknown."
           ]
         },
@@ -13573,10 +13573,10 @@
       }
     },
     {
-      "seedId": "exp3-depth-cassava-leaf-stew-nut-free-comparison",
+      "seedId": "exp3-depth-cassava-leaf-stew-nut-free-adaptation",
       "cacheTarget": {
         "dishFamily": "cassava-leaf-stew",
-        "region": "Nut-free comparison"
+        "region": "Global diaspora nut-free adaptation"
       },
       "sourceIds": [
         "wikidata-structured-food-data"
@@ -13596,7 +13596,7 @@
       ],
       "record": {
         "dishName": "cassava-leaf-stew",
-        "query": "sombe Nut-free comparison sensory variant structured data",
+        "query": "sombe Global diaspora nut-free adaptation sensory variant structured data",
         "sources": [
           {
             "title": "sombe (Q124448968) structured data",
@@ -13608,7 +13608,7 @@
               "Wikidata item Q124448968 has English label \"sombe\".",
               "Wikidata item Q124448968 has English description: Ugandan stew made using pounded cassava leaves, palm oil and fish or meat.",
               "Operator mapped aliases for depth grounding: cassava leaf stew.",
-              "Operator depth context for retrieval: Nut-free comparison."
+              "Operator depth context for retrieval: Global diaspora nut-free adaptation."
             ]
           }
         ],
@@ -13642,7 +13642,7 @@
             "diaspora or regional variant cue"
           ],
           "regionalVariants": [
-            "Nut-free comparison is stored as a retrieval context for cassava-leaf-stew.",
+            "Global diaspora nut-free adaptation is stored as a retrieval context for cassava-leaf-stew.",
             "This depth record reuses approved structured labels while keeping household certainty unknown."
           ]
         },
@@ -13656,9 +13656,9 @@
       }
     },
     {
-      "seedId": "exp3-depth-black-lime-sour-stew-cue-iraq",
+      "seedId": "exp3-depth-black-lime-sour-stew-iraq",
       "cacheTarget": {
-        "dishFamily": "black-lime-sour-stew-cue",
+        "dishFamily": "black-lime-sour-stew",
         "region": "Iraq"
       },
       "sourceIds": [
@@ -13677,7 +13677,7 @@
         "evidenceLevels.seed_hypothesis"
       ],
       "record": {
-        "dishName": "black-lime-sour-stew-cue",
+        "dishName": "black-lime-sour-stew",
         "query": "Black lime Iraq sensory variant structured data",
         "sources": [
           {
@@ -13696,7 +13696,7 @@
         ],
         "extractedFacts": {
           "namesAndAliases": [
-            "black-lime-sour-stew-cue",
+            "black-lime-sour-stew",
             "Black lime",
             "dried lime",
             "loomi",
@@ -13727,7 +13727,7 @@
             "diaspora or regional variant cue"
           ],
           "regionalVariants": [
-            "Iraq is stored as a retrieval context for black-lime-sour-stew-cue.",
+            "Iraq is stored as a retrieval context for black-lime-sour-stew.",
             "This depth record reuses approved structured labels while keeping household certainty unknown."
           ]
         },
@@ -13741,10 +13741,10 @@
       }
     },
     {
-      "seedId": "exp3-depth-black-lime-sour-stew-cue-iran-gulf-comparison",
+      "seedId": "exp3-depth-black-lime-sour-stew-iran-gulf",
       "cacheTarget": {
-        "dishFamily": "black-lime-sour-stew-cue",
-        "region": "Iran and Gulf comparison"
+        "dishFamily": "black-lime-sour-stew",
+        "region": "Iran and Gulf"
       },
       "sourceIds": [
         "wikidata-structured-food-data"
@@ -13762,8 +13762,8 @@
         "evidenceLevels.seed_hypothesis"
       ],
       "record": {
-        "dishName": "black-lime-sour-stew-cue",
-        "query": "Black lime Iran and Gulf comparison sensory variant structured data",
+        "dishName": "black-lime-sour-stew",
+        "query": "Black lime Iran and Gulf sensory variant structured data",
         "sources": [
           {
             "title": "Black lime (Q460570) structured data",
@@ -13775,13 +13775,13 @@
               "Wikidata item Q460570 has English label \"Black lime\".",
               "Wikidata item Q460570 has English description: Dried lime.",
               "Operator mapped aliases for depth grounding: dried lime, loomi.",
-              "Operator depth context for retrieval: Iran and Gulf comparison."
+              "Operator depth context for retrieval: Iran and Gulf."
             ]
           }
         ],
         "extractedFacts": {
           "namesAndAliases": [
-            "black-lime-sour-stew-cue",
+            "black-lime-sour-stew",
             "Black lime",
             "dried lime",
             "loomi",
@@ -13811,7 +13811,7 @@
             "diaspora or regional variant cue"
           ],
           "regionalVariants": [
-            "Iran and Gulf comparison is stored as a retrieval context for black-lime-sour-stew-cue.",
+            "Iran and Gulf is stored as a retrieval context for black-lime-sour-stew.",
             "This depth record reuses approved structured labels while keeping household certainty unknown."
           ]
         },
@@ -13825,9 +13825,9 @@
       }
     },
     {
-      "seedId": "exp3-depth-black-lime-sour-stew-cue-gulf-diaspora",
+      "seedId": "exp3-depth-black-lime-sour-stew-gulf-diaspora",
       "cacheTarget": {
-        "dishFamily": "black-lime-sour-stew-cue",
+        "dishFamily": "black-lime-sour-stew",
         "region": "Gulf diaspora"
       },
       "sourceIds": [
@@ -13846,7 +13846,7 @@
         "evidenceLevels.seed_hypothesis"
       ],
       "record": {
-        "dishName": "black-lime-sour-stew-cue",
+        "dishName": "black-lime-sour-stew",
         "query": "Black lime Gulf diaspora sensory variant structured data",
         "sources": [
           {
@@ -13865,7 +13865,7 @@
         ],
         "extractedFacts": {
           "namesAndAliases": [
-            "black-lime-sour-stew-cue",
+            "black-lime-sour-stew",
             "Black lime",
             "dried lime",
             "loomi",
@@ -13896,7 +13896,7 @@
             "diaspora or regional variant cue"
           ],
           "regionalVariants": [
-            "Gulf diaspora is stored as a retrieval context for black-lime-sour-stew-cue.",
+            "Gulf diaspora is stored as a retrieval context for black-lime-sour-stew.",
             "This depth record reuses approved structured labels while keeping household certainty unknown."
           ]
         },
@@ -13910,9 +13910,9 @@
       }
     },
     {
-      "seedId": "exp3-depth-black-lime-sour-stew-cue-global-diaspora",
+      "seedId": "exp3-depth-black-lime-sour-stew-global-diaspora",
       "cacheTarget": {
-        "dishFamily": "black-lime-sour-stew-cue",
+        "dishFamily": "black-lime-sour-stew",
         "region": "Global diaspora"
       },
       "sourceIds": [
@@ -13931,7 +13931,7 @@
         "evidenceLevels.seed_hypothesis"
       ],
       "record": {
-        "dishName": "black-lime-sour-stew-cue",
+        "dishName": "black-lime-sour-stew",
         "query": "Black lime Global diaspora sensory variant structured data",
         "sources": [
           {
@@ -13950,7 +13950,7 @@
         ],
         "extractedFacts": {
           "namesAndAliases": [
-            "black-lime-sour-stew-cue",
+            "black-lime-sour-stew",
             "Black lime",
             "dried lime",
             "loomi",
@@ -13980,7 +13980,7 @@
             "diaspora or regional variant cue"
           ],
           "regionalVariants": [
-            "Global diaspora is stored as a retrieval context for black-lime-sour-stew-cue.",
+            "Global diaspora is stored as a retrieval context for black-lime-sour-stew.",
             "This depth record reuses approved structured labels while keeping household certainty unknown."
           ]
         },
@@ -13997,7 +13997,7 @@
       "seedId": "exp3-depth-bitter-melon-egg-broth-global-diaspora",
       "cacheTarget": {
         "dishFamily": "bitter-melon-egg-broth",
-        "region": "Bitter melon global comparison"
+        "region": "Global bitter melon diaspora"
       },
       "sourceIds": [
         "wikidata-structured-food-data"
@@ -14017,7 +14017,7 @@
       ],
       "record": {
         "dishName": "bitter-melon-egg-broth",
-        "query": "bitter melon global comparison sensory variant structured data",
+        "query": "bitter melon global diaspora sensory variant structured data",
         "sources": [
           {
             "title": "bitter melon (Q112758485) structured data",
@@ -14029,7 +14029,7 @@
               "Wikidata item Q112758485 has English label \"bitter melon\".",
               "Wikidata item Q112758485 has English description: the vegetable; fruit of Momordica charantia.",
               "Operator mapped aliases for depth grounding: bitter gourd.",
-              "Operator depth context for retrieval: Bitter melon global comparison."
+              "Operator depth context for retrieval: Global bitter melon diaspora."
             ]
           }
         ],
@@ -14038,7 +14038,7 @@
             "bitter-melon-egg-broth",
             "bitter melon",
             "bitter gourd",
-            "global bitter melon comparison",
+            "global bitter melon diaspora",
             "bitter gourd broth disambiguator"
           ],
           "regions": [
@@ -14065,7 +14065,7 @@
             "diaspora or regional variant cue"
           ],
           "regionalVariants": [
-            "Bitter melon global comparison is stored as a retrieval context for bitter-melon-egg-broth.",
+            "Global bitter melon diaspora is stored as a retrieval context for bitter-melon-egg-broth.",
             "This depth record reuses approved structured labels while keeping household certainty unknown."
           ]
         },

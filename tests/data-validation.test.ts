@@ -222,7 +222,7 @@ describe('bundled data validation', () => {
       id: data.referenceSeedQueue.seeds[0].id,
       coverageTags: ['foodForms.not-real'],
       querySeeds: [],
-      cacheTargets: [{ dishFamily: 'missing-region' }],
+      cacheTargets: [{ dishFamily: 'borscht-liquids-and-comfort', region: 'Europe comparison' }],
     });
     delete data.referenceSeedQueue.seeds[1].provenance;
 
@@ -231,8 +231,27 @@ describe('bundled data validation', () => {
     expectIssue(issues, `referenceSeedQueue.seeds[${badSeedIndex}].id`, 'duplicate');
     expectIssue(issues, `referenceSeedQueue.seeds[${badSeedIndex}].coverageTags[0]`, 'unknown coverage tag');
     expectIssue(issues, `referenceSeedQueue.seeds[${badSeedIndex}].querySeeds`, 'non-empty array');
-    expectIssue(issues, `referenceSeedQueue.seeds[${badSeedIndex}].cacheTargets[0].region`, 'non-empty string');
+    expectIssue(issues, `referenceSeedQueue.seeds[${badSeedIndex}].cacheTargets[0].dishFamily`, 'must not encode coverage band');
+    expectIssue(issues, `referenceSeedQueue.seeds[${badSeedIndex}].cacheTargets[0].region`, 'must not encode comparison');
     expectIssue(issues, 'referenceSeedQueue.seeds[1].provenance', 'provenance');
+  });
+
+  it('rejects artificial taxonomy keys in cache warming targets', () => {
+    const data = cloneBundledData();
+    const badTaskIndex = data.cacheWarmingManifest.tasks.length;
+    data.cacheWarmingManifest.tasks.push({
+      ...structuredClone(data.cacheWarmingManifest.tasks[0]),
+      id: 'synthetic-taxonomy-task',
+      cacheTarget: {
+        dishFamily: 'rice-cinnamon-beverage-cue',
+        region: 'Latin America variants',
+      },
+    });
+
+    const issues = validateBundledData(data);
+
+    expectIssue(issues, `cacheWarmingManifest.tasks[${badTaskIndex}].cacheTarget.dishFamily`, 'must not encode coverage band');
+    expectIssue(issues, `cacheWarmingManifest.tasks[${badTaskIndex}].cacheTarget.region`, 'must not encode comparison');
   });
 
   it('rejects malformed cache warming manifest tasks', () => {
