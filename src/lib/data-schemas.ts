@@ -182,6 +182,10 @@ type ReferenceFamilyMapping = {
 export type ReferenceFamilyTaxonomy = {
   meta: Meta;
   clusterPolicy: {
+    coverageUniverse?: unknown;
+    currentCoverageAxesAreCompleteClaim?: unknown;
+    requiredCoverageAxesScope?: unknown;
+    expansionBacklogAxes?: unknown;
     familyCountIsNotSuccessMetric?: unknown;
     minimumTargetRecordsPerFamily?: unknown;
     minimumTargetRecordsPerCluster?: unknown;
@@ -835,6 +839,17 @@ function validateReferenceFamilyTaxonomy(
   if (!isRecord(policy)) {
     pushIssue(issues, 'referenceFamilyTaxonomy.clusterPolicy', 'must be an object');
   } else {
+    if (policy.coverageUniverse !== 'open_world') {
+      pushIssue(issues, 'referenceFamilyTaxonomy.clusterPolicy.coverageUniverse', 'must be open_world');
+    }
+    if (policy.currentCoverageAxesAreCompleteClaim !== false) {
+      pushIssue(issues, 'referenceFamilyTaxonomy.clusterPolicy.currentCoverageAxesAreCompleteClaim', 'must be false');
+    }
+    validateNonEmptyString(issues, 'referenceFamilyTaxonomy.clusterPolicy.requiredCoverageAxesScope', policy.requiredCoverageAxesScope);
+    validateStringArray(issues, 'referenceFamilyTaxonomy.clusterPolicy.expansionBacklogAxes', policy.expansionBacklogAxes, {
+      requireNonEmpty: true,
+      unique: true,
+    });
     if (policy.familyCountIsNotSuccessMetric !== true) {
       pushIssue(issues, 'referenceFamilyTaxonomy.clusterPolicy.familyCountIsNotSuccessMetric', 'must be true');
     }

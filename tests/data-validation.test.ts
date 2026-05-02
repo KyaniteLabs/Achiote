@@ -209,8 +209,18 @@ describe('bundled data validation', () => {
     const mappedClusterIds = new Set(referenceFamilyTaxonomyData.familyMappings.map((mapping) => mapping.primaryCluster));
     const coveredTags = new Set(referenceFamilyTaxonomyData.familyMappings.flatMap((mapping) => mapping.coverageTags));
 
+    expect(referenceFamilyTaxonomyData.clusterPolicy.coverageUniverse).toBe('open_world');
+    expect(referenceFamilyTaxonomyData.clusterPolicy.currentCoverageAxesAreCompleteClaim).toBe(false);
+    expect(referenceFamilyTaxonomyData.clusterPolicy.requiredCoverageAxesScope).toContain('not a final or exhaustive ontology');
+    expect(referenceFamilyTaxonomyData.clusterPolicy.expansionBacklogAxes).toEqual(expect.arrayContaining([
+      'microRegionsAndEcologies',
+      'stapleIngredientBases',
+      'languagesScriptsTransliterationsAndHouseholdNames',
+      'seasonalityClimateAndAvailabilityConstraints',
+    ]));
     expect(referenceFamilyTaxonomyData.clusterPolicy.familyCountIsNotSuccessMetric).toBe(true);
     expect(referenceFamilyTaxonomyData.clusterPolicy.populationOrder).toEqual(expect.arrayContaining([
+      'cover every current global coverage axis value while treating the axis list as expandable',
       'add region, diaspora, naming, ingredient, and sensory variants under existing families before creating new families',
     ]));
     expect(referenceFamilyTaxonomyData.clusters.length).toBeGreaterThanOrEqual(8);

@@ -8,11 +8,32 @@
       "notes": [
         "This file is taxonomy architecture, not proof that every family is well-populated.",
         "Specific dish families remain retrieval leaves; clusters are parent buckets for balanced database population.",
-        "Population should thicken clusters across regions, food forms, mechanisms, naming systems, and diaspora paths rather than multiplying fake family names."
+        "Population should thicken clusters across regions, food forms, mechanisms, naming systems, and diaspora paths rather than multiplying fake family names.",
+        "Current coverage axes are the first required scaffold, not a completeness claim about world food.",
+        "Everything means open-world expansion: every newly observed food form, ecology, ingredient base, technique, naming system, ritual context, migration path, and locality must be either mapped into an existing axis or added as a new axis/value."
       ]
     }
   },
   "clusterPolicy": {
+    "coverageUniverse": "open_world",
+    "currentCoverageAxesAreCompleteClaim": false,
+    "requiredCoverageAxesScope": "Current requiredCoverageAxes come from global-coverage-matrix and are the first validation scaffold, not a final or exhaustive ontology of world food.",
+    "expansionBacklogAxes": [
+      "microRegionsAndEcologies",
+      "stapleIngredientBases",
+      "plantAnimalFungiAndMineralSources",
+      "preparationAndPreservationTechniques",
+      "flavorAndAromaProfiles",
+      "textureAndTemperatureProfiles",
+      "mealOccasionsAndLifeCycleRituals",
+      "religiousDietaryAndTabooSystems",
+      "classLaborStreetAndHomeContexts",
+      "migrationColonialTradeAndForcedDisplacementPaths",
+      "languagesScriptsTransliterationsAndHouseholdNames",
+      "utensilsVesselsFuelAndCookingInfrastructure",
+      "seasonalityClimateAndAvailabilityConstraints",
+      "substitutionAndAccessibilityPatterns"
+    ],
     "familyCountIsNotSuccessMetric": true,
     "minimumTargetRecordsPerFamily": 5,
     "minimumTargetRecordsPerCluster": 40,
@@ -25,7 +46,7 @@
     ],
     "populationOrder": [
       "cover every parent cluster",
-      "cover every global coverage axis value",
+      "cover every current global coverage axis value while treating the axis list as expandable",
       "raise thin families to target record floor",
       "add region, diaspora, naming, ingredient, and sensory variants under existing families before creating new families",
       "create a new family only when no existing family or parent cluster can retrieve the memory without semantic distortion"
