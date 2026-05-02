@@ -150,16 +150,141 @@ function hasPhrase(textValue: string, phrase: string): boolean {
   return new RegExp(`(?:^|\\b)${escaped}(?:$|\\b)`, 'i').test(textValue);
 }
 
+const MECHANISM_STOPWORDS = new Set([
+  'with', 'from', 'type', 'specific', 'over', 'home', 'dish', 'food', 'method',
+  'family', 'region', 'level', 'inclusion', 'served', 'often', 'when', 'cooked',
+  'cooking', 'using', 'made', 'made', 'into', 'such', 'than', 'more', 'most',
+  'very', 'well', 'also', 'only', 'just', 'like', 'than', 'them', 'they', 'this',
+  'that', 'have', 'been', 'being', 'were', 'where', 'what', 'which', 'while',
+  'other', 'another', 'between', 'among', 'within', 'without', 'through', 'during',
+  'before', 'after', 'above', 'below', 'under', 'over', 'again', 'further', 'then',
+  'once', 'here', 'there', 'when', 'where', 'why', 'how', 'all', 'any', 'both',
+  'each', 'few', 'more', 'most', 'other', 'some', 'such', 'nor', 'not', 'only',
+  'own', 'same', 'so', 'than', 'too', 'very', 'can', 'will', 'shall', 'should',
+  'would', 'could', 'might', 'must', 'shall', 'may', 'need', 'dare', 'ought',
+  'used', 'use', 'used', 'get', 'gets', 'got', 'getting', 'make', 'makes',
+  'making', 'take', 'takes', 'taking', 'come', 'comes', 'coming', 'give', 'gives',
+  'giving', 'say', 'says', 'saying', 'know', 'knows', 'knowing', 'think', 'thinks',
+  'thinking', 'see', 'sees', 'seeing', 'look', 'looks', 'looking', 'want', 'wants',
+  'wanting', 'find', 'finds', 'finding', 'tell', 'tells', 'telling', 'ask', 'asks',
+  'asking', 'work', 'works', 'working', 'seem', 'seems', 'seeming', 'feel', 'feels',
+  'feeling', 'try', 'tries', 'trying', 'leave', 'leaves', 'leaving', 'call', 'calls',
+  'calling', 'keep', 'keeps', 'keeping', 'let', 'lets', 'letting', 'put', 'puts',
+  'putting', 'bring', 'brings', 'bringing', 'begin', 'begins', 'beginning', 'help',
+  'helps', 'helping', 'show', 'shows', 'showing', 'hear', 'hears', 'hearing', 'play',
+  'plays', 'playing', 'run', 'runs', 'running', 'move', 'moves', 'moving', 'live',
+  'lives', 'living', 'believe', 'believes', 'believing', 'hold', 'holds', 'holding',
+  'bring', 'brings', 'bringing', 'happen', 'happens', 'happening', 'stand', 'stands',
+  'standing', 'lose', 'loses', 'losing', 'pay', 'pays', 'paying', 'meet', 'meets',
+  'meeting', 'include', 'includes', 'including', 'continue', 'continues', 'continuing',
+  'set', 'sets', 'setting', 'learn', 'learns', 'learning', 'change', 'changes',
+  'changing', 'lead', 'leads', 'leading', 'understand', 'understands', 'understanding',
+  'watch', 'watches', 'watching', 'follow', 'follows', 'following', 'stop', 'stops',
+  'stopping', 'create', 'creates', 'creating', 'speak', 'speaks', 'speaking', 'read',
+  'reads', 'reading', 'allow', 'allows', 'allowing', 'add', 'adds', 'adding', 'spend',
+  'spends', 'spending', 'grow', 'grows', 'growing', 'open', 'opens', 'opening',
+  'walk', 'walks', 'walking', 'offer', 'offers', 'offering', 'remember', 'remembers',
+  'remembering', 'love', 'loves', 'loving', 'consider', 'considers', 'considering',
+  'appear', 'appears', 'appearing', 'buy', 'buys', 'buying', 'wait', 'waits',
+  'waiting', 'serve', 'serves', 'serving', 'die', 'dies', 'dying', 'send', 'sends',
+  'sending', 'expect', 'expects', 'expecting', 'build', 'builds', 'building', 'stay',
+  'stays', 'staying', 'fall', 'falls', 'falling', 'cut', 'cuts', 'cutting', 'reach',
+  'reaches', 'reaching', 'kill', 'kills', 'killing', 'remain', 'remains', 'remaining',
+  'suggest', 'suggests', 'suggesting', 'raise', 'raises', 'raising', 'pass', 'passes',
+  'passing', 'sell', 'sells', 'selling', 'require', 'requires', 'requiring', 'report',
+  'reports', 'reporting', 'decide', 'decides', 'deciding', 'pull', 'pulls', 'pulling',
+  'whose', 'whom', 'these', 'those', 'am', 'is', 'are', 'was', 'were', 'be', 'been',
+  'being', 'have', 'has', 'had', 'do', 'does', 'did', 'doing', 'done', 'a', 'an',
+  'the', 'and', 'but', 'if', 'or', 'because', 'as', 'until', 'while', 'of', 'at',
+  'by', 'for', 'to', 'in', 'on', 'off', 'up', 'down', 'out', 'about', 'into',
+  'through', 'during', 'before', 'after', 'above', 'below', 'between', 'among',
+  'within', 'without', 'against', 'under', 'over', 'again', 'further', 'then',
+  'once', 'here', 'there', 'when', 'where', 'why', 'how', 'all', 'any', 'both',
+  'each', 'few', 'more', 'most', 'other', 'some', 'such', 'nor', 'not', 'only',
+  'own', 'same', 'so', 'than', 'too', 'very', 'just', 'now', 'also', 'back',
+  'still', 'already', 'yet', 'almost', 'quite', 'rather', 'enough', 'even',
+  'much', 'many', 'little', 'less', 'least', 'last', 'first', 'second', 'next',
+  'every', 'several', 'various', 'certain', 'particular', 'general', 'common',
+  'usual', 'normal', 'regular', 'standard', 'typical', 'traditional', 'classic',
+  'authentic', 'original', 'real', 'true', 'actual', 'exact', 'precise', 'accurate',
+  'correct', 'right', 'proper', 'appropriate', 'suitable', 'fitting', 'likely',
+  'possible', 'probable', 'certain', 'sure', 'clear', 'obvious', 'evident',
+  'apparent', 'plain', 'simple', 'easy', 'difficult', 'hard', 'complex',
+  'complicated', 'detailed', 'complete', 'full', 'whole', 'entire', 'total',
+  'partial', 'half', 'quarter', 'third', 'double', 'single', 'multiple',
+  'different', 'similar', 'same', 'opposite', 'reverse', 'inverse', 'varied',
+  'various', 'diverse', 'range', 'series', 'group', 'set', 'collection',
+  'amount', 'number', 'quantity', 'volume', 'mass', 'size', 'length', 'width',
+  'height', 'depth', 'area', 'space', 'place', 'spot', 'point', 'part',
+  'piece', 'section', 'segment', 'portion', 'share', 'bit', 'lot', 'deal',
+  'sort', 'kind', 'type', 'form', 'shape', 'way', 'manner', 'style', 'mode',
+  'fashion', 'trend', 'pattern', 'design', 'plan', 'scheme', 'system',
+  'structure', 'framework', 'model', 'example', 'sample', 'instance', 'case',
+  'situation', 'condition', 'state', 'position', 'status', 'stage', 'phase',
+  'step', 'level', 'degree', 'extent', 'scale', 'scope', 'range', 'reach',
+  'span', 'stretch', 'spread', 'cover', 'contain', 'include', 'involve',
+  'concern', 'relate', 'connect', 'link', 'tie', 'bind', 'attach', 'join',
+  'unite', 'combine', 'mix', 'merge', 'blend', 'fuse', 'integrate', 'incorporate',
+  'absorb', 'adopt', 'accept', 'receive', 'get', 'obtain', 'gain', 'acquire',
+  'achieve', 'attain', 'reach', 'arrive', 'come', 'go', 'leave', 'depart',
+  'enter', 'exit', 'return', 'turn', 'change', 'shift', 'switch', 'transfer',
+  'move', 'motion', 'movement', 'action', 'activity', 'act', 'deed', 'feat',
+  'effort', 'attempt', 'try', 'trial', 'test', 'experiment', 'experience',
+  'event', 'occasion', 'opportunity', 'chance', 'luck', 'fortune', 'fate',
+  'destiny', 'future', 'past', 'present', 'time', 'moment', 'minute',
+  'hour', 'day', 'week', 'month', 'year', 'today', 'tomorrow', 'yesterday',
+  'morning', 'afternoon', 'evening', 'night', 'dawn', 'dusk', 'noon',
+  'midnight', 'early', 'late', 'soon', 'later', 'eventually', 'finally',
+  'ultimately', 'initially', 'originally', 'previously', 'formerly',
+  'recently', 'lately', 'currently', 'presently', 'nowadays', 'today',
+  'always', 'never', 'sometimes', 'often', 'frequently', 'usually',
+  'normally', 'generally', 'typically', 'commonly', 'regularly',
+  'constantly', 'continuously', 'repeatedly', 'periodically',
+  'occasionally', 'rarely', 'seldom', 'hardly', 'barely', 'scarcely',
+  'nearly', 'almost', 'practically', 'virtually', 'essentially',
+  'basically', 'fundamentally', 'primarily', 'mainly', 'mostly',
+  'largely', 'partly', 'partially', 'slightly', 'somewhat', 'rather',
+  'fairly', 'pretty', 'quite', 'really', 'truly', 'actually', 'indeed',
+  'certainly', 'definitely', 'absolutely', 'completely', 'totally',
+  'entirely', 'fully', 'wholly', 'thoroughly', 'deeply', 'strongly',
+  'highly', 'greatly', 'significantly', 'considerably', 'substantially',
+  'markedly', 'noticeably', 'clearly', 'obviously', 'evidently',
+  'apparently', 'seemingly', 'presumably', 'supposedly', 'allegedly',
+  'reportedly', 'supposedly', ' arguably', 'perhaps', 'maybe',
+  'possibly', 'probably', 'likely', 'presumably', 'presumably',
+  'the', 'and', 'but', 'or', 'for', 'with', 'from', 'into', 'onto',
+  'upon', 'about', 'above', 'across', 'after', 'against', 'along',
+  'amid', 'among', 'around', 'as', 'at', 'before', 'behind',
+  'below', 'beneath', 'beside', 'besides', 'between', 'beyond',
+  'but', 'by', 'concerning', 'considering', 'despite', 'down',
+  'during', 'except', 'excepting', 'excluding', 'following', 'for',
+  'from', 'in', 'inside', 'into', 'like', 'minus', 'near', 'of',
+  'off', 'on', 'onto', 'opposite', 'out', 'outside', 'over',
+  'past', 'per', 'plus', 'regarding', 'round', 'save', 'since',
+  'than', 'through', 'throughout', 'till', 'to', 'toward',
+  'towards', 'under', 'underneath', 'unlike', 'until', 'up',
+  'upon', 'versus', 'via', 'with', 'within', 'without',
+]);
+
 function termParts(value: string): string[] {
   return normalizeKnowledgeText(value)
     .split(/\s+/)
-    .filter((part) => part.length >= 4);
+    .filter((part) => part.length >= 4 && !MECHANISM_STOPWORDS.has(part));
+}
+
+const ALIAS_TO_CANONICAL = new Map<string, string>();
+for (const family of dishFamiliesData.families) {
+  ALIAS_TO_CANONICAL.set(family.canonicalName, family.canonicalName);
+  for (const alias of family.aliases) {
+    ALIAS_TO_CANONICAL.set(alias, family.canonicalName);
+  }
 }
 
 const PANTRY_FAMILIES = new Set(
   pantryFixturesData.fixtures
     .map((f) => f.cacheTarget?.dishFamily)
-    .filter((f): f is string => typeof f === 'string'),
+    .filter((f): f is string => typeof f === 'string')
+    .map((dishFamily) => ALIAS_TO_CANONICAL.get(dishFamily) ?? dishFamily),
 );
 
 function bundledMechanismFamilyFor(userMessage: string): string | null {

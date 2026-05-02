@@ -88,9 +88,10 @@ describe('bundled data validation', () => {
 
     const issues = validateBundledData(data);
 
+    const firstFamilyAliasCount = data.dishFamilies.families[0].aliases.length;
     expectIssue(issues, 'dishFamilies.meta.description', 'non-empty string');
-    expectIssue(issues, 'dishFamilies.families[0].aliases[12]', 'duplicate');
-    expectIssue(issues, 'dishFamilies.families[0].aliases[13]', 'non-empty string');
+    expectIssue(issues, `dishFamilies.families[0].aliases[${firstFamilyAliasCount - 2}]`, 'duplicate');
+    expectIssue(issues, `dishFamilies.families[0].aliases[${firstFamilyAliasCount - 1}]`, 'non-empty string');
     expectIssue(issues, `dishFamilies.families[${duplicateIndex}].canonicalName`, 'duplicate');
   });
 
@@ -145,10 +146,10 @@ describe('bundled data validation', () => {
     const issues = validateBundledData(data);
 
     expectIssue(issues, `memoryHints.ingredients[${data.memoryHints.ingredients.length - 1}]`, 'duplicate');
-    expectIssue(issues, 'memoryHints.cookingMethods[14].label', 'non-empty string');
-    expectIssue(issues, 'memoryHints.cookingMethods[14].regexSource', 'valid regular expression');
-    expectIssue(issues, 'memoryHints.regionPatterns[94].label', 'duplicate');
-    expectIssue(issues, 'memoryHints.regionPatterns[94].regexSource', 'valid regular expression');
+    expectIssue(issues, `memoryHints.cookingMethods[${data.memoryHints.cookingMethods.length - 1}].label`, 'non-empty string');
+    expectIssue(issues, `memoryHints.cookingMethods[${data.memoryHints.cookingMethods.length - 1}].regexSource`, 'valid regular expression');
+    expectIssue(issues, `memoryHints.regionPatterns[${data.memoryHints.regionPatterns.length - 1}].label`, 'duplicate');
+    expectIssue(issues, `memoryHints.regionPatterns[${data.memoryHints.regionPatterns.length - 1}].regexSource`, 'valid regular expression');
     expectIssue(issues, 'memoryHints.regionFamilyMap.Puerto Rican', 'non-empty array');
   });
 
