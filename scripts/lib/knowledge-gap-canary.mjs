@@ -58,6 +58,7 @@ export function analyzeKnowledgeGaps(rows) {
       addGap(gaps, 'mechanism_signature_gap', 'Final cue stayed at a generic mechanism level; add or refine reusable taxonomy axes for aroma, body, acid, fat, starch, texture, or disambiguation.', context);
     }
     if (/\b(?:where did you eat it|country|region|from|grandmother|neighbor|aunt|specific place)\b/i.test(text)
+      && /\?/.test(text)
       && !/\b(?:minimum viable|first-pass verification|tiny\s+(?:amount|sip|bite|cue|test)|first\s+(?:cue|test)|do not buy the exact suspected dish)\b/i.test(text)) {
       addGap(gaps, 'insufficient_disambiguators', 'The answer needed a disambiguator but did not pair it with a useful minimum cue.', context);
     }

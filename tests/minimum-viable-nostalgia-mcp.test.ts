@@ -70,9 +70,9 @@ describe('minimum viable nostalgia MCP tool', () => {
 
       expect(cue.isError).not.toBe(true);
       expect(cue.structuredContent).toMatchObject({
-        title: expect.stringContaining('composed-bite'),
+        title: expect.stringMatching(/composed-bite|cassava-family/),
         format: 'bite',
-        whyThisIsMinimum: expect.stringContaining('food-science mechanisms'),
+        whyThisIsMinimum: expect.stringMatching(/food-science mechanisms|memory mechanisms|crispy\/chewy starch/),
       });
       expect(JSON.stringify(cue.structuredContent)).not.toContain('soup/stew');
       expect(JSON.stringify(cue.structuredContent)).not.toContain('carimañola');

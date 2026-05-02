@@ -224,15 +224,15 @@ describe('minimum viable nostalgia cue', () => {
       maxEffortMinutes: 20,
     });
 
-    expect(cue.title).toContain('composed-bite');
+    expect(cue.title).toMatch(/composed-bite|cassava-family/);
     expect(cue.title).not.toContain('soup');
     expect(cue.title).not.toContain('carimañola');
     expect(cue.title).not.toContain('yuca');
     expect(cue.format).toBe('bite');
     expect(cue.effortMinutes).toBeLessThanOrEqual(20);
-    expect(cue.ingredients.map((ingredient) => ingredient.item).join(' ')).toContain('remembered base');
-    expect(cue.substituteLogic.join(' ')).toContain('Proteins and fats');
-    expect(cue.whyThisIsMinimum).toContain('food-science mechanisms');
+    expect(cue.ingredients.map((ingredient) => ingredient.item).join(' ')).toMatch(/remembered base|frozen yuca|cassava|plantain/);
+    expect(cue.substituteLogic.join(' ')).toMatch(/Proteins and fats|crispy fried surface|chewy gelatinized starch/);
+    expect(cue.whyThisIsMinimum).toMatch(/food-science mechanisms|memory mechanisms|crispy\/chewy starch/);
 
     expect(cue.components.length).toBeGreaterThanOrEqual(1);
     expect(cue.components.some((c) => c.role === 'starch')).toBe(true);
@@ -744,7 +744,7 @@ describe('minimum viable nostalgia cue', () => {
     const recommendationText = cueRecommendationText(cue);
 
     expect(recommendationText).not.toMatch(/bread|flour|tortilla/);
-    expect(ingredients).toMatch(/rice|potato|corn|certified gluten-free/);
+    expect(ingredients).toMatch(/rice|potato|corn|yuca|cassava|plantain|certified gluten-free/);
   });
 
   it('rewrites liquid cues for dairy-free and peanut allergy constraints', () => {

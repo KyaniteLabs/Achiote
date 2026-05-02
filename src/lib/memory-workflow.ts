@@ -1055,6 +1055,15 @@ function specificCriticalElement(role: ComponentRole, signals: string, fallback:
   if (role === 'confectionery' && signalIncludes(signals, 'peanut|jaggery|brittle|chikki')) {
     return 'roasted peanut aroma, hard sugar snap, and sandy caramel finish';
   }
+  if (role === 'confectionery' && signalIncludes(signals, 'coconut|cocada|bukayo')) {
+    return 'toasted coconut or seed aroma, grainy sugar crystallization, and chewy or sticky matrix texture';
+  }
+  if (role === 'confectionery' && signalIncludes(signals, 'grainy|crystalline|powdery|crumbly')) {
+    return 'sugar crystallization texture — grainy, crumbly, or powdery — plus fat or seed aroma that binds the sweet';
+  }
+  if (role === 'confectionery' && signalIncludes(signals, 'chewy|sticky|gummy|nougat|taffy|melcocha')) {
+    return 'chewy or sticky sugar matrix with toasted seed, nut, dairy, or spice aroma carried in the stretch';
+  }
   return fallback;
 }
 
@@ -1082,6 +1091,15 @@ function specificFlavorProfile(role: ComponentRole, signals: string, fallback: s
   }
   if (role === 'confectionery' && signalIncludes(signals, 'peanut|jaggery|brittle|chikki')) {
     return 'roasted peanut, brown sugar or jaggery caramel, hard snap, then sandy melt';
+  }
+  if (role === 'confectionery' && signalIncludes(signals, 'coconut|cocada|bukayo')) {
+    return 'toasted coconut or seed aroma, grainy sugar crystal, chewy or sticky body, and optional dairy fat';
+  }
+  if (role === 'confectionery' && signalIncludes(signals, 'grainy|crystalline|powdery|crumbly')) {
+    return 'sugar crystallization stage — grainy, crumbly, or powdery — with toasted seed, nut, or dairy aroma';
+  }
+  if (role === 'confectionery' && signalIncludes(signals, 'chewy|sticky|gummy|nougat|taffy|melcocha')) {
+    return 'stretchy or sticky sugar matrix, toasted seed or nut aroma, and optional spice or dairy accent';
   }
   return fallback;
 }
@@ -1113,6 +1131,15 @@ function specificLocalTestWith(role: ComponentRole, signals: string, fallback: s
   }
   if (role === 'confectionery' && signalIncludes(signals, 'peanut|jaggery|brittle|chikki')) {
     return 'one spoon of roasted peanuts or peanut butter with brown sugar, syrup, or jaggery-style caramel if available';
+  }
+  if (role === 'confectionery' && signalIncludes(signals, 'coconut|cocada|bukayo')) {
+    return 'one spoon of granulated sugar mixed with toasted coconut flakes or a safe toasted seed to test grainy crystal and aroma';
+  }
+  if (role === 'confectionery' && signalIncludes(signals, 'grainy|crystalline|powdery|crumbly')) {
+    return 'one spoon of granulated sugar or crushed sugar cube with a safe toasted seed, nut, or plain cracker crumb to test crystallization texture';
+  }
+  if (role === 'confectionery' && signalIncludes(signals, 'chewy|sticky|gummy|nougat|taffy|melcocha')) {
+    return 'one spoon of sugar warmed slightly with a safe nut butter, tahini, or syrup to test sticky matrix and aroma';
   }
   return fallback;
 }
@@ -1262,6 +1289,49 @@ function isSourHerbSoupSignal(signals: string): boolean {
     && signalIncludes(signals, 'dill|sorrel|herb|pickle|potato|egg|pale|chunks');
 }
 
+function isCassavaFritterSignal(signals: string): boolean {
+  const hasCassavaFamily = signalIncludes(signals, 'yuca|cassava|tapioca|plantain');
+  const hasFriedTexture = signalIncludes(signals, 'fried|crispy|crunchy|golden|crisp');
+  const hasRollOrFritterShape = signalIncludes(signals, 'roll|fritter|stuffed|filled|shape|oval|picadillo');
+  return hasCassavaFamily && hasFriedTexture && hasRollOrFritterShape;
+}
+
+function cassavaFritterCueProfile(signals: string, userLocation?: string, overallConfidence?: Confidence): FoodScienceCueProfile {
+  const hasMeatFilling = signalIncludes(signals, 'meat|beef|pork|chicken|picadillo|filling|stuffed|ground');
+  const hasSofritoAroma = signalIncludes(signals, 'garlic|onion|cumin|achiote|oregano|tomato|culantro|sofrito');
+  return {
+    title: 'Minimum viable cassava-family fritter cue',
+    goal: 'Test whether the memory is carried by crispy fried starch outside, chewy cassava inside, or browned savory filling aroma before naming a specific fritter.',
+    effortMinutes: 12,
+    format: 'bite',
+    ingredients: [
+      { item: 'frozen yuca, cassava, or green plantain from an ordinary grocery store', amount: 'one small piece', purpose: 'tests the gelatinized chewy starch and crisp fried surface without making dough from scratch' },
+      { item: hasMeatFilling ? 'tiny piece of pan-seared ground meat or safe protein with a pinch of garlic, cumin, or oregano' : 'safe local protein or fat for Maillard aroma: pan-seared ground meat, browned tofu, or a drop of achiote oil if available', amount: '1 teaspoon', purpose: 'tests whether the memory trigger is the browned savory filling or just the fried starch' },
+      { item: 'neutral oil for pan-frying', amount: 'thin film in a small pan', purpose: 'creates the crispy fried surface contrast' },
+      { item: hasSofritoAroma ? 'pantry sofrito direction: tiny bit of tomato paste, garlic powder, or dried oregano' : 'pantry aromatic pinch: garlic powder, cumin, or dried herb', amount: 'pinch', purpose: 'tests whether the aroma memory is in the filling spice mix or the starch itself', optional: true },
+    ],
+    steps: [
+      'Do not buy the exact suspected fritter for the first test; build one tiny local proxy instead.',
+      'Boil the frozen yuca/cassava/plantain until tender, then mash or press flat.',
+      'Pan-fry one small piece in a thin film of oil until golden and crisp on the outside.',
+      'Taste the crispy outside and chewy inside first, without any filling.',
+      'If the starch texture is right, add a tiny piece of browned protein or aromatic pinch to test whether the memory is the filling aroma or just the fried cassava.',
+    ],
+    preserves: ['crispy fried starch surface', 'chewy cassava-family interior', 'browned savory filling aroma', 'Maillard crust from pan-frying'],
+    doesNotPreserve: ['exact regional name', 'precise dough recipe', 'specific filling proportions', 'original cooking vessel'],
+    accessibilityPrinciples: ['use frozen yuca, cassava, or plantain from an ordinary grocery store', 'test one tiny piece', 'do not buy the exact suspected fritter until the texture direction works', 'pan-fry in a small skillet, not a deep fryer'],
+    substituteLogic: [
+      'Cassava-fritter nostalgia splits into three mechanisms: crispy fried surface, chewy gelatinized starch interior, and browned savory filling aroma.',
+      'Frozen yuca or plantain tests the starch texture without grating and shaping raw cassava.',
+      'A tiny piece of pan-seared protein with garlic or cumin tests whether the memory is the filling or just the fried starch.',
+    ],
+    whyThisIsMinimum: 'One small piece of boiled-then-fried frozen yuca or plantain tests the core crispy/chewy starch mechanism before grating cassava, making dough, or stuffing a full batch.',
+    safetyNotes: ['Check for meat or herb allergies before testing.', 'Pan-fry with care; hot oil can splatter.'],
+    followUpIfItWorks: ['Ask whether the original was stuffed with meat, cheese, or plain.', 'Ask whether the crust was thicker or thinner than the test piece.', 'Ask what aroma comes first: fried starch, garlic, cumin, tomato, or something else.', 'Only then use source_ingredients to help find regional fritter ingredients near the user.'],
+    components: decomposeIntoComponents(signals, userLocation, overallConfidence),
+  };
+}
+
 function sourHerbSoupCueProfile(signals: string, userLocation?: string, overallConfidence?: Confidence): FoodScienceCueProfile {
   const hasDill = signalIncludes(signals, 'dill');
   const acidCue = signalIncludes(signals, 'pickle|brine|fermented|fermentation')
@@ -1353,10 +1423,14 @@ function foodScienceCueProfile(signals: string, userLocation?: string, overallCo
     return sourHerbSoupCueProfile(signals, userLocation, overallConfidence);
   }
 
+  if (isCassavaFritterSignal(signals)) {
+    return cassavaFritterCueProfile(signals, userLocation, overallConfidence);
+  }
+
   if (hasConfectionery && (hasStrongConfectionery || !hasSavoryCueFamily)) {
     return {
       title: 'Minimum viable sweet-texture cue',
-      goal: 'Test the memory by building a tiny local pantry proxy for sweetness, seed/nut/coconut aroma, and crumbly or crystalline texture before buying the suspected sweet.',
+      goal: 'Test the memory by building a one-spoon local pantry proxy for sugar crystallization texture, toasted seed or coconut aroma, and crumbly or chewy mouthfeel before buying the suspected sweet. The first test should isolate whether the trigger is grainy sugar crystals, toasted aroma, sticky fat, or crumbly fracture.',
       effortMinutes: 8,
       format: 'bite',
       ingredients: [

@@ -294,7 +294,7 @@ Then include one targeted follow-up that would most reduce uncertainty if they w
 - If you give a cue, make it cheap, accessible, and food-science grounded.
 - Do not tell the user to buy the exact suspected dish, candy, snack, brand, or imported specialty item as the minimum test.
 - Build the cue from cheap local pantry or ordinary grocery ingredients first; exact sourcing belongs only after a proxy cue works.
-- Use the strongest remembered ingredient family when choosing the ordinary-grocery proxy: peanut memories should test peanut plus sugar/caramel, yuca/cassava memories should test cassava-family chew before potato fallback, fish memories should test a small fish bite unless constraints say otherwise, and hot-orange sauce memories should test acid + chile heat + color/aroma rather than generic salsa.
+- Use the strongest remembered ingredient family when choosing the ordinary-grocery proxy: peanut memories should test peanut plus sugar/caramel, coconut or grainy sugar memories should test sugar crystallization plus toasted coconut or seed aroma before buying the suspected sweet, yuca/cassava memories should test cassava-family chew before potato fallback, fish memories should test a small fish bite unless constraints say otherwise, and hot-orange sauce memories should test acid + chile heat + color/aroma rather than generic salsa.
 - Make the answer sensory and concrete: name what the user should smell, feel, or notice first, then say what a wrong result would rule out.
 - Avoid clinical labels like "research-bounded proxy test" in user-facing prose. Say "first-pass verification bite" or "first tiny check" instead.
 - Keep responses under 220 words.
@@ -876,6 +876,15 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       send('text', sanitized);
       maybeSendMemoryReceipt({ toolPayloads, assistantText: sanitized, send });
       finish({ guarded: 'recipe_measurement_sanitized' });
+      return;
+    }
+
+    if (calledTools.has('generate_minimum_viable_nostalgia') && lacksMinimumCueLanguage(trustBoundedResponseText)) {
+      console.warn('[ask] replaced missing-minimum-cue response with deterministic minimum cue');
+      const responseText = buildMinimumCueCompletedResponse(toolPayloads, userMessage);
+      send('text', responseText);
+      maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
+      finish({ guarded: 'minimum_cue_language_sanitized' });
       return;
     }
 
@@ -2029,6 +2038,18 @@ function containsRecipeProcedureOrAdaptationLanguage(text: string): boolean {
     || /\bmake a simple (?:broth|sauce|slurry|mixture|paste)\b[\s\S]{0,250}\b(?:dash|pinch|squeeze|spoon|sip|simmer|mix|blend|taste)\b/i.test(text)
     || /\b(?:simple\s+)?tiny\s+sip\s+test\b[\s\S]{0,400}\b(?:boil|steep|cook|simmer|specific ingredients?)\b/i.test(text)
     || /\bminimum viable nostalgia bite\b[\s\S]{0,600}\btake\b[\s\S]{0,200}\btop\b[\s\S]{0,200}\btaste\b/i.test(text);
+}
+
+function lacksMinimumCueLanguage(text: string): boolean {
+  if (!text || text.length < 80) return false;
+  const hasMarker = /\bminimum viable\b/i.test(text)
+    || /\bfirst[-\s]?pass verification\b/i.test(text)
+    || /\bfirst tiny check\b/i.test(text)
+    || /\bdo not buy the exact suspected (?:dish|sweet|beverage|drink)\b/i.test(text)
+    || /\bwhy this is minimum\b/i.test(text)
+    || /\btiny amount of\b/i.test(text)
+    || /\bone (?:sip|bite|spoon|teaspoon)\b/i.test(text);
+  return !hasMarker;
 }
 
 function sanitizeRecipeStyleCueLanguage(text: string): string {
