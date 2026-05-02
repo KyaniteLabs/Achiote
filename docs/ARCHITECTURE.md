@@ -2,6 +2,8 @@
 
 Achiote is a TypeScript MCP server for research-first food-memory reconstruction. It provides deterministic structured context, typed provenance contracts, cache helpers, and bounded prompts that a host model can use to reconstruct recipes from food memories.
 
+For shared domain vocabulary, see [`../CONTEXT.md`](../CONTEXT.md). For architecture decisions that future reviews should preserve, see [`docs/adr/README.md`](adr/README.md). Agent issue-tracker and triage guidance lives in [`docs/agents/README.md`](agents/README.md).
+
 ## Runtime shape
 
 ```text

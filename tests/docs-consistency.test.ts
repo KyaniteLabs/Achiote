@@ -83,4 +83,39 @@ describe('release documentation consistency', () => {
     expect(plan).toContain('Anti-Rigidity Guard');
     expect(plan).toContain('preserveLatitude');
   });
+
+  it('keeps architecture review context discoverable', () => {
+    const context = fs.readFileSync('CONTEXT.md', 'utf8');
+    const architecture = fs.readFileSync('docs/ARCHITECTURE.md', 'utf8');
+    const adrIndex = fs.readFileSync('docs/adr/README.md', 'utf8');
+    const agentGuidance = fs.readFileSync('docs/agents/README.md', 'utf8');
+
+    for (const term of [
+      'food memory',
+      'memory receipt',
+      'research plan',
+      'research record',
+      'reconstruction dossier',
+      'minimum viable nostalgia cue',
+      'reference pantry',
+      'cache warming manifest',
+      'reference seed queue',
+      'source policy',
+      'inference burden',
+      'provider capability profile',
+      'ask session',
+      'quality signal',
+      'account access',
+      'product app',
+      'QA artifact pipeline',
+    ]) {
+      expect(context).toContain(term);
+    }
+    expect(architecture).toContain('CONTEXT.md');
+    expect(architecture).toContain('docs/adr/README.md');
+    expect(adrIndex).toContain('Research-first Reconstruction Boundary');
+    expect(adrIndex).toContain('Host-AI Search Boundary');
+    expect(agentGuidance).toContain('GitHub issues');
+    expect(agentGuidance).toContain('architecture');
+  });
 });
