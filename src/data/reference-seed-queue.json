@@ -44102,6 +44102,2087 @@
           "This does not make nutrition or medical claims."
         ]
       }
+    },
+    {
+      "id": "exp9-source-usda-rice-cinnamon-beverage",
+      "forms": [
+        "foodForms.beverage"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "rice-cinnamon-beverage",
+        "rice cinnamon beverage",
+        "rice-cinnamon-beverage ingredient grounding",
+        "rice-cinnamon-beverage pantry commodity context"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature"
+      ],
+      "querySeeds": [
+        "rice-cinnamon-beverage USDA FoodData Central ingredient commodity grounding",
+        "rice-cinnamon-beverage ingredient composition context public domain",
+        "rice-cinnamon-beverage commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "rice-cinnamon-beverage",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "cultureAreas.diaspora_global",
+        "cultureAreas.north_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.diaspora",
+        "regionScopes.nation"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp9-source-usda-atole",
+      "forms": [
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "atole",
+        "atole ingredient grounding",
+        "atole pantry commodity context"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature"
+      ],
+      "querySeeds": [
+        "atole USDA FoodData Central ingredient commodity grounding",
+        "atole ingredient composition context public domain",
+        "atole commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "atole",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp9-source-usda-champurrado",
+      "forms": [
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "champurrado",
+        "champurrado ingredient grounding",
+        "champurrado pantry commodity context"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature"
+      ],
+      "querySeeds": [
+        "champurrado USDA FoodData Central ingredient commodity grounding",
+        "champurrado ingredient composition context public domain",
+        "champurrado commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "champurrado",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.borderland_trade_routes",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.borderland"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp9-source-usda-hibiscus-tea",
+      "forms": [
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "hibiscus-tea",
+        "hibiscus tea",
+        "hibiscus-tea ingredient grounding",
+        "hibiscus-tea pantry commodity context"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature"
+      ],
+      "querySeeds": [
+        "hibiscus-tea USDA FoodData Central ingredient commodity grounding",
+        "hibiscus-tea ingredient composition context public domain",
+        "hibiscus-tea commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "hibiscus-tea",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp9-source-usda-yerba-mate-beverage",
+      "forms": [
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "yerba-mate-beverage",
+        "yerba mate",
+        "yerba-mate-beverage ingredient grounding",
+        "yerba-mate-beverage pantry commodity context"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature"
+      ],
+      "querySeeds": [
+        "yerba-mate-beverage USDA FoodData Central ingredient commodity grounding",
+        "yerba-mate-beverage ingredient composition context public domain",
+        "yerba-mate-beverage commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "yerba-mate-beverage",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.south_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp9-source-usda-kava",
+      "forms": [
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "kava",
+        "kava ingredient grounding",
+        "kava pantry commodity context"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature"
+      ],
+      "querySeeds": [
+        "kava USDA FoodData Central ingredient commodity grounding",
+        "kava ingredient composition context public domain",
+        "kava commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "kava",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.oceania_pacific",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp9-source-usda-lassi",
+      "forms": [
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "lassi",
+        "lassi ingredient grounding",
+        "lassi pantry commodity context"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature"
+      ],
+      "querySeeds": [
+        "lassi USDA FoodData Central ingredient commodity grounding",
+        "lassi ingredient composition context public domain",
+        "lassi commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "lassi",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp9-source-usda-ayran",
+      "forms": [
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "ayran",
+        "ayran ingredient grounding",
+        "ayran pantry commodity context"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature"
+      ],
+      "querySeeds": [
+        "ayran USDA FoodData Central ingredient commodity grounding",
+        "ayran ingredient composition context public domain",
+        "ayran commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "ayran",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp9-source-usda-congee",
+      "forms": [
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "congee",
+        "congee ingredient grounding",
+        "congee pantry commodity context"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.starch_texture"
+      ],
+      "querySeeds": [
+        "congee USDA FoodData Central ingredient commodity grounding",
+        "congee ingredient composition context public domain",
+        "congee commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "congee",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp9-source-usda-dal",
+      "forms": [
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "dal",
+        "dal ingredient grounding",
+        "dal pantry commodity context"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "dal USDA FoodData Central ingredient commodity grounding",
+        "dal ingredient composition context public domain",
+        "dal commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "dal",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp9-source-usda-chicken-soup",
+      "forms": [
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "chicken-soup",
+        "chicken soup",
+        "chicken-soup ingredient grounding",
+        "chicken-soup pantry commodity context"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature"
+      ],
+      "querySeeds": [
+        "chicken-soup USDA FoodData Central ingredient commodity grounding",
+        "chicken-soup ingredient composition context public domain",
+        "chicken-soup commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "chicken-soup",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.north_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp9-source-usda-comfort-broth",
+      "forms": [
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "comfort-broth",
+        "broth",
+        "comfort-broth ingredient grounding",
+        "comfort-broth pantry commodity context"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature"
+      ],
+      "querySeeds": [
+        "comfort-broth USDA FoodData Central ingredient commodity grounding",
+        "comfort-broth ingredient composition context public domain",
+        "comfort-broth commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "comfort-broth",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.arctic_subarctic",
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "regionScopes.diaspora"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp9-source-usda-harira",
+      "forms": [
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "harira",
+        "harira ingredient grounding",
+        "harira pantry commodity context"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature"
+      ],
+      "querySeeds": [
+        "harira USDA FoodData Central ingredient commodity grounding",
+        "harira ingredient composition context public domain",
+        "harira commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "harira",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp9-source-usda-egusi-soup",
+      "forms": [
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "egusi-soup",
+        "egusi soup",
+        "egusi-soup ingredient grounding",
+        "egusi-soup pantry commodity context"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "egusi-soup USDA FoodData Central ingredient commodity grounding",
+        "egusi-soup ingredient composition context public domain",
+        "egusi-soup commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "egusi-soup",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp9-source-usda-three-sisters-soup",
+      "forms": [
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "three-sisters-soup",
+        "three sisters soup",
+        "three-sisters-soup ingredient grounding",
+        "three-sisters-soup pantry commodity context"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "three-sisters-soup USDA FoodData Central ingredient commodity grounding",
+        "three-sisters-soup ingredient composition context public domain",
+        "three-sisters-soup commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "three-sisters-soup",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.indigenous_first_peoples",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.indigenous"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp9-source-usda-kimchi",
+      "forms": [
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "kimchi",
+        "kimchi ingredient grounding",
+        "kimchi pantry commodity context"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "kimchi USDA FoodData Central ingredient commodity grounding",
+        "kimchi ingredient composition context public domain",
+        "kimchi commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "kimchi",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp9-source-usda-curtido",
+      "forms": [
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "curtido",
+        "curtido ingredient grounding",
+        "curtido pantry commodity context"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "curtido USDA FoodData Central ingredient commodity grounding",
+        "curtido ingredient composition context public domain",
+        "curtido commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "curtido",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp9-source-usda-mango-pickle",
+      "forms": [
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "mango-pickle",
+        "mango pickle",
+        "mango-pickle ingredient grounding",
+        "mango-pickle pantry commodity context"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "mango-pickle USDA FoodData Central ingredient commodity grounding",
+        "mango-pickle ingredient composition context public domain",
+        "mango-pickle commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "mango-pickle",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.diaspora"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp9-source-usda-sambal",
+      "forms": [
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "sambal",
+        "sambal ingredient grounding",
+        "sambal pantry commodity context"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "sambal USDA FoodData Central ingredient commodity grounding",
+        "sambal ingredient composition context public domain",
+        "sambal commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "sambal",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp9-source-usda-harissa",
+      "forms": [
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "harissa",
+        "harissa ingredient grounding",
+        "harissa pantry commodity context"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "harissa USDA FoodData Central ingredient commodity grounding",
+        "harissa ingredient composition context public domain",
+        "harissa commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "harissa",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp9-source-usda-toum",
+      "forms": [
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "toum",
+        "toum ingredient grounding",
+        "toum pantry commodity context"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "toum USDA FoodData Central ingredient commodity grounding",
+        "toum ingredient composition context public domain",
+        "toum commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "toum",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp9-source-usda-barbecue-sauce",
+      "forms": [
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "barbecue-sauce",
+        "barbecue sauce",
+        "barbecue-sauce ingredient grounding",
+        "barbecue-sauce pantry commodity context"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "barbecue-sauce USDA FoodData Central ingredient commodity grounding",
+        "barbecue-sauce ingredient composition context public domain",
+        "barbecue-sauce commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "barbecue-sauce",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.north_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp9-source-usda-chimichurri",
+      "forms": [
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "chimichurri",
+        "chimichurri ingredient grounding",
+        "chimichurri pantry commodity context"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "chimichurri USDA FoodData Central ingredient commodity grounding",
+        "chimichurri ingredient composition context public domain",
+        "chimichurri commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "chimichurri",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.south_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp9-source-usda-corn-tortilla",
+      "forms": [
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "corn-tortilla",
+        "corn tortilla",
+        "corn-tortilla ingredient grounding",
+        "corn-tortilla pantry commodity context"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.starch_texture"
+      ],
+      "querySeeds": [
+        "corn-tortilla USDA FoodData Central ingredient commodity grounding",
+        "corn-tortilla ingredient composition context public domain",
+        "corn-tortilla commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "corn-tortilla",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp9-source-usda-arepa",
+      "forms": [
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "arepa",
+        "arepa ingredient grounding",
+        "arepa pantry commodity context"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.starch_texture"
+      ],
+      "querySeeds": [
+        "arepa USDA FoodData Central ingredient commodity grounding",
+        "arepa ingredient composition context public domain",
+        "arepa commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "arepa",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.south_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp9-source-usda-chapati",
+      "forms": [
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "chapati",
+        "chapati ingredient grounding",
+        "chapati pantry commodity context"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.starch_texture"
+      ],
+      "querySeeds": [
+        "chapati USDA FoodData Central ingredient commodity grounding",
+        "chapati ingredient composition context public domain",
+        "chapati commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "chapati",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp9-source-usda-naan",
+      "forms": [
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "naan",
+        "naan ingredient grounding",
+        "naan pantry commodity context"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.starch_texture"
+      ],
+      "querySeeds": [
+        "naan USDA FoodData Central ingredient commodity grounding",
+        "naan ingredient composition context public domain",
+        "naan commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "naan",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp9-source-usda-couscous",
+      "forms": [
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "couscous",
+        "couscous ingredient grounding",
+        "couscous pantry commodity context"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.starch_texture"
+      ],
+      "querySeeds": [
+        "couscous USDA FoodData Central ingredient commodity grounding",
+        "couscous ingredient composition context public domain",
+        "couscous commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "couscous",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp9-source-usda-polenta",
+      "forms": [
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "polenta",
+        "polenta ingredient grounding",
+        "polenta pantry commodity context"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.starch_texture"
+      ],
+      "querySeeds": [
+        "polenta USDA FoodData Central ingredient commodity grounding",
+        "polenta ingredient composition context public domain",
+        "polenta commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "polenta",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.europe",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp9-source-usda-fufu",
+      "forms": [
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "fufu",
+        "fufu ingredient grounding",
+        "fufu pantry commodity context"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.starch_texture"
+      ],
+      "querySeeds": [
+        "fufu USDA FoodData Central ingredient commodity grounding",
+        "fufu ingredient composition context public domain",
+        "fufu commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "fufu",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp9-source-usda-ceremonial-wrapped-food",
+      "forms": [
+        "foodForms.ceremonial_holiday"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "ceremonial-wrapped-food",
+        "corn masa wrapped food",
+        "ceremonial-wrapped-food ingredient grounding",
+        "ceremonial-wrapped-food pantry commodity context"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.starch_texture",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "ceremonial-wrapped-food USDA FoodData Central ingredient commodity grounding",
+        "ceremonial-wrapped-food ingredient composition context public domain",
+        "ceremonial-wrapped-food commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "ceremonial-wrapped-food",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "cultureAreas.diaspora_global",
+        "cultureAreas.east_asia",
+        "cultureAreas.middle_east_west_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.starch_texture",
+        "mechanisms.texture_contrast",
+        "nameSystems.colonial_postcolonial_name",
+        "regionScopes.religious_ritual",
+        "regionScopes.subregion"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp9-source-usda-pierogi",
+      "forms": [
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "pierogi",
+        "pierogi ingredient grounding",
+        "pierogi pantry commodity context"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "pierogi USDA FoodData Central ingredient commodity grounding",
+        "pierogi ingredient composition context public domain",
+        "pierogi commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "pierogi",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.europe",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp9-source-usda-momo",
+      "forms": [
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "momo",
+        "momo ingredient grounding",
+        "momo pantry commodity context"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "momo USDA FoodData Central ingredient commodity grounding",
+        "momo ingredient composition context public domain",
+        "momo commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "momo",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp9-source-usda-empanada",
+      "forms": [
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "empanada",
+        "empanada ingredient grounding",
+        "empanada pantry commodity context"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "empanada USDA FoodData Central ingredient commodity grounding",
+        "empanada ingredient composition context public domain",
+        "empanada commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "empanada",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.south_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp9-source-usda-falafel",
+      "forms": [
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "falafel",
+        "falafel ingredient grounding",
+        "falafel pantry commodity context"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "falafel USDA FoodData Central ingredient commodity grounding",
+        "falafel ingredient composition context public domain",
+        "falafel commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "falafel",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.diaspora"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp9-source-usda-jerk-chicken",
+      "forms": [
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "jerk-chicken",
+        "jerk chicken",
+        "jerk-chicken ingredient grounding",
+        "jerk-chicken pantry commodity context"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "jerk-chicken USDA FoodData Central ingredient commodity grounding",
+        "jerk-chicken ingredient composition context public domain",
+        "jerk-chicken commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "jerk-chicken",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.diaspora"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp9-source-usda-rendang",
+      "forms": [
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "rendang",
+        "rendang ingredient grounding",
+        "rendang pantry commodity context"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "rendang USDA FoodData Central ingredient commodity grounding",
+        "rendang ingredient composition context public domain",
+        "rendang commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "rendang",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp9-source-usda-apple-pie",
+      "forms": [
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "apple-pie",
+        "apple pie",
+        "apple-pie ingredient grounding",
+        "apple-pie pantry commodity context"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal"
+      ],
+      "querySeeds": [
+        "apple-pie USDA FoodData Central ingredient commodity grounding",
+        "apple-pie ingredient composition context public domain",
+        "apple-pie commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "apple-pie",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.north_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp9-source-usda-baklava",
+      "forms": [
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "baklava",
+        "baklava ingredient grounding",
+        "baklava pantry commodity context"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal"
+      ],
+      "querySeeds": [
+        "baklava USDA FoodData Central ingredient commodity grounding",
+        "baklava ingredient composition context public domain",
+        "baklava commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "baklava",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
+    },
+    {
+      "id": "exp9-source-usda-tres-leches-cake",
+      "forms": [
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert"
+      ],
+      "regions": [
+        "Ingredient composition context",
+        "source:USDA FoodData Central"
+      ],
+      "nameSignals": [
+        "tres-leches-cake",
+        "tres leches cake",
+        "tres-leches-cake ingredient grounding",
+        "tres-leches-cake pantry commodity context"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal"
+      ],
+      "querySeeds": [
+        "tres-leches-cake USDA FoodData Central ingredient commodity grounding",
+        "tres-leches-cake ingredient composition context public domain",
+        "tres-leches-cake commodity names source-gated record"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "tres-leches-cake",
+          "region": "Ingredient composition context"
+        }
+      ],
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "provenance": {
+        "sourceType": "operator curated USDA source-diversity seed",
+        "notes": [
+          "Adds source diversity for ingredient/commodity grounding using the approved USDA FoodData Central source policy.",
+          "This does not make nutrition or medical claims."
+        ]
+      }
     }
   ]
 }

@@ -374,10 +374,11 @@
       "dishFamily": "apple-pie",
       "primaryCluster": "sweets-desserts-and-ritual-foods",
       "supportClusters": [],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "Community diaspora",
         "Global diaspora",
+        "Ingredient composition context",
         "North America",
         "North America diaspora",
         "North America migration corridor"
@@ -408,10 +409,11 @@
       "dishFamily": "arepa",
       "primaryCluster": "staple-starches-grains-and-noodles",
       "supportClusters": [],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "Community diaspora",
         "Global diaspora",
+        "Ingredient composition context",
         "South America",
         "South America diaspora",
         "South America migration corridor"
@@ -442,13 +444,14 @@
       "supportClusters": [
         "soups-broths-and-sour-liquids"
       ],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "Central America",
         "Central America diaspora",
         "Central America migration corridor",
         "Community diaspora",
-        "Global diaspora"
+        "Global diaspora",
+        "Ingredient composition context"
       ],
       "coverageTags": [
         "cultureAreas.central_america",
@@ -478,10 +481,11 @@
       "supportClusters": [
         "soups-broths-and-sour-liquids"
       ],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "Community diaspora",
         "Global diaspora",
+        "Ingredient composition context",
         "Middle East and West Asia",
         "Middle East and West Asia diaspora",
         "Middle East and West Asia migration corridor"
@@ -546,10 +550,11 @@
       "dishFamily": "baklava",
       "primaryCluster": "sweets-desserts-and-ritual-foods",
       "supportClusters": [],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "Community diaspora",
         "Global diaspora",
+        "Ingredient composition context",
         "Middle East and West Asia",
         "Middle East and West Asia diaspora",
         "Middle East and West Asia migration corridor"
@@ -644,10 +649,11 @@
       "dishFamily": "barbecue-sauce",
       "primaryCluster": "sauces-condiments-pickles-and-ferments",
       "supportClusters": [],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "Community diaspora",
         "Global diaspora",
+        "Ingredient composition context",
         "North America",
         "North America diaspora",
         "North America migration corridor"
@@ -1313,11 +1319,12 @@
         "diaspora-borderland-and-migration-foodways",
         "indigenous-land-and-ceremonial-foodways"
       ],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "Community diaspora",
         "Global",
         "Global diaspora",
+        "Ingredient composition context",
         "Local diaspora",
         "United States diaspora"
       ],
@@ -1422,13 +1429,14 @@
         "liquid-comfort-beverages",
         "soups-broths-and-sour-liquids"
       ],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "Borderlands and trade routes",
         "Borderlands and trade routes diaspora",
         "Borderlands and trade routes migration corridor",
         "Community diaspora",
-        "Global diaspora"
+        "Global diaspora",
+        "Ingredient composition context"
       ],
       "coverageTags": [
         "cultureAreas.borderland_trade_routes",
@@ -1458,10 +1466,11 @@
       "dishFamily": "chapati",
       "primaryCluster": "staple-starches-grains-and-noodles",
       "supportClusters": [],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "Community diaspora",
         "Global diaspora",
+        "Ingredient composition context",
         "South Asia",
         "South Asia diaspora",
         "South Asia migration corridor"
@@ -1525,10 +1534,11 @@
       "supportClusters": [
         "soups-broths-and-sour-liquids"
       ],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "Community diaspora",
         "Global diaspora",
+        "Ingredient composition context",
         "North America",
         "North America diaspora",
         "North America migration corridor"
@@ -1635,10 +1645,11 @@
       "dishFamily": "chimichurri",
       "primaryCluster": "sauces-condiments-pickles-and-ferments",
       "supportClusters": [],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "Community diaspora",
         "Global diaspora",
+        "Ingredient composition context",
         "South America",
         "South America diaspora",
         "South America migration corridor"
@@ -1818,11 +1829,12 @@
         "diaspora-borderland-and-migration-foodways",
         "liquid-comfort-beverages"
       ],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "Community diaspora",
         "Global",
         "Global diaspora",
+        "Ingredient composition context",
         "Local diaspora",
         "United States diaspora"
       ],
@@ -1852,13 +1864,14 @@
       "dishFamily": "congee",
       "primaryCluster": "staple-starches-grains-and-noodles",
       "supportClusters": [],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "Community diaspora",
         "East Asia",
         "East Asia diaspora",
         "East Asia migration corridor",
-        "Global diaspora"
+        "Global diaspora",
+        "Ingredient composition context"
       ],
       "coverageTags": [
         "cultureAreas.east_asia",
@@ -1884,13 +1897,14 @@
       "dishFamily": "corn-tortilla",
       "primaryCluster": "staple-starches-grains-and-noodles",
       "supportClusters": [],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "Central America",
         "Central America diaspora",
         "Central America migration corridor",
         "Community diaspora",
-        "Global diaspora"
+        "Global diaspora",
+        "Ingredient composition context"
       ],
       "coverageTags": [
         "cultureAreas.central_america",
@@ -1948,10 +1962,11 @@
       "dishFamily": "couscous",
       "primaryCluster": "staple-starches-grains-and-noodles",
       "supportClusters": [],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "Community diaspora",
         "Global diaspora",
+        "Ingredient composition context",
         "North Africa",
         "North Africa diaspora",
         "North Africa migration corridor"
@@ -2087,13 +2102,14 @@
       "dishFamily": "curtido",
       "primaryCluster": "sauces-condiments-pickles-and-ferments",
       "supportClusters": [],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "Central America",
         "Central America diaspora",
         "Central America migration corridor",
         "Community diaspora",
-        "Global diaspora"
+        "Global diaspora",
+        "Ingredient composition context"
       ],
       "coverageTags": [
         "cultureAreas.central_america",
@@ -2120,10 +2136,11 @@
       "dishFamily": "dal",
       "primaryCluster": "stews-braises-and-sauced-mains",
       "supportClusters": [],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "Community diaspora",
         "Global diaspora",
+        "Ingredient composition context",
         "South Asia",
         "South Asia diaspora",
         "South Asia migration corridor"
@@ -2298,10 +2315,11 @@
       "dishFamily": "egusi-soup",
       "primaryCluster": "stews-braises-and-sauced-mains",
       "supportClusters": [],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "Community diaspora",
         "Global diaspora",
+        "Ingredient composition context",
         "West Africa",
         "West Africa diaspora",
         "West Africa migration corridor"
@@ -2332,10 +2350,11 @@
       "dishFamily": "empanada",
       "primaryCluster": "handheld-street-and-filled-foods",
       "supportClusters": [],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "Community diaspora",
         "Global diaspora",
+        "Ingredient composition context",
         "South America",
         "South America diaspora",
         "South America migration corridor"
@@ -2367,10 +2386,11 @@
       "supportClusters": [
         "diaspora-borderland-and-migration-foodways"
       ],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "Community diaspora",
         "Global diaspora",
+        "Ingredient composition context",
         "Local diaspora",
         "Migration corridor",
         "United States diaspora"
@@ -2654,10 +2674,11 @@
       "dishFamily": "fufu",
       "primaryCluster": "staple-starches-grains-and-noodles",
       "supportClusters": [],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "Community diaspora",
         "Global diaspora",
+        "Ingredient composition context",
         "West Africa",
         "West Africa diaspora",
         "West Africa migration corridor"
@@ -2999,10 +3020,11 @@
       "supportClusters": [
         "soups-broths-and-sour-liquids"
       ],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "Community diaspora",
         "Global diaspora",
+        "Ingredient composition context",
         "North Africa",
         "North Africa diaspora",
         "North Africa migration corridor"
@@ -3033,10 +3055,11 @@
       "dishFamily": "harissa",
       "primaryCluster": "sauces-condiments-pickles-and-ferments",
       "supportClusters": [],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "Community diaspora",
         "Global diaspora",
+        "Ingredient composition context",
         "North Africa",
         "North Africa diaspora",
         "North Africa migration corridor"
@@ -3068,13 +3091,14 @@
       "supportClusters": [
         "soups-broths-and-sour-liquids"
       ],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "Caribbean",
         "Caribbean diaspora",
         "Caribbean migration corridor",
         "Community diaspora",
-        "Global diaspora"
+        "Global diaspora",
+        "Ingredient composition context"
       ],
       "coverageTags": [
         "cultureAreas.caribbean",
@@ -3137,10 +3161,11 @@
       "supportClusters": [
         "diaspora-borderland-and-migration-foodways"
       ],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "Community diaspora",
         "Global diaspora",
+        "Ingredient composition context",
         "Local diaspora",
         "Migration corridor",
         "United States diaspora"
@@ -3206,10 +3231,11 @@
       "supportClusters": [
         "soups-broths-and-sour-liquids"
       ],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "Community diaspora",
         "Global diaspora",
+        "Ingredient composition context",
         "Oceania and Pacific",
         "Oceania and Pacific diaspora",
         "Oceania and Pacific migration corridor"
@@ -3273,13 +3299,14 @@
       "dishFamily": "kimchi",
       "primaryCluster": "sauces-condiments-pickles-and-ferments",
       "supportClusters": [],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "Community diaspora",
         "East Asia",
         "East Asia diaspora",
         "East Asia migration corridor",
-        "Global diaspora"
+        "Global diaspora",
+        "Ingredient composition context"
       ],
       "coverageTags": [
         "cultureAreas.east_asia",
@@ -3451,10 +3478,11 @@
       "supportClusters": [
         "soups-broths-and-sour-liquids"
       ],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "Community diaspora",
         "Global diaspora",
+        "Ingredient composition context",
         "South Asia",
         "South Asia diaspora",
         "South Asia migration corridor"
@@ -3624,10 +3652,11 @@
       "supportClusters": [
         "diaspora-borderland-and-migration-foodways"
       ],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "Community diaspora",
         "Global diaspora",
+        "Ingredient composition context",
         "Local diaspora",
         "Migration corridor",
         "United States diaspora"
@@ -3895,10 +3924,11 @@
       "dishFamily": "momo",
       "primaryCluster": "handheld-street-and-filled-foods",
       "supportClusters": [],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "Community diaspora",
         "Global diaspora",
+        "Ingredient composition context",
         "South Asia",
         "South Asia diaspora",
         "South Asia migration corridor"
@@ -4031,13 +4061,14 @@
       "dishFamily": "naan",
       "primaryCluster": "staple-starches-grains-and-noodles",
       "supportClusters": [],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "Central Asia",
         "Central Asia diaspora",
         "Central Asia migration corridor",
         "Community diaspora",
-        "Global diaspora"
+        "Global diaspora",
+        "Ingredient composition context"
       ],
       "coverageTags": [
         "cultureAreas.central_asia",
@@ -4413,13 +4444,14 @@
       "dishFamily": "pierogi",
       "primaryCluster": "handheld-street-and-filled-foods",
       "supportClusters": [],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "Community diaspora",
         "Europe",
         "Europe diaspora",
         "Europe migration corridor",
-        "Global diaspora"
+        "Global diaspora",
+        "Ingredient composition context"
       ],
       "coverageTags": [
         "cultureAreas.europe",
@@ -4511,13 +4543,14 @@
       "dishFamily": "polenta",
       "primaryCluster": "staple-starches-grains-and-noodles",
       "supportClusters": [],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "Community diaspora",
         "Europe",
         "Europe diaspora",
         "Europe migration corridor",
-        "Global diaspora"
+        "Global diaspora",
+        "Ingredient composition context"
       ],
       "coverageTags": [
         "cultureAreas.europe",
@@ -4643,10 +4676,11 @@
       "dishFamily": "rendang",
       "primaryCluster": "stews-braises-and-sauced-mains",
       "supportClusters": [],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "Community diaspora",
         "Global diaspora",
+        "Ingredient composition context",
         "Southeast Asia",
         "Southeast Asia diaspora",
         "Southeast Asia migration corridor"
@@ -4679,10 +4713,11 @@
       "supportClusters": [
         "diaspora-borderland-and-migration-foodways"
       ],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "Community diaspora",
         "Global diaspora",
+        "Ingredient composition context",
         "Mexico",
         "Mexico diaspora",
         "Mexico migration corridor"
@@ -4860,10 +4895,11 @@
       "dishFamily": "sambal",
       "primaryCluster": "sauces-condiments-pickles-and-ferments",
       "supportClusters": [],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "Community diaspora",
         "Global diaspora",
+        "Ingredient composition context",
         "Southeast Asia",
         "Southeast Asia diaspora",
         "Southeast Asia migration corridor"
@@ -5256,13 +5292,14 @@
       "supportClusters": [
         "stews-braises-and-sauced-mains"
       ],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "Global diaspora",
         "Indigenous and First Peoples",
         "Indigenous and First Peoples diaspora",
         "Indigenous and First Peoples migration corridor",
-        "Indigenous community context"
+        "Indigenous community context",
+        "Ingredient composition context"
       ],
       "coverageTags": [
         "cultureAreas.indigenous_first_peoples",
@@ -5290,10 +5327,11 @@
       "dishFamily": "toum",
       "primaryCluster": "sauces-condiments-pickles-and-ferments",
       "supportClusters": [],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "Community diaspora",
         "Global diaspora",
+        "Ingredient composition context",
         "Middle East and West Asia",
         "Middle East and West Asia diaspora",
         "Middle East and West Asia migration corridor"
@@ -5323,13 +5361,14 @@
       "dishFamily": "tres-leches-cake",
       "primaryCluster": "sweets-desserts-and-ritual-foods",
       "supportClusters": [],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "Central America",
         "Central America diaspora",
         "Central America migration corridor",
         "Community diaspora",
-        "Global diaspora"
+        "Global diaspora",
+        "Ingredient composition context"
       ],
       "coverageTags": [
         "cultureAreas.central_america",
@@ -5427,10 +5466,11 @@
       "supportClusters": [
         "soups-broths-and-sour-liquids"
       ],
-      "currentRecordCount": 5,
+      "currentRecordCount": 6,
       "currentRegions": [
         "Community diaspora",
         "Global diaspora",
+        "Ingredient composition context",
         "South America",
         "South America diaspora",
         "South America migration corridor"

@@ -73761,6 +73761,3929 @@
         "confidence": "Medium",
         "createdAt": "2026-05-02T00:00:00.000Z"
       }
+    },
+    {
+      "seedId": "exp9-source-usda-rice-cinnamon-beverage",
+      "cacheTarget": {
+        "dishFamily": "rice-cinnamon-beverage",
+        "region": "Ingredient composition context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data",
+        "usda-fooddata-central"
+      ],
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "cultureAreas.diaspora_global",
+        "cultureAreas.north_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.diaspora",
+        "regionScopes.nation"
+      ],
+      "record": {
+        "dishName": "rice-cinnamon-beverage",
+        "query": "rice-cinnamon-beverage USDA FoodData Central ingredient commodity grounding",
+        "sources": [
+          {
+            "title": "Rice Cinnamon Beverage structured-data search",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=rice%20cinnamon%20beverage",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured-data search is used only to keep the family label findable for \"rice cinnamon beverage\".",
+              "The search page is not treated as household, regional, or recipe proof."
+            ]
+          },
+          {
+            "title": "USDA FoodData Central search for rice-cinnamon-beverage",
+            "url": "https://fdc.nal.usda.gov/fdc-app.html#/food-search?query=rice%20cinnamon%20beverage",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "FoodData Central is used here for public-domain ingredient or commodity name grounding for rice-cinnamon-beverage.",
+              "Operator search target: rice cinnamon beverage.",
+              "No nutrition, health, or medical interpretation is stored from this source."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "rice-cinnamon-beverage",
+            "rice cinnamon beverage",
+            "rice-cinnamon-beverage ingredient grounding",
+            "FoodData Central ingredient grounding"
+          ],
+          "regions": [
+            "source:USDA FoodData Central",
+            "Ingredient composition context",
+            "central america",
+            "diaspora global",
+            "north america"
+          ],
+          "ingredients": [
+            "rice",
+            "cinnamon"
+          ],
+          "techniques": [
+            "source-gated retrieval grounding",
+            "ingredient commodity normalization",
+            "sensory disambiguation",
+            "source-diversity grounding"
+          ],
+          "sensoryDescriptors": [
+            "warm cinnamon",
+            "creamy starch",
+            "chilled sweetness",
+            "ingredient availability grounding"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "source-diversity population"
+          ],
+          "regionalVariants": [
+            "Ingredient composition context is stored as a source-diversity retrieval context, not as a cultural region.",
+            "USDA FoodData Central is stored as ingredient/commodity grounding for rice-cinnamon-beverage.",
+            "This record keeps household certainty unknown until user, family, or stronger cultural sources confirm it."
+          ]
+        },
+        "uncertainty": [
+          "FoodData Central grounds ingredient or commodity naming only; it is not an authority on cultural memory or household identity.",
+          "No nutrition, health, or medical claims are inferred from this source.",
+          "Specific household usage, region, sensory priority, and substitution fit need user, family, or additional source confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp9-source-usda-atole",
+      "cacheTarget": {
+        "dishFamily": "atole",
+        "region": "Ingredient composition context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data",
+        "usda-fooddata-central"
+      ],
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "record": {
+        "dishName": "atole",
+        "query": "atole USDA FoodData Central ingredient commodity grounding",
+        "sources": [
+          {
+            "title": "Atole structured-data search",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=atole",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured-data search is used only to keep the family label findable for \"atole\".",
+              "The search page is not treated as household, regional, or recipe proof."
+            ]
+          },
+          {
+            "title": "USDA FoodData Central search for atole",
+            "url": "https://fdc.nal.usda.gov/fdc-app.html#/food-search?query=atole",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "FoodData Central is used here for public-domain ingredient or commodity name grounding for atole.",
+              "Operator search target: atole.",
+              "No nutrition, health, or medical interpretation is stored from this source."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "atole",
+            "atole",
+            "atole ingredient grounding",
+            "FoodData Central ingredient grounding"
+          ],
+          "regions": [
+            "source:USDA FoodData Central",
+            "Ingredient composition context",
+            "central america"
+          ],
+          "ingredients": [
+            "corn masa",
+            "milk",
+            "cinnamon"
+          ],
+          "techniques": [
+            "source-gated retrieval grounding",
+            "ingredient commodity normalization",
+            "sensory disambiguation",
+            "source-diversity grounding"
+          ],
+          "sensoryDescriptors": [
+            "thick corn body",
+            "warm drink",
+            "sweet steam",
+            "ingredient availability grounding"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "source-diversity population"
+          ],
+          "regionalVariants": [
+            "Ingredient composition context is stored as a source-diversity retrieval context, not as a cultural region.",
+            "USDA FoodData Central is stored as ingredient/commodity grounding for atole.",
+            "This record keeps household certainty unknown until user, family, or stronger cultural sources confirm it."
+          ]
+        },
+        "uncertainty": [
+          "FoodData Central grounds ingredient or commodity naming only; it is not an authority on cultural memory or household identity.",
+          "No nutrition, health, or medical claims are inferred from this source.",
+          "Specific household usage, region, sensory priority, and substitution fit need user, family, or additional source confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp9-source-usda-champurrado",
+      "cacheTarget": {
+        "dishFamily": "champurrado",
+        "region": "Ingredient composition context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data",
+        "usda-fooddata-central"
+      ],
+      "coverageTags": [
+        "cultureAreas.borderland_trade_routes",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.borderland"
+      ],
+      "record": {
+        "dishName": "champurrado",
+        "query": "champurrado USDA FoodData Central ingredient commodity grounding",
+        "sources": [
+          {
+            "title": "Champurrado structured-data search",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=champurrado",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured-data search is used only to keep the family label findable for \"champurrado\".",
+              "The search page is not treated as household, regional, or recipe proof."
+            ]
+          },
+          {
+            "title": "USDA FoodData Central search for champurrado",
+            "url": "https://fdc.nal.usda.gov/fdc-app.html#/food-search?query=champurrado",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "FoodData Central is used here for public-domain ingredient or commodity name grounding for champurrado.",
+              "Operator search target: champurrado.",
+              "No nutrition, health, or medical interpretation is stored from this source."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "champurrado",
+            "champurrado",
+            "champurrado ingredient grounding",
+            "FoodData Central ingredient grounding"
+          ],
+          "regions": [
+            "source:USDA FoodData Central",
+            "Ingredient composition context",
+            "borderland trade routes"
+          ],
+          "ingredients": [
+            "corn masa",
+            "chocolate",
+            "cinnamon"
+          ],
+          "techniques": [
+            "source-gated retrieval grounding",
+            "ingredient commodity normalization",
+            "sensory disambiguation",
+            "source-diversity grounding"
+          ],
+          "sensoryDescriptors": [
+            "toasty corn",
+            "chocolate aroma",
+            "thick sip",
+            "ingredient availability grounding"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "source-diversity population"
+          ],
+          "regionalVariants": [
+            "Ingredient composition context is stored as a source-diversity retrieval context, not as a cultural region.",
+            "USDA FoodData Central is stored as ingredient/commodity grounding for champurrado.",
+            "This record keeps household certainty unknown until user, family, or stronger cultural sources confirm it."
+          ]
+        },
+        "uncertainty": [
+          "FoodData Central grounds ingredient or commodity naming only; it is not an authority on cultural memory or household identity.",
+          "No nutrition, health, or medical claims are inferred from this source.",
+          "Specific household usage, region, sensory priority, and substitution fit need user, family, or additional source confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp9-source-usda-hibiscus-tea",
+      "cacheTarget": {
+        "dishFamily": "hibiscus-tea",
+        "region": "Ingredient composition context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data",
+        "usda-fooddata-central"
+      ],
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "record": {
+        "dishName": "hibiscus-tea",
+        "query": "hibiscus-tea USDA FoodData Central ingredient commodity grounding",
+        "sources": [
+          {
+            "title": "Hibiscus Tea structured-data search",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=hibiscus%20tea",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured-data search is used only to keep the family label findable for \"hibiscus tea\".",
+              "The search page is not treated as household, regional, or recipe proof."
+            ]
+          },
+          {
+            "title": "USDA FoodData Central search for hibiscus-tea",
+            "url": "https://fdc.nal.usda.gov/fdc-app.html#/food-search?query=hibiscus%20tea",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "FoodData Central is used here for public-domain ingredient or commodity name grounding for hibiscus-tea.",
+              "Operator search target: hibiscus tea.",
+              "No nutrition, health, or medical interpretation is stored from this source."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "hibiscus-tea",
+            "hibiscus tea",
+            "hibiscus-tea ingredient grounding",
+            "FoodData Central ingredient grounding"
+          ],
+          "regions": [
+            "source:USDA FoodData Central",
+            "Ingredient composition context",
+            "caribbean"
+          ],
+          "ingredients": [
+            "hibiscus",
+            "sugar"
+          ],
+          "techniques": [
+            "source-gated retrieval grounding",
+            "ingredient commodity normalization",
+            "sensory disambiguation",
+            "source-diversity grounding"
+          ],
+          "sensoryDescriptors": [
+            "tart red infusion",
+            "floral aroma",
+            "cold sip",
+            "ingredient availability grounding"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "source-diversity population"
+          ],
+          "regionalVariants": [
+            "Ingredient composition context is stored as a source-diversity retrieval context, not as a cultural region.",
+            "USDA FoodData Central is stored as ingredient/commodity grounding for hibiscus-tea.",
+            "This record keeps household certainty unknown until user, family, or stronger cultural sources confirm it."
+          ]
+        },
+        "uncertainty": [
+          "FoodData Central grounds ingredient or commodity naming only; it is not an authority on cultural memory or household identity.",
+          "No nutrition, health, or medical claims are inferred from this source.",
+          "Specific household usage, region, sensory priority, and substitution fit need user, family, or additional source confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp9-source-usda-yerba-mate-beverage",
+      "cacheTarget": {
+        "dishFamily": "yerba-mate-beverage",
+        "region": "Ingredient composition context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data",
+        "usda-fooddata-central"
+      ],
+      "coverageTags": [
+        "cultureAreas.south_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "record": {
+        "dishName": "yerba-mate-beverage",
+        "query": "yerba-mate-beverage USDA FoodData Central ingredient commodity grounding",
+        "sources": [
+          {
+            "title": "Yerba Mate Beverage structured-data search",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=yerba%20mate",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured-data search is used only to keep the family label findable for \"yerba mate\".",
+              "The search page is not treated as household, regional, or recipe proof."
+            ]
+          },
+          {
+            "title": "USDA FoodData Central search for yerba-mate-beverage",
+            "url": "https://fdc.nal.usda.gov/fdc-app.html#/food-search?query=yerba%20mate",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "FoodData Central is used here for public-domain ingredient or commodity name grounding for yerba-mate-beverage.",
+              "Operator search target: yerba mate.",
+              "No nutrition, health, or medical interpretation is stored from this source."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "yerba-mate-beverage",
+            "yerba mate",
+            "yerba-mate-beverage ingredient grounding",
+            "FoodData Central ingredient grounding"
+          ],
+          "regions": [
+            "source:USDA FoodData Central",
+            "Ingredient composition context",
+            "south america"
+          ],
+          "ingredients": [
+            "yerba mate leaves"
+          ],
+          "techniques": [
+            "source-gated retrieval grounding",
+            "ingredient commodity normalization",
+            "sensory disambiguation",
+            "source-diversity grounding"
+          ],
+          "sensoryDescriptors": [
+            "green bitter aroma",
+            "hot infusion",
+            "shared cup ritual",
+            "ingredient availability grounding"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "source-diversity population"
+          ],
+          "regionalVariants": [
+            "Ingredient composition context is stored as a source-diversity retrieval context, not as a cultural region.",
+            "USDA FoodData Central is stored as ingredient/commodity grounding for yerba-mate-beverage.",
+            "This record keeps household certainty unknown until user, family, or stronger cultural sources confirm it."
+          ]
+        },
+        "uncertainty": [
+          "FoodData Central grounds ingredient or commodity naming only; it is not an authority on cultural memory or household identity.",
+          "No nutrition, health, or medical claims are inferred from this source.",
+          "Specific household usage, region, sensory priority, and substitution fit need user, family, or additional source confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp9-source-usda-kava",
+      "cacheTarget": {
+        "dishFamily": "kava",
+        "region": "Ingredient composition context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data",
+        "usda-fooddata-central"
+      ],
+      "coverageTags": [
+        "cultureAreas.oceania_pacific",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "record": {
+        "dishName": "kava",
+        "query": "kava USDA FoodData Central ingredient commodity grounding",
+        "sources": [
+          {
+            "title": "Kava structured-data search",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=kava",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured-data search is used only to keep the family label findable for \"kava\".",
+              "The search page is not treated as household, regional, or recipe proof."
+            ]
+          },
+          {
+            "title": "USDA FoodData Central search for kava",
+            "url": "https://fdc.nal.usda.gov/fdc-app.html#/food-search?query=kava",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "FoodData Central is used here for public-domain ingredient or commodity name grounding for kava.",
+              "Operator search target: kava.",
+              "No nutrition, health, or medical interpretation is stored from this source."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "kava",
+            "kava",
+            "kava ingredient grounding",
+            "FoodData Central ingredient grounding"
+          ],
+          "regions": [
+            "source:USDA FoodData Central",
+            "Ingredient composition context",
+            "oceania pacific"
+          ],
+          "ingredients": [
+            "kava root"
+          ],
+          "techniques": [
+            "source-gated retrieval grounding",
+            "ingredient commodity normalization",
+            "sensory disambiguation",
+            "source-diversity grounding"
+          ],
+          "sensoryDescriptors": [
+            "earthy root drink",
+            "cooling bitterness",
+            "ceremonial sip",
+            "ingredient availability grounding"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "source-diversity population"
+          ],
+          "regionalVariants": [
+            "Ingredient composition context is stored as a source-diversity retrieval context, not as a cultural region.",
+            "USDA FoodData Central is stored as ingredient/commodity grounding for kava.",
+            "This record keeps household certainty unknown until user, family, or stronger cultural sources confirm it."
+          ]
+        },
+        "uncertainty": [
+          "FoodData Central grounds ingredient or commodity naming only; it is not an authority on cultural memory or household identity.",
+          "No nutrition, health, or medical claims are inferred from this source.",
+          "Specific household usage, region, sensory priority, and substitution fit need user, family, or additional source confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp9-source-usda-lassi",
+      "cacheTarget": {
+        "dishFamily": "lassi",
+        "region": "Ingredient composition context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data",
+        "usda-fooddata-central"
+      ],
+      "coverageTags": [
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "record": {
+        "dishName": "lassi",
+        "query": "lassi USDA FoodData Central ingredient commodity grounding",
+        "sources": [
+          {
+            "title": "Lassi structured-data search",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=lassi",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured-data search is used only to keep the family label findable for \"lassi\".",
+              "The search page is not treated as household, regional, or recipe proof."
+            ]
+          },
+          {
+            "title": "USDA FoodData Central search for lassi",
+            "url": "https://fdc.nal.usda.gov/fdc-app.html#/food-search?query=lassi",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "FoodData Central is used here for public-domain ingredient or commodity name grounding for lassi.",
+              "Operator search target: lassi.",
+              "No nutrition, health, or medical interpretation is stored from this source."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "lassi",
+            "lassi",
+            "lassi ingredient grounding",
+            "FoodData Central ingredient grounding"
+          ],
+          "regions": [
+            "source:USDA FoodData Central",
+            "Ingredient composition context",
+            "south asia"
+          ],
+          "ingredients": [
+            "yogurt",
+            "sugar",
+            "mango"
+          ],
+          "techniques": [
+            "source-gated retrieval grounding",
+            "ingredient commodity normalization",
+            "sensory disambiguation",
+            "source-diversity grounding"
+          ],
+          "sensoryDescriptors": [
+            "cultured dairy tang",
+            "cool body",
+            "fruit aroma",
+            "ingredient availability grounding"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "source-diversity population"
+          ],
+          "regionalVariants": [
+            "Ingredient composition context is stored as a source-diversity retrieval context, not as a cultural region.",
+            "USDA FoodData Central is stored as ingredient/commodity grounding for lassi.",
+            "This record keeps household certainty unknown until user, family, or stronger cultural sources confirm it."
+          ]
+        },
+        "uncertainty": [
+          "FoodData Central grounds ingredient or commodity naming only; it is not an authority on cultural memory or household identity.",
+          "No nutrition, health, or medical claims are inferred from this source.",
+          "Specific household usage, region, sensory priority, and substitution fit need user, family, or additional source confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp9-source-usda-ayran",
+      "cacheTarget": {
+        "dishFamily": "ayran",
+        "region": "Ingredient composition context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data",
+        "usda-fooddata-central"
+      ],
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "record": {
+        "dishName": "ayran",
+        "query": "ayran USDA FoodData Central ingredient commodity grounding",
+        "sources": [
+          {
+            "title": "Ayran structured-data search",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=ayran",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured-data search is used only to keep the family label findable for \"ayran\".",
+              "The search page is not treated as household, regional, or recipe proof."
+            ]
+          },
+          {
+            "title": "USDA FoodData Central search for ayran",
+            "url": "https://fdc.nal.usda.gov/fdc-app.html#/food-search?query=ayran",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "FoodData Central is used here for public-domain ingredient or commodity name grounding for ayran.",
+              "Operator search target: ayran.",
+              "No nutrition, health, or medical interpretation is stored from this source."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "ayran",
+            "ayran",
+            "ayran ingredient grounding",
+            "FoodData Central ingredient grounding"
+          ],
+          "regions": [
+            "source:USDA FoodData Central",
+            "Ingredient composition context",
+            "middle east west asia"
+          ],
+          "ingredients": [
+            "yogurt",
+            "salt"
+          ],
+          "techniques": [
+            "source-gated retrieval grounding",
+            "ingredient commodity normalization",
+            "sensory disambiguation",
+            "source-diversity grounding"
+          ],
+          "sensoryDescriptors": [
+            "salty dairy tang",
+            "cold foam",
+            "thin sip",
+            "ingredient availability grounding"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "source-diversity population"
+          ],
+          "regionalVariants": [
+            "Ingredient composition context is stored as a source-diversity retrieval context, not as a cultural region.",
+            "USDA FoodData Central is stored as ingredient/commodity grounding for ayran.",
+            "This record keeps household certainty unknown until user, family, or stronger cultural sources confirm it."
+          ]
+        },
+        "uncertainty": [
+          "FoodData Central grounds ingredient or commodity naming only; it is not an authority on cultural memory or household identity.",
+          "No nutrition, health, or medical claims are inferred from this source.",
+          "Specific household usage, region, sensory priority, and substitution fit need user, family, or additional source confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp9-source-usda-congee",
+      "cacheTarget": {
+        "dishFamily": "congee",
+        "region": "Ingredient composition context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data",
+        "usda-fooddata-central"
+      ],
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "record": {
+        "dishName": "congee",
+        "query": "congee USDA FoodData Central ingredient commodity grounding",
+        "sources": [
+          {
+            "title": "Congee structured-data search",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=congee",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured-data search is used only to keep the family label findable for \"congee\".",
+              "The search page is not treated as household, regional, or recipe proof."
+            ]
+          },
+          {
+            "title": "USDA FoodData Central search for congee",
+            "url": "https://fdc.nal.usda.gov/fdc-app.html#/food-search?query=congee",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "FoodData Central is used here for public-domain ingredient or commodity name grounding for congee.",
+              "Operator search target: congee.",
+              "No nutrition, health, or medical interpretation is stored from this source."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "congee",
+            "congee",
+            "congee ingredient grounding",
+            "FoodData Central ingredient grounding"
+          ],
+          "regions": [
+            "source:USDA FoodData Central",
+            "Ingredient composition context",
+            "east asia"
+          ],
+          "ingredients": [
+            "rice",
+            "ginger"
+          ],
+          "techniques": [
+            "source-gated retrieval grounding",
+            "ingredient commodity normalization",
+            "sensory disambiguation",
+            "source-diversity grounding"
+          ],
+          "sensoryDescriptors": [
+            "soft rice starch",
+            "warm bowl",
+            "ginger steam",
+            "ingredient availability grounding"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "source-diversity population"
+          ],
+          "regionalVariants": [
+            "Ingredient composition context is stored as a source-diversity retrieval context, not as a cultural region.",
+            "USDA FoodData Central is stored as ingredient/commodity grounding for congee.",
+            "This record keeps household certainty unknown until user, family, or stronger cultural sources confirm it."
+          ]
+        },
+        "uncertainty": [
+          "FoodData Central grounds ingredient or commodity naming only; it is not an authority on cultural memory or household identity.",
+          "No nutrition, health, or medical claims are inferred from this source.",
+          "Specific household usage, region, sensory priority, and substitution fit need user, family, or additional source confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp9-source-usda-dal",
+      "cacheTarget": {
+        "dishFamily": "dal",
+        "region": "Ingredient composition context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data",
+        "usda-fooddata-central"
+      ],
+      "coverageTags": [
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "record": {
+        "dishName": "dal",
+        "query": "dal USDA FoodData Central ingredient commodity grounding",
+        "sources": [
+          {
+            "title": "Dal structured-data search",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=dal",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured-data search is used only to keep the family label findable for \"dal\".",
+              "The search page is not treated as household, regional, or recipe proof."
+            ]
+          },
+          {
+            "title": "USDA FoodData Central search for dal",
+            "url": "https://fdc.nal.usda.gov/fdc-app.html#/food-search?query=dal",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "FoodData Central is used here for public-domain ingredient or commodity name grounding for dal.",
+              "Operator search target: dal.",
+              "No nutrition, health, or medical interpretation is stored from this source."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "dal",
+            "dal",
+            "dal ingredient grounding",
+            "FoodData Central ingredient grounding"
+          ],
+          "regions": [
+            "source:USDA FoodData Central",
+            "Ingredient composition context",
+            "south asia"
+          ],
+          "ingredients": [
+            "lentils",
+            "cumin",
+            "turmeric"
+          ],
+          "techniques": [
+            "source-gated retrieval grounding",
+            "ingredient commodity normalization",
+            "sensory disambiguation",
+            "source-diversity grounding"
+          ],
+          "sensoryDescriptors": [
+            "soft legume body",
+            "bloomed spice",
+            "warm bowl",
+            "ingredient availability grounding"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "source-diversity population"
+          ],
+          "regionalVariants": [
+            "Ingredient composition context is stored as a source-diversity retrieval context, not as a cultural region.",
+            "USDA FoodData Central is stored as ingredient/commodity grounding for dal.",
+            "This record keeps household certainty unknown until user, family, or stronger cultural sources confirm it."
+          ]
+        },
+        "uncertainty": [
+          "FoodData Central grounds ingredient or commodity naming only; it is not an authority on cultural memory or household identity.",
+          "No nutrition, health, or medical claims are inferred from this source.",
+          "Specific household usage, region, sensory priority, and substitution fit need user, family, or additional source confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp9-source-usda-chicken-soup",
+      "cacheTarget": {
+        "dishFamily": "chicken-soup",
+        "region": "Ingredient composition context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data",
+        "usda-fooddata-central"
+      ],
+      "coverageTags": [
+        "cultureAreas.north_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "record": {
+        "dishName": "chicken-soup",
+        "query": "chicken-soup USDA FoodData Central ingredient commodity grounding",
+        "sources": [
+          {
+            "title": "Chicken Soup structured-data search",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=chicken%20soup",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured-data search is used only to keep the family label findable for \"chicken soup\".",
+              "The search page is not treated as household, regional, or recipe proof."
+            ]
+          },
+          {
+            "title": "USDA FoodData Central search for chicken-soup",
+            "url": "https://fdc.nal.usda.gov/fdc-app.html#/food-search?query=chicken%20soup",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "FoodData Central is used here for public-domain ingredient or commodity name grounding for chicken-soup.",
+              "Operator search target: chicken soup.",
+              "No nutrition, health, or medical interpretation is stored from this source."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "chicken-soup",
+            "chicken soup",
+            "chicken-soup ingredient grounding",
+            "FoodData Central ingredient grounding"
+          ],
+          "regions": [
+            "source:USDA FoodData Central",
+            "Ingredient composition context",
+            "north america"
+          ],
+          "ingredients": [
+            "chicken broth",
+            "carrot",
+            "celery"
+          ],
+          "techniques": [
+            "source-gated retrieval grounding",
+            "ingredient commodity normalization",
+            "sensory disambiguation",
+            "source-diversity grounding"
+          ],
+          "sensoryDescriptors": [
+            "hot broth",
+            "poultry aroma",
+            "soft vegetables",
+            "ingredient availability grounding"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "source-diversity population"
+          ],
+          "regionalVariants": [
+            "Ingredient composition context is stored as a source-diversity retrieval context, not as a cultural region.",
+            "USDA FoodData Central is stored as ingredient/commodity grounding for chicken-soup.",
+            "This record keeps household certainty unknown until user, family, or stronger cultural sources confirm it."
+          ]
+        },
+        "uncertainty": [
+          "FoodData Central grounds ingredient or commodity naming only; it is not an authority on cultural memory or household identity.",
+          "No nutrition, health, or medical claims are inferred from this source.",
+          "Specific household usage, region, sensory priority, and substitution fit need user, family, or additional source confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp9-source-usda-comfort-broth",
+      "cacheTarget": {
+        "dishFamily": "comfort-broth",
+        "region": "Ingredient composition context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data",
+        "usda-fooddata-central"
+      ],
+      "coverageTags": [
+        "cultureAreas.arctic_subarctic",
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "regionScopes.diaspora"
+      ],
+      "record": {
+        "dishName": "comfort-broth",
+        "query": "comfort-broth USDA FoodData Central ingredient commodity grounding",
+        "sources": [
+          {
+            "title": "Comfort Broth structured-data search",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=broth",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured-data search is used only to keep the family label findable for \"broth\".",
+              "The search page is not treated as household, regional, or recipe proof."
+            ]
+          },
+          {
+            "title": "USDA FoodData Central search for comfort-broth",
+            "url": "https://fdc.nal.usda.gov/fdc-app.html#/food-search?query=broth",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "FoodData Central is used here for public-domain ingredient or commodity name grounding for comfort-broth.",
+              "Operator search target: broth.",
+              "No nutrition, health, or medical interpretation is stored from this source."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "comfort-broth",
+            "broth",
+            "comfort-broth ingredient grounding",
+            "FoodData Central ingredient grounding"
+          ],
+          "regions": [
+            "source:USDA FoodData Central",
+            "Ingredient composition context",
+            "arctic subarctic",
+            "diaspora global"
+          ],
+          "ingredients": [
+            "broth",
+            "ginger",
+            "onion"
+          ],
+          "techniques": [
+            "source-gated retrieval grounding",
+            "ingredient commodity normalization",
+            "sensory disambiguation",
+            "source-diversity grounding"
+          ],
+          "sensoryDescriptors": [
+            "hot clear broth",
+            "aromatic steam",
+            "gentle salt",
+            "ingredient availability grounding"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "source-diversity population"
+          ],
+          "regionalVariants": [
+            "Ingredient composition context is stored as a source-diversity retrieval context, not as a cultural region.",
+            "USDA FoodData Central is stored as ingredient/commodity grounding for comfort-broth.",
+            "This record keeps household certainty unknown until user, family, or stronger cultural sources confirm it."
+          ]
+        },
+        "uncertainty": [
+          "FoodData Central grounds ingredient or commodity naming only; it is not an authority on cultural memory or household identity.",
+          "No nutrition, health, or medical claims are inferred from this source.",
+          "Specific household usage, region, sensory priority, and substitution fit need user, family, or additional source confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp9-source-usda-harira",
+      "cacheTarget": {
+        "dishFamily": "harira",
+        "region": "Ingredient composition context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data",
+        "usda-fooddata-central"
+      ],
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.beverage",
+        "foodForms.sick_day_comfort",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "record": {
+        "dishName": "harira",
+        "query": "harira USDA FoodData Central ingredient commodity grounding",
+        "sources": [
+          {
+            "title": "Harira structured-data search",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=harira",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured-data search is used only to keep the family label findable for \"harira\".",
+              "The search page is not treated as household, regional, or recipe proof."
+            ]
+          },
+          {
+            "title": "USDA FoodData Central search for harira",
+            "url": "https://fdc.nal.usda.gov/fdc-app.html#/food-search?query=harira",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "FoodData Central is used here for public-domain ingredient or commodity name grounding for harira.",
+              "Operator search target: harira.",
+              "No nutrition, health, or medical interpretation is stored from this source."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "harira",
+            "harira",
+            "harira ingredient grounding",
+            "FoodData Central ingredient grounding"
+          ],
+          "regions": [
+            "source:USDA FoodData Central",
+            "Ingredient composition context",
+            "north africa"
+          ],
+          "ingredients": [
+            "lentils",
+            "chickpeas",
+            "tomato"
+          ],
+          "techniques": [
+            "source-gated retrieval grounding",
+            "ingredient commodity normalization",
+            "sensory disambiguation",
+            "source-diversity grounding"
+          ],
+          "sensoryDescriptors": [
+            "legume body",
+            "tomato acid",
+            "warm spice",
+            "ingredient availability grounding"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "source-diversity population"
+          ],
+          "regionalVariants": [
+            "Ingredient composition context is stored as a source-diversity retrieval context, not as a cultural region.",
+            "USDA FoodData Central is stored as ingredient/commodity grounding for harira.",
+            "This record keeps household certainty unknown until user, family, or stronger cultural sources confirm it."
+          ]
+        },
+        "uncertainty": [
+          "FoodData Central grounds ingredient or commodity naming only; it is not an authority on cultural memory or household identity.",
+          "No nutrition, health, or medical claims are inferred from this source.",
+          "Specific household usage, region, sensory priority, and substitution fit need user, family, or additional source confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp9-source-usda-egusi-soup",
+      "cacheTarget": {
+        "dishFamily": "egusi-soup",
+        "region": "Ingredient composition context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data",
+        "usda-fooddata-central"
+      ],
+      "coverageTags": [
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "record": {
+        "dishName": "egusi-soup",
+        "query": "egusi-soup USDA FoodData Central ingredient commodity grounding",
+        "sources": [
+          {
+            "title": "Egusi Soup structured-data search",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=egusi%20soup",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured-data search is used only to keep the family label findable for \"egusi soup\".",
+              "The search page is not treated as household, regional, or recipe proof."
+            ]
+          },
+          {
+            "title": "USDA FoodData Central search for egusi-soup",
+            "url": "https://fdc.nal.usda.gov/fdc-app.html#/food-search?query=egusi%20soup",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "FoodData Central is used here for public-domain ingredient or commodity name grounding for egusi-soup.",
+              "Operator search target: egusi soup.",
+              "No nutrition, health, or medical interpretation is stored from this source."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "egusi-soup",
+            "egusi soup",
+            "egusi-soup ingredient grounding",
+            "FoodData Central ingredient grounding"
+          ],
+          "regions": [
+            "source:USDA FoodData Central",
+            "Ingredient composition context",
+            "west africa"
+          ],
+          "ingredients": [
+            "melon seed",
+            "leafy greens"
+          ],
+          "techniques": [
+            "source-gated retrieval grounding",
+            "ingredient commodity normalization",
+            "sensory disambiguation",
+            "source-diversity grounding"
+          ],
+          "sensoryDescriptors": [
+            "seed-thickened body",
+            "greens aroma",
+            "stew warmth",
+            "ingredient availability grounding"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "source-diversity population"
+          ],
+          "regionalVariants": [
+            "Ingredient composition context is stored as a source-diversity retrieval context, not as a cultural region.",
+            "USDA FoodData Central is stored as ingredient/commodity grounding for egusi-soup.",
+            "This record keeps household certainty unknown until user, family, or stronger cultural sources confirm it."
+          ]
+        },
+        "uncertainty": [
+          "FoodData Central grounds ingredient or commodity naming only; it is not an authority on cultural memory or household identity.",
+          "No nutrition, health, or medical claims are inferred from this source.",
+          "Specific household usage, region, sensory priority, and substitution fit need user, family, or additional source confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp9-source-usda-three-sisters-soup",
+      "cacheTarget": {
+        "dishFamily": "three-sisters-soup",
+        "region": "Ingredient composition context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data",
+        "usda-fooddata-central"
+      ],
+      "coverageTags": [
+        "cultureAreas.indigenous_first_peoples",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.indigenous"
+      ],
+      "record": {
+        "dishName": "three-sisters-soup",
+        "query": "three-sisters-soup USDA FoodData Central ingredient commodity grounding",
+        "sources": [
+          {
+            "title": "Three Sisters Soup structured-data search",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=three%20sisters%20soup",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured-data search is used only to keep the family label findable for \"three sisters soup\".",
+              "The search page is not treated as household, regional, or recipe proof."
+            ]
+          },
+          {
+            "title": "USDA FoodData Central search for three-sisters-soup",
+            "url": "https://fdc.nal.usda.gov/fdc-app.html#/food-search?query=three%20sisters%20soup",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "FoodData Central is used here for public-domain ingredient or commodity name grounding for three-sisters-soup.",
+              "Operator search target: three sisters soup.",
+              "No nutrition, health, or medical interpretation is stored from this source."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "three-sisters-soup",
+            "three sisters soup",
+            "three-sisters-soup ingredient grounding",
+            "FoodData Central ingredient grounding"
+          ],
+          "regions": [
+            "source:USDA FoodData Central",
+            "Ingredient composition context",
+            "indigenous first peoples"
+          ],
+          "ingredients": [
+            "corn",
+            "beans",
+            "squash"
+          ],
+          "techniques": [
+            "source-gated retrieval grounding",
+            "ingredient commodity normalization",
+            "sensory disambiguation",
+            "source-diversity grounding"
+          ],
+          "sensoryDescriptors": [
+            "sweet corn",
+            "soft beans",
+            "squash body",
+            "ingredient availability grounding"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "source-diversity population"
+          ],
+          "regionalVariants": [
+            "Ingredient composition context is stored as a source-diversity retrieval context, not as a cultural region.",
+            "USDA FoodData Central is stored as ingredient/commodity grounding for three-sisters-soup.",
+            "This record keeps household certainty unknown until user, family, or stronger cultural sources confirm it."
+          ]
+        },
+        "uncertainty": [
+          "FoodData Central grounds ingredient or commodity naming only; it is not an authority on cultural memory or household identity.",
+          "No nutrition, health, or medical claims are inferred from this source.",
+          "Specific household usage, region, sensory priority, and substitution fit need user, family, or additional source confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp9-source-usda-kimchi",
+      "cacheTarget": {
+        "dishFamily": "kimchi",
+        "region": "Ingredient composition context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data",
+        "usda-fooddata-central"
+      ],
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "record": {
+        "dishName": "kimchi",
+        "query": "kimchi USDA FoodData Central ingredient commodity grounding",
+        "sources": [
+          {
+            "title": "Kimchi structured-data search",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=kimchi",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured-data search is used only to keep the family label findable for \"kimchi\".",
+              "The search page is not treated as household, regional, or recipe proof."
+            ]
+          },
+          {
+            "title": "USDA FoodData Central search for kimchi",
+            "url": "https://fdc.nal.usda.gov/fdc-app.html#/food-search?query=kimchi",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "FoodData Central is used here for public-domain ingredient or commodity name grounding for kimchi.",
+              "Operator search target: kimchi.",
+              "No nutrition, health, or medical interpretation is stored from this source."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "kimchi",
+            "kimchi",
+            "kimchi ingredient grounding",
+            "FoodData Central ingredient grounding"
+          ],
+          "regions": [
+            "source:USDA FoodData Central",
+            "Ingredient composition context",
+            "east asia"
+          ],
+          "ingredients": [
+            "cabbage",
+            "chili pepper",
+            "garlic"
+          ],
+          "techniques": [
+            "source-gated retrieval grounding",
+            "ingredient commodity normalization",
+            "sensory disambiguation",
+            "source-diversity grounding"
+          ],
+          "sensoryDescriptors": [
+            "fermented acidity",
+            "chile aroma",
+            "crisp vegetable",
+            "ingredient availability grounding"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "source-diversity population"
+          ],
+          "regionalVariants": [
+            "Ingredient composition context is stored as a source-diversity retrieval context, not as a cultural region.",
+            "USDA FoodData Central is stored as ingredient/commodity grounding for kimchi.",
+            "This record keeps household certainty unknown until user, family, or stronger cultural sources confirm it."
+          ]
+        },
+        "uncertainty": [
+          "FoodData Central grounds ingredient or commodity naming only; it is not an authority on cultural memory or household identity.",
+          "No nutrition, health, or medical claims are inferred from this source.",
+          "Specific household usage, region, sensory priority, and substitution fit need user, family, or additional source confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp9-source-usda-curtido",
+      "cacheTarget": {
+        "dishFamily": "curtido",
+        "region": "Ingredient composition context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data",
+        "usda-fooddata-central"
+      ],
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "record": {
+        "dishName": "curtido",
+        "query": "curtido USDA FoodData Central ingredient commodity grounding",
+        "sources": [
+          {
+            "title": "Curtido structured-data search",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=curtido",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured-data search is used only to keep the family label findable for \"curtido\".",
+              "The search page is not treated as household, regional, or recipe proof."
+            ]
+          },
+          {
+            "title": "USDA FoodData Central search for curtido",
+            "url": "https://fdc.nal.usda.gov/fdc-app.html#/food-search?query=curtido",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "FoodData Central is used here for public-domain ingredient or commodity name grounding for curtido.",
+              "Operator search target: curtido.",
+              "No nutrition, health, or medical interpretation is stored from this source."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "curtido",
+            "curtido",
+            "curtido ingredient grounding",
+            "FoodData Central ingredient grounding"
+          ],
+          "regions": [
+            "source:USDA FoodData Central",
+            "Ingredient composition context",
+            "central america"
+          ],
+          "ingredients": [
+            "cabbage",
+            "vinegar",
+            "oregano"
+          ],
+          "techniques": [
+            "source-gated retrieval grounding",
+            "ingredient commodity normalization",
+            "sensory disambiguation",
+            "source-diversity grounding"
+          ],
+          "sensoryDescriptors": [
+            "vinegar brightness",
+            "cabbage crunch",
+            "herbal aroma",
+            "ingredient availability grounding"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "source-diversity population"
+          ],
+          "regionalVariants": [
+            "Ingredient composition context is stored as a source-diversity retrieval context, not as a cultural region.",
+            "USDA FoodData Central is stored as ingredient/commodity grounding for curtido.",
+            "This record keeps household certainty unknown until user, family, or stronger cultural sources confirm it."
+          ]
+        },
+        "uncertainty": [
+          "FoodData Central grounds ingredient or commodity naming only; it is not an authority on cultural memory or household identity.",
+          "No nutrition, health, or medical claims are inferred from this source.",
+          "Specific household usage, region, sensory priority, and substitution fit need user, family, or additional source confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp9-source-usda-mango-pickle",
+      "cacheTarget": {
+        "dishFamily": "mango-pickle",
+        "region": "Ingredient composition context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data",
+        "usda-fooddata-central"
+      ],
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.diaspora"
+      ],
+      "record": {
+        "dishName": "mango-pickle",
+        "query": "mango-pickle USDA FoodData Central ingredient commodity grounding",
+        "sources": [
+          {
+            "title": "Mango Pickle structured-data search",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=mango%20pickle",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured-data search is used only to keep the family label findable for \"mango pickle\".",
+              "The search page is not treated as household, regional, or recipe proof."
+            ]
+          },
+          {
+            "title": "USDA FoodData Central search for mango-pickle",
+            "url": "https://fdc.nal.usda.gov/fdc-app.html#/food-search?query=mango%20pickle",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "FoodData Central is used here for public-domain ingredient or commodity name grounding for mango-pickle.",
+              "Operator search target: mango pickle.",
+              "No nutrition, health, or medical interpretation is stored from this source."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "mango-pickle",
+            "mango pickle",
+            "mango-pickle ingredient grounding",
+            "FoodData Central ingredient grounding"
+          ],
+          "regions": [
+            "source:USDA FoodData Central",
+            "Ingredient composition context",
+            "diaspora global"
+          ],
+          "ingredients": [
+            "mango",
+            "mustard seed",
+            "chili pepper"
+          ],
+          "techniques": [
+            "source-gated retrieval grounding",
+            "ingredient commodity normalization",
+            "sensory disambiguation",
+            "source-diversity grounding"
+          ],
+          "sensoryDescriptors": [
+            "salty-sour fruit",
+            "oil spice",
+            "chile heat",
+            "ingredient availability grounding"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "source-diversity population"
+          ],
+          "regionalVariants": [
+            "Ingredient composition context is stored as a source-diversity retrieval context, not as a cultural region.",
+            "USDA FoodData Central is stored as ingredient/commodity grounding for mango-pickle.",
+            "This record keeps household certainty unknown until user, family, or stronger cultural sources confirm it."
+          ]
+        },
+        "uncertainty": [
+          "FoodData Central grounds ingredient or commodity naming only; it is not an authority on cultural memory or household identity.",
+          "No nutrition, health, or medical claims are inferred from this source.",
+          "Specific household usage, region, sensory priority, and substitution fit need user, family, or additional source confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp9-source-usda-sambal",
+      "cacheTarget": {
+        "dishFamily": "sambal",
+        "region": "Ingredient composition context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data",
+        "usda-fooddata-central"
+      ],
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "record": {
+        "dishName": "sambal",
+        "query": "sambal USDA FoodData Central ingredient commodity grounding",
+        "sources": [
+          {
+            "title": "Sambal structured-data search",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=sambal",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured-data search is used only to keep the family label findable for \"sambal\".",
+              "The search page is not treated as household, regional, or recipe proof."
+            ]
+          },
+          {
+            "title": "USDA FoodData Central search for sambal",
+            "url": "https://fdc.nal.usda.gov/fdc-app.html#/food-search?query=sambal",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "FoodData Central is used here for public-domain ingredient or commodity name grounding for sambal.",
+              "Operator search target: sambal.",
+              "No nutrition, health, or medical interpretation is stored from this source."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "sambal",
+            "sambal",
+            "sambal ingredient grounding",
+            "FoodData Central ingredient grounding"
+          ],
+          "regions": [
+            "source:USDA FoodData Central",
+            "Ingredient composition context",
+            "southeast asia"
+          ],
+          "ingredients": [
+            "chili pepper",
+            "garlic",
+            "shrimp paste"
+          ],
+          "techniques": [
+            "source-gated retrieval grounding",
+            "ingredient commodity normalization",
+            "sensory disambiguation",
+            "source-diversity grounding"
+          ],
+          "sensoryDescriptors": [
+            "hot chile paste",
+            "garlic aroma",
+            "savory funk",
+            "ingredient availability grounding"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "source-diversity population"
+          ],
+          "regionalVariants": [
+            "Ingredient composition context is stored as a source-diversity retrieval context, not as a cultural region.",
+            "USDA FoodData Central is stored as ingredient/commodity grounding for sambal.",
+            "This record keeps household certainty unknown until user, family, or stronger cultural sources confirm it."
+          ]
+        },
+        "uncertainty": [
+          "FoodData Central grounds ingredient or commodity naming only; it is not an authority on cultural memory or household identity.",
+          "No nutrition, health, or medical claims are inferred from this source.",
+          "Specific household usage, region, sensory priority, and substitution fit need user, family, or additional source confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp9-source-usda-harissa",
+      "cacheTarget": {
+        "dishFamily": "harissa",
+        "region": "Ingredient composition context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data",
+        "usda-fooddata-central"
+      ],
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "record": {
+        "dishName": "harissa",
+        "query": "harissa USDA FoodData Central ingredient commodity grounding",
+        "sources": [
+          {
+            "title": "Harissa structured-data search",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=harissa",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured-data search is used only to keep the family label findable for \"harissa\".",
+              "The search page is not treated as household, regional, or recipe proof."
+            ]
+          },
+          {
+            "title": "USDA FoodData Central search for harissa",
+            "url": "https://fdc.nal.usda.gov/fdc-app.html#/food-search?query=harissa",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "FoodData Central is used here for public-domain ingredient or commodity name grounding for harissa.",
+              "Operator search target: harissa.",
+              "No nutrition, health, or medical interpretation is stored from this source."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "harissa",
+            "harissa",
+            "harissa ingredient grounding",
+            "FoodData Central ingredient grounding"
+          ],
+          "regions": [
+            "source:USDA FoodData Central",
+            "Ingredient composition context",
+            "north africa"
+          ],
+          "ingredients": [
+            "chili pepper",
+            "caraway",
+            "coriander"
+          ],
+          "techniques": [
+            "source-gated retrieval grounding",
+            "ingredient commodity normalization",
+            "sensory disambiguation",
+            "source-diversity grounding"
+          ],
+          "sensoryDescriptors": [
+            "red chile oil",
+            "toasted spice",
+            "paste heat",
+            "ingredient availability grounding"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "source-diversity population"
+          ],
+          "regionalVariants": [
+            "Ingredient composition context is stored as a source-diversity retrieval context, not as a cultural region.",
+            "USDA FoodData Central is stored as ingredient/commodity grounding for harissa.",
+            "This record keeps household certainty unknown until user, family, or stronger cultural sources confirm it."
+          ]
+        },
+        "uncertainty": [
+          "FoodData Central grounds ingredient or commodity naming only; it is not an authority on cultural memory or household identity.",
+          "No nutrition, health, or medical claims are inferred from this source.",
+          "Specific household usage, region, sensory priority, and substitution fit need user, family, or additional source confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp9-source-usda-toum",
+      "cacheTarget": {
+        "dishFamily": "toum",
+        "region": "Ingredient composition context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data",
+        "usda-fooddata-central"
+      ],
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "record": {
+        "dishName": "toum",
+        "query": "toum USDA FoodData Central ingredient commodity grounding",
+        "sources": [
+          {
+            "title": "Toum structured-data search",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=toum",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured-data search is used only to keep the family label findable for \"toum\".",
+              "The search page is not treated as household, regional, or recipe proof."
+            ]
+          },
+          {
+            "title": "USDA FoodData Central search for toum",
+            "url": "https://fdc.nal.usda.gov/fdc-app.html#/food-search?query=toum",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "FoodData Central is used here for public-domain ingredient or commodity name grounding for toum.",
+              "Operator search target: toum.",
+              "No nutrition, health, or medical interpretation is stored from this source."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "toum",
+            "toum",
+            "toum ingredient grounding",
+            "FoodData Central ingredient grounding"
+          ],
+          "regions": [
+            "source:USDA FoodData Central",
+            "Ingredient composition context",
+            "middle east west asia"
+          ],
+          "ingredients": [
+            "garlic",
+            "lemon juice",
+            "oil"
+          ],
+          "techniques": [
+            "source-gated retrieval grounding",
+            "ingredient commodity normalization",
+            "sensory disambiguation",
+            "source-diversity grounding"
+          ],
+          "sensoryDescriptors": [
+            "garlic pungency",
+            "lemon acid",
+            "whipped fat",
+            "ingredient availability grounding"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "source-diversity population"
+          ],
+          "regionalVariants": [
+            "Ingredient composition context is stored as a source-diversity retrieval context, not as a cultural region.",
+            "USDA FoodData Central is stored as ingredient/commodity grounding for toum.",
+            "This record keeps household certainty unknown until user, family, or stronger cultural sources confirm it."
+          ]
+        },
+        "uncertainty": [
+          "FoodData Central grounds ingredient or commodity naming only; it is not an authority on cultural memory or household identity.",
+          "No nutrition, health, or medical claims are inferred from this source.",
+          "Specific household usage, region, sensory priority, and substitution fit need user, family, or additional source confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp9-source-usda-barbecue-sauce",
+      "cacheTarget": {
+        "dishFamily": "barbecue-sauce",
+        "region": "Ingredient composition context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data",
+        "usda-fooddata-central"
+      ],
+      "coverageTags": [
+        "cultureAreas.north_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "record": {
+        "dishName": "barbecue-sauce",
+        "query": "barbecue-sauce USDA FoodData Central ingredient commodity grounding",
+        "sources": [
+          {
+            "title": "Barbecue Sauce structured-data search",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=barbecue%20sauce",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured-data search is used only to keep the family label findable for \"barbecue sauce\".",
+              "The search page is not treated as household, regional, or recipe proof."
+            ]
+          },
+          {
+            "title": "USDA FoodData Central search for barbecue-sauce",
+            "url": "https://fdc.nal.usda.gov/fdc-app.html#/food-search?query=barbecue%20sauce",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "FoodData Central is used here for public-domain ingredient or commodity name grounding for barbecue-sauce.",
+              "Operator search target: barbecue sauce.",
+              "No nutrition, health, or medical interpretation is stored from this source."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "barbecue-sauce",
+            "barbecue sauce",
+            "barbecue-sauce ingredient grounding",
+            "FoodData Central ingredient grounding"
+          ],
+          "regions": [
+            "source:USDA FoodData Central",
+            "Ingredient composition context",
+            "north america"
+          ],
+          "ingredients": [
+            "tomato",
+            "vinegar",
+            "molasses"
+          ],
+          "techniques": [
+            "source-gated retrieval grounding",
+            "ingredient commodity normalization",
+            "sensory disambiguation",
+            "source-diversity grounding"
+          ],
+          "sensoryDescriptors": [
+            "smoke-sweet sauce",
+            "vinegar tang",
+            "sticky glaze",
+            "ingredient availability grounding"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "source-diversity population"
+          ],
+          "regionalVariants": [
+            "Ingredient composition context is stored as a source-diversity retrieval context, not as a cultural region.",
+            "USDA FoodData Central is stored as ingredient/commodity grounding for barbecue-sauce.",
+            "This record keeps household certainty unknown until user, family, or stronger cultural sources confirm it."
+          ]
+        },
+        "uncertainty": [
+          "FoodData Central grounds ingredient or commodity naming only; it is not an authority on cultural memory or household identity.",
+          "No nutrition, health, or medical claims are inferred from this source.",
+          "Specific household usage, region, sensory priority, and substitution fit need user, family, or additional source confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp9-source-usda-chimichurri",
+      "cacheTarget": {
+        "dishFamily": "chimichurri",
+        "region": "Ingredient composition context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data",
+        "usda-fooddata-central"
+      ],
+      "coverageTags": [
+        "cultureAreas.south_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.pickle_ferment",
+        "foodForms.sauce_condiment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "record": {
+        "dishName": "chimichurri",
+        "query": "chimichurri USDA FoodData Central ingredient commodity grounding",
+        "sources": [
+          {
+            "title": "Chimichurri structured-data search",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=chimichurri",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured-data search is used only to keep the family label findable for \"chimichurri\".",
+              "The search page is not treated as household, regional, or recipe proof."
+            ]
+          },
+          {
+            "title": "USDA FoodData Central search for chimichurri",
+            "url": "https://fdc.nal.usda.gov/fdc-app.html#/food-search?query=chimichurri",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "FoodData Central is used here for public-domain ingredient or commodity name grounding for chimichurri.",
+              "Operator search target: chimichurri.",
+              "No nutrition, health, or medical interpretation is stored from this source."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "chimichurri",
+            "chimichurri",
+            "chimichurri ingredient grounding",
+            "FoodData Central ingredient grounding"
+          ],
+          "regions": [
+            "source:USDA FoodData Central",
+            "Ingredient composition context",
+            "south america"
+          ],
+          "ingredients": [
+            "parsley",
+            "garlic",
+            "vinegar"
+          ],
+          "techniques": [
+            "source-gated retrieval grounding",
+            "ingredient commodity normalization",
+            "sensory disambiguation",
+            "source-diversity grounding"
+          ],
+          "sensoryDescriptors": [
+            "green herb aroma",
+            "garlic bite",
+            "acid-oil sauce",
+            "ingredient availability grounding"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "source-diversity population"
+          ],
+          "regionalVariants": [
+            "Ingredient composition context is stored as a source-diversity retrieval context, not as a cultural region.",
+            "USDA FoodData Central is stored as ingredient/commodity grounding for chimichurri.",
+            "This record keeps household certainty unknown until user, family, or stronger cultural sources confirm it."
+          ]
+        },
+        "uncertainty": [
+          "FoodData Central grounds ingredient or commodity naming only; it is not an authority on cultural memory or household identity.",
+          "No nutrition, health, or medical claims are inferred from this source.",
+          "Specific household usage, region, sensory priority, and substitution fit need user, family, or additional source confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp9-source-usda-corn-tortilla",
+      "cacheTarget": {
+        "dishFamily": "corn-tortilla",
+        "region": "Ingredient composition context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data",
+        "usda-fooddata-central"
+      ],
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "record": {
+        "dishName": "corn-tortilla",
+        "query": "corn-tortilla USDA FoodData Central ingredient commodity grounding",
+        "sources": [
+          {
+            "title": "Corn Tortilla structured-data search",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=corn%20tortilla",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured-data search is used only to keep the family label findable for \"corn tortilla\".",
+              "The search page is not treated as household, regional, or recipe proof."
+            ]
+          },
+          {
+            "title": "USDA FoodData Central search for corn-tortilla",
+            "url": "https://fdc.nal.usda.gov/fdc-app.html#/food-search?query=corn%20tortilla",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "FoodData Central is used here for public-domain ingredient or commodity name grounding for corn-tortilla.",
+              "Operator search target: corn tortilla.",
+              "No nutrition, health, or medical interpretation is stored from this source."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "corn-tortilla",
+            "corn tortilla",
+            "corn-tortilla ingredient grounding",
+            "FoodData Central ingredient grounding"
+          ],
+          "regions": [
+            "source:USDA FoodData Central",
+            "Ingredient composition context",
+            "central america"
+          ],
+          "ingredients": [
+            "corn masa"
+          ],
+          "techniques": [
+            "source-gated retrieval grounding",
+            "ingredient commodity normalization",
+            "sensory disambiguation",
+            "source-diversity grounding"
+          ],
+          "sensoryDescriptors": [
+            "toasted corn aroma",
+            "flexible starch",
+            "griddle warmth",
+            "ingredient availability grounding"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "source-diversity population"
+          ],
+          "regionalVariants": [
+            "Ingredient composition context is stored as a source-diversity retrieval context, not as a cultural region.",
+            "USDA FoodData Central is stored as ingredient/commodity grounding for corn-tortilla.",
+            "This record keeps household certainty unknown until user, family, or stronger cultural sources confirm it."
+          ]
+        },
+        "uncertainty": [
+          "FoodData Central grounds ingredient or commodity naming only; it is not an authority on cultural memory or household identity.",
+          "No nutrition, health, or medical claims are inferred from this source.",
+          "Specific household usage, region, sensory priority, and substitution fit need user, family, or additional source confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp9-source-usda-arepa",
+      "cacheTarget": {
+        "dishFamily": "arepa",
+        "region": "Ingredient composition context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data",
+        "usda-fooddata-central"
+      ],
+      "coverageTags": [
+        "cultureAreas.south_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "record": {
+        "dishName": "arepa",
+        "query": "arepa USDA FoodData Central ingredient commodity grounding",
+        "sources": [
+          {
+            "title": "Arepa structured-data search",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=arepa",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured-data search is used only to keep the family label findable for \"arepa\".",
+              "The search page is not treated as household, regional, or recipe proof."
+            ]
+          },
+          {
+            "title": "USDA FoodData Central search for arepa",
+            "url": "https://fdc.nal.usda.gov/fdc-app.html#/food-search?query=arepa",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "FoodData Central is used here for public-domain ingredient or commodity name grounding for arepa.",
+              "Operator search target: arepa.",
+              "No nutrition, health, or medical interpretation is stored from this source."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "arepa",
+            "arepa",
+            "arepa ingredient grounding",
+            "FoodData Central ingredient grounding"
+          ],
+          "regions": [
+            "source:USDA FoodData Central",
+            "Ingredient composition context",
+            "south america"
+          ],
+          "ingredients": [
+            "cornmeal",
+            "cheese"
+          ],
+          "techniques": [
+            "source-gated retrieval grounding",
+            "ingredient commodity normalization",
+            "sensory disambiguation",
+            "source-diversity grounding"
+          ],
+          "sensoryDescriptors": [
+            "corn crust",
+            "soft starch",
+            "griddle browning",
+            "ingredient availability grounding"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "source-diversity population"
+          ],
+          "regionalVariants": [
+            "Ingredient composition context is stored as a source-diversity retrieval context, not as a cultural region.",
+            "USDA FoodData Central is stored as ingredient/commodity grounding for arepa.",
+            "This record keeps household certainty unknown until user, family, or stronger cultural sources confirm it."
+          ]
+        },
+        "uncertainty": [
+          "FoodData Central grounds ingredient or commodity naming only; it is not an authority on cultural memory or household identity.",
+          "No nutrition, health, or medical claims are inferred from this source.",
+          "Specific household usage, region, sensory priority, and substitution fit need user, family, or additional source confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp9-source-usda-chapati",
+      "cacheTarget": {
+        "dishFamily": "chapati",
+        "region": "Ingredient composition context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data",
+        "usda-fooddata-central"
+      ],
+      "coverageTags": [
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "record": {
+        "dishName": "chapati",
+        "query": "chapati USDA FoodData Central ingredient commodity grounding",
+        "sources": [
+          {
+            "title": "Chapati structured-data search",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=chapati",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured-data search is used only to keep the family label findable for \"chapati\".",
+              "The search page is not treated as household, regional, or recipe proof."
+            ]
+          },
+          {
+            "title": "USDA FoodData Central search for chapati",
+            "url": "https://fdc.nal.usda.gov/fdc-app.html#/food-search?query=chapati",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "FoodData Central is used here for public-domain ingredient or commodity name grounding for chapati.",
+              "Operator search target: chapati.",
+              "No nutrition, health, or medical interpretation is stored from this source."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "chapati",
+            "chapati",
+            "chapati ingredient grounding",
+            "FoodData Central ingredient grounding"
+          ],
+          "regions": [
+            "source:USDA FoodData Central",
+            "Ingredient composition context",
+            "south asia"
+          ],
+          "ingredients": [
+            "whole wheat flour"
+          ],
+          "techniques": [
+            "source-gated retrieval grounding",
+            "ingredient commodity normalization",
+            "sensory disambiguation",
+            "source-diversity grounding"
+          ],
+          "sensoryDescriptors": [
+            "wheat aroma",
+            "flatbread chew",
+            "dry griddle warmth",
+            "ingredient availability grounding"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "source-diversity population"
+          ],
+          "regionalVariants": [
+            "Ingredient composition context is stored as a source-diversity retrieval context, not as a cultural region.",
+            "USDA FoodData Central is stored as ingredient/commodity grounding for chapati.",
+            "This record keeps household certainty unknown until user, family, or stronger cultural sources confirm it."
+          ]
+        },
+        "uncertainty": [
+          "FoodData Central grounds ingredient or commodity naming only; it is not an authority on cultural memory or household identity.",
+          "No nutrition, health, or medical claims are inferred from this source.",
+          "Specific household usage, region, sensory priority, and substitution fit need user, family, or additional source confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp9-source-usda-naan",
+      "cacheTarget": {
+        "dishFamily": "naan",
+        "region": "Ingredient composition context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data",
+        "usda-fooddata-central"
+      ],
+      "coverageTags": [
+        "cultureAreas.central_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "record": {
+        "dishName": "naan",
+        "query": "naan USDA FoodData Central ingredient commodity grounding",
+        "sources": [
+          {
+            "title": "Naan structured-data search",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=naan",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured-data search is used only to keep the family label findable for \"naan\".",
+              "The search page is not treated as household, regional, or recipe proof."
+            ]
+          },
+          {
+            "title": "USDA FoodData Central search for naan",
+            "url": "https://fdc.nal.usda.gov/fdc-app.html#/food-search?query=naan",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "FoodData Central is used here for public-domain ingredient or commodity name grounding for naan.",
+              "Operator search target: naan.",
+              "No nutrition, health, or medical interpretation is stored from this source."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "naan",
+            "naan",
+            "naan ingredient grounding",
+            "FoodData Central ingredient grounding"
+          ],
+          "regions": [
+            "source:USDA FoodData Central",
+            "Ingredient composition context",
+            "central asia"
+          ],
+          "ingredients": [
+            "wheat flour",
+            "yogurt"
+          ],
+          "techniques": [
+            "source-gated retrieval grounding",
+            "ingredient commodity normalization",
+            "sensory disambiguation",
+            "source-diversity grounding"
+          ],
+          "sensoryDescriptors": [
+            "soft bread",
+            "charred spots",
+            "dairy tenderness",
+            "ingredient availability grounding"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "source-diversity population"
+          ],
+          "regionalVariants": [
+            "Ingredient composition context is stored as a source-diversity retrieval context, not as a cultural region.",
+            "USDA FoodData Central is stored as ingredient/commodity grounding for naan.",
+            "This record keeps household certainty unknown until user, family, or stronger cultural sources confirm it."
+          ]
+        },
+        "uncertainty": [
+          "FoodData Central grounds ingredient or commodity naming only; it is not an authority on cultural memory or household identity.",
+          "No nutrition, health, or medical claims are inferred from this source.",
+          "Specific household usage, region, sensory priority, and substitution fit need user, family, or additional source confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp9-source-usda-couscous",
+      "cacheTarget": {
+        "dishFamily": "couscous",
+        "region": "Ingredient composition context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data",
+        "usda-fooddata-central"
+      ],
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "record": {
+        "dishName": "couscous",
+        "query": "couscous USDA FoodData Central ingredient commodity grounding",
+        "sources": [
+          {
+            "title": "Couscous structured-data search",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=couscous",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured-data search is used only to keep the family label findable for \"couscous\".",
+              "The search page is not treated as household, regional, or recipe proof."
+            ]
+          },
+          {
+            "title": "USDA FoodData Central search for couscous",
+            "url": "https://fdc.nal.usda.gov/fdc-app.html#/food-search?query=couscous",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "FoodData Central is used here for public-domain ingredient or commodity name grounding for couscous.",
+              "Operator search target: couscous.",
+              "No nutrition, health, or medical interpretation is stored from this source."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "couscous",
+            "couscous",
+            "couscous ingredient grounding",
+            "FoodData Central ingredient grounding"
+          ],
+          "regions": [
+            "source:USDA FoodData Central",
+            "Ingredient composition context",
+            "north africa"
+          ],
+          "ingredients": [
+            "semolina wheat"
+          ],
+          "techniques": [
+            "source-gated retrieval grounding",
+            "ingredient commodity normalization",
+            "sensory disambiguation",
+            "source-diversity grounding"
+          ],
+          "sensoryDescriptors": [
+            "small grain texture",
+            "steamed wheat",
+            "sauce absorption",
+            "ingredient availability grounding"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "source-diversity population"
+          ],
+          "regionalVariants": [
+            "Ingredient composition context is stored as a source-diversity retrieval context, not as a cultural region.",
+            "USDA FoodData Central is stored as ingredient/commodity grounding for couscous.",
+            "This record keeps household certainty unknown until user, family, or stronger cultural sources confirm it."
+          ]
+        },
+        "uncertainty": [
+          "FoodData Central grounds ingredient or commodity naming only; it is not an authority on cultural memory or household identity.",
+          "No nutrition, health, or medical claims are inferred from this source.",
+          "Specific household usage, region, sensory priority, and substitution fit need user, family, or additional source confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp9-source-usda-polenta",
+      "cacheTarget": {
+        "dishFamily": "polenta",
+        "region": "Ingredient composition context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data",
+        "usda-fooddata-central"
+      ],
+      "coverageTags": [
+        "cultureAreas.europe",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "record": {
+        "dishName": "polenta",
+        "query": "polenta USDA FoodData Central ingredient commodity grounding",
+        "sources": [
+          {
+            "title": "Polenta structured-data search",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=polenta",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured-data search is used only to keep the family label findable for \"polenta\".",
+              "The search page is not treated as household, regional, or recipe proof."
+            ]
+          },
+          {
+            "title": "USDA FoodData Central search for polenta",
+            "url": "https://fdc.nal.usda.gov/fdc-app.html#/food-search?query=polenta",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "FoodData Central is used here for public-domain ingredient or commodity name grounding for polenta.",
+              "Operator search target: polenta.",
+              "No nutrition, health, or medical interpretation is stored from this source."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "polenta",
+            "polenta",
+            "polenta ingredient grounding",
+            "FoodData Central ingredient grounding"
+          ],
+          "regions": [
+            "source:USDA FoodData Central",
+            "Ingredient composition context",
+            "europe"
+          ],
+          "ingredients": [
+            "cornmeal"
+          ],
+          "techniques": [
+            "source-gated retrieval grounding",
+            "ingredient commodity normalization",
+            "sensory disambiguation",
+            "source-diversity grounding"
+          ],
+          "sensoryDescriptors": [
+            "soft corn porridge",
+            "buttery body",
+            "warm spoonful",
+            "ingredient availability grounding"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "source-diversity population"
+          ],
+          "regionalVariants": [
+            "Ingredient composition context is stored as a source-diversity retrieval context, not as a cultural region.",
+            "USDA FoodData Central is stored as ingredient/commodity grounding for polenta.",
+            "This record keeps household certainty unknown until user, family, or stronger cultural sources confirm it."
+          ]
+        },
+        "uncertainty": [
+          "FoodData Central grounds ingredient or commodity naming only; it is not an authority on cultural memory or household identity.",
+          "No nutrition, health, or medical claims are inferred from this source.",
+          "Specific household usage, region, sensory priority, and substitution fit need user, family, or additional source confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp9-source-usda-fufu",
+      "cacheTarget": {
+        "dishFamily": "fufu",
+        "region": "Ingredient composition context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data",
+        "usda-fooddata-central"
+      ],
+      "coverageTags": [
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.bread_flatbread",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "record": {
+        "dishName": "fufu",
+        "query": "fufu USDA FoodData Central ingredient commodity grounding",
+        "sources": [
+          {
+            "title": "Fufu structured-data search",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=fufu",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured-data search is used only to keep the family label findable for \"fufu\".",
+              "The search page is not treated as household, regional, or recipe proof."
+            ]
+          },
+          {
+            "title": "USDA FoodData Central search for fufu",
+            "url": "https://fdc.nal.usda.gov/fdc-app.html#/food-search?query=fufu",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "FoodData Central is used here for public-domain ingredient or commodity name grounding for fufu.",
+              "Operator search target: fufu.",
+              "No nutrition, health, or medical interpretation is stored from this source."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "fufu",
+            "fufu",
+            "fufu ingredient grounding",
+            "FoodData Central ingredient grounding"
+          ],
+          "regions": [
+            "source:USDA FoodData Central",
+            "Ingredient composition context",
+            "west africa"
+          ],
+          "ingredients": [
+            "cassava",
+            "plantain"
+          ],
+          "techniques": [
+            "source-gated retrieval grounding",
+            "ingredient commodity normalization",
+            "sensory disambiguation",
+            "source-diversity grounding"
+          ],
+          "sensoryDescriptors": [
+            "elastic starch",
+            "neutral base",
+            "hand-pulled texture",
+            "ingredient availability grounding"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "source-diversity population"
+          ],
+          "regionalVariants": [
+            "Ingredient composition context is stored as a source-diversity retrieval context, not as a cultural region.",
+            "USDA FoodData Central is stored as ingredient/commodity grounding for fufu.",
+            "This record keeps household certainty unknown until user, family, or stronger cultural sources confirm it."
+          ]
+        },
+        "uncertainty": [
+          "FoodData Central grounds ingredient or commodity naming only; it is not an authority on cultural memory or household identity.",
+          "No nutrition, health, or medical claims are inferred from this source.",
+          "Specific household usage, region, sensory priority, and substitution fit need user, family, or additional source confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp9-source-usda-ceremonial-wrapped-food",
+      "cacheTarget": {
+        "dishFamily": "ceremonial-wrapped-food",
+        "region": "Ingredient composition context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data",
+        "usda-fooddata-central"
+      ],
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "cultureAreas.diaspora_global",
+        "cultureAreas.east_asia",
+        "cultureAreas.middle_east_west_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.starch_texture",
+        "mechanisms.texture_contrast",
+        "nameSystems.colonial_postcolonial_name",
+        "regionScopes.religious_ritual",
+        "regionScopes.subregion"
+      ],
+      "record": {
+        "dishName": "ceremonial-wrapped-food",
+        "query": "ceremonial-wrapped-food USDA FoodData Central ingredient commodity grounding",
+        "sources": [
+          {
+            "title": "Ceremonial Wrapped Food structured-data search",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=corn%20masa%20wrapped%20food",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured-data search is used only to keep the family label findable for \"corn masa wrapped food\".",
+              "The search page is not treated as household, regional, or recipe proof."
+            ]
+          },
+          {
+            "title": "USDA FoodData Central search for ceremonial-wrapped-food",
+            "url": "https://fdc.nal.usda.gov/fdc-app.html#/food-search?query=corn%20masa%20wrapped%20food",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "FoodData Central is used here for public-domain ingredient or commodity name grounding for ceremonial-wrapped-food.",
+              "Operator search target: corn masa wrapped food.",
+              "No nutrition, health, or medical interpretation is stored from this source."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "ceremonial-wrapped-food",
+            "corn masa wrapped food",
+            "ceremonial-wrapped-food ingredient grounding",
+            "FoodData Central ingredient grounding"
+          ],
+          "regions": [
+            "source:USDA FoodData Central",
+            "Ingredient composition context",
+            "central america",
+            "diaspora global",
+            "east asia",
+            "middle east west asia"
+          ],
+          "ingredients": [
+            "corn masa",
+            "leaf wrapper",
+            "lard"
+          ],
+          "techniques": [
+            "source-gated retrieval grounding",
+            "ingredient commodity normalization",
+            "sensory disambiguation",
+            "source-diversity grounding"
+          ],
+          "sensoryDescriptors": [
+            "steamed corn",
+            "leaf aroma",
+            "soft filled starch",
+            "ingredient availability grounding"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "source-diversity population"
+          ],
+          "regionalVariants": [
+            "Ingredient composition context is stored as a source-diversity retrieval context, not as a cultural region.",
+            "USDA FoodData Central is stored as ingredient/commodity grounding for ceremonial-wrapped-food.",
+            "This record keeps household certainty unknown until user, family, or stronger cultural sources confirm it."
+          ]
+        },
+        "uncertainty": [
+          "FoodData Central grounds ingredient or commodity naming only; it is not an authority on cultural memory or household identity.",
+          "No nutrition, health, or medical claims are inferred from this source.",
+          "Specific household usage, region, sensory priority, and substitution fit need user, family, or additional source confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp9-source-usda-pierogi",
+      "cacheTarget": {
+        "dishFamily": "pierogi",
+        "region": "Ingredient composition context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data",
+        "usda-fooddata-central"
+      ],
+      "coverageTags": [
+        "cultureAreas.europe",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "record": {
+        "dishName": "pierogi",
+        "query": "pierogi USDA FoodData Central ingredient commodity grounding",
+        "sources": [
+          {
+            "title": "Pierogi structured-data search",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=pierogi",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured-data search is used only to keep the family label findable for \"pierogi\".",
+              "The search page is not treated as household, regional, or recipe proof."
+            ]
+          },
+          {
+            "title": "USDA FoodData Central search for pierogi",
+            "url": "https://fdc.nal.usda.gov/fdc-app.html#/food-search?query=pierogi",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "FoodData Central is used here for public-domain ingredient or commodity name grounding for pierogi.",
+              "Operator search target: pierogi.",
+              "No nutrition, health, or medical interpretation is stored from this source."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "pierogi",
+            "pierogi",
+            "pierogi ingredient grounding",
+            "FoodData Central ingredient grounding"
+          ],
+          "regions": [
+            "source:USDA FoodData Central",
+            "Ingredient composition context",
+            "europe"
+          ],
+          "ingredients": [
+            "wheat flour",
+            "potato",
+            "cheese"
+          ],
+          "techniques": [
+            "source-gated retrieval grounding",
+            "ingredient commodity normalization",
+            "sensory disambiguation",
+            "source-diversity grounding"
+          ],
+          "sensoryDescriptors": [
+            "tender dumpling",
+            "potato filling",
+            "browned butter aroma",
+            "ingredient availability grounding"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "source-diversity population"
+          ],
+          "regionalVariants": [
+            "Ingredient composition context is stored as a source-diversity retrieval context, not as a cultural region.",
+            "USDA FoodData Central is stored as ingredient/commodity grounding for pierogi.",
+            "This record keeps household certainty unknown until user, family, or stronger cultural sources confirm it."
+          ]
+        },
+        "uncertainty": [
+          "FoodData Central grounds ingredient or commodity naming only; it is not an authority on cultural memory or household identity.",
+          "No nutrition, health, or medical claims are inferred from this source.",
+          "Specific household usage, region, sensory priority, and substitution fit need user, family, or additional source confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp9-source-usda-momo",
+      "cacheTarget": {
+        "dishFamily": "momo",
+        "region": "Ingredient composition context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data",
+        "usda-fooddata-central"
+      ],
+      "coverageTags": [
+        "cultureAreas.south_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "record": {
+        "dishName": "momo",
+        "query": "momo USDA FoodData Central ingredient commodity grounding",
+        "sources": [
+          {
+            "title": "Momo structured-data search",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=momo",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured-data search is used only to keep the family label findable for \"momo\".",
+              "The search page is not treated as household, regional, or recipe proof."
+            ]
+          },
+          {
+            "title": "USDA FoodData Central search for momo",
+            "url": "https://fdc.nal.usda.gov/fdc-app.html#/food-search?query=momo",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "FoodData Central is used here for public-domain ingredient or commodity name grounding for momo.",
+              "Operator search target: momo.",
+              "No nutrition, health, or medical interpretation is stored from this source."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "momo",
+            "momo",
+            "momo ingredient grounding",
+            "FoodData Central ingredient grounding"
+          ],
+          "regions": [
+            "source:USDA FoodData Central",
+            "Ingredient composition context",
+            "south asia"
+          ],
+          "ingredients": [
+            "wheat flour",
+            "ground meat",
+            "cabbage"
+          ],
+          "techniques": [
+            "source-gated retrieval grounding",
+            "ingredient commodity normalization",
+            "sensory disambiguation",
+            "source-diversity grounding"
+          ],
+          "sensoryDescriptors": [
+            "steamed wrapper",
+            "savory filling",
+            "dipping sauce",
+            "ingredient availability grounding"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "source-diversity population"
+          ],
+          "regionalVariants": [
+            "Ingredient composition context is stored as a source-diversity retrieval context, not as a cultural region.",
+            "USDA FoodData Central is stored as ingredient/commodity grounding for momo.",
+            "This record keeps household certainty unknown until user, family, or stronger cultural sources confirm it."
+          ]
+        },
+        "uncertainty": [
+          "FoodData Central grounds ingredient or commodity naming only; it is not an authority on cultural memory or household identity.",
+          "No nutrition, health, or medical claims are inferred from this source.",
+          "Specific household usage, region, sensory priority, and substitution fit need user, family, or additional source confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp9-source-usda-empanada",
+      "cacheTarget": {
+        "dishFamily": "empanada",
+        "region": "Ingredient composition context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data",
+        "usda-fooddata-central"
+      ],
+      "coverageTags": [
+        "cultureAreas.south_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "record": {
+        "dishName": "empanada",
+        "query": "empanada USDA FoodData Central ingredient commodity grounding",
+        "sources": [
+          {
+            "title": "Empanada structured-data search",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=empanada",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured-data search is used only to keep the family label findable for \"empanada\".",
+              "The search page is not treated as household, regional, or recipe proof."
+            ]
+          },
+          {
+            "title": "USDA FoodData Central search for empanada",
+            "url": "https://fdc.nal.usda.gov/fdc-app.html#/food-search?query=empanada",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "FoodData Central is used here for public-domain ingredient or commodity name grounding for empanada.",
+              "Operator search target: empanada.",
+              "No nutrition, health, or medical interpretation is stored from this source."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "empanada",
+            "empanada",
+            "empanada ingredient grounding",
+            "FoodData Central ingredient grounding"
+          ],
+          "regions": [
+            "source:USDA FoodData Central",
+            "Ingredient composition context",
+            "south america"
+          ],
+          "ingredients": [
+            "wheat flour",
+            "ground beef",
+            "onion"
+          ],
+          "techniques": [
+            "source-gated retrieval grounding",
+            "ingredient commodity normalization",
+            "sensory disambiguation",
+            "source-diversity grounding"
+          ],
+          "sensoryDescriptors": [
+            "browned pastry",
+            "savory filling",
+            "handheld warmth",
+            "ingredient availability grounding"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "source-diversity population"
+          ],
+          "regionalVariants": [
+            "Ingredient composition context is stored as a source-diversity retrieval context, not as a cultural region.",
+            "USDA FoodData Central is stored as ingredient/commodity grounding for empanada.",
+            "This record keeps household certainty unknown until user, family, or stronger cultural sources confirm it."
+          ]
+        },
+        "uncertainty": [
+          "FoodData Central grounds ingredient or commodity naming only; it is not an authority on cultural memory or household identity.",
+          "No nutrition, health, or medical claims are inferred from this source.",
+          "Specific household usage, region, sensory priority, and substitution fit need user, family, or additional source confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp9-source-usda-falafel",
+      "cacheTarget": {
+        "dishFamily": "falafel",
+        "region": "Ingredient composition context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data",
+        "usda-fooddata-central"
+      ],
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.diaspora"
+      ],
+      "record": {
+        "dishName": "falafel",
+        "query": "falafel USDA FoodData Central ingredient commodity grounding",
+        "sources": [
+          {
+            "title": "Falafel structured-data search",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=falafel",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured-data search is used only to keep the family label findable for \"falafel\".",
+              "The search page is not treated as household, regional, or recipe proof."
+            ]
+          },
+          {
+            "title": "USDA FoodData Central search for falafel",
+            "url": "https://fdc.nal.usda.gov/fdc-app.html#/food-search?query=falafel",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "FoodData Central is used here for public-domain ingredient or commodity name grounding for falafel.",
+              "Operator search target: falafel.",
+              "No nutrition, health, or medical interpretation is stored from this source."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "falafel",
+            "falafel",
+            "falafel ingredient grounding",
+            "FoodData Central ingredient grounding"
+          ],
+          "regions": [
+            "source:USDA FoodData Central",
+            "Ingredient composition context",
+            "diaspora global"
+          ],
+          "ingredients": [
+            "chickpeas",
+            "parsley",
+            "cumin"
+          ],
+          "techniques": [
+            "source-gated retrieval grounding",
+            "ingredient commodity normalization",
+            "sensory disambiguation",
+            "source-diversity grounding"
+          ],
+          "sensoryDescriptors": [
+            "fried legume crust",
+            "herb aroma",
+            "warm spice",
+            "ingredient availability grounding"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "source-diversity population"
+          ],
+          "regionalVariants": [
+            "Ingredient composition context is stored as a source-diversity retrieval context, not as a cultural region.",
+            "USDA FoodData Central is stored as ingredient/commodity grounding for falafel.",
+            "This record keeps household certainty unknown until user, family, or stronger cultural sources confirm it."
+          ]
+        },
+        "uncertainty": [
+          "FoodData Central grounds ingredient or commodity naming only; it is not an authority on cultural memory or household identity.",
+          "No nutrition, health, or medical claims are inferred from this source.",
+          "Specific household usage, region, sensory priority, and substitution fit need user, family, or additional source confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp9-source-usda-jerk-chicken",
+      "cacheTarget": {
+        "dishFamily": "jerk-chicken",
+        "region": "Ingredient composition context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data",
+        "usda-fooddata-central"
+      ],
+      "coverageTags": [
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.diaspora"
+      ],
+      "record": {
+        "dishName": "jerk-chicken",
+        "query": "jerk-chicken USDA FoodData Central ingredient commodity grounding",
+        "sources": [
+          {
+            "title": "Jerk Chicken structured-data search",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=jerk%20chicken",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured-data search is used only to keep the family label findable for \"jerk chicken\".",
+              "The search page is not treated as household, regional, or recipe proof."
+            ]
+          },
+          {
+            "title": "USDA FoodData Central search for jerk-chicken",
+            "url": "https://fdc.nal.usda.gov/fdc-app.html#/food-search?query=jerk%20chicken",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "FoodData Central is used here for public-domain ingredient or commodity name grounding for jerk-chicken.",
+              "Operator search target: jerk chicken.",
+              "No nutrition, health, or medical interpretation is stored from this source."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "jerk-chicken",
+            "jerk chicken",
+            "jerk-chicken ingredient grounding",
+            "FoodData Central ingredient grounding"
+          ],
+          "regions": [
+            "source:USDA FoodData Central",
+            "Ingredient composition context",
+            "diaspora global"
+          ],
+          "ingredients": [
+            "chicken",
+            "allspice",
+            "chili pepper"
+          ],
+          "techniques": [
+            "source-gated retrieval grounding",
+            "ingredient commodity normalization",
+            "sensory disambiguation",
+            "source-diversity grounding"
+          ],
+          "sensoryDescriptors": [
+            "smoke",
+            "warm spice",
+            "chile heat",
+            "ingredient availability grounding"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "source-diversity population"
+          ],
+          "regionalVariants": [
+            "Ingredient composition context is stored as a source-diversity retrieval context, not as a cultural region.",
+            "USDA FoodData Central is stored as ingredient/commodity grounding for jerk-chicken.",
+            "This record keeps household certainty unknown until user, family, or stronger cultural sources confirm it."
+          ]
+        },
+        "uncertainty": [
+          "FoodData Central grounds ingredient or commodity naming only; it is not an authority on cultural memory or household identity.",
+          "No nutrition, health, or medical claims are inferred from this source.",
+          "Specific household usage, region, sensory priority, and substitution fit need user, family, or additional source confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp9-source-usda-rendang",
+      "cacheTarget": {
+        "dishFamily": "rendang",
+        "region": "Ingredient composition context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data",
+        "usda-fooddata-central"
+      ],
+      "coverageTags": [
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "foodForms.stew_braise",
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "record": {
+        "dishName": "rendang",
+        "query": "rendang USDA FoodData Central ingredient commodity grounding",
+        "sources": [
+          {
+            "title": "Rendang structured-data search",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=rendang",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured-data search is used only to keep the family label findable for \"rendang\".",
+              "The search page is not treated as household, regional, or recipe proof."
+            ]
+          },
+          {
+            "title": "USDA FoodData Central search for rendang",
+            "url": "https://fdc.nal.usda.gov/fdc-app.html#/food-search?query=rendang",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "FoodData Central is used here for public-domain ingredient or commodity name grounding for rendang.",
+              "Operator search target: rendang.",
+              "No nutrition, health, or medical interpretation is stored from this source."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "rendang",
+            "rendang",
+            "rendang ingredient grounding",
+            "FoodData Central ingredient grounding"
+          ],
+          "regions": [
+            "source:USDA FoodData Central",
+            "Ingredient composition context",
+            "southeast asia"
+          ],
+          "ingredients": [
+            "beef",
+            "coconut milk",
+            "lemongrass"
+          ],
+          "techniques": [
+            "source-gated retrieval grounding",
+            "ingredient commodity normalization",
+            "sensory disambiguation",
+            "source-diversity grounding"
+          ],
+          "sensoryDescriptors": [
+            "slow-cooked meat",
+            "coconut fat",
+            "aromatic paste",
+            "ingredient availability grounding"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "source-diversity population"
+          ],
+          "regionalVariants": [
+            "Ingredient composition context is stored as a source-diversity retrieval context, not as a cultural region.",
+            "USDA FoodData Central is stored as ingredient/commodity grounding for rendang.",
+            "This record keeps household certainty unknown until user, family, or stronger cultural sources confirm it."
+          ]
+        },
+        "uncertainty": [
+          "FoodData Central grounds ingredient or commodity naming only; it is not an authority on cultural memory or household identity.",
+          "No nutrition, health, or medical claims are inferred from this source.",
+          "Specific household usage, region, sensory priority, and substitution fit need user, family, or additional source confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp9-source-usda-apple-pie",
+      "cacheTarget": {
+        "dishFamily": "apple-pie",
+        "region": "Ingredient composition context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data",
+        "usda-fooddata-central"
+      ],
+      "coverageTags": [
+        "cultureAreas.north_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "record": {
+        "dishName": "apple-pie",
+        "query": "apple-pie USDA FoodData Central ingredient commodity grounding",
+        "sources": [
+          {
+            "title": "Apple Pie structured-data search",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=apple%20pie",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured-data search is used only to keep the family label findable for \"apple pie\".",
+              "The search page is not treated as household, regional, or recipe proof."
+            ]
+          },
+          {
+            "title": "USDA FoodData Central search for apple-pie",
+            "url": "https://fdc.nal.usda.gov/fdc-app.html#/food-search?query=apple%20pie",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "FoodData Central is used here for public-domain ingredient or commodity name grounding for apple-pie.",
+              "Operator search target: apple pie.",
+              "No nutrition, health, or medical interpretation is stored from this source."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "apple-pie",
+            "apple pie",
+            "apple-pie ingredient grounding",
+            "FoodData Central ingredient grounding"
+          ],
+          "regions": [
+            "source:USDA FoodData Central",
+            "Ingredient composition context",
+            "north america"
+          ],
+          "ingredients": [
+            "apple",
+            "wheat flour",
+            "cinnamon"
+          ],
+          "techniques": [
+            "source-gated retrieval grounding",
+            "ingredient commodity normalization",
+            "sensory disambiguation",
+            "source-diversity grounding"
+          ],
+          "sensoryDescriptors": [
+            "baked apple",
+            "browned crust",
+            "warm spice",
+            "ingredient availability grounding"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "source-diversity population"
+          ],
+          "regionalVariants": [
+            "Ingredient composition context is stored as a source-diversity retrieval context, not as a cultural region.",
+            "USDA FoodData Central is stored as ingredient/commodity grounding for apple-pie.",
+            "This record keeps household certainty unknown until user, family, or stronger cultural sources confirm it."
+          ]
+        },
+        "uncertainty": [
+          "FoodData Central grounds ingredient or commodity naming only; it is not an authority on cultural memory or household identity.",
+          "No nutrition, health, or medical claims are inferred from this source.",
+          "Specific household usage, region, sensory priority, and substitution fit need user, family, or additional source confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp9-source-usda-baklava",
+      "cacheTarget": {
+        "dishFamily": "baklava",
+        "region": "Ingredient composition context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data",
+        "usda-fooddata-central"
+      ],
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "record": {
+        "dishName": "baklava",
+        "query": "baklava USDA FoodData Central ingredient commodity grounding",
+        "sources": [
+          {
+            "title": "Baklava structured-data search",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=baklava",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured-data search is used only to keep the family label findable for \"baklava\".",
+              "The search page is not treated as household, regional, or recipe proof."
+            ]
+          },
+          {
+            "title": "USDA FoodData Central search for baklava",
+            "url": "https://fdc.nal.usda.gov/fdc-app.html#/food-search?query=baklava",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "FoodData Central is used here for public-domain ingredient or commodity name grounding for baklava.",
+              "Operator search target: baklava.",
+              "No nutrition, health, or medical interpretation is stored from this source."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "baklava",
+            "baklava",
+            "baklava ingredient grounding",
+            "FoodData Central ingredient grounding"
+          ],
+          "regions": [
+            "source:USDA FoodData Central",
+            "Ingredient composition context",
+            "middle east west asia"
+          ],
+          "ingredients": [
+            "phyllo dough",
+            "nuts",
+            "honey"
+          ],
+          "techniques": [
+            "source-gated retrieval grounding",
+            "ingredient commodity normalization",
+            "sensory disambiguation",
+            "source-diversity grounding"
+          ],
+          "sensoryDescriptors": [
+            "crisp layers",
+            "honey syrup",
+            "nut aroma",
+            "ingredient availability grounding"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "source-diversity population"
+          ],
+          "regionalVariants": [
+            "Ingredient composition context is stored as a source-diversity retrieval context, not as a cultural region.",
+            "USDA FoodData Central is stored as ingredient/commodity grounding for baklava.",
+            "This record keeps household certainty unknown until user, family, or stronger cultural sources confirm it."
+          ]
+        },
+        "uncertainty": [
+          "FoodData Central grounds ingredient or commodity naming only; it is not an authority on cultural memory or household identity.",
+          "No nutrition, health, or medical claims are inferred from this source.",
+          "Specific household usage, region, sensory priority, and substitution fit need user, family, or additional source confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "exp9-source-usda-tres-leches-cake",
+      "cacheTarget": {
+        "dishFamily": "tres-leches-cake",
+        "region": "Ingredient composition context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data",
+        "usda-fooddata-central"
+      ],
+      "coverageTags": [
+        "cultureAreas.central_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "foodForms.dessert",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "record": {
+        "dishName": "tres-leches-cake",
+        "query": "tres-leches-cake USDA FoodData Central ingredient commodity grounding",
+        "sources": [
+          {
+            "title": "Tres Leches Cake structured-data search",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=tres%20leches%20cake",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured-data search is used only to keep the family label findable for \"tres leches cake\".",
+              "The search page is not treated as household, regional, or recipe proof."
+            ]
+          },
+          {
+            "title": "USDA FoodData Central search for tres-leches-cake",
+            "url": "https://fdc.nal.usda.gov/fdc-app.html#/food-search?query=tres%20leches%20cake",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "FoodData Central is used here for public-domain ingredient or commodity name grounding for tres-leches-cake.",
+              "Operator search target: tres leches cake.",
+              "No nutrition, health, or medical interpretation is stored from this source."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "tres-leches-cake",
+            "tres leches cake",
+            "tres-leches-cake ingredient grounding",
+            "FoodData Central ingredient grounding"
+          ],
+          "regions": [
+            "source:USDA FoodData Central",
+            "Ingredient composition context",
+            "central america"
+          ],
+          "ingredients": [
+            "milk",
+            "evaporated milk",
+            "cake"
+          ],
+          "techniques": [
+            "source-gated retrieval grounding",
+            "ingredient commodity normalization",
+            "sensory disambiguation",
+            "source-diversity grounding"
+          ],
+          "sensoryDescriptors": [
+            "cold dairy soak",
+            "soft crumb",
+            "sweet cream",
+            "ingredient availability grounding"
+          ],
+          "culturalOccasions": [
+            "family memory reconstruction",
+            "source-diversity population"
+          ],
+          "regionalVariants": [
+            "Ingredient composition context is stored as a source-diversity retrieval context, not as a cultural region.",
+            "USDA FoodData Central is stored as ingredient/commodity grounding for tres-leches-cake.",
+            "This record keeps household certainty unknown until user, family, or stronger cultural sources confirm it."
+          ]
+        },
+        "uncertainty": [
+          "FoodData Central grounds ingredient or commodity naming only; it is not an authority on cultural memory or household identity.",
+          "No nutrition, health, or medical claims are inferred from this source.",
+          "Specific household usage, region, sensory priority, and substitution fit need user, family, or additional source confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
     }
   ]
 }
