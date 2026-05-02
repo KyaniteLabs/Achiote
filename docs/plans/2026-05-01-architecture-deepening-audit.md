@@ -4,6 +4,23 @@ Date: 2026-05-01
 
 Trigger: fresh audit after reviewing mattpocock/skills guidance for `zoom-out` and `improve-codebase-architecture`.
 
+## Remediation Status
+
+Updated: 2026-05-02.
+
+This audit has been largely remediated on `master`. Keep the original findings below as the audit record, but treat this status list as the current navigation point:
+
+- Finding 1: `AskController` exists in `src/lib/ask-controller.ts`.
+- Finding 2: `WorkflowPlanner` exists in `src/lib/workflow-planner.ts`.
+- Finding 3: `CueProfileEngine` and `ConstraintAdapter` exist in `src/lib/cue-profile-engine.ts` and `src/lib/constraint-adapter.ts`.
+- Finding 4: `ReferencePantryPopulation` exists in `src/lib/reference-pantry-population.ts`.
+- Finding 5: bundled data validation is still an identified future cleanup candidate.
+- Finding 6: `PackageSurface` exists in `scripts/lib/package-surface.mjs`.
+- Additional boundaries landed after the audit: `ProviderRuntime`, `AccountAccess`, `LocalSpeechController`, and `ProductApp`.
+- Domain docs and ADR setup now exist in `CONTEXT.md`, `docs/adr/`, and `docs/agents/`.
+
+Current extension rule: prefer these named boundaries before adding behavior back into `src/http-server.ts`, `src/lib/memory-workflow.ts`, `src/tools/tool-registry.ts`, or `docs/landing/app.js`.
+
 ## Scope
 
 This is a read-only architecture audit of the current Achiote repo. The repo is clean and synced on `master` at audit start.

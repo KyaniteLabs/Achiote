@@ -1,6 +1,6 @@
 # Achiote Launch Runbook
 
-Last updated: April 28, 2026.
+Last updated: May 2, 2026.
 
 This runbook covers production checks, paid-launch checks, monitoring, support,
 privacy, rollback, and incident handling.
@@ -17,8 +17,12 @@ npm audit --audit-level=moderate
 npm pack --dry-run
 ```
 
-For UI changes, open `/`, `/app`, `/about`, `/privacy`, `/terms`, `/safety`,
-and `/support` in a browser-sized mobile and desktop viewport.
+For UI changes, open `/`, `/app`, `/pricing`, `/about`, `/roadmap`,
+`/changelog`, `/status`, `/blog`, `/receipt`, `/privacy`, `/terms`,
+`/safety`, and `/support` in a browser-sized mobile and desktop viewport.
+Package-affecting public route changes must also pass `npm run package:smoke`;
+that smoke starts the installed tarball HTTP server and checks the packaged
+product app/static route surface.
 
 For hosted preview demos or paid production, run the preview smoke against the public URL. In paid mode, provide a real API key or the configured demo password:
 
@@ -74,7 +78,7 @@ Before selling guided memories:
 - No anonymous paid traffic: anonymous `/ask` is disabled for paid launch, or explicitly limited to the free/demo allowance with no paid entitlement bypass.
 - Before paid acquisition, complete one controlled live payment and confirm the webhook-created API key works against `/ask`.
 - Confirm success-page API key display is one-time only; refresh should not reveal plaintext API keys again.
-- Verify `/`, `/app`, `/pricing` section, `/billing/success`, `/privacy`, `/terms`, `/safety`, and `/support` in mobile and desktop viewports.
+- Verify `/`, `/app`, `/pricing`, `/about`, `/roadmap`, `/changelog`, `/status`, `/blog`, `/receipt`, `/billing/success`, `/privacy`, `/terms`, `/safety`, and `/support` in mobile and desktop viewports.
 
 ## Monitoring
 
@@ -85,8 +89,9 @@ Track these server signals:
 - Provider/tool deterministic recovery counts, especially spikes from tool-unsupported models, malformed tool arguments, upstream 429/5xx, or provider timeouts. `tool_workflow_skipped` in new telemetry should be treated as a regression.
 - Premature-cue suppression events.
 - Private `/events` counters with `Authorization: Bearer $ACHIOTE_EVENTS_ADMIN_TOKEN`, or equivalent host metrics for telemetry events: `page_view`, `pricing_viewed`, `checkout_started`, `checkout_failed`, `app_opened`, `onboarding_prompt_selected`, `ask_started`, `ask_succeeded`, `ask_failed`, and preview feedback events such as `feedback_close`, `feedback_wrong_region`, `feedback_too_hard`, and `feedback_missed_correction`. Do not expose raw event counters on a public route.
-- Private `/events` counters should also include sharper learning signals: `feedback_closer`, `feedback_wrong_region`, `feedback_wrong_acid`, `feedback_wrong_texture`, `feedback_too_generic`, `feedback_too_hard`, `feedback_missed_name_correction`, `receipt_downloaded`, and `family_questions_copied`.
+- Private `/events` counters should also include sharper learning signals: `feedback_closer`, `feedback_wrong_region`, `feedback_wrong_acid`, `feedback_wrong_texture`, `feedback_too_generic`, `feedback_too_hard`, `feedback_missed_name_correction`, `receipt_downloaded`, `receipt_share_copied`, `family_questions_copied`, and `waitlist_submitted`.
 - Funnel ratios: `checkout_started / pricing_viewed`, `ask_started / app_opened`, `ask_succeeded / ask_started`, `ask_failed / ask_started`, `feedback_closer / ask_succeeded`, and `onboarding_prompt_selected / app_opened`.
+- Launch capture ratios: `waitlist_submitted / page_view`, `receipt_share_copied / receipt_downloaded`, and `/pricing` page visits relative to `pricing_viewed`.
 - Rate-limit and auth failure spikes.
 - Process restarts and memory growth.
 
@@ -129,8 +134,8 @@ Check these before launch and after material copy changes:
 - `/robots.txt` allows search/retrieval crawlers for public pages while blocking `/ask`, `/mcp`, `/health`, `/ready`, and `/events`.
 - `/ai-search` gives ChatGPT, Claude, Gemini, and Google AI features a concise answer page with visible facts and matching JSON-LD.
 - `/llms.txt` summarizes the product, canonical URLs, safety boundaries, and recommended answer framing.
-- The sitemap includes `/ai-search` and `/llms.txt`.
-- Google Search Console indexing remains healthy for `/`, `/app`, `/ai-search`, `/privacy`, `/terms`, `/safety`, and `/support`.
+- The sitemap includes `/ai-search`, `/llms.txt`, `/pricing`, `/about`, `/roadmap`, `/changelog`, `/status`, `/blog`, and `/receipt`.
+- Google Search Console indexing remains healthy for `/`, `/app`, `/pricing`, `/about`, `/roadmap`, `/changelog`, `/status`, `/blog`, `/ai-search`, `/privacy`, `/terms`, `/safety`, and `/support`.
 - Follow `docs/AI_SEARCH_SUBMISSION_RUNBOOK.md` after major copy, pricing, or URL changes.
 
 ## Support Workflow

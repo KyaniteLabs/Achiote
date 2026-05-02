@@ -44,4 +44,4 @@ For package-affecting changes, also run:
 npm pack --dry-run
 ```
 
-For landing-page visual changes, open `docs/landing/index.html` in a browser and note whether screenshot/visual review was or was not performed.
+For landing-page visual changes, open the changed public routes in a browser and note whether screenshot/visual review was or was not performed. Route-affecting launch changes should consider `/`, `/app`, `/pricing`, `/about`, `/roadmap`, `/changelog`, `/status`, `/blog`, `/receipt`, `/privacy`, `/terms`, `/safety`, and `/support`.

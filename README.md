@@ -40,20 +40,30 @@ My mom said my Puerto Rican grandma made something that sounded like pass-teh-la
 
 Expected behavior: the host AI should use the MCP tools to collect the memory, plan research, build a dossier, and present a minimum viable nostalgia cue first. Only after that should it ask whether the user wants something more complex, such as sourcing help or a full recipe handoff.
 
-## Landing Page
+## Public Web Surfaces
 
-A polished static landing page lives at [`docs/landing/index.html`](docs/landing/index.html). Open it directly in a browser; it has no build step or external assets.
+The hosted/static product surface lives under [`docs/landing/`](docs/landing/). The core app and launch pages are dependency-free static assets served by the optional HTTP server:
+
+- `/` -> [`docs/landing/index.html`](docs/landing/index.html), the public landing page.
+- `/app` -> [`docs/landing/app.html`](docs/landing/app.html), the interactive food-memory detective.
+- `/pricing`, `/about`, `/roadmap`, `/changelog`, `/status`, `/blog`, and `/receipt` -> standalone launch/trust/growth pages.
+- `/ai-search`, `/llms.txt`, `/privacy`, `/terms`, `/safety`, `/support`, `/compare`, `/robots.txt`, and `/sitemap.xml` -> AI-search, legal, support, comparison, and crawler surfaces.
+
+Open the HTML files directly in a browser for static review; the full route behavior is covered by `npm run package:smoke`.
 
 ## What It Does Today
 
-Achiote is a research-first food-and-drink memory reconstruction server. It provides 15 MCP tools that let a host AI chat client run the workflow from a fragment to a minimum viable nostalgia cue, with optional sourcing/substitution and recipe handoff if the user wants more:
+Achiote is a research-first food-and-drink memory reconstruction server. It provides 18 MCP tools that let a host AI chat client run the workflow from a fragment to a minimum viable nostalgia cue, with optional sourcing/substitution and recipe handoff if the user wants more:
 
 | Stage | Tool | Implemented behavior |
 |------|------|----------------------|
+| Workflow control | `plan_tool_workflow` | Deterministically plans the `/ask` tool sequence from the raw user message so provider models do not freestyle the workflow. |
 | Memory intake | `collect_food_memory` | Structures raw fragments, sound-alikes, family context, remembered ingredients, sensory clues, missing information, and gentle next questions. |
 | Research planning | `plan_dish_research` | Produces hypotheses, search queries, source preferences, facts to verify, and clarification questions for foods or drinks. It plans research instead of pretending sparse fragments are solved. |
+| Optional search adapter | `search_web` | Uses configured host search (`SERPER_API_KEY`) when available, otherwise returns an explicit no-search note. Search remains optional and should not be treated as guaranteed runtime behavior. |
 | Research provenance | `build_research_record` / `validate_research_record` / `extract_research_findings` | Converts host-researched source facts into typed provenance records, validates source metadata, and summarizes researched facts/inferences/unknowns for dossier handoff. |
 | Evidence ledger | `build_reconstruction_dossier` | Builds a dossier that separates user-said, researched, inferred, and unknown claims, plus sensory priorities and adaptation strategy. |
+| Receipt | `build_memory_receipt` | Builds a portable Memory Receipt from collected memory, research plan, and optional first tiny taste test so families can inspect and correct the evidence trail. |
 | Family connection | `generate_family_followup_questions` | Generates gentle questions the user can ask relatives to deepen the memory and resolve uncertainty. |
 | Name resolution | `resolve_dish_name` | Resolves names to broad families and ambiguity-aware candidates using bundled aliases, fuzzy matching, and transliterations. |
 | Sensory analysis | `analyze_nostalgic_dish` | Returns sensory-dimension criteria and a bounded prompt for the host model to analyze nostalgia-critical elements. |
@@ -127,8 +137,16 @@ node dist/http-server.js
 
 | Endpoint | Description |
 |----------|-------------|
-| `GET /` | Web UI (`app.html`) |
-| `GET /about` | Landing page (`index.html`) |
+| `GET /` | Public landing page (`index.html`) |
+| `GET /app` | Web UI (`app.html`) |
+| `GET /about` | Trust/company page (`about.html`) |
+| `GET /pricing` | Standalone pricing page (`pricing.html`) |
+| `GET /roadmap` | Public roadmap page (`roadmap.html`) |
+| `GET /changelog` | Public changelog page (`changelog.html`) |
+| `GET /status` | Public service status page (`status.html`) |
+| `GET /blog` | Launch blog index (`blog.html`) |
+| `GET /receipt` | Shareable Memory Receipt renderer (`receipt.html`) |
+| `GET /ai-search`, `/llms.txt`, `/privacy`, `/terms`, `/safety`, `/support`, `/compare` | Public AI-search, legal, support, safety, and comparison surfaces |
 | `GET /health` | JSON status with memory/uptime metrics |
 | `GET /voice/status` | Local OSS speech readiness for optional voice input/read-aloud |
 | `POST /voice/transcribe` | Local speech-to-text through a configured OSS engine |
@@ -137,6 +155,8 @@ node dist/http-server.js
 | `POST /mcp` | Streamable HTTP MCP transport |
 
 Authentication is enabled by default for the HTTP server. Configure `ACHIOTE_API_KEYS` for `/ask`, `/mcp`, and voice upload endpoints. Setting `ACHIOTE_AUTH_ENABLED=false` does not by itself expose anonymous `/ask` or voice processing; set `ACHIOTE_ALLOW_ANON_ASK=true` only for local demos. Generate a self-hosted key with `npm run keygen -- --tier pro --name admin`; put the printed `envRecord` inside the `ACHIOTE_API_KEYS` JSON array, not the one-time raw key. Port defaults to 3000, configurable via `PORT` env var.
+
+Shareable Memory Receipt links keep receipt JSON in the URL fragment (`/receipt#data=...`). URL fragments are not sent to the server, so possession of the link is the access boundary. Do not put private family memory text into telemetry or server-side share records.
 
 ### Local OSS speech
 
@@ -218,6 +238,16 @@ For self-hosted GitHub Actions runner and queued-job troubleshooting, see [`docs
 ## Architecture
 
 See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md).
+
+Current long-lived module boundaries include:
+
+- `src/lib/provider-runtime.ts` for provider/model profile resolution and ask-session adapter selection.
+- `src/lib/account-access.ts` for auth, billing, credits, anonymous demo behavior, and rate-limit decisions.
+- `src/lib/local-speech-controller.ts` for HTTP voice route behavior around local OSS speech engines.
+- `src/lib/cue-profile-engine.ts` for minimum viable nostalgia cue profile evidence surfaces.
+- `src/lib/constraint-adapter.ts` for dietary, allergy, and religious constraint rewrites.
+- `docs/landing/product-app.js` for browser app primitives such as SSE parsing, actionable HTTP errors, and chat-history updates.
+- `scripts/lib/package-surface.mjs` for the intentional package/release surface.
 
 ## The Science
 

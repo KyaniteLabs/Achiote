@@ -34,8 +34,16 @@ src/http-server.ts
   - optional HTTP mode for web UI and AI agent endpoint
   - started via: node dist/http-server.js
   - endpoints:
-      GET  /           → docs/landing/app.html (web UI)
-      GET  /about      → docs/landing/index.html (landing page)
+      GET  /           → docs/landing/index.html (public landing page)
+      GET  /app        → docs/landing/app.html (web UI)
+      GET  /about      → docs/landing/about.html
+      GET  /pricing    → docs/landing/pricing.html
+      GET  /roadmap    → docs/landing/roadmap.html
+      GET  /changelog  → docs/landing/changelog.html
+      GET  /status     → docs/landing/status.html
+      GET  /blog       → docs/landing/blog.html
+      GET  /receipt    → docs/landing/receipt.html (fragment-based Memory Receipt renderer)
+      GET  /ai-search, /llms.txt, /privacy, /terms, /safety, /support, /compare
       GET  /health     → JSON status with memory/uptime metrics
       GET  /voice/status → local OSS speech readiness
       POST /voice/transcribe → local speech-to-text through configured OSS binaries/models
@@ -47,6 +55,22 @@ src/http-server.ts
   - rate limiting: tiered (free/personal/pro/family/enterprise, with business as a legacy alias) per calendar month
   - shares tool execution logic with src/server.ts
 ```
+
+## Named architecture boundaries
+
+The high-traffic surfaces are split into named contracts so future work does not keep re-inferring ownership from `src/http-server.ts` and `src/lib/memory-workflow.ts`.
+
+| Boundary | Owner | Responsibility |
+| --- | --- | --- |
+| Provider runtime | `src/lib/provider-runtime.ts` | Resolves provider kind, ask model, endpoint style, native tool support, readiness credentials, and Anthropic/OpenAI-compatible ask-session creation. |
+| Account access | `src/lib/account-access.ts` | Centralizes auth, anonymous demo policy, billing-key recognition, credit/rate-limit decisions, and rate-limit headers for `/ask` and `/mcp`. |
+| Local speech controller | `src/lib/local-speech-controller.ts` | Shapes `/voice/status`, `/voice/transcribe`, and `/voice/synthesize` behavior around configured local OSS engines. |
+| Cue profile engine | `src/lib/cue-profile-engine.ts` | Turns cue heuristics into explicit profile, component, mechanism-language, accessibility, and local-test evidence surfaces. |
+| Constraint adapter | `src/lib/constraint-adapter.ts` | Classifies and applies vegan, vegetarian, gluten-free, nut-allergy, halal, kosher, dairy-free, and pork-free cue rewrites. |
+| Product app | `docs/landing/product-app.js` | Holds browser primitives for SSE parsing, actionable HTTP error copy, and chat-history append semantics used by `app.js`. |
+| Package surface | `scripts/lib/package-surface.mjs` | Defines required runtime entrypoints, product app assets, public docs, helper scripts, and forbidden packaged artifacts. |
+
+These modules are not optional wrappers around dead code. They are the places future agents should extend first when changing the relevant behavior. Guardrail tests should assert the owning module instead of duplicating the old monolith expectations.
 
 ## Tool boundaries
 
@@ -71,6 +95,16 @@ The server does not browse the web itself. It can structure and validate source 
 Speech is an optional HTTP-mode input/output layer, not part of the MCP reasoning core. It is disabled by default and only runs when the operator configures local OSS speech engines. The intended production stack is `whisper.cpp` for multilingual speech-to-text and Kokoro-82M for read-aloud. STT defaults to `auto` language detection and accepts language hints so accented, code-switched, transliterated, or immigrant-family memories can be captured without forcing users to spell dish names correctly.
 
 `GET /voice/status` exposes readiness and configured language/voice options. `POST /voice/transcribe` and `POST /voice/synthesize` follow the same auth and anonymous-demo policy as `/ask`; recorded voices and family memories are sensitive user data. The server passes audio/text to local subprocesses with argv arrays, not shell interpolation. No hosted speech API is called by this layer.
+
+## Product app and public launch surface
+
+`docs/landing/index.html` is the public landing page. `docs/landing/app.html` is the interactive reconstruction app. `docs/landing/product-app.js` owns small, testable browser contracts used by `app.js`:
+
+- `parseSseChunk()` keeps streamed `/ask` events from silently dropping partial chunks.
+- `explainHttpStatus()` maps 401/429/413/415 and generic HTTP failures to actionable user-facing text.
+- `appendChatTurn()` appends user/assistant turns and bounds local chat history.
+
+Public launch routes are intentionally static and dependency-free: `/pricing`, `/about`, `/roadmap`, `/changelog`, `/status`, `/blog`, and `/receipt`. Package smoke starts the installed tarball HTTP server and verifies those routes plus the product assets. The receipt renderer reads shared receipt data from the URL fragment so the server never receives the receipt payload as part of route handling.
 
 ## Data assets
 

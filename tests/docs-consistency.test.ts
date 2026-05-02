@@ -107,6 +107,10 @@ describe('release documentation consistency', () => {
       'quality signal',
       'account access',
       'product app',
+      'package surface',
+      'cue profile engine',
+      'constraint adapter',
+      'shareable receipt link',
       'QA artifact pipeline',
     ]) {
       expect(context).toContain(term);
@@ -115,7 +119,31 @@ describe('release documentation consistency', () => {
     expect(architecture).toContain('docs/adr/README.md');
     expect(adrIndex).toContain('Research-first Reconstruction Boundary');
     expect(adrIndex).toContain('Host-AI Search Boundary');
+    expect(adrIndex).toContain('Named Runtime and Launch Surface Boundaries');
     expect(agentGuidance).toContain('GitHub issues');
     expect(agentGuidance).toContain('architecture');
+    expect(agentGuidance).toContain('ProviderRuntime');
+    expect(agentGuidance).toContain('PackageSurface');
+  });
+
+  it('keeps public route and release-surface documentation aligned with the shipped app', () => {
+    const readme = fs.readFileSync('README.md', 'utf8');
+    const architecture = fs.readFileSync('docs/ARCHITECTURE.md', 'utf8');
+    const runbook = fs.readFileSync('docs/LAUNCH_RUNBOOK.md', 'utf8');
+    const agents = fs.readFileSync('AGENTS.md', 'utf8');
+
+    for (const route of ['/pricing', '/about', '/roadmap', '/changelog', '/status', '/blog', '/receipt']) {
+      expect(readme).toContain(route);
+      expect(architecture).toContain(route);
+      expect(runbook).toContain(route);
+      expect(agents).toContain(route);
+    }
+    expect(readme).toContain('18 MCP tools');
+    expect(readme).toContain('build_memory_receipt');
+    expect(readme).toContain('plan_tool_workflow');
+    expect(architecture).toContain('Named architecture boundaries');
+    expect(architecture).toContain('docs/landing/product-app.js');
+    expect(runbook).toContain('receipt_share_copied');
+    expect(runbook).toContain('waitlist_submitted');
   });
 });

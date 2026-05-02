@@ -36,6 +36,14 @@ Achiote is a research-first food-memory reconstruction system. The MCP server an
 
 **product app**: The browser-facing usable app under `docs/landing/app.html` and `docs/landing/app.js`, plus public metadata/assets that make the HTTP surface work.
 
+**package surface**: The explicit release contract for what ships in the npm tarball: runtime entrypoints, product app assets, public docs, helper scripts, and forbidden private/generated artifacts.
+
+**cue profile engine**: The boundary that exposes cue profile, component, mechanism-language, accessibility, and local-test evidence surfaces for the minimum viable nostalgia cue path.
+
+**constraint adapter**: The boundary that applies dietary, allergy, and religious constraints to cue ingredients and components while preserving the sensory mechanism.
+
+**shareable receipt link**: A `/receipt#data=...` URL whose receipt payload lives in the URL fragment. The server serves the renderer, but the browser keeps the receipt data client-side unless the user sends it elsewhere.
+
 **QA artifact pipeline**: Shared manifest and normalization contract for local canaries, weak-cloud runs, profiler artifacts, telemetry reports, and knowledge-gap canary analysis. It exists so database population decisions cite sample counts, prompt bank, provider/model truth, stop condition, and excluded evidence reasons.
 
 ## Operating Distinctions
@@ -45,3 +53,5 @@ Achiote is a research-first food-memory reconstruction system. The MCP server an
 - Population density matters more than family count. Add records, regions, names, sensory variants, and source-backed facts under existing families before creating new family buckets.
 - Minimum cues are mechanism-driven. Do not add country, dish, restaurant, or recipe branches to the cue path.
 - Public traces and browser copy must stay provider-neutral. Provider/runtime truth belongs in private telemetry and operator reports.
+- Public launch routes are static and dependency-free unless a future ADR explicitly approves a hosted external dependency.
+- Fake testimonials and fake social links are not acceptable launch copy; trust surfaces should either be factual or absent.

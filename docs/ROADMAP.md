@@ -17,6 +17,7 @@ This roadmap is scoped to the MCP server, HTTP server, and skill behavior.
 ### HTTP server and production hardening
 - Optional HTTP server with web UI, landing page, and `/ask` SSE streaming endpoint
 - Streamable HTTP MCP transport at `/mcp`
+- Named `ProviderRuntime`, `AccountAccess`, and `LocalSpeechController` module boundaries for provider routing, auth/billing/rate-limit decisions, and voice route behavior
 - Tiered API key authentication (`ACHIOTE_AUTH_ENABLED`, `ACHIOTE_API_KEYS`)
 - Monthly calendar-window rate limiting (free/personal/pro/family/enterprise, with business as a legacy alias)
 - SQLite-backed persistent rate limits (`ACHIOTE_RATE_LIMIT_DB`) with SHA-256 hashed keys
@@ -29,8 +30,10 @@ This roadmap is scoped to the MCP server, HTTP server, and skill behavior.
 - Docker healthcheck and non-root runtime
 - TLS/reverse proxy documentation (Caddy, nginx examples)
 - `.env.example` documenting all environment variables
-- Landing page with dark mode, scroll reveals, try-it widget, structured data, CSP headers
-- Web UI (`app.html`) with SSE streaming chat, dark mode, suggestion buttons, API key input
+- Landing page with dark mode, scroll reveals, structured data, CSP headers, hero email capture, standalone `/pricing`, `/about`, `/roadmap`, `/changelog`, `/status`, `/blog`, `/receipt`, `/ai-search`, `/compare`, `/privacy`, `/terms`, `/safety`, and `/support` routes
+- Web UI (`app.html`) with SSE streaming chat, dark mode, suggestion buttons, API key input, Memory Receipt download, family-question copy, and fragment-based share links
+- `ProductApp` frontend helper contract for SSE parsing, actionable HTTP errors, and bounded chat-history appends
+- `PackageSurface` release contract plus packaged HTTP server smoke over MCP CLI and public product assets
 
 ### Data quality and validation
 - DOI-validated food science references (12 mechanism areas)
@@ -40,6 +43,8 @@ This roadmap is scoped to the MCP server, HTTP server, and skill behavior.
 - Validated memory hint vocabulary data
 - Broad provenance metadata for bundled food chemistry and cultural datasets
 - Dietary/allergen/religious constraint-aware minimum cues
+- `CueProfileEngine` and `ConstraintAdapter` seams for minimum viable nostalgia cue evidence surfaces and constraint rewrites
+- Bundled reference pantry baseline with CC0 structured records available without a SQLite bootstrap step
 
 ## Next: optional food-data provider lookups
 
@@ -54,6 +59,7 @@ Open-ended web research should remain a host AI responsibility. Optional provide
 ## Next: data quality and cultural specificity
 
 - Add item-level citations where sources are verified, rather than broad launch provenance
+- Continue densifying the reference pantry under existing well-categorized families before creating new family buckets
 - Expand the first canonical dish plus regional variant model beyond the initial tortilla/egg-dish ambiguity slice
 - Broaden multiple-candidate name resolution with scores and ambiguity flags across more overloaded names
 - Expand constraint-aware cue regressions for additional allergy, texture, and accessibility interactions

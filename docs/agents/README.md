@@ -13,5 +13,7 @@ Use GitHub issues as the issue tracker for architecture and launch work.
 
 - Read `CONTEXT.md` before architecture reviews so terms are not re-inferred from scattered files.
 - Check `docs/adr/README.md` before proposing new boundaries.
+- Use existing named boundaries before adding new modules: `ProviderRuntime`, `AccountAccess`, `LocalSpeechController`, `CueProfileEngine`, `ConstraintAdapter`, `ProductApp`, and `PackageSurface`.
 - For database population work, use the QA artifact manifest and reference pantry append path; do not paste canary prompt text into production data.
+- For launch-surface changes, update `docs/landing/sitemap.xml`, `package.json` `files`, `scripts/lib/package-surface.mjs`, and package/static route tests together.
 - Close issues only after implementation, verification, merge/sync, and an evidence comment naming the verification commands.
