@@ -16,9 +16,10 @@ import { buildAskCaseFile, formatAskCaseFileForModel } from './lib/ask-case-file
 import { createCacheWithStatus } from './lib/cache-path.js';
 import { createAuthenticator, loadKeysFromEnv } from './lib/auth.js';
 import { createRateLimiter } from './lib/rate-limit.js';
+import { createAccountAccess, rateLimitHeaders, type AuthedRequest } from './lib/account-access.js';
 import { BillingDb, defaultBillingDbPath } from './lib/billing-db.js';
 import { BillingStripe, loadBillingConfigFromEnv, type CheckoutTier } from './lib/billing-stripe.js';
-import { getHttpReadiness, getRequestRateLimitIdentity, isAnonymousAskAllowed, shouldApplyRateLimit } from './lib/http-runtime.js';
+import { getHttpReadiness, getRequestRateLimitIdentity, shouldApplyRateLimit } from './lib/http-runtime.js';
 import { resolveLocalSpeechConfig, synthesizeWithLocalSpeech, transcribeWithLocalSpeech, validateSpeechAudioPayload, validateSpeechTextPayload } from './lib/local-speech.js';
 import { buildMemoryReceipt } from './lib/memory-receipt.js';
 import { buildAskQualitySignal, emptyQualitySignalReport, inferAskCacheOutcome, recordQualitySignal } from './lib/quality-signals.js';
@@ -136,6 +137,17 @@ const localSpeechConfig = resolveLocalSpeechConfig();
 
 const AUTH_ENABLED = process.env.ACHIOTE_AUTH_ENABLED !== 'false';
 const DEMO_PASSWORD = process.env.ACHIOTE_DEMO_PASSWORD?.trim();
+const accountAccess = createAccountAccess({
+  authEnabled: AUTH_ENABLED,
+  allowAnonymousAsk: ALLOW_ANON_ASK,
+  demoPassword: DEMO_PASSWORD,
+  trustProxy: TRUST_PROXY,
+  trustedProxyIps: TRUSTED_PROXY_IPS,
+  anonymousWebLimitOverride: ANON_WEB_RECONSTRUCTIONS,
+  authenticator,
+  rateLimiter,
+  billingDb,
+});
 const allowedTelemetryEvents = new Set([
   'page_view',
   'pricing_viewed',
@@ -324,55 +336,18 @@ function extractDemoPassword(req: IncomingMessage): string | undefined {
   return undefined;
 }
 
-type AuthedRequest = { tier: Tier; name: string; keyId: string } | null;
-
 function authenticateRequest(req: IncomingMessage): AuthedRequest {
-  const demo = extractDemoPassword(req);
-  if (DEMO_PASSWORD && demo) {
-    const demoBuf = Buffer.from(demo);
-    const passBuf = Buffer.from(DEMO_PASSWORD);
-    if (demoBuf.length === passBuf.length && timingSafeEqual(demoBuf, passBuf)) {
-      return { tier: 'pro', name: 'demo-user', keyId: 'demo' };
-    }
-  }
-  const rawKey = extractApiKey(req) ?? extractBearer(req);
-  const result = AUTH_ENABLED ? authenticator.authenticate(rawKey) : { authenticated: false as const, error: 'auth disabled' };
-
-  if (result.authenticated) {
-    return getRequestRateLimitIdentity({
-      authEnabled: AUTH_ENABLED,
-      authenticated: { authenticated: true, tier: result.tier, name: result.name, keyId: result.keyId },
-      headers: req.headers,
-      remoteAddress: req.socket.remoteAddress,
-      trustProxy: TRUST_PROXY,
-      trustedProxyIps: TRUSTED_PROXY_IPS,
-    });
-  }
-
-  // Fallback to billing-generated API keys
-  if (rawKey && billingDb) {
-    const billingAuth = billingDb.authenticateApiKey(rawKey);
-    if (billingAuth) {
-      return { tier: billingAuth.tier, name: billingAuth.name, keyId: billingAuth.keyId };
-    }
-  }
-
-  return getRequestRateLimitIdentity({
-    authEnabled: AUTH_ENABLED,
-    authenticated: undefined,
+  return accountAccess.authenticate({
+    apiKey: extractApiKey(req),
+    bearer: extractBearer(req),
+    demoPassword: extractDemoPassword(req),
     headers: req.headers,
     remoteAddress: req.socket.remoteAddress,
-    trustProxy: TRUST_PROXY,
-    trustedProxyIps: TRUSTED_PROXY_IPS,
   });
 }
 
 function checkCreditsForAuthed(authed: AuthedRequest, scope: 'mcp' | 'web'): boolean {
-  if (!authed || !billingDb) return false;
-  const customerId = billingDb.getCustomerIdByKeyId(authed.keyId);
-  if (!customerId) return false;
-  if (scope === 'mcp') return billingDb.deductMcpCredit(customerId);
-  return billingDb.deductWebCredit(customerId);
+  return accountAccess.spendCredit(authed, scope);
 }
 
 function isSubscriptionCheckoutTier(tier: string): tier is Extract<Tier, 'personal' | 'family'> {
@@ -384,9 +359,9 @@ function isPaymentCheckoutTier(tier: string): tier is Extract<CheckoutTier, 'mem
 }
 
 function sendRateLimitHeaders(res: ServerResponse, limitResult: { remaining: number; limit: number; resetAt: number }): void {
-  res.setHeader('X-RateLimit-Remaining', String(limitResult.remaining));
-  res.setHeader('X-RateLimit-Limit', String(limitResult.limit));
-  res.setHeader('X-RateLimit-Reset', String(Math.ceil(limitResult.resetAt / 1000)));
+  for (const [name, value] of Object.entries(rateLimitHeaders(limitResult))) {
+    res.setHeader(name, value);
+  }
 }
 
 function telemetryClientKey(req: IncomingMessage): string {
@@ -453,7 +428,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
 
   const authed = authenticateRequest(req);
   if (!authed) { logSecurityEvent('auth_failure', { path: '/ask' }); sendJson(res, 401, { error: DEMO_PASSWORD ? 'Unauthorized. Provide the demo password via x-demo-password header.' : 'Unauthorized. Provide a valid API key via x-api-key header or Authorization bearer token.' }); return; }
-  if (!isAnonymousAskAllowed({ authEnabled: AUTH_ENABLED, allowAnonymousAsk: ALLOW_ANON_ASK })) {
+  if (!accountAccess.anonymousProductAccessAllowed()) {
     sendJson(res, 401, { error: 'Anonymous /ask access is disabled. Enable ACHIOTE_ALLOW_ANON_ASK=true only for local demos, or provide a valid API key.' });
     return;
   }
@@ -481,7 +456,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
   const consent = parseDataConsent(parsed.consent);
 
   if (shouldApplyRateLimit({ contentType, parsedBody: parsed })) {
-    const limitResult = rateLimiter.checkWebLimit(authed.tier, authed.keyId, anonymousWebLimitOverride(authed));
+    const limitResult = accountAccess.webLimit(authed);
     sendRateLimitHeaders(res, limitResult);
     if (!limitResult.allowed && !checkCreditsForAuthed(authed, 'web')) {
       logSecurityEvent('rate_limit', { keyId: authed.keyId, path: '/ask' });
@@ -1308,11 +1283,6 @@ function inferUserLocation(userMessage: string): string | undefined {
   return location.slice(0, 80);
 }
 
-function anonymousWebLimitOverride(authed: AuthedRequest): number | undefined {
-  if (!authed || AUTH_ENABLED || !ALLOW_ANON_ASK) return undefined;
-  return ANON_WEB_RECONSTRUCTIONS;
-}
-
 function parsePositiveInteger(value: string | undefined): number | undefined {
   if (!value) return undefined;
   const parsed = Number.parseInt(value, 10);
@@ -1910,7 +1880,7 @@ function authenticateVoiceRequest(req: IncomingMessage, res: ServerResponse): Au
     sendJson(res, 401, { error: DEMO_PASSWORD ? 'Unauthorized. Provide the demo password via x-demo-password header.' : 'Unauthorized. Provide a valid API key via x-api-key header or Authorization bearer token.' });
     return null;
   }
-  if (!isAnonymousAskAllowed({ authEnabled: AUTH_ENABLED, allowAnonymousAsk: ALLOW_ANON_ASK })) {
+  if (!accountAccess.anonymousProductAccessAllowed()) {
     sendJson(res, 401, { error: 'Anonymous voice access is disabled. Enable ACHIOTE_ALLOW_ANON_ASK=true only for local demos, or provide a valid API key.' });
     return null;
   }
@@ -2576,7 +2546,7 @@ const server = createServer(async (req, res) => {
     const authed = authenticateRequest(req);
     if (!authed) { logSecurityEvent('auth_failure', { path: '/mcp' }); sendJson(res, 401, { jsonrpc: '2.0', error: { code: -32001, message: DEMO_PASSWORD ? 'Unauthorized: provide the demo password via x-demo-password header' : 'Unauthorized: valid API key required' }, id: null }); return; }
 
-    const limitResult = rateLimiter.checkMcpLimit(authed.tier, authed.keyId);
+    const limitResult = accountAccess.mcpLimit(authed);
     sendRateLimitHeaders(res, limitResult);
     if (!limitResult.allowed && !checkCreditsForAuthed(authed, 'mcp')) {
       logSecurityEvent('rate_limit', { keyId: authed.keyId, path: '/mcp' });
