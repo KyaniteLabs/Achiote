@@ -142,6 +142,43 @@ describe('reference seed operator integration', () => {
     expect(JSON.stringify(fixture)).not.toMatch(/rawMemory|memoryText|prompt_text|recipe instructions|live web/i);
   });
 
+  it('ships canary-remediated cassava fritter and coconut sugar fixtures as cacheable evidence', () => {
+    const cassavaFixture = pantryFixtureData.fixtures.find((entry) => entry.seedId === 'cassava-fritter-caribbean-central-america');
+    const coconutFixture = pantryFixtureData.fixtures.find((entry) => entry.seedId === 'confectionery-coconut-sugar-festival');
+
+    expect(cassavaFixture).toMatchObject({
+      cacheTarget: { dishFamily: 'cassava-fritter', region: 'Panama and Colombia' },
+      sourceIds: ['wikidata-structured-food-data'],
+    });
+    expect(cassavaFixture?.record.extractedFacts.namesAndAliases).toEqual(expect.arrayContaining([
+      'carimañola',
+      'carimanola',
+      'caribañola',
+      'fried yuca roll',
+    ]));
+    expect(cassavaFixture?.record.extractedFacts.sensoryDescriptors).toEqual(expect.arrayContaining([
+      'cassava starch chew',
+      'crisp exterior',
+      'savory filling aroma',
+    ]));
+
+    expect(coconutFixture).toMatchObject({
+      cacheTarget: { dishFamily: 'coconut-sugar-confection', region: 'Global diaspora' },
+      sourceIds: ['wikidata-structured-food-data'],
+    });
+    expect(coconutFixture?.record.extractedFacts.namesAndAliases).toEqual(expect.arrayContaining([
+      'cocada',
+      'bukayo',
+      'grainy coconut sweet',
+    ]));
+    expect(coconutFixture?.record.extractedFacts.sensoryDescriptors).toEqual(expect.arrayContaining([
+      'coconut aroma',
+      'grainy sugar crystals',
+      'festival or school serving context',
+    ]));
+    expect(JSON.stringify([cassavaFixture, coconutFixture])).not.toMatch(/rawMemory|memoryText|prompt_text|recipe instructions|live web/i);
+  });
+
   it('rejects fixture records whose seed target or research record is malformed', () => {
     const issues = validateReferenceSeedFixtures({
       fixtures: [

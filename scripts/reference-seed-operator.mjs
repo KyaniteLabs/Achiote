@@ -52,7 +52,7 @@ function emptyQualityReport() {
 }
 
 function writeApprovedFixtures(fixturePath, cachePath) {
-  const fixture = fixturePath === 'bundled' ? bundledGlobalReferenceSeeds.referencePantryFixtures : readJson(fixturePath);
+  const fixture = fixturePath === 'bundled' ? readJson('src/data/reference-pantry-fixtures.json') : readJson(fixturePath);
   const cache = new ResearchCache(resolve(cachePath));
   try {
     return writeReferenceSeedFixturesToCache(fixture, cache);

@@ -332,6 +332,220 @@
       }
     },
     {
+      "seedId": "cassava-fritter-caribbean-central-america",
+      "cacheTarget": {
+        "dishFamily": "cassava-fritter",
+        "region": "Panama and Colombia"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "cultureAreas.central_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "foodForms.snack_street_food",
+        "mechanisms.aroma",
+        "mechanisms.browning",
+        "mechanisms.starch_texture",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "nameSystems.phonetic",
+        "regionScopes.nation"
+      ],
+      "record": {
+        "dishName": "cassava-fritter",
+        "query": "carimañola carimanola cassava fritter Panama Colombia aliases | fried yuca roll picadillo texture contrast",
+        "sources": [
+          {
+            "title": "Carimañola (Q5042044) structured data",
+            "url": "https://www.wikidata.org/wiki/Q5042044",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q5042044 has English label \"Carimañola\".",
+              "Wikidata item Q5042044 has English description: Colombian and Panamanian meat-pie in a yuca fritter."
+            ]
+          },
+          {
+            "title": "cassava (Q250766) structured data",
+            "url": "https://www.wikidata.org/wiki/Q250766",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q250766 has English label \"cassava\".",
+              "Wikidata item Q250766 has English description: species of plant."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "cassava-fritter",
+            "carimañola",
+            "carimanola",
+            "caribañola",
+            "fried yuca roll",
+            "yuca fritter",
+            "cassava fritter"
+          ],
+          "regions": [
+            "nation:Panama",
+            "nation:Colombia",
+            "macro:Central America",
+            "macro:Caribbean",
+            "central america",
+            "caribbean"
+          ],
+          "ingredients": [
+            "cassava",
+            "yuca"
+          ],
+          "techniques": [
+            "browning",
+            "starch texture",
+            "texture contrast",
+            "aroma"
+          ],
+          "sensoryDescriptors": [
+            "fried browned surface",
+            "cassava starch chew",
+            "crisp exterior",
+            "savory filling aroma",
+            "texture contrast"
+          ],
+          "culturalOccasions": [
+            "snack street food",
+            "breakfast or family preparation"
+          ],
+          "regionalVariants": [
+            "Wikidata item Q5042044 has English label \"Carimañola\".",
+            "Wikidata item Q5042044 has English description: Colombian and Panamanian meat-pie in a yuca fritter.",
+            "Achiote should keep Panamanian, Colombian, Caribbean, and household spelling uncertainty separate until the user confirms context."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Exact spelling, filling, shape, meal setting, and country context need user or family confirmation.",
+          "This pantry record grounds cassava, fried texture, and alias-family recognition before any exact identity claim."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "confectionery-coconut-sugar-festival",
+      "cacheTarget": {
+        "dishFamily": "coconut-sugar-confection",
+        "region": "Global diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "cultureAreas.caribbean",
+        "cultureAreas.diaspora_global",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.ceremonial_holiday",
+        "foodForms.confectionery",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "mechanisms.sugar_crystal",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.diaspora",
+        "regionScopes.macro_region"
+      ],
+      "record": {
+        "dishName": "coconut-sugar-confection",
+        "query": "cocada bukayo coconut candy festival sweet sugar crystal texture diaspora variants",
+        "sources": [
+          {
+            "title": "Cocada (Q1103795) structured data",
+            "url": "https://www.wikidata.org/wiki/Q1103795",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q1103795 has English label \"Cocada\".",
+              "Wikidata item Q1103795 has English description: traditional coconut candy or confectionery found in many parts of Latin America."
+            ]
+          },
+          {
+            "title": "Bukayo (Q4987124) structured data",
+            "url": "https://www.wikidata.org/wiki/Q4987124",
+            "sourceType": "other",
+            "accessedAt": "2026-05-02T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata item Q4987124 has English label \"Bukayo\".",
+              "Wikidata item Q4987124 has English description: Filipino dessert."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "coconut-sugar-confection",
+            "cocada",
+            "cocadas",
+            "bukayo",
+            "coconut candy",
+            "coconut sweet",
+            "grainy coconut sweet",
+            "celebration coconut sweet"
+          ],
+          "regions": [
+            "macro:Latin America",
+            "macro:Caribbean",
+            "macro:Southeast Asia",
+            "macro:West Africa",
+            "diaspora:Global",
+            "caribbean",
+            "diaspora global"
+          ],
+          "ingredients": [
+            "coconut",
+            "sugar"
+          ],
+          "techniques": [
+            "sugar crystal",
+            "texture contrast",
+            "aroma",
+            "serving ritual"
+          ],
+          "sensoryDescriptors": [
+            "coconut aroma",
+            "grainy sugar crystals",
+            "chewy or sticky texture",
+            "white or caramelized color uncertainty",
+            "festival or school serving context"
+          ],
+          "culturalOccasions": [
+            "confectionery",
+            "ceremonial holiday",
+            "school or festival sweet"
+          ],
+          "regionalVariants": [
+            "Wikidata item Q1103795 has English label \"Cocada\".",
+            "Wikidata item Q1103795 has English description: traditional coconut candy or confectionery found in many parts of Latin America.",
+            "Wikidata item Q4987124 has English label \"Bukayo\".",
+            "Achiote should treat cocada, bukayo, and related coconut sweets as a mechanism family until user or source evidence narrows region."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Exact regional name, school or festival setting, milk use, caramelization, shape, and texture need user or family confirmation.",
+          "This pantry record should encourage cheap pantry proxy cues before specialty sourcing or exact dish identity."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-02T00:00:00.000Z"
+      }
+    },
+    {
       "seedId": "sauce-chile-vinegar-caribbean",
       "cacheTarget": {
         "dishFamily": "chile-vinegar-condiment",
