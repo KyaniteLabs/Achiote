@@ -161,6 +161,7 @@ export class BillingDb {
       CREATE INDEX IF NOT EXISTS idx_billing_keys_hash ON billing_api_keys(key_hash);
       CREATE INDEX IF NOT EXISTS idx_billing_keys_customer ON billing_api_keys(stripe_customer_id);
       CREATE INDEX IF NOT EXISTS idx_billing_keys_subscription ON billing_api_keys(stripe_subscription_id);
+      CREATE INDEX IF NOT EXISTS idx_billing_subscriptions_customer_status ON billing_subscriptions(stripe_customer_id, status);
       CREATE INDEX IF NOT EXISTS idx_checkout_sessions_customer ON checkout_sessions(stripe_customer_id);
     `);
   }
@@ -465,14 +466,18 @@ export class BillingDb {
   }
 
   purgeExpiredCheckoutSessions(): number {
-    const cutoff = new Date(Date.now() - CHECKOUT_SESSION_TTL_MS).toISOString();
-    const result = this.db.prepare(
+    const pendingCutoff = new Date(Date.now() - CHECKOUT_SESSION_TTL_MS).toISOString();
+    const completedCutoff = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString(); // 90 days
+    const pendingResult = this.db.prepare(
       `DELETE FROM checkout_sessions WHERE created_at < ? AND status = 'pending'`
-    ).run(cutoff);
+    ).run(pendingCutoff);
     this.db.prepare(
       `UPDATE checkout_sessions SET key_plaintext = NULL WHERE created_at < ? AND key_plaintext IS NOT NULL`
-    ).run(cutoff);
-    return result.changes;
+    ).run(pendingCutoff);
+    const completedResult = this.db.prepare(
+      `DELETE FROM checkout_sessions WHERE created_at < ? AND status = 'completed'`
+    ).run(completedCutoff);
+    return pendingResult.changes + completedResult.changes;
   }
 
   // ── Cleanup ────────────────────────────────────────────────────────────────

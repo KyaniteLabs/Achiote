@@ -105,9 +105,11 @@ async function closeMcpSession(sid: string, entry: McpSessionEntry): Promise<voi
 
 function sweepStaleSessions(): void {
   const now = Date.now();
-  for (const [sid, entry] of transports) {
+  for (const [sid, entry] of [...transports]) {
     if (now - entry.lastActivity > SESSION_TTL) {
-      void closeMcpSession(sid, entry);
+      closeMcpSession(sid, entry).catch((err) => {
+        console.error('[mcp] session cleanup failed:', err instanceof Error ? err.message : String(err));
+      });
     }
   }
 }
@@ -654,6 +656,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
           const detail = err instanceof Error ? err.message : String(err);
           const code = err instanceof ToolExecutionError ? err.code : 'tool_failed';
           send('error', { message: 'Tool failed', tool: call.name, code, detail });
+          finish({ error: code, detail });
           return;
         }
       }

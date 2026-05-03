@@ -155,6 +155,10 @@ export class BillingStripe {
     const customerId = typeof session.customer === 'string' ? session.customer : null;
     if (!customerId) return;
 
+    // Idempotency: skip if this session was already processed
+    const existingSession = billingDb.getCheckoutSession(session.id);
+    if (existingSession?.status === 'completed') return;
+
     const rawTier = session.metadata?.tier;
     const mode = (session.metadata?.mode as 'subscription' | 'payment') || 'subscription';
 
@@ -169,14 +173,14 @@ export class BillingStripe {
       const subscriptionId = typeof session.subscription === 'string' ? session.subscription : null;
       if (subscriptionId) {
         const subscription = await this.stripe.subscriptions.retrieve(subscriptionId);
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const subAny = subscription as any;
+        // Stripe SDK v22 removed current_period_end from Subscription types, but the API still returns it.
+        const currentPeriodEnd = (subscription as unknown as { current_period_end?: number }).current_period_end;
         billingDb.upsertSubscription({
           stripeSubscriptionId: subscriptionId,
           stripeCustomerId: customerId,
           tier,
           status: subscription.status,
-          currentPeriodEnd: subAny.current_period_end ? subAny.current_period_end * 1000 : null,
+          currentPeriodEnd: typeof currentPeriodEnd === 'number' ? currentPeriodEnd * 1000 : null,
           createdAt: new Date(subscription.created * 1000).toISOString(),
           updatedAt: new Date().toISOString(),
         });
@@ -203,15 +207,15 @@ export class BillingStripe {
     // Determine tier from the subscription items
     const priceId = subscription.items.data[0]?.price.id ?? '';
     const tier = this.tierForPriceId(priceId) || 'personal';
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const subAny = subscription as any;
+    // Stripe SDK v22 removed current_period_end from Subscription types, but the API still returns it.
+    const currentPeriodEnd = (subscription as unknown as { current_period_end?: number }).current_period_end;
 
     billingDb.upsertSubscription({
       stripeSubscriptionId: subscription.id,
       stripeCustomerId: customerId,
       tier,
       status: subscription.status,
-      currentPeriodEnd: subAny.current_period_end ? subAny.current_period_end * 1000 : null,
+      currentPeriodEnd: typeof currentPeriodEnd === 'number' ? currentPeriodEnd * 1000 : null,
       createdAt: new Date(subscription.created * 1000).toISOString(),
       updatedAt: new Date().toISOString(),
     });
@@ -231,8 +235,10 @@ export class BillingStripe {
   }
 
   private async handlePaymentFailed(invoice: Stripe.Invoice, billingDb: BillingDb): Promise<void> {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const subscriptionId = (invoice as any).subscription as string | null;
+    // Stripe SDK v22 removed subscription from Invoice types, but the API still returns it.
+    const subscriptionId = typeof (invoice as unknown as { subscription?: string }).subscription === 'string'
+      ? (invoice as unknown as { subscription?: string }).subscription
+      : null;
     if (!subscriptionId) return;
     billingDb.cancelSubscription(subscriptionId);
   }
@@ -258,8 +264,15 @@ export class BillingStripe {
     if (priceId === this.config.personalPriceId) return 'personal';
     if (priceId === this.config.personalAnnualPriceId) return 'personal';
     if (priceId === this.config.proPriceId) return 'pro';
-    if (priceId === this.config.legacyBusinessPriceId) return 'business';
-    if (priceId === this.config.familyPriceId) return 'family';
+    // When familyPriceId and legacyBusinessPriceId are the same (fallback scenario),
+    // prefer 'business' for backward compatibility with legacy subscriptions.
+    // When they differ, prefer 'family' so family subscriptions are not misidentified.
+    if (this.config.familyPriceId === this.config.legacyBusinessPriceId) {
+      if (priceId === this.config.legacyBusinessPriceId) return 'business';
+    } else {
+      if (priceId === this.config.familyPriceId) return 'family';
+      if (priceId === this.config.legacyBusinessPriceId) return 'business';
+    }
     return null;
   }
 

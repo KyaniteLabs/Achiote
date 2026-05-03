@@ -351,4 +351,109 @@ describe('HTTP server integration', () => {
     const res = await fetch(`${baseUrl}/mcp`);
     expect(res.status).toBeGreaterThanOrEqual(400);
   });
+
+  it('returns 503 for billing endpoints when billing is not configured', async () => {
+    const checkout = await fetch(`${baseUrl}/billing/checkout`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+    expect(checkout.status).toBe(503);
+
+    const portal = await fetch(`${baseUrl}/billing/portal`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+    expect(portal.status).toBe(503);
+
+    const webhook = await fetch(`${baseUrl}/billing/webhook`, { method: 'POST' });
+    expect(webhook.status).toBe(503);
+
+    const session = await fetch(`${baseUrl}/billing/session?session_id=test`);
+    expect(session.status).toBe(503);
+  });
+});
+
+describe('HTTP server billing integration', () => {
+  let server: ChildProcess;
+  let baseUrl: string;
+  let port: number;
+
+  beforeAll(async () => {
+    port = await getFreePort();
+    baseUrl = `http://127.0.0.1:${port}`;
+
+    server = spawn('node', [resolve(ROOT, 'dist/http-server.js')], {
+      env: {
+        ...process.env,
+        PORT: String(port),
+        ACHIOTE_AUTH_ENABLED: 'false',
+        STRIPE_SECRET_KEY: 'sk_test_dummy',
+        STRIPE_WEBHOOK_SECRET: 'whsec_dummy_secret_for_testing_only',
+        STRIPE_PERSONAL_PRICE_ID: 'price_test',
+      },
+      stdio: ['pipe', 'pipe', 'pipe'],
+    });
+
+    await new Promise<void>((resolve, reject) => {
+      const timeout = setTimeout(() => reject(new Error('Server startup timeout')), 10000);
+      server.stdout!.on('data', (data: Buffer) => {
+        if (data.toString().includes(`localhost:${port}`)) {
+          clearTimeout(timeout);
+          resolve();
+        }
+      });
+      server.stderr!.on('data', (data: Buffer) => {
+        if (data.toString().includes('EADDRINUSE')) {
+          clearTimeout(timeout);
+          reject(new Error(`Port ${port} already in use`));
+        }
+      });
+      server.on('error', (err) => {
+        clearTimeout(timeout);
+        reject(err);
+      });
+    });
+  }, 15000);
+
+  afterAll(() => {
+    server?.kill('SIGINT');
+  });
+
+  it('rejects webhook requests without stripe-signature header', async () => {
+    const res = await fetch(`${baseUrl}/billing/webhook`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: '{}',
+    });
+    expect(res.status).toBe(400);
+    const body = await res.json();
+    expect(body.error).toMatch(/Missing stripe-signature/);
+  });
+
+  it('rejects webhook requests with invalid stripe-signature', async () => {
+    const res = await fetch(`${baseUrl}/billing/webhook`, {
+      method: 'POST',
+      headers: { 'stripe-signature': 'invalid_signature', 'Content-Type': 'application/json' },
+      body: '{}',
+    });
+    expect(res.status).toBe(400);
+    const body = await res.json();
+    expect(body.error).toMatch(/Webhook processing failed|No signatures found|Unable to extract timestamp/);
+  });
+
+  it('rejects checkout with invalid tier', async () => {
+    const res = await fetch(`${baseUrl}/billing/checkout`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ tier: 'invalid-tier', mode: 'subscription' }),
+    });
+    expect(res.status).toBe(400);
+    const body = await res.json();
+    expect(body.error).toMatch(/Invalid tier/);
+  });
+
+  it('rejects checkout with invalid mode', async () => {
+    const res = await fetch(`${baseUrl}/billing/checkout`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ tier: 'personal', mode: 'invalid' }),
+    });
+    expect(res.status).toBe(400);
+    const body = await res.json();
+    expect(body.error).toMatch(/Invalid checkout mode/);
+  });
 });
