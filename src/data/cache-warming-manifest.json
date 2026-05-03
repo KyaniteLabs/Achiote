@@ -40869,6 +40869,4542 @@
           "Warm from approved structured source metadata and taxonomy-backed naming fields only."
         ]
       }
+    },
+    {
+      "id": "warm-stuffed-vegetables-0-balkans",
+      "seedId": "stuffed-vegetables-0-balkans",
+      "cacheTarget": {
+        "dishFamily": "stuffed-vegetables",
+        "region": "Balkans"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-stuffed-vegetables-1-mediterranean",
+      "seedId": "stuffed-vegetables-1-mediterranean",
+      "cacheTarget": {
+        "dishFamily": "stuffed-vegetables",
+        "region": "Mediterranean"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-stuffed-vegetables-2-eastern-europe",
+      "seedId": "stuffed-vegetables-2-eastern-europe",
+      "cacheTarget": {
+        "dishFamily": "stuffed-vegetables",
+        "region": "Eastern Europe"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-stuffed-vegetables-3-middle-east",
+      "seedId": "stuffed-vegetables-3-middle-east",
+      "cacheTarget": {
+        "dishFamily": "stuffed-vegetables",
+        "region": "Middle East"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-stuffed-vegetables-4-central-asia",
+      "seedId": "stuffed-vegetables-4-central-asia",
+      "cacheTarget": {
+        "dishFamily": "stuffed-vegetables",
+        "region": "Central Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-stuffed-vegetables-5-community-diaspora",
+      "seedId": "stuffed-vegetables-5-community-diaspora",
+      "cacheTarget": {
+        "dishFamily": "stuffed-vegetables",
+        "region": "Community diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-stuffed-vegetables-6-global-diaspora",
+      "seedId": "stuffed-vegetables-6-global-diaspora",
+      "cacheTarget": {
+        "dishFamily": "stuffed-vegetables",
+        "region": "Global diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-rice-dish-0-south-asia",
+      "seedId": "rice-dish-0-south-asia",
+      "cacheTarget": {
+        "dishFamily": "rice-dish",
+        "region": "South Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-rice-dish-1-middle-east",
+      "seedId": "rice-dish-1-middle-east",
+      "cacheTarget": {
+        "dishFamily": "rice-dish",
+        "region": "Middle East"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-rice-dish-2-mediterranean",
+      "seedId": "rice-dish-2-mediterranean",
+      "cacheTarget": {
+        "dishFamily": "rice-dish",
+        "region": "Mediterranean"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-rice-dish-3-west-africa",
+      "seedId": "rice-dish-3-west-africa",
+      "cacheTarget": {
+        "dishFamily": "rice-dish",
+        "region": "West Africa"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-rice-dish-4-east-asia",
+      "seedId": "rice-dish-4-east-asia",
+      "cacheTarget": {
+        "dishFamily": "rice-dish",
+        "region": "East Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-rice-dish-5-southeast-asia",
+      "seedId": "rice-dish-5-southeast-asia",
+      "cacheTarget": {
+        "dishFamily": "rice-dish",
+        "region": "Southeast Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-rice-dish-6-latin-america",
+      "seedId": "rice-dish-6-latin-america",
+      "cacheTarget": {
+        "dishFamily": "rice-dish",
+        "region": "Latin America"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-egg-dish-0-mediterranean",
+      "seedId": "egg-dish-0-mediterranean",
+      "cacheTarget": {
+        "dishFamily": "egg-dish",
+        "region": "Mediterranean"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-egg-dish-1-east-asia",
+      "seedId": "egg-dish-1-east-asia",
+      "cacheTarget": {
+        "dishFamily": "egg-dish",
+        "region": "East Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-egg-dish-2-latin-america",
+      "seedId": "egg-dish-2-latin-america",
+      "cacheTarget": {
+        "dishFamily": "egg-dish",
+        "region": "Latin America"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-egg-dish-3-middle-east",
+      "seedId": "egg-dish-3-middle-east",
+      "cacheTarget": {
+        "dishFamily": "egg-dish",
+        "region": "Middle East"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-egg-dish-4-south-asia",
+      "seedId": "egg-dish-4-south-asia",
+      "cacheTarget": {
+        "dishFamily": "egg-dish",
+        "region": "South Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-egg-dish-5-north-africa",
+      "seedId": "egg-dish-5-north-africa",
+      "cacheTarget": {
+        "dishFamily": "egg-dish",
+        "region": "North Africa"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-egg-dish-6-western-europe",
+      "seedId": "egg-dish-6-western-europe",
+      "cacheTarget": {
+        "dishFamily": "egg-dish",
+        "region": "Western Europe"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-wrapped-masa-0-caribbean",
+      "seedId": "wrapped-masa-0-caribbean",
+      "cacheTarget": {
+        "dishFamily": "wrapped-masa",
+        "region": "Caribbean"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.southeast_asia",
+        "cultureAreas.west_africa"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-wrapped-masa-1-latin-america",
+      "seedId": "wrapped-masa-1-latin-america",
+      "cacheTarget": {
+        "dishFamily": "wrapped-masa",
+        "region": "Latin America"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.southeast_asia",
+        "cultureAreas.west_africa"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-wrapped-masa-2-southeast-asia",
+      "seedId": "wrapped-masa-2-southeast-asia",
+      "cacheTarget": {
+        "dishFamily": "wrapped-masa",
+        "region": "Southeast Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.southeast_asia",
+        "cultureAreas.west_africa"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-wrapped-masa-3-east-asia",
+      "seedId": "wrapped-masa-3-east-asia",
+      "cacheTarget": {
+        "dishFamily": "wrapped-masa",
+        "region": "East Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.southeast_asia",
+        "cultureAreas.west_africa"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-wrapped-masa-4-pacific-islands",
+      "seedId": "wrapped-masa-4-pacific-islands",
+      "cacheTarget": {
+        "dishFamily": "wrapped-masa",
+        "region": "Pacific Islands"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.southeast_asia",
+        "cultureAreas.west_africa"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-wrapped-masa-5-west-africa",
+      "seedId": "wrapped-masa-5-west-africa",
+      "cacheTarget": {
+        "dishFamily": "wrapped-masa",
+        "region": "West Africa"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.southeast_asia",
+        "cultureAreas.west_africa"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-wrapped-masa-6-community-diaspora",
+      "seedId": "wrapped-masa-6-community-diaspora",
+      "cacheTarget": {
+        "dishFamily": "wrapped-masa",
+        "region": "Community diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.southeast_asia",
+        "cultureAreas.west_africa"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-grilled-meat-0-middle-east",
+      "seedId": "grilled-meat-0-middle-east",
+      "cacheTarget": {
+        "dishFamily": "grilled-meat",
+        "region": "Middle East"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-grilled-meat-1-east-asia",
+      "seedId": "grilled-meat-1-east-asia",
+      "cacheTarget": {
+        "dishFamily": "grilled-meat",
+        "region": "East Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-grilled-meat-2-south-america",
+      "seedId": "grilled-meat-2-south-america",
+      "cacheTarget": {
+        "dishFamily": "grilled-meat",
+        "region": "South America"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-grilled-meat-3-mediterranean",
+      "seedId": "grilled-meat-3-mediterranean",
+      "cacheTarget": {
+        "dishFamily": "grilled-meat",
+        "region": "Mediterranean"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-grilled-meat-4-southern-africa",
+      "seedId": "grilled-meat-4-southern-africa",
+      "cacheTarget": {
+        "dishFamily": "grilled-meat",
+        "region": "Southern Africa"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-grilled-meat-5-caribbean",
+      "seedId": "grilled-meat-5-caribbean",
+      "cacheTarget": {
+        "dishFamily": "grilled-meat",
+        "region": "Caribbean"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-grilled-meat-6-community-diaspora",
+      "seedId": "grilled-meat-6-community-diaspora",
+      "cacheTarget": {
+        "dishFamily": "grilled-meat",
+        "region": "Community diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-bone-broth-0-east-asia",
+      "seedId": "bone-broth-0-east-asia",
+      "cacheTarget": {
+        "dishFamily": "bone-broth",
+        "region": "East Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.east_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-bone-broth-1-southeast-asia",
+      "seedId": "bone-broth-1-southeast-asia",
+      "cacheTarget": {
+        "dishFamily": "bone-broth",
+        "region": "Southeast Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.east_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-bone-broth-2-latin-america",
+      "seedId": "bone-broth-2-latin-america",
+      "cacheTarget": {
+        "dishFamily": "bone-broth",
+        "region": "Latin America"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.east_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-bone-broth-3-eastern-europe",
+      "seedId": "bone-broth-3-eastern-europe",
+      "cacheTarget": {
+        "dishFamily": "bone-broth",
+        "region": "Eastern Europe"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.east_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-bone-broth-4-mediterranean",
+      "seedId": "bone-broth-4-mediterranean",
+      "cacheTarget": {
+        "dishFamily": "bone-broth",
+        "region": "Mediterranean"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.east_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-bone-broth-5-community-diaspora",
+      "seedId": "bone-broth-5-community-diaspora",
+      "cacheTarget": {
+        "dishFamily": "bone-broth",
+        "region": "Community diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.east_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-bone-broth-6-global-diaspora",
+      "seedId": "bone-broth-6-global-diaspora",
+      "cacheTarget": {
+        "dishFamily": "bone-broth",
+        "region": "Global diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.east_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-fermented-vegetable-0-east-asia",
+      "seedId": "fermented-vegetable-0-east-asia",
+      "cacheTarget": {
+        "dishFamily": "fermented-vegetable",
+        "region": "East Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.east_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-fermented-vegetable-1-eastern-europe",
+      "seedId": "fermented-vegetable-1-eastern-europe",
+      "cacheTarget": {
+        "dishFamily": "fermented-vegetable",
+        "region": "Eastern Europe"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.east_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-fermented-vegetable-2-south-asia",
+      "seedId": "fermented-vegetable-2-south-asia",
+      "cacheTarget": {
+        "dishFamily": "fermented-vegetable",
+        "region": "South Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.east_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-fermented-vegetable-3-latin-america",
+      "seedId": "fermented-vegetable-3-latin-america",
+      "cacheTarget": {
+        "dishFamily": "fermented-vegetable",
+        "region": "Latin America"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.east_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-fermented-vegetable-4-mediterranean",
+      "seedId": "fermented-vegetable-4-mediterranean",
+      "cacheTarget": {
+        "dishFamily": "fermented-vegetable",
+        "region": "Mediterranean"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.east_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-fermented-vegetable-5-community-diaspora",
+      "seedId": "fermented-vegetable-5-community-diaspora",
+      "cacheTarget": {
+        "dishFamily": "fermented-vegetable",
+        "region": "Community diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.east_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-fermented-vegetable-6-global-diaspora",
+      "seedId": "fermented-vegetable-6-global-diaspora",
+      "cacheTarget": {
+        "dishFamily": "fermented-vegetable",
+        "region": "Global diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.east_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-casserole-0-mediterranean",
+      "seedId": "casserole-0-mediterranean",
+      "cacheTarget": {
+        "dishFamily": "casserole",
+        "region": "Mediterranean"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-casserole-1-eastern-europe",
+      "seedId": "casserole-1-eastern-europe",
+      "cacheTarget": {
+        "dishFamily": "casserole",
+        "region": "Eastern Europe"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-casserole-2-latin-america",
+      "seedId": "casserole-2-latin-america",
+      "cacheTarget": {
+        "dishFamily": "casserole",
+        "region": "Latin America"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-casserole-3-north-america",
+      "seedId": "casserole-3-north-america",
+      "cacheTarget": {
+        "dishFamily": "casserole",
+        "region": "North America"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-casserole-4-middle-east",
+      "seedId": "casserole-4-middle-east",
+      "cacheTarget": {
+        "dishFamily": "casserole",
+        "region": "Middle East"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-casserole-5-east-africa",
+      "seedId": "casserole-5-east-africa",
+      "cacheTarget": {
+        "dishFamily": "casserole",
+        "region": "East Africa"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-casserole-6-community-diaspora",
+      "seedId": "casserole-6-community-diaspora",
+      "cacheTarget": {
+        "dishFamily": "casserole",
+        "region": "Community diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-grilled-seafood-0-latin-america",
+      "seedId": "grilled-seafood-0-latin-america",
+      "cacheTarget": {
+        "dishFamily": "grilled-seafood",
+        "region": "Latin America"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.east_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-grilled-seafood-1-southeast-asia",
+      "seedId": "grilled-seafood-1-southeast-asia",
+      "cacheTarget": {
+        "dishFamily": "grilled-seafood",
+        "region": "Southeast Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.east_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-grilled-seafood-2-mediterranean",
+      "seedId": "grilled-seafood-2-mediterranean",
+      "cacheTarget": {
+        "dishFamily": "grilled-seafood",
+        "region": "Mediterranean"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.east_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-grilled-seafood-3-west-africa",
+      "seedId": "grilled-seafood-3-west-africa",
+      "cacheTarget": {
+        "dishFamily": "grilled-seafood",
+        "region": "West Africa"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.east_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-grilled-seafood-4-japan",
+      "seedId": "grilled-seafood-4-japan",
+      "cacheTarget": {
+        "dishFamily": "grilled-seafood",
+        "region": "Japan"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.east_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-grilled-seafood-5-community-diaspora",
+      "seedId": "grilled-seafood-5-community-diaspora",
+      "cacheTarget": {
+        "dishFamily": "grilled-seafood",
+        "region": "Community diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.east_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-grilled-seafood-6-global-diaspora",
+      "seedId": "grilled-seafood-6-global-diaspora",
+      "cacheTarget": {
+        "dishFamily": "grilled-seafood",
+        "region": "Global diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.east_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-smoked-fish-0-scandinavia",
+      "seedId": "smoked-fish-0-scandinavia",
+      "cacheTarget": {
+        "dishFamily": "smoked-fish",
+        "region": "Scandinavia"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.europe",
+        "cultureAreas.oceania_pacific"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-smoked-fish-1-eastern-europe",
+      "seedId": "smoked-fish-1-eastern-europe",
+      "cacheTarget": {
+        "dishFamily": "smoked-fish",
+        "region": "Eastern Europe"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.europe",
+        "cultureAreas.oceania_pacific"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-smoked-fish-2-scotland",
+      "seedId": "smoked-fish-2-scotland",
+      "cacheTarget": {
+        "dishFamily": "smoked-fish",
+        "region": "Scotland"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.europe",
+        "cultureAreas.oceania_pacific"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-smoked-fish-3-pacific-northwest",
+      "seedId": "smoked-fish-3-pacific-northwest",
+      "cacheTarget": {
+        "dishFamily": "smoked-fish",
+        "region": "Pacific Northwest"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.europe",
+        "cultureAreas.oceania_pacific"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-smoked-fish-4-japan",
+      "seedId": "smoked-fish-4-japan",
+      "cacheTarget": {
+        "dishFamily": "smoked-fish",
+        "region": "Japan"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.europe",
+        "cultureAreas.oceania_pacific"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-smoked-fish-5-community-diaspora",
+      "seedId": "smoked-fish-5-community-diaspora",
+      "cacheTarget": {
+        "dishFamily": "smoked-fish",
+        "region": "Community diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.europe",
+        "cultureAreas.oceania_pacific"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-smoked-fish-6-global-diaspora",
+      "seedId": "smoked-fish-6-global-diaspora",
+      "cacheTarget": {
+        "dishFamily": "smoked-fish",
+        "region": "Global diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.europe",
+        "cultureAreas.oceania_pacific"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-barbecue-0-american-south",
+      "seedId": "barbecue-0-american-south",
+      "cacheTarget": {
+        "dishFamily": "barbecue",
+        "region": "American South"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.southern_africa",
+        "cultureAreas.caribbean"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-barbecue-1-argentina",
+      "seedId": "barbecue-1-argentina",
+      "cacheTarget": {
+        "dishFamily": "barbecue",
+        "region": "Argentina"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.southern_africa",
+        "cultureAreas.caribbean"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-barbecue-2-south-africa",
+      "seedId": "barbecue-2-south-africa",
+      "cacheTarget": {
+        "dishFamily": "barbecue",
+        "region": "South Africa"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.southern_africa",
+        "cultureAreas.caribbean"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-barbecue-3-caribbean",
+      "seedId": "barbecue-3-caribbean",
+      "cacheTarget": {
+        "dishFamily": "barbecue",
+        "region": "Caribbean"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.southern_africa",
+        "cultureAreas.caribbean"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-barbecue-4-korea",
+      "seedId": "barbecue-4-korea",
+      "cacheTarget": {
+        "dishFamily": "barbecue",
+        "region": "Korea"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.southern_africa",
+        "cultureAreas.caribbean"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-barbecue-5-japan",
+      "seedId": "barbecue-5-japan",
+      "cacheTarget": {
+        "dishFamily": "barbecue",
+        "region": "Japan"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.southern_africa",
+        "cultureAreas.caribbean"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-barbecue-6-community-diaspora",
+      "seedId": "barbecue-6-community-diaspora",
+      "cacheTarget": {
+        "dishFamily": "barbecue",
+        "region": "Community diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.southern_africa",
+        "cultureAreas.caribbean"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-fermented-soybean-0-japan",
+      "seedId": "fermented-soybean-0-japan",
+      "cacheTarget": {
+        "dishFamily": "fermented-soybean",
+        "region": "Japan"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-fermented-soybean-1-korea",
+      "seedId": "fermented-soybean-1-korea",
+      "cacheTarget": {
+        "dishFamily": "fermented-soybean",
+        "region": "Korea"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-fermented-soybean-2-china",
+      "seedId": "fermented-soybean-2-china",
+      "cacheTarget": {
+        "dishFamily": "fermented-soybean",
+        "region": "China"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-fermented-soybean-3-southeast-asia",
+      "seedId": "fermented-soybean-3-southeast-asia",
+      "cacheTarget": {
+        "dishFamily": "fermented-soybean",
+        "region": "Southeast Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-fermented-soybean-4-himalayan",
+      "seedId": "fermented-soybean-4-himalayan",
+      "cacheTarget": {
+        "dishFamily": "fermented-soybean",
+        "region": "Himalayan"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-fermented-soybean-5-community-diaspora",
+      "seedId": "fermented-soybean-5-community-diaspora",
+      "cacheTarget": {
+        "dishFamily": "fermented-soybean",
+        "region": "Community diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-fermented-soybean-6-global-diaspora",
+      "seedId": "fermented-soybean-6-global-diaspora",
+      "cacheTarget": {
+        "dishFamily": "fermented-soybean",
+        "region": "Global diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-fermented-dairy-0-middle-east",
+      "seedId": "fermented-dairy-0-middle-east",
+      "cacheTarget": {
+        "dishFamily": "fermented-dairy",
+        "region": "Middle East"
+      },
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.south_asia",
+        "cultureAreas.europe"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-fermented-dairy-1-south-asia",
+      "seedId": "fermented-dairy-1-south-asia",
+      "cacheTarget": {
+        "dishFamily": "fermented-dairy",
+        "region": "South Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.south_asia",
+        "cultureAreas.europe"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-fermented-dairy-2-caucasus",
+      "seedId": "fermented-dairy-2-caucasus",
+      "cacheTarget": {
+        "dishFamily": "fermented-dairy",
+        "region": "Caucasus"
+      },
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.south_asia",
+        "cultureAreas.europe"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-fermented-dairy-3-eastern-europe",
+      "seedId": "fermented-dairy-3-eastern-europe",
+      "cacheTarget": {
+        "dishFamily": "fermented-dairy",
+        "region": "Eastern Europe"
+      },
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.south_asia",
+        "cultureAreas.europe"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-fermented-dairy-4-scandinavia",
+      "seedId": "fermented-dairy-4-scandinavia",
+      "cacheTarget": {
+        "dishFamily": "fermented-dairy",
+        "region": "Scandinavia"
+      },
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.south_asia",
+        "cultureAreas.europe"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-fermented-dairy-5-community-diaspora",
+      "seedId": "fermented-dairy-5-community-diaspora",
+      "cacheTarget": {
+        "dishFamily": "fermented-dairy",
+        "region": "Community diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.south_asia",
+        "cultureAreas.europe"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-fermented-dairy-6-global-diaspora",
+      "seedId": "fermented-dairy-6-global-diaspora",
+      "cacheTarget": {
+        "dishFamily": "fermented-dairy",
+        "region": "Global diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.south_asia",
+        "cultureAreas.europe"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-steamed-dumpling-0-china",
+      "seedId": "steamed-dumpling-0-china",
+      "cacheTarget": {
+        "dishFamily": "steamed-dumpling",
+        "region": "China"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-steamed-dumpling-1-tibet",
+      "seedId": "steamed-dumpling-1-tibet",
+      "cacheTarget": {
+        "dishFamily": "steamed-dumpling",
+        "region": "Tibet"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-steamed-dumpling-2-mongolia",
+      "seedId": "steamed-dumpling-2-mongolia",
+      "cacheTarget": {
+        "dishFamily": "steamed-dumpling",
+        "region": "Mongolia"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-steamed-dumpling-3-korea",
+      "seedId": "steamed-dumpling-3-korea",
+      "cacheTarget": {
+        "dishFamily": "steamed-dumpling",
+        "region": "Korea"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-steamed-dumpling-4-southeast-asia",
+      "seedId": "steamed-dumpling-4-southeast-asia",
+      "cacheTarget": {
+        "dishFamily": "steamed-dumpling",
+        "region": "Southeast Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-steamed-dumpling-5-community-diaspora",
+      "seedId": "steamed-dumpling-5-community-diaspora",
+      "cacheTarget": {
+        "dishFamily": "steamed-dumpling",
+        "region": "Community diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-steamed-dumpling-6-global-diaspora",
+      "seedId": "steamed-dumpling-6-global-diaspora",
+      "cacheTarget": {
+        "dishFamily": "steamed-dumpling",
+        "region": "Global diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-steamed-pudding-0-britain",
+      "seedId": "steamed-pudding-0-britain",
+      "cacheTarget": {
+        "dishFamily": "steamed-pudding",
+        "region": "Britain"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.south_asia",
+        "cultureAreas.southeast_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-steamed-pudding-1-american-south",
+      "seedId": "steamed-pudding-1-american-south",
+      "cacheTarget": {
+        "dishFamily": "steamed-pudding",
+        "region": "American South"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.south_asia",
+        "cultureAreas.southeast_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-steamed-pudding-2-southeast-asia",
+      "seedId": "steamed-pudding-2-southeast-asia",
+      "cacheTarget": {
+        "dishFamily": "steamed-pudding",
+        "region": "Southeast Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.south_asia",
+        "cultureAreas.southeast_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-steamed-pudding-3-turkey",
+      "seedId": "steamed-pudding-3-turkey",
+      "cacheTarget": {
+        "dishFamily": "steamed-pudding",
+        "region": "Turkey"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.south_asia",
+        "cultureAreas.southeast_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-steamed-pudding-4-india",
+      "seedId": "steamed-pudding-4-india",
+      "cacheTarget": {
+        "dishFamily": "steamed-pudding",
+        "region": "India"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.south_asia",
+        "cultureAreas.southeast_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-steamed-pudding-5-community-diaspora",
+      "seedId": "steamed-pudding-5-community-diaspora",
+      "cacheTarget": {
+        "dishFamily": "steamed-pudding",
+        "region": "Community diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.south_asia",
+        "cultureAreas.southeast_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-steamed-pudding-6-global-diaspora",
+      "seedId": "steamed-pudding-6-global-diaspora",
+      "cacheTarget": {
+        "dishFamily": "steamed-pudding",
+        "region": "Global diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.south_asia",
+        "cultureAreas.southeast_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-hearty-soup-0-latin-america",
+      "seedId": "hearty-soup-0-latin-america",
+      "cacheTarget": {
+        "dishFamily": "hearty-soup",
+        "region": "Latin America"
+      },
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.east_asia",
+        "cultureAreas.south_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-hearty-soup-1-middle-east",
+      "seedId": "hearty-soup-1-middle-east",
+      "cacheTarget": {
+        "dishFamily": "hearty-soup",
+        "region": "Middle East"
+      },
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.east_asia",
+        "cultureAreas.south_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-hearty-soup-2-south-asia",
+      "seedId": "hearty-soup-2-south-asia",
+      "cacheTarget": {
+        "dishFamily": "hearty-soup",
+        "region": "South Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.east_asia",
+        "cultureAreas.south_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-hearty-soup-3-eastern-europe",
+      "seedId": "hearty-soup-3-eastern-europe",
+      "cacheTarget": {
+        "dishFamily": "hearty-soup",
+        "region": "Eastern Europe"
+      },
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.east_asia",
+        "cultureAreas.south_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-hearty-soup-4-east-asia",
+      "seedId": "hearty-soup-4-east-asia",
+      "cacheTarget": {
+        "dishFamily": "hearty-soup",
+        "region": "East Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.east_asia",
+        "cultureAreas.south_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-hearty-soup-5-community-diaspora",
+      "seedId": "hearty-soup-5-community-diaspora",
+      "cacheTarget": {
+        "dishFamily": "hearty-soup",
+        "region": "Community diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.east_asia",
+        "cultureAreas.south_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-hearty-soup-6-global-diaspora",
+      "seedId": "hearty-soup-6-global-diaspora",
+      "cacheTarget": {
+        "dishFamily": "hearty-soup",
+        "region": "Global diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.east_asia",
+        "cultureAreas.south_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-cold-soup-0-mediterranean",
+      "seedId": "cold-soup-0-mediterranean",
+      "cacheTarget": {
+        "dishFamily": "cold-soup",
+        "region": "Mediterranean"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-cold-soup-1-eastern-europe",
+      "seedId": "cold-soup-1-eastern-europe",
+      "cacheTarget": {
+        "dishFamily": "cold-soup",
+        "region": "Eastern Europe"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-cold-soup-2-korea",
+      "seedId": "cold-soup-2-korea",
+      "cacheTarget": {
+        "dishFamily": "cold-soup",
+        "region": "Korea"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-cold-soup-3-latin-america",
+      "seedId": "cold-soup-3-latin-america",
+      "cacheTarget": {
+        "dishFamily": "cold-soup",
+        "region": "Latin America"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-cold-soup-4-middle-east",
+      "seedId": "cold-soup-4-middle-east",
+      "cacheTarget": {
+        "dishFamily": "cold-soup",
+        "region": "Middle East"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-cold-soup-5-community-diaspora",
+      "seedId": "cold-soup-5-community-diaspora",
+      "cacheTarget": {
+        "dishFamily": "cold-soup",
+        "region": "Community diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-cold-soup-6-global-diaspora",
+      "seedId": "cold-soup-6-global-diaspora",
+      "cacheTarget": {
+        "dishFamily": "cold-soup",
+        "region": "Global diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-baked-pasta-0-italy",
+      "seedId": "baked-pasta-0-italy",
+      "cacheTarget": {
+        "dishFamily": "baked-pasta",
+        "region": "Italy"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.caribbean"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-baked-pasta-1-greece",
+      "seedId": "baked-pasta-1-greece",
+      "cacheTarget": {
+        "dishFamily": "baked-pasta",
+        "region": "Greece"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.caribbean"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-baked-pasta-2-american-south",
+      "seedId": "baked-pasta-2-american-south",
+      "cacheTarget": {
+        "dishFamily": "baked-pasta",
+        "region": "American South"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.caribbean"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-baked-pasta-3-caribbean",
+      "seedId": "baked-pasta-3-caribbean",
+      "cacheTarget": {
+        "dishFamily": "baked-pasta",
+        "region": "Caribbean"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.caribbean"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-baked-pasta-4-eastern-europe",
+      "seedId": "baked-pasta-4-eastern-europe",
+      "cacheTarget": {
+        "dishFamily": "baked-pasta",
+        "region": "Eastern Europe"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.caribbean"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-baked-pasta-5-community-diaspora",
+      "seedId": "baked-pasta-5-community-diaspora",
+      "cacheTarget": {
+        "dishFamily": "baked-pasta",
+        "region": "Community diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.caribbean"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-baked-pasta-6-global-diaspora",
+      "seedId": "baked-pasta-6-global-diaspora",
+      "cacheTarget": {
+        "dishFamily": "baked-pasta",
+        "region": "Global diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.caribbean"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-cured-meat-0-mediterranean",
+      "seedId": "cured-meat-0-mediterranean",
+      "cacheTarget": {
+        "dishFamily": "cured-meat",
+        "region": "Mediterranean"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-cured-meat-1-eastern-europe",
+      "seedId": "cured-meat-1-eastern-europe",
+      "cacheTarget": {
+        "dishFamily": "cured-meat",
+        "region": "Eastern Europe"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-cured-meat-2-china",
+      "seedId": "cured-meat-2-china",
+      "cacheTarget": {
+        "dishFamily": "cured-meat",
+        "region": "China"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-cured-meat-3-middle-east",
+      "seedId": "cured-meat-3-middle-east",
+      "cacheTarget": {
+        "dishFamily": "cured-meat",
+        "region": "Middle East"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-cured-meat-4-american-south",
+      "seedId": "cured-meat-4-american-south",
+      "cacheTarget": {
+        "dishFamily": "cured-meat",
+        "region": "American South"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-cured-meat-5-community-diaspora",
+      "seedId": "cured-meat-5-community-diaspora",
+      "cacheTarget": {
+        "dishFamily": "cured-meat",
+        "region": "Community diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-cured-meat-6-global-diaspora",
+      "seedId": "cured-meat-6-global-diaspora",
+      "cacheTarget": {
+        "dishFamily": "cured-meat",
+        "region": "Global diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-dried-fruit-0-middle-east",
+      "seedId": "dried-fruit-0-middle-east",
+      "cacheTarget": {
+        "dishFamily": "dried-fruit",
+        "region": "Middle East"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-dried-fruit-1-central-asia",
+      "seedId": "dried-fruit-1-central-asia",
+      "cacheTarget": {
+        "dishFamily": "dried-fruit",
+        "region": "Central Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-dried-fruit-2-mediterranean",
+      "seedId": "dried-fruit-2-mediterranean",
+      "cacheTarget": {
+        "dishFamily": "dried-fruit",
+        "region": "Mediterranean"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-dried-fruit-3-south-asia",
+      "seedId": "dried-fruit-3-south-asia",
+      "cacheTarget": {
+        "dishFamily": "dried-fruit",
+        "region": "South Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-dried-fruit-4-north-africa",
+      "seedId": "dried-fruit-4-north-africa",
+      "cacheTarget": {
+        "dishFamily": "dried-fruit",
+        "region": "North Africa"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-dried-fruit-5-community-diaspora",
+      "seedId": "dried-fruit-5-community-diaspora",
+      "cacheTarget": {
+        "dishFamily": "dried-fruit",
+        "region": "Community diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-dried-fruit-6-global-diaspora",
+      "seedId": "dried-fruit-6-global-diaspora",
+      "cacheTarget": {
+        "dishFamily": "dried-fruit",
+        "region": "Global diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-confit-0-france",
+      "seedId": "confit-0-france",
+      "cacheTarget": {
+        "dishFamily": "confit",
+        "region": "France"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.southeast_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-confit-1-mexico",
+      "seedId": "confit-1-mexico",
+      "cacheTarget": {
+        "dishFamily": "confit",
+        "region": "Mexico"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.southeast_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-confit-2-philippines",
+      "seedId": "confit-2-philippines",
+      "cacheTarget": {
+        "dishFamily": "confit",
+        "region": "Philippines"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.southeast_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-confit-3-southern-us",
+      "seedId": "confit-3-southern-us",
+      "cacheTarget": {
+        "dishFamily": "confit",
+        "region": "Southern US"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.southeast_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-confit-4-eastern-europe",
+      "seedId": "confit-4-eastern-europe",
+      "cacheTarget": {
+        "dishFamily": "confit",
+        "region": "Eastern Europe"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.southeast_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-confit-5-community-diaspora",
+      "seedId": "confit-5-community-diaspora",
+      "cacheTarget": {
+        "dishFamily": "confit",
+        "region": "Community diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.southeast_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-confit-6-global-diaspora",
+      "seedId": "confit-6-global-diaspora",
+      "cacheTarget": {
+        "dishFamily": "confit",
+        "region": "Global diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.southeast_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-ceviche-0-peru",
+      "seedId": "ceviche-0-peru",
+      "cacheTarget": {
+        "dishFamily": "ceviche",
+        "region": "Peru"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.southeast_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-ceviche-1-mexico",
+      "seedId": "ceviche-1-mexico",
+      "cacheTarget": {
+        "dishFamily": "ceviche",
+        "region": "Mexico"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.southeast_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-ceviche-2-philippines",
+      "seedId": "ceviche-2-philippines",
+      "cacheTarget": {
+        "dishFamily": "ceviche",
+        "region": "Philippines"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.southeast_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-ceviche-3-hawaii",
+      "seedId": "ceviche-3-hawaii",
+      "cacheTarget": {
+        "dishFamily": "ceviche",
+        "region": "Hawaii"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.southeast_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-ceviche-4-mediterranean",
+      "seedId": "ceviche-4-mediterranean",
+      "cacheTarget": {
+        "dishFamily": "ceviche",
+        "region": "Mediterranean"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.southeast_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-ceviche-5-community-diaspora",
+      "seedId": "ceviche-5-community-diaspora",
+      "cacheTarget": {
+        "dishFamily": "ceviche",
+        "region": "Community diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.southeast_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-ceviche-6-global-diaspora",
+      "seedId": "ceviche-6-global-diaspora",
+      "cacheTarget": {
+        "dishFamily": "ceviche",
+        "region": "Global diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.southeast_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-tartare-0-france",
+      "seedId": "tartare-0-france",
+      "cacheTarget": {
+        "dishFamily": "tartare",
+        "region": "France"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.east_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-tartare-1-ethiopia",
+      "seedId": "tartare-1-ethiopia",
+      "cacheTarget": {
+        "dishFamily": "tartare",
+        "region": "Ethiopia"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.east_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-tartare-2-korea",
+      "seedId": "tartare-2-korea",
+      "cacheTarget": {
+        "dishFamily": "tartare",
+        "region": "Korea"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.east_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-tartare-3-italy",
+      "seedId": "tartare-3-italy",
+      "cacheTarget": {
+        "dishFamily": "tartare",
+        "region": "Italy"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.east_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-tartare-4-lebanon",
+      "seedId": "tartare-4-lebanon",
+      "cacheTarget": {
+        "dishFamily": "tartare",
+        "region": "Lebanon"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.east_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-tartare-5-community-diaspora",
+      "seedId": "tartare-5-community-diaspora",
+      "cacheTarget": {
+        "dishFamily": "tartare",
+        "region": "Community diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.east_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-tartare-6-global-diaspora",
+      "seedId": "tartare-6-global-diaspora",
+      "cacheTarget": {
+        "dishFamily": "tartare",
+        "region": "Global diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.east_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-pudding-custard-0-latin-america",
+      "seedId": "pudding-custard-0-latin-america",
+      "cacheTarget": {
+        "dishFamily": "pudding-custard",
+        "region": "Latin America"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.south_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-pudding-custard-1-south-asia",
+      "seedId": "pudding-custard-1-south-asia",
+      "cacheTarget": {
+        "dishFamily": "pudding-custard",
+        "region": "South Asia"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.south_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-pudding-custard-2-mediterranean",
+      "seedId": "pudding-custard-2-mediterranean",
+      "cacheTarget": {
+        "dishFamily": "pudding-custard",
+        "region": "Mediterranean"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.south_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-pudding-custard-3-europe",
+      "seedId": "pudding-custard-3-europe",
+      "cacheTarget": {
+        "dishFamily": "pudding-custard",
+        "region": "Europe"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.south_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-pudding-custard-4-philippines",
+      "seedId": "pudding-custard-4-philippines",
+      "cacheTarget": {
+        "dishFamily": "pudding-custard",
+        "region": "Philippines"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.south_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-pudding-custard-5-community-diaspora",
+      "seedId": "pudding-custard-5-community-diaspora",
+      "cacheTarget": {
+        "dishFamily": "pudding-custard",
+        "region": "Community diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.south_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-pudding-custard-6-global-diaspora",
+      "seedId": "pudding-custard-6-global-diaspora",
+      "cacheTarget": {
+        "dishFamily": "pudding-custard",
+        "region": "Global diaspora"
+      },
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.south_asia"
+      ],
+      "qualityTriggers": [
+        "frequent_memory_type",
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
     }
   ]
 }

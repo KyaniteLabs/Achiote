@@ -290,10 +290,21 @@ const PANTRY_FAMILIES = new Set(
 function bundledMechanismFamilyFor(userMessage: string): string | null {
   const normalized = normalizeKnowledgeText(userMessage);
 
+  // First pass: alias matches suppress search regardless of pantry coverage.
+  // If the user explicitly names a dish, we don't need live search to know
+  // what family it belongs to.
+  for (const family of dishFamiliesData.families) {
+    const aliasMatch = family.aliases.some((alias) => hasPhrase(normalized, alias));
+    if (aliasMatch) {
+      return family.canonicalName;
+    }
+  }
+
+  // Second pass: mechanism-term matches only suppress search when the
+  // family has pantry fixtures to ground the model.
   for (const family of dishFamiliesData.families) {
     if (!PANTRY_FAMILIES.has(family.canonicalName)) continue;
 
-    const aliasMatch = family.aliases.some((alias) => hasPhrase(normalized, alias));
     const mechanismTerms = [
       ...family.sharedElements,
       ...family.divergentElements,
@@ -301,7 +312,7 @@ function bundledMechanismFamilyFor(userMessage: string): string | null {
     ].flatMap(termParts);
     const matchedMechanismTerms = new Set(mechanismTerms.filter((term) => hasPhrase(normalized, term)));
 
-    if (aliasMatch || matchedMechanismTerms.size >= 3) {
+    if (matchedMechanismTerms.size >= 3) {
       return family.canonicalName;
     }
   }

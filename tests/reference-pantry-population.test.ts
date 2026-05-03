@@ -15,8 +15,8 @@ describe('reference pantry population audit', () => {
     });
 
     expect(audit.totalFixtures).toBeGreaterThanOrEqual(1120);
-    expect(audit.familyCount).toBe(160);
-    expect(audit.depthBuckets).toEqual({ '7': 160 });
+    expect(audit.familyCount).toBe(184);
+    expect(audit.depthBuckets).toEqual({ '7': 184 });
     expect(audit.minRecordsPerFamily).toBe(7);
     expect(audit.maxRecordsPerFamily).toBe(7);
     expect(audit.familiesBelowFloor).toEqual([]);
@@ -27,7 +27,7 @@ describe('reference pantry population audit', () => {
     expect(audit.taxonomyFamiliesMissingFixtures).toEqual([]);
     expect(audit.sourceCounts).toMatchObject({
       'usda-fooddata-central': 51,
-      'wikidata-structured-food-data': 1120,
+      'wikidata-structured-food-data': 1288,
     });
     expect(audit.sourceFamilyCounts['usda-fooddata-central']).toBe(51);
     expect(audit.issues).toEqual([]);
@@ -109,10 +109,10 @@ describe('reference pantry population audit', () => {
     const audit = JSON.parse(result.stdout);
     expect(audit).toMatchObject({
       totalFixtures: pantryFixtureData.fixtures.length,
-      familyCount: 160,
+      familyCount: 184,
       minRecordsPerFamily: 7,
       maxRecordsPerFamily: 7,
-      depthBuckets: { '7': 160 },
+      depthBuckets: { '7': 184 },
       duplicateCacheTargets: [],
       artificialTargets: [],
       taxonomyCountDrift: [],

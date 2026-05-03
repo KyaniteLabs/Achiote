@@ -6211,6 +6211,962 @@
         "at least one naming record covering alias, transliteration, family nickname, menu name, or common typo when relevant"
       ],
       "populationPriority": "maintain"
+    },
+    {
+      "dishFamily": "stuffed-vegetables",
+      "primaryCluster": "soups-broths-and-sour-liquids",
+      "supportClusters": [],
+      "currentRecordCount": 7,
+      "currentRegions": [
+        "Balkans",
+        "Central Asia",
+        "Community diaspora",
+        "Eastern Europe",
+        "Global diaspora",
+        "Mediterranean",
+        "Middle East"
+      ],
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.central_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.vegetable_fungi",
+        "mechanisms.sauce_balance",
+        "mechanisms.texture_contrast",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "mechanisms.serving_ritual",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "targetRecordFloor": 5,
+      "targetDiversity": [
+        "at least one region/locality record when known",
+        "at least one diaspora or migration-context record when plausible",
+        "at least one sensory-mechanism record grounded in aroma, texture, temperature, acid, fat, or sauce balance",
+        "at least one naming record covering alias, transliteration, family nickname, menu name, or common typo when relevant"
+      ],
+      "populationPriority": "maintain"
+    },
+    {
+      "dishFamily": "rice-dish",
+      "primaryCluster": "staple-starches-grains-and-noodles",
+      "supportClusters": [],
+      "currentRecordCount": 7,
+      "currentRegions": [
+        "East Asia",
+        "Latin America",
+        "Mediterranean",
+        "Middle East",
+        "South Asia",
+        "Southeast Asia",
+        "West Africa"
+      ],
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.east_asia",
+        "cultureAreas.south_asia",
+        "cultureAreas.southeast_asia",
+        "cultureAreas.west_africa",
+        "cultureAreas.south_america",
+        "cultureAreas.central_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.starch_texture",
+        "mechanisms.serving_ritual",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "targetRecordFloor": 5,
+      "targetDiversity": [
+        "at least one region/locality record when known",
+        "at least one diaspora or migration-context record when plausible",
+        "at least one sensory-mechanism record grounded in aroma, texture, temperature, acid, fat, or sauce balance",
+        "at least one naming record covering alias, transliteration, family nickname, menu name, or common typo when relevant"
+      ],
+      "populationPriority": "maintain"
+    },
+    {
+      "dishFamily": "egg-dish",
+      "primaryCluster": "sweets-desserts-and-ritual-foods",
+      "supportClusters": [],
+      "currentRecordCount": 7,
+      "currentRegions": [
+        "East Asia",
+        "Latin America",
+        "Mediterranean",
+        "Middle East",
+        "North Africa",
+        "South Asia",
+        "Western Europe"
+      ],
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.east_asia",
+        "cultureAreas.south_asia",
+        "cultureAreas.south_america",
+        "cultureAreas.central_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.texture_contrast",
+        "mechanisms.browning",
+        "mechanisms.temperature",
+        "mechanisms.serving_ritual",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "targetRecordFloor": 5,
+      "targetDiversity": [
+        "at least one region/locality record when known",
+        "at least one diaspora or migration-context record when plausible",
+        "at least one sensory-mechanism record grounded in aroma, texture, temperature, acid, fat, or sauce balance",
+        "at least one naming record covering alias, transliteration, family nickname, menu name, or common typo when relevant"
+      ],
+      "populationPriority": "maintain"
+    },
+    {
+      "dishFamily": "wrapped-masa",
+      "primaryCluster": "handheld-street-and-filled-foods",
+      "supportClusters": [],
+      "currentRecordCount": 7,
+      "currentRegions": [
+        "Caribbean",
+        "Community diaspora",
+        "East Asia",
+        "Latin America",
+        "Pacific Islands",
+        "Southeast Asia",
+        "West Africa"
+      ],
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.southeast_asia",
+        "cultureAreas.west_africa",
+        "cultureAreas.caribbean",
+        "cultureAreas.south_america",
+        "cultureAreas.central_america",
+        "cultureAreas.oceania_pacific",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.texture_contrast",
+        "mechanisms.starch_texture",
+        "mechanisms.serving_ritual",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "targetRecordFloor": 5,
+      "targetDiversity": [
+        "at least one region/locality record when known",
+        "at least one diaspora or migration-context record when plausible",
+        "at least one sensory-mechanism record grounded in aroma, texture, temperature, acid, fat, or sauce balance",
+        "at least one naming record covering alias, transliteration, family nickname, menu name, or common typo when relevant"
+      ],
+      "populationPriority": "maintain"
+    },
+    {
+      "dishFamily": "grilled-meat",
+      "primaryCluster": "stews-braises-and-sauced-mains",
+      "supportClusters": [],
+      "currentRecordCount": 7,
+      "currentRegions": [
+        "Caribbean",
+        "Community diaspora",
+        "East Asia",
+        "Mediterranean",
+        "Middle East",
+        "South America",
+        "Southern Africa"
+      ],
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.east_asia",
+        "cultureAreas.southern_africa",
+        "cultureAreas.caribbean",
+        "cultureAreas.south_america",
+        "cultureAreas.central_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "mechanisms.smoke",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "mechanisms.browning",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "targetRecordFloor": 5,
+      "targetDiversity": [
+        "at least one region/locality record when known",
+        "at least one diaspora or migration-context record when plausible",
+        "at least one sensory-mechanism record grounded in aroma, texture, temperature, acid, fat, or sauce balance",
+        "at least one naming record covering alias, transliteration, family nickname, menu name, or common typo when relevant"
+      ],
+      "populationPriority": "maintain"
+    },
+    {
+      "dishFamily": "bone-broth",
+      "primaryCluster": "soups-broths-and-sour-liquids",
+      "supportClusters": [],
+      "currentRecordCount": 7,
+      "currentRegions": [
+        "Community diaspora",
+        "East Asia",
+        "Eastern Europe",
+        "Global diaspora",
+        "Latin America",
+        "Mediterranean",
+        "Southeast Asia"
+      ],
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.east_asia",
+        "cultureAreas.southeast_asia",
+        "cultureAreas.south_america",
+        "cultureAreas.central_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.serving_ritual",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "targetRecordFloor": 5,
+      "targetDiversity": [
+        "at least one region/locality record when known",
+        "at least one diaspora or migration-context record when plausible",
+        "at least one sensory-mechanism record grounded in aroma, texture, temperature, acid, fat, or sauce balance",
+        "at least one naming record covering alias, transliteration, family nickname, menu name, or common typo when relevant"
+      ],
+      "populationPriority": "maintain"
+    },
+    {
+      "dishFamily": "fermented-vegetable",
+      "primaryCluster": "sauces-condiments-pickles-and-ferments",
+      "supportClusters": [],
+      "currentRecordCount": 7,
+      "currentRegions": [
+        "Community diaspora",
+        "East Asia",
+        "Eastern Europe",
+        "Global diaspora",
+        "Latin America",
+        "Mediterranean",
+        "South Asia"
+      ],
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.east_asia",
+        "cultureAreas.south_asia",
+        "cultureAreas.south_america",
+        "cultureAreas.central_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.vegetable_fungi",
+        "foodForms.sauce_condiment",
+        "foodForms.pickle_ferment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.serving_ritual",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "targetRecordFloor": 5,
+      "targetDiversity": [
+        "at least one region/locality record when known",
+        "at least one diaspora or migration-context record when plausible",
+        "at least one sensory-mechanism record grounded in aroma, texture, temperature, acid, fat, or sauce balance",
+        "at least one naming record covering alias, transliteration, family nickname, menu name, or common typo when relevant"
+      ],
+      "populationPriority": "maintain"
+    },
+    {
+      "dishFamily": "casserole",
+      "primaryCluster": "stews-braises-and-sauced-mains",
+      "supportClusters": [],
+      "currentRecordCount": 7,
+      "currentRegions": [
+        "Community diaspora",
+        "East Africa",
+        "Eastern Europe",
+        "Latin America",
+        "Mediterranean",
+        "Middle East",
+        "North America"
+      ],
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.east_africa",
+        "cultureAreas.south_america",
+        "cultureAreas.central_america",
+        "cultureAreas.north_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "mechanisms.starch_texture",
+        "mechanisms.browning",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "targetRecordFloor": 5,
+      "targetDiversity": [
+        "at least one region/locality record when known",
+        "at least one diaspora or migration-context record when plausible",
+        "at least one sensory-mechanism record grounded in aroma, texture, temperature, acid, fat, or sauce balance",
+        "at least one naming record covering alias, transliteration, family nickname, menu name, or common typo when relevant"
+      ],
+      "populationPriority": "maintain"
+    },
+    {
+      "dishFamily": "grilled-seafood",
+      "primaryCluster": "stews-braises-and-sauced-mains",
+      "supportClusters": [],
+      "currentRecordCount": 7,
+      "currentRegions": [
+        "Community diaspora",
+        "Global diaspora",
+        "Japan",
+        "Latin America",
+        "Mediterranean",
+        "Southeast Asia",
+        "West Africa"
+      ],
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.east_asia",
+        "cultureAreas.southeast_asia",
+        "cultureAreas.west_africa",
+        "cultureAreas.south_america",
+        "cultureAreas.central_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "mechanisms.smoke",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.starch_texture",
+        "mechanisms.browning",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "targetRecordFloor": 5,
+      "targetDiversity": [
+        "at least one region/locality record when known",
+        "at least one diaspora or migration-context record when plausible",
+        "at least one sensory-mechanism record grounded in aroma, texture, temperature, acid, fat, or sauce balance",
+        "at least one naming record covering alias, transliteration, family nickname, menu name, or common typo when relevant"
+      ],
+      "populationPriority": "maintain"
+    },
+    {
+      "dishFamily": "smoked-fish",
+      "primaryCluster": "sauces-condiments-pickles-and-ferments",
+      "supportClusters": [],
+      "currentRecordCount": 7,
+      "currentRegions": [
+        "Community diaspora",
+        "Eastern Europe",
+        "Global diaspora",
+        "Japan",
+        "Pacific Northwest",
+        "Scandinavia",
+        "Scotland"
+      ],
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.europe",
+        "cultureAreas.oceania_pacific",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "mechanisms.smoke",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.texture_contrast",
+        "mechanisms.temperature",
+        "mechanisms.serving_ritual",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "targetRecordFloor": 5,
+      "targetDiversity": [
+        "at least one region/locality record when known",
+        "at least one diaspora or migration-context record when plausible",
+        "at least one sensory-mechanism record grounded in aroma, texture, temperature, acid, fat, or sauce balance",
+        "at least one naming record covering alias, transliteration, family nickname, menu name, or common typo when relevant"
+      ],
+      "populationPriority": "maintain"
+    },
+    {
+      "dishFamily": "barbecue",
+      "primaryCluster": "stews-braises-and-sauced-mains",
+      "supportClusters": [],
+      "currentRecordCount": 7,
+      "currentRegions": [
+        "American South",
+        "Argentina",
+        "Caribbean",
+        "Community diaspora",
+        "Japan",
+        "Korea",
+        "South Africa"
+      ],
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.southern_africa",
+        "cultureAreas.caribbean",
+        "cultureAreas.south_america",
+        "cultureAreas.central_america",
+        "cultureAreas.north_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "mechanisms.smoke",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "mechanisms.browning",
+        "mechanisms.sugar_crystal",
+        "mechanisms.temperature",
+        "mechanisms.serving_ritual",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "targetRecordFloor": 5,
+      "targetDiversity": [
+        "at least one region/locality record when known",
+        "at least one diaspora or migration-context record when plausible",
+        "at least one sensory-mechanism record grounded in aroma, texture, temperature, acid, fat, or sauce balance",
+        "at least one naming record covering alias, transliteration, family nickname, menu name, or common typo when relevant"
+      ],
+      "populationPriority": "maintain"
+    },
+    {
+      "dishFamily": "fermented-soybean",
+      "primaryCluster": "sauces-condiments-pickles-and-ferments",
+      "supportClusters": [],
+      "currentRecordCount": 7,
+      "currentRegions": [
+        "China",
+        "Community diaspora",
+        "Global diaspora",
+        "Himalayan",
+        "Japan",
+        "Korea",
+        "Southeast Asia"
+      ],
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.sauce_condiment",
+        "foodForms.pickle_ferment",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "targetRecordFloor": 5,
+      "targetDiversity": [
+        "at least one region/locality record when known",
+        "at least one diaspora or migration-context record when plausible",
+        "at least one sensory-mechanism record grounded in aroma, texture, temperature, acid, fat, or sauce balance",
+        "at least one naming record covering alias, transliteration, family nickname, menu name, or common typo when relevant"
+      ],
+      "populationPriority": "maintain"
+    },
+    {
+      "dishFamily": "fermented-dairy",
+      "primaryCluster": "sauces-condiments-pickles-and-ferments",
+      "supportClusters": [],
+      "currentRecordCount": 7,
+      "currentRegions": [
+        "Caucasus",
+        "Community diaspora",
+        "Eastern Europe",
+        "Global diaspora",
+        "Middle East",
+        "Scandinavia",
+        "South Asia"
+      ],
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.south_asia",
+        "cultureAreas.europe",
+        "cultureAreas.central_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.sauce_condiment",
+        "foodForms.pickle_ferment",
+        "mechanisms.fermentation_acid",
+        "mechanisms.texture_contrast",
+        "mechanisms.serving_ritual",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "targetRecordFloor": 5,
+      "targetDiversity": [
+        "at least one region/locality record when known",
+        "at least one diaspora or migration-context record when plausible",
+        "at least one sensory-mechanism record grounded in aroma, texture, temperature, acid, fat, or sauce balance",
+        "at least one naming record covering alias, transliteration, family nickname, menu name, or common typo when relevant"
+      ],
+      "populationPriority": "maintain"
+    },
+    {
+      "dishFamily": "steamed-dumpling",
+      "primaryCluster": "handheld-street-and-filled-foods",
+      "supportClusters": [],
+      "currentRecordCount": 7,
+      "currentRegions": [
+        "China",
+        "Community diaspora",
+        "Global diaspora",
+        "Korea",
+        "Mongolia",
+        "Southeast Asia",
+        "Tibet"
+      ],
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.southeast_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dumpling_pocket",
+        "mechanisms.sauce_balance",
+        "mechanisms.starch_texture",
+        "mechanisms.sugar_crystal",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "targetRecordFloor": 5,
+      "targetDiversity": [
+        "at least one region/locality record when known",
+        "at least one diaspora or migration-context record when plausible",
+        "at least one sensory-mechanism record grounded in aroma, texture, temperature, acid, fat, or sauce balance",
+        "at least one naming record covering alias, transliteration, family nickname, menu name, or common typo when relevant"
+      ],
+      "populationPriority": "maintain"
+    },
+    {
+      "dishFamily": "steamed-pudding",
+      "primaryCluster": "sweets-desserts-and-ritual-foods",
+      "supportClusters": [],
+      "currentRecordCount": 7,
+      "currentRegions": [
+        "American South",
+        "Britain",
+        "Community diaspora",
+        "Global diaspora",
+        "India",
+        "Southeast Asia",
+        "Turkey"
+      ],
+      "coverageTags": [
+        "cultureAreas.east_asia",
+        "cultureAreas.south_asia",
+        "cultureAreas.southeast_asia",
+        "cultureAreas.europe",
+        "cultureAreas.north_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dessert",
+        "foodForms.confectionery",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "mechanisms.texture_contrast",
+        "mechanisms.starch_texture",
+        "mechanisms.sugar_crystal",
+        "mechanisms.temperature",
+        "mechanisms.serving_ritual",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "targetRecordFloor": 5,
+      "targetDiversity": [
+        "at least one region/locality record when known",
+        "at least one diaspora or migration-context record when plausible",
+        "at least one sensory-mechanism record grounded in aroma, texture, temperature, acid, fat, or sauce balance",
+        "at least one naming record covering alias, transliteration, family nickname, menu name, or common typo when relevant"
+      ],
+      "populationPriority": "maintain"
+    },
+    {
+      "dishFamily": "hearty-soup",
+      "primaryCluster": "soups-broths-and-sour-liquids",
+      "supportClusters": [],
+      "currentRecordCount": 7,
+      "currentRegions": [
+        "Community diaspora",
+        "East Asia",
+        "Eastern Europe",
+        "Global diaspora",
+        "Latin America",
+        "Middle East",
+        "South Asia"
+      ],
+      "coverageTags": [
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.east_asia",
+        "cultureAreas.south_asia",
+        "cultureAreas.south_america",
+        "cultureAreas.central_america",
+        "cultureAreas.europe",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.soup_broth",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.temperature",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "targetRecordFloor": 5,
+      "targetDiversity": [
+        "at least one region/locality record when known",
+        "at least one diaspora or migration-context record when plausible",
+        "at least one sensory-mechanism record grounded in aroma, texture, temperature, acid, fat, or sauce balance",
+        "at least one naming record covering alias, transliteration, family nickname, menu name, or common typo when relevant"
+      ],
+      "populationPriority": "maintain"
+    },
+    {
+      "dishFamily": "cold-soup",
+      "primaryCluster": "soups-broths-and-sour-liquids",
+      "supportClusters": [],
+      "currentRecordCount": 7,
+      "currentRegions": [
+        "Community diaspora",
+        "Eastern Europe",
+        "Global diaspora",
+        "Korea",
+        "Latin America",
+        "Mediterranean",
+        "Middle East"
+      ],
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.east_asia",
+        "cultureAreas.south_america",
+        "cultureAreas.central_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.soup_broth",
+        "foodForms.vegetable_fungi",
+        "mechanisms.temperature",
+        "mechanisms.serving_ritual",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "targetRecordFloor": 5,
+      "targetDiversity": [
+        "at least one region/locality record when known",
+        "at least one diaspora or migration-context record when plausible",
+        "at least one sensory-mechanism record grounded in aroma, texture, temperature, acid, fat, or sauce balance",
+        "at least one naming record covering alias, transliteration, family nickname, menu name, or common typo when relevant"
+      ],
+      "populationPriority": "maintain"
+    },
+    {
+      "dishFamily": "baked-pasta",
+      "primaryCluster": "staple-starches-grains-and-noodles",
+      "supportClusters": [],
+      "currentRecordCount": 7,
+      "currentRegions": [
+        "American South",
+        "Caribbean",
+        "Community diaspora",
+        "Eastern Europe",
+        "Global diaspora",
+        "Greece",
+        "Italy"
+      ],
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.caribbean",
+        "cultureAreas.north_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.grain_rice_noodle",
+        "mechanisms.sauce_balance",
+        "mechanisms.texture_contrast",
+        "mechanisms.starch_texture",
+        "mechanisms.serving_ritual",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "targetRecordFloor": 5,
+      "targetDiversity": [
+        "at least one region/locality record when known",
+        "at least one diaspora or migration-context record when plausible",
+        "at least one sensory-mechanism record grounded in aroma, texture, temperature, acid, fat, or sauce balance",
+        "at least one naming record covering alias, transliteration, family nickname, menu name, or common typo when relevant"
+      ],
+      "populationPriority": "maintain"
+    },
+    {
+      "dishFamily": "cured-meat",
+      "primaryCluster": "sauces-condiments-pickles-and-ferments",
+      "supportClusters": [],
+      "currentRecordCount": 7,
+      "currentRegions": [
+        "American South",
+        "China",
+        "Community diaspora",
+        "Eastern Europe",
+        "Global diaspora",
+        "Mediterranean",
+        "Middle East"
+      ],
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.east_asia",
+        "cultureAreas.north_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "mechanisms.smoke",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.serving_ritual",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "targetRecordFloor": 5,
+      "targetDiversity": [
+        "at least one region/locality record when known",
+        "at least one diaspora or migration-context record when plausible",
+        "at least one sensory-mechanism record grounded in aroma, texture, temperature, acid, fat, or sauce balance",
+        "at least one naming record covering alias, transliteration, family nickname, menu name, or common typo when relevant"
+      ],
+      "populationPriority": "maintain"
+    },
+    {
+      "dishFamily": "dried-fruit",
+      "primaryCluster": "sweets-desserts-and-ritual-foods",
+      "supportClusters": [],
+      "currentRecordCount": 7,
+      "currentRegions": [
+        "Central Asia",
+        "Community diaspora",
+        "Global diaspora",
+        "Mediterranean",
+        "Middle East",
+        "North Africa",
+        "South Asia"
+      ],
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.middle_east_west_asia",
+        "cultureAreas.south_asia",
+        "cultureAreas.central_asia",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "mechanisms.sugar_crystal",
+        "mechanisms.serving_ritual",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "targetRecordFloor": 5,
+      "targetDiversity": [
+        "at least one region/locality record when known",
+        "at least one diaspora or migration-context record when plausible",
+        "at least one sensory-mechanism record grounded in aroma, texture, temperature, acid, fat, or sauce balance",
+        "at least one naming record covering alias, transliteration, family nickname, menu name, or common typo when relevant"
+      ],
+      "populationPriority": "maintain"
+    },
+    {
+      "dishFamily": "confit",
+      "primaryCluster": "sauces-condiments-pickles-and-ferments",
+      "supportClusters": [],
+      "currentRecordCount": 7,
+      "currentRegions": [
+        "Community diaspora",
+        "Eastern Europe",
+        "France",
+        "Global diaspora",
+        "Mexico",
+        "Philippines",
+        "Southern US"
+      ],
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.southeast_asia",
+        "cultureAreas.south_america",
+        "cultureAreas.central_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.texture_contrast",
+        "mechanisms.serving_ritual",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "targetRecordFloor": 5,
+      "targetDiversity": [
+        "at least one region/locality record when known",
+        "at least one diaspora or migration-context record when plausible",
+        "at least one sensory-mechanism record grounded in aroma, texture, temperature, acid, fat, or sauce balance",
+        "at least one naming record covering alias, transliteration, family nickname, menu name, or common typo when relevant"
+      ],
+      "populationPriority": "maintain"
+    },
+    {
+      "dishFamily": "ceviche",
+      "primaryCluster": "pantry-aroma-preserved-and-single-ingredient-cues",
+      "supportClusters": [],
+      "currentRecordCount": 7,
+      "currentRegions": [
+        "Community diaspora",
+        "Global diaspora",
+        "Hawaii",
+        "Mediterranean",
+        "Mexico",
+        "Peru",
+        "Philippines"
+      ],
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.southeast_asia",
+        "cultureAreas.south_america",
+        "cultureAreas.central_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "targetRecordFloor": 5,
+      "targetDiversity": [
+        "at least one region/locality record when known",
+        "at least one diaspora or migration-context record when plausible",
+        "at least one sensory-mechanism record grounded in aroma, texture, temperature, acid, fat, or sauce balance",
+        "at least one naming record covering alias, transliteration, family nickname, menu name, or common typo when relevant"
+      ],
+      "populationPriority": "maintain"
+    },
+    {
+      "dishFamily": "tartare",
+      "primaryCluster": "pantry-aroma-preserved-and-single-ingredient-cues",
+      "supportClusters": [],
+      "currentRecordCount": 7,
+      "currentRegions": [
+        "Community diaspora",
+        "Ethiopia",
+        "France",
+        "Global diaspora",
+        "Italy",
+        "Korea",
+        "Lebanon"
+      ],
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.east_asia",
+        "cultureAreas.west_africa",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.protein_centered",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.texture_contrast",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "targetRecordFloor": 5,
+      "targetDiversity": [
+        "at least one region/locality record when known",
+        "at least one diaspora or migration-context record when plausible",
+        "at least one sensory-mechanism record grounded in aroma, texture, temperature, acid, fat, or sauce balance",
+        "at least one naming record covering alias, transliteration, family nickname, menu name, or common typo when relevant"
+      ],
+      "populationPriority": "maintain"
+    },
+    {
+      "dishFamily": "pudding-custard",
+      "primaryCluster": "sweets-desserts-and-ritual-foods",
+      "supportClusters": [],
+      "currentRecordCount": 7,
+      "currentRegions": [
+        "Community diaspora",
+        "Europe",
+        "Global diaspora",
+        "Latin America",
+        "Mediterranean",
+        "Philippines",
+        "South Asia"
+      ],
+      "coverageTags": [
+        "cultureAreas.north_africa",
+        "cultureAreas.europe",
+        "cultureAreas.south_asia",
+        "cultureAreas.southeast_asia",
+        "cultureAreas.south_america",
+        "cultureAreas.central_america",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis",
+        "foodForms.dessert",
+        "foodForms.confectionery",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.starch_texture",
+        "mechanisms.browning",
+        "mechanisms.sugar_crystal",
+        "mechanisms.temperature",
+        "mechanisms.serving_ritual",
+        "nameSystems.alias",
+        "regionScopes.macro_region"
+      ],
+      "targetRecordFloor": 5,
+      "targetDiversity": [
+        "at least one region/locality record when known",
+        "at least one diaspora or migration-context record when plausible",
+        "at least one sensory-mechanism record grounded in aroma, texture, temperature, acid, fat, or sauce balance",
+        "at least one naming record covering alias, transliteration, family nickname, menu name, or common typo when relevant"
+      ],
+      "populationPriority": "maintain"
     }
   ]
 }
