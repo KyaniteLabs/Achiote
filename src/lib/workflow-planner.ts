@@ -280,6 +280,13 @@ for (const family of dishFamiliesData.families) {
   }
 }
 
+/** Alias entries sorted longest-first so multi-word aliases beat single-word shadows (e.g. "tortilla española" before "tortilla"). */
+const SORTED_ALIASES = dishFamiliesData.families
+  .flatMap((family) =>
+    family.aliases.map((alias) => ({ alias, canonicalName: family.canonicalName }))
+  )
+  .sort((a, b) => b.alias.length - a.alias.length);
+
 const PANTRY_FAMILIES = new Set(
   pantryFixturesData.fixtures
     .map((f) => f.cacheTarget?.dishFamily)
@@ -292,11 +299,11 @@ function bundledMechanismFamilyFor(userMessage: string): string | null {
 
   // First pass: alias matches suppress search regardless of pantry coverage.
   // If the user explicitly names a dish, we don't need live search to know
-  // what family it belongs to.
-  for (const family of dishFamiliesData.families) {
-    const aliasMatch = family.aliases.some((alias) => hasPhrase(normalized, alias));
-    if (aliasMatch) {
-      return family.canonicalName;
+  // what family it belongs to. Longest aliases are checked first to avoid
+  // prefix shadowing (e.g. "tortilla" incorrectly matching before "tortilla española").
+  for (const { alias, canonicalName } of SORTED_ALIASES) {
+    if (hasPhrase(normalized, alias)) {
+      return canonicalName;
     }
   }
 

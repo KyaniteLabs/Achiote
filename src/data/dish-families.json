@@ -25,7 +25,18 @@
         "golabki",
         "halupki",
         "sarmale",
-        "japrak"
+        "japrak",
+        "dolmas",
+        "sarmas",
+        "tolmas",
+        "mahi-yebras",
+        "yaprak-sarmas",
+        "warak-enabs",
+        "cabbage-rolls",
+        "golabkis",
+        "halupkis",
+        "sarmales",
+        "japraks"
       ],
       "transliterations": {
         "Arabic": [
@@ -106,7 +117,26 @@
         "manti",
         "buuz",
         "wonton",
-        "samosa"
+        "samosa",
+        "pierogis",
+        "varenykies",
+        "pyrohies",
+        "uszkas",
+        "pelmenis",
+        "mandus",
+        "jiaozis",
+        "potstickers",
+        "gyozas",
+        "momos",
+        "empanadas",
+        "pastels",
+        "raviolis",
+        "tortellinis",
+        "khinkalis",
+        "mantis",
+        "buuzes",
+        "wontons",
+        "samosas"
       ],
       "transliterations": {
         "Korean": [
@@ -187,7 +217,21 @@
         "nan",
         "laffa",
         "sangak",
-        "barbari"
+        "barbari",
+        "tortillas",
+        "chapatis",
+        "rotis",
+        "naans",
+        "pitas",
+        "lavashes",
+        "arepas",
+        "injeras",
+        "parathas",
+        "focaccias",
+        "nans",
+        "laffas",
+        "sangaks",
+        "barbaris"
       ],
       "transliterations": {
         "Arabic": [
@@ -297,7 +341,21 @@
         "tahdig",
         "mandi",
         "kabsa",
-        "arroz-rojo"
+        "arroz-rojo",
+        "biryanis",
+        "pilafs",
+        "pulaos",
+        "paellas",
+        "risottos",
+        "jollofs",
+        "fried-rices",
+        "nasi-gorengs",
+        "arroz-con-pollos",
+        "bibimbaps",
+        "tahdigs",
+        "mandis",
+        "kabsas",
+        "arroz-rojos"
       ],
       "transliterations": {
         "Hindi": [
@@ -370,7 +428,19 @@
         "bo-kho",
         "adobo",
         "rendang",
-        "hotpot"
+        "hotpot",
+        "tagines",
+        "curries",
+        "goulashes",
+        "pot-au-feus",
+        "ossobucos",
+        "cozidos",
+        "pucheros",
+        "pho-bos",
+        "bo-khos",
+        "adobos",
+        "rendangs",
+        "hotpots"
       ],
       "transliterations": {
         "Hindi": [
@@ -439,7 +509,11 @@
         "tortilla-espanola",
         "tortilla española",
         "spanish tortilla",
-        "tortilla de patatas"
+        "tortilla de patatas",
+        "omelettes",
+        "omelets",
+        "frittatas",
+        "tortilla-espanolas"
       ],
       "transliterations": {
         "Spanish": [
@@ -535,7 +609,17 @@
         "suman",
         "zongzi",
         "achiote",
-        "masa"
+        "masa",
+        "pastels",
+        "hallacas",
+        "hayacas",
+        "chimoles",
+        "pamonhas",
+        "bibingkas",
+        "sumans",
+        "zongzis",
+        "achiotes",
+        "masas"
       ],
       "transliterations": {
         "Spanish": [
@@ -666,7 +750,19 @@
         "medu vada",
         "acarajé",
         "arepa",
-        "hushpuppy"
+        "hushpuppy",
+        "bacalaitos",
+        "bacalaítos",
+        "empanadillas",
+        "croquettes",
+        "falafels",
+        "pakoras",
+        "tempuras",
+        "beignets",
+        "fritters",
+        "acarajés",
+        "arepas",
+        "hushpuppies"
       ],
       "transliterations": {
         "Spanish": [
@@ -727,7 +823,17 @@
         "amok",
         "opor",
         "gulai",
-        "korma"
+        "korma",
+        "curries",
+        "karis",
+        "karhis",
+        "masalas",
+        "rougailles",
+        "rendangs",
+        "amoks",
+        "opors",
+        "gulais",
+        "kormas"
       ],
       "transliterations": {
         "Hindi": [
@@ -788,7 +894,19 @@
         "souvlaki",
         "shashlik",
         "braai",
-        "jerk"
+        "jerk",
+        "asados",
+        "barbecues",
+        "bbqs",
+        "kebabs",
+        "kabobs",
+        "satays",
+        "yakitoris",
+        "churrascos",
+        "souvlakis",
+        "shashliks",
+        "braais",
+        "jerks"
       ],
       "transliterations": {
         "Arabic": [
@@ -849,7 +967,15 @@
         "salapao",
         "hirata bun",
         "gua bao",
-        "momo"
+        "momo",
+        "baos",
+        "baozis",
+        "mantous",
+        "humbows",
+        "nikumans",
+        "siopaos",
+        "salapaos",
+        "momos"
       ],
       "transliterations": {
         "Chinese": [
@@ -910,7 +1036,13 @@
         "bone broth",
         "sopas",
         "sopa",
-        "chinmi"
+        "chinmi",
+        "broths",
+        "stocks",
+        "consommés",
+        "caldos",
+        "phos",
+        "chinmis"
       ],
       "transliterations": {
         "Vietnamese": [
@@ -973,7 +1105,17 @@
         "samosa",
         "knish",
         "bridie",
-        "pastel de carne"
+        "pastel de carne",
+        "empanadas",
+        "pasties",
+        "tourtières",
+        "bureks",
+        "böreks",
+        "banitsas",
+        "spanakopitas",
+        "samosas",
+        "knishes",
+        "bridies"
       ],
       "transliterations": {
         "Spanish": [
@@ -1033,7 +1175,16 @@
         "giardiniera",
         "chow-chow",
         "preserved lemon",
-        "dakgangjeong"
+        "dakgangjeong",
+        "kimchis",
+        "sauerkrauts",
+        "curtidos",
+        "tsukemonos",
+        "achars",
+        "atcharas",
+        "giardinieras",
+        "chow-chows",
+        "dakgangjeongs"
       ],
       "transliterations": {
         "Korean": [
@@ -1095,7 +1246,13 @@
         "khao soi",
         "bun bo hue",
         "wonton soup",
-        "chicken and stars"
+        "chicken and stars",
+        "ramens",
+        "phos",
+        "laksas",
+        "udons",
+        "thukpas",
+        "mohingas"
       ],
       "transliterations": {
         "Vietnamese": [
@@ -1160,7 +1317,17 @@
         "loukoumades",
         "loukoum",
         "lokma",
-        "pretzel"
+        "pretzel",
+        "tangyuans",
+        "mochis",
+        "daifukus",
+        "buchis",
+        "kochis",
+        "modaks",
+        "rasgullas",
+        "loukoums",
+        "lokmas",
+        "pretzels"
       ],
       "transliterations": {
         "Chinese": [
@@ -1228,7 +1395,23 @@
         "sambal",
         "berbere",
         "ras el hanout",
-        "baharat"
+        "baharat",
+        "sofritos",
+        "recaitos",
+        "refogados",
+        "mirepoixes",
+        "soffrittos",
+        "bases",
+        "tadkas",
+        "baghars",
+        "dukkahs",
+        "za'atars",
+        "chimichurris",
+        "mojos",
+        "romescos",
+        "sambals",
+        "berberes",
+        "baharats"
       ],
       "transliterations": {
         "Spanish": [
@@ -1291,7 +1474,19 @@
         "kapusta",
         "pikliz",
         "curtido",
-        "esqueixada"
+        "esqueixada",
+        "ensaladas",
+        "salatas",
+        "larbs",
+        "gado-gados",
+        "kachumbers",
+        "tabboulehs",
+        "fattoushes",
+        "coleslaws",
+        "kapustas",
+        "piklizes",
+        "curtidos",
+        "esqueixadas"
       ],
       "transliterations": {
         "Arabic": [
@@ -1354,7 +1549,17 @@
         "cottage pie",
         "kugel",
         "tian",
-        "escalivada"
+        "escalivada",
+        "pastitsios",
+        "moussakas",
+        "lasagnas",
+        "pastelóns",
+        "timbals",
+        "gratins",
+        "dauphinoises",
+        "kugels",
+        "tians",
+        "escalivadas"
       ],
       "transliterations": {
         "Greek": [
@@ -1420,7 +1625,17 @@
         "kulich",
         "mona",
         "hot cross bun",
-        "cinnamon roll"
+        "cinnamon roll",
+        "roscas",
+        "brioches",
+        "challahs",
+        "babkas",
+        "stollens",
+        "panettones",
+        "cozonacs",
+        "tsourekis",
+        "kuliches",
+        "monas"
       ],
       "transliterations": {
         "Spanish": [
@@ -1483,7 +1698,16 @@
         "pla-pao",
         "encocado",
         "moqueca-grilled",
-        "pescado-asado"
+        "pescado-asado",
+        "pescado-a-la-tallas",
+        "ikan-bakars",
+        "yakitori-fishes",
+        "grouper-on-grills",
+        "lechon-de-mars",
+        "pla-paos",
+        "encocados",
+        "moqueca-grilleds",
+        "pescado-asados"
       ],
       "transliterations": {
         "Spanish": [
@@ -1547,7 +1771,17 @@
         "arbroath-smokie",
         "palamida",
         "raucherfisch",
-        "sikhae"
+        "sikhae",
+        "loxes",
+        "gravlaxes",
+        "smoked-salmons",
+        "balyks",
+        "finnan-haddies",
+        "arbroath-smokies",
+        "palamidas",
+        "raucherfisches",
+        "sikhaes",
+        "smoked fish"
       ],
       "transliterations": {
         "Yiddish": [
@@ -1610,7 +1844,17 @@
         "bulgogi",
         "yakiniku",
         "jerk",
-        "tandoori"
+        "tandoori",
+        "bbqs",
+        "asados",
+        "braais",
+        "churrascos",
+        "lechons",
+        "char-sius",
+        "bulgogis",
+        "yakinikus",
+        "jerks",
+        "tandooris"
       ],
       "transliterations": {
         "Spanish": [
@@ -1677,7 +1921,17 @@
         "chunjang",
         "choujiu",
         "kinema",
-        "thua-nao"
+        "thua-nao",
+        "misos",
+        "doenjangs",
+        "douchis",
+        "tauchus",
+        "tempeh-ferments",
+        "nattos",
+        "chunjangs",
+        "choujius",
+        "kinemas",
+        "thua-naos"
       ],
       "transliterations": {
         "Japanese": [
@@ -1741,7 +1995,17 @@
         "matsoni",
         "kishk",
         "amarula-milk",
-        "filmjolk"
+        "filmjolk",
+        "yogurts",
+        "kefirs",
+        "labnehs",
+        "quarks",
+        "skyrs",
+        "dahis",
+        "matsonis",
+        "kishks",
+        "amarula-milks",
+        "filmjolks"
       ],
       "transliterations": {
         "Arabic": [
@@ -1805,7 +2069,16 @@
         "cwee-kueh",
         "putu-mayam",
         "tutu-kueh",
-        "kueh-tee"
+        "kueh-tee",
+        "xiaolongbaos",
+        "buuzes",
+        "mandu-steameds",
+        "har-gows",
+        "idlis",
+        "cwee-kuehs",
+        "putu-mayams",
+        "tutu-kuehs",
+        "kueh-tees"
       ],
       "transliterations": {
         "Chinese": [
@@ -1869,7 +2142,16 @@
         "kue-lapis",
         "bikaner-pudding",
         "podi-pudi",
-        "tavuk-gogsu"
+        "tavuk-gogsu",
+        "spotted-dicks",
+        "christmas-puddings",
+        "persimmon-puddings",
+        "hasty-puddings",
+        "couscous-sweets",
+        "putus",
+        "bikaner-puddings",
+        "podi-pudis",
+        "tavuk-gogsus"
       ],
       "transliterations": {
         "English": [
@@ -1929,7 +2211,17 @@
         "sambar",
         "pozole",
         "menudo",
-        "thukpa"
+        "thukpa",
+        "stew-soups",
+        "caldos",
+        "sopas",
+        "chorbas",
+        "shorbas",
+        "rasams",
+        "sambars",
+        "pozoles",
+        "menudos",
+        "thukpas"
       ],
       "transliterations": {
         "Spanish": [
@@ -1994,7 +2286,17 @@
         "ajillo",
         "mango-soup",
         "salmorejo",
-        "chilled-cucumber"
+        "chilled-cucumber",
+        "gazpachos",
+        "vichyssoises",
+        "borscht-colds",
+        "naengmyeon-broths",
+        "okroshkas",
+        "tarators",
+        "ajillos",
+        "mango-soups",
+        "salmorejos",
+        "chilled-cucumbers"
       ],
       "transliterations": {
         "Spanish": [
@@ -2055,7 +2357,17 @@
         "burek",
         "gözleme",
         "paratha-stuffed",
-        "arepa-rellena"
+        "arepa-rellena",
+        "empanadas",
+        "pasties",
+        "calzones",
+        "strombolis",
+        "pides",
+        "lahmacuns",
+        "bureks",
+        "gözlemes",
+        "paratha-stuffeds",
+        "arepa-rellenas"
       ],
       "transliterations": {
         "Spanish": [
@@ -2120,7 +2432,17 @@
         "mac-and-cheese",
         "ziti-baked",
         "cannelloni",
-        "baked-ziti"
+        "baked-ziti",
+        "lasagnas",
+        "lasagnes",
+        "pastitsios",
+        "macaroni-pies",
+        "timmbles",
+        "imqaret-pastas",
+        "mac-and-cheeses",
+        "ziti-bakeds",
+        "cannellonis",
+        "baked-zitis"
       ],
       "transliterations": {
         "Italian": [
@@ -2178,7 +2500,17 @@
         "basturma",
         "chorizo",
         "lap-cheong",
-        "bresaola"
+        "bresaola",
+        "prosciuttos",
+        "jamóns",
+        "bacons",
+        "pancettas",
+        "salamis",
+        "sujuks",
+        "basturmas",
+        "chorizos",
+        "lap-cheongs",
+        "bresaolas"
       ],
       "transliterations": {
         "Italian": [
@@ -2241,7 +2573,17 @@
         "torshi",
         "giardiniera",
         "escabeche",
-        "atjar"
+        "atjar",
+        "kimchis",
+        "sauerkrauts",
+        "achars",
+        "tsukemonos",
+        "pickles",
+        "cortidos",
+        "torshis",
+        "giardinieras",
+        "escabeches",
+        "atjars"
       ],
       "transliterations": {
         "Korean": [
@@ -2304,7 +2646,17 @@
         "dried-plum",
         "preserved-lemon",
         "oshim",
-        "lukaim"
+        "lukaim",
+        "raisins",
+        "prunes",
+        "dried-apricots",
+        "dried-mangos",
+        "dried-dates",
+        "dried-figs",
+        "dried-plums",
+        "preserved-lemons",
+        "oshims",
+        "lukaims"
       ],
       "transliterations": {
         "Arabic": [
@@ -2365,7 +2717,16 @@
         "kondiment",
         "tavuk-confit",
         "goose-confit",
-        "pork-confit"
+        "pork-confit",
+        "duck-confits",
+        "confit-de-canards",
+        "carnitas",
+        "ginataan-meats",
+        "lechon-kawalis",
+        "kondiments",
+        "tavuk-confits",
+        "goose-confits",
+        "pork-confits"
       ],
       "transliterations": {
         "French": [
@@ -2422,7 +2783,17 @@
         "tartare-fish",
         "aguachile",
         "tiradito",
-        "poisson-cru"
+        "poisson-cru",
+        "ceviches",
+        "ceviche-de-pescados",
+        "kinilaws",
+        "pokes",
+        "yukhoes",
+        "crudos",
+        "tartare-fishes",
+        "aguachiles",
+        "tiraditos",
+        "poisson-crus"
       ],
       "transliterations": {
         "Spanish": [
@@ -2483,7 +2854,17 @@
         "khanom-jiin",
         "maki-unrolled",
         "hand-roll",
-        "taco-de-pescado-fresh"
+        "taco-de-pescado-fresh",
+        "spring-roll-freshes",
+        "gỏi-cuốns",
+        "popiahs",
+        "lumpia-sariwas",
+        "bánh-trángs",
+        "bo-bias",
+        "khanom-jiins",
+        "maki-unrolleds",
+        "hand-rolls",
+        "taco-de-pescado-freshes"
       ],
       "transliterations": {
         "Vietnamese": [
@@ -2543,7 +2924,17 @@
         "oysters-raw",
         "mett",
         "beef-carpaccio",
-        "raw-beef"
+        "raw-beef",
+        "steak-tartares",
+        "kitfos",
+        "yukhoes",
+        "carpaccios",
+        "crudo-beefs",
+        "kibbeh-raws",
+        "oysters-raws",
+        "metts",
+        "beef-carpaccios",
+        "raw-beefs"
       ],
       "transliterations": {
         "French": [
@@ -2606,7 +2997,17 @@
         "pudim",
         "creme-brulee",
         "panna-cotta",
-        "mahalabia"
+        "mahalabia",
+        "flans",
+        "creme-caramels",
+        "kheers",
+        "arroz-con-leches",
+        "rice-puddings",
+        "maja-blancas",
+        "pudims",
+        "creme-brulees",
+        "panna-cottas",
+        "mahalabias"
       ],
       "transliterations": {
         "Spanish": [
@@ -2668,7 +3069,10 @@
         "żurek",
         "sorrel soup",
         "green sour soup",
-        "kulajda"
+        "kulajda",
+        "ogórkowas",
+        "żureks",
+        "kulajdas"
       ],
       "transliterations": {
         "Polish": [
@@ -2729,7 +3133,9 @@
         "barley water",
         "grain drink",
         "barley drink",
-        "rice drink"
+        "rice drink",
+        "horchatas",
+        "cebadas"
       ],
       "transliterations": {
         "Spanish": [
@@ -2780,7 +3186,8 @@
         "caribañola",
         "yuca fritter",
         "cassava fritter",
-        "fried yuca roll"
+        "fried yuca roll",
+        "caribañolas"
       ],
       "transliterations": {
         "Spanish": [
@@ -2875,7 +3282,8 @@
         "kokada",
         "coconut candy",
         "coconut sweet",
-        "grainy coconut sweet"
+        "grainy coconut sweet",
+        "kokadas"
       ],
       "transliterations": {
         "Spanish": [
@@ -2932,7 +3340,17 @@
         "dulce-de-leche",
         "nougat",
         "fudge",
-        "kok"
+        "kok",
+        "halvas",
+        "loukoums",
+        "baklavas",
+        "barfis",
+        "mochi-sweets",
+        "brigadeiros",
+        "dulce-de-leches",
+        "nougats",
+        "fudges",
+        "koks"
       ],
       "transliterations": {
         "Arabic": [
