@@ -876,6 +876,14 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
     if (calledTools.has('generate_minimum_viable_nostalgia') && containsRecipeMeasurementLanguage(trustBoundedResponseText)) {
       console.warn('[ask] suppressed recipe-style measurements in cue response');
       const sanitized = sanitizeRecipeStyleCueLanguage(trustBoundedResponseText);
+      if (lacksMinimumCueLanguage(sanitized)) {
+        console.warn('[ask] sanitized measurement text still lacks minimum cue language; falling back to deterministic minimum cue');
+        const responseText = buildMinimumCueCompletedResponse(toolPayloads, userMessage);
+        send('text', responseText);
+        maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
+        finish({ guarded: 'minimum_cue_language_sanitized' });
+        return;
+      }
       send('text', sanitized);
       maybeSendMemoryReceipt({ toolPayloads, assistantText: sanitized, send });
       finish({ guarded: 'recipe_measurement_sanitized' });
