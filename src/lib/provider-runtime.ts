@@ -7,10 +7,14 @@ import {
   openAICompatibleProviderReady,
   resolveAskModel,
   resolveAskProviderKind,
+  resolveFallbackProviderConfig,
   resolveProviderCapabilityProfile,
   type AskHistoryItem,
   type AskImage,
+  type AskModelResponse,
   type AskSession,
+  type AskToolResult,
+  type FallbackProviderConfig,
   type ProviderCapabilityProfile,
 } from './ask-provider.js';
 
@@ -29,6 +33,7 @@ export type ProviderRuntime = {
   model: string;
   openAIBaseUrl: string;
   profile: ProviderCapabilityProfile;
+  fallbackConfig: FallbackProviderConfig;
   createAskSession(input: {
     userMessage: string;
     history?: AskHistoryItem[];
@@ -39,8 +44,95 @@ export type ProviderRuntime = {
     anthropicApiKey?: string;
     anthropicAuthToken?: string;
     openaiProviderReady: boolean;
+    fallbackReady: boolean;
   };
 };
+
+function isFallbackTriggerError(err: unknown): boolean {
+  if (err instanceof Error) {
+    const msg = err.message;
+    // Connection failure (fetch throws)
+    if (msg.includes('ECONNREFUSED') || msg.includes('ENOTFOUND') || msg.includes('fetch failed')) return true;
+    // AbortController timeout
+    if (err.name === 'AbortError' || msg.includes('abort')) return true;
+    // HTTP 5xx from createOpenAICompatibleAskSession
+    if (/returned\s5\d\d/.test(msg)) return true;
+  }
+  return false;
+}
+
+function createFallbackDecoratedSession(
+  primary: AskSession,
+  fallbackInput: {
+    model: string;
+    systemPrompt: string;
+    tools: AnthropicTool[];
+    baseUrl: string;
+    apiKey: string | null;
+    timeoutMs: number;
+    userMessage: string;
+    history?: AskHistoryItem[];
+    images?: AskImage[];
+  },
+): AskSession {
+  let fallbackSession: AskSession | null = null;
+  let usingFallback = false;
+
+  function getOrCreateFallback(): AskSession {
+    if (!fallbackSession) {
+      fallbackSession = createOpenAICompatibleAskSession({
+        model: fallbackInput.model,
+        systemPrompt: fallbackInput.systemPrompt,
+        userMessage: fallbackInput.userMessage,
+        tools: fallbackInput.tools,
+        baseUrl: fallbackInput.baseUrl,
+        apiKey: fallbackInput.apiKey,
+        timeoutMs: fallbackInput.timeoutMs,
+        history: fallbackInput.history,
+        images: fallbackInput.images,
+      });
+    }
+    return fallbackSession;
+  }
+
+  return {
+    async create(maxTokens: number): Promise<AskModelResponse> {
+      if (usingFallback) return getOrCreateFallback().create(maxTokens);
+      try {
+        const result = await primary.create(maxTokens);
+        console.log('[ask] provider=primary');
+        return result;
+      } catch (err) {
+        if (isFallbackTriggerError(err)) {
+          console.warn(`[ask] primary provider failed, falling back to local: ${err instanceof Error ? err.message : String(err)}`);
+          usingFallback = true;
+          console.log('[ask] provider=fallback');
+          return getOrCreateFallback().create(maxTokens);
+        }
+        throw err;
+      }
+    },
+    appendToolResults(response: AskModelResponse, toolResults: AskToolResult[]): void {
+      (usingFallback ? getOrCreateFallback() : primary).appendToolResults(response, toolResults);
+    },
+    injectDeterministicToolResult(toolCallId: string, toolName: string, toolInput: unknown, result: unknown): void {
+      // Deterministic results are injected before the first model call, so they
+      // go to both sessions to keep state consistent.
+      primary.injectDeterministicToolResult(toolCallId, toolName, toolInput, result);
+      if (fallbackSession) fallbackSession.injectDeterministicToolResult(toolCallId, toolName, toolInput, result);
+    },
+    setAvailableTools(tools: Anthropic.Tool[]): void {
+      primary.setAvailableTools(tools);
+      if (fallbackSession) fallbackSession.setAvailableTools(tools);
+    },
+    pushUserMessage(text: string): void {
+      (usingFallback ? getOrCreateFallback() : primary).pushUserMessage(text);
+    },
+    compactForSynthesis(caseFileText: string): void {
+      (usingFallback ? getOrCreateFallback() : primary).compactForSynthesis(caseFileText);
+    },
+  };
+}
 
 export function createProviderRuntime(input: ProviderRuntimeInput): ProviderRuntime {
   const env = input.env ?? process.env;
@@ -48,6 +140,7 @@ export function createProviderRuntime(input: ProviderRuntimeInput): ProviderRunt
   const model = resolveAskModel(env);
   const openAIBaseUrl = openAIBaseUrlFromEnv(env);
   const profile = resolveProviderCapabilityProfile(env);
+  const fallbackConfig = resolveFallbackProviderConfig(env);
   let openRouterToolsSupportPromise: Promise<boolean | undefined> | undefined;
 
   function openAIApiKey(): string | null {
@@ -65,9 +158,10 @@ export function createProviderRuntime(input: ProviderRuntimeInput): ProviderRunt
     model,
     openAIBaseUrl,
     profile,
+    fallbackConfig,
     createAskSession(sessionInput) {
       if (providerKind === 'openai') {
-        return createOpenAICompatibleAskSession({
+        const primary = createOpenAICompatibleAskSession({
           model,
           systemPrompt: input.systemPrompt,
           userMessage: sessionInput.userMessage,
@@ -78,6 +172,20 @@ export function createProviderRuntime(input: ProviderRuntimeInput): ProviderRunt
           history: sessionInput.history,
           images: sessionInput.images,
         });
+        if (fallbackConfig.enabled) {
+          return createFallbackDecoratedSession(primary, {
+            model: fallbackConfig.model,
+            systemPrompt: input.systemPrompt,
+            tools: input.tools,
+            baseUrl: fallbackConfig.baseUrl,
+            apiKey: fallbackConfig.apiKey,
+            timeoutMs: fallbackConfig.timeoutMs,
+            userMessage: sessionInput.userMessage,
+            history: sessionInput.history,
+            images: sessionInput.images,
+          });
+        }
+        return primary;
       }
 
       return createAnthropicAskSession({
@@ -104,6 +212,7 @@ export function createProviderRuntime(input: ProviderRuntimeInput): ProviderRunt
         anthropicApiKey: ready ? 'openai-compatible-provider' : providerKind === 'openai' ? undefined : (env.ANTHROPIC_API_KEY || env.GLM_API_KEY || env.ZHIPU_API_KEY || undefined),
         anthropicAuthToken: providerKind === 'openai' ? undefined : env.ANTHROPIC_AUTH_TOKEN,
         openaiProviderReady: ready,
+        fallbackReady: fallbackConfig.enabled,
       };
     },
   };
