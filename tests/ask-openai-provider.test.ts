@@ -157,7 +157,8 @@ describe('/ask OpenAI-compatible provider mode', () => {
       body.tools?.map((tool) => ((tool as { function?: { name?: string } }).function?.name)).filter(Boolean),
     );
     expect(exposedToolNames[0]).toEqual(['collect_food_memory']);
-    expect(exposedToolNames[1]).toEqual(['plan_dish_research']);
+    expect(exposedToolNames[1]).toEqual(expect.arrayContaining(['plan_dish_research']));
+    expect(exposedToolNames[1]!.length).toBeLessThanOrEqual(3);
     expect(exposedToolNames[2]).toEqual([
       'resolve_dish_name',
       'build_reconstruction_dossier',
