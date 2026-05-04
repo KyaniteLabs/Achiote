@@ -360,6 +360,41 @@ export function resolveProviderCapabilityProfile(
 }
 
 /** Returns true when the URL looks like a local or Tailscale inference endpoint. */
+export interface FallbackProviderConfig {
+  enabled: boolean;
+  baseUrl: string;
+  model: string;
+  apiKey: string | null;
+  timeoutMs: number;
+}
+
+export function resolveFallbackProviderConfig(
+  env: Record<string, string | undefined> = process.env,
+): FallbackProviderConfig {
+  const enabled = env.ACHIOTE_ALLOW_LOCAL_FALLBACK?.trim() === '1'
+    || env.ACHIOTE_ALLOW_LOCAL_FALLBACK?.trim().toLowerCase() === 'true';
+  const baseUrl = normalizeOpenAICompatibleBaseUrl(
+    env.ACHIOTE_LOCAL_FALLBACK_BASE_URL?.trim()
+      || env.LOCAL_INFERENCE_BASE_URL?.trim()
+      || 'http://host.docker.internal:8085/v1',
+  );
+  const model = env.ACHIOTE_LOCAL_FALLBACK_MODEL?.trim()
+    || env.LOCAL_INFERENCE_MODEL?.trim()
+    || 'Qwen3.5-0.8B-Q4_K_M';
+  const apiKey = env.ACHIOTE_LOCAL_FALLBACK_API_KEY?.trim()
+    || env.LOCAL_INFERENCE_API_KEY?.trim()
+    || null;
+  const timeoutMs = Number.parseInt(env.ACHIOTE_LOCAL_FALLBACK_TIMEOUT_MS?.trim() || '', 10);
+  return {
+    enabled,
+    baseUrl,
+    model,
+    apiKey,
+    timeoutMs: Number.isFinite(timeoutMs) && timeoutMs > 0 ? timeoutMs : 60_000,
+  };
+}
+
+/** Returns true when the URL looks like a local or Tailscale inference endpoint. */
 export function isLocalInferenceUrl(baseUrl: string): boolean {
   try {
     const parsed = new URL(baseUrl);

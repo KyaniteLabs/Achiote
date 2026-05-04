@@ -2602,6 +2602,13 @@ const server = createServer(async (req, res) => {
         nativeTools: providerRuntime.profile.nativeTools,
         rateLimitSensitive: providerRuntime.profile.rateLimitSensitive,
         compatibilitySource: providerRuntime.profile.compatibilitySource,
+        fallback: providerRuntime.fallbackConfig.enabled
+          ? {
+              enabled: true,
+              baseUrl: providerRuntime.fallbackConfig.baseUrl,
+              model: providerRuntime.fallbackConfig.model,
+            }
+          : { enabled: false },
       },
     });
     return;
