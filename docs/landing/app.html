@@ -643,10 +643,11 @@
   </main>
 
   <div class="input-bar">
-    <details id="demo-auth-wrap">
-      <summary>Auth</summary>
-      <input type="password" id="demo-password" placeholder="Demo password (optional)" />
-      <input type="password" id="api-key" placeholder="API key (optional)" style="margin-top:6px;" />
+    <details id="demo-auth-wrap" open>
+      <summary>Sign in</summary>
+      <input type="password" id="demo-password" placeholder="Demo password" />
+      <input type="password" id="api-key" placeholder="API key" style="margin-top:6px;" />
+      <small id="auth-hint" style="display:block;margin-top:4px;color:var(--muted);font-size:11px;">Optional. Try without auth first, or enter a demo password if you have one.</small>
     </details>
     <details class="data-controls" id="data-memory-controls">
       <summary>Data & memory</summary>

@@ -156,6 +156,12 @@ function send(text, metadata = {}) {
   .catch(err => {
     const reason = err.message.includes('Rate limit') ? 'rate_limited' : err.message.includes('Authentication') ? 'auth' : 'request';
     trackEvent('ask_failed', { route: '/app', source: currentAskSource, category: currentAskCategory, reason });
+    if (err.message.includes('Authentication')) {
+      const authWrap = document.getElementById('demo-auth-wrap');
+      if (authWrap) { authWrap.open = true; authWrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+      const hint = document.getElementById('auth-hint');
+      if (hint) hint.textContent = 'Required. Enter your demo password or API key to continue.';
+    }
     aiEl.textContent = err.message.includes('fetch')
       ? 'Server not running. Start it with node dist/http-server.js.'
       : err.message;

@@ -724,7 +724,16 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       return;
     }
 
-    if (calledTools.has('collect_food_memory') && !calledTools.has('plan_dish_research') && !calledTools.has('generate_minimum_viable_nostalgia')) {
+    // Follow-up escape hatch: if the user has already answered clarification questions and
+    // their memory now has substantive anchors, skip the entire guard chain. The guards are
+    // designed for first-turn sparsity; on follow-ups they just replace good model output.
+    const isFollowUpWithAnchors = (history !== undefined && history.length > 0)
+      && hasSubstantialMemoryAnchors(toolPayloads.collect_food_memory);
+    if (isFollowUpWithAnchors) {
+      console.log('[ask] follow-up with substantive anchors — skipping guard chain');
+    }
+
+    if (!isFollowUpWithAnchors && calledTools.has('collect_food_memory') && !calledTools.has('plan_dish_research') && !calledTools.has('generate_minimum_viable_nostalgia')) {
       // In a follow-up turn the user answered the previous clarification question. If the
       // collected memory now has substantive anchors (location, cultural hint, or ≥2 ingredients)
       // let the model's natural response through instead of looping back to clarification.
@@ -741,24 +750,19 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       }
     }
 
-    if (calledTools.has('collect_food_memory')
+    if (!isFollowUpWithAnchors && calledTools.has('collect_food_memory')
       && calledTools.has('plan_dish_research')
       && !calledTools.has('generate_minimum_viable_nostalgia')
       && (modelResponse.textBlocks.length === 0 || containsStalledFallbackText(modelResponse.textBlocks.join('\n\n')))) {
-      const isFollowUp = history !== undefined && history.length > 0;
-      if (isFollowUp && hasSubstantialMemoryAnchors(toolPayloads.collect_food_memory)) {
-        console.log('[ask] follow-up with substantive anchors — skipping stalled_planning_clarification guard');
-      } else {
-        console.warn('[ask] replaced stalled post-plan response with structured clarification');
-        const responseText = buildClarificationOnlyResponse(toolPayloads, userMessage);
-        send('text', responseText);
-        maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
-        finish({ guarded: 'missing_research_plan_clarification' });
-        return;
-      }
+      console.warn('[ask] replaced stalled post-plan response with structured clarification');
+      const responseText = buildClarificationOnlyResponse(toolPayloads, userMessage);
+      send('text', responseText);
+      maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
+      finish({ guarded: 'missing_research_plan_clarification' });
+      return;
     }
 
-    if (!calledTools.has('generate_minimum_viable_nostalgia') && containsConcreteFoodCue(modelResponse.textBlocks.join('\n\n'))) {
+    if (!isFollowUpWithAnchors && !calledTools.has('generate_minimum_viable_nostalgia') && containsConcreteFoodCue(modelResponse.textBlocks.join('\n\n'))) {
       console.warn('[ask] suppressed concrete cue before minimum viable nostalgia tool');
       const responseText = buildClarificationOnlyResponse(toolPayloads, userMessage);
       send('text', responseText);
@@ -767,7 +771,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       return;
     }
 
-    if (!calledTools.has('generate_minimum_viable_nostalgia') && containsGenericUncertaintyWaffle(modelResponse.textBlocks.join('\n\n'))) {
+    if (!isFollowUpWithAnchors && !calledTools.has('generate_minimum_viable_nostalgia') && containsGenericUncertaintyWaffle(modelResponse.textBlocks.join('\n\n'))) {
       console.warn('[ask] replaced generic uncertainty prose with structured clarification');
       const responseText = buildClarificationOnlyResponse(toolPayloads, userMessage);
       send('text', responseText);
@@ -776,7 +780,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       return;
     }
 
-    if (!calledTools.has('generate_minimum_viable_nostalgia') && containsPrematureCandidateSpeculation(modelResponse.textBlocks.join('\n\n'), toolPayloads)) {
+    if (!isFollowUpWithAnchors && !calledTools.has('generate_minimum_viable_nostalgia') && containsPrematureCandidateSpeculation(modelResponse.textBlocks.join('\n\n'), toolPayloads)) {
       console.warn('[ask] replaced premature candidate list with structured clarification');
       const responseText = buildClarificationOnlyResponse(toolPayloads, userMessage);
       send('text', responseText);
@@ -785,7 +789,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       return;
     }
 
-    if (calledTools.has('generate_minimum_viable_nostalgia') && shouldClarifyBroadUncertainMemory(userMessage, toolPayloads)) {
+    if (!isFollowUpWithAnchors && calledTools.has('generate_minimum_viable_nostalgia') && shouldClarifyBroadUncertainMemory(userMessage, toolPayloads)) {
       console.warn('[ask] replaced broad uncertain post-cue response with structured clarification');
       const responseText = buildClarificationOnlyResponse(toolPayloads, userMessage);
       send('text', responseText);
@@ -794,14 +798,9 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       return;
     }
 
-    if (calledTools.has('generate_minimum_viable_nostalgia') && shouldClarifySparseUnanchoredMemory(userMessage, toolPayloads)) {
-      console.warn('[ask] replaced sparse unanchored post-cue response with structured clarification');
-      const responseText = buildClarificationOnlyResponse(toolPayloads, userMessage);
-      send('text', responseText);
-      maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
-      finish({ guarded: 'generic_uncertainty_clarification' });
-      return;
-    }
+    // NOTE: removed shouldClarifySparseUnanchoredMemory guard here.
+    // The MVN tool is the designed answer to sparse, unanchored sensory memories.
+    // Replacing its output with generic clarification defeats the core product use case.
 
     if (calledTools.has('generate_minimum_viable_nostalgia') && containsBlockedRecipeToolSynthesis(modelResponse.textBlocks.join('\n\n'))) {
       console.warn('[ask] replaced blocked recipe-tool synthesis with deterministic minimum cue');
@@ -1434,11 +1433,10 @@ function nextAskToolNames(toolPayloads: Record<string, unknown>, calledTools: Se
 
   if (plannedToolNames.length === 0) return calledTools.has('collect_food_memory') ? [] : ['collect_food_memory'];
   if (!calledTools.has('collect_food_memory') && plannedToolNames.includes('collect_food_memory')) return ['collect_food_memory'];
-  if (!calledTools.has('plan_dish_research') && plannedToolNames.includes('plan_dish_research')) return ['plan_dish_research'];
 
   const remaining = plannedToolNames.filter((name) => !calledTools.has(name));
-  if (plan?.needsSubstitutions && remaining.length > 0) return [remaining[0]];
-  return [...new Set(remaining)];
+  // Show up to 3 remaining tools so the model can progress naturally through the workflow
+  return [...new Set(remaining)].slice(0, 3);
 }
 
 async function recoverFromInitialProviderFailure({
@@ -2017,8 +2015,8 @@ async function handleVoiceSynthesize(req: IncomingMessage, res: ServerResponse):
 
 function containsConcreteFoodCue(text: string): boolean {
   return /\b(?:smallest safe cue|tasting cue|concrete food cue|recipe move|try this|try it tonight)\b/i.test(text)
-    || /\b(?:teaspoons?|tablespoons?|cups?|pinch)\b/i.test(text)
-    || /\b(?:heat|stir|sip|bite|steep|mix)\b[\s\S]{0,80}\b(?:dill|broth|buttermilk|vinegar|lemon|salt|sour cream|yogurt|potato)\b/i.test(text);
+    || /\b\d+\s*(?:teaspoons?|tablespoons?|cups?|pinch(?:es)?)\b/i.test(text)
+    || /\b(?:heat|stir|steep|mix)\b[\s\S]{0,60}\b\d+\s*(?:mins?|minutes?|hours?|°[FC])\b/i.test(text);
 }
 
 function containsRecipeMeasurementLanguage(text: string): boolean {
