@@ -1885,10 +1885,11 @@ describe('/ask failure surface regressions', () => {
       .join('\n\n');
 
     expect(events.some((event) => event.event === 'error')).toBe(false);
-    expect(finalText).toMatch(/\b(?:one more detail|need one|do not fake certainty|specific rather than generic)\b/i);
-    expect(finalText).not.toMatch(/Minimum viable aroma-balance cue/i);
+    // After relaxing the sparse unanchored memory guard, MVN output passes through
+    // for the core use case (vague sensory-only memories) instead of being replaced
+    // with generic clarification.
+    expect(finalText).toMatch(/Minimum viable aroma-balance cue/i);
     expect(events.at(-1)?.event).toBe('done');
-    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'generic_uncertainty_clarification' });
   }, 20_000);
 
   it('scrubs provider identity, browsing claims, and medical claims from final text', async () => {
