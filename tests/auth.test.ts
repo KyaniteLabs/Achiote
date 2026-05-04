@@ -53,12 +53,30 @@ describe('auth module', () => {
   });
 
   it('rejects missing key', () => {
-    const auth = createAuthenticator([]);
+    const auth = createAuthenticator([], false);
     const result = auth.authenticate(undefined);
     expect(result.authenticated).toBe(false);
     if (!result.authenticated) {
       expect(result.error).toContain('required');
     }
+  });
+
+  it('accepts built-in dev key when no real keys are configured', () => {
+    const auth = createAuthenticator([]);
+    const result = auth.authenticate('ach_dev_test_only');
+    expect(result.authenticated).toBe(true);
+    if (result.authenticated) {
+      expect(result.tier).toBe('pro');
+      expect(result.name).toBe('dev-test');
+      expect(result.keyId).toBe('ak_dev');
+    }
+  });
+
+  it('does not accept dev key when real keys are configured', () => {
+    const real = generateApiKey('free', 'real');
+    const auth = createAuthenticator([real]);
+    expect(auth.authenticate('ach_dev_test_only').authenticated).toBe(false);
+    expect(auth.authenticate(real.key).authenticated).toBe(true);
   });
 
   it('supports all current tiers plus the legacy business alias', () => {
@@ -72,7 +90,7 @@ describe('auth module', () => {
   });
 
   it('adds and removes keys dynamically', () => {
-    const auth = createAuthenticator([]);
+    const auth = createAuthenticator([], false);
     const record = generateApiKey('free', 'dynamic');
     auth.addKey(record);
     expect(auth.authenticate(record.key).authenticated).toBe(true);

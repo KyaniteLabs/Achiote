@@ -116,8 +116,26 @@ function normalizedRecord(record: ApiKeyRecord): ApiKeyStoredRecord | null {
   return null;
 }
 
-export function createAuthenticator(keys: ApiKeyRecord[]) {
+// Built-in dev/test key — always available, only valid when no ACHIOTE_API_KEYS are configured.
+// Key: ach_dev_test_only
+const DEV_KEY = 'ach_dev_test_only';
+const DEV_KEY_HASH = hashApiKey(DEV_KEY);
+const DEV_KEY_RECORD: ApiKeyStoredRecord = {
+  keyId: 'ak_dev',
+  keyHash: DEV_KEY_HASH,
+  tier: 'pro',
+  name: 'dev-test',
+  createdAt: new Date(0).toISOString(),
+};
+
+export function createAuthenticator(keys: ApiKeyRecord[], includeDevKey = true) {
   const keyMap = new Map<string, ApiKeyStoredRecord>();
+
+  // Inject the built-in dev key when no real keys are configured
+  if (includeDevKey && keys.length === 0) {
+    keyMap.set(DEV_KEY_RECORD.keyId, DEV_KEY_RECORD);
+  }
+
   for (const record of keys) {
     const normalized = normalizedRecord(record);
     if (!normalized) continue;
