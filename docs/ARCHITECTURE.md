@@ -22,7 +22,12 @@ src/index.ts
               +--> src/tools/results.ts
               +--> src/lib/cache-path.ts
               +--> src/lib/regional-matcher.ts
-              +--> src/lib/memory-workflow.ts
+              +--> src/lib/memory-workflow.ts (barrel re-export)
+              |       +--> src/lib/food-memory-collector.ts
+              |       +--> src/lib/dish-research-planner.ts
+              |       +--> src/lib/reconstruction-dossier.ts
+              |       +--> src/lib/family-followup-generator.ts
+              |       +--> src/lib/nostalgia-cue-generator.ts
               +--> src/lib/name-resolver.ts
               +--> src/lib/substitution-engine.ts
               +--> src/lib/research-cache.ts
@@ -67,6 +72,10 @@ The high-traffic surfaces are split into named contracts so future work does not
 | Local speech controller | `src/lib/local-speech-controller.ts` | Shapes `/voice/status`, `/voice/transcribe`, and `/voice/synthesize` behavior around configured local OSS engines. |
 | Cue profile engine | `src/lib/cue-profile-engine.ts` | Turns cue heuristics into explicit profile, component, mechanism-language, accessibility, and local-test evidence surfaces. |
 | Constraint adapter | `src/lib/constraint-adapter.ts` | Classifies and applies vegan, vegetarian, gluten-free, nut-allergy, halal, kosher, dairy-free, and pork-free cue rewrites. |
+| Ask guardrails | `src/lib/ask-guardrails.ts` | Guardrail detection and sanitization: overconfident identity claims, premature candidate speculation, recipe measurement/procedure language, uncertainty waffle, stalled fallback, tool name normalization, clarification-only response builder. |
+| Ask response builder | `src/lib/ask-response-builder.ts` | Response assembly and templating: minimum-cue formatting, substitution basis responses, evidence preambles, cue quality language enforcement, and local-cue language injection. |
+| Ask memory correction | `src/lib/ask-memory-correction.ts` | Memory correction pipeline: safety constraint inference, grounded search query building, stale memory sanitization, negated term stripping. |
+| Telemetry collector | `src/lib/telemetry-collector.ts` | Privacy-preserving telemetry: event sanitization, per-key rate limiting, and breakdown serialization. |
 | Product app | `docs/landing/product-app.js` | Holds browser primitives for SSE parsing, actionable HTTP error copy, and chat-history append semantics used by `app.js`. |
 | Package surface | `scripts/lib/package-surface.mjs` | Defines required runtime entrypoints, product app assets, public docs, helper scripts, and forbidden packaged artifacts. |
 

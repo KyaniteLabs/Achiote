@@ -46,6 +46,11 @@ This roadmap is scoped to the MCP server, HTTP server, and skill behavior.
 - `CueProfileEngine` and `ConstraintAdapter` seams for minimum viable nostalgia cue evidence surfaces and constraint rewrites
 - Bundled reference pantry baseline with CC0 structured records available without a SQLite bootstrap step
 
+### Architecture deepening
+- Memory workflow decomposed from monolithic `memory-workflow.ts` into five focused modules: `food-memory-collector`, `dish-research-planner`, `reconstruction-dossier`, `family-followup-generator`, `nostalgia-cue-generator`
+- HTTP server decomposed from ~2900 lines to ~2140 lines by extracting `ask-guardrails`, `ask-response-builder`, `ask-memory-correction`, and `telemetry-collector` modules
+- Cross-file duplications eliminated: `isBroadRegionalHint`, `escapeRegExp`, and cache patterns (`ARTIFICIAL_CACHE_FAMILY_PATTERN`/`ARTIFICIAL_CACHE_REGION_PATTERN`) now have canonical single-definition locations
+
 ## Next: optional food-data provider lookups
 
 Open-ended web research should remain a host AI responsibility. Optional provider integrations should be narrow, opt-in, and privacy-documented structured lookups, such as ingredient-label or nutrition databases. A strong implementation would include:
