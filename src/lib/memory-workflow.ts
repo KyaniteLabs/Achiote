@@ -17,6 +17,7 @@ import type {
 } from './types.js';
 import { adaptCueProfileForConstraints } from './constraint-adapter.js';
 import { runCueProfileEngine, type FoodScienceCueProfile } from './cue-profile-engine.js';
+import { unique, includesAny, escapeRegExp, normalizeForLooseMatch, matchesWordOrPhrase } from './food-memory-text.js';
 
 const RESEARCH_STOPWORDS = new Set([
   // English
@@ -47,37 +48,8 @@ const INGREDIENT_HINTS = MEMORY_HINTS.ingredients;
 const COOKING_METHOD_HINTS: CookingMethodHint[] = MEMORY_HINTS.cookingMethods;
 const CONCEPT_ALIASES = MEMORY_HINTS.conceptAliases ?? {};
 
-function unique(values: string[]): string[] {
-  return [...new Set(values.filter(Boolean))];
-}
-
-function includesAny(text: string, needles: string[]): boolean {
-  return needles.some((needle) => {
-    const escaped = escapeRegExp(needle).replace(/\s+/g, '\\s+');
-    return new RegExp(`(?:^|\\b)${escaped}(?:$|\\b)`, 'i').test(text);
-  });
-}
-
-function escapeRegExp(value: string): string {
-  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
-function normalizeForLooseMatch(value: string): string {
-  return value
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/\p{Diacritic}/gu, '')
-    .replace(/[^\p{L}\p{N}]+/gu, ' ')
-    .trim();
-}
-
 function isBroadRegionalHint(hint: string): boolean {
   return /\b(?:latin\s+america|hispanic|spanish-speaking|asia|europe|africa|middle\s+east|mediterranean|caribbean|south\s+america|central\s+america)\b/i.test(hint);
-}
-
-function matchesWordOrPhrase(text: string, hint: string): boolean {
-  const pattern = escapeRegExp(hint).replace(/\s+/g, '\\s+');
-  return new RegExp(`(?:^|\\b)${pattern}(?:$|\\b)`, 'i').test(text);
 }
 
 function isNegatedMention(text: string, phrase: string): boolean {
