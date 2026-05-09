@@ -283,8 +283,8 @@ const VALID_INFERENCE_OWNERS = new Set([
 ]);
 const VALID_INFERENCE_STATUSES = new Set(['candidate', 'partially_supported', 'ready_to_extract']);
 const VALID_POPULATION_PRIORITIES = new Set(['high', 'medium', 'maintain']);
-const ARTIFICIAL_CACHE_FAMILY_PATTERN = /(?:-liquids-and-comfort|-protein-vegetable-mains|-sweet-ritual-foods|-handheld-social-foods|-staple-starches|-acid-heat-condiment|-cue)$/;
-const ARTIFICIAL_CACHE_REGION_PATTERN = /\b(?:comparison|variants?|cue)\b/i;
+export const ARTIFICIAL_CACHE_FAMILY_PATTERN = /(?:-liquids-and-comfort|-protein-vegetable-mains|-sweet-ritual-foods|-handheld-social-foods|-staple-starches|-acid-heat-condiment|-cue)$/;
+export const ARTIFICIAL_CACHE_REGION_PATTERN = /\b(?:comparison|variants?|cue)\b/i;
 
 function isNonEmptyString(value: unknown): value is string {
   return typeof value === 'string' && value.trim().length > 0;

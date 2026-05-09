@@ -6,18 +6,19 @@ Trigger: fresh audit after reviewing mattpocock/skills guidance for `zoom-out` a
 
 ## Remediation Status
 
-Updated: 2026-05-02.
+Updated: 2026-05-08.
 
 This audit has been largely remediated on `master`. Keep the original findings below as the audit record, but treat this status list as the current navigation point:
 
-- Finding 1: `AskController` exists in `src/lib/ask-controller.ts`.
+- Finding 1: `AskController` exists in `src/lib/ask-controller.ts`. Additionally, `http-server.ts` has been decomposed from ~2900 lines to ~2140 lines by extracting `src/lib/ask-guardrails.ts` (~409 lines), `src/lib/ask-response-builder.ts` (~302 lines), `src/lib/ask-memory-correction.ts` (~93 lines), and `src/lib/telemetry-collector.ts` (~155 lines). The memory workflow barrel `src/lib/memory-workflow.ts` has been decomposed into five focused modules: `food-memory-collector`, `dish-research-planner`, `reconstruction-dossier`, `family-followup-generator`, and `nostalgia-cue-generator`.
 - Finding 2: `WorkflowPlanner` exists in `src/lib/workflow-planner.ts`.
 - Finding 3: `CueProfileEngine` and `ConstraintAdapter` exist in `src/lib/cue-profile-engine.ts` and `src/lib/constraint-adapter.ts`.
 - Finding 4: `ReferencePantryPopulation` exists in `src/lib/reference-pantry-population.ts`.
 - Finding 5: bundled data validation split into `validateCoreFoodData`, `validateReferencePantryData`, `validateOperatorData`, and `validateInferenceBurdenData`; `validateCrossReferences` is tested; all family validators have regression coverage.
 - Finding 6: `PackageSurface` exists in `scripts/lib/package-surface.mjs`.
-- Additional boundaries landed after the audit: `ProviderRuntime`, `AccountAccess`, `LocalSpeechController`, and `ProductApp`.
+- Additional boundaries landed after the audit: `ProviderRuntime`, `AccountAccess`, `LocalSpeechController`, `ProductApp`, `AskGuardrails`, `AskResponseBuilder`, `AskMemoryCorrection`, and `TelemetryCollector`.
 - Domain docs and ADR setup now exist in `CONTEXT.md`, `docs/adr/`, and `docs/agents/`.
+- Cross-file duplications resolved: `isBroadRegionalHint`, `escapeRegExp`, cache patterns (`ARTIFICIAL_CACHE_FAMILY_PATTERN`/`ARTIFICIAL_CACHE_REGION_PATTERN`) now have canonical single-definition locations.
 
 Current extension rule: prefer these named boundaries before adding behavior back into `src/http-server.ts`, `src/lib/memory-workflow.ts`, `src/tools/tool-registry.ts`, or `docs/landing/app.js`.
 
@@ -66,11 +67,15 @@ Architecture vocabulary follows the Matt Pocock skill:
 
 ## Findings
 
-### 1. Ask Flow Is The Highest-Risk Shallow Module
+### 1. Ask Flow Is The Highest-Risk Shallow Module (PARTIALLY REMEDIATED)
 
 Files:
 
-- `src/http-server.ts`
+- `src/http-server.ts` (~2140 lines, reduced from ~2900)
+- `src/lib/ask-guardrails.ts` (extracted)
+- `src/lib/ask-response-builder.ts` (extracted)
+- `src/lib/ask-memory-correction.ts` (extracted)
+- `src/lib/telemetry-collector.ts` (extracted)
 - `src/lib/ask-provider.ts`
 - `src/tools/tool-registry.ts`
 - `src/lib/tool-loop.ts`
@@ -79,11 +84,21 @@ Files:
 
 Problem:
 
-`src/http-server.ts` is a 2,900-line module whose interface is nominally HTTP routing, but its implementation also owns ask-session orchestration, deterministic tool recovery, tool input normalization, search caps, substitution recovery, final-answer sanitization, provider failure classification, SSE event sequencing, and quality-signal recording.
+`src/http-server.ts` was a 2,900-line module whose interface is nominally HTTP routing, but its implementation also owned ask-session orchestration, deterministic tool recovery, tool input normalization, search caps, substitution recovery, final-answer sanitization, provider failure classification, SSE event sequencing, and quality-signal recording.
 
 The deletion test says the ask flow is earning its keep, but the module shape is shallow: deleting `http-server.ts` would scatter many ask-specific invariants rather than reveal a clean HTTP interface. Tests mostly exercise HTTP behavior or provider fixtures, so implementation-local changes are costly.
 
-Solution:
+Remediation (2026-05-08):
+
+Extracted four focused modules from `http-server.ts`:
+- `src/lib/ask-guardrails.ts` — guardrail detection/sanitization, tool name normalization, clarification response builder
+- `src/lib/ask-response-builder.ts` — response assembly, minimum-cue formatting, substitution basis, cue quality enforcement
+- `src/lib/ask-memory-correction.ts` — safety constraint inference, search query building, memory correction pipeline
+- `src/lib/telemetry-collector.ts` — privacy-preserving telemetry event sanitization and rate limiting
+
+The remaining ask-session orchestration, tool-loop control, and SSE event sequencing still live in `http-server.ts`. A future `AskController` extraction could address these.
+
+Solution (remaining):
 
 Create a deep `AskController` module with one interface such as `runAskTurn(input, sinks)`. Keep HTTP parsing/auth/rate limit in `http-server.ts`, but move tool-loop orchestration, deterministic recovery, final synthesis fallback, and event emission decisions behind the controller seam.
 
@@ -117,29 +132,36 @@ Benefits:
 - Leverage: tool registry, HTTP pre-plan injection, canary tests, and future CLI/quality reports can share the same planner.
 - Tests: intent/restriction/search-budget cases become fast unit tests against planner output.
 
-### 3. Minimum Viable Nostalgia Cue Has Too Much Policy In One Module
+### 3. Minimum Viable Nostalgia Cue Has Too Much Policy In One Module (REMEDIATED)
 
 Files:
 
-- `src/lib/memory-workflow.ts`
+- `src/lib/memory-workflow.ts` (now a 6-line re-export barrel)
+- `src/lib/food-memory-collector.ts` (extracted)
+- `src/lib/dish-research-planner.ts` (extracted)
+- `src/lib/reconstruction-dossier.ts` (extracted)
+- `src/lib/family-followup-generator.ts` (extracted)
+- `src/lib/nostalgia-cue-generator.ts` (extracted)
+- `src/lib/cue-profile-engine.ts` (pre-existing)
+- `src/lib/constraint-adapter.ts` (pre-existing)
 - `src/data/memory-hints.json`
 - `tests/minimum-viable-nostalgia.test.ts`
 - `tests/ask-failure-surface-regressions.test.ts`
 
 Problem:
 
-`memory-workflow.ts` owns memory collection, hypothesis planning, dossier building, family follow-up questions, cue profile selection, food-science mechanism matching, local test wording, dietary constraints, and constraint rewrites. The minimum-cue implementation alone contains many private seams, but callers only see one large module.
+`memory-workflow.ts` owned memory collection, hypothesis planning, dossier building, family follow-up questions, cue profile selection, food-science mechanism matching, local test wording, dietary constraints, and constraint rewrites. The minimum-cue implementation alone contained many private seams, but callers only saw one large module.
 
-Solution:
+Remediation (2026-05-08):
 
-Deepen around the domain, not helper categories:
+Decomposed the monolith into five domain-focused modules behind a thin re-export barrel:
+- `food-memory-collector.ts` — clue extraction, missing-information questions, broad-regional detection
+- `dish-research-planner.ts` — hypothesis building, evidence planning, search queries
+- `reconstruction-dossier.ts` — evidence-separated dossier assembly
+- `family-followup-generator.ts` — family follow-up question generation
+- `nostalgia-cue-generator.ts` — minimum viable nostalgia cue generation with all component/signal helpers
 
-- `MemoryIntake` for clue extraction and missing-information questions.
-- `ResearchPlanner` for hypotheses and evidence needs.
-- `CueProfileEngine` for sensory mechanism profile selection.
-- `ConstraintAdapter` for dietary/allergy/religious constraint rewrites.
-
-The first useful extraction is `CueProfileEngine`, because it is the most policy-dense and already has strong tests.
+Pre-existing `CueProfileEngine` and `ConstraintAdapter` remain separate as recommended.
 
 Benefits:
 

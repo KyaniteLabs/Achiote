@@ -7,7 +7,7 @@ function read(path: string): string {
 }
 
 function extractMinimumCueImplementation(): string {
-  const source = read('src/lib/memory-workflow.ts');
+  const source = read('src/lib/nostalgia-cue-generator.ts');
   const start = source.indexOf('function textSignals');
   const generatorStart = source.indexOf('export function generateMinimumViableNostalgiaCue');
   const generatorEnd = generatorStart + source.slice(generatorStart).indexOf('\n}') + 2;
