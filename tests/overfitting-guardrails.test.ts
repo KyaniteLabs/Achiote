@@ -62,7 +62,7 @@ function extractDefaultCanaryText(): string {
 describe('overfitting guardrails', () => {
   it('keeps internal QA and canary terminology out of production-facing strings', () => {
     const productionText = [
-      'src/lib/memory-workflow.ts',
+      'src/lib/nostalgia-cue-generator.ts',
       'src/http-server.ts',
       'src/tools/tool-registry.ts',
       'src/data/dish-families.json',
@@ -83,7 +83,7 @@ describe('overfitting guardrails', () => {
   });
 
   it('keeps multilingual concept aliases in taxonomy data, not cue-selection code', () => {
-    const workflow = read('src/lib/memory-workflow.ts');
+    const workflow = read('src/lib/nostalgia-cue-generator.ts');
     const memoryHints = read('src/data/memory-hints.json');
     const cueSelectionCode = workflow.slice(workflow.indexOf('function signalIncludes'));
 
