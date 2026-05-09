@@ -76,10 +76,10 @@ describe('overfitting guardrails', () => {
   });
 
   it('keeps corrected research targets in data, not as a workflow-code answer key', () => {
-    const workflow = read('src/lib/memory-workflow.ts');
+    const planner = read('src/lib/dish-research-planner.ts');
 
-    expect(workflow).toContain("from '../data/corrected-research-targets.json'");
-    expect(workflow).not.toContain('const CORRECTED_RESEARCH_TARGETS');
+    expect(planner).toContain("from '../data/corrected-research-targets.json'");
+    expect(planner).not.toContain('const CORRECTED_RESEARCH_TARGETS');
   });
 
   it('keeps multilingual concept aliases in taxonomy data, not cue-selection code', () => {
