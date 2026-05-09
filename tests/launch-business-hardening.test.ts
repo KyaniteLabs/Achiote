@@ -7,6 +7,7 @@ const landing = () => fs.readFileSync('docs/landing/index.html', 'utf8');
 const app = () => fs.readFileSync('docs/landing/app.html', 'utf8');
 const appJs = () => fs.readFileSync('docs/landing/app.js', 'utf8');
 const server = () => fs.readFileSync('src/http-server.ts', 'utf8');
+const telemetryCollector = () => fs.readFileSync('src/lib/telemetry-collector.ts', 'utf8');
 
 describe('launch business hardening', () => {
   it('publishes trust, legal, safety, and support pages linked from public surfaces', () => {
@@ -81,14 +82,14 @@ describe('launch business hardening', () => {
       'feedback_missed_name_correction',
     ]) {
       expect(appJs()).toContain(eventName);
-      expect(server()).toContain(`'${eventName}'`);
+      expect(telemetryCollector()).toContain(`'${eventName}'`);
     }
     expect(appJs()).not.toContain('feedback_helpful');
     expect(appJs()).not.toContain('feedback_generic');
-    expect(server()).toContain("'receipt_downloaded'");
-    expect(server()).toContain("'receipt_share_copied'");
-    expect(server()).toContain("'family_questions_copied'");
-    expect(server()).toContain("'waitlist_submitted'");
+    expect(telemetryCollector()).toContain("'receipt_downloaded'");
+    expect(telemetryCollector()).toContain("'receipt_share_copied'");
+    expect(telemetryCollector()).toContain("'family_questions_copied'");
+    expect(telemetryCollector()).toContain("'waitlist_submitted'");
     expect(fs.readFileSync('docs/landing/index.js', 'utf8')).toContain("trackEvent('waitlist_submitted'");
     expect(fs.readFileSync('docs/landing/index.js', 'utf8')).toContain('emailDomain');
     expect(appJs()).toContain("navigator.sendBeacon('/events'");
@@ -97,13 +98,12 @@ describe('launch business hardening', () => {
     expect(server()).toContain('Forbidden origin');
     expect(server()).toContain('Telemetry rate limit exceeded');
     expect(server()).toContain("pathname === '/events'");
-    expect(server()).toContain('allowedTelemetryEvents');
-    expect(server()).toContain('allowedTelemetryProperties');
-    expect(server()).toContain("'feedback_close'");
-    expect(server()).toContain("'feedback_too_hard'");
-    expect(server()).toContain("'feedback_missed_correction'");
-    expect(server()).toContain('telemetryBreakdowns');
-    expect(server()).toContain('telemetryCounters');
+    expect(server()).toContain('telemetryCollector');
+    expect(telemetryCollector()).toContain('ALLOWED_EVENTS');
+    expect(telemetryCollector()).toContain('ALLOWED_PROPERTIES');
+    expect(telemetryCollector()).toContain("'feedback_close'");
+    expect(telemetryCollector()).toContain("'feedback_too_hard'");
+    expect(telemetryCollector()).toContain("'feedback_missed_correction'");
     expect(server()).toContain('qualitySignalReport');
     expect(server()).toContain('buildAskQualitySignal');
     expect(server()).toContain('recordQualitySignal');

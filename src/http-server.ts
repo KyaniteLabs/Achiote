@@ -27,6 +27,7 @@ import { buildAskQualitySignal, emptyQualitySignalReport, inferAskCacheOutcome, 
 import { createProviderRuntime } from './lib/provider-runtime.js';
 import { buildReferenceSeedOperatorReport } from './lib/reference-seed-operator.js';
 import { filterRepeatedToolCalls } from './lib/tool-loop.js';
+import { createTelemetryCollector, sanitizeTelemetryProperties as sanitizeTelemetryProps } from './lib/telemetry-collector.js';
 import type { Tier } from './lib/auth.js';
 import type { CollectedFoodMemory, DishResearchPlan, MinimumViableNostalgiaCue, ReconstructionDossier } from './lib/types.js';
 import {
@@ -152,74 +153,8 @@ const accountAccess = createAccountAccess({
   rateLimiter,
   billingDb,
 });
-const allowedTelemetryEvents = new Set([
-  'page_view',
-  'pricing_viewed',
-  'app_opened',
-  'onboarding_prompt_selected',
-  'ask_started',
-  'ask_succeeded',
-  'ask_failed',
-  'checkout_started',
-  'checkout_failed',
-  'feedback_close',
-  'feedback_closer',
-  'feedback_wrong_region',
-  'feedback_wrong_acid',
-  'feedback_wrong_texture',
-  'feedback_too_generic',
-  'feedback_too_hard',
-  'feedback_missed_correction',
-  'feedback_missed_name_correction',
-  'receipt_downloaded',
-  'receipt_share_copied',
-  'family_questions_copied',
-  'waitlist_submitted',
-]);
-const allowedTelemetryProperties = new Set(['route', 'source', 'category', 'tier', 'mode', 'billing', 'reason', 'hasHistory', 'emailDomain']);
-const MAX_TELEMETRY_VALUES_PER_PROPERTY = 25;
-const OTHER_TELEMETRY_VALUE = 'other';
-const telemetryCounters = new Map<string, number>();
-const telemetryBreakdowns = new Map<string, Map<string, Map<string, number>>>();
-const telemetryBuckets = new Map<string, { count: number; resetAt: number }>();
+const telemetryCollector = createTelemetryCollector({ limitPerMinute: TELEMETRY_LIMIT_PER_MINUTE });
 const qualitySignalReport = emptyQualitySignalReport();
-
-function sanitizeTelemetryProperties(raw: unknown): Record<string, string> {
-  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return {};
-  const sanitized: Record<string, string> = {};
-  for (const [key, value] of Object.entries(raw as Record<string, unknown>)) {
-    if (!allowedTelemetryProperties.has(key)) continue;
-    if (!['string', 'number', 'boolean'].includes(typeof value)) continue;
-    const normalized = String(value).trim().slice(0, 80);
-    if (!/^[a-zA-Z0-9_./:-]+$/.test(normalized)) continue;
-    sanitized[key] = normalized;
-  }
-  return sanitized;
-}
-
-function incrementTelemetryBreakdowns(eventName: string, properties: Record<string, string>): void {
-  if (!telemetryBreakdowns.has(eventName)) telemetryBreakdowns.set(eventName, new Map());
-  const eventBreakdown = telemetryBreakdowns.get(eventName)!;
-  for (const [property, value] of Object.entries(properties)) {
-    if (!eventBreakdown.has(property)) eventBreakdown.set(property, new Map());
-    const values = eventBreakdown.get(property)!;
-    const bucket = values.has(value) || values.size < MAX_TELEMETRY_VALUES_PER_PROPERTY - 1
-      ? value
-      : OTHER_TELEMETRY_VALUE;
-    values.set(bucket, (values.get(bucket) ?? 0) + 1);
-  }
-}
-
-function serializeTelemetryBreakdowns(): Record<string, Record<string, Record<string, number>>> {
-  const serialized: Record<string, Record<string, Record<string, number>>> = {};
-  for (const [eventName, properties] of telemetryBreakdowns.entries()) {
-    serialized[eventName] = {};
-    for (const [property, values] of properties.entries()) {
-      serialized[eventName][property] = Object.fromEntries(values);
-    }
-  }
-  return serialized;
-}
 
 function logSecurityEvent(event: string, details: Record<string, string> = {}): void {
   console.warn(JSON.stringify({ event, ...details, ts: new Date().toISOString() }));
@@ -379,25 +314,6 @@ function telemetryClientKey(req: IncomingMessage): string {
     trustedProxyIps: TRUSTED_PROXY_IPS,
   });
   return identity?.keyId ?? 'anon:ip:unknown';
-}
-
-function checkTelemetryLimit(key: string): { allowed: boolean; remaining: number; limit: number; resetAt: number } {
-  const limit = Math.max(1, TELEMETRY_LIMIT_PER_MINUTE);
-  const now = Date.now();
-  const windowMs = 60_000;
-  let bucket = telemetryBuckets.get(key);
-
-  if (!bucket || now >= bucket.resetAt) {
-    bucket = { count: 0, resetAt: now + windowMs };
-    telemetryBuckets.set(key, bucket);
-  }
-
-  if (bucket.count >= limit) {
-    return { allowed: false, remaining: 0, limit, resetAt: bucket.resetAt };
-  }
-
-  bucket.count++;
-  return { allowed: true, remaining: Math.max(0, limit - bucket.count), limit, resetAt: bucket.resetAt };
 }
 
 function hasEventsAdminAccess(req: IncomingMessage): boolean {
@@ -2523,7 +2439,7 @@ const server = createServer(async (req, res) => {
       return;
     }
 
-    const telemetryLimit = checkTelemetryLimit(telemetryClientKey(req));
+    const telemetryLimit = telemetryCollector.checkRateLimit(telemetryClientKey(req));
     sendRateLimitHeaders(res, telemetryLimit);
     if (!telemetryLimit.allowed) {
       sendJson(res, 429, { error: 'Telemetry rate limit exceeded' });
@@ -2534,7 +2450,7 @@ const server = createServer(async (req, res) => {
       const raw = await readBody(req, 1_024);
       const parsed = JSON.parse(raw) as { event?: unknown; properties?: unknown; consent?: unknown };
       const eventName = typeof parsed.event === 'string' ? parsed.event : '';
-      if (!allowedTelemetryEvents.has(eventName)) {
+      if (!telemetryCollector.isEventAllowed(eventName)) {
         sendJson(res, 400, { error: 'Unsupported telemetry event' });
         return;
       }
@@ -2543,9 +2459,8 @@ const server = createServer(async (req, res) => {
         sendJson(res, 202, { ok: true, skipped: 'analytics_consent_required' });
         return;
       }
-      const properties = sanitizeTelemetryProperties(parsed.properties);
-      telemetryCounters.set(eventName, (telemetryCounters.get(eventName) ?? 0) + 1);
-      incrementTelemetryBreakdowns(eventName, properties);
+      const properties = sanitizeTelemetryProps(parsed.properties);
+      telemetryCollector.record(eventName, properties);
       sendJson(res, 202, { ok: true });
     } catch (err) {
       sendJson(res, err instanceof Error && err.message === 'Body too large' ? 413 : 400, { error: 'Invalid telemetry event' });
@@ -2559,8 +2474,8 @@ const server = createServer(async (req, res) => {
       return;
     }
     sendJson(res, 200, {
-      counters: Object.fromEntries(telemetryCounters),
-      breakdowns: serializeTelemetryBreakdowns(),
+      counters: telemetryCollector.serialize().counters,
+      breakdowns: telemetryCollector.serialize().breakdowns,
       quality: qualitySignalReport,
       referenceSeeds: buildReferenceSeedOperatorReport(qualitySignalReport),
     });
