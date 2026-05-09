@@ -1,6 +1,10 @@
 import {
   bundledGlobalReferenceSeeds,
 } from './reference-seed-planner.js';
+import {
+  ARTIFICIAL_CACHE_FAMILY_PATTERN,
+  ARTIFICIAL_CACHE_REGION_PATTERN,
+} from './data-schemas.js';
 import type {
   CacheWarmingManifest,
   ReferenceFamilyTaxonomy,
@@ -10,9 +14,6 @@ import type {
   ReferenceSeedQueue,
   ReferenceSourceRegistry,
 } from './data-schemas.js';
-
-const ARTIFICIAL_CACHE_FAMILY_PATTERN = /(?:-liquids-and-comfort|-protein-vegetable-mains|-sweet-ritual-foods|-handheld-social-foods|-staple-starches|-acid-heat-condiment|-cue)$/;
-const ARTIFICIAL_CACHE_REGION_PATTERN = /\b(?:comparison|variants?|cue)\b/i;
 
 export type ReferencePantryPopulationData = {
   referencePantryFixtures: ReferencePantryFixtureBatch;
