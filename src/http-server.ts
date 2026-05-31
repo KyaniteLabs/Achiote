@@ -96,6 +96,7 @@ import {
   compactMinimumCueWhy,
   buildMinimumCueCompletedResponse,
   buildEvidenceBoundedMinimumCueResponse,
+  buildResearchGroundedForcedCueResponse,
   containsCueFamilyMismatch,
   buildUserMessageMechanismCueResponse,
   ensureLocalCueLanguage,
@@ -902,7 +903,9 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
     if (calledTools.has('generate_minimum_viable_nostalgia')
       && (modelResponse.textBlocks.length === 0 || containsStalledFallbackText(modelResponse.textBlocks.join('\n\n')))) {
       console.warn('[ask] replaced stalled post-cue response with deterministic minimum cue');
-      const responseText = buildMinimumCueCompletedResponse(toolPayloads, userMessage);
+      const responseText = calledTools.has('search_web')
+        ? buildResearchGroundedForcedCueResponse(toolPayloads, userMessage)
+        : buildMinimumCueCompletedResponse(toolPayloads, userMessage);
       send('text', responseText);
       maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
       finish({ guarded: 'minimum_cue_deterministic_completion' });
@@ -963,9 +966,16 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       return;
     }
 
-    // If the answer is grounded in real web research, trust the model. The quality guards below were
-    // discarding good research-backed synthesis as false positives and replacing it with generic templates.
-    const researchGrounded = calledTools.has('search_web');
+    // If the answer is grounded in research or concrete resolver evidence, trust the model. The quality guards below were
+    // discarding good tool-backed synthesis as false positives and replacing it with generic templates.
+    const resolvedForGrounding = toolPayloads.resolve_dish_name as
+      | { region?: string; confidence?: string; matchType?: string }
+      | undefined;
+    const resolverGrounded = calledTools.has('resolve_dish_name')
+      && resolvedForGrounding?.matchType !== 'unknown'
+      && resolvedForGrounding?.confidence !== 'Low'
+      && Boolean(resolvedForGrounding?.region && !/^unknown$/i.test(resolvedForGrounding.region));
+    const researchGrounded = calledTools.has('search_web') || resolverGrounded;
     if (calledTools.has('generate_minimum_viable_nostalgia') && containsCueFamilyMismatch(trustBoundedResponseText, userMessage) && !researchGrounded) {
       console.warn('[ask] replaced cue-family mismatch with deterministic mechanism cue');
       const responseText = buildUserMessageMechanismCueResponse(userMessage, toolPayloads);
@@ -1002,7 +1012,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       const memoryPayload = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
       const isExplicitlyUnnamedMemory = /\b(?:never knew the name|don['’]?t know the name|didn['’]?t know the name|no name|unnamed)\b/i.test(userMessage);
       const responseText = isExplicitlyUnnamedMemory && (memoryPayload?.nextQuestions?.length ?? 0) > 0
-        ? buildClarificationOnlyResponse(toolPayloads, userMessage)
+        ? buildClarificationOnlyResponse(toolPayloads, userMessage, { includeEvidencePreamble: false })
         : buildMinimumCueCompletedResponse(toolPayloads, userMessage);
       send('text', responseText);
       maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
@@ -1024,7 +1034,9 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       const sanitized = sanitizeRecipeStyleCueLanguage(trustBoundedResponseText);
       if (lacksMinimumCueLanguage(sanitized)) {
         console.warn('[ask] sanitized measurement text still lacks minimum cue language; falling back to deterministic minimum cue');
-        const responseText = buildMinimumCueCompletedResponse(toolPayloads, userMessage);
+        const responseText = calledTools.has('search_web')
+          ? buildResearchGroundedForcedCueResponse(toolPayloads, userMessage)
+          : buildMinimumCueCompletedResponse(toolPayloads, userMessage);
         send('text', responseText);
         maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
         finish({ guarded: 'minimum_cue_language_sanitized' });
@@ -1036,9 +1048,21 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       return;
     }
 
+    if (calledTools.has('generate_minimum_viable_nostalgia')
+      && shouldClarifyUnresolvedUnnamedMemory(userMessage, toolPayloads, calledTools, trustBoundedResponseText)) {
+      console.warn('[ask] replaced unresolved unnamed cue with targeted clarification');
+      const responseText = buildClarificationOnlyResponse(toolPayloads, userMessage, { includeEvidencePreamble: false });
+      send('text', responseText);
+      maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
+      finish({ guarded: 'unnamed_memory_clarification' });
+      return;
+    }
+
     if (calledTools.has('generate_minimum_viable_nostalgia') && lacksMinimumCueLanguage(trustBoundedResponseText)) {
       console.warn('[ask] replaced missing-minimum-cue response with deterministic minimum cue');
-      const responseText = buildMinimumCueCompletedResponse(toolPayloads, userMessage);
+      const responseText = calledTools.has('search_web')
+        ? buildResearchGroundedForcedCueResponse(toolPayloads, userMessage)
+        : buildMinimumCueCompletedResponse(toolPayloads, userMessage);
       send('text', responseText);
       maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
       finish({ guarded: 'minimum_cue_language_sanitized' });
@@ -1233,6 +1257,30 @@ function deriveResearchedFactsForReceipt(toolPayloads: Record<string, unknown>):
   return facts;
 }
 
+function sourceBackedSearchFacts(toolPayloads: Record<string, unknown>): string[] {
+  const searchResults = toolPayloads.search_web as
+    | { results?: Array<{ title?: string; snippet?: string }> }
+    | undefined;
+  return (searchResults?.results ?? [])
+    .filter((r) => r.snippet?.trim())
+    .map((r) => `${r.title}: ${r.snippet}`)
+    .slice(0, 5);
+}
+
+function sourceBackedDossierFacts(toolPayloads: Record<string, unknown>): string[] {
+  const facts = [...sourceBackedSearchFacts(toolPayloads)];
+  const resolved = toolPayloads.resolve_dish_name as
+    | { canonicalName?: string; region?: string; confidence?: string; matchType?: string }
+    | undefined;
+  if (resolved?.canonicalName
+    && !/^Unknown$/i.test(resolved.canonicalName)
+    && resolved.matchType !== 'unknown'
+    && resolved.confidence !== 'Low') {
+    facts.unshift(`Dish resolved: "${resolved.canonicalName}" (confidence: ${resolved.confidence ?? 'unknown'}, region: ${resolved.region ?? 'unknown'})`);
+  }
+  return [...new Set(facts)].slice(0, 5);
+}
+
 function flattenReceiptSourcingHints(value: unknown): string[] {
   if (Array.isArray(value)) {
     return value.flatMap((entry) => {
@@ -1351,14 +1399,32 @@ function normalizeDependentToolInput(toolName: string, input: unknown, userMessa
     return { ...record, memory: collectedMemory };
   }
   if (toolName === 'resolve_dish_name' && collectedMemory) {
-    return { ...record, memory: collectedMemory };
+    const normalized: Record<string, unknown> = { ...record, memory: collectedMemory };
+    const researchedFacts = sourceBackedSearchFacts(toolPayloads);
+    if (researchedFacts.length > 0) {
+      normalized.researchedFacts = researchedFacts;
+    } else if (!shouldPreserveModelProvidedResearchFacts(collectedMemory as CollectedFoodMemory, userMessage)) {
+      delete normalized.researchedFacts;
+    }
+    return normalized;
   }
   if (toolName === 'build_reconstruction_dossier') {
-    return {
+    const normalized: Record<string, unknown> = {
       ...record,
       ...(collectedMemory ? { memory: collectedMemory } : {}),
       ...(researchPlan ? { researchPlan } : {}),
     };
+    const researchedFacts = sourceBackedDossierFacts(toolPayloads);
+    if (researchedFacts.length > 0) {
+      normalized.researchedFacts = researchedFacts;
+    } else if (!shouldPreserveModelProvidedResearchFacts(collectedMemory as CollectedFoodMemory | undefined, userMessage)) {
+      delete normalized.researchedFacts;
+    }
+    if (sourceBackedSearchFacts(toolPayloads).length === 0
+      && !shouldPreserveModelProvidedResearchFacts(collectedMemory as CollectedFoodMemory | undefined, userMessage)) {
+      delete normalized.inferredFacts;
+    }
+    return normalized;
   }
   if (toolName === 'search_web'
     && record.purpose === 'local_sourcing'
@@ -1705,7 +1771,9 @@ async function maybeSendForcedMinimumCue({
     maxEffortMinutes: 10,
   }, userMessage, send, calledTools, toolPayloads) as MinimumViableNostalgiaCue;
 
-  const responseText = buildEvidenceBoundedMinimumCueResponse(toolPayloads, userMessage);
+  const responseText = calledTools.has('search_web')
+    ? buildResearchGroundedForcedCueResponse(toolPayloads, userMessage)
+    : buildEvidenceBoundedMinimumCueResponse(toolPayloads, userMessage);
   send('text', responseText);
   maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
   finish({ guarded: 'explicit_minimum_cue_fallback' });
@@ -1744,6 +1812,40 @@ function shouldForceMinimumCue(userMessage: string, toolPayloads: Record<string,
   }
 
   return false;
+}
+
+function shouldClarifyUnresolvedUnnamedMemory(
+  userMessage: string,
+  toolPayloads: Record<string, unknown>,
+  calledTools: Set<string>,
+  responseText: string,
+): boolean {
+  if (!/\b(?:never knew the name|don['’]?t know the name|didn['’]?t know the name|no name|unnamed)\b/i.test(userMessage)) return false;
+  if (calledTools.has('search_web')) return false;
+  const resolved = toolPayloads.resolve_dish_name as
+    | { confidence?: string; matchType?: string; region?: string; needsClarification?: boolean }
+    | undefined;
+  const unresolved = !resolved
+    || resolved.needsClarification === true
+    || resolved.matchType === 'unknown'
+    || resolved.confidence === 'Low'
+    || !resolved.region
+    || /^unknown$/i.test(resolved.region);
+  if (!unresolved) return false;
+
+  const questionCount = (responseText.match(/\?/g) ?? []).length;
+  const cueBeforeIdentity = containsConcreteFoodCue(responseText)
+    || /\b(?:first[-\s]?pass verification bite|minimum viable|sensory test|buy one|pan[-\s]?fry|simmer|recipe)\b/i.test(responseText);
+  return questionCount === 0 || cueBeforeIdentity;
+}
+
+function shouldPreserveModelProvidedResearchFacts(memory: CollectedFoodMemory | undefined, userMessage: string): boolean {
+  if (!memory) return false;
+  const explicitlyUnnamed = /\b(?:never knew the name|don['’]?t know the name|didn['’]?t know the name|no name|unnamed)\b/i.test(userMessage);
+  const hasNameAnchor = (memory.extractedClues.possibleDishNames ?? []).some((name) => name.trim().length > 0);
+  const hasRegionAnchor = (memory.extractedClues.culturalOrRegionalHints ?? []).some((hint) => hint.trim().length > 0);
+  if (explicitlyUnnamed && !hasRegionAnchor) return false;
+  return hasNameAnchor || hasRegionAnchor;
 }
 
 async function maybeRunMissingResearchPlan({

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   buildMinimumCueCompletedResponse,
+  buildResearchGroundedForcedCueResponse,
   extractSubstitutionTargets,
   summarizeSourcingResults,
   summarizeSubstitutionResults,
@@ -127,5 +128,92 @@ describe('ask response builder', () => {
     expect(lines.join('\n')).toMatch(/Queens, New York/i);
     expect(lines.join('\n')).toMatch(/Mi Tierra Supermarket/i);
     expect(lines.join('\n')).toMatch(/not proof of current stock/i);
+  });
+
+  it('keeps forced researched fallback specific instead of generic starch boilerplate', () => {
+    const response = buildResearchGroundedForcedCueResponse({
+      collect_food_memory: {
+        extractedClues: {
+          possibleDishNames: ['goyura'],
+          culturalOrRegionalHints: ['Panama'],
+          rememberedIngredients: [],
+          ruledOutIngredients: ['potatoes'],
+          cookingMethods: ['fried', 'thick cut'],
+          sensoryClues: ['savory', 'sweet syrup on top'],
+          occasions: [],
+        },
+      },
+      resolve_dish_name: {
+        canonicalName: 'goyura',
+        region: 'Panama',
+        confidence: 'Low',
+        matchType: 'unknown',
+      },
+      search_web: {
+        results: [
+          {
+            title: 'Platanos Maduros - Ripe Plantains',
+            snippet: 'These naturally sweet plantain slices, made from ripe plantains, are delicately fried to perfection.',
+          },
+        ],
+      },
+      generate_minimum_viable_nostalgia: {
+        ...cue,
+        ingredients: [
+          {
+            item: 'cheap grocery-store carrier matching the remembered base: starch, bread, potato, rice, bean, noodle, or cooked vegetable',
+            amount: '1-2 bites',
+            purpose: 'texture and sauce carrier',
+          },
+        ],
+      },
+    }, 'something like goyura in panama. savory, thick cut fried, not potatoes, sweet syrup on top.');
+
+    expect(response).toMatch(/Panama/i);
+    expect(response).toMatch(/ripe plantain/i);
+    expect(response).toMatch(/fried and thick cut/i);
+    expect(response).toMatch(/sweet syrup/i);
+    expect(response).toMatch(/potatoes out/i);
+    expect(response).not.toContain('What I heard:');
+    expect(response).not.toMatch(/starch, bread, potato, rice, bean/i);
+  });
+
+  it('keeps researched arepa fallback on masarepa instead of generic starch', () => {
+    const response = buildResearchGroundedForcedCueResponse({
+      collect_food_memory: {
+        extractedClues: {
+          possibleDishNames: ['arepas con queso'],
+          culturalOrRegionalHints: ['Venezuela'],
+          rememberedIngredients: ['queso'],
+          ruledOutIngredients: [],
+          cookingMethods: ['griddled'],
+          sensoryClues: [],
+          occasions: ['mother/family context'],
+        },
+      },
+      search_web: {
+        results: [
+          {
+            title: 'Venezuelan arepas',
+            snippet: 'Traditional fillings for arepas include queso blanco and other Venezuelan fillings.',
+          },
+        ],
+      },
+      generate_minimum_viable_nostalgia: {
+        ...cue,
+        ingredients: [
+          {
+            item: 'cheap grocery-store carrier matching the remembered base: starch, bread, potato, rice, bean, noodle, or cooked vegetable',
+            amount: '1-2 bites',
+            purpose: 'texture and sauce carrier',
+          },
+        ],
+      },
+    }, 'my mom made arepas con queso, my family is from Venezuela.');
+
+    expect(response).toMatch(/Venezuela/i);
+    expect(response).toMatch(/masarepa|P\.A\.N\./i);
+    expect(response).toMatch(/griddled/i);
+    expect(response).not.toMatch(/starch, bread, potato, rice, bean/i);
   });
 });

@@ -80,6 +80,7 @@ function likelyDishPhrases(text: string): string[] {
   const patterns = [
     /(?:mentioned|called|named)\s+([\p{L}\p{M}-]+(?:\s+[\p{L}\p{M}-]+){0,2})/giu,
     /(?:sounded like|something like)\s+([\p{L}\p{M}-]+(?:\s+[\p{L}\p{M}-]+){0,2})/giu,
+    /(?:made|ate|had|miss|remember)\s+(?:(?:a|an|some|the)\s+)?([\p{L}\p{M}-]+(?:\s+con\s+[\p{L}\p{M}-]+){1,2})(?=[\s,.;!?]|$)/giu,
     /(?:made|ate|had|miss|remember)\s+(?:(?:a|an|some|the)\s+)?([\p{L}\p{M}-]+)(?=[\s,.;!?]|$)/giu,
   ];
   const phrases = patterns.flatMap((pattern) => [...lower.matchAll(pattern)].map((match) => match[1].trim()));
@@ -88,7 +89,7 @@ function likelyDishPhrases(text: string): string[] {
     .map((phrase) =>
       phrase
         .split(/\s+/)
-        .filter((word) => !RESEARCH_STOPWORDS.has(word))
+        .filter((word) => word === 'con' || !RESEARCH_STOPWORDS.has(word))
         .join(' ')
         .trim(),
     )
@@ -107,6 +108,13 @@ function extractCookingMethodHints(text: string): string[] {
   return COOKING_METHOD_HINTS.filter((hint) => (
     hint.regexSource ? new RegExp(hint.regexSource, hint.flags).test(text) : matchesWordOrPhrase(text, hint.label)
   )).map((hint) => hint.label);
+}
+
+function extractWithPhraseIngredients(text: string): string[] {
+  return [...text.matchAll(/\bcon\s+([\p{L}\p{M}-]+(?:\s+[\p{L}\p{M}-]+){0,2})/gu)]
+    .map((match) => match[1].trim())
+    .map((phrase) => phrase.split(/\s+/).filter((word) => !RESEARCH_STOPWORDS.has(word)).join(' ').trim())
+    .filter((phrase) => phrase.length > 2 && !isExcludedIngredientMention(text, phrase));
 }
 
 function memorySufficiencyScore(input: {
@@ -589,6 +597,7 @@ export function collectFoodMemory(input: FoodMemoryInput): CollectedFoodMemory {
     ...extractRegionHints(lower, normalized),
   ].filter((value): value is string => Boolean(value)));
   const rememberedIngredients = unique([
+    ...extractWithPhraseIngredients(lower),
     ...INGREDIENT_HINTS.filter((ingredient) => matchesWordOrPhrase(lower, ingredient) && !isExcludedIngredientMention(lower, ingredient)),
     includesAny(lower, ['acorn jelly', 'acorn']) && !isExcludedIngredientMention(lower, 'acorn') ? 'acorn jelly' : '',
   ]).filter((ingredient) => !(ingredient === 'orange' && isLikelyColorUseOfOrange(lower)));

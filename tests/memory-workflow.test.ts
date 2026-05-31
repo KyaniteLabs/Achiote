@@ -211,8 +211,10 @@ describe('model-assisted food memory extraction', () => {
       timeoutMs: 100,
     });
 
-    expect(memory.extractedClues.possibleDishNames).toContain('arepas');
+    expect(memory.extractedClues.possibleDishNames).toContain('arepas con queso');
+    expect(memory.extractedClues.rememberedIngredients).toContain('queso');
     expect(memory.extractedClues.culturalOrRegionalHints).toContain('Venezuela');
+    expect(memory.missingInformation).not.toContain('core ingredients');
     expect(memory.extractionMetadata?.source).toBe('regex_fallback');
     expect(memory.extractionMetadata?.fallbackReason).toMatch(/schema/i);
   });

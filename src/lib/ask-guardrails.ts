@@ -153,7 +153,10 @@ export function containsGenericUncertaintyWaffle(text: string): boolean {
 }
 
 export function containsStalledFallbackText(text: string): boolean {
-  return /\bI've gathered enough information so far\.?\s+Let me work with what we have\.?\b/i.test(text.trim());
+  const trimmed = text.trim();
+  return /\bI've gathered enough information so far\.?\s+Let me work with what we have\.?\b/i.test(trimmed)
+    || /\bI['’]?ll work through (?:the )?(?:pipeline|tool workflow|workflow)\b/i.test(trimmed)
+    || /\blet me research this further\b[\s\S]{0,140}\b(?:pipeline|tool workflow|workflow)\b/i.test(trimmed);
 }
 
 export function containsBlockedRecipeToolSynthesis(text: string): boolean {
@@ -412,18 +415,37 @@ export function buildEvidencePreamble(toolPayloads: Record<string, unknown>, use
   ].filter(Boolean).join('\n');
 }
 
-export function buildClarificationOnlyResponse(toolPayloads: Record<string, unknown>, userMessage?: string): string {
+export function buildClarificationOnlyResponse(
+  toolPayloads: Record<string, unknown>,
+  userMessage?: string,
+  options: { includeEvidencePreamble?: boolean } = {},
+): string {
   const constraints = userMessage ? inferSafetyConstraints(userMessage) : [];
   const memoryQuestions = filterAnchorsForConstraints(getStringArray(toolPayloads.collect_food_memory, 'nextQuestions'), constraints);
   const planQuestions = filterAnchorsForConstraints(getStringArray(toolPayloads.plan_dish_research, 'questionsForUser'), constraints);
-  const questions = [...new Set([...planQuestions, ...memoryQuestions])].slice(0, 3);
+  const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
+  const explicitlyUnnamed = userMessage
+    ? /\b(?:never knew the name|don['’]?t know the name|didn['’]?t know the name|no name|unnamed)\b/i.test(userMessage)
+    : false;
+  const extracted = memory?.extractedClues;
+  const unnamedQuestions = explicitlyUnnamed ? [
+    (extracted?.culturalOrRegionalHints?.length ?? 0) === 0
+      ? 'What country, region, language, or community was this tied to?'
+      : undefined,
+    ((extracted?.cookingMethods?.length ?? 0) > 0 || (extracted?.sensoryClues?.length ?? 0) > 0)
+      ? 'Was the texture spoonable like porridge, sliceable or firm after steaming, or something else?'
+      : undefined,
+    (extracted?.possibleDishNames?.length ?? 0) === 0
+      ? 'Do you remember any local name or sound-alike, even one syllable?'
+      : undefined,
+  ].filter((question): question is string => Boolean(question)) : [];
+  const questions = [...new Set([...unnamedQuestions, ...planQuestions, ...memoryQuestions])].slice(0, 3);
   const selectedQuestions = questions.length > 0 ? questions : [
     'Where did you eat this, or where was it from? Even a country, region, city, or community helps.',
     'Do you remember anything about the name, even a rough sound-alike?',
   ];
 
   // Build a context-aware preamble based on what signals are already present
-  const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
   const sensoryClues = filterAnchorsForConstraints(memory?.extractedClues?.sensoryClues ?? [], constraints);
   const ingredients = filterAnchorsForConstraints(memory?.extractedClues?.rememberedIngredients ?? [], constraints);
   const inferred = memory?.inferredContext?.culturalOrRegional ?? [];
@@ -441,7 +463,9 @@ export function buildClarificationOnlyResponse(toolPayloads: Record<string, unkn
     preamble = 'Before I give you a tasting cue, I need one or two details so I do not fake certainty.';
   }
 
-  const evidencePreamble = buildEvidencePreamble(toolPayloads, userMessage);
+  const evidencePreamble = options.includeEvidencePreamble === false
+    ? ''
+    : buildEvidencePreamble(toolPayloads, userMessage);
   const parts = evidencePreamble ? [evidencePreamble, '', preamble] : [preamble];
   return [
     ...parts,

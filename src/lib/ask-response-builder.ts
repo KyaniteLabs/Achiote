@@ -381,6 +381,109 @@ export function buildEvidenceBoundedMinimumCueResponse(toolPayloads: Record<stri
   return sanitizeMinimumCueFallbackBlock([preamble, body, substitutionSection, sourcingSection].filter(Boolean).join('\n\n'));
 }
 
+export function buildResearchGroundedForcedCueResponse(toolPayloads: Record<string, unknown>, userMessage?: string): string {
+  const cue = toolPayloads.generate_minimum_viable_nostalgia as MinimumViableNostalgiaCue | undefined;
+  if (!cue) return buildEvidenceBoundedMinimumCueResponse(toolPayloads, userMessage);
+  const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
+  const groundedBody = formatGroundedMinimumCueFallback(cue, toolPayloads, memory?.userLocation, userMessage);
+  const body = ensureCueQualityLanguage(groundedBody, toolPayloads, new Set(['generate_minimum_viable_nostalgia']));
+  const lead = buildResearchGroundedLead(toolPayloads);
+  const substitutionLines = summarizeSubstitutionResults(toolPayloads, inferSafetyConstraints(userMessage ?? '').length > 0);
+  const sourcingLines = summarizeSourcingResults(toolPayloads);
+  const substitutionSection = substitutionLines.length > 0
+    ? ['Substitutes to try:', ...substitutionLines.map((line) => `- ${line}`)].join('\n')
+    : '';
+  const sourcingSection = sourcingLines.length > 0
+    ? ['Where to buy:', ...sourcingLines.map((line) => `- ${line}`)].join('\n')
+    : '';
+  return sanitizeMinimumCueFallbackBlock([lead, body, substitutionSection, sourcingSection].filter(Boolean).join('\n\n'));
+}
+
+function buildResearchGroundedLead(toolPayloads: Record<string, unknown>): string {
+  const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
+  const extracted = memory?.extractedClues;
+  const names = extracted?.possibleDishNames?.filter(Boolean).slice(0, 2) ?? [];
+  const region = extracted?.culturalOrRegionalHints?.find(Boolean);
+  const candidates = groundedCarrierCandidates(toolPayloads);
+  const resolved = toolPayloads.resolve_dish_name as { canonicalName?: string; confidence?: string; region?: string } | undefined;
+  const unresolvedName = names.length > 0
+    ? `I would keep "${names[0]}" as an unresolved sound-alike, not a confirmed name.`
+    : 'I would keep the exact name unresolved for now.';
+  const regionLine = region ? `The usable anchor is ${region}.` : '';
+  const researchLine = candidates.length > 0
+    ? `The source-backed first test should focus on ${joinHuman(candidates.slice(0, 2))}.`
+    : resolved?.canonicalName
+      ? `The resolver found "${resolved.canonicalName}" at ${resolved.confidence ?? 'unknown'} confidence.`
+      : '';
+  return [unresolvedName, regionLine, researchLine].filter(Boolean).join(' ');
+}
+
+function formatGroundedMinimumCueFallback(
+  cue: MinimumViableNostalgiaCue,
+  toolPayloads: Record<string, unknown>,
+  userLocation?: string,
+  userMessage?: string,
+): string {
+  const candidates = groundedCarrierCandidates(toolPayloads);
+  if (candidates.length === 0) return formatMinimumCueFallback(cue, userLocation);
+
+  const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
+  const extracted = memory?.extractedClues;
+  const methods = extracted?.cookingMethods?.filter(Boolean).slice(0, 2) ?? [];
+  const sensory = extracted?.sensoryClues?.filter(Boolean).slice(0, 3) ?? [];
+  const ruledOut = [
+    ...(extracted?.ruledOutIngredients ?? []),
+    ...(userMessage ? userMessage.match(/\bnot\s+([a-z][a-z -]{1,30})/gi)?.map((value) => value.replace(/^not\s+/i, '').trim()) ?? [] : []),
+  ].filter(Boolean);
+  const methodPhrase = methods.length > 0 ? ` with the remembered ${joinHuman(methods)}` : '';
+  const sensoryPhrase = sensory.length > 0 ? ` Aim at ${joinHuman(sensory)}.` : '';
+  const ruledOutPhrase = ruledOut.length > 0 ? ` Keep ${joinHuman([...new Set(ruledOut)])} out of the test.` : '';
+  const localLine = userLocation
+    ? `Use ordinary grocery or pantry items near ${userLocation}; do not buy the exact suspected dish for this first test.`
+    : 'Use ordinary grocery or pantry items first; do not buy the exact suspected dish for this first test.';
+
+  return [
+    cue.title,
+    '',
+    `First-pass verification bite: test ${joinHuman(candidates.slice(0, 2))} as the carrier${methodPhrase}.${sensoryPhrase}${ruledOutPhrase}`,
+    'Keep it to one or two bites. The point is to check texture, aroma release, browning, and sweet/salt balance before chasing the exact family recipe.',
+    localLine,
+    '',
+    `Why this is minimum: ${compactMinimumCueWhy(cue.whyThisIsMinimum)}`,
+    cue.followUpIfItWorks[0] ? `If it works, next ask: ${sanitizeMinimumCueFallbackText(cue.followUpIfItWorks[0])}` : undefined,
+  ].filter(Boolean).join('\n');
+}
+
+function groundedCarrierCandidates(toolPayloads: Record<string, unknown>): string[] {
+  const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
+  const searched = toolPayloads.search_web as { results?: Array<{ title?: string; snippet?: string }> } | undefined;
+  const cue = toolPayloads.generate_minimum_viable_nostalgia as MinimumViableNostalgiaCue | undefined;
+  const text = [
+    JSON.stringify(memory?.extractedClues ?? {}),
+    ...(searched?.results ?? []).flatMap((result) => [result.title, result.snippet]),
+    ...(cue?.ingredients ?? []).map((ingredient) => ingredient.item),
+  ].filter(Boolean).join(' ').toLowerCase();
+  const candidates: string[] = [];
+  if (/\b(?:plantain|plantains|platanos|pl[aá]tanos|maduros?)\b/i.test(text)) candidates.push('ripe plantain');
+  if (/\b(?:yuca|cassava|mandioca)\b/i.test(text)) candidates.push('yuca or cassava');
+  if (/\b(?:arepas?|masarepa|harina\s+p\.?a\.?n\.?|p\.?a\.?n\.?|arepa flour|precooked corn)\b/i.test(text)) candidates.push('masarepa or P.A.N.-style arepa dough');
+  if (/\b(?:corn|maize|masa)\b/i.test(text) && candidates.length === 0) candidates.push('corn or masa starch');
+  if (/\b(?:rice|arroz)\b/i.test(text) && candidates.length === 0) candidates.push('rice');
+
+  const ruledOut = new Set((memory?.extractedClues?.ruledOutIngredients ?? []).map((item) => item.toLowerCase()));
+  return [...new Set(candidates)].filter((candidate) => {
+    if (ruledOut.has('potato') || ruledOut.has('potatoes')) return !/\bpotato/i.test(candidate);
+    return true;
+  });
+}
+
+function joinHuman(values: string[]): string {
+  const cleaned = values.map((value) => value.trim()).filter(Boolean);
+  if (cleaned.length <= 1) return cleaned[0] ?? '';
+  if (cleaned.length === 2) return `${cleaned[0]} and ${cleaned[1]}`;
+  return `${cleaned.slice(0, -1).join(', ')}, and ${cleaned.at(-1)}`;
+}
+
 // ── Cue quality enforcement ───────────────────────────────────────────────
 
 export function ensureLocalCueLanguage(text: string, toolPayloads: Record<string, unknown>, calledTools: Set<string>): string {

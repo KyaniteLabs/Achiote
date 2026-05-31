@@ -4,6 +4,7 @@ import {
   buildEvidencePreamble,
   containsConcreteFoodCue,
   containsOverconfidentIdentityClaim,
+  containsStalledFallbackText,
 } from '../src/lib/ask-guardrails.js';
 import { inferSafetyConstraints } from '../src/lib/ask-memory-correction.js';
 
@@ -45,6 +46,11 @@ describe('ask guardrails', () => {
 
   it('recognizes overconfident identity claims with descriptive clauses', () => {
     expect(containsOverconfidentIdentityClaim('Your description — thick, sour, grayish — points strongly toward a cassava-based fermented dish.')).toBe(true);
+  });
+
+  it('recognizes process-leak prose as stalled fallback text', () => {
+    expect(containsStalledFallbackText("Let me research this further to pin down the exact dish. I'll work through the pipeline now.")).toBe(true);
+    expect(containsStalledFallbackText('I can work with this memory, but I need one region detail first.')).toBe(false);
   });
 
   it('keeps restricted allergens out of evidence anchors while preserving the safety boundary', () => {
@@ -103,5 +109,34 @@ describe('ask guardrails', () => {
     expect(response).toContain('Where did you eat this?');
     expect(response).not.toMatch(/\b(?:peanuts?|nutty|Peanut chikki|jaggery)\b/);
     expect(response).toContain('Food boundaries: nut allergy.');
+  });
+
+  it('asks region, texture, and name questions for rich unnamed memories', () => {
+    const response = buildClarificationOnlyResponse(
+      {
+        collect_food_memory: {
+          extractedClues: {
+            possibleDishNames: [],
+            culturalOrRegionalHints: [],
+            rememberedIngredients: ['banana'],
+            cookingMethods: ['steamed', 'wrapped in banana leaf', 'fermented porridge'],
+            sensoryClues: ['thick', 'sour', 'grayish', 'savory'],
+            occasions: ['funerals'],
+          },
+          inferredContext: { culturalOrRegional: [] },
+          nextQuestions: ['Do you remember anything about the food or drink name, even a rough sound-alike?'],
+        },
+        plan_dish_research: {
+          questionsForUser: ['Do you remember anything about the food or drink name, even a rough sound-alike?'],
+        },
+      },
+      'thick sour fermented porridge, steamed in a banana leaf, grayish savory, served at funerals. I never knew the name.',
+      { includeEvidencePreamble: false },
+    );
+
+    expect(response).toContain('country, region, language, or community');
+    expect(response).toContain('spoonable like porridge');
+    expect(response).toContain('local name or sound-alike');
+    expect(response).not.toContain('What I heard:');
   });
 });

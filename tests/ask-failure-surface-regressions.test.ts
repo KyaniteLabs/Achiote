@@ -2744,4 +2744,61 @@ describe('/ask failure surface regressions', () => {
     expect(error!.data).not.toContain('acct_123');
     expect(error!.data).not.toContain('OpenAI-compatible provider returned');
   }, 20_000);
+
+  it('does not let model-supplied unsourced facts turn an unnamed memory into a confident cue', async () => {
+    const fakePort = await getFreePort();
+    let requestCount = 0;
+    fakeOpenAi = createServer(async (req, res) => {
+      if (req.url !== '/v1/chat/completions' || req.method !== 'POST') {
+        res.writeHead(404).end();
+        return;
+      }
+      requestCount++;
+      await readBody(req);
+      const toolCallsByTurn = [
+        [{ id: 'call_1', type: 'function', function: { name: 'collect_food_memory', arguments: JSON.stringify({ memoryText: 'thick sour fermented porridge, steamed in a banana leaf, grayish savory, served at funerals. I never knew the name.' }) } }],
+        [{ id: 'call_2', type: 'function', function: { name: 'plan_dish_research', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_3', type: 'function', function: { name: 'resolve_dish_name', arguments: JSON.stringify({ input: 'fermented corn porridge steamed in banana leaf grayish savory funeral', researchedFacts: ['Kenkey is definitely the dish.'] }) } }],
+        [{ id: 'call_4', type: 'function', function: { name: 'build_reconstruction_dossier', arguments: JSON.stringify({ researchedFacts: ['Kenkey is definitely the dish.'], inferredFacts: ['This closely matches kenkey.'] }) } }],
+        [{ id: 'call_5', type: 'function', function: { name: 'generate_minimum_viable_nostalgia', arguments: JSON.stringify({}) } }],
+      ];
+      const toolCalls = toolCallsByTurn[requestCount - 1];
+      res.setHeader('content-type', 'application/json');
+      res.end(JSON.stringify({
+        choices: [{
+          finish_reason: toolCalls ? 'tool_calls' : 'stop',
+          message: toolCalls
+            ? { role: 'assistant', content: '', tool_calls: toolCalls }
+            : { role: 'assistant', content: 'Let me work through your memory to identify this dish and build a sensory test for you. This is only a first-pass verification bite.' },
+        }],
+      }));
+    });
+    await new Promise<void>((resolveListen) => fakeOpenAi?.listen(fakePort, '127.0.0.1', resolveListen));
+
+    const achiotePort = await getFreePort();
+    achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`);
+
+    const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: 'thick sour fermented porridge, steamed in a banana leaf, grayish savory, served at funerals. I never knew the name.' }),
+    });
+
+    expect(response.status).toBe(200);
+    const events = parseSse(await response.text());
+    const finalText = events
+      .filter((event) => event.event === 'text')
+      .map((event) => JSON.parse(event.data))
+      .join('\n\n');
+    const allPayloadText = events.map((event) => event.data).join('\n');
+
+    expect(events.some((event) => event.event === 'error')).toBe(false);
+    expect(finalText).toMatch(/country, region, language, or community/i);
+    expect(finalText).toMatch(/spoonable like porridge/i);
+    expect(finalText).toMatch(/local name or sound-alike/i);
+    expect(finalText).not.toMatch(/first-pass verification bite/i);
+    expect(allPayloadText).not.toMatch(/Kenkey is definitely the dish|closely matches kenkey/i);
+    expect(events.at(-1)?.event).toBe('done');
+    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'unnamed_memory_clarification' });
+  }, 20_000);
 });
