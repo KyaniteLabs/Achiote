@@ -21,6 +21,17 @@ function isRestrictedAnchorForConstraints(anchor: string, constraints: string[])
   });
 }
 
+function extractRuledOutTerms(text: string): string[] {
+  const matches = [...text.matchAll(/\b(?:not|no|without|wasn['']?t|was not|isn['']?t|is not|aren['']?t|are not)\b[^.:?!;]{0,48}\b[\p{L}\p{M}]+(?:\s+[\p{L}\p{M}]+){0,3}\b/giu)];
+  return unique(matches.flatMap((match) => {
+    const cleaned = match[0]
+      .replace(/^\b(?:not|no|without|wasn['']?t|was not|isn['']?t|is not|aren['']?t|are not)\b\s*/iu, '')
+      .split(/[,.:?!;]/, 1)[0]
+      .trim();
+    return cleaned ? [cleaned] : [];
+  })).slice(0, 4);
+}
+
 export function buildMemoryReceipt(input: {
   memory: CollectedFoodMemory;
   researchPlan?: DishResearchPlan;
@@ -46,6 +57,7 @@ export function buildMemoryReceipt(input: {
     ...input.memory.missingInformation,
     ...(input.researchPlan?.factsToVerify ?? []),
   ]);
+  const ruledOut = filterSafetyBounded(extractRuledOutTerms(input.memory.rawMemory));
   const hypotheses = (input.researchPlan?.hypotheses ?? [])
     .filter((hypothesis) => !isRestrictedAnchorForConstraints(hypothesis.name, safetyConstraints))
     .map((hypothesis) => ({
@@ -62,7 +74,10 @@ export function buildMemoryReceipt(input: {
     createdAt: input.createdAt ?? new Date().toISOString(),
     status: input.cue ? 'first_test_ready' : 'needs_more_clues',
     evidence: {
-      userSaid: [input.memory.rawMemory],
+      userSaid: [
+        input.memory.rawMemory,
+        ...(ruledOut.length ? [`Ruled out: ${ruledOut.join(', ')}`] : []),
+      ],
       inferred: filterSafetyBounded(inferred),
       researched: filterSafetyBounded(input.researchedFacts ?? []),
       unknown: filterSafetyBounded(unknown),

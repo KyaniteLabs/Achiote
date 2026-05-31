@@ -106,4 +106,31 @@ describe('memory receipt', () => {
     expect(receipt.evidence.researched).toEqual([]);
     expect(receipt.evidence.unknown.join(' ')).not.toMatch(/\bpeanuts?\b/i);
   });
+
+  it('surfaces negated clues as ruled-out receipt evidence', () => {
+    const receipt = buildMemoryReceipt({
+      memory: {
+        rawMemory: 'something like goyura in panama. savory, thick cut fried, not potatoes, sweet syrup on top.',
+        normalizedMemory: 'something like goyura in panama. savory, thick cut fried, not potatoes, sweet syrup on top.',
+        extractedClues: {
+          possibleDishNames: ['goyura'],
+          culturalOrRegionalHints: ['Panamanian'],
+          rememberedIngredients: [],
+          sensoryClues: ['savory', 'thick cut fried', 'sweet syrup on top'],
+          occasions: [],
+        },
+        inferredContext: {
+          culturalOrRegional: [],
+          language: [],
+        },
+        missingInformation: ['exact dish family'],
+        nextQuestions: ['Where in Panama did you have it?'],
+        reassurance: "You don't need to spell it correctly or know the original language; sound-alikes and tiny clues are enough to start.",
+      },
+      createdAt: '2026-04-27T12:00:00.000Z',
+    });
+
+    expect(receipt.evidence.userSaid).toContain('Ruled out: potatoes');
+    expect(formatMemoryReceiptMarkdown(receipt)).toContain('Ruled out: potatoes');
+  });
 });
