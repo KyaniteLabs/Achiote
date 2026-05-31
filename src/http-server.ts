@@ -292,7 +292,7 @@ Then include one targeted follow-up that would most reduce uncertainty if they w
 - Avoid clinical labels like "research-bounded proxy test" in user-facing prose. Say "first-pass verification bite" or "first tiny check" instead.
 - Keep responses under 220 words.
 - Be warm and direct, like a knowledgeable friend who wants to help them taste the memory again.
-- Write like a real person talking to a friend. Use plain words and short sentences. Never use em-dashes or en-dashes; use commas, periods, or "and" instead. No exclamation points. Avoid AI-tell words like "delve", "tapestry", "crucial", "elevate", "unleash", or "testament".
+- Write like a real person talking to a friend. Use plain words and short sentences. No exclamation points. Avoid AI-tell words like "delve", "tapestry", "crucial", "elevate", "unleash", or "testament". Generated answer text does not need to be rewritten just because a model uses an em-dash.
 - FOOD SAFETY OVERRIDES EVERYTHING. If the person mentions any allergy, intolerance, or dietary restriction, never suggest tasting, buying, or substituting anything that could contain it; build cues only from ingredients they have confirmed are safe for them. Name common allergens (nuts, peanuts, dairy, egg, wheat or gluten, soy, shellfish, fish, sesame) whenever a suggestion could contain them. Never call anything "safe", "allergen-free", or "medically safe". You do not give medical, allergy, or nutritional advice; point people to a qualified professional for those. Every taste is optional and at the person's own discretion.
 - If the user shares a photo, describe what you see in the image and combine it with any text description they provide before calling tools.
 - If researched facts were gathered (e.g., from search_web or resolve_dish_name), explicitly reference at least one specific finding in your prose. Do not summarize vaguely. Name the exact fact.`;
@@ -449,7 +449,10 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
   res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', Connection: 'keep-alive' });
 
   const send = (event: string, data: unknown) => {
-    res.write(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`);
+    const payload = event === 'text' && typeof data === 'string'
+      ? enforceAllergyProfessionalBoundary(data, userMessage)
+      : data;
+    res.write(`event: ${event}\ndata: ${JSON.stringify(payload)}\n\n`);
   };
 
   try {
@@ -803,7 +806,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
     const responseText = modelResponse.textBlocks
       .map((text) => ensureCueQualityLanguage(text, toolPayloads, calledTools))
       .join('\n\n');
-    const trustBoundedResponseText = sanitizeFinalAnswerTrustBoundaryLanguage(responseText);
+    const trustBoundedResponseText = enforceAllergyProfessionalBoundary(sanitizeFinalAnswerTrustBoundaryLanguage(responseText), userMessage);
     const didSanitizeTrustBoundary = trustBoundedResponseText !== responseText;
 
     if (calledTools.has('generate_minimum_viable_nostalgia') && contradictsLatestCorrection(trustBoundedResponseText, userMessage)) {
@@ -889,6 +892,15 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
 
 type SseSender = (event: string, data: unknown) => void;
 type DoneSender = (data?: Record<string, unknown>) => void;
+
+function enforceAllergyProfessionalBoundary(text: string, userMessage: string): string {
+  if (!/\b(?:allerg(?:y|ic|ies|en)|intoleran(?:ce|t)|anaphylaxis|severely allergic|tree nuts?|peanuts?)\b/i.test(userMessage)) return text;
+  if (/\b(?:qualified professional|medical professional|doctor|allergist|clinician|dietitian)\b/i.test(text)) return text;
+  return [
+    text,
+    'Because you named an allergy, check any new substitute with a qualified professional before tasting.',
+  ].filter(Boolean).join('\n\n');
+}
 
 function recordAskCompletion(toolPayloads: Record<string, unknown>, calledTools: Set<string>, donePayload: Record<string, unknown>, consent: DataConsent): void {
   if (!consent.qualitySignals) return;

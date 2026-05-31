@@ -125,6 +125,50 @@ describe('/ask failure surface regressions', () => {
     expect(requestCount).toBe(1);
   }, 20_000);
 
+  it('keeps allergy responses professionally bounded across deterministic recovery', async () => {
+    const fakePort = await getFreePort();
+    fakeOpenAi = createServer(async (req, res) => {
+      if (req.url !== '/v1/chat/completions' || req.method !== 'POST') {
+        res.writeHead(404).end();
+        return;
+      }
+      await readBody(req);
+      res.writeHead(200, { 'content-type': 'application/json' });
+      res.end(JSON.stringify({
+        choices: [{
+          finish_reason: 'stop',
+          message: {
+            role: 'assistant',
+            content: 'Before I suggest a satay-like sauce, I need to ask what flavor you remember most.',
+          },
+        }],
+      }));
+    });
+    await new Promise<void>((resolveListen) => fakeOpenAi?.listen(fakePort, '127.0.0.1', resolveListen));
+
+    const achiotePort = await getFreePort();
+    achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`);
+
+    const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: 'I am severely allergic to peanuts and tree nuts. Help me recreate a satay-like sauce I remember.',
+      }),
+    });
+
+    expect(response.status).toBe(200);
+    const raw = await response.text();
+    const events = parseSse(raw);
+    const finalText = events
+      .filter((event) => event.event === 'text')
+      .map((event) => JSON.parse(event.data))
+      .join('\n\n');
+
+    expect(finalText).toContain('qualified professional');
+    expect(finalText).not.toMatch(/\bsafe\b/i);
+  }, 20_000);
+
   it('recovers deterministically from llama.cpp n_keep/n_ctx context errors', async () => {
     const fakePort = await getFreePort();
     let requestCount = 0;
