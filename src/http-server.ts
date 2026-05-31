@@ -450,7 +450,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
 
   const send = (event: string, data: unknown) => {
     const payload = event === 'text' && typeof data === 'string'
-      ? enforceAllergyProfessionalBoundary(data, userMessage)
+      ? enforceAllergyProfessionalBoundary(sanitizeFoodSafetyClaimLanguage(data), userMessage)
       : data;
     res.write(`event: ${event}\ndata: ${JSON.stringify(payload)}\n\n`);
   };
@@ -922,6 +922,24 @@ function enforceAllergyProfessionalBoundary(text: string, userMessage: string): 
     text,
     'Because you named an allergy, check any new substitute with a qualified professional before tasting.',
   ].filter(Boolean).join('\n\n');
+}
+
+function sanitizeFoodSafetyClaimLanguage(text: string): string {
+  return text
+    .replace(/\bmedically safe\b/gi, 'medically appropriate')
+    .replace(/\ballergen-free\b/gi, 'without the named allergen only when labels and a qualified professional support that')
+    .replace(/\blegally safe\b/gi, 'legally appropriate')
+    .replace(/\bsafe neutral\b/gi, 'plain neutral')
+    .replace(/\bsafe liquid\b/gi, 'plain liquid')
+    .replace(/\bsafe pantry\b/gi, 'known tolerated pantry')
+    .replace(/\bsafe local\b/gi, 'known tolerated local')
+    .replace(/\bsafe remembered\b/gi, 'already tolerated remembered')
+    .replace(/\bsafe edible\b/gi, 'known edible')
+    .replace(/\bsafe cue\b/gi, 'first cue')
+    .replace(/\bsmallest safe\b/gi, 'smallest')
+    .replace(/\bonly if safe\b/gi, 'only if already tolerated')
+    .replace(/\bif safe\b/gi, 'if already tolerated')
+    .replace(/\bsafe\b/gi, 'already tolerated');
 }
 
 function containsRawToolMarkup(text: string): boolean {

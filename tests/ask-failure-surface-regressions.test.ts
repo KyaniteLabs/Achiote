@@ -2445,7 +2445,8 @@ describe('/ask failure surface regressions', () => {
     expect(events.some((event) => event.event === 'error')).toBe(false);
     expect(events.at(-1)?.event).toBe('done');
     expect(JSON.parse(events.at(-1)!.data)).not.toMatchObject({ guarded: 'substitution_basis_deterministic_completion' });
-    expect(finalText).toMatch(/smallest safe first test|Heat tiny sip/i);
+    expect(finalText).toMatch(/smallest first test|Heat tiny sip/i);
+    expect(finalText).not.toMatch(/\bsafe\b/i);
     expect(finalText).toMatch(/Sip it warm/i);
   }, 20_000);
 
