@@ -72,6 +72,7 @@ const SPEECH_COMMAND_TIMEOUT_MS = 120_000;
 
 function isValidBinaryPath(binaryPath: string): boolean {
   if (!binaryPath || binaryPath.includes('..')) return false;
+  if (!binaryPath.includes('/') && !binaryPath.includes('\\')) return false;
   if (binaryPath.includes('/') || binaryPath.includes('\\')) {
     const resolved = binaryPath.replace(/\\/g, '/');
     if (!/^\/(usr|opt|home|nix|tmp|private|var|Users|etc)\//.test(resolved) && !/^\/[^/]+$/.test(resolved)) return false;
@@ -130,6 +131,30 @@ function resolveWhisperConfig(env: Env): LocalSttConfig {
       reason: 'ACHIOTE_WHISPER_CPP_MODEL is required',
       binary,
       ffmpegBinary,
+      language,
+      languages,
+    };
+  }
+  if (!isValidBinaryPath(binary)) {
+    return {
+      provider: 'whispercpp',
+      ready: false,
+      reason: 'ACHIOTE_WHISPER_CPP_BINARY must be an absolute allowlisted path',
+      binary,
+      ffmpegBinary,
+      model,
+      language,
+      languages,
+    };
+  }
+  if (!isValidBinaryPath(ffmpegBinary)) {
+    return {
+      provider: 'whispercpp',
+      ready: false,
+      reason: 'ACHIOTE_FFMPEG_BINARY must be an absolute allowlisted path',
+      binary,
+      ffmpegBinary,
+      model,
       language,
       languages,
     };

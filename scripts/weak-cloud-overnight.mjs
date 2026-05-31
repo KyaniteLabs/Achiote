@@ -398,7 +398,7 @@ function openRouterCapabilityMetadata(catalog, modelId) {
     baseUrl: 'https://openrouter.ai/api/v1',
     nativeTools: supportedParameters.includes('tools') ? 'supported' : model ? 'unsupported' : 'unknown',
     nativeToolChoice: supportedParameters.includes('tool_choice') ? 'supported' : model ? 'unsupported' : 'unknown',
-    rateLimitSensitive: /:free$/i.test(modelId),
+    rateLimitSensitive: modelId === 'openrouter/free' || /:free$/i.test(modelId),
     compatibilitySource: model ? 'catalog' : 'default',
     supportedParameters,
     contextLength: typeof model?.context_length === 'number'
@@ -579,7 +579,7 @@ async function achioteAsk({ provider, model, prompt, openRouterKey, endpointStyl
     ACHIOTE_RATE_LIMIT_DB: path.join(tmp, 'rate.db'),
     OPENAI_API_KEY: '',
     ANTHROPIC_API_KEY: '',
-    ...(searchDisabledPromptIds.has(prompt.id) ? { ACHIOTE_DISABLE_SEARCH_WEB: 'true' } : {}),
+    ACHIOTE_DISABLE_SEARCH_WEB: searchDisabledPromptIds.has(prompt.id) ? 'true' : '',
   };
   if (provider === 'glm') {
     env.ACHIOTE_ASK_PROVIDER = 'glm';

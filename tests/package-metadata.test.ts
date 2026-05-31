@@ -82,7 +82,7 @@ describe('package distribution metadata', () => {
 
   it('has reproducible quality and packaging scripts', () => {
     expect(pkg.scripts.typecheck).toBe('tsc --noEmit');
-    expect(pkg.scripts.check).toBe('npm run typecheck && npm run lint && npm run coverage:guard && npm run reference:coverage && npm run build && npm run validate:citations && npm test');
+    expect(pkg.scripts.check).toBe('npm run typecheck && npm run lint && npm run coverage:guard && npm run reference:coverage && npm run build && npm test');
     expect(pkg.scripts['check:compat']).toBe('npm run typecheck && npm run build && npm test');
     expect(pkg.scripts.lint).toBe('node scripts/static-checks.mjs');
     expect(pkg.scripts['coverage:guard']).toBe('node scripts/coverage-threshold.mjs');
@@ -97,7 +97,7 @@ describe('package distribution metadata', () => {
     expect(pkg.scripts['torture:fake']).toBe('npm run build && node scripts/torture-smoke.mjs');
     expect(pkg.scripts['viability:smoke']).toBe('node scripts/viability-transcript-smoke.mjs');
     expect(pkg.scripts['reference:seeds']).toBe('npm run build && node scripts/reference-seed-operator.mjs');
-    expect(pkg.scripts['pack:check']).toBe('npm run check && npm run package:smoke && npm pack --dry-run');
+    expect(pkg.scripts['pack:check']).toBe('npm run check && npm run validate:citations && npm run package:smoke && npm pack --dry-run');
     expect(pkg.scripts['package:smoke']).toBe('node scripts/package-smoke.mjs');
   });
 

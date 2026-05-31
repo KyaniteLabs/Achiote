@@ -61,8 +61,13 @@ describe('auth module', () => {
     }
   });
 
-  it('accepts built-in dev key when no real keys are configured', () => {
+  it('rejects built-in dev key unless a test opts in', () => {
     const auth = createAuthenticator([]);
+    expect(auth.authenticate('ach_dev_test_only').authenticated).toBe(false);
+  });
+
+  it('accepts built-in dev key only when explicitly enabled for tests', () => {
+    const auth = createAuthenticator([], true);
     const result = auth.authenticate('ach_dev_test_only');
     expect(result.authenticated).toBe(true);
     if (result.authenticated) {

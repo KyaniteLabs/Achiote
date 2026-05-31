@@ -69,8 +69,15 @@ const ENCRYPTION_KEY_ENV = 'ACHIOTE_KEY_ENCRYPTION_KEY';
 function getEncryptionKey(): Buffer | null {
   const hex = process.env[ENCRYPTION_KEY_ENV]?.trim();
   if (!hex) return null;
+  if (!/^[0-9a-f]{64}$/i.test(hex)) {
+    throw new Error(`${ENCRYPTION_KEY_ENV} must be a 32-byte hex string`);
+  }
   const buf = Buffer.from(hex, 'hex');
   return buf.length === 32 ? buf : null;
+}
+
+export function assertBillingEncryptionKeyConfigured(): void {
+  if (!getEncryptionKey()) throw new Error(`${ENCRYPTION_KEY_ENV} is required for billing checkout key delivery`);
 }
 
 function encryptKey(plaintext: string): string {
@@ -84,6 +91,7 @@ function encryptKey(plaintext: string): string {
 }
 
 function decryptKey(stored: string): string | null {
+  if (stored.startsWith(KEY_PREFIX)) return stored;
   const key = getEncryptionKey();
   if (!key) return stored;
   try {

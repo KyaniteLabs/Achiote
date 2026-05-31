@@ -100,6 +100,8 @@ export function boundedEditDistance(left: string, right: string, maxDistance: nu
 export function containsConcreteFoodCue(text: string): boolean {
   return /\b(?:smallest safe cue|tasting cue|concrete food cue|recipe move|try this|try it tonight)\b/i.test(text)
     || /\b\d+\s*(?:teaspoons?|tablespoons?|cups?|pinch(?:es)?)\b/i.test(text)
+    || /\b(?:heat|stir|steep|mix|toast|bloom|sip|taste|sprinkle|swirl)\b[\s\S]{0,80}\b(?:pinch(?:es)?|spoonfuls?|splash(?:es)?|drops?|pieces?|slices?|strips?|cloves?|leaves|seeds?)\b/i.test(text)
+    || /\b(?:pinch(?:es)?|spoonfuls?|splash(?:es)?|drops?|pieces?|slices?|strips?|cloves?|leaves|seeds?)\b[\s\S]{0,80}\b(?:heat|stir|steep|mix|toast|bloom|sip|taste|sprinkle|swirl)\b/i.test(text)
     || /\b(?:heat|stir|steep|mix)\b[\s\S]{0,60}\b\d+\s*(?:mins?|minutes?|hours?|°[FC])\b/i.test(text);
 }
 
@@ -163,7 +165,8 @@ export function containsBlockedRecipeToolSynthesis(text: string): boolean {
 }
 
 export function containsOverconfidentIdentityClaim(text: string): boolean {
-  return /\b(?:almost certainly|definitely|clearly|you(?:'re| are) thinking of|your memory is spot[-\s]?on|it'?s called)\b/i.test(text)
+  return /\b(?:almost certainly|you(?:'re| are) thinking of|your memory is spot[-\s]?on|it'?s called)\b/i.test(text)
+    || /\b(?:definitely|clearly)\b[\s\S]{0,48}\b(?:called|is|was|matches|points?\s+to|maps?\s+to|thinking\s+of|remembering)\b/i.test(text)
     || /\bmost likely\s+(?:points?\s+to|matches|is|was|means|refers?\s+to)\b/i.test(text)
     || /\bit\s+points?\s+(?:strongly\s+)?toward\b/i.test(text)
     || /\b(?:your\s+)?(?:memory|description|clues?)\s+(?:points?|pointed)\s+(?:strongly\s+)?(?:toward|to)\b/i.test(text)

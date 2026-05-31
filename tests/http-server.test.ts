@@ -384,6 +384,7 @@ describe('HTTP server billing integration', () => {
         STRIPE_SECRET_KEY: 'sk_test_dummy',
         STRIPE_WEBHOOK_SECRET: 'whsec_dummy_secret_for_testing_only',
         STRIPE_PERSONAL_PRICE_ID: 'price_test',
+        ACHIOTE_KEY_ENCRYPTION_KEY: '0'.repeat(64),
       },
       stdio: ['pipe', 'pipe', 'pipe'],
     });

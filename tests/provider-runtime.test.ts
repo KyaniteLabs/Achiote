@@ -63,6 +63,45 @@ describe('ProviderRuntime', () => {
     });
   });
 
+  it('marks the OpenRouter free router alias as rate-limit sensitive', () => {
+    const runtime = createProviderRuntime({
+      env: {
+        ACHIOTE_ASK_PROVIDER: 'openai',
+        OPENAI_BASE_URL: 'https://openrouter.ai/api/v1',
+        OPENAI_MODEL: 'openrouter/free',
+        OPENROUTER_API_KEY: 'sk-router',
+      },
+      anthropicClient: {} as never,
+      systemPrompt: 'system',
+      tools: [tool],
+      openAITimeoutMs: 5678,
+    });
+
+    expect(runtime.profile).toMatchObject({
+      provider: 'openrouter',
+      rateLimitSensitive: true,
+    });
+  });
+
+  it('does not treat local inference keys as OpenAI cloud credentials', () => {
+    const runtime = createProviderRuntime({
+      env: {
+        ACHIOTE_ASK_PROVIDER: 'openai',
+        OPENAI_BASE_URL: 'https://api.openai.com/v1',
+        OPENAI_MODEL: 'gpt-4o-mini',
+        LOCAL_INFERENCE_API_KEY: 'local-only',
+      },
+      anthropicClient: {} as never,
+      systemPrompt: 'system',
+      tools: [tool],
+      openAITimeoutMs: 5678,
+    });
+
+    expect(runtime.readinessCredentials()).toMatchObject({
+      openaiProviderReady: false,
+    });
+  });
+
   it('creates OpenAI-compatible sessions for local inference URLs without requiring cloud keys', async () => {
     const runtime = createProviderRuntime({
       env: {

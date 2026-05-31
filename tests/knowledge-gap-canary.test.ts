@@ -226,6 +226,59 @@ describe('knowledge-gap canary', () => {
     ]);
   });
 
+  it('classifies missed minimum-cue frames as wrapper regressions', async () => {
+    const { analyzeKnowledgeGaps } = await import('../scripts/lib/knowledge-gap-canary.mjs');
+
+    const report = analyzeKnowledgeGaps([
+      {
+        mode: 'achiote',
+        provider: 'glm',
+        model: 'bad-wrapper',
+        prompt: 'cold grain drink',
+        text: 'This answer never offers a first tiny cue.',
+        tools: ['plan_tool_workflow', 'collect_food_memory'],
+        quality: ['missed_minimum_cue_frame'],
+      },
+    ]);
+
+    expect(report.knowledgeGaps).toEqual([]);
+    expect(report.excludedEvidence).toEqual([
+      expect.objectContaining({ reason: 'wrapper_quality_regression' }),
+    ]);
+    expect(report.regressionCandidates).toEqual([
+      expect.objectContaining({
+        type: 'wrapper_quality_regression',
+        nextAction: 'Add a fake-provider regression that proves final answers keep the minimum-cue frame.',
+      }),
+    ]);
+  });
+
+  it('requires every candidate seed to have fixture evidence before landing taxonomy work', async () => {
+    const { reconcileTaxonomyRemediationQueue } = await import('../scripts/lib/knowledge-gap-canary.mjs');
+
+    const queue = {
+      items: [{
+        id: 'grain-beverage',
+        status: 'landed_in_taxonomy',
+        candidateSeedIds: ['seed-a', 'seed-b'],
+      }],
+    };
+    const reconciled = reconcileTaxonomyRemediationQueue(queue, {
+      referenceSeedQueue: { seeds: [{ id: 'seed-a' }, { id: 'seed-b' }] },
+      referencePantryFixtures: {
+        fixtures: [
+          { seedId: 'seed-a', cacheTarget: { dishFamily: 'grain-beverage', region: 'A' } },
+          { seedId: 'seed-a', cacheTarget: { dishFamily: 'grain-beverage', region: 'B' } },
+        ],
+      },
+      dishFamilies: { families: [{ canonicalName: 'grain-beverage' }] },
+    });
+
+    expect(reconciled.items[0].status).toBe('ready_for_taxonomy');
+    expect(reconciled.items[0].coverageEvidence.seedIds).toEqual(['seed-a', 'seed-b']);
+    expect(reconciled.items[0].coverageEvidence.fixtureTargets).toHaveLength(2);
+  });
+
   it('builds taxonomy remediation work from clean gaps only', async () => {
     const { analyzeKnowledgeGaps, buildTaxonomyRemediationQueue } = await import('../scripts/lib/knowledge-gap-canary.mjs');
 

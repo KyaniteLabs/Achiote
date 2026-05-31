@@ -4,7 +4,7 @@ import { spawn, spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import { assertPackageSurfaceFiles, PACKAGE_SURFACE } from './lib/package-surface.mjs';
@@ -13,7 +13,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(__dirname, '..');
 const npmCommand = process.platform === 'win32' ? 'npm.cmd' : 'npm';
 async function loadExpectedTools() {
-  const registry = await import(path.join(repoRoot, 'dist', 'tools', 'tool-registry.js'));
+  const registry = await import(pathToFileURL(path.join(repoRoot, 'dist', 'tools', 'tool-registry.js')).href);
   return registry.toolNames;
 }
 
@@ -78,10 +78,12 @@ async function withTimeout(promise, ms, label) {
 
 function waitForServer(child, port) {
   return new Promise((resolve, reject) => {
+    let stdout = '';
     let stderr = '';
     const timeout = setTimeout(() => reject(new Error(`Packaged HTTP server startup timed out on port ${port}${stderr ? `\n\nstderr:\n${stderr}` : ''}`)), 10_000);
     child.stdout?.on('data', (chunk) => {
-      if (Buffer.from(chunk).toString('utf8').includes(`localhost:${port}`)) {
+      stdout += Buffer.from(chunk).toString('utf8');
+      if (stdout.includes(`localhost:${port}`)) {
         clearTimeout(timeout);
         resolve();
       }
@@ -106,6 +108,7 @@ function assertPackagedHelperScripts(installDir, tempRoot) {
   const dockerSmokePath = path.join(packageRoot, 'scripts', 'docker-smoke.mjs');
   const liveAskPath = path.join(packageRoot, 'scripts', 'live-ask-smoke.mjs');
   const referenceSeedOperatorPath = path.join(packageRoot, 'scripts', 'reference-seed-operator.mjs');
+  const bundledFixtureCount = JSON.parse(fs.readFileSync(path.join(repoRoot, 'src', 'data', 'reference-pantry-fixtures.json'), 'utf8')).fixtures.length;
   if (!fs.existsSync(keygenPath)) throw new Error(`Packaged keygen helper missing at ${keygenPath}`);
   if (!fs.existsSync(dockerSmokePath)) throw new Error(`Packaged docker smoke helper missing at ${dockerSmokePath}`);
   if (!fs.existsSync(liveAskPath)) throw new Error(`Packaged live ask smoke helper missing at ${liveAskPath}`);
@@ -144,7 +147,7 @@ function assertPackagedHelperScripts(installDir, tempRoot) {
     throw new Error(`Packaged bundled reference pantry write failed\nstdout:\n${bundledWrite.stdout}\nstderr:\n${bundledWrite.stderr}`);
   }
   const bundledWriteResult = JSON.parse(bundledWrite.stdout);
-  if (typeof bundledWriteResult.stored !== 'number' || bundledWriteResult.stored < 138) {
+  if (bundledWriteResult.stored !== bundledFixtureCount) {
     throw new Error(`Packaged bundled reference pantry write returned unexpected result: ${bundledWrite.stdout}`);
   }
 }
@@ -161,6 +164,7 @@ async function assertPackagedHttpServerStarts(installDir, tempRoot) {
       ACHIOTE_AUTH_ENABLED: 'false',
       ACHIOTE_CACHE_PATH: path.join(tempRoot, 'http-cache', 'culture-cache.db'),
       ACHIOTE_RATE_LIMIT_DB: path.join(tempRoot, 'http-rate-limit.db'),
+      ACHIOTE_EVENTS_ADMIN_TOKEN: '',
       ANTHROPIC_API_KEY: 'package-smoke-placeholder',
     },
   });
@@ -178,9 +182,11 @@ async function assertPackagedHttpServerStarts(installDir, tempRoot) {
     const privateEvents = await withTimeout(fetch(`http://127.0.0.1:${port}/events`), 5_000, 'GET /events');
     if (privateEvents.status !== 404) throw new Error(`GET /events returned ${privateEvents.status}; expected private 404`);
   } finally {
-    const exited = new Promise((resolve) => child.once('exit', resolve));
-    child.kill('SIGTERM');
-    await withTimeout(exited, 5_000, 'packaged HTTP shutdown');
+    if (child.exitCode === null && child.signalCode === null) {
+      const exited = new Promise((resolve) => child.once('exit', resolve));
+      child.kill('SIGTERM');
+      await withTimeout(exited, 5_000, 'packaged HTTP shutdown');
+    }
   }
 }
 

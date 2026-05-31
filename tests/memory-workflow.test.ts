@@ -31,6 +31,15 @@ describe('research-first food memory workflow', () => {
     expect(memory.nextQuestions.join(' ')).not.toMatch(/\b(?:nuts?|peanuts?)\b/i);
   });
 
+  it('matches plural allergy terms against singular ingredient hints', () => {
+    const memory = collectFoodMemory({
+      memoryText: 'I am allergic to eggs and sesame. I remember a sweet sauce.',
+    });
+
+    expect(memory.extractedClues.rememberedIngredients).not.toEqual(expect.arrayContaining(['egg', 'sesame']));
+    expect(memory.nextQuestions.join(' ')).not.toMatch(/\b(?:eggs?|sesame)\b/i);
+  });
+
   it('plans research instead of pretending sparse fragments are resolved', () => {
     const memory = collectFoodMemory({
       memoryText: 'My grandma made something like pass-teh-lay for Christmas. Puerto Rican family.',

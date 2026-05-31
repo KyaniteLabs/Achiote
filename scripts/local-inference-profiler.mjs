@@ -209,16 +209,22 @@ async function unloadAll(targetBaseUrl, protectedModelNames, requestTimeoutMs) {
   const apiBase = managementBaseUrl(targetBaseUrl);
   const models = await fetchJson(`${apiBase}/models`, {}, requestTimeoutMs);
   const descriptors = extractModelDescriptors(models);
-  const ids = descriptors.map((entry) => entry.key ?? entry.id).filter((id) => typeof id === 'string');
-  const loadedIds = Array.isArray(models.models)
+  const descriptorCandidates = descriptors
+    .map((entry) => localInferenceModelIdentifiers(entry))
+    .filter((ids) => ids.length > 0);
+  const loadedIdentifiers = Array.isArray(models.models)
     ? models.models
       .filter((entry) => entry?.state === 'loaded' || entry?.loaded === true || entry?.loaded_instance_id)
-      .map((entry) => entry?.loaded_instance_id ?? entry?.key ?? entry?.id)
-      .filter((id) => typeof id === 'string')
+      .map((entry) => localInferenceModelIdentifiers(entry))
+      .filter((ids) => ids.length > 0)
     : [];
-  const candidates = loadedIds.length > 0 ? loadedIds : ids;
-  const safeCandidates = candidates.filter((id) => !isProtectedLocalInferenceModel(id, protectedModelNames));
-  const skippedProtected = candidates.filter((id) => isProtectedLocalInferenceModel(id, protectedModelNames));
+  const candidateGroups = loadedIdentifiers.length > 0 ? loadedIdentifiers : descriptorCandidates;
+  const safeCandidates = candidateGroups
+    .filter((ids) => !ids.some((id) => isProtectedLocalInferenceModel(id, protectedModelNames)))
+    .map((ids) => ids[0]);
+  const skippedProtected = candidateGroups
+    .filter((ids) => ids.some((id) => isProtectedLocalInferenceModel(id, protectedModelNames)))
+    .map((ids) => ids[0]);
   const responses = [];
   for (const id of safeCandidates) {
     try {

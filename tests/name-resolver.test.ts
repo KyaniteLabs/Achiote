@@ -105,6 +105,7 @@ describe('resolveDishName ambiguity-aware candidates', () => {
       variantName: 'tortilla-espanola',
       confidence: 'High',
     });
+    expect(result.clarificationPrompt).toBeUndefined();
   });
 });
 

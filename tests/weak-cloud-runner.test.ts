@@ -145,7 +145,7 @@ describe('weak cloud runner hardening', () => {
     expect(runner).toContain('promptBank');
     expect(runner).toContain('referenceFingerprint');
     expect(runner).toContain('rotatedAfterReferenceUpdate');
-    expect(runner).toContain("...(searchDisabledPromptIds.has(prompt.id) ? { ACHIOTE_DISABLE_SEARCH_WEB: 'true' } : {})");
+    expect(runner).toContain("ACHIOTE_DISABLE_SEARCH_WEB: searchDisabledPromptIds.has(prompt.id) ? 'true' : ''");
     expect(runner).toContain("SERPER_API_KEY: ''");
     expect(runner).toContain("BRAVE_API_KEY: ''");
     expect(runner).toContain("TAVILY_API_KEY: ''");

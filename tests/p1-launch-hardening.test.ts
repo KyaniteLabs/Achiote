@@ -9,6 +9,7 @@ describe('P1 launch hardening guardrails', () => {
     expect(releaseJob).toContain('name: Node 22 release gate');
     expect(releaseJob).toContain('node-version: 22');
     expect(releaseJob).toMatch(/^\s+run: npm run check$/m);
+    expect(releaseJob).toMatch(/^\s+run: npm run validate:citations$/m);
     expect(releaseJob).toContain('npm audit --audit-level=moderate');
     expect(releaseJob).toContain('npm run package:smoke');
     expect(releaseJob).toContain('npm pack --dry-run');

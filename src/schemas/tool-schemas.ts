@@ -346,6 +346,7 @@ export const minimumViableNostalgiaOutputSchema = z.object({
 
 export const webSearchOutputSchema = z.object({
   query: z.string(),
+  searchStatus: z.enum(['ok', 'not_configured', 'error']),
   results: z.array(
     z.object({
       title: z.string(),

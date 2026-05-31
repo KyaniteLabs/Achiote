@@ -54,6 +54,27 @@ export function sanitizeGroundedSearchQuery(query: string): string {
     .slice(0, 180);
 }
 
+export function isExplicitLocalSourcingSearchRequest(userMessage: string): boolean {
+  return /\b(?:where\s+(?:can|could)\s+i\s+(?:buy|find)|where\s+to\s+(?:buy|find)|find\s+(?:actual\s+)?(?:stores?|markets?|grocer(?:y|ies)|shops?)|actual\s+(?:stores?|markets?|grocer(?:y|ies)|shops?)|local\s+(?:stores?|markets?|grocer(?:y|ies)|shops?)|near\s+me|near\s+[a-z][\p{L}\p{M}\s,.-]{2,80})\b/iu.test(userMessage);
+}
+
+export function buildLocalSourcingSearchQuery(ingredients: string[], location: string): string {
+  const ingredientQuery = ingredients
+    .map((ingredient) => ingredient.trim())
+    .filter(Boolean)
+    .slice(0, 3)
+    .join(' ');
+  if (!ingredientQuery || !location.trim()) return '';
+  const specialtyTerms = /\b(?:chilhuacle|mole\s+negro|quesillo|tlayuda|oaxac)/i.test(ingredientQuery)
+    ? 'Mexican Oaxacan grocery dried chiles spice shop'
+    : /\b(?:chiles?|chilis?|chillies|peppers?)\b/i.test(ingredientQuery)
+      ? 'spice shop international grocery specialty market'
+      : /\b(?:masa|maiz|maize|achiote|annatto|epazote)\b/i.test(ingredientQuery)
+        ? 'Mexican Latin grocery specialty market'
+        : 'specialty grocery market store shop';
+  return sanitizeGroundedSearchQuery(`${ingredientQuery} ${location.trim()} ${specialtyTerms}`);
+}
+
 export function isLatestCorrectionMessage(userMessage: string): boolean {
   return /\b(?:correction|actually|wait\s+no|remembered\s+wrong)\b/i.test(userMessage);
 }

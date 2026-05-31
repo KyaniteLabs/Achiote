@@ -146,10 +146,8 @@ describe('WorkflowPlanner', () => {
     const exactIdentity = planAskWorkflow({
       userMessage: 'Someone served a tart green-herb broth with pale potato or egg pieces. What exact regional dish is this, and what sources confirm the name?',
     });
-    // If the message matches a pantry family, search is suppressed because internal data is sufficient.
-    // If no pantry family matches, search remains available.
-    expect(exactIdentity.maxSearchCalls).toBeGreaterThanOrEqual(0);
-    expect(exactIdentity.maxSearchCalls).toBeLessThanOrEqual(1);
+    expect(exactIdentity.maxSearchCalls).toBe(1);
+    expect(exactIdentity.workflowSteps.map((step) => step.tool)).toContain('search_web');
   });
 
   it('keeps unknown and general food inquiries on a clarification-only path', () => {

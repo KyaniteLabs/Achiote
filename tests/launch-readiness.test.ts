@@ -72,7 +72,7 @@ describe('P0 launch readiness guards', () => {
 
     expect(landing).not.toContain('Simon G., first memory reconstructed');
     expect(landing).not.toContain('Beta user, family recipe recovery');
-    expect(landing).not.toMatch(/\btestimonial\b/i);
+    expect(landing).not.toMatch(/\btestimonials?\b/i);
   });
 
   it('documents secure HTTP auth defaults and source/tarball install status', () => {

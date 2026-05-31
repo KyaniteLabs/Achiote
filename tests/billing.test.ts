@@ -167,6 +167,28 @@ describe('billing-db', () => {
       keyPlaintext: null,
     });
   });
+
+  it('preserves pre-encryption plaintext checkout keys long enough to consume once', () => {
+    billingDb.createCheckoutSession('cs_legacy_plain', 'subscription', 'cus_123', 'personal');
+    const rawDb = (billingDb as unknown as {
+      db: { prepare(sql: string): { run(...args: unknown[]): unknown } };
+    }).db;
+    rawDb
+      .prepare("UPDATE checkout_sessions SET stripe_customer_id = ?, key_id = ?, key_plaintext = ?, tier = ?, status = 'completed' WHERE stripe_session_id = ?")
+      .run('cus_123', 'ak_legacy', 'ach_legacykey', 'personal', 'cs_legacy_plain');
+
+    expect(billingDb.consumeCheckoutSessionApiKey('cs_legacy_plain')).toMatchObject({
+      keyPlaintext: 'ach_legacykey',
+    });
+    expect(billingDb.getCheckoutSession('cs_legacy_plain')!.keyPlaintext).toBeNull();
+  });
+
+  it('fails checkout key storage when the encryption key is malformed', () => {
+    billingDb.createCheckoutSession('cs_bad_key', 'subscription', 'cus_123', 'personal');
+    process.env.ACHIOTE_KEY_ENCRYPTION_KEY = 'not-hex';
+
+    expect(() => billingDb.completeCheckoutSession('cs_bad_key', 'cus_123', 'ak_bad', 'ach_badkey', 'personal')).toThrow('32-byte hex');
+  });
 });
 
 describe('billing-stripe config', () => {
@@ -174,6 +196,7 @@ describe('billing-stripe config', () => {
 
   beforeEach(() => {
     process.env = { ...originalEnv };
+    process.env.ACHIOTE_KEY_ENCRYPTION_KEY = '0'.repeat(64);
     delete process.env.STRIPE_SECRET_KEY;
     delete process.env.STRIPE_WEBHOOK_SECRET;
     delete process.env.STRIPE_PERSONAL_PRICE_ID;
@@ -202,6 +225,14 @@ describe('billing-stripe config', () => {
   it('returns null when no price IDs are configured', () => {
     process.env.STRIPE_SECRET_KEY = 'sk_test_123';
     process.env.STRIPE_WEBHOOK_SECRET = 'whsec_123';
+    expect(loadBillingConfigFromEnv()).toBeNull();
+  });
+
+  it('returns null when billing key encryption is not configured', () => {
+    process.env.STRIPE_SECRET_KEY = 'sk_test_123';
+    process.env.STRIPE_WEBHOOK_SECRET = 'whsec_123';
+    process.env.STRIPE_PERSONAL_PRICE_ID = 'price_personal';
+    delete process.env.ACHIOTE_KEY_ENCRYPTION_KEY;
     expect(loadBillingConfigFromEnv()).toBeNull();
   });
 

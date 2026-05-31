@@ -81,9 +81,10 @@ All KyaniteLabs repos must have these CI checks (via GitHub Actions on Blacksmit
 
 | Check | Tool | Config |
 |-------|------|--------|
-| Lint | ruff | `ruff check . && ruff format --check .` |
-| Test | pytest | `pytest --tb=short -q` |
-| Build | pip install | `pip install -e .` (Python) or equivalent |
+| Static checks | npm | `npm run lint` |
+| Typecheck | TypeScript | `npm run typecheck` |
+| Test | Vitest | `npm test` |
+| Package smoke | npm | `npm run package:smoke` |
 
 ### Recommended Checks (add when applicable)
 
