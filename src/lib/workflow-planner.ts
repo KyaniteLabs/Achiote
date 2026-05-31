@@ -26,7 +26,7 @@ const DIETARY_PATTERNS: Array<{ pattern: RegExp; label: string }> = [
   { pattern: /\b(?:shellfish|seafood.?allerg)\b/i, label: 'shellfish_allergy' },
 ];
 
-export function planAskWorkflow(input: AskWorkflowPlannerInput): AskWorkflowPlan {
+export function planAskWorkflow(input: AskWorkflowPlannerInput): AskWorkflowPlan & { needsSourcing?: boolean } {
   const userMessage = input.userMessage;
   const msg = userMessage.toLowerCase();
   const detectedRestrictions = DIETARY_PATTERNS
@@ -51,6 +51,10 @@ export function planAskWorkflow(input: AskWorkflowPlannerInput): AskWorkflowPlan
     || /\b(?:tell|say|claim)\s+(?:me\s+)?(?:you\s+)?(?:browsed|searched)\b[\s\S]{0,80}\b(?:live\s+)?(?:web|results|prices)\b/i.test(msg)
     || /\bdo\s+not\s+(?:claim\s+)?(?:browse|search|use\s+live\s+web|claim\s+(?:you\s+)?(?:browsed|searched))\b/i.test(msg)
     || /\b(?:do\s+not|don't)\s+claim\s+(?:you\s+)?(?:browsed|searched)\b/i.test(msg);
+  const hasSourcingKeywords = /\b(?:where\s+(?:can|do|would|should)\s+i\s+(?:buy|find|get)|what\s+should\s+i\s+buy|buy\s+near|find\s+near|source\s+(?:for|ingredients?)|where\s+to\s+(?:buy|find|get)|grocery\s+store|supermarket|market\s+near|available\s+near)\b/i.test(msg);
+  const hasResidenceLocation = /\b(?:i\s+(?:live|am|currently\s+live|currently\s+am)|i['']?m|im|we\s+(?:live|are)|based|located)\s+in\s+[^.!?;,]{2,80}/i.test(userMessage);
+  const hasPurchaseLocation = /\b(?:buy|find|get|source|sourcing|shop(?:\s+for)?)\b[\s\S]{0,120}\b(?:in|near|around)\s+[^.!?;,]{2,80}/i.test(userMessage);
+  const needsSourcing = hasSourcingKeywords && (hasResidenceLocation || hasPurchaseLocation);
 
   const needsSubstitutions = (hasRestrictions || hasSubstitutionKeywords) && wantsAdaptation && !negatesSubstitutionNeed;
   const detectedIntent = detectIntent({
@@ -83,11 +87,17 @@ export function planAskWorkflow(input: AskWorkflowPlannerInput): AskWorkflowPlan
     steps.push({ tool: 'build_reconstruction_dossier', reason: 'Assemble the original evidence boundary before substitutions', required: true });
     steps.push({ tool: 'generate_minimum_viable_nostalgia', reason: 'Create the original minimum cue that will become the substitution basis', required: true });
     steps.push({ tool: 'find_sensory_substitutes', reason: 'Find compound-matched substitutions after the original cue is clear', required: true });
+    if (needsSourcing) {
+      steps.push({ tool: 'source_ingredients', reason: 'Help the user find ingredients near where they live', required: false });
+    }
   } else if (detectedIntent === 'recipe_adaptation') {
     steps.push({ tool: 'resolve_dish_name', reason: 'Identify the target dish', required: true });
     addSearchStep('Find current recipe approaches');
     steps.push({ tool: 'build_reconstruction_dossier', reason: 'Assemble evidence for adaptation', required: true });
     steps.push({ tool: 'generate_minimum_viable_nostalgia', reason: 'Create a test cue for the adaptation', required: true });
+    if (needsSourcing) {
+      steps.push({ tool: 'source_ingredients', reason: 'Help the user find ingredients near where they live', required: false });
+    }
   } else if (detectedIntent === 'unknown_dish' || detectedIntent === 'general_food_inquiry') {
     maxSearchCalls = 0;
   } else {
@@ -95,6 +105,9 @@ export function planAskWorkflow(input: AskWorkflowPlannerInput): AskWorkflowPlan
     addSearchStep('Confirm dish identity or find regional details');
     steps.push({ tool: 'build_reconstruction_dossier', reason: 'Assemble evidence boundary', required: true });
     steps.push({ tool: 'generate_minimum_viable_nostalgia', reason: 'Create first sensory test cue', required: true });
+    if (needsSourcing) {
+      steps.push({ tool: 'source_ingredients', reason: 'Help the user find ingredients near where they live', required: false });
+    }
   }
 
   if (bundledMechanismFamily) maxSearchCalls = 0;
@@ -108,6 +121,7 @@ export function planAskWorkflow(input: AskWorkflowPlannerInput): AskWorkflowPlan
     workflowSteps: steps,
     maxSearchCalls,
     needsSubstitutions,
+    needsSourcing,
     detectedRestrictions,
     needsResolve,
     confidenceNote: `Intent: ${detectedIntent}. Dietary restrictions: ${detectedRestrictions.length > 0 ? detectedRestrictions.join(', ') : 'none detected'}. Max search_web calls: ${maxSearchCalls}.${bundledMechanismNote}`,

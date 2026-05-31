@@ -5,258 +5,1357 @@
   },
   "regions": {
     "southern-california": {
-      "cities": ["Los Angeles", "San Diego", "Orange County", "Inland Empire"],
+      "cities": [
+        "Los Angeles",
+        "San Diego",
+        "Orange County",
+        "Inland Empire"
+      ],
       "majorEthnicCorridors": [
-        { "name": "Koreatown", "city": "Los Angeles", "cuisines": ["Korean", "Japanese"] },
-        { "name": "San Gabriel Valley", "city": "Los Angeles", "cuisines": ["Chinese", "Vietnamese"] },
-        { "name": "Thai Town", "city": "Los Angeles", "cuisines": ["Thai", "Southeast Asian"] },
-        { "name": "Little Ethiopia", "city": "Los Angeles", "cuisines": ["Ethiopian", "Eritrean"] },
-        { "name": "Glendale", "city": "Los Angeles", "cuisines": ["Armenian", "Middle Eastern"] },
-        { "name": "Westminster", "city": "Orange County", "cuisines": ["Vietnamese"] },
-        { "name": "National City", "city": "San Diego", "cuisines": ["Filipino"] },
-        { "name": "East LA / Boyle Heights", "city": "Los Angeles", "cuisines": ["Mexican", "Central American"] }
+        {
+          "name": "Koreatown",
+          "city": "Los Angeles",
+          "cuisines": [
+            "Korean",
+            "Japanese"
+          ]
+        },
+        {
+          "name": "San Gabriel Valley",
+          "city": "Los Angeles",
+          "cuisines": [
+            "Chinese",
+            "Vietnamese"
+          ]
+        },
+        {
+          "name": "Thai Town",
+          "city": "Los Angeles",
+          "cuisines": [
+            "Thai",
+            "Southeast Asian"
+          ]
+        },
+        {
+          "name": "Little Ethiopia",
+          "city": "Los Angeles",
+          "cuisines": [
+            "Ethiopian",
+            "Eritrean"
+          ]
+        },
+        {
+          "name": "Glendale",
+          "city": "Los Angeles",
+          "cuisines": [
+            "Armenian",
+            "Middle Eastern"
+          ]
+        },
+        {
+          "name": "Westminster",
+          "city": "Orange County",
+          "cuisines": [
+            "Vietnamese"
+          ]
+        },
+        {
+          "name": "National City",
+          "city": "San Diego",
+          "cuisines": [
+            "Filipino"
+          ]
+        },
+        {
+          "name": "East LA / Boyle Heights",
+          "city": "Los Angeles",
+          "cuisines": [
+            "Mexican",
+            "Central American"
+          ]
+        }
       ],
       "majorStores": {
-        "asian": ["H Mart", "99 Ranch Market", "Mitsuwa", "Tokyo Central"],
-        "latin": ["Northgate Gonzalez", "Vallarta Supermarket", "Cardenas"],
-        "middleEastern": ["Jons Marketplace", "Super King"],
-        "indian": ["India Sweets & Spices", "Apna Bazar"],
-        "mainstream": ["Whole Foods", "Bristol Farms", "Sprouts", "Trader Joe's", "Ralphs", "Vons"]
+        "asian": [
+          "H Mart",
+          "99 Ranch Market",
+          "Mitsuwa",
+          "Tokyo Central"
+        ],
+        "latin": [
+          "Northgate Gonzalez",
+          "Vallarta Supermarket",
+          "Cardenas"
+        ],
+        "middleEastern": [
+          "Jons Marketplace",
+          "Super King"
+        ],
+        "indian": [
+          "India Sweets & Spices",
+          "Apna Bazar"
+        ],
+        "mainstream": [
+          "Whole Foods",
+          "Bristol Farms",
+          "Sprouts",
+          "Trader Joe's",
+          "Ralphs",
+          "Vons"
+        ]
       }
     },
     "bay-area": {
-      "cities": ["San Francisco", "San Jose", "Oakland", "Berkeley"],
+      "cities": [
+        "San Francisco",
+        "San Jose",
+        "Oakland",
+        "Berkeley"
+      ],
       "majorEthnicCorridors": [
-        { "name": "Chinatown", "city": "San Francisco", "cuisines": ["Chinese", "Southeast Asian"] },
-        { "name": "Mission District", "city": "San Francisco", "cuisines": ["Mexican", "Central American"] },
-        { "name": "Japantown", "city": "San Jose", "cuisines": ["Japanese", "Korean"] },
-        { "name": "Fremont", "city": "East Bay", "cuisines": ["Indian", "Afghan", "Middle Eastern"] },
-        { "name": "Oakland Chinatown", "city": "Oakland", "cuisines": ["Chinese", "Vietnamese", "Korean"] }
+        {
+          "name": "Chinatown",
+          "city": "San Francisco",
+          "cuisines": [
+            "Chinese",
+            "Southeast Asian"
+          ]
+        },
+        {
+          "name": "Mission District",
+          "city": "San Francisco",
+          "cuisines": [
+            "Mexican",
+            "Central American"
+          ]
+        },
+        {
+          "name": "Japantown",
+          "city": "San Jose",
+          "cuisines": [
+            "Japanese",
+            "Korean"
+          ]
+        },
+        {
+          "name": "Fremont",
+          "city": "East Bay",
+          "cuisines": [
+            "Indian",
+            "Afghan",
+            "Middle Eastern"
+          ]
+        },
+        {
+          "name": "Oakland Chinatown",
+          "city": "Oakland",
+          "cuisines": [
+            "Chinese",
+            "Vietnamese",
+            "Korean"
+          ]
+        }
       ],
       "majorStores": {
-        "asian": ["99 Ranch Market", "Marina Food", "Mitsuwa"],
-        "latin": ["Mi Pueblo", "Lucky"],
-        "middleEastern": ["Sahara Market"],
-        "indian": ["New India Bazar", "Milan Grocery"],
-        "mainstream": ["Whole Foods", "Berkeley Bowl", "Rainbow Grocery", "Trader Joe's", "Safeway"]
+        "asian": [
+          "99 Ranch Market",
+          "Marina Food",
+          "Mitsuwa"
+        ],
+        "latin": [
+          "Mi Pueblo",
+          "Lucky"
+        ],
+        "middleEastern": [
+          "Sahara Market"
+        ],
+        "indian": [
+          "New India Bazar",
+          "Milan Grocery"
+        ],
+        "mainstream": [
+          "Whole Foods",
+          "Berkeley Bowl",
+          "Rainbow Grocery",
+          "Trader Joe's",
+          "Safeway"
+        ]
       }
     },
     "new-york-metro": {
-      "cities": ["New York City", "Jersey City", "Yonkers", "Newark"],
+      "cities": [
+        "New York City",
+        "Jersey City",
+        "Yonkers",
+        "Newark"
+      ],
       "majorEthnicCorridors": [
-        { "name": "Flushing", "city": "Queens", "cuisines": ["Chinese", "Korean"] },
-        { "name": "Jackson Heights", "city": "Queens", "cuisines": ["Indian", "South Asian", "Latin American"] },
-        { "name": "Astoria", "city": "Queens", "cuisines": ["Greek", "Middle Eastern", "Eastern European"] },
-        { "name": "Washington Heights", "city": "Manhattan", "cuisines": ["Dominican", "Caribbean"] },
-        { "name": "Sunset Park", "city": "Brooklyn", "cuisines": ["Chinese", "Mexican"] },
-        { "name": "Koreatown", "city": "Manhattan", "cuisines": ["Korean", "Japanese"] },
-        { "name": "Arthur Avenue", "city": "Bronx", "cuisines": ["Italian"] }
+        {
+          "name": "Flushing",
+          "city": "Queens",
+          "cuisines": [
+            "Chinese",
+            "Korean"
+          ]
+        },
+        {
+          "name": "Jackson Heights",
+          "city": "Queens",
+          "cuisines": [
+            "Indian",
+            "South Asian",
+            "Latin American"
+          ]
+        },
+        {
+          "name": "Astoria",
+          "city": "Queens",
+          "cuisines": [
+            "Greek",
+            "Middle Eastern",
+            "Eastern European"
+          ]
+        },
+        {
+          "name": "Washington Heights",
+          "city": "Manhattan",
+          "cuisines": [
+            "Dominican",
+            "Caribbean"
+          ]
+        },
+        {
+          "name": "Sunset Park",
+          "city": "Brooklyn",
+          "cuisines": [
+            "Chinese",
+            "Mexican"
+          ]
+        },
+        {
+          "name": "Koreatown",
+          "city": "Manhattan",
+          "cuisines": [
+            "Korean",
+            "Japanese"
+          ]
+        },
+        {
+          "name": "Arthur Avenue",
+          "city": "Bronx",
+          "cuisines": [
+            "Italian"
+          ]
+        }
       ],
       "majorStores": {
-        "asian": ["H Mart", "SkyFoods", "Great Wall Supermarket"],
-        "latin": ["Associated Supermarket", "Compare Foods"],
-        "middleEastern": ["Kalustyan's", "Sahadi's"],
-        "indian": ["Patel Brothers", "Apna Bazar"],
-        "mainstream": ["Whole Foods", "Trader Joe's", "Fairway", "Zabar's"]
+        "asian": [
+          "H Mart",
+          "SkyFoods",
+          "Great Wall Supermarket"
+        ],
+        "latin": [
+          "Associated Supermarket",
+          "Compare Foods"
+        ],
+        "middleEastern": [
+          "Kalustyan's",
+          "Sahadi's"
+        ],
+        "indian": [
+          "Patel Brothers",
+          "Apna Bazar"
+        ],
+        "mainstream": [
+          "Whole Foods",
+          "Trader Joe's",
+          "Fairway",
+          "Zabar's"
+        ]
       }
     },
     "chicago-metro": {
-      "cities": ["Chicago", "Evanston", "Naperville", "Schaumburg"],
+      "cities": [
+        "Chicago",
+        "Evanston",
+        "Naperville",
+        "Schaumburg"
+      ],
       "majorEthnicCorridors": [
-        { "name": "Chinatown", "city": "Chicago", "cuisines": ["Chinese", "Pan-Asian"] },
-        { "name": "Devon Avenue", "city": "Chicago", "cuisines": ["Indian", "Pakistani", "Middle Eastern"] },
-        { "name": "Pilsen", "city": "Chicago", "cuisines": ["Mexican", "Central American"] },
-        { "name": "Little Village", "city": "Chicago", "cuisines": ["Mexican"] },
-        { "name": "Albany Park", "city": "Chicago", "cuisines": ["Korean", "Middle Eastern", "Latin American"] }
+        {
+          "name": "Chinatown",
+          "city": "Chicago",
+          "cuisines": [
+            "Chinese",
+            "Pan-Asian"
+          ]
+        },
+        {
+          "name": "Devon Avenue",
+          "city": "Chicago",
+          "cuisines": [
+            "Indian",
+            "Pakistani",
+            "Middle Eastern"
+          ]
+        },
+        {
+          "name": "Pilsen",
+          "city": "Chicago",
+          "cuisines": [
+            "Mexican",
+            "Central American"
+          ]
+        },
+        {
+          "name": "Little Village",
+          "city": "Chicago",
+          "cuisines": [
+            "Mexican"
+          ]
+        },
+        {
+          "name": "Albany Park",
+          "city": "Chicago",
+          "cuisines": [
+            "Korean",
+            "Middle Eastern",
+            "Latin American"
+          ]
+        }
       ],
       "majorStores": {
-        "asian": ["H Mart", "Assi Plaza", "Mitsuwa"],
-        "latin": ["Carnicerias Jimenez", "El Guero"],
-        "middleEastern": ["Z&H Market", "Kedzie Plaza"],
-        "indian": ["Patel Brothers", "Apna Bazar India"],
-        "mainstream": ["Whole Foods", "Trader Joe's", "Mariano's", "Jewel-Osco"]
+        "asian": [
+          "H Mart",
+          "Assi Plaza",
+          "Mitsuwa"
+        ],
+        "latin": [
+          "Carnicerias Jimenez",
+          "El Guero"
+        ],
+        "middleEastern": [
+          "Z&H Market",
+          "Kedzie Plaza"
+        ],
+        "indian": [
+          "Patel Brothers",
+          "Apna Bazar India"
+        ],
+        "mainstream": [
+          "Whole Foods",
+          "Trader Joe's",
+          "Mariano's",
+          "Jewel-Osco"
+        ]
       }
     },
     "texas-metro": {
-      "cities": ["Houston", "Dallas", "Austin", "San Antonio"],
+      "cities": [
+        "Houston",
+        "Dallas",
+        "Austin",
+        "San Antonio"
+      ],
       "majorEthnicCorridors": [
-        { "name": "Bellaire Chinatown", "city": "Houston", "cuisines": ["Chinese", "Vietnamese", "Korean"] },
-        { "name": "Hillcroft", "city": "Houston", "cuisines": ["Indian", "Pakistani", "Middle Eastern"] },
-        { "name": "Koreatown", "city": "Dallas", "cuisines": ["Korean"] },
-        { "name": "Richardson", "city": "Dallas", "cuisines": ["Chinese", "Indian", "Middle Eastern"] },
-        { "name": "East Austin", "city": "Austin", "cuisines": ["Mexican", "Central American"] }
+        {
+          "name": "Bellaire Chinatown",
+          "city": "Houston",
+          "cuisines": [
+            "Chinese",
+            "Vietnamese",
+            "Korean"
+          ]
+        },
+        {
+          "name": "Hillcroft",
+          "city": "Houston",
+          "cuisines": [
+            "Indian",
+            "Pakistani",
+            "Middle Eastern"
+          ]
+        },
+        {
+          "name": "Koreatown",
+          "city": "Dallas",
+          "cuisines": [
+            "Korean"
+          ]
+        },
+        {
+          "name": "Richardson",
+          "city": "Dallas",
+          "cuisines": [
+            "Chinese",
+            "Indian",
+            "Middle Eastern"
+          ]
+        },
+        {
+          "name": "East Austin",
+          "city": "Austin",
+          "cuisines": [
+            "Mexican",
+            "Central American"
+          ]
+        }
       ],
       "majorStores": {
-        "asian": ["H Mart", "99 Ranch Market", "Hong Kong Market"],
-        "latin": ["Mi Tienda", "Fiesta Mart", "El Rancho"],
-        "middleEastern": ["Phoenicia Specialty Foods", "Sahara"],
-        "indian": ["India Grocers", "Taj Grocery"],
-        "mainstream": ["Whole Foods", "Trader Joe's", "HEB", "Central Market", "Sprouts"]
+        "asian": [
+          "H Mart",
+          "99 Ranch Market",
+          "Hong Kong Market"
+        ],
+        "latin": [
+          "Mi Tienda",
+          "Fiesta Mart",
+          "El Rancho"
+        ],
+        "middleEastern": [
+          "Phoenicia Specialty Foods",
+          "Sahara"
+        ],
+        "indian": [
+          "India Grocers",
+          "Taj Grocery"
+        ],
+        "mainstream": [
+          "Whole Foods",
+          "Trader Joe's",
+          "HEB",
+          "Central Market",
+          "Sprouts"
+        ]
       }
     },
     "pacific-northwest": {
-      "cities": ["Seattle", "Portland", "Tacoma", "Bellevue"],
+      "cities": [
+        "Seattle",
+        "Portland",
+        "Tacoma",
+        "Bellevue"
+      ],
       "majorEthnicCorridors": [
-        { "name": "International District", "city": "Seattle", "cuisines": ["Chinese", "Japanese", "Vietnamese", "Filipino"] },
-        { "name": "Rainier Valley", "city": "Seattle", "cuisines": ["East African", "Southeast Asian", "Caribbean"] },
-        { "name": "Beaverton-Hillsboro", "city": "Portland", "cuisines": ["Korean", "Japanese", "Chinese"] },
-        { "name": "SE Division-Hawthorne", "city": "Portland", "cuisines": ["Thai", "Vietnamese", "Mexican"] },
-        { "name": "Lakewood", "city": "Tacoma", "cuisines": ["Korean", "Filipino"] }
+        {
+          "name": "International District",
+          "city": "Seattle",
+          "cuisines": [
+            "Chinese",
+            "Japanese",
+            "Vietnamese",
+            "Filipino"
+          ]
+        },
+        {
+          "name": "Rainier Valley",
+          "city": "Seattle",
+          "cuisines": [
+            "East African",
+            "Southeast Asian",
+            "Caribbean"
+          ]
+        },
+        {
+          "name": "Beaverton-Hillsboro",
+          "city": "Portland",
+          "cuisines": [
+            "Korean",
+            "Japanese",
+            "Chinese"
+          ]
+        },
+        {
+          "name": "SE Division-Hawthorne",
+          "city": "Portland",
+          "cuisines": [
+            "Thai",
+            "Vietnamese",
+            "Mexican"
+          ]
+        },
+        {
+          "name": "Lakewood",
+          "city": "Tacoma",
+          "cuisines": [
+            "Korean",
+            "Filipino"
+          ]
+        }
       ],
       "majorStores": {
-        "asian": ["Uwajimaya", "H Mart", "99 Ranch Market", "Paldo World"],
-        "latin": ["Mi Pueblo Market", "Su Casa"],
-        "middleEastern": ["Pars Market", "World Market"],
-        "indian": ["India Grocery", "Apna Bazar"],
-        "mainstream": ["Whole Foods", "Trader Joe's", "PCC Community Markets", "New Seasons Market", "Fred Meyer"]
+        "asian": [
+          "Uwajimaya",
+          "H Mart",
+          "99 Ranch Market",
+          "Paldo World"
+        ],
+        "latin": [
+          "Mi Pueblo Market",
+          "Su Casa"
+        ],
+        "middleEastern": [
+          "Pars Market",
+          "World Market"
+        ],
+        "indian": [
+          "India Grocery",
+          "Apna Bazar"
+        ],
+        "mainstream": [
+          "Whole Foods",
+          "Trader Joe's",
+          "PCC Community Markets",
+          "New Seasons Market",
+          "Fred Meyer"
+        ]
       }
     },
     "denver-metro": {
-      "cities": ["Denver", "Aurora", "Boulder", "Lakewood"],
+      "cities": [
+        "Denver",
+        "Aurora",
+        "Boulder",
+        "Lakewood"
+      ],
       "majorEthnicCorridors": [
-        { "name": "Federal Boulevard", "city": "Denver", "cuisines": ["Mexican", "Vietnamese", "Chinese"] },
-        { "name": "South Federal", "city": "Aurora", "cuisines": ["Korean", "Ethiopian", "Vietnamese"] },
-        { "name": "East Colfax", "city": "Denver", "cuisines": ["Ethiopian", "Middle Eastern", "Mexican"] },
-        { "name": "Leetsdale-Havana", "city": "Aurora", "cuisines": ["Chinese", "Korean", "Southeast Asian"] }
+        {
+          "name": "Federal Boulevard",
+          "city": "Denver",
+          "cuisines": [
+            "Mexican",
+            "Vietnamese",
+            "Chinese"
+          ]
+        },
+        {
+          "name": "South Federal",
+          "city": "Aurora",
+          "cuisines": [
+            "Korean",
+            "Ethiopian",
+            "Vietnamese"
+          ]
+        },
+        {
+          "name": "East Colfax",
+          "city": "Denver",
+          "cuisines": [
+            "Ethiopian",
+            "Middle Eastern",
+            "Mexican"
+          ]
+        },
+        {
+          "name": "Leetsdale-Havana",
+          "city": "Aurora",
+          "cuisines": [
+            "Chinese",
+            "Korean",
+            "Southeast Asian"
+          ]
+        }
       ],
       "majorStores": {
-        "asian": ["H Mart", "Pacific Ocean Marketplace", "Seoul Food"],
-        "latin": ["Mi Pueblo Market", "Carniceria La Chiquita"],
-        "middleEastern": ["Mediterranean Market", "Al-Sham"],
-        "indian": ["India Grocers", "Namaste Plaza"],
-        "mainstream": ["Whole Foods", "Trader Joe's", "Sprouts", "King Soopers", "Safeway"]
+        "asian": [
+          "H Mart",
+          "Pacific Ocean Marketplace",
+          "Seoul Food"
+        ],
+        "latin": [
+          "Mi Pueblo Market",
+          "Carniceria La Chiquita"
+        ],
+        "middleEastern": [
+          "Mediterranean Market",
+          "Al-Sham"
+        ],
+        "indian": [
+          "India Grocers",
+          "Namaste Plaza"
+        ],
+        "mainstream": [
+          "Whole Foods",
+          "Trader Joe's",
+          "Sprouts",
+          "King Soopers",
+          "Safeway"
+        ]
       }
     },
     "twin-cities": {
-      "cities": ["Minneapolis", "St. Paul", "Bloomington", "Brooklyn Center"],
+      "cities": [
+        "Minneapolis",
+        "St. Paul",
+        "Bloomington",
+        "Brooklyn Center"
+      ],
       "majorEthnicCorridors": [
-        { "name": "Nicollet Avenue (Eat Street)", "city": "Minneapolis", "cuisines": ["Vietnamese", "Korean", "Ethiopian", "Mexican"] },
-        { "name": "University Avenue", "city": "St. Paul", "cuisines": ["Hmong", "Vietnamese", "Thai", "Chinese"] },
-        { "name": "Cedar-Riverside", "city": "Minneapolis", "cuisines": ["Somali", "Ethiopian", "Middle Eastern"] },
-        { "name": "Brooklyn Center", "city": "Brooklyn Center", "cuisines": ["West African", "Liberian", "Southeast Asian"] }
+        {
+          "name": "Nicollet Avenue (Eat Street)",
+          "city": "Minneapolis",
+          "cuisines": [
+            "Vietnamese",
+            "Korean",
+            "Ethiopian",
+            "Mexican"
+          ]
+        },
+        {
+          "name": "University Avenue",
+          "city": "St. Paul",
+          "cuisines": [
+            "Hmong",
+            "Vietnamese",
+            "Thai",
+            "Chinese"
+          ]
+        },
+        {
+          "name": "Cedar-Riverside",
+          "city": "Minneapolis",
+          "cuisines": [
+            "Somali",
+            "Ethiopian",
+            "Middle Eastern"
+          ]
+        },
+        {
+          "name": "Brooklyn Center",
+          "city": "Brooklyn Center",
+          "cuisines": [
+            "West African",
+            "Liberian",
+            "Southeast Asian"
+          ]
+        }
       ],
       "majorStores": {
-        "asian": ["United Noodles", "Shuang Hur", "H Mart"],
-        "latin": ["El Burrito Mercado", "Mercado Central"],
-        "middleEastern": ["Bill's Imported Foods", "Holy Land"],
-        "indian": ["Patel Brothers", "India Spices"],
-        "mainstream": ["Whole Foods", "Trader Joe's", "Cub Foods", "Lunds & Byerlys", "Hy-Vee"]
+        "asian": [
+          "United Noodles",
+          "Shuang Hur",
+          "H Mart"
+        ],
+        "latin": [
+          "El Burrito Mercado",
+          "Mercado Central"
+        ],
+        "middleEastern": [
+          "Bill's Imported Foods",
+          "Holy Land"
+        ],
+        "indian": [
+          "Patel Brothers",
+          "India Spices"
+        ],
+        "mainstream": [
+          "Whole Foods",
+          "Trader Joe's",
+          "Cub Foods",
+          "Lunds & Byerlys",
+          "Hy-Vee"
+        ]
       }
     },
     "detroit-metro": {
-      "cities": ["Detroit", "Dearborn", "Hamtramck", "Warren"],
+      "cities": [
+        "Detroit",
+        "Dearborn",
+        "Hamtramck",
+        "Warren"
+      ],
       "majorEthnicCorridors": [
-        { "name": "Warren Avenue", "city": "Dearborn", "cuisines": ["Lebanese", "Iraqi", "Yemeni", "Syrian"] },
-        { "name": "Hamtramck", "city": "Hamtramck", "cuisines": ["Polish", "Bangladeshi", "Yemeni", "Bosnian"] },
-        { "name": "Chaldean Town", "city": "Detroit", "cuisines": ["Iraqi", "Chaldean", "Middle Eastern"] },
-        { "name": "Mexicantown", "city": "Detroit", "cuisines": ["Mexican", "Central American"] }
+        {
+          "name": "Warren Avenue",
+          "city": "Dearborn",
+          "cuisines": [
+            "Lebanese",
+            "Iraqi",
+            "Yemeni",
+            "Syrian"
+          ]
+        },
+        {
+          "name": "Hamtramck",
+          "city": "Hamtramck",
+          "cuisines": [
+            "Polish",
+            "Bangladeshi",
+            "Yemeni",
+            "Bosnian"
+          ]
+        },
+        {
+          "name": "Chaldean Town",
+          "city": "Detroit",
+          "cuisines": [
+            "Iraqi",
+            "Chaldean",
+            "Middle Eastern"
+          ]
+        },
+        {
+          "name": "Mexicantown",
+          "city": "Detroit",
+          "cuisines": [
+            "Mexican",
+            "Central American"
+          ]
+        }
       ],
       "majorStores": {
-        "asian": ["H Mart", "Tokyo Japanese Store"],
-        "latin": ["E & L Supermercado", "Honey Bee Market"],
-        "middleEastern": ["Shatila Bakery", "Amana Foods", "Al-Ameer Market"],
-        "indian": ["Indian Village", "Spice Hut"],
-        "mainstream": ["Whole Foods", "Trader Joe's", "Meijer", "Kroger", "Busch's"]
+        "asian": [
+          "H Mart",
+          "Tokyo Japanese Store"
+        ],
+        "latin": [
+          "E & L Supermercado",
+          "Honey Bee Market"
+        ],
+        "middleEastern": [
+          "Shatila Bakery",
+          "Amana Foods",
+          "Al-Ameer Market"
+        ],
+        "indian": [
+          "Indian Village",
+          "Spice Hut"
+        ],
+        "mainstream": [
+          "Whole Foods",
+          "Trader Joe's",
+          "Meijer",
+          "Kroger",
+          "Busch's"
+        ]
       }
     },
     "atlanta-metro": {
-      "cities": ["Atlanta", "Doraville", "Clarkston", "Decatur"],
+      "cities": [
+        "Atlanta",
+        "Doraville",
+        "Clarkston",
+        "Decatur"
+      ],
       "majorEthnicCorridors": [
-        { "name": "Buford Highway", "city": "Doraville", "cuisines": ["Korean", "Chinese", "Vietnamese", "Mexican", "Japanese"] },
-        { "name": "Clarkston", "city": "Clarkston", "cuisines": ["East African", "Burmese", "Bhutanese", "Somali"] },
-        { "name": "Ponce de Leon", "city": "Atlanta", "cuisines": ["Ethiopian", "West African", "Caribbean"] },
-        { "name": "South Cobb Drive", "city": "Atlanta", "cuisines": ["Mexican", "Central American"] }
+        {
+          "name": "Buford Highway",
+          "city": "Doraville",
+          "cuisines": [
+            "Korean",
+            "Chinese",
+            "Vietnamese",
+            "Mexican",
+            "Japanese"
+          ]
+        },
+        {
+          "name": "Clarkston",
+          "city": "Clarkston",
+          "cuisines": [
+            "East African",
+            "Burmese",
+            "Bhutanese",
+            "Somali"
+          ]
+        },
+        {
+          "name": "Ponce de Leon",
+          "city": "Atlanta",
+          "cuisines": [
+            "Ethiopian",
+            "West African",
+            "Caribbean"
+          ]
+        },
+        {
+          "name": "South Cobb Drive",
+          "city": "Atlanta",
+          "cuisines": [
+            "Mexican",
+            "Central American"
+          ]
+        }
       ],
       "majorStores": {
-        "asian": ["H Mart", "Assi Market", "Great Wall Supermarket", "Buford Highway Farmers Market"],
-        "latin": ["El Progreso Market", "Fiesta"],
-        "middleEastern": ["Sandy Springs Mediterranean", "Balady"],
-        "indian": ["Patel Brothers", "Cherians"],
-        "mainstream": ["Whole Foods", "Trader Joe's", "Publix", "Sprouts", "Kroger"]
+        "asian": [
+          "H Mart",
+          "Assi Market",
+          "Great Wall Supermarket",
+          "Buford Highway Farmers Market"
+        ],
+        "latin": [
+          "El Progreso Market",
+          "Fiesta"
+        ],
+        "middleEastern": [
+          "Sandy Springs Mediterranean",
+          "Balady"
+        ],
+        "indian": [
+          "Patel Brothers",
+          "Cherians"
+        ],
+        "mainstream": [
+          "Whole Foods",
+          "Trader Joe's",
+          "Publix",
+          "Sprouts",
+          "Kroger"
+        ]
       }
     },
     "miami-south-florida": {
-      "cities": ["Miami", "Hialeah", "Doral", "Fort Lauderdale", "Kendall"],
+      "cities": [
+        "Miami",
+        "Hialeah",
+        "Doral",
+        "Fort Lauderdale",
+        "Kendall"
+      ],
       "majorEthnicCorridors": [
-        { "name": "Little Havana", "city": "Miami", "cuisines": ["Cuban", "Nicaraguan", "Colombian"] },
-        { "name": "Doral", "city": "Doral", "cuisines": ["Venezuelan", "Colombian", "Peruvian"] },
-        { "name": "Hialeah", "city": "Hialeah", "cuisines": ["Cuban", "Dominican", "Puerto Rican"] },
-        { "name": "Sunny Isles", "city": "Miami", "cuisines": ["Russian", "Israeli", "Eastern European"] },
-        { "name": "Pompano Beach", "city": "Fort Lauderdale", "cuisines": ["Haitian", "Caribbean", "Jamaican"] }
+        {
+          "name": "Little Havana",
+          "city": "Miami",
+          "cuisines": [
+            "Cuban",
+            "Nicaraguan",
+            "Colombian"
+          ]
+        },
+        {
+          "name": "Doral",
+          "city": "Doral",
+          "cuisines": [
+            "Venezuelan",
+            "Colombian",
+            "Peruvian"
+          ]
+        },
+        {
+          "name": "Hialeah",
+          "city": "Hialeah",
+          "cuisines": [
+            "Cuban",
+            "Dominican",
+            "Puerto Rican"
+          ]
+        },
+        {
+          "name": "Sunny Isles",
+          "city": "Miami",
+          "cuisines": [
+            "Russian",
+            "Israeli",
+            "Eastern European"
+          ]
+        },
+        {
+          "name": "Pompano Beach",
+          "city": "Fort Lauderdale",
+          "cuisines": [
+            "Haitian",
+            "Caribbean",
+            "Jamaican"
+          ]
+        }
       ],
       "majorStores": {
-        "asian": ["Lucky's Market", "New York Mart"],
-        "latin": ["Sedano's", "Navarro Discount Pharmacy", "Presidente Supermarket", "Publix Sabor"],
-        "middleEastern": ["Pita Bakery", "Oasis Market"],
-        "indian": ["Bombay Spices", "India Bazaar"],
-        "mainstream": ["Whole Foods", "Trader Joe's", "Publix", "Fresh Market", "Aldi"]
+        "asian": [
+          "Lucky's Market",
+          "New York Mart"
+        ],
+        "latin": [
+          "Sedano's",
+          "Navarro Discount Pharmacy",
+          "Presidente Supermarket",
+          "Publix Sabor"
+        ],
+        "middleEastern": [
+          "Pita Bakery",
+          "Oasis Market"
+        ],
+        "indian": [
+          "Bombay Spices",
+          "India Bazaar"
+        ],
+        "mainstream": [
+          "Whole Foods",
+          "Trader Joe's",
+          "Publix",
+          "Fresh Market",
+          "Aldi"
+        ]
       }
     },
     "hawaii": {
-      "cities": ["Honolulu", "Kaneohe", "Pearl City", "Kailua"],
+      "cities": [
+        "Honolulu",
+        "Kaneohe",
+        "Pearl City",
+        "Kailua"
+      ],
       "majorEthnicCorridors": [
-        { "name": "Chinatown", "city": "Honolulu", "cuisines": ["Chinese", "Filipino", "Japanese", "Korean"] },
-        { "name": "Kalihi", "city": "Honolulu", "cuisines": ["Filipino", "Hawaiian", "Samoan"] },
-        { "name": "Waipahu", "city": "Pearl City", "cuisines": ["Filipino", "Japanese", "Okinawan"] },
-        { "name": "Kakaako", "city": "Honolulu", "cuisines": ["Japanese", "Korean", "Hawaiian fusion"] }
+        {
+          "name": "Chinatown",
+          "city": "Honolulu",
+          "cuisines": [
+            "Chinese",
+            "Filipino",
+            "Japanese",
+            "Korean"
+          ]
+        },
+        {
+          "name": "Kalihi",
+          "city": "Honolulu",
+          "cuisines": [
+            "Filipino",
+            "Hawaiian",
+            "Samoan"
+          ]
+        },
+        {
+          "name": "Waipahu",
+          "city": "Pearl City",
+          "cuisines": [
+            "Filipino",
+            "Japanese",
+            "Okinawan"
+          ]
+        },
+        {
+          "name": "Kakaako",
+          "city": "Honolulu",
+          "cuisines": [
+            "Japanese",
+            "Korean",
+            "Hawaiian fusion"
+          ]
+        }
       ],
       "majorStores": {
-        "asian": ["Don Quijote", "Marukai", "Nijiya Market", "Shima's Supermarket"],
-        "latin": ["Tammy's Market"],
-        "middleEastern": ["Kokua Market"],
-        "indian": ["India Market", "Gandhi Indian Store"],
-        "mainstream": ["Whole Foods", "Foodland", "Safeway", "Times Supermarket", "Down to Earth"]
+        "asian": [
+          "Don Quijote",
+          "Marukai",
+          "Nijiya Market",
+          "Shima's Supermarket"
+        ],
+        "latin": [
+          "Tammy's Market"
+        ],
+        "middleEastern": [
+          "Kokua Market"
+        ],
+        "indian": [
+          "India Market",
+          "Gandhi Indian Store"
+        ],
+        "mainstream": [
+          "Whole Foods",
+          "Foodland",
+          "Safeway",
+          "Times Supermarket",
+          "Down to Earth"
+        ]
       }
     },
     "london-uk": {
-      "cities": ["London", "Birmingham corridor", "Leicester corridor"],
+      "cities": [
+        "London",
+        "Birmingham corridor",
+        "Leicester corridor"
+      ],
       "majorEthnicCorridors": [
-        { "name": "Brick Lane", "city": "London", "cuisines": ["Bangladeshi", "Pakistani", "Indian"] },
-        { "name": "Southall", "city": "London", "cuisines": ["Indian", "Pakistani", "Sri Lankan"] },
-        { "name": "Chinatown", "city": "London", "cuisines": ["Chinese", "Japanese", "Korean"] },
-        { "name": "Brixton", "city": "London", "cuisines": ["West African", "Caribbean", "Ethiopian"] },
-        { "name": "Edgware Road", "city": "London", "cuisines": ["Lebanese", "Syrian", "Iraqi", "Turkish"] }
+        {
+          "name": "Brick Lane",
+          "city": "London",
+          "cuisines": [
+            "Bangladeshi",
+            "Pakistani",
+            "Indian"
+          ]
+        },
+        {
+          "name": "Southall",
+          "city": "London",
+          "cuisines": [
+            "Indian",
+            "Pakistani",
+            "Sri Lankan"
+          ]
+        },
+        {
+          "name": "Chinatown",
+          "city": "London",
+          "cuisines": [
+            "Chinese",
+            "Japanese",
+            "Korean"
+          ]
+        },
+        {
+          "name": "Brixton",
+          "city": "London",
+          "cuisines": [
+            "West African",
+            "Caribbean",
+            "Ethiopian"
+          ]
+        },
+        {
+          "name": "Edgware Road",
+          "city": "London",
+          "cuisines": [
+            "Lebanese",
+            "Syrian",
+            "Iraqi",
+            "Turkish"
+          ]
+        }
       ],
       "majorStores": {
-        "asian": ["See Woo", "Loon Fung", "Oseyo", "Japan Centre"],
-        "latin": ["El Valle", "Mateo's"],
-        "middleEastern": ["Green Valley", "Al Amana"],
-        "indian": ["Patel Brothers UK", "Taj Stores"],
-        "mainstream": ["Waitrose", "Sainsbury's", "Tesco", "Ocado", "M&S Food"]
+        "asian": [
+          "See Woo",
+          "Loon Fung",
+          "Oseyo",
+          "Japan Centre"
+        ],
+        "latin": [
+          "El Valle",
+          "Mateo's"
+        ],
+        "middleEastern": [
+          "Green Valley",
+          "Al Amana"
+        ],
+        "indian": [
+          "Patel Brothers UK",
+          "Taj Stores"
+        ],
+        "mainstream": [
+          "Waitrose",
+          "Sainsbury's",
+          "Tesco",
+          "Ocado",
+          "M&S Food"
+        ]
       }
     },
     "toronto-canada": {
-      "cities": ["Toronto", "Scarborough", "Markham", "Brampton", "Mississauga"],
+      "cities": [
+        "Toronto",
+        "Scarborough",
+        "Markham",
+        "Brampton",
+        "Mississauga"
+      ],
       "majorEthnicCorridors": [
-        { "name": "Gerrard India Bazaar", "city": "Toronto", "cuisines": ["Indian", "Pakistani", "Sri Lankan"] },
-        { "name": "Chinatown (Spadina)", "city": "Toronto", "cuisines": ["Chinese", "Vietnamese", "Malaysian"] },
-        { "name": "Markham", "city": "Markham", "cuisines": ["Chinese", "Hong Kong", "Taiwanese"] },
-        { "name": "Brampton", "city": "Brampton", "cuisines": ["Indian", "Pakistani", "Caribbean"] },
-        { "name": "Thorncliffe Park", "city": "Toronto", "cuisines": ["Afghan", "Syrian", "Pakistani", "Middle Eastern"] }
+        {
+          "name": "Gerrard India Bazaar",
+          "city": "Toronto",
+          "cuisines": [
+            "Indian",
+            "Pakistani",
+            "Sri Lankan"
+          ]
+        },
+        {
+          "name": "Chinatown (Spadina)",
+          "city": "Toronto",
+          "cuisines": [
+            "Chinese",
+            "Vietnamese",
+            "Malaysian"
+          ]
+        },
+        {
+          "name": "Markham",
+          "city": "Markham",
+          "cuisines": [
+            "Chinese",
+            "Hong Kong",
+            "Taiwanese"
+          ]
+        },
+        {
+          "name": "Brampton",
+          "city": "Brampton",
+          "cuisines": [
+            "Indian",
+            "Pakistani",
+            "Caribbean"
+          ]
+        },
+        {
+          "name": "Thorncliffe Park",
+          "city": "Toronto",
+          "cuisines": [
+            "Afghan",
+            "Syrian",
+            "Pakistani",
+            "Middle Eastern"
+          ]
+        }
       ],
       "majorStores": {
-        "asian": ["T&T Supermarket", "Oceans Fresh Food", "Sunny Mart", "Galleria Supermarket"],
-        "latin": ["Los Amigos", "Perola"],
-        "middleEastern": ["Adonis", "Paramount Fine Foods"],
-        "indian": ["Patel's Cash & Carry", "Subzi Mandi"],
-        "mainstream": ["Loblaws", "Sobeys", "Whole Foods", "Longo's", "No Frills"]
+        "asian": [
+          "T&T Supermarket",
+          "Oceans Fresh Food",
+          "Sunny Mart",
+          "Galleria Supermarket"
+        ],
+        "latin": [
+          "Los Amigos",
+          "Perola"
+        ],
+        "middleEastern": [
+          "Adonis",
+          "Paramount Fine Foods"
+        ],
+        "indian": [
+          "Patel's Cash & Carry",
+          "Subzi Mandi"
+        ],
+        "mainstream": [
+          "Loblaws",
+          "Sobeys",
+          "Whole Foods",
+          "Longo's",
+          "No Frills"
+        ]
       }
     },
     "melbourne-australia": {
-      "cities": ["Melbourne", "Richmond", "Footscray", "Springvale", "Dandenong"],
+      "cities": [
+        "Melbourne",
+        "Richmond",
+        "Footscray",
+        "Springvale",
+        "Dandenong"
+      ],
       "majorEthnicCorridors": [
-        { "name": "Victoria Street", "city": "Richmond", "cuisines": ["Vietnamese", "Cambodian", "Chinese"] },
-        { "name": "Footscray", "city": "Footscray", "cuisines": ["East African", "Vietnamese", "Burmese"] },
-        { "name": "Springvale", "city": "Springvale", "cuisines": ["Vietnamese", "Cambodian", "Chinese", "Sri Lankan"] },
-        { "name": "Dandenong", "city": "Dandenong", "cuisines": ["Afghan", "Indian", "Pakistani", "Sri Lankan"] },
-        { "name": "Lygon Street", "city": "Melbourne", "cuisines": ["Italian", "Greek"] }
+        {
+          "name": "Victoria Street",
+          "city": "Richmond",
+          "cuisines": [
+            "Vietnamese",
+            "Cambodian",
+            "Chinese"
+          ]
+        },
+        {
+          "name": "Footscray",
+          "city": "Footscray",
+          "cuisines": [
+            "East African",
+            "Vietnamese",
+            "Burmese"
+          ]
+        },
+        {
+          "name": "Springvale",
+          "city": "Springvale",
+          "cuisines": [
+            "Vietnamese",
+            "Cambodian",
+            "Chinese",
+            "Sri Lankan"
+          ]
+        },
+        {
+          "name": "Dandenong",
+          "city": "Dandenong",
+          "cuisines": [
+            "Afghan",
+            "Indian",
+            "Pakistani",
+            "Sri Lankan"
+          ]
+        },
+        {
+          "name": "Lygon Street",
+          "city": "Melbourne",
+          "cuisines": [
+            "Italian",
+            "Greek"
+          ]
+        }
       ],
       "majorStores": {
-        "asian": ["Asian Grocery Store Springvale", "Minh Phat", "Hoa Nghia"],
-        "latin": ["Tienda Latino", "Fuego"],
-        "middleEastern": ["Al Baraka", "Kasih Middle Eastern Grocer"],
-        "indian": ["Indian Groceries Melbourne", "Spice Gallery"],
-        "mainstream": ["Woolworths", "Coles", "IGA", "Aldi", "Harris Farm Markets"]
+        "asian": [
+          "Asian Grocery Store Springvale",
+          "Minh Phat",
+          "Hoa Nghia"
+        ],
+        "latin": [
+          "Tienda Latino",
+          "Fuego"
+        ],
+        "middleEastern": [
+          "Al Baraka",
+          "Kasih Middle Eastern Grocer"
+        ],
+        "indian": [
+          "Indian Groceries Melbourne",
+          "Spice Gallery"
+        ],
+        "mainstream": [
+          "Woolworths",
+          "Coles",
+          "IGA",
+          "Aldi",
+          "Harris Farm Markets"
+        ]
+      }
+    }
+  },
+  "layers": {
+    "worldwide": {
+      "label": "Worldwide fallback sourcing ladder",
+      "appliesWhen": "No metro overlay matches the user location.",
+      "inventoryClaim": "Static category guidance only, not live stock, pricing, or safety advice.",
+      "degradeOrder": [
+        "ordinary grocery or pantry proxy",
+        "mainstream grocery category",
+        "local ethnic or specialty market category",
+        "online specialty category or search phrase",
+        "closest sensory substitute when exact sourcing fails"
+      ],
+      "majorEthnicCorridors": [
+        {
+          "name": "Latin American, Mexican, Caribbean, or Central American market category",
+          "city": "local area",
+          "cuisines": [
+            "Mexican",
+            "Central American",
+            "Caribbean",
+            "Latin American"
+          ]
+        },
+        {
+          "name": "South Asian, Middle Eastern, or halal market category",
+          "city": "local area",
+          "cuisines": [
+            "South Asian",
+            "Middle Eastern",
+            "North African"
+          ]
+        },
+        {
+          "name": "East Asian or Southeast Asian market category",
+          "city": "local area",
+          "cuisines": [
+            "Chinese",
+            "Korean",
+            "Japanese",
+            "Vietnamese",
+            "Thai",
+            "Filipino"
+          ]
+        },
+        {
+          "name": "African or diaspora grocery category",
+          "city": "local area",
+          "cuisines": [
+            "West African",
+            "East African",
+            "North African",
+            "Caribbean"
+          ]
+        },
+        {
+          "name": "European deli, bakery, butcher, or import category",
+          "city": "local area",
+          "cuisines": [
+            "European",
+            "Mediterranean",
+            "Balkan",
+            "Nordic"
+          ]
+        }
+      ],
+      "majorStores": {
+        "mainstream": [
+          "large supermarket spice aisle",
+          "international aisle",
+          "natural foods store",
+          "bulk spice shop"
+        ],
+        "specialty": [
+          "ethnic grocery category matching the ingredient region",
+          "specialty butcher or fishmonger",
+          "bakery or deli category"
+        ],
+        "online": [
+          "specialty spice importer",
+          "regional pantry importer",
+          "manufacturer direct store",
+          "marketplace seller with label verification"
+        ],
+        "proxy": [
+          "ordinary grocery substitute with the same aroma, fat, acid, starch, heat, smoke, or texture role"
+        ]
+      }
+    },
+    "country": {
+      "unitedStates": {
+        "aliases": [
+          "US",
+          "USA",
+          "United States",
+          "America"
+        ],
+        "majorStores": {
+          "mainstream": [
+            "Kroger-family supermarket",
+            "Walmart grocery",
+            "Target grocery",
+            "Whole Foods",
+            "Trader Joe's",
+            "Aldi"
+          ],
+          "online": [
+            "specialty spice importer",
+            "regional grocery shipper"
+          ]
+        }
+      },
+      "canada": {
+        "aliases": [
+          "Canada"
+        ],
+        "majorStores": {
+          "mainstream": [
+            "Loblaw-family supermarket",
+            "Metro",
+            "Sobeys",
+            "Walmart Canada"
+          ],
+          "online": [
+            "specialty spice importer",
+            "regional grocery shipper"
+          ]
+        }
+      },
+      "unitedKingdom": {
+        "aliases": [
+          "UK",
+          "United Kingdom",
+          "Britain"
+        ],
+        "majorStores": {
+          "mainstream": [
+            "Tesco",
+            "Sainsbury's",
+            "Waitrose",
+            "Morrisons"
+          ],
+          "online": [
+            "specialty spice importer",
+            "regional grocery shipper"
+          ]
+        }
       }
     }
   }

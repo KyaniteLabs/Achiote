@@ -203,7 +203,7 @@ export function formatCollectedFoodMemory(memory: CollectedFoodMemory): string {
     : 'still figuring this out';
   const regions = memory.extractedClues.culturalOrRegionalHints.length > 0
     ? memory.extractedClues.culturalOrRegionalHints.join(', ')
-    : 'not sure yet — every clue helps';
+    : 'not sure yet, every clue helps';
   const ingredients = memory.extractedClues.rememberedIngredients.length > 0
     ? memory.extractedClues.rememberedIngredients.join(', ')
     : 'nothing specific yet';

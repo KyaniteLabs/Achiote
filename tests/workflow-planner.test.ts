@@ -69,6 +69,26 @@ describe('WorkflowPlanner', () => {
     expect(recipeRequest.confidenceNote).not.toContain('Bundled mechanism family');
   });
 
+  it('plans sourcing for ordinary buy phrasing with a named location', () => {
+    const whereWouldBuy = planAskWorkflow({
+      userMessage: 'My grandmother made mole negro with chilhuacle chiles. I live in Madison. Where would I buy the important ingredients?',
+    });
+    expect(whereWouldBuy.needsSourcing).toBe(true);
+    expect(whereWouldBuy.workflowSteps.map((step) => step.tool)).toContain('source_ingredients');
+
+    const whatShouldBuy = planAskWorkflow({
+      userMessage: 'Butter chicken with cashew gravy, butter, cream, whiskey, and naan. My family needs nut-free, halal, vegan, and gluten-free substitutions. What should I buy in Des Moines?',
+    });
+    expect(whatShouldBuy.needsSourcing).toBe(true);
+    expect(whatShouldBuy.workflowSteps.map((step) => step.tool)).toContain('source_ingredients');
+
+    const lowercaseLocation = planAskWorkflow({
+      userMessage: 'My grandmother made mole negro with chilhuacle chiles. where can i buy chilhuacle chiles near des moines?',
+    });
+    expect(lowercaseLocation.needsSourcing).toBe(true);
+    expect(lowercaseLocation.workflowSteps.map((step) => step.tool)).toContain('source_ingredients');
+  });
+
   it('keeps search for exact-identity research requests', () => {
     const exactIdentity = planAskWorkflow({
       userMessage: 'Someone served a tart green-herb broth with pale potato or egg pieces. What exact regional dish is this, and what sources confirm the name?',

@@ -556,15 +556,15 @@
     .input-wrap button:active { transform: scale(0.95); }
     .input-wrap button:disabled { opacity: 0.4; transform: none; box-shadow: none; cursor: default; }
 
-    /* Demo auth */
-    #demo-auth-wrap { margin-bottom: 8px; }
-    #demo-auth-wrap summary {
+    /* Optional account key */
+    #auth-wrap { margin-bottom: 8px; }
+    #auth-wrap summary {
       cursor: pointer;
       font-size: 12px;
       color: var(--muted);
       font-weight: 600;
     }
-    #demo-password {
+    #api-key {
       margin-top: 6px;
       padding: 8px 12px;
       border: 1px solid var(--line);
@@ -576,7 +576,7 @@
       font-family: inherit;
       outline: none;
     }
-    #demo-password:focus { border-color: var(--saffron); }
+    #api-key:focus { border-color: var(--saffron); }
 
     /* Responsive — tablet */
     @media (max-width: 980px) {
@@ -643,11 +643,10 @@
   </main>
 
   <div class="input-bar">
-    <details id="demo-auth-wrap" open>
+    <details id="auth-wrap" open>
       <summary>Sign in</summary>
-      <input type="password" id="demo-password" placeholder="Demo password" />
-      <input type="password" id="api-key" placeholder="API key" style="margin-top:6px;" />
-      <small id="auth-hint" style="display:block;margin-top:4px;color:var(--muted);font-size:11px;">Optional. Try without auth first, or enter a demo password if you have one.</small>
+      <input type="password" id="api-key" placeholder="API key" />
+      <small id="auth-hint" style="display:block;margin-top:4px;color:var(--muted);font-size:11px;">Optional. Try without auth first.</small>
     </details>
     <details class="data-controls" id="data-memory-controls">
       <summary>Data & memory</summary>

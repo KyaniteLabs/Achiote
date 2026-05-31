@@ -107,7 +107,8 @@ const ANON_WEB_RECONSTRUCTIONS = parsePositiveInteger(process.env.ACHIOTE_ANON_W
 const PORT = parseInt(process.env.PORT || '3000', 10);
 const ANTHROPIC_TIMEOUT_MS = parseInt(process.env.ANTHROPIC_TIMEOUT_MS || process.env.API_TIMEOUT_MS || '120000', 10);
 const OPENAI_TIMEOUT_MS = parseInt(process.env.LOCAL_INFERENCE_TIMEOUT_MS || process.env.OPENAI_TIMEOUT_MS || process.env.LMSTUDIO_TIMEOUT_MS || process.env.GLM_TIMEOUT_MS || process.env.ZHIPU_TIMEOUT_MS || process.env.API_TIMEOUT_MS || '180000', 10);
-const FINAL_SYNTHESIS_TIMEOUT_MS = parsePositiveInteger(process.env.ACHIOTE_FINAL_SYNTHESIS_TIMEOUT_MS) ?? 20_000;
+const FINAL_SYNTHESIS_TIMEOUT_MS = parsePositiveInteger(process.env.ACHIOTE_FINAL_SYNTHESIS_TIMEOUT_MS) ?? 60_000;
+const FINAL_SYNTHESIS_MAX_TOKENS = parsePositiveInteger(process.env.ACHIOTE_FINAL_SYNTHESIS_MAX_TOKENS) ?? 4096;
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const STATIC_DIR = resolve(__dirname, '..', 'docs', 'landing');
 const ALLOWED_ORIGINS = (process.env.ACHIOTE_ALLOWED_ORIGINS || 'http://localhost:3000,http://127.0.0.1:3000,https://achiote.kyanitelabs.tech')
@@ -222,21 +223,22 @@ function isSameHostOrigin(req: IncomingMessage, origin: string | undefined): boo
   }
 }
 
-const SYSTEM_PROMPT = `You are a food memory assistant built into Achiote. You MUST use the provided tools — never answer from memory alone. This applies to ALL user messages: nostalgic memories, recipe adaptation requests, dietary substitution questions, and cooking guidance.
+const SYSTEM_PROMPT = `You are a food memory assistant built into Achiote. You MUST use the provided tools, never answer from memory alone. This applies to ALL user messages: nostalgic memories, recipe adaptation requests, dietary substitution questions, and cooking guidance.
 
 ## TOOL WORKFLOW
 
 For EVERY user message, you MUST follow this workflow:
 
 1. The server runs \`plan_tool_workflow\` before your first turn and injects its result into your conversation context. Treat that result as already completed; do not call \`plan_tool_workflow\` again.
-2. Follow the injected \`workflowSteps\` from the plan exactly — call the tools in the order listed.
-3. Respect \`maxSearchCalls\` — the server enforces this cap. Do not call \`search_web\` more than the plan allows.
+2. Follow the injected \`workflowSteps\` from the plan exactly, call the tools in the order listed.
+3. Respect \`maxSearchCalls\`, the server enforces this cap. Do not call \`search_web\` more than the plan allows.
 4. If \`needsSubstitutions\` is true, first complete the original reconstruction and minimum cue without substitutions; only then call \`find_sensory_substitutes\` for each restricted ingredient.
-5. After the tool chain completes, synthesize the results into your response.
+5. If \`needsSourcing\` is true, call \`source_ingredients\` after \`generate_minimum_viable_nostalgia\`, and after \`find_sensory_substitutes\` when substitutions are needed.
+6. After the tool chain completes, synthesize the results into your response.
 
 ### Standard pipeline after plan_tool_workflow:
-- \`collect_food_memory\` — parse the user's text.
-- \`plan_dish_research\` — build hypotheses from the parsed memory.
+- \`collect_food_memory\`: parse the user's text.
+- \`plan_dish_research\`: build hypotheses from the parsed memory.
 - Look at the structured \`nextQuestions\`, \`questionsForUser\`, hypotheses, confidence, and missing-information fields.
 - If the memory is still sparse or the next best move is clarification, stop tool calling and ask targeted questions.
 - If there is enough signal for a sensory test, continue:
@@ -252,6 +254,8 @@ The final answer can include one narrowing question, but it must still give the 
 Do not give a concrete food cue, tasting test, substitute, recipe move, or reconstruction until after
 \`generate_minimum_viable_nostalgia\` has returned. If the right move is a clarification-only response,
 ask the targeted questions and stop; do not sneak in a cue.
+
+If the user asked for substitutes, include a short \`Substitutes to try\` section grounded in \`find_sensory_substitutes\` and the original cue. If the user asked where to buy, include a short \`Where to buy\` section grounded in \`source_ingredients\`. Use \`promptForAgent\` guidance from both tools when present. Never replace these sections with a raw evidence dump.
 
 ## HOW TO WRITE YOUR RESPONSE
 
@@ -279,7 +283,7 @@ Then include one targeted follow-up that would most reduce uncertainty if they w
 - NEVER apologize for not knowing the exact dish.
 - Do not use emoji.
 - NEVER string the user's keywords together as a fake dish name (e.g., "fried Szechuan rice with Szechuan spices").
-- ALWAYS anchor to the specific region the user mentioned. If they said Sichuan, talk about Sichuan — not "Asia."
+- ALWAYS anchor to the specific region the user mentioned. If they said Sichuan, talk about Sichuan, not "Asia."
 - If you give a cue, make it cheap, accessible, and food-science grounded.
 - Do not tell the user to buy the exact suspected dish, candy, snack, brand, or imported specialty item as the minimum test.
 - Build the cue from cheap local pantry or ordinary grocery ingredients first; exact sourcing belongs only after a proxy cue works.
@@ -288,7 +292,10 @@ Then include one targeted follow-up that would most reduce uncertainty if they w
 - Avoid clinical labels like "research-bounded proxy test" in user-facing prose. Say "first-pass verification bite" or "first tiny check" instead.
 - Keep responses under 220 words.
 - Be warm and direct, like a knowledgeable friend who wants to help them taste the memory again.
-- If the user shares a photo, describe what you see in the image and combine it with any text description they provide before calling tools.`;
+- Write like a real person talking to a friend. Use plain words and short sentences. No exclamation points. Avoid AI-tell words like "delve", "tapestry", "crucial", "elevate", "unleash", or "testament". Generated answer text does not need to be rewritten just because a model uses an em-dash.
+- FOOD SAFETY OVERRIDES EVERYTHING. If the person mentions any allergy, intolerance, or dietary restriction, never suggest tasting, buying, or substituting anything that could contain it; build cues only from ingredients they have confirmed are safe for them. Name common allergens (nuts, peanuts, dairy, egg, wheat or gluten, soy, shellfish, fish, sesame) whenever a suggestion could contain them. Never call anything "safe", "allergen-free", or "medically safe". You do not give medical, allergy, or nutritional advice; point people to a qualified professional for those. Every taste is optional and at the person's own discretion.
+- If the user shares a photo, describe what you see in the image and combine it with any text description they provide before calling tools.
+- If researched facts were gathered (e.g., from search_web or resolve_dish_name), explicitly reference at least one specific finding in your prose. Do not summarize vaguely. Name the exact fact.`;
 
 const providerRuntime = createProviderRuntime({
   anthropicClient: anthropic,
@@ -442,7 +449,10 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
   res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', Connection: 'keep-alive' });
 
   const send = (event: string, data: unknown) => {
-    res.write(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`);
+    const payload = event === 'text' && typeof data === 'string'
+      ? enforceAllergyProfessionalBoundary(sanitizeFoodSafetyClaimLanguage(data), userMessage)
+      : data;
+    res.write(`event: ${event}\ndata: ${JSON.stringify(payload)}\n\n`);
   };
 
   try {
@@ -600,7 +610,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
             toolCallHistory.push({ name: call.name, input: call.input });
             continue;
           }
-          // Enforce search_web call cap — hard block, never falls through
+          // Enforce search_web call cap. Hard block, never falls through.
           if (call.name === 'search_web' && searchCallCount >= getMaxSearchCalls()) {
             const cached = toolPayloads.search_web;
             const maxSearchCalls = getMaxSearchCalls();
@@ -631,6 +641,8 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
 
       askSession.appendToolResults(modelResponse, toolResults);
       if (modelResponse.toolCalls.some((call) => call.name === 'generate_minimum_viable_nostalgia')) {
+        await maybeRunPlannedSubstitutions({ userMessage, toolPayloads, calledTools, send });
+        await maybeRunPlannedSourcing({ userMessage, toolPayloads, calledTools, send });
         askSession.compactForSynthesis(formatAskCaseFileForModel(buildAskCaseFile({
           userMessage,
           history,
@@ -643,7 +655,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       }
       send('status', { iteration: iterations, stage: 'thinking' });
       try {
-        modelResponse = await createWithTimeout(askSession, 2048, FINAL_SYNTHESIS_TIMEOUT_MS);
+        modelResponse = await createWithTimeout(askSession, FINAL_SYNTHESIS_MAX_TOKENS, FINAL_SYNTHESIS_TIMEOUT_MS);
       } catch (err) {
         const detail = err instanceof Error ? err.message : String(err);
         if (modelResponse.toolCalls.some((call) => call.name === 'generate_minimum_viable_nostalgia')) {
@@ -653,6 +665,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
               return;
             }
           }
+          await maybeRunPlannedSourcing({ userMessage, toolPayloads, calledTools, send });
           console.warn(`[ask] final synthesis unavailable after minimum cue, using deterministic response: ${detail}`);
           const responseText = buildMinimumCueCompletedResponse(toolPayloads, userMessage);
           send('text', responseText);
@@ -669,6 +682,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
     await maybeRunMissingResearchPlan({ userMessage, toolPayloads, calledTools, send });
     await maybeRunOriginalSubstitutionBasisCue({ userMessage, toolPayloads, calledTools, send });
     await maybeRunPlannedSubstitutions({ userMessage, toolPayloads, calledTools, send });
+    await maybeRunPlannedSourcing({ userMessage, toolPayloads, calledTools, send });
 
     if ((modelResponse.textBlocks.length === 0 || containsStalledFallbackText(modelResponse.textBlocks.join('\n\n')))
       && maybeSendSubstitutionBasisResponse({ userMessage, toolPayloads, calledTools, send, finish })) {
@@ -698,7 +712,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
     const isFollowUpWithAnchors = (history !== undefined && history.length > 0)
       && hasSubstantialMemoryAnchors(toolPayloads.collect_food_memory);
     if (isFollowUpWithAnchors) {
-      console.log('[ask] follow-up with substantive anchors — skipping guard chain');
+      console.log('[ask] follow-up with substantive anchors, skipping guard chain');
     }
 
     if (!isFollowUpWithAnchors && calledTools.has('collect_food_memory') && !calledTools.has('plan_dish_research') && !calledTools.has('generate_minimum_viable_nostalgia')) {
@@ -707,7 +721,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       // let the model's natural response through instead of looping back to clarification.
       const isFollowUp = history !== undefined && history.length > 0;
       if (isFollowUp && hasSubstantialMemoryAnchors(toolPayloads.collect_food_memory)) {
-        console.log('[ask] follow-up with substantive anchors — skipping missing_research_plan_clarification guard');
+        console.log('[ask] follow-up with substantive anchors, skipping missing_research_plan_clarification guard');
       } else {
         console.warn('[ask] replaced response that skipped research planning with structured clarification');
         const responseText = buildClarificationOnlyResponse(toolPayloads, userMessage);
@@ -792,8 +806,30 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
     const responseText = modelResponse.textBlocks
       .map((text) => ensureCueQualityLanguage(text, toolPayloads, calledTools))
       .join('\n\n');
-    const trustBoundedResponseText = sanitizeFinalAnswerTrustBoundaryLanguage(responseText);
+    const trustBoundedResponseText = enforceAllergyProfessionalBoundary(sanitizeFinalAnswerTrustBoundaryLanguage(responseText), userMessage);
     const didSanitizeTrustBoundary = trustBoundedResponseText !== responseText;
+
+    if (calledTools.has('generate_minimum_viable_nostalgia') && containsRawToolMarkup(trustBoundedResponseText)) {
+      console.warn('[ask] replaced raw tool markup synthesis with deterministic response');
+      const responseText = calledTools.has('find_sensory_substitutes') || isSubstitutionPlan(toolPayloads)
+        ? buildSubstitutionBasisResponse(toolPayloads, userMessage)
+        : buildMinimumCueCompletedResponse(toolPayloads, userMessage);
+      send('text', responseText);
+      maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
+      finish({ guarded: 'raw_tool_markup_sanitized' });
+      return;
+    }
+
+    if (calledTools.has('generate_minimum_viable_nostalgia') && shouldReplaceWithSourcingGuidance(trustBoundedResponseText, calledTools)) {
+      console.warn('[ask] replaced sourcing response that failed to render source_ingredients guidance');
+      const responseText = calledTools.has('find_sensory_substitutes') || isSubstitutionPlan(toolPayloads)
+        ? buildSubstitutionBasisResponse(toolPayloads, userMessage)
+        : buildMinimumCueCompletedResponse(toolPayloads, userMessage);
+      send('text', responseText);
+      maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
+      finish({ guarded: 'sourcing_guidance_deterministic_completion' });
+      return;
+    }
 
     if (calledTools.has('generate_minimum_viable_nostalgia') && contradictsLatestCorrection(trustBoundedResponseText, userMessage)) {
       console.warn('[ask] replaced stale correction-conflicting response with deterministic minimum cue');
@@ -879,6 +915,43 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
 type SseSender = (event: string, data: unknown) => void;
 type DoneSender = (data?: Record<string, unknown>) => void;
 
+function enforceAllergyProfessionalBoundary(text: string, userMessage: string): string {
+  if (!/\b(?:allerg(?:y|ic|ies|en)|intoleran(?:ce|t)|anaphylaxis|severely allergic|tree nuts?|peanuts?)\b/i.test(userMessage)) return text;
+  if (/\b(?:qualified professional|medical professional|doctor|allergist|clinician|dietitian)\b/i.test(text)) return text;
+  return [
+    text,
+    'Because you named an allergy, check any new substitute with a qualified professional before tasting.',
+  ].filter(Boolean).join('\n\n');
+}
+
+function sanitizeFoodSafetyClaimLanguage(text: string): string {
+  return text
+    .replace(/\bmedically safe\b/gi, 'medically appropriate')
+    .replace(/\ballergen-free\b/gi, 'without the named allergen only when labels and a qualified professional support that')
+    .replace(/\blegally safe\b/gi, 'legally appropriate')
+    .replace(/\bsafe neutral\b/gi, 'plain neutral')
+    .replace(/\bsafe liquid\b/gi, 'plain liquid')
+    .replace(/\bsafe pantry\b/gi, 'known tolerated pantry')
+    .replace(/\bsafe local\b/gi, 'known tolerated local')
+    .replace(/\bsafe remembered\b/gi, 'already tolerated remembered')
+    .replace(/\bsafe edible\b/gi, 'known edible')
+    .replace(/\bsafe cue\b/gi, 'first cue')
+    .replace(/\bsmallest safe\b/gi, 'smallest')
+    .replace(/\bonly if safe\b/gi, 'only if already tolerated')
+    .replace(/\bif safe\b/gi, 'if already tolerated')
+    .replace(/\bsafe\b/gi, 'already tolerated');
+}
+
+function containsRawToolMarkup(text: string): boolean {
+  return /<\/?tool_(?:call|result)\??>/i.test(text);
+}
+
+function shouldReplaceWithSourcingGuidance(text: string, calledTools: Set<string>): boolean {
+  if (!calledTools.has('source_ingredients')) return false;
+  if (!/\bWhere to buy\b/i.test(text)) return true;
+  return /\b(?:let me|I'll|I will|I can|I'd love to)\s+(?:research|find|track|look up|source)\b/i.test(text);
+}
+
 function recordAskCompletion(toolPayloads: Record<string, unknown>, calledTools: Set<string>, donePayload: Record<string, unknown>, consent: DataConsent): void {
   if (!consent.qualitySignals) return;
   const guarded = typeof donePayload.guarded === 'string' ? donePayload.guarded : 'none';
@@ -917,22 +990,26 @@ function maybeSendMemoryReceipt(input: {
 function deriveResearchedFactsForReceipt(toolPayloads: Record<string, unknown>): string[] {
   const facts: string[] = [];
 
+  // search_web: reference for confidence boosting
+  const searched = toolPayloads.search_web as
+    | { results?: Array<{ title?: string; snippet?: string }> }
+    | undefined;
+
   // resolve_dish_name: emit canonical name + region when a real match was found
   const resolved = toolPayloads.resolve_dish_name as
     | { dishName?: string; canonicalName?: string; region?: string; confidence?: string; aliases?: string[] }
     | undefined;
   if (resolved?.canonicalName && !/^Unknown$/i.test(resolved.canonicalName)) {
-    facts.push(`Dish resolved: "${resolved.canonicalName}" (confidence: ${resolved.confidence ?? 'unknown'}, region: ${resolved.region ?? 'unknown'})`);
+    const hasResearchProduct = (searched?.results?.length ?? 0) > 0;
+    const effectiveConfidence = (resolved.confidence === 'Low' && hasResearchProduct) ? 'Medium' : resolved.confidence;
+    facts.push(`Dish resolved: "${resolved.canonicalName}" (confidence: ${effectiveConfidence ?? 'unknown'}, region: ${resolved.region ?? 'unknown'})`);
     const aliases = (resolved.aliases ?? []).filter(Boolean).slice(0, 3);
     if (aliases.length) facts.push(`Also known as: ${aliases.join(', ')}`);
   }
 
   // search_web: emit the snippet from each top result (up to 3)
-  const searched = toolPayloads.search_web as
-    | { results?: Array<{ title?: string; snippet?: string }> }
-    | undefined;
   for (const result of (searched?.results ?? []).slice(0, 3)) {
-    if (result.snippet?.trim()) facts.push(result.snippet.trim());
+    if (result.snippet?.trim()) facts.push(result.snippet.trim().replace(/[\u2014\u2013]/g, ', '));
   }
 
   return facts;
@@ -1141,7 +1218,7 @@ function normalizeResearchSource(source: unknown): Record<string, unknown> {
   const extractedFacts = Array.isArray(record.extractedFacts)
     ? record.extractedFacts.filter((fact): fact is string => typeof fact === 'string' && fact.trim().length > 0)
     : typeof record.snippet === 'string' && record.snippet.trim()
-      ? [record.snippet]
+      ? [record.snippet.replace(/[\u2014\u2013]/g, ', ')]
       : [];
 
   return {
@@ -1170,7 +1247,8 @@ function normalizeConfidence(value: unknown): 'High' | 'Medium' | 'Low' {
 }
 
 function inferUserLocation(userMessage: string): string | undefined {
-  const match = userMessage.match(/\b(?:i\s+(?:live|am|currently\s+live|currently\s+am)|i['’]?m|im|we\s+(?:live|are)|based|located)\s+in\s+([^.!?;,]{2,80})/i);
+  const match = userMessage.match(/\b(?:i\s+(?:live|am|currently\s+live|currently\s+am)|i['’]?m|im|we\s+(?:live|are)|based|located)\s+in\s+([^.!?;,]{2,80})/i)
+    ?? userMessage.match(/\b(?:buy|find|get|source|shop\s+for)\b[^.!?;,]{0,80}\b(?:in|near|around)\s+([^.!?;,]{2,80})/i);
   if (!match?.[1]) return undefined;
   const location = match[1]
     .replace(/\s+(?:now|currently|these days|at the moment)\b.*$/i, '')
@@ -1315,6 +1393,7 @@ async function recoverFromInitialProviderFailure({
   await maybeRunMissingResearchPlan({ userMessage, toolPayloads, calledTools, send });
   await maybeRunOriginalSubstitutionBasisCue({ userMessage, toolPayloads, calledTools, send });
   await maybeRunPlannedSubstitutions({ userMessage, toolPayloads, calledTools, send });
+  await maybeRunPlannedSourcing({ userMessage, toolPayloads, calledTools, send });
 
   if (maybeSendSubstitutionBasisResponse({ userMessage, toolPayloads, calledTools, send, finish })) {
     return true;
@@ -1393,7 +1472,7 @@ function shouldForceMinimumCue(userMessage: string, toolPayloads: Record<string,
   const workflowPlan = toolPayloads.plan_tool_workflow as { needsSubstitutions?: boolean } | undefined;
   if (workflowPlan?.needsSubstitutions && calledTools.has('find_sensory_substitutes')) return true;
 
-  // Explicit minimum-cue request — force whenever we have memory + plan + any sensory signal
+  // Explicit minimum-cue request, force whenever we have memory + plan + any sensory signal.
   if (isExplicitMinimumTestRequest(userMessage)) {
     return hasSensorySignal(userMessage, toolPayloads.collect_food_memory);
   }
@@ -1496,6 +1575,39 @@ async function maybeRunPlannedSubstitutions({
   }
 }
 
+async function maybeRunPlannedSourcing({
+  userMessage,
+  toolPayloads,
+  calledTools,
+  send,
+}: {
+  userMessage: string;
+  toolPayloads: Record<string, unknown>;
+  calledTools: Set<string>;
+  send: SseSender;
+}): Promise<void> {
+  const plan = toolPayloads.plan_tool_workflow as { workflowSteps?: Array<{ tool?: string }> } | undefined;
+  const plannedTools = plan?.workflowSteps?.map((step) => step.tool) ?? [];
+  if (!plannedTools.includes('source_ingredients') || calledTools.has('source_ingredients')) return;
+
+  const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
+  const location = memory?.userLocation ?? inferUserLocation(userMessage);
+  const ingredients = extractSourcingIngredients(userMessage, toolPayloads.collect_food_memory);
+  if (!location || ingredients.length === 0) return;
+
+  send('status', { stage: 'calling_tools', tools: ['source_ingredients'], deterministic: true });
+  await executeAndStreamTool('source_ingredients', { ingredients: ingredients.slice(0, 10), location }, userMessage, send, calledTools, toolPayloads);
+}
+
+function extractSourcingIngredients(userMessage: string, collectedMemory: unknown): string[] {
+  const memory = collectedMemory as CollectedFoodMemory | undefined;
+  const remembered = memory?.extractedClues?.rememberedIngredients ?? [];
+  return [...new Set([
+    ...remembered,
+    ...extractSubstitutionTargets(userMessage, collectedMemory),
+  ].map((ingredient) => ingredient.trim()).filter(Boolean))];
+}
+
 function maybeSendSubstitutionBasisResponse({
   userMessage,
   toolPayloads,
@@ -1519,7 +1631,12 @@ function maybeSendSubstitutionBasisResponse({
 
 function shouldReplaceWithSubstitutionBasisResponse(text: string, toolPayloads: Record<string, unknown>, calledTools: Set<string>): boolean {
   if (!hasSubstitutionBasisReady(toolPayloads, calledTools)) return false;
-  return !/\bbasis before substitutions\b/i.test(text) || !/\badapted cue\b/i.test(text);
+  const plan = toolPayloads.plan_tool_workflow as { workflowSteps?: Array<{ tool?: string }> } | undefined;
+  const needsSourcing = (plan?.workflowSteps ?? []).some((step) => step.tool === 'source_ingredients');
+  const hasFirstCue = /\b(?:what to test first|minimum viable|first[-\s]?pass|first tiny check)\b/i.test(text);
+  const hasSubstitutes = /\bSubstitutes to try\b/i.test(text);
+  const hasSourcing = /\bWhere to (?:buy|find)\b/i.test(text);
+  return !(hasFirstCue && hasSubstitutes && (!needsSourcing || hasSourcing));
 }
 
 function authenticateVoiceRequest(req: IncomingMessage, res: ServerResponse): AuthedRequest {
@@ -2120,7 +2237,7 @@ server.requestTimeout = 120_000;
 server.headersTimeout = 125_000;
 
 server.listen(PORT, () => {
-  console.log(`Achiote — http://localhost:${PORT}`);
+  console.log(`Achiote - http://localhost:${PORT}`);
 });
 
 async function shutdown(): Promise<void> {

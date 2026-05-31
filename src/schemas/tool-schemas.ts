@@ -373,6 +373,7 @@ export const planToolWorkflowOutputSchema = z.object({
   })),
   maxSearchCalls: z.number(),
   needsSubstitutions: z.boolean(),
+  needsSourcing: z.boolean().optional(),
   detectedRestrictions: z.array(z.string()),
   needsResolve: z.boolean(),
   confidenceNote: z.string(),

@@ -49,7 +49,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "coriander-seeds": {
       "name": "Coriander Seeds",
@@ -82,7 +98,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "smoked-paprika": {
       "name": "Smoked Paprika",
@@ -113,7 +145,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "fresh-cilantro": {
       "name": "Fresh Cilantro",
@@ -145,7 +193,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "fish-sauce": {
       "name": "Fish Sauce",
@@ -179,7 +243,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": true,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "soy-sauce": {
       "name": "Soy Sauce",
@@ -210,7 +290,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": true,
+          "soy": true,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "ghee": {
       "name": "Ghee",
@@ -242,7 +338,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": true,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "tamarind": {
       "name": "Tamarind",
@@ -276,7 +388,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "sumac": {
       "name": "Sumac",
@@ -307,7 +435,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "specialty_market_or_online"
     },
     "dried-chilies": {
       "name": "Dried Chilies",
@@ -342,7 +486,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "turmeric": {
       "name": "Turmeric",
@@ -375,7 +535,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "specialty_market_or_online"
     },
     "star-anise": {
       "name": "Star Anise",
@@ -407,7 +583,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "garlic": {
       "name": "Garlic",
@@ -442,7 +634,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "onion": {
       "name": "Onion",
@@ -472,7 +680,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "shallot": {
       "name": "Shallot",
@@ -504,7 +728,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "scallion": {
       "name": "Scallion (Green Onion)",
@@ -536,7 +776,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "lime": {
       "name": "Lime Juice",
@@ -569,7 +825,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "lemon": {
       "name": "Lemon Juice",
@@ -602,7 +874,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "vinegar": {
       "name": "Vinegar (Rice/Apple Cider/White)",
@@ -634,7 +922,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "pomegranate-molasses": {
       "name": "Pomegranate Molasses",
@@ -667,7 +971,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "butter": {
       "name": "Butter",
@@ -700,7 +1020,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": true,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "sesame-oil": {
       "name": "Toasted Sesame Oil",
@@ -732,7 +1068,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": true
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "coconut-oil": {
       "name": "Coconut Oil",
@@ -765,7 +1117,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": true,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "olive-oil": {
       "name": "Extra Virgin Olive Oil",
@@ -798,7 +1166,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "black-pepper": {
       "name": "Black Pepper",
@@ -829,7 +1213,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "ginger": {
       "name": "Fresh Ginger",
@@ -863,7 +1263,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "szechuan-peppercorn": {
       "name": "Szechuan Peppercorn",
@@ -896,7 +1312,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "specialty_market_or_online"
     },
     "basil": {
       "name": "Fresh Basil",
@@ -929,7 +1361,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "mint": {
       "name": "Fresh Mint",
@@ -963,7 +1411,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "dill": {
       "name": "Fresh Dill",
@@ -996,7 +1460,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "parsley": {
       "name": "Fresh Parsley",
@@ -1030,7 +1510,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "oregano": {
       "name": "Oregano",
@@ -1064,7 +1560,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "honey": {
       "name": "Honey",
@@ -1095,7 +1607,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "palm-sugar": {
       "name": "Palm Sugar",
@@ -1125,7 +1653,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": true,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "miso": {
       "name": "Miso Paste",
@@ -1156,7 +1700,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": true,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "specialty_market_or_online"
     },
     "anchovy": {
       "name": "Anchovy",
@@ -1190,7 +1750,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": true,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "cardamom": {
       "name": "Cardamom",
@@ -1223,7 +1799,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "cinnamon": {
       "name": "Cinnamon",
@@ -1254,7 +1846,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "cloves": {
       "name": "Cloves",
@@ -1287,7 +1895,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "chickpea-flour": {
       "name": "Chickpea Flour (Besan)",
@@ -1320,7 +1944,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "leek": {
       "name": "Leek",
@@ -1353,7 +1993,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "garlic-scapes": {
       "name": "Garlic Scapes",
@@ -1386,7 +2042,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "amchoor": {
       "name": "Amchoor (Dried Mango Powder)",
@@ -1418,7 +2090,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "specialty_market_or_online"
     },
     "lard": {
       "name": "Lard",
@@ -1452,7 +2140,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "schmaltz": {
       "name": "Schmaltz (Chicken Fat)",
@@ -1485,7 +2189,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "horseradish": {
       "name": "Horseradish",
@@ -1518,7 +2238,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "wasabi": {
       "name": "Wasabi",
@@ -1548,7 +2284,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "specialty_market_or_online"
     },
     "thyme": {
       "name": "Thyme",
@@ -1582,7 +2334,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "rosemary": {
       "name": "Rosemary",
@@ -1616,7 +2384,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "lemongrass": {
       "name": "Lemongrass",
@@ -1650,7 +2434,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "molasses": {
       "name": "Molasses",
@@ -1684,7 +2484,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "jaggery": {
       "name": "Jaggery (Gur)",
@@ -1716,7 +2532,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "maple-syrup": {
       "name": "Maple Syrup",
@@ -1749,7 +2581,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "msg": {
       "name": "MSG (Monosodium Glutamate)",
@@ -1781,7 +2629,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "mushroom": {
       "name": "Mushroom (Dried Shiitake)",
@@ -1815,7 +2679,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "fermented-bean-paste": {
       "name": "Fermented Bean Paste (Doenjang/Doubanjiang)",
@@ -1848,7 +2728,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": true,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "specialty_market_or_online"
     },
     "fenugreek": {
       "name": "Fenugreek",
@@ -1881,7 +2777,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "saffron": {
       "name": "Saffron",
@@ -1914,7 +2826,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "specialty_market_or_online"
     },
     "nutmeg": {
       "name": "Nutmeg",
@@ -1948,7 +2876,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "vanilla": {
       "name": "Vanilla",
@@ -1981,7 +2925,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "rice-flour": {
       "name": "Rice Flour",
@@ -2014,7 +2974,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "cornstarch": {
       "name": "Cornstarch",
@@ -2045,7 +3021,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "tapioca": {
       "name": "Tapioca (Cassava Starch)",
@@ -2077,7 +3069,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "semolina": {
       "name": "Semolina (Durum Wheat)",
@@ -2110,7 +3118,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": true,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "yogurt": {
       "name": "Yogurt",
@@ -2143,7 +3167,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": true,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "paneer": {
       "name": "Paneer",
@@ -2175,7 +3215,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": true,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "feta": {
       "name": "Feta Cheese",
@@ -2209,7 +3265,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": true,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "tofu": {
       "name": "Tofu",
@@ -2242,7 +3314,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": true,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "eggplant": {
       "name": "Eggplant (Aubergine)",
@@ -2275,7 +3363,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "plantain": {
       "name": "Plantain",
@@ -2309,7 +3413,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "okra": {
       "name": "Okra",
@@ -2342,7 +3462,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "lentils": {
       "name": "Lentils",
@@ -2376,7 +3512,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "black-beans": {
       "name": "Black Beans",
@@ -2409,7 +3561,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "masa-harina": {
       "name": "Masa Harina (Nixtamalized Corn Flour)",
@@ -2442,7 +3610,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "specialty_market_or_online"
     },
     "dried-shrimp": {
       "name": "Dried Shrimp",
@@ -2476,7 +3660,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": true,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "specialty_market_or_online"
     },
     "kombu": {
       "name": "Kombu (Kelp)",
@@ -2509,7 +3709,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "specialty_market_or_online"
     },
     "peanut": {
       "name": "Peanut",
@@ -2543,7 +3759,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": true,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "sesame-seeds": {
       "name": "Sesame Seeds",
@@ -2576,7 +3808,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": true
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     },
     "gochujang": {
       "name": "Gochujang (Korean Chili Paste)",
@@ -2607,7 +3855,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": true,
+          "soy": true,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "specialty_market_or_online"
     },
     "harissa": {
       "name": "Harissa",
@@ -2640,7 +3904,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "specialty_market_or_online"
     },
     "tahini": {
       "name": "Tahini",
@@ -2674,7 +3954,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": true
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "specialty_market_or_online"
     },
     "chimichurri": {
       "name": "Chimichurri",
@@ -2707,7 +4003,23 @@
           "Aroma/flavor groupings are derived from common culinary usage and the dataset-level compound references.",
           "Verify specialty or allergy-sensitive substitutions before use."
         ]
-      }
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "ordinary_grocery_or_pantry"
     }
   }
 }

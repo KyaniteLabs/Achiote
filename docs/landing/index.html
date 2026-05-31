@@ -52,6 +52,7 @@
     :root {
       --cream: #fff8f0;
       --cream-2: #f8e8d4;
+      --page-bg-texture: url("images/background-grain.jpg");
       --ink: #2a1a0e;
       --muted: #6b5744;
       --achiote: #b5451b;
@@ -138,7 +139,11 @@
         radial-gradient(circle at 12% 8%, rgba(242, 184, 75, 0.22), transparent 32rem),
         radial-gradient(circle at 88% 4%, rgba(207, 232, 216, 0.45), transparent 28rem),
         radial-gradient(circle at 78% 82%, rgba(155, 74, 27, 0.12), transparent 30rem),
-        linear-gradient(135deg, var(--cream) 0%, #fffdf8 46%, var(--cream-2) 100%);
+        linear-gradient(135deg, rgba(255, 248, 240, 0.84) 0%, rgba(255, 253, 248, 0.88) 46%, rgba(248, 232, 212, 0.86) 100%),
+        var(--page-bg-texture);
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: auto, auto, auto, auto, cover;
       transition: background var(--transition-slow);
     }
 
@@ -147,7 +152,8 @@
         radial-gradient(circle at 12% 8%, rgba(242, 184, 75, 0.10), transparent 32rem),
         radial-gradient(circle at 88% 4%, rgba(45, 106, 79, 0.18), transparent 28rem),
         radial-gradient(circle at 78% 82%, rgba(155, 74, 27, 0.08), transparent 30rem),
-        linear-gradient(135deg, var(--cream) 0%, #1a1216 46%, var(--cream-2) 100%);
+        linear-gradient(135deg, rgba(24, 18, 14, 0.66) 0%, rgba(26, 18, 22, 0.70) 46%, rgba(34, 26, 20, 0.66) 100%),
+        var(--page-bg-texture);
     }
 
     .skip-link {

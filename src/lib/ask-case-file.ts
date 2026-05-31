@@ -105,13 +105,41 @@ export function buildAskCaseFile(input: BuildAskCaseFileInput): AskCaseFile {
   addMany(inferred, arrayStrings(dossier.nostalgiaCriticalElements).map((element) => `critical element: ${element}`));
   addMany(inferred, arrayStrings(dossier.recreationStrategy).map((strategy) => `strategy: ${strategy}`));
 
-  const substitutes = asRecord(toolPayloads.find_sensory_substitutes);
-  const substituteIngredient = stringValue(substitutes.ingredient);
-  for (const substitute of arrayRecords(substitutes.substitutes).slice(0, 4)) {
-    const original = stringValue(substitute.original) ?? substituteIngredient;
-    const replacement = stringValue(substitute.substitute);
-    const reason = stringValue(substitute.reasoning);
-    if (original && replacement) add(researched, `substitute: ${original} -> ${replacement}${reason ? ` (${reason})` : ''}`);
+  const substitutionPayloads = Array.isArray(toolPayloads.find_sensory_substitutes_all)
+    ? toolPayloads.find_sensory_substitutes_all
+    : [toolPayloads.find_sensory_substitutes].filter(Boolean);
+  for (const payload of substitutionPayloads) {
+    const substitutes = asRecord(payload);
+    const substituteIngredient = stringValue(substitutes.ingredient);
+    const promptForAgent = stringValue(substitutes.promptForAgent);
+    if (promptForAgent) addPriority(retrievedReferences, `substitution tool guidance: ${promptForAgent}`);
+    for (const substitute of arrayRecords(substitutes.substitutes).slice(0, 4)) {
+      const original = stringValue(substitute.original) ?? substituteIngredient;
+      const replacement = stringValue(substitute.substitute);
+      const reason = stringValue(substitute.reasoning);
+      if (original && replacement) add(researched, `substitute: ${original} -> ${replacement}${reason ? ` (${reason})` : ''}`);
+    }
+    if (substituteIngredient && arrayRecords(substitutes.substitutes).length === 0) {
+      add(researched, `substitute target: ${substituteIngredient}, host-model analysis required`);
+    }
+  }
+
+  const sourcing = asRecord(toolPayloads.source_ingredients);
+  const sourcingLocation = stringValue(sourcing.location);
+  const sourcingIngredients = arrayStrings(sourcing.ingredients);
+  const regionalData = asRecord(sourcing.regionalData);
+  const sourcingFacts = [
+    sourcingIngredients.length > 0
+      ? `sourcing request: ${sourcingIngredients.join(', ')} near ${sourcingLocation ?? 'the user'}`
+      : undefined,
+    sourcingLocation ? `purchase location: ${sourcingLocation.toLowerCase()}` : undefined,
+    ...summarizeRegionalStores(regionalData.majorStores).slice(0, 3).map((store) => `sourcing store/corridor: ${store}`),
+    ...summarizeRegionalCorridors(regionalData.ethnicCorridors).slice(0, 3).map((corridor) => `sourcing store/corridor: ${corridor}`),
+  ];
+  addManyPriority(researched, sourcingFacts);
+  const sourcingPrompt = stringValue(sourcing.promptForAgent);
+  if (sourcingPrompt) {
+    addPriority(retrievedReferences, `sourcing tool guidance: ${sourcingPrompt}`);
   }
 
   const cue = asRecord(toolPayloads.generate_minimum_viable_nostalgia);
@@ -214,8 +242,44 @@ function addMany(target: string[], values: Array<string | undefined>): void {
   for (const value of values) add(target, value);
 }
 
+function addPriority(target: string[], value: string | undefined): void {
+  const clean = sanitizeText(value);
+  if (!clean) return;
+  const existing = target.indexOf(clean);
+  if (existing >= 0) target.splice(existing, 1);
+  target.unshift(clean);
+}
+
+function addManyPriority(target: string[], values: Array<string | undefined>): void {
+  for (const value of values.slice().reverse()) addPriority(target, value);
+}
+
 function limitBucket(values: string[], maxItems = MAX_ITEMS_PER_BUCKET): string[] {
   return values.slice(0, maxItems).map((value) => value.slice(0, MAX_ITEM_CHARS));
+}
+
+function summarizeRegionalStores(value: unknown): string[] {
+  if (Array.isArray(value)) return arrayStrings(value);
+  return Object.entries(asRecord(value)).flatMap(([category, stores]) => {
+    const storeNames = arrayStrings(stores).slice(0, 4);
+    if (storeNames.length === 0) return [];
+    const cleanCategory = sanitizeText(category);
+    return [cleanCategory ? `${cleanCategory}: ${storeNames.join(', ')}` : storeNames.join(', ')];
+  });
+}
+
+function summarizeRegionalCorridors(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+  return value.flatMap((entry) => {
+    if (typeof entry === 'string') return arrayStrings([entry]);
+    const corridor = asRecord(entry);
+    const name = stringValue(corridor.name);
+    if (!name) return [];
+    const city = stringValue(corridor.city);
+    const cuisines = arrayStrings(corridor.cuisines).slice(0, 3);
+    const cuisineSuffix = cuisines.length > 0 ? ` (${cuisines.join(', ')})` : '';
+    return [`${name}${city ? ` in ${city}` : ''}${cuisineSuffix}`];
+  });
 }
 
 function sanitizeText(value: unknown): string | undefined {

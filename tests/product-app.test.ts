@@ -25,10 +25,11 @@ describe('ProductApp browser helpers', () => {
     expect(second.pending).toBe('');
   });
 
-  it('keeps auth and rate-limit error copy actionable', () => {
+  it('keeps open-demo and rate-limit error copy actionable', () => {
     const app = loadProductApp();
 
-    expect(app.explainHttpStatus(401, 'missing key')).toContain('Enter your API key or demo password');
+    expect(app.explainHttpStatus(401, 'missing key')).not.toMatch(/demo password/i);
+    expect(app.explainHttpStatus(401, 'missing key')).toContain('The public demo should be open');
     expect(app.explainHttpStatus(429, 'upgrade')).toBe('Rate limit exceeded. upgrade');
     expect(app.explainHttpStatus(500, '')).toBe('Server error 500. Could not parse server response');
   });
