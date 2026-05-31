@@ -982,7 +982,10 @@ type SseSender = (event: string, data: unknown) => void;
 type DoneSender = (data?: Record<string, unknown>) => void;
 
 function enforceAllergyProfessionalBoundary(text: string, userMessage: string): string {
-  if (!/\b(?:allerg(?:y|ic|ies|en)|intoleran(?:ce|t)|anaphylaxis|severely allergic|tree nuts?|peanuts?)\b/i.test(userMessage)) return text;
+  const constraints = inferSafetyConstraints(userMessage);
+  const hasAllergyBoundary = constraints.some((constraint) => /\ballergy\b|dairy-free|gluten-free/i.test(constraint))
+    || /\b(?:allerg(?:y|ic|ies|en)|intoleran(?:ce|t)|anaphylaxis|severely allergic|tree nuts?|peanuts?)\b/i.test(userMessage);
+  if (!hasAllergyBoundary) return text;
   const boundedText = sanitizeFoodSafetyClaimLanguage(text);
   if (/\b(?:qualified professional|medical professional|doctor|allergist|clinician|dietitian)\b/i.test(boundedText)) return boundedText;
   return [

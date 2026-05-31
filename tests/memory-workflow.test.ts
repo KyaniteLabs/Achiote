@@ -40,6 +40,17 @@ describe('research-first food memory workflow', () => {
     expect(memory.nextQuestions.join(' ')).not.toMatch(/\b(?:eggs?|sesame)\b/i);
   });
 
+  it('keeps idiomatic shellfish reaction terms out of remembered ingredients and follow-up targets', () => {
+    const memory = collectFoodMemory({
+      memoryText: 'my dad made a seafood rice dish, but shrimp and crab make me swell up. help me recreate it.',
+    });
+
+    expect(memory.extractedClues.rememberedIngredients).not.toContain('shrimp');
+    expect(memory.extractedClues.rememberedIngredients).not.toContain('crab');
+    expect(memory.extractedClues.rememberedIngredients).not.toContain('shellfish');
+    expect(memory.nextQuestions.join(' ')).not.toMatch(/\b(?:shrimp|crab|shellfish)\b/i);
+  });
+
   it('plans research instead of pretending sparse fragments are resolved', () => {
     const memory = collectFoodMemory({
       memoryText: 'My grandma made something like pass-teh-lay for Christmas. Puerto Rican family.',

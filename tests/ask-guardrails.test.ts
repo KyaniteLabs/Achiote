@@ -27,6 +27,12 @@ describe('ask guardrails', () => {
     ]));
   });
 
+  it('recognizes idiomatic shellfish reaction phrasing as a safety constraint', () => {
+    expect(inferSafetyConstraints('shrimp and crab make me swell up')).toEqual(expect.arrayContaining([
+      'shellfish allergy',
+    ]));
+  });
+
   it('recognizes concrete cue instructions even when amounts are not numeric', () => {
     expect(containsConcreteFoodCue('Try this: toast a pinch of cumin and steep it in hot water.')).toBe(true);
     expect(containsConcreteFoodCue('A few broad possibilities come to mind, but I need more clues first.')).toBe(false);

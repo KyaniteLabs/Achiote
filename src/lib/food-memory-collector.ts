@@ -56,8 +56,19 @@ function isAllergyConstraintMention(text: string, phrase: string): boolean {
   ).test(text);
 }
 
+function isAdverseReactionConstraintMention(text: string, phrase: string): boolean {
+  const pattern = escapeRegExp(phrase).replace(/\s+/g, '\\s+');
+  return new RegExp(
+    `\\b${pattern}\\b[^.:?!;]{0,96}\\b(?:make|makes|made|causes?|trigger(?:s|ed)?|gives?|gave)\\s+me\\s+[^.:?!;]{0,80}\\b(?:swell(?:ing)?|swollen|hives?|rash|itch(?:y|ing)?|wheez(?:e|ing)|throat|anaphylaxis)\\b|\\b(?:swell(?:ing)?|swollen|hives?|rash|itch(?:y|ing)?|wheez(?:e|ing)|throat|anaphylaxis)\\b[^.:?!;]{0,96}\\b(?:after|from|when\\s+I\\s+eat)\\b[^.:?!;]{0,48}\\b${pattern}\\b`,
+    'i',
+  ).test(text);
+}
+
 function isExcludedIngredientMention(text: string, phrase: string): boolean {
-  return isNegatedMention(text, phrase) || isAllergyConstraintMention(text, phrase);
+  return isNegatedMention(text, phrase)
+    || isAllergyConstraintMention(text, phrase)
+    || isAdverseReactionConstraintMention(text, phrase)
+    || (phrase === 'seafood' && /\b(?:shrimp|prawns?|crab|lobster|oysters?|clams?|mussels?|scallops?)\b[^.:?!;]{0,96}\b(?:make|makes|made|causes?|trigger(?:s|ed)?|gives?|gave)\s+me\s+[^.:?!;]{0,80}\b(?:swell(?:ing)?|swollen|hives?|rash|itch(?:y|ing)?|wheez(?:e|ing)|throat|anaphylaxis)\b/i.test(text));
 }
 
 function likelyDishPhrases(text: string): string[] {
