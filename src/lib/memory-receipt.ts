@@ -32,6 +32,17 @@ function extractRuledOutTerms(text: string): string[] {
   })).slice(0, 4);
 }
 
+function buildUnknownsFromExtractedClues(memory: CollectedFoodMemory): string[] {
+  const clues = memory.extractedClues;
+  return unique([
+    clues.possibleDishNames.length === 0 ? 'food or drink name or local nickname' : '',
+    clues.culturalOrRegionalHints.length === 0 ? 'country, island, region, town, or community' : '',
+    clues.rememberedIngredients.length === 0 ? 'core ingredients' : '',
+    clues.sensoryClues.length === 0 ? 'taste, texture, aroma, sauce, or heat level' : '',
+    clues.occasions.length === 0 ? 'where/when they ate it or who made it' : '',
+  ]);
+}
+
 export function buildMemoryReceipt(input: {
   memory: CollectedFoodMemory;
   researchPlan?: DishResearchPlan;
@@ -53,10 +64,7 @@ export function buildMemoryReceipt(input: {
     ...input.memory.inferredContext.language,
   ].map((clue) => `${clue.label} (${clue.confidence} confidence): ${clue.basis}`);
 
-  const unknown = unique([
-    ...input.memory.missingInformation,
-    ...(input.researchPlan?.factsToVerify ?? []),
-  ]);
+  const unknown = buildUnknownsFromExtractedClues(input.memory);
   const ruledOut = filterSafetyBounded(extractRuledOutTerms(input.memory.rawMemory));
   const hypotheses = (input.researchPlan?.hypotheses ?? [])
     .filter((hypothesis) => !isRestrictedAnchorForConstraints(hypothesis.name, safetyConstraints))

@@ -133,4 +133,46 @@ describe('memory receipt', () => {
     expect(receipt.evidence.userSaid).toContain('Ruled out: potatoes');
     expect(formatMemoryReceiptMarkdown(receipt)).toContain('Ruled out: potatoes');
   });
+
+  it('lists only empty extracted clue fields as unknowns', () => {
+    const receipt = buildMemoryReceipt({
+      memory: {
+        rawMemory: 'my mom made arepas con queso, my family is from Venezuela.',
+        normalizedMemory: 'my mom made arepas con queso, my family is from Venezuela.',
+        extractedClues: {
+          possibleDishNames: ['arepas con queso'],
+          culturalOrRegionalHints: ['Venezuela'],
+          rememberedIngredients: ['cheese', 'corn'],
+          sensoryClues: ['toasted corn aroma'],
+          occasions: ['mother/family context'],
+        },
+        inferredContext: {
+          culturalOrRegional: [],
+          language: [],
+        },
+        missingInformation: [
+          'cooking method or serving format',
+          'core ingredients',
+          'taste, texture, aroma, sauce, or heat level',
+        ],
+        nextQuestions: [],
+        reassurance: "You don't need to spell it correctly or know the original language; sound-alikes and tiny clues are enough to start.",
+      },
+      researchPlan: {
+        researchRequired: true,
+        hypotheses: [],
+        searchQueries: [],
+        preferredSourceTypes: [],
+        factsToVerify: [
+          'base ingredient, beverage base, or starch',
+          'cooking, extraction, mixing, or serving method',
+          'sensory cues: aroma, texture, flavor, appearance, temperature, or dilution',
+        ],
+        questionsForUser: [],
+      },
+      createdAt: '2026-04-27T12:00:00.000Z',
+    });
+
+    expect(receipt.evidence.unknown).toEqual([]);
+  });
 });
