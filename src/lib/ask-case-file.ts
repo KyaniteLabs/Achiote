@@ -142,6 +142,16 @@ export function buildAskCaseFile(input: BuildAskCaseFileInput): AskCaseFile {
     addPriority(retrievedReferences, `sourcing tool guidance: ${sourcingPrompt}`);
   }
 
+  const localSourcingSearch = asRecord(toolPayloads.local_sourcing_search);
+  for (const result of arrayRecords(localSourcingSearch.results).slice(0, 3)) {
+    const title = stringValue(result.title);
+    const snippet = stringValue(result.snippet);
+    if (title || snippet) {
+      addPriority(researched, `local sourcing search lead: ${[title, snippet].filter(Boolean).join(' - ')}`);
+      addPriority(retrievedReferences, `local sourcing search lead: ${title ?? snippet}`);
+    }
+  }
+
   const cue = asRecord(toolPayloads.generate_minimum_viable_nostalgia);
   add(researched, stringValue(cue.title) ? `minimum cue: ${stringValue(cue.title)}` : undefined);
   add(researched, stringValue(cue.goal));

@@ -87,6 +87,14 @@ describe('WorkflowPlanner', () => {
     });
     expect(lowercaseLocation.needsSourcing).toBe(true);
     expect(lowercaseLocation.workflowSteps.map((step) => step.tool)).toContain('source_ingredients');
+
+    const whereShouldLook = planAskWorkflow({
+      userMessage: 'I am in Queens, New York. I am trying to recreate a dark Oaxacan mole my aunt made, and I think the ingredient I need is chilhuacle chiles. Where should I look near me, and what substitutes should I use if I cannot find them?',
+    });
+    expect(whereShouldLook.needsSourcing).toBe(true);
+    expect(whereShouldLook.needsSubstitutions).toBe(true);
+    expect(whereShouldLook.workflowSteps.map((step) => step.tool)).toContain('source_ingredients');
+    expect(whereShouldLook.maxSearchCalls).toBeGreaterThanOrEqual(2);
   });
 
   it('tracks sourcing intent without silently inventing a location', () => {

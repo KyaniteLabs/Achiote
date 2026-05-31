@@ -139,7 +139,7 @@ describe('/ask failure surface regressions', () => {
           finish_reason: 'stop',
           message: {
             role: 'assistant',
-            content: 'Before I suggest a satay-like sauce, I need to ask what flavor you remember most.',
+            content: 'Before I safely suggest a satay-like sauce, I need to ask what flavor you remember most. Safety note: check labels.',
           },
         }],
       }));
@@ -168,6 +168,7 @@ describe('/ask failure surface regressions', () => {
 
     expect(finalText).toContain('qualified professional');
     expect(finalText).not.toMatch(/\bsafe\b/i);
+    expect(finalText).not.toMatch(/\bsafely\b|\bsafety note\b/i);
     expect(finalText).not.toMatch(/What I heard:[^\n]*(?:peanuts?|tree nuts?|nuts?)/i);
     expect(finalText).not.toMatch(/(?:peanuts?|tree nuts?|nuts?) you mentioned/i);
     if (receipt) {
