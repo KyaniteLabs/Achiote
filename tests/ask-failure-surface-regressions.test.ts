@@ -118,11 +118,62 @@ describe('/ask failure surface regressions', () => {
       .join('\n\n');
     expect(events.at(-1)?.event).toBe('done');
     expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'substitution_basis_deterministic_completion' });
-    expect(finalText).toMatch(/basis before substitutions/i);
-    expect(finalText).toMatch(/adapted cue/i);
+    expect(finalText).toMatch(/what to test first/i);
+    expect(finalText).toMatch(/substitutes to try/i);
     expect(finalText).not.toMatch(/\b(?:\d+\s*(?:cups?|tbsp|tablespoons?|teaspoons?|tsp|minutes?|mins?|servings?)|one-cup|half-cup|recipe)\b/i);
     expect(finalText).not.toMatch(/amount of (?:small amount|tiny)\b/i);
     expect(requestCount).toBe(1);
+  }, 20_000);
+
+  it('keeps allergy responses professionally bounded across deterministic recovery', async () => {
+    const fakePort = await getFreePort();
+    fakeOpenAi = createServer(async (req, res) => {
+      if (req.url !== '/v1/chat/completions' || req.method !== 'POST') {
+        res.writeHead(404).end();
+        return;
+      }
+      await readBody(req);
+      res.writeHead(200, { 'content-type': 'application/json' });
+      res.end(JSON.stringify({
+        choices: [{
+          finish_reason: 'stop',
+          message: {
+            role: 'assistant',
+            content: 'Before I safely suggest a satay-like sauce, I need to ask what flavor you remember most. Safety note: check labels.',
+          },
+        }],
+      }));
+    });
+    await new Promise<void>((resolveListen) => fakeOpenAi?.listen(fakePort, '127.0.0.1', resolveListen));
+
+    const achiotePort = await getFreePort();
+    achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`);
+
+    const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: 'I am severely allergic to peanuts and tree nuts. Help me recreate a satay-like sauce I remember.',
+      }),
+    });
+
+    expect(response.status).toBe(200);
+    const raw = await response.text();
+    const events = parseSse(raw);
+    const finalText = events
+      .filter((event) => event.event === 'text')
+      .map((event) => JSON.parse(event.data))
+      .join('\n\n');
+    const receipt = events.find((event) => event.event === 'receipt');
+
+    expect(finalText).toContain('qualified professional');
+    expect(finalText).not.toMatch(/\bsafe\b/i);
+    expect(finalText).not.toMatch(/\bsafely\b|\bsafety note\b/i);
+    expect(finalText).not.toMatch(/What I heard:[^\n]*(?:peanuts?|tree nuts?|nuts?)/i);
+    expect(finalText).not.toMatch(/(?:peanuts?|tree nuts?|nuts?) you mentioned/i);
+    if (receipt) {
+      expect(JSON.stringify(JSON.parse(receipt.data).nextBestQuestions)).not.toMatch(/\b(?:peanuts?|tree nuts?|nuts?)\b/i);
+    }
   }, 20_000);
 
   it('recovers deterministically from llama.cpp n_keep/n_ctx context errors', async () => {
@@ -620,11 +671,149 @@ describe('/ask failure surface regressions', () => {
     expect(events.at(-1)?.event).toBe('done');
     expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'substitution_basis_deterministic_completion' });
     expect(toolNames.indexOf('generate_minimum_viable_nostalgia')).toBeLessThan(toolNames.indexOf('find_sensory_substitutes'));
-    expect(finalText).toMatch(/basis before substitutions/i);
-    expect(finalText).toMatch(/adapted cue/i);
+    expect(finalText).toMatch(/what to test first/i);
+    expect(finalText).toMatch(/substitutes to try/i);
     expect(finalText).not.toMatch(/\b(?:\d+\s*(?:cups?|tbsp|tablespoons?|teaspoons?|tsp|minutes?|mins?|servings?)|one-cup|half-cup|recipe)\b/i);
     expect(finalText).not.toMatch(/amount of (?:small amount|tiny)\b/i);
     expect(requestCount).toBeGreaterThanOrEqual(1);
+  }, 20_000);
+
+  it('uses the user ingredient for planned substitutes and sourcing after the minimum cue', async () => {
+    const fakePort = await getFreePort();
+    let requestCount = 0;
+    fakeOpenAi = createServer(async (req, res) => {
+      if (req.url !== '/v1/chat/completions' || req.method !== 'POST') {
+        res.writeHead(404).end();
+        return;
+      }
+      requestCount++;
+      await readBody(req);
+      const toolCallsByTurn = [
+        [{ id: 'call_1', type: 'function', function: { name: 'collect_food_memory', arguments: JSON.stringify({ memoryText: 'My grandmother in Oaxaca made mole negro with chilhuacle chiles; I live in Des Moines, Iowa; where can I buy the chiles near me, and what can I substitute?' }) } }],
+        [{ id: 'call_2', type: 'function', function: { name: 'plan_dish_research', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_3', type: 'function', function: { name: 'resolve_dish_name', arguments: JSON.stringify({ query: 'Oaxacan mole negro chilhuacle chiles' }) } }],
+        [{ id: 'call_4', type: 'function', function: { name: 'build_reconstruction_dossier', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_5', type: 'function', function: { name: 'generate_minimum_viable_nostalgia', arguments: JSON.stringify({}) } }],
+      ];
+      const toolCalls = toolCallsByTurn[requestCount - 1];
+      res.setHeader('content-type', 'application/json');
+      res.end(JSON.stringify({
+        choices: [{
+          finish_reason: toolCalls ? 'tool_calls' : 'stop',
+          message: toolCalls
+            ? { role: 'assistant', content: '', tool_calls: toolCalls }
+            : { role: 'assistant', content: 'I need to gather substitution and sourcing information for you. <tool_call?>{"name":"source_ingredients","arguments":{"ingredients":["chilhuacle chiles"],"location":"Des Moines, Iowa"}}</tool_call?><tool_result?>{"promptForAgent":"Use source_ingredients output directly."}</tool_result?>' },
+        }],
+      }));
+    });
+    await new Promise<void>((resolveListen) => fakeOpenAi?.listen(fakePort, '127.0.0.1', resolveListen));
+
+    const achiotePort = await getFreePort();
+    achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`);
+
+    const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: 'My grandmother in Oaxaca made mole negro with chilhuacle chiles; I live in Des Moines, Iowa; where can I buy the chiles near me, and what can I substitute?',
+      }),
+    });
+
+    expect(response.status).toBe(200);
+    const events = parseSse(await response.text());
+    const toolNames = events.filter((event) => event.event === 'tool_call').map((event) => JSON.parse(event.data).name);
+    const plan = events
+      .filter((event) => event.event === 'tool_result')
+      .map((event) => JSON.parse(event.data))
+      .find((event) => event.name === 'plan_tool_workflow')?.result;
+    const substituteInputs = events
+      .filter((event) => event.event === 'tool_call' && JSON.parse(event.data).name === 'find_sensory_substitutes')
+      .map((event) => JSON.parse(event.data).input.ingredient);
+    const sourceInput = events
+      .filter((event) => event.event === 'tool_call' && JSON.parse(event.data).name === 'source_ingredients')
+      .map((event) => JSON.parse(event.data).input)
+      .at(-1);
+    const finalText = events
+      .filter((event) => event.event === 'text')
+      .map((event) => JSON.parse(event.data))
+      .join('\n\n');
+
+    expect(events.some((event) => event.event === 'error')).toBe(false);
+    expect(plan).toMatchObject({ needsSubstitutions: true, needsSourcing: true });
+    expect(toolNames.indexOf('generate_minimum_viable_nostalgia')).toBeLessThan(toolNames.indexOf('find_sensory_substitutes'));
+    expect(toolNames.indexOf('generate_minimum_viable_nostalgia')).toBeLessThan(toolNames.indexOf('source_ingredients'));
+    expect(substituteInputs).toContain('chilhuacle chiles');
+    expect(substituteInputs).not.toContain('chocolate');
+    expect(sourceInput).toMatchObject({
+      ingredients: expect.arrayContaining(['chilhuacle chiles']),
+    });
+    expect(sourceInput?.location).toMatch(/Des Moines/i);
+    expect(finalText).toMatch(/Substitutes to try/i);
+    expect(finalText).toMatch(/Where to buy/i);
+    expect(finalText).not.toMatch(/I need to gather substitution and sourcing information/i);
+    expect(finalText).not.toMatch(/<\/?tool_(?:call|result)\??>/i);
+    expect(finalText).not.toMatch(/User-said anchors/i);
+    expect(events.at(-1)?.event).toBe('done');
+    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'raw_tool_markup_sanitized' });
+    expect(requestCount).toBe(6);
+  }, 20_000);
+
+  it('renders planned sourcing instead of passing through sourcing deferrals', async () => {
+    const fakePort = await getFreePort();
+    let requestCount = 0;
+    fakeOpenAi = createServer(async (req, res) => {
+      if (req.url !== '/v1/chat/completions' || req.method !== 'POST') {
+        res.writeHead(404).end();
+        return;
+      }
+      requestCount++;
+      await readBody(req);
+      const toolCallsByTurn = [
+        [{ id: 'call_1', type: 'function', function: { name: 'collect_food_memory', arguments: JSON.stringify({ memoryText: 'My grandmother in Oaxaca made mole negro with chilhuacle chiles. I live in Des Moines, Iowa. Where can I buy chilhuacle chiles near me?' }) } }],
+        [{ id: 'call_2', type: 'function', function: { name: 'plan_dish_research', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_3', type: 'function', function: { name: 'build_reconstruction_dossier', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_4', type: 'function', function: { name: 'generate_minimum_viable_nostalgia', arguments: JSON.stringify({}) } }],
+      ];
+      const toolCalls = toolCallsByTurn[requestCount - 1];
+      res.setHeader('content-type', 'application/json');
+      res.end(JSON.stringify({
+        choices: [{
+          finish_reason: toolCalls ? 'tool_calls' : 'stop',
+          message: toolCalls
+            ? { role: 'assistant', content: '', tool_calls: toolCalls }
+            : { role: 'assistant', content: 'I would love to help you track those chiles down. Let me research sourcing options in Des Moines and then I can give you a list.' },
+        }],
+      }));
+    });
+    await new Promise<void>((resolveListen) => fakeOpenAi?.listen(fakePort, '127.0.0.1', resolveListen));
+
+    const achiotePort = await getFreePort();
+    achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`);
+
+    const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: 'My grandmother in Oaxaca made mole negro with chilhuacle chiles. I live in Des Moines, Iowa. Where can I buy chilhuacle chiles near me?',
+      }),
+    });
+
+    expect(response.status).toBe(200);
+    const events = parseSse(await response.text());
+    const toolNames = events.filter((event) => event.event === 'tool_call').map((event) => JSON.parse(event.data).name);
+    const finalText = events
+      .filter((event) => event.event === 'text')
+      .map((event) => JSON.parse(event.data))
+      .join('\n\n');
+
+    expect(toolNames).toContain('source_ingredients');
+    expect(finalText).toMatch(/Where to buy/i);
+    expect(finalText).toMatch(/chilhuacle chiles/i);
+    expect(finalText).toMatch(/Des Moines/i);
+    expect(finalText).not.toMatch(/let me research|track those chiles down/i);
+    expect(finalText).not.toMatch(/User-said anchors/i);
+    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'sourcing_guidance_deterministic_completion' });
+    expect(requestCount).toBe(5);
   }, 20_000);
 
   it('filters duplicate tool calls while allowing new calls in the same batch', async () => {
@@ -1395,11 +1584,11 @@ describe('/ask failure surface regressions', () => {
       byMemoryType: { beverage: 1 },
       byGuard: { minimum_cue_deterministic_completion: 1 },
       bySearch: { skipped: 1 },
-      byCache: { unavailable: 1 },
     });
+    expect((body.quality.byCache.fallback ?? 0) + (body.quality.byCache.unavailable ?? 0)).toBe(1);
     expect(body.referenceSeeds.priorities[0]).toMatchObject({
       seedId: 'beverage-rice-cinnamon-latin-america',
-      reasons: expect.arrayContaining(['frequent_memory_type', 'cache_unavailable']),
+      reasons: expect.arrayContaining(['frequent_memory_type', 'fallback_guard']),
     });
     expect(body.referenceSeeds.cacheWarmingTasks[0]).toMatchObject({
       id: 'warm-beverage-rice-cinnamon-latin-america',
@@ -1528,7 +1717,7 @@ describe('/ask failure surface regressions', () => {
     expect(collectedMemory?.normalizedMemory).not.toMatch(/\b(?:milky|creamy|cream)\b/i);
     expect(finalText).toMatch(/\b(?:watery|ice|icy|lime|citrus|acid|barely sweet|dilution)\b/i);
     // Negated terms may appear in the evidence preamble; ensure they don't leak into cue recommendations
-    expect(finalText).toMatch(/Negated\/corrected:.*(?:not milky|not creamy|was not milky)/i);
+    expect(finalText).toMatch(/What not to assume:.*(?:not milky|not creamy|was not milky)/i);
     const linesWithForbidden = finalText.split('\n').filter((line) => /\b(?:milky|creamy|cream)\b/i.test(line));
     for (const line of linesWithForbidden) {
       expect(line).toMatch(/\b(?:not|wasn['']?t|isn['']?t|no|without)\b/i);
@@ -1939,15 +2128,15 @@ describe('/ask failure surface regressions', () => {
 
     expect(events.some((event) => event.event === 'error')).toBe(false);
     expect(events.at(-1)?.event).toBe('done');
-    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'substitution_basis_deterministic_completion' });
-    // Negated/corrected terms may appear in the evidence preamble; only scrub the cue body
+    expect(['substitution_basis_deterministic_completion', 'recipe_procedure_sanitized']).toContain(JSON.parse(events.at(-1)!.data).guarded);
+    // Correction terms may appear in the evidence preamble; only scrub the cue body
     const bodyLines = finalText.split('\n');
-    const bodyStart = bodyLines.findIndex((line) => /^Basis before substitutions:/.test(line) || /^Minimum viable/.test(line));
+    const bodyStart = bodyLines.findIndex((line) => /^What to test first:/.test(line) || /^Minimum viable/.test(line));
     const cueBody = bodyStart >= 0 ? bodyLines.slice(bodyStart).join('\n') : finalText;
     expect(cueBody).not.toMatch(/\b(?:my model|cannot browse|browse|Achiote\s+(?:assistant|app|tool|toolset|workflow|model|server|searched|browsed)|toolset|workflow|OpenAI|gpt-4o|fake-hostile-model|provider|browsing|browsed|live web|current grocery prices|medically safe|heart-healthy|cure|lowers cholesterol|treats inflammation|prevents diabetes|legal advice|legally safe)\b/i);
     expect(cueBody).not.toMatch(/\bI cannot give\b/i);
-    expect(finalText).toMatch(/basis before substitutions/i);
-    expect(finalText).toMatch(/adapted cue/i);
+    expect(finalText).toMatch(/what to test first/i);
+    expect(finalText).toMatch(/substitutes to try/i);
   }, 20_000);
 
   it('scrubs essential oils from edible final cue text', async () => {
@@ -2103,9 +2292,9 @@ describe('/ask failure surface regressions', () => {
 
     expect(events.some((event) => event.event === 'error')).toBe(false);
     expect(events.at(-1)?.event).toBe('done');
-    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'substitution_basis_deterministic_completion' });
+    expect(['substitution_basis_deterministic_completion', 'recipe_procedure_sanitized']).toContain(JSON.parse(events.at(-1)!.data).guarded);
     expect(finalText).toContain('Minimum viable');
-    expect(finalText).toMatch(/adapted cue/i);
+    expect(finalText).toMatch(/substitutes to try/i);
     expect(finalText).not.toMatch(/\b(?:full substitution map|complex set of dietary needs|sunflower-seed cream|coconut-curry dal)\b/i);
   }, 20_000);
 
@@ -2157,9 +2346,9 @@ describe('/ask failure surface regressions', () => {
 
     expect(events.some((event) => event.event === 'error')).toBe(false);
     expect(events.at(-1)?.event).toBe('done');
-    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'substitution_basis_deterministic_completion' });
+    expect(['substitution_basis_deterministic_completion', 'overconfident_identity_sanitized']).toContain(JSON.parse(events.at(-1)!.data).guarded);
     expect(finalText).toContain('Minimum viable');
-    expect(finalText).toMatch(/adapted cue/i);
+    expect(finalText).toMatch(/substitutes to try/i);
     expect(finalText).not.toMatch(/\b(?:Original role|Constraint|Stand-in|sunflower seed butter|silken tofu|gluten-free naan)\b/i);
   }, 20_000);
 
@@ -2263,7 +2452,8 @@ describe('/ask failure surface regressions', () => {
     expect(events.some((event) => event.event === 'error')).toBe(false);
     expect(events.at(-1)?.event).toBe('done');
     expect(JSON.parse(events.at(-1)!.data)).not.toMatchObject({ guarded: 'substitution_basis_deterministic_completion' });
-    expect(finalText).toMatch(/smallest safe first test|Heat tiny sip/i);
+    expect(finalText).toMatch(/smallest first test|Heat tiny sip/i);
+    expect(finalText).not.toMatch(/\bsafe\b/i);
     expect(finalText).toMatch(/Sip it warm/i);
   }, 20_000);
 

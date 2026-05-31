@@ -5,10 +5,20 @@ import { escapeRegExp } from './food-memory-text.js';
 
 export function inferSafetyConstraints(userMessage: string): string[] {
   const constraints: string[] = [];
+  const hasAllergyContext = /\ballerg(?:y|ic|ies)\b/i.test(userMessage);
   if (/\bvegan\b|\bplant[-\s]?based\b|\bno animal products?\b/i.test(userMessage)) constraints.push('vegan');
   if (/\bvegetarian\b|\bmeat[-\s]?free\b|\bno meat\b/i.test(userMessage)) constraints.push('vegetarian');
   if (/\bsoy allerg|\ballergic to soy\b|\bno soy\b|\bsoy[-\s]?free\b/i.test(userMessage)) constraints.push('soy allergy');
-  if (/\bpeanut allerg|\btree nut allerg|\bnut allerg|\bno nuts?\b|\bnut[-\s]?free\b/i.test(userMessage)) constraints.push('nut allergy');
+  if (/\b(?:peanut|peanuts|tree nuts?|nuts?)\s+allerg|\ballergic\s+to\s+(?:peanuts?|tree nuts?|nuts?)\b|\bno nuts?\b|\bnut[-\s]?free\b/i.test(userMessage)
+    || (hasAllergyContext && /\b(?:peanuts?|tree nuts?|nuts?)\b/i.test(userMessage))) constraints.push('nut allergy');
+  if (/\b(?:egg|eggs)\s+allerg|\ballergic\s+to\s+eggs?\b|\bno eggs?\b|\begg[-\s]?free\b/i.test(userMessage)
+    || (hasAllergyContext && /\beggs?\b/i.test(userMessage))) constraints.push('egg allergy');
+  if (/\b(?:shellfish|shrimp|prawns?|crab|lobster|oysters?|clams?|mussels?|scallops?)\s+allerg|\ballergic\s+to\s+(?:shellfish|shrimp|prawns?|crab|lobster|oysters?|clams?|mussels?|scallops?)\b|\bno shellfish\b|\bshellfish[-\s]?free\b/i.test(userMessage)
+    || (hasAllergyContext && /\b(?:shellfish|shrimp|prawns?|crab|lobster|oysters?|clams?|mussels?|scallops?)\b/i.test(userMessage))) constraints.push('shellfish allergy');
+  if (/\b(?:fish|seafood)\s+allerg|\ballergic\s+to\s+(?:fish|seafood)\b|\bno fish\b|\bfish[-\s]?free\b|\bseafood[-\s]?free\b/i.test(userMessage)
+    || (hasAllergyContext && /\b(?:fish|seafood)\b/i.test(userMessage))) constraints.push('fish allergy');
+  if (/\b(?:sesame|tahini)\s+allerg|\ballergic\s+to\s+(?:sesame|tahini)\b|\bno sesame\b|\bsesame[-\s]?free\b/i.test(userMessage)
+    || (hasAllergyContext && /\b(?:sesame|tahini)\b/i.test(userMessage))) constraints.push('sesame allergy');
   if (/\bdairy[-\s]?free\b|\bno dairy\b|\bmilk allerg|\blactose\b/i.test(userMessage)) constraints.push('dairy-free');
   if (/\bgluten[-\s]?free\b|\bno gluten\b|\bceliac\b|\bcoeliac\b/i.test(userMessage)) constraints.push('gluten-free');
   if (/\bhalal\b/i.test(userMessage)) constraints.push('halal');

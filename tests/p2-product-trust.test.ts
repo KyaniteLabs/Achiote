@@ -117,6 +117,17 @@ describe('P2 product trust improvements', () => {
     expect(copyProposal).toContain('not the current production source of truth');
   });
 
+  it('keeps the public demo free of shared password UI and headers', () => {
+    const app = fs.readFileSync('docs/landing/app.html', 'utf8');
+    const appScript = fs.readFileSync('docs/landing/app.js', 'utf8');
+    const productApp = fs.readFileSync('docs/landing/product-app.js', 'utf8');
+
+    expect(app).not.toMatch(/demo-password|demo password|this demo is gated/i);
+    expect(appScript).not.toContain('x-demo-password');
+    expect(appScript).not.toContain('achiote-demo-password');
+    expect(productApp).not.toMatch(/demo password/i);
+  });
+
   it('describes local OSS voice as multilingual and immigrant-family friendly without hosted speech claims', () => {
     const app = fs.readFileSync('docs/landing/app.html', 'utf8');
     const script = fs.readFileSync('docs/landing/app.js', 'utf8');

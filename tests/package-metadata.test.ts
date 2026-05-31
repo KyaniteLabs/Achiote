@@ -82,10 +82,11 @@ describe('package distribution metadata', () => {
 
   it('has reproducible quality and packaging scripts', () => {
     expect(pkg.scripts.typecheck).toBe('tsc --noEmit');
-    expect(pkg.scripts.check).toBe('npm run typecheck && npm run lint && npm run coverage:guard && npm run build && npm run validate:citations && npm test');
+    expect(pkg.scripts.check).toBe('npm run typecheck && npm run lint && npm run coverage:guard && npm run reference:coverage && npm run build && npm run validate:citations && npm test');
     expect(pkg.scripts['check:compat']).toBe('npm run typecheck && npm run build && npm test');
     expect(pkg.scripts.lint).toBe('node scripts/static-checks.mjs');
     expect(pkg.scripts['coverage:guard']).toBe('node scripts/coverage-threshold.mjs');
+    expect(pkg.scripts['reference:coverage']).toBe('node scripts/reference-coverage-audit.mjs --fail');
     expect(pkg.scripts.keygen).toBe('node scripts/generate-api-key.mjs');
     expect(pkg.scripts['docker:smoke']).toBe('node scripts/docker-smoke.mjs');
     expect(pkg.scripts['live:ask']).toBe('node scripts/live-ask-smoke.mjs');

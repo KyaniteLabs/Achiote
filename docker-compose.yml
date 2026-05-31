@@ -15,6 +15,7 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=3000
+      - ACHIOTE_WHISPER_CPP_BINARY=/usr/local/bin/whisper-cli
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:

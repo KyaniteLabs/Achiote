@@ -105,11 +105,11 @@ export function containsConcreteFoodCue(text: string): boolean {
 
 export function containsRecipeMeasurementLanguage(text: string): boolean {
   const spelledAmount = String.raw`(?:a|an|half|quarter|one|two|three|four|five|six|seven|eight|nine|ten)`;
-  return /\b\d+(?:\s*[-–]\s*\d+)?(?:\s*\/\s*\d+)?\s*(?:tsp|tbsp|teaspoons?|tablespoons?|cups?|ounces?|oz|pounds?|lbs?|grams?|g|ml|milliliters?|liters?|quarts?|gallons?|sticks?|cloves?|heads?|bunches?)\b/i.test(text)
+  return /\b\d+(?:\s*[-\u2013]\s*\d+)?(?:\s*\/\s*\d+)?\s*(?:tsp|tbsp|teaspoons?|tablespoons?|cups?|ounces?|oz|pounds?|lbs?|grams?|g|ml|milliliters?|liters?|quarts?|gallons?|sticks?|cloves?|heads?|bunches?)\b/i.test(text)
     || /(?:[¼½¾⅓⅔⅛⅜⅝⅞]|\b\d+\/\d+)\s*(?:tsp|tbsp|teaspoons?|tablespoons?|cups?|ounces?|oz|pounds?|lbs?|grams?|g|ml|milliliters?|liters?|quarts?|gallons?|sticks?|cloves?|heads?|bunches?)\b/i.test(text)
     || /\b(?:one|half)[-\s]?cup\b/i.test(text)
     || new RegExp(String.raw`\b${spelledAmount}\s+(?:(?:small|large|tiny)\s+)?(?:of\s+|a\s+)?(?:tsp|tbsp|teaspoons?|tablespoons?|cups?|glass(?:es)?|bowls?|spoonfuls?|ounces?|oz|pounds?|lbs?|grams?|milliliters?|liters?|quarts?|gallons?|sticks?|cloves?|heads?|bunches?)\b`, 'i').test(text)
-    || /\b\d+(?:\s*[-–]\s*\d+)?\s*(?:mins?|minutes?|hrs?|hours?)\b/i.test(text)
+    || /\b\d+(?:\s*[-\u2013]\s*\d+)?\s*(?:mins?|minutes?|hrs?|hours?)\b/i.test(text)
     || /\b\d{2,4}\s*°?\s*[FC]\b/i.test(text)
     || /\bpreheat\b.*\b(?:oven|to)\b/i.test(text)
     || /\b(?:bake|roast|simmer|boil)\b.*\b(?:minutes?|hours?|degrees?|°)\b/i.test(text)
@@ -188,6 +188,7 @@ export function containsPrematureCandidateSpeculation(text: string, toolPayloads
   if (hasStableAnchor) return false;
   return /\bcould\s+be\s+(?:a|an|the)?\s*[\s\S]{0,120}\b(?:or\s+even|,\s*(?:a|an|the)?\s*[\p{L}\p{M}])/iu.test(text)
     || /\bmight\s+be\s+(?:a|an|the)?\s*[\s\S]{0,120}\b(?:or\s+even|,\s*(?:a|an|the)?\s*[\p{L}\p{M}])/iu.test(text)
+    || /\bcould\s+come\s+from\b[\s\S]{0,160}\bbut\s+(?:it\s+)?could\s+also\b/iu.test(text)
     || /\bfrom\s+(?:a|an|the)?\s*[\s\S]{0,160}\bto\s+(?:a|an|the)?\s*[\s\S]{0,160}\bto\b/iu.test(text)
     || /\bfor example\s+[\s\S]{0,160},\s*[\s\S]{0,80}\bor\s+[\s\S]{0,80}\b/iu.test(text);
 }
@@ -197,7 +198,8 @@ export function shouldClarifyBroadUncertainMemory(userMessage: string, toolPaylo
   if (!memory) return false;
 
   const text = `${userMessage}\n${memory.normalizedMemory}`.toLowerCase();
-  const explicitUncertainty = /\b(?:do\s+not|don't|not\s+sure|uncertain|no\s+idea|unknown)\b[\s\S]{0,180}\b(?:country|region|dish\s+name|name|ingredients?|soup|sauce|stew)\b/i.test(text)
+  const explicitUncertainty = /\b(?:do\s+not|don't|not\s+sure|uncertain|no\s+idea|unknown|never\s+(?:learned|knew)|nobody\s+(?:left\s+)?(?:really\s+)?remembers?|no\s+one\s+(?:really\s+)?remembers?)\b[\s\S]{0,180}\b(?:country|region|dish\s+name|name|called|ingredients?|soup|sauce|stew)\b/i.test(text)
+    || /\b(?:no\s+name|unknown\s+name|not\s+sure\s+what\s+it\s+was\s+called)\b/i.test(text)
     || /\bwhether\s+(?:it\s+)?(?:was\s+)?(?:a\s+)?(?:soup|sauce|stew)\b/i.test(text);
   const asksNotToGuess = /\b(?:do\s+not|don't)\s+(?:list\s+candidate(?:\s+dishes|\s+lists?|s)?|guess|pretend\s+certainty)\b/i.test(text)
     || /\bno\s+(?:guesses|candidate\s+lists?)\b/i.test(text);
@@ -263,9 +265,9 @@ export function sanitizeRecipeStyleCueLanguage(text: string): string {
     .replace(/(?:[¼½¾⅓⅔⅛⅜⅝⅞]|\b\d+\/\d+)\s*(?:tsp|tbsp|teaspoons?|tablespoons?|cups?|ounces?|oz|pounds?|lbs?|grams?|g|ml|milliliters?|liters?|quarts?|gallons?|sticks?|cloves?|heads?|bunches?)\b/gi, 'a small amount of')
     .replace(/\b(?:one|half)[-\s]?cup\b/gi, 'tiny sip')
     .replace(/\bfull\s+recipe\b/gi, 'full dish')
-    .replace(/\b\d+(?:\s*[-–]\s*\d+)?(?:\s*\/\s*\d+)?\s*(?:tsp|tbsp|teaspoons?|tablespoons?|cups?|ounces?|oz|pounds?|lbs?|grams?|g|ml|milliliters?|liters?|quarts?|gallons?|sticks?|cloves?|heads?|bunches?)\b/gi, 'a small amount of')
+    .replace(/\b\d+(?:\s*[-\u2013]\s*\d+)?(?:\s*\/\s*\d+)?\s*(?:tsp|tbsp|teaspoons?|tablespoons?|cups?|ounces?|oz|pounds?|lbs?|grams?|g|ml|milliliters?|liters?|quarts?|gallons?|sticks?|cloves?|heads?|bunches?)\b/gi, 'a small amount of')
     .replace(/\b(?:a|an|half|quarter|one|two|three|four|five|six|seven|eight|nine|ten)\s+(?:(?:small|large|tiny)\s+)?(?:of\s+|a\s+)?(?:tsp|tbsp|teaspoons?|tablespoons?|cups?|glass(?:es)?|bowls?|spoonfuls?|ounces?|oz|pounds?|lbs?|grams?|milliliters?|liters?|quarts?|gallons?|sticks?|cloves?|heads?|bunches?)\b/gi, 'a tiny sip or bite')
-    .replace(/\b\d+(?:\s*[-–]\s*\d+)?\s*(?:mins?|minutes?|hrs?|hours?)\b/gi, 'briefly')
+    .replace(/\b\d+(?:\s*[-\u2013]\s*\d+)?\s*(?:mins?|minutes?|hrs?|hours?)\b/gi, 'briefly')
     .replace(/\b\d{2,4}\s*°?\s*[FC]\b/gi, 'gentle heat')
     .replace(/\b(?:gentle\s+simmer|rolling\s+boil)\b/gi, 'gentle heat')
     .replace(/\bpreheat\b[^.?!]*(?:[.?!]|$)/gi, 'Keep this to a tiny tasting cue, not an oven recipe. ')
@@ -337,41 +339,80 @@ function extractNegatedTerms(text: string): string[] {
   return [...new Set(matches.map((m) => m[0].trim()))].filter((m) => m.length > 4).slice(0, 4);
 }
 
+function isRestrictedAnchorForConstraints(anchor: string, constraints: string[]): boolean {
+  const lower = anchor.toLowerCase();
+  return constraints.some((constraint) => {
+    if (/nut allergy/.test(constraint)) return /\b(?:nuts?|nutty|peanuts?|tree nuts?|cashews?|almonds?|walnuts?|pecans?|pistachios?|hazelnuts?|macadamias?)\b/i.test(lower);
+    if (/egg allergy/.test(constraint)) return /\b(?:eggs?|mayonnaise|mayo|meringue)\b/i.test(lower);
+    if (/shellfish allergy/.test(constraint)) return /\b(?:shellfish|shrimp|prawns?|crab|lobster|oysters?|clams?|mussels?|scallops?)\b/i.test(lower);
+    if (/fish allergy/.test(constraint)) return /\b(?:fish|seafood|anchov(?:y|ies)|sardines?|bonito|tuna|salmon|mackerel|fish sauce)\b/i.test(lower);
+    if (/sesame allergy/.test(constraint)) return /\b(?:sesame|tahini|benne)\b/i.test(lower);
+    if (/dairy-free/.test(constraint)) return /\b(?:milk|cream|butter|cheese|yogurt|dairy)\b/i.test(lower);
+    if (/gluten-free/.test(constraint)) return /\b(?:wheat|gluten|barley|rye|bread|naan)\b/i.test(lower);
+    if (/soy allergy/.test(constraint)) return /\bsoy\b/i.test(lower);
+    if (/pork-free/.test(constraint)) return /\bpork\b/i.test(lower);
+    return false;
+  });
+}
+
+function filterAnchorsForConstraints(anchors: string[], constraints: string[]): string[] {
+  return anchors.filter((anchor) => !isRestrictedAnchorForConstraints(anchor, constraints));
+}
+
 export function buildEvidencePreamble(toolPayloads: Record<string, unknown>, userMessage?: string): string {
   const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
   const plan = toolPayloads.plan_dish_research as DishResearchPlan | undefined;
   const top = plan?.hypotheses?.[0];
   const clues = memory?.extractedClues;
+  const constraints = userMessage ? inferSafetyConstraints(userMessage) : [];
+  const topName = top && !/^Unidentified\b/i.test(top.name) && !isRestrictedAnchorForConstraints(top.name, constraints)
+    ? top.name
+    : '';
   const userAnchors = [
     ...(clues?.culturalOrRegionalHints ?? []),
     ...(clues?.possibleDishNames ?? []),
     ...(clues?.rememberedIngredients ?? []),
     ...(clues?.sensoryClues ?? []),
-  ].filter((anchor) => !isBroadRegionalHint(anchor)).slice(0, 8);
+  ].filter((anchor) => !isBroadRegionalHint(anchor) && !isRestrictedAnchorForConstraints(anchor, constraints)).slice(0, 8);
   const inferred = [
-    top && !/^Unidentified\b/i.test(top.name) ? top.name : '',
+    topName,
     ...(top?.whatWouldConfirm ?? []).slice(0, 3),
-  ].filter(Boolean);
+  ].filter((anchor) => Boolean(anchor) && !isRestrictedAnchorForConstraints(anchor, constraints));
   const unknown = top?.confidence === 'Low' || !top ? 'exact name and family version' : 'family version and exact proportions';
-  const correction = userMessage && /\b(?:spelling|wrong|mistake|sound(?:ed)? like|called it)\b/i.test(userMessage) && top && !/^Unidentified\b/i.test(top.name)
-    ? ` Likely correction: your fragment points toward ${top.name}; keep that as a research start, not a final identity.`
+  const correction = userMessage && /\b(?:spelling|wrong|mistake|sound(?:ed)? like|called it)\b/i.test(userMessage) && topName
+    ? ` Likely correction: your fragment points toward ${topName}; keep that as a research start, not a final identity.`
     : '';
   const negated = userMessage ? extractNegatedTerms(userMessage) : [];
-  const constraints = userMessage ? inferSafetyConstraints(userMessage) : [];
 
-  if (userAnchors.length === 0 && inferred.length === 0 && negated.length === 0 && constraints.length === 0) return '';
+  const researchedFacts: string[] = [];
+  const resolved = toolPayloads.resolve_dish_name as
+    | { dishName?: string; canonicalName?: string; region?: string; confidence?: string; aliases?: string[] }
+    | undefined;
+  if (resolved?.canonicalName && !/^Unknown$/i.test(resolved.canonicalName)) {
+    researchedFacts.push(`Dish resolved: "${resolved.canonicalName}" (confidence: ${resolved.confidence ?? 'unknown'}, region: ${resolved.region ?? 'unknown'})`);
+  }
+  const searched = toolPayloads.search_web as
+    | { results?: Array<{ title?: string; snippet?: string }> }
+    | undefined;
+  for (const result of (searched?.results ?? []).slice(0, 2)) {
+    if (result.snippet?.trim()) researchedFacts.push(result.snippet.trim().replace(/[\u2014\u2013]/g, ', '));
+  }
+
+  if (userAnchors.length === 0 && inferred.length === 0 && negated.length === 0 && constraints.length === 0 && researchedFacts.length === 0) return '';
   return [
-    `User-said anchors: ${userAnchors.length > 0 ? userAnchors.join(', ') : 'not enough yet'}.`,
-    negated.length > 0 ? `Negated/corrected: ${negated.join('; ')}.` : '',
-    inferred.length > 0 ? `Inferred research start: ${inferred.join('; ')}.${correction}` : '',
-    constraints.length > 0 ? `Constraints: ${constraints.join(', ')}.` : '',
-    `Unknown: ${unknown}.`,
+    `What I heard: ${userAnchors.length > 0 ? userAnchors.join(', ') : 'not enough yet'}.`,
+    negated.length > 0 ? `What not to assume: ${negated.join('; ')}.` : '',
+    inferred.length > 0 ? `Best research start: ${inferred.join('; ')}.${correction}` : '',
+    constraints.length > 0 ? `Food boundaries: ${constraints.join(', ')}.` : '',
+    researchedFacts.length > 0 ? `What the tools found: ${researchedFacts.join('; ')}.` : '',
+    `Still uncertain: ${unknown}.`,
   ].filter(Boolean).join('\n');
 }
 
 export function buildClarificationOnlyResponse(toolPayloads: Record<string, unknown>, userMessage?: string): string {
-  const memoryQuestions = getStringArray(toolPayloads.collect_food_memory, 'nextQuestions');
-  const planQuestions = getStringArray(toolPayloads.plan_dish_research, 'questionsForUser');
+  const constraints = userMessage ? inferSafetyConstraints(userMessage) : [];
+  const memoryQuestions = filterAnchorsForConstraints(getStringArray(toolPayloads.collect_food_memory, 'nextQuestions'), constraints);
+  const planQuestions = filterAnchorsForConstraints(getStringArray(toolPayloads.plan_dish_research, 'questionsForUser'), constraints);
   const questions = [...new Set([...planQuestions, ...memoryQuestions])].slice(0, 3);
   const selectedQuestions = questions.length > 0 ? questions : [
     'Where did you eat this, or where was it from? Even a country, region, city, or community helps.',
@@ -380,8 +421,8 @@ export function buildClarificationOnlyResponse(toolPayloads: Record<string, unkn
 
   // Build a context-aware preamble based on what signals are already present
   const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
-  const sensoryClues = memory?.extractedClues?.sensoryClues ?? [];
-  const ingredients = memory?.extractedClues?.rememberedIngredients ?? [];
+  const sensoryClues = filterAnchorsForConstraints(memory?.extractedClues?.sensoryClues ?? [], constraints);
+  const ingredients = filterAnchorsForConstraints(memory?.extractedClues?.rememberedIngredients ?? [], constraints);
   const inferred = memory?.inferredContext?.culturalOrRegional ?? [];
   const nonBroadInferred = inferred.filter((c) => !isBroadRegionalHint(c.label));
 
@@ -389,7 +430,7 @@ export function buildClarificationOnlyResponse(toolPayloads: Record<string, unkn
   if (nonBroadInferred.length > 0) {
     // Acknowledge the cultural inference so the user knows we heard them
     const context = nonBroadInferred[0].label.replace(/\s+context$/i, '').toLowerCase();
-    preamble = `Your description already points toward a ${context} tradition — I just need one more anchor to give you a real test instead of a guess.`;
+    preamble = `Your description already points toward a ${context} tradition. I just need one more anchor to give you a real test instead of a guess.`;
   } else if (sensoryClues.length > 0 || ingredients.length > 0) {
     const anchor = [...sensoryClues, ...ingredients].slice(0, 2).join(' and ');
     preamble = `The ${anchor} you mentioned is a real anchor. One more detail will keep the first test specific rather than generic.`;

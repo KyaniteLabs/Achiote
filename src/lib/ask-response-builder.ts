@@ -47,23 +47,46 @@ export function buildSubstitutionBasisResponse(toolPayloads: Record<string, unkn
   const localLine = memory?.userLocation
     ? `Use ordinary grocery or pantry items near ${memory.userLocation}; do not buy the exact suspected dish for this first test.`
     : 'Use ordinary grocery or pantry items first; do not buy the exact suspected dish for this first test.';
-  const preamble = buildEvidencePreamble(toolPayloads, userMessage);
+  const sourcingLines = summarizeSourcingResults(toolPayloads);
+  const sourcingSection = sourcingLines.length > 0
+    ? ['Where to buy:', ...sourcingLines.map((line) => `- ${line}`)]
+    : [];
 
   return sanitizeMinimumCueFallbackBlock([
-    preamble,
-    'Basis before substitutions:',
+    'What to test first:',
     `${cue.title}: ${cuePhrase}.`,
     firstStep,
     '',
-    'Adapted cue:',
+    'Substitutes to try:',
     substitutionLines.length > 0
       ? `Keep that same sensory target, but swap constrained pieces by role: ${substitutionLines.join('; ')}.`
       : `Keep that same sensory target, but choose substitutes by role: fat carrier, aroma base, starch texture, protein bite, acid, salt, and sauce body.`,
     `Test the adapted version as a tiny bite or sip; if it loses ${preserved}, the substitute is wrong even if the restriction is satisfied.`,
     localLine,
+    ...sourcingSection,
     '',
     'Next ask: tell me which part hit first after the adapted test: smell, texture, fat, starch, sauce, heat, or acidity.',
   ].filter(Boolean).join('\n'));
+}
+
+export function buildSourcingGuidanceResponse(toolPayloads: Record<string, unknown>, userMessage: string): string {
+  const sourcingLines = summarizeSourcingResults(toolPayloads);
+  const substitutionLines = summarizeSubstitutionResults(toolPayloads, inferSafetyConstraints(userMessage).length > 0);
+  const substitutionSection = substitutionLines.length > 0
+    ? ['Substitutes to try:', ...substitutionLines.map((line) => `- ${line}`)]
+    : [];
+
+  if (sourcingLines.length === 0) {
+    return buildClarificationOnlyResponse(toolPayloads, userMessage);
+  }
+
+  return sanitizeMinimumCueFallbackBlock([
+    'Where to buy:',
+    ...sourcingLines.map((line) => `- ${line}`),
+    ...(substitutionSection.length > 0 ? ['', ...substitutionSection] : []),
+    '',
+    'Next ask: tell me what city or store type you can actually reach, and I can narrow the path without claiming live inventory.',
+  ].join('\n'));
 }
 
 export function summarizeSubstitutionResults(toolPayloads: Record<string, unknown>, maskAsRestricted = false): string[] {
@@ -77,11 +100,101 @@ export function summarizeSubstitutionResults(toolPayloads: Record<string, unknow
     const ingredient = maskAsRestricted ? 'the restricted ingredient' : rawIngredient;
     const substitutes = Array.isArray(entry.substitutes) ? entry.substitutes : [];
     const first = substitutes.find(isRecord);
-    if (!first) return [`${ingredient} -> match the original sensory role, then mark the result uncertain`];
+    if (!first) return [fallbackSubstitutionLine(rawIngredient, ingredient) ?? `${ingredient} -> match the original sensory role, then mark the result uncertain`];
     const substitute = typeof first.substitute === 'string' ? first.substitute : 'role-matched substitute';
     const reasoning = typeof first.reasoning === 'string' ? first.reasoning : '';
     return [`${ingredient} -> ${substitute}${reasoning ? ` (${sanitizeMinimumCueFallbackText(reasoning).replace(/\.$/, '')})` : ''}`];
   }).slice(0, 5);
+}
+
+export function summarizeSourcingResults(toolPayloads: Record<string, unknown>): string[] {
+  const sourcing = isRecord(toolPayloads.source_ingredients) ? toolPayloads.source_ingredients : undefined;
+  if (!sourcing) return [];
+  const ingredients = Array.isArray(sourcing.ingredients)
+    ? sourcing.ingredients.filter((item): item is string => typeof item === 'string' && item.trim().length > 0)
+    : [];
+  const location = typeof sourcing.location === 'string' && sourcing.location.trim()
+    ? sourcing.location.trim()
+    : 'your area';
+  if (ingredients.length === 0) return [];
+
+  const regionalData = isRecord(sourcing.regionalData) ? sourcing.regionalData : undefined;
+  const majorStores = flattenRegionalStores(regionalData?.majorStores);
+  const corridors = flattenRegionalCorridors(regionalData?.ethnicCorridors);
+  const localHints = [...majorStores, ...corridors].slice(0, 3);
+  const localLine = localHints.length > 0
+    ? `Start with ${localHints.join(', ')}. Treat that as static guidance, not live inventory.`
+    : 'Start with Mexican, Latin, international, or spice-focused markets, then check online specialty chile importers if local shelves miss.';
+  const localSearchLeads = summarizeLocalSourcingSearch(toolPayloads.local_sourcing_search);
+
+  return [
+    `Where to buy near ${location}: look for ${ingredients.join(', ')}.`,
+    ...localSearchLeads,
+    localLine,
+    'Call ahead or check labels yourself; this is sourcing guidance, not a live inventory claim.',
+  ];
+}
+
+function fallbackSubstitutionLine(rawIngredient: string, displayIngredient: string): string | undefined {
+  if (/\bchilhuacle(?:\s+(?:negro|rojo|amarillo))?\s+chiles?\b/i.test(rawIngredient)) {
+    return `${displayIngredient} -> start with ancho plus pasilla negro; if you can find cascabel, add a little for round heat and nutty smoke. Mark it uncertain because chilhuacle has a specific Oaxacan character.`;
+  }
+  return undefined;
+}
+
+function summarizeLocalSourcingSearch(value: unknown): string[] {
+  if (!isRecord(value) || !Array.isArray(value.results)) return [];
+  const leads = value.results
+    .map(formatLocalSourcingLead)
+    .filter((line): line is string => Boolean(line))
+    .slice(0, 3);
+  if (leads.length === 0) return [];
+  return [
+    `Local search leads to check: ${leads.join('; ')}. Treat these as candidate stores or source paths, not proof of current stock.`,
+  ];
+}
+
+function formatLocalSourcingLead(value: unknown): string | undefined {
+  if (!isRecord(value)) return undefined;
+  const title = typeof value.title === 'string' ? sanitizeMinimumCueFallbackText(value.title).trim() : '';
+  const snippet = typeof value.snippet === 'string' ? sanitizeMinimumCueFallbackText(value.snippet).trim() : '';
+  const link = typeof value.link === 'string' ? value.link : typeof value.url === 'string' ? value.url : '';
+  const combined = `${title} ${snippet} ${link}`.toLowerCase();
+  if (!title) return undefined;
+  if (/\brecipe\b/i.test(combined) && !/\b(?:market|store|shop|grocery|supermarket|spice|mexican|latin|oaxacan|chile|chiles)\b/i.test(combined)) {
+    return undefined;
+  }
+  const domain = domainFromUrl(link);
+  return `${title}${domain ? ` (${domain})` : ''}`;
+}
+
+function domainFromUrl(value: string): string {
+  try {
+    return new URL(value).hostname.replace(/^www\./i, '');
+  } catch {
+    return '';
+  }
+}
+
+function flattenRegionalStores(value: unknown): string[] {
+  if (Array.isArray(value)) {
+    return value.filter((item): item is string => typeof item === 'string' && item.trim().length > 0);
+  }
+  if (!isRecord(value)) return [];
+  return Object.values(value)
+    .flatMap((entry) => Array.isArray(entry) ? entry : [])
+    .filter((item): item is string => typeof item === 'string' && item.trim().length > 0);
+}
+
+function flattenRegionalCorridors(value: unknown): string[] {
+  if (!Array.isArray(value)) return [];
+  return value.flatMap((entry) => {
+    if (typeof entry === 'string' && entry.trim()) return [entry.trim()];
+    if (!isRecord(entry)) return [];
+    const name = typeof entry.name === 'string' ? entry.name.trim() : '';
+    const city = typeof entry.city === 'string' ? entry.city.trim() : '';
+    return name ? [city ? `${name} in ${city}` : name] : [];
+  });
 }
 
 export function extractSubstitutionTargets(userMessage: string, collectedMemory: unknown): string[] {
@@ -95,6 +208,8 @@ export function extractSubstitutionTargets(userMessage: string, collectedMemory:
   }
 
   const ingredientPatterns: Array<[RegExp, string]> = [
+    [/\bchilhuacle(?:\s+(?:negro|rojo|amarillo))?\s+chiles?\b/i, 'chilhuacle chiles'],
+    [/\bchiles?\s+chilhuacles?\b/i, 'chilhuacle chiles'],
     [/\bcashews?\b/i, 'cashews'],
     [/\btree nuts?\b/i, 'tree nuts'],
     [/\bbutter\b/i, 'butter'],
@@ -181,6 +296,7 @@ export function formatMinimumCueIngredientPhrase(ingredient: MinimumViableNostal
     .replace(/^(?:a\s+)?(?:tiny|small)\s+(?:test\s+)?amount\s+of\s+/i, '')
     .replace(/^tiny\s+/i, '')
     .trim();
+  if (/^(?:a|an|one|some)\b/i.test(item)) return item;
   return `a tiny amount of ${item}`;
 }
 
@@ -254,7 +370,15 @@ export function buildEvidenceBoundedMinimumCueResponse(toolPayloads: Record<stri
   const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
   const body = ensureCueQualityLanguage(formatMinimumCueFallback(cue, memory?.userLocation), toolPayloads, new Set(['generate_minimum_viable_nostalgia']));
   const preamble = buildEvidencePreamble(toolPayloads, userMessage);
-  return sanitizeMinimumCueFallbackBlock([preamble, body].filter(Boolean).join('\n\n'));
+  const substitutionLines = summarizeSubstitutionResults(toolPayloads, inferSafetyConstraints(userMessage ?? '').length > 0);
+  const sourcingLines = summarizeSourcingResults(toolPayloads);
+  const substitutionSection = substitutionLines.length > 0
+    ? ['Substitutes to try:', ...substitutionLines.map((line) => `- ${line}`)].join('\n')
+    : '';
+  const sourcingSection = sourcingLines.length > 0
+    ? ['Where to buy:', ...sourcingLines.map((line) => `- ${line}`)].join('\n')
+    : '';
+  return sanitizeMinimumCueFallbackBlock([preamble, body, substitutionSection, sourcingSection].filter(Boolean).join('\n\n'));
 }
 
 // ── Cue quality enforcement ───────────────────────────────────────────────

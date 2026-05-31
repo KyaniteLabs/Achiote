@@ -61,4 +61,49 @@ describe('memory receipt', () => {
     expect(markdown).toContain('## Family Questions');
     expect(markdown).not.toContain('undefined');
   });
+
+  it('keeps allergy-constrained terms out of receipt questions and research sections', () => {
+    const receipt = buildMemoryReceipt({
+      memory: {
+        rawMemory: 'I am allergic to peanuts. I remember a sauce.',
+        normalizedMemory: 'I am allergic to peanuts. I remember a sauce.',
+        extractedClues: {
+          possibleDishNames: [],
+          culturalOrRegionalHints: [],
+          rememberedIngredients: ['peanuts'],
+          sensoryClues: ['sauce/gravy'],
+          occasions: [],
+        },
+        inferredContext: {
+          culturalOrRegional: [],
+          language: [],
+        },
+        missingInformation: ['core ingredients'],
+        nextQuestions: ['How were the peanuts served?', 'Where did you eat this?'],
+        reassurance: "You don't need to spell it correctly or know the original language; sound-alikes and tiny clues are enough to start.",
+      },
+      researchPlan: {
+        researchRequired: true,
+        hypotheses: [{
+          name: 'Peanut chikki',
+          whyPossible: ['peanuts set in jaggery'],
+          whatWouldConfirm: ['peanuts set in jaggery', 'hard brittle texture'],
+          confidence: 'Low',
+          researchRequired: true,
+        }],
+        searchQueries: [],
+        preferredSourceTypes: ['family/community recipe sources'],
+        factsToVerify: ['peanut texture'],
+        questionsForUser: ['Was it peanuts set in jaggery?', 'Where did you eat this?'],
+      },
+      assistantText: 'Food boundaries: nut allergy.',
+      researchedFacts: ['Dish resolved: "Peanut chikki"'],
+      createdAt: '2026-04-27T12:00:00.000Z',
+    });
+
+    expect(receipt.nextBestQuestions).toEqual(['Where did you eat this?']);
+    expect(receipt.hypotheses).toEqual([]);
+    expect(receipt.evidence.researched).toEqual([]);
+    expect(receipt.evidence.unknown.join(' ')).not.toMatch(/\bpeanuts?\b/i);
+  });
 });

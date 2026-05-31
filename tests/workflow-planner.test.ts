@@ -69,6 +69,79 @@ describe('WorkflowPlanner', () => {
     expect(recipeRequest.confidenceNote).not.toContain('Bundled mechanism family');
   });
 
+  it('plans sourcing for ordinary buy phrasing with a named location', () => {
+    const whereWouldBuy = planAskWorkflow({
+      userMessage: 'My grandmother made mole negro with chilhuacle chiles. I live in Madison. Where would I buy the important ingredients?',
+    });
+    expect(whereWouldBuy.needsSourcing).toBe(true);
+    expect(whereWouldBuy.workflowSteps.map((step) => step.tool)).toContain('source_ingredients');
+
+    const whatShouldBuy = planAskWorkflow({
+      userMessage: 'Butter chicken with cashew gravy, butter, cream, whiskey, and naan. My family needs nut-free, halal, vegan, and gluten-free substitutions. What should I buy in Des Moines?',
+    });
+    expect(whatShouldBuy.needsSourcing).toBe(true);
+    expect(whatShouldBuy.workflowSteps.map((step) => step.tool)).toContain('source_ingredients');
+
+    const lowercaseLocation = planAskWorkflow({
+      userMessage: 'My grandmother made mole negro with chilhuacle chiles. where can i buy chilhuacle chiles near des moines?',
+    });
+    expect(lowercaseLocation.needsSourcing).toBe(true);
+    expect(lowercaseLocation.workflowSteps.map((step) => step.tool)).toContain('source_ingredients');
+
+    const whereShouldLook = planAskWorkflow({
+      userMessage: 'I am in Queens, New York. I am trying to recreate a dark Oaxacan mole my aunt made, and I think the ingredient I need is chilhuacle chiles. Where should I look near me, and what substitutes should I use if I cannot find them?',
+    });
+    expect(whereShouldLook.needsSourcing).toBe(true);
+    expect(whereShouldLook.needsSubstitutions).toBe(true);
+    expect(whereShouldLook.workflowSteps.map((step) => step.tool)).toContain('source_ingredients');
+    expect(whereShouldLook.maxSearchCalls).toBeGreaterThanOrEqual(2);
+  });
+
+  it('tracks sourcing intent without silently inventing a location', () => {
+    const nearMe = planAskWorkflow({
+      userMessage: 'Where can I buy chilhuacle chiles near me?',
+    });
+    expect(nearMe.needsSourcing).toBe(true);
+    expect(nearMe.workflowSteps.map((step) => step.tool)).not.toContain('source_ingredients');
+    expect(nearMe.confidenceNote).toContain('ask for location');
+
+    const sourceOnly = planAskWorkflow({
+      userMessage: 'Where can I buy chilhuacle chiles near Des Moines?',
+    });
+    expect(sourceOnly.needsSourcing).toBe(true);
+    expect(sourceOnly.workflowSteps.map((step) => step.tool)).toContain('source_ingredients');
+    expect(sourceOnly.workflowSteps.map((step) => step.tool)).not.toContain('generate_minimum_viable_nostalgia');
+  });
+
+  it('keeps sparse demo memories on a questionnaire-first path', () => {
+    const soup = planAskWorkflow({
+      userMessage: "There's a soup my grandmother used to make. I never learned the name. I just remember it being deep orange and a little oily, and only when the whole family came together. My dad's side came from somewhere in West Africa.",
+    });
+    expect(soup.workflowSteps.map((step) => step.tool)).toEqual([
+      'collect_food_memory',
+      'plan_dish_research',
+    ]);
+    expect(soup.maxSearchCalls).toBe(0);
+    expect(soup.confidenceNote).toContain('Questionnaire-first');
+
+    const drink = planAskWorkflow({
+      userMessage: "A cold, sweet drink from when I was little. My family stopped making it. Cinnamon, maybe, kind of milky? My mom's family is from somewhere in Latin America but nobody really remembers.",
+    });
+    expect(drink.workflowSteps.map((step) => step.tool)).toEqual([
+      'collect_food_memory',
+      'plan_dish_research',
+    ]);
+    expect(drink.workflowSteps.map((step) => step.tool)).not.toContain('generate_minimum_viable_nostalgia');
+
+    const leafWrapped = planAskWorkflow({
+      userMessage: 'Some savory thing wrapped in a banana leaf that my great-grandmother used to steam. Nobody left in the family remembers what it was called. We only know we came from somewhere in Southeast Asia.',
+    });
+    expect(leafWrapped.workflowSteps.map((step) => step.tool)).toEqual([
+      'collect_food_memory',
+      'plan_dish_research',
+    ]);
+  });
+
   it('keeps search for exact-identity research requests', () => {
     const exactIdentity = planAskWorkflow({
       userMessage: 'Someone served a tart green-herb broth with pale potato or egg pieces. What exact regional dish is this, and what sources confirm the name?',

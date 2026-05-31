@@ -114630,6 +114630,5266 @@
         "confidence": "Medium",
         "createdAt": "2026-05-03T00:00:00.000Z"
       }
+    },
+    {
+      "seedId": "nordic-rye-bread",
+      "cacheTarget": {
+        "dishFamily": "nordic-rye-bread",
+        "region": "Scandinavia"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.bread_flatbread",
+        "mechanisms.starch_texture",
+        "mechanisms.fermentation_acid",
+        "mechanisms.aroma",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "nordic-rye-bread",
+        "query": "nordic rye bread scandinavia variants",
+        "sources": [
+          {
+            "title": "nordic rye bread Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=nordic%20rye%20bread",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"nordic rye bread\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "nordic-rye-bread",
+            "rugbrod",
+            "nordic-rye",
+            "sourdough-rye"
+          ],
+          "regions": [
+            "Scandinavia",
+            "europe"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "starch texture",
+            "fermentation acid",
+            "aroma"
+          ],
+          "sensoryDescriptors": [
+            "starch texture",
+            "fermentation acid",
+            "aroma"
+          ],
+          "culturalOccasions": [
+            "nordic-rye-bread"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"nordic rye bread\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "nordic-rye-bread-diaspora",
+      "cacheTarget": {
+        "dishFamily": "nordic-rye-bread",
+        "region": "Scandinavia diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.bread_flatbread",
+        "mechanisms.starch_texture",
+        "mechanisms.fermentation_acid",
+        "mechanisms.aroma",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "nordic-rye-bread",
+        "query": "nordic rye bread scandinavia diaspora variants",
+        "sources": [
+          {
+            "title": "nordic rye bread Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=nordic%20rye%20bread",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"nordic rye bread\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "nordic-rye-bread",
+            "rugbrod",
+            "nordic-rye",
+            "sourdough-rye"
+          ],
+          "regions": [
+            "Scandinavia diaspora"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "starch texture",
+            "fermentation acid",
+            "aroma"
+          ],
+          "sensoryDescriptors": [
+            "starch texture",
+            "fermentation acid",
+            "aroma"
+          ],
+          "culturalOccasions": [
+            "nordic-rye-bread"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"nordic rye bread\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "nordic-rye-bread-migration",
+      "cacheTarget": {
+        "dishFamily": "nordic-rye-bread",
+        "region": "Scandinavia migration corridor"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.bread_flatbread",
+        "mechanisms.starch_texture",
+        "mechanisms.fermentation_acid",
+        "mechanisms.aroma",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "nordic-rye-bread",
+        "query": "nordic rye bread scandinavia migration corridor variants",
+        "sources": [
+          {
+            "title": "nordic rye bread Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=nordic%20rye%20bread",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"nordic rye bread\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "nordic-rye-bread",
+            "rugbrod",
+            "nordic-rye",
+            "sourdough-rye"
+          ],
+          "regions": [
+            "Scandinavia migration corridor"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "starch texture",
+            "fermentation acid",
+            "aroma"
+          ],
+          "sensoryDescriptors": [
+            "starch texture",
+            "fermentation acid",
+            "aroma"
+          ],
+          "culturalOccasions": [
+            "nordic-rye-bread"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"nordic rye bread\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "nordic-rye-bread-global",
+      "cacheTarget": {
+        "dishFamily": "nordic-rye-bread",
+        "region": "Global diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.bread_flatbread",
+        "mechanisms.starch_texture",
+        "mechanisms.fermentation_acid",
+        "mechanisms.aroma",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "nordic-rye-bread",
+        "query": "nordic rye bread global diaspora variants",
+        "sources": [
+          {
+            "title": "nordic rye bread Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=nordic%20rye%20bread",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"nordic rye bread\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "nordic-rye-bread",
+            "rugbrod",
+            "nordic-rye",
+            "sourdough-rye"
+          ],
+          "regions": [
+            "Global diaspora"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "starch texture",
+            "fermentation acid",
+            "aroma"
+          ],
+          "sensoryDescriptors": [
+            "starch texture",
+            "fermentation acid",
+            "aroma"
+          ],
+          "culturalOccasions": [
+            "nordic-rye-bread"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"nordic rye bread\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "nordic-rye-bread-community",
+      "cacheTarget": {
+        "dishFamily": "nordic-rye-bread",
+        "region": "Community diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.bread_flatbread",
+        "mechanisms.starch_texture",
+        "mechanisms.fermentation_acid",
+        "mechanisms.aroma",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "nordic-rye-bread",
+        "query": "nordic rye bread community diaspora variants",
+        "sources": [
+          {
+            "title": "nordic rye bread Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=nordic%20rye%20bread",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"nordic rye bread\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "nordic-rye-bread",
+            "rugbrod",
+            "nordic-rye",
+            "sourdough-rye"
+          ],
+          "regions": [
+            "Community diaspora"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "starch texture",
+            "fermentation acid",
+            "aroma"
+          ],
+          "sensoryDescriptors": [
+            "starch texture",
+            "fermentation acid",
+            "aroma"
+          ],
+          "culturalOccasions": [
+            "nordic-rye-bread"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"nordic rye bread\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "nordic-rye-bread-mechanism",
+      "cacheTarget": {
+        "dishFamily": "nordic-rye-bread",
+        "region": "Sensory mechanism context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.bread_flatbread",
+        "mechanisms.starch_texture",
+        "mechanisms.fermentation_acid",
+        "mechanisms.aroma",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "nordic-rye-bread",
+        "query": "nordic rye bread sensory mechanism context variants",
+        "sources": [
+          {
+            "title": "nordic rye bread Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=nordic%20rye%20bread",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"nordic rye bread\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "nordic-rye-bread",
+            "rugbrod",
+            "nordic-rye",
+            "sourdough-rye"
+          ],
+          "regions": [
+            "Sensory mechanism context"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "starch texture",
+            "fermentation acid",
+            "aroma"
+          ],
+          "sensoryDescriptors": [
+            "starch texture",
+            "fermentation acid",
+            "aroma"
+          ],
+          "culturalOccasions": [
+            "nordic-rye-bread"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"nordic rye bread\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "nordic-rye-bread-naming",
+      "cacheTarget": {
+        "dishFamily": "nordic-rye-bread",
+        "region": "Naming and alias context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.bread_flatbread",
+        "mechanisms.starch_texture",
+        "mechanisms.fermentation_acid",
+        "mechanisms.aroma",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "nordic-rye-bread",
+        "query": "nordic rye bread naming and alias context variants",
+        "sources": [
+          {
+            "title": "nordic rye bread Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=nordic%20rye%20bread",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"nordic rye bread\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "nordic-rye-bread",
+            "rugbrod",
+            "nordic-rye",
+            "sourdough-rye"
+          ],
+          "regions": [
+            "Naming and alias context"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "starch texture",
+            "fermentation acid",
+            "aroma"
+          ],
+          "sensoryDescriptors": [
+            "starch texture",
+            "fermentation acid",
+            "aroma"
+          ],
+          "culturalOccasions": [
+            "nordic-rye-bread"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"nordic rye bread\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "swedish-meatball",
+      "cacheTarget": {
+        "dishFamily": "swedish-meatball",
+        "region": "Scandinavia"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.protein_centered",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "swedish-meatball",
+        "query": "swedish meatball scandinavia variants",
+        "sources": [
+          {
+            "title": "swedish meatball Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=swedish%20meatball",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"swedish meatball\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "swedish-meatball",
+            "kottbullar",
+            "swedish-meatball",
+            "lingonberry-meatball"
+          ],
+          "regions": [
+            "Scandinavia",
+            "europe"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "browning",
+            "fat mouthfeel",
+            "sauce balance",
+            "aroma"
+          ],
+          "sensoryDescriptors": [
+            "browning",
+            "fat mouthfeel",
+            "sauce balance",
+            "aroma"
+          ],
+          "culturalOccasions": [
+            "swedish-meatball"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"swedish meatball\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "swedish-meatball-diaspora",
+      "cacheTarget": {
+        "dishFamily": "swedish-meatball",
+        "region": "Scandinavia diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.protein_centered",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "swedish-meatball",
+        "query": "swedish meatball scandinavia diaspora variants",
+        "sources": [
+          {
+            "title": "swedish meatball Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=swedish%20meatball",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"swedish meatball\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "swedish-meatball",
+            "kottbullar",
+            "swedish-meatball",
+            "lingonberry-meatball"
+          ],
+          "regions": [
+            "Scandinavia diaspora"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "browning",
+            "fat mouthfeel",
+            "sauce balance",
+            "aroma"
+          ],
+          "sensoryDescriptors": [
+            "browning",
+            "fat mouthfeel",
+            "sauce balance",
+            "aroma"
+          ],
+          "culturalOccasions": [
+            "swedish-meatball"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"swedish meatball\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "swedish-meatball-migration",
+      "cacheTarget": {
+        "dishFamily": "swedish-meatball",
+        "region": "Scandinavia migration corridor"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.protein_centered",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "swedish-meatball",
+        "query": "swedish meatball scandinavia migration corridor variants",
+        "sources": [
+          {
+            "title": "swedish meatball Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=swedish%20meatball",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"swedish meatball\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "swedish-meatball",
+            "kottbullar",
+            "swedish-meatball",
+            "lingonberry-meatball"
+          ],
+          "regions": [
+            "Scandinavia migration corridor"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "browning",
+            "fat mouthfeel",
+            "sauce balance",
+            "aroma"
+          ],
+          "sensoryDescriptors": [
+            "browning",
+            "fat mouthfeel",
+            "sauce balance",
+            "aroma"
+          ],
+          "culturalOccasions": [
+            "swedish-meatball"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"swedish meatball\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "swedish-meatball-global",
+      "cacheTarget": {
+        "dishFamily": "swedish-meatball",
+        "region": "Global diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.protein_centered",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "swedish-meatball",
+        "query": "swedish meatball global diaspora variants",
+        "sources": [
+          {
+            "title": "swedish meatball Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=swedish%20meatball",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"swedish meatball\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "swedish-meatball",
+            "kottbullar",
+            "swedish-meatball",
+            "lingonberry-meatball"
+          ],
+          "regions": [
+            "Global diaspora"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "browning",
+            "fat mouthfeel",
+            "sauce balance",
+            "aroma"
+          ],
+          "sensoryDescriptors": [
+            "browning",
+            "fat mouthfeel",
+            "sauce balance",
+            "aroma"
+          ],
+          "culturalOccasions": [
+            "swedish-meatball"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"swedish meatball\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "swedish-meatball-community",
+      "cacheTarget": {
+        "dishFamily": "swedish-meatball",
+        "region": "Community diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.protein_centered",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "swedish-meatball",
+        "query": "swedish meatball community diaspora variants",
+        "sources": [
+          {
+            "title": "swedish meatball Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=swedish%20meatball",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"swedish meatball\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "swedish-meatball",
+            "kottbullar",
+            "swedish-meatball",
+            "lingonberry-meatball"
+          ],
+          "regions": [
+            "Community diaspora"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "browning",
+            "fat mouthfeel",
+            "sauce balance",
+            "aroma"
+          ],
+          "sensoryDescriptors": [
+            "browning",
+            "fat mouthfeel",
+            "sauce balance",
+            "aroma"
+          ],
+          "culturalOccasions": [
+            "swedish-meatball"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"swedish meatball\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "swedish-meatball-mechanism",
+      "cacheTarget": {
+        "dishFamily": "swedish-meatball",
+        "region": "Sensory mechanism context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.protein_centered",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "swedish-meatball",
+        "query": "swedish meatball sensory mechanism context variants",
+        "sources": [
+          {
+            "title": "swedish meatball Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=swedish%20meatball",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"swedish meatball\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "swedish-meatball",
+            "kottbullar",
+            "swedish-meatball",
+            "lingonberry-meatball"
+          ],
+          "regions": [
+            "Sensory mechanism context"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "browning",
+            "fat mouthfeel",
+            "sauce balance",
+            "aroma"
+          ],
+          "sensoryDescriptors": [
+            "browning",
+            "fat mouthfeel",
+            "sauce balance",
+            "aroma"
+          ],
+          "culturalOccasions": [
+            "swedish-meatball"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"swedish meatball\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "swedish-meatball-naming",
+      "cacheTarget": {
+        "dishFamily": "swedish-meatball",
+        "region": "Naming and alias context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.protein_centered",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "swedish-meatball",
+        "query": "swedish meatball naming and alias context variants",
+        "sources": [
+          {
+            "title": "swedish meatball Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=swedish%20meatball",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"swedish meatball\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "swedish-meatball",
+            "kottbullar",
+            "swedish-meatball",
+            "lingonberry-meatball"
+          ],
+          "regions": [
+            "Naming and alias context"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "browning",
+            "fat mouthfeel",
+            "sauce balance",
+            "aroma"
+          ],
+          "sensoryDescriptors": [
+            "browning",
+            "fat mouthfeel",
+            "sauce balance",
+            "aroma"
+          ],
+          "culturalOccasions": [
+            "swedish-meatball"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"swedish meatball\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "french-braise",
+      "cacheTarget": {
+        "dishFamily": "french-braise",
+        "region": "France"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.stew_braise",
+        "mechanisms.browning",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "mechanisms.temperature",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "french-braise",
+        "query": "french braise france variants",
+        "sources": [
+          {
+            "title": "french braise Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=french%20braise",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"french braise\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "french-braise",
+            "cassoulet",
+            "coq-au-vin",
+            "pot-au-feu",
+            "french-stew"
+          ],
+          "regions": [
+            "France",
+            "europe"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "browning",
+            "sauce balance",
+            "aroma",
+            "temperature"
+          ],
+          "sensoryDescriptors": [
+            "browning",
+            "sauce balance",
+            "aroma",
+            "temperature"
+          ],
+          "culturalOccasions": [
+            "french-braise"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"french braise\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "french-braise-diaspora",
+      "cacheTarget": {
+        "dishFamily": "french-braise",
+        "region": "France diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.stew_braise",
+        "mechanisms.browning",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "mechanisms.temperature",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "french-braise",
+        "query": "french braise france diaspora variants",
+        "sources": [
+          {
+            "title": "french braise Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=french%20braise",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"french braise\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "french-braise",
+            "cassoulet",
+            "coq-au-vin",
+            "pot-au-feu",
+            "french-stew"
+          ],
+          "regions": [
+            "France diaspora"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "browning",
+            "sauce balance",
+            "aroma",
+            "temperature"
+          ],
+          "sensoryDescriptors": [
+            "browning",
+            "sauce balance",
+            "aroma",
+            "temperature"
+          ],
+          "culturalOccasions": [
+            "french-braise"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"french braise\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "french-braise-migration",
+      "cacheTarget": {
+        "dishFamily": "french-braise",
+        "region": "France migration corridor"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.stew_braise",
+        "mechanisms.browning",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "mechanisms.temperature",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "french-braise",
+        "query": "french braise france migration corridor variants",
+        "sources": [
+          {
+            "title": "french braise Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=french%20braise",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"french braise\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "french-braise",
+            "cassoulet",
+            "coq-au-vin",
+            "pot-au-feu",
+            "french-stew"
+          ],
+          "regions": [
+            "France migration corridor"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "browning",
+            "sauce balance",
+            "aroma",
+            "temperature"
+          ],
+          "sensoryDescriptors": [
+            "browning",
+            "sauce balance",
+            "aroma",
+            "temperature"
+          ],
+          "culturalOccasions": [
+            "french-braise"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"french braise\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "french-braise-global",
+      "cacheTarget": {
+        "dishFamily": "french-braise",
+        "region": "Global diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.stew_braise",
+        "mechanisms.browning",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "mechanisms.temperature",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "french-braise",
+        "query": "french braise global diaspora variants",
+        "sources": [
+          {
+            "title": "french braise Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=french%20braise",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"french braise\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "french-braise",
+            "cassoulet",
+            "coq-au-vin",
+            "pot-au-feu",
+            "french-stew"
+          ],
+          "regions": [
+            "Global diaspora"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "browning",
+            "sauce balance",
+            "aroma",
+            "temperature"
+          ],
+          "sensoryDescriptors": [
+            "browning",
+            "sauce balance",
+            "aroma",
+            "temperature"
+          ],
+          "culturalOccasions": [
+            "french-braise"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"french braise\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "french-braise-community",
+      "cacheTarget": {
+        "dishFamily": "french-braise",
+        "region": "Community diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.stew_braise",
+        "mechanisms.browning",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "mechanisms.temperature",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "french-braise",
+        "query": "french braise community diaspora variants",
+        "sources": [
+          {
+            "title": "french braise Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=french%20braise",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"french braise\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "french-braise",
+            "cassoulet",
+            "coq-au-vin",
+            "pot-au-feu",
+            "french-stew"
+          ],
+          "regions": [
+            "Community diaspora"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "browning",
+            "sauce balance",
+            "aroma",
+            "temperature"
+          ],
+          "sensoryDescriptors": [
+            "browning",
+            "sauce balance",
+            "aroma",
+            "temperature"
+          ],
+          "culturalOccasions": [
+            "french-braise"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"french braise\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "french-braise-mechanism",
+      "cacheTarget": {
+        "dishFamily": "french-braise",
+        "region": "Sensory mechanism context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.stew_braise",
+        "mechanisms.browning",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "mechanisms.temperature",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "french-braise",
+        "query": "french braise sensory mechanism context variants",
+        "sources": [
+          {
+            "title": "french braise Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=french%20braise",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"french braise\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "french-braise",
+            "cassoulet",
+            "coq-au-vin",
+            "pot-au-feu",
+            "french-stew"
+          ],
+          "regions": [
+            "Sensory mechanism context"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "browning",
+            "sauce balance",
+            "aroma",
+            "temperature"
+          ],
+          "sensoryDescriptors": [
+            "browning",
+            "sauce balance",
+            "aroma",
+            "temperature"
+          ],
+          "culturalOccasions": [
+            "french-braise"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"french braise\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "french-braise-naming",
+      "cacheTarget": {
+        "dishFamily": "french-braise",
+        "region": "Naming and alias context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.stew_braise",
+        "mechanisms.browning",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "mechanisms.temperature",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "french-braise",
+        "query": "french braise naming and alias context variants",
+        "sources": [
+          {
+            "title": "french braise Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=french%20braise",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"french braise\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "french-braise",
+            "cassoulet",
+            "coq-au-vin",
+            "pot-au-feu",
+            "french-stew"
+          ],
+          "regions": [
+            "Naming and alias context"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "browning",
+            "sauce balance",
+            "aroma",
+            "temperature"
+          ],
+          "sensoryDescriptors": [
+            "browning",
+            "sauce balance",
+            "aroma",
+            "temperature"
+          ],
+          "culturalOccasions": [
+            "french-braise"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"french braise\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "iberian-custard-tart",
+      "cacheTarget": {
+        "dishFamily": "iberian-custard-tart",
+        "region": "Portugal"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.dessert",
+        "mechanisms.browning",
+        "mechanisms.sugar_crystal",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast",
+        "cultureAreas.europe",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "iberian-custard-tart",
+        "query": "iberian custard tart portugal variants",
+        "sources": [
+          {
+            "title": "iberian custard tart Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=iberian%20custard%20tart",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"iberian custard tart\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "iberian-custard-tart",
+            "pasteis-de-nata",
+            "custard-tart",
+            "portuguese-tart"
+          ],
+          "regions": [
+            "Portugal",
+            "europe"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "browning",
+            "sugar crystal",
+            "temperature",
+            "texture contrast"
+          ],
+          "sensoryDescriptors": [
+            "browning",
+            "sugar crystal",
+            "temperature",
+            "texture contrast"
+          ],
+          "culturalOccasions": [
+            "iberian-custard-tart"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"iberian custard tart\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "iberian-custard-tart-diaspora",
+      "cacheTarget": {
+        "dishFamily": "iberian-custard-tart",
+        "region": "Portugal diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.dessert",
+        "mechanisms.browning",
+        "mechanisms.sugar_crystal",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast",
+        "cultureAreas.europe",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "iberian-custard-tart",
+        "query": "iberian custard tart portugal diaspora variants",
+        "sources": [
+          {
+            "title": "iberian custard tart Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=iberian%20custard%20tart",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"iberian custard tart\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "iberian-custard-tart",
+            "pasteis-de-nata",
+            "custard-tart",
+            "portuguese-tart"
+          ],
+          "regions": [
+            "Portugal diaspora"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "browning",
+            "sugar crystal",
+            "temperature",
+            "texture contrast"
+          ],
+          "sensoryDescriptors": [
+            "browning",
+            "sugar crystal",
+            "temperature",
+            "texture contrast"
+          ],
+          "culturalOccasions": [
+            "iberian-custard-tart"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"iberian custard tart\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "iberian-custard-tart-migration",
+      "cacheTarget": {
+        "dishFamily": "iberian-custard-tart",
+        "region": "Portugal migration corridor"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.dessert",
+        "mechanisms.browning",
+        "mechanisms.sugar_crystal",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast",
+        "cultureAreas.europe",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "iberian-custard-tart",
+        "query": "iberian custard tart portugal migration corridor variants",
+        "sources": [
+          {
+            "title": "iberian custard tart Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=iberian%20custard%20tart",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"iberian custard tart\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "iberian-custard-tart",
+            "pasteis-de-nata",
+            "custard-tart",
+            "portuguese-tart"
+          ],
+          "regions": [
+            "Portugal migration corridor"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "browning",
+            "sugar crystal",
+            "temperature",
+            "texture contrast"
+          ],
+          "sensoryDescriptors": [
+            "browning",
+            "sugar crystal",
+            "temperature",
+            "texture contrast"
+          ],
+          "culturalOccasions": [
+            "iberian-custard-tart"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"iberian custard tart\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "iberian-custard-tart-global",
+      "cacheTarget": {
+        "dishFamily": "iberian-custard-tart",
+        "region": "Global diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.dessert",
+        "mechanisms.browning",
+        "mechanisms.sugar_crystal",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast",
+        "cultureAreas.europe",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "iberian-custard-tart",
+        "query": "iberian custard tart global diaspora variants",
+        "sources": [
+          {
+            "title": "iberian custard tart Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=iberian%20custard%20tart",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"iberian custard tart\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "iberian-custard-tart",
+            "pasteis-de-nata",
+            "custard-tart",
+            "portuguese-tart"
+          ],
+          "regions": [
+            "Global diaspora"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "browning",
+            "sugar crystal",
+            "temperature",
+            "texture contrast"
+          ],
+          "sensoryDescriptors": [
+            "browning",
+            "sugar crystal",
+            "temperature",
+            "texture contrast"
+          ],
+          "culturalOccasions": [
+            "iberian-custard-tart"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"iberian custard tart\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "iberian-custard-tart-community",
+      "cacheTarget": {
+        "dishFamily": "iberian-custard-tart",
+        "region": "Community diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.dessert",
+        "mechanisms.browning",
+        "mechanisms.sugar_crystal",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast",
+        "cultureAreas.europe",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "iberian-custard-tart",
+        "query": "iberian custard tart community diaspora variants",
+        "sources": [
+          {
+            "title": "iberian custard tart Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=iberian%20custard%20tart",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"iberian custard tart\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "iberian-custard-tart",
+            "pasteis-de-nata",
+            "custard-tart",
+            "portuguese-tart"
+          ],
+          "regions": [
+            "Community diaspora"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "browning",
+            "sugar crystal",
+            "temperature",
+            "texture contrast"
+          ],
+          "sensoryDescriptors": [
+            "browning",
+            "sugar crystal",
+            "temperature",
+            "texture contrast"
+          ],
+          "culturalOccasions": [
+            "iberian-custard-tart"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"iberian custard tart\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "iberian-custard-tart-mechanism",
+      "cacheTarget": {
+        "dishFamily": "iberian-custard-tart",
+        "region": "Sensory mechanism context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.dessert",
+        "mechanisms.browning",
+        "mechanisms.sugar_crystal",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast",
+        "cultureAreas.europe",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "iberian-custard-tart",
+        "query": "iberian custard tart sensory mechanism context variants",
+        "sources": [
+          {
+            "title": "iberian custard tart Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=iberian%20custard%20tart",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"iberian custard tart\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "iberian-custard-tart",
+            "pasteis-de-nata",
+            "custard-tart",
+            "portuguese-tart"
+          ],
+          "regions": [
+            "Sensory mechanism context"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "browning",
+            "sugar crystal",
+            "temperature",
+            "texture contrast"
+          ],
+          "sensoryDescriptors": [
+            "browning",
+            "sugar crystal",
+            "temperature",
+            "texture contrast"
+          ],
+          "culturalOccasions": [
+            "iberian-custard-tart"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"iberian custard tart\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "iberian-custard-tart-naming",
+      "cacheTarget": {
+        "dishFamily": "iberian-custard-tart",
+        "region": "Naming and alias context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.dessert",
+        "mechanisms.browning",
+        "mechanisms.sugar_crystal",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast",
+        "cultureAreas.europe",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "iberian-custard-tart",
+        "query": "iberian custard tart naming and alias context variants",
+        "sources": [
+          {
+            "title": "iberian custard tart Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=iberian%20custard%20tart",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"iberian custard tart\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "iberian-custard-tart",
+            "pasteis-de-nata",
+            "custard-tart",
+            "portuguese-tart"
+          ],
+          "regions": [
+            "Naming and alias context"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "browning",
+            "sugar crystal",
+            "temperature",
+            "texture contrast"
+          ],
+          "sensoryDescriptors": [
+            "browning",
+            "sugar crystal",
+            "temperature",
+            "texture contrast"
+          ],
+          "culturalOccasions": [
+            "iberian-custard-tart"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"iberian custard tart\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "maize-porridge",
+      "cacheTarget": {
+        "dishFamily": "maize-porridge",
+        "region": "Southern Africa"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "mechanisms.serving_ritual",
+        "cultureAreas.southern_africa",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "maize-porridge",
+        "query": "maize porridge southern africa southern africa variants",
+        "sources": [
+          {
+            "title": "maize porridge southern africa Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=maize%20porridge%20southern%20africa",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"maize porridge southern africa\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "maize-porridge",
+            "pap",
+            "sadza",
+            "maize-porridge",
+            "mealie-pap"
+          ],
+          "regions": [
+            "Southern Africa",
+            "southern africa"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "starch texture",
+            "temperature",
+            "serving ritual"
+          ],
+          "sensoryDescriptors": [
+            "starch texture",
+            "temperature",
+            "serving ritual"
+          ],
+          "culturalOccasions": [
+            "maize-porridge"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"maize porridge southern africa\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "maize-porridge-diaspora",
+      "cacheTarget": {
+        "dishFamily": "maize-porridge",
+        "region": "Southern Africa diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "mechanisms.serving_ritual",
+        "cultureAreas.southern_africa",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "maize-porridge",
+        "query": "maize porridge southern africa southern africa diaspora variants",
+        "sources": [
+          {
+            "title": "maize porridge southern africa Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=maize%20porridge%20southern%20africa",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"maize porridge southern africa\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "maize-porridge",
+            "pap",
+            "sadza",
+            "maize-porridge",
+            "mealie-pap"
+          ],
+          "regions": [
+            "Southern Africa diaspora"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "starch texture",
+            "temperature",
+            "serving ritual"
+          ],
+          "sensoryDescriptors": [
+            "starch texture",
+            "temperature",
+            "serving ritual"
+          ],
+          "culturalOccasions": [
+            "maize-porridge"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"maize porridge southern africa\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "maize-porridge-migration",
+      "cacheTarget": {
+        "dishFamily": "maize-porridge",
+        "region": "Southern Africa migration corridor"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "mechanisms.serving_ritual",
+        "cultureAreas.southern_africa",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "maize-porridge",
+        "query": "maize porridge southern africa southern africa migration corridor variants",
+        "sources": [
+          {
+            "title": "maize porridge southern africa Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=maize%20porridge%20southern%20africa",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"maize porridge southern africa\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "maize-porridge",
+            "pap",
+            "sadza",
+            "maize-porridge",
+            "mealie-pap"
+          ],
+          "regions": [
+            "Southern Africa migration corridor"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "starch texture",
+            "temperature",
+            "serving ritual"
+          ],
+          "sensoryDescriptors": [
+            "starch texture",
+            "temperature",
+            "serving ritual"
+          ],
+          "culturalOccasions": [
+            "maize-porridge"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"maize porridge southern africa\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "maize-porridge-global",
+      "cacheTarget": {
+        "dishFamily": "maize-porridge",
+        "region": "Global diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "mechanisms.serving_ritual",
+        "cultureAreas.southern_africa",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "maize-porridge",
+        "query": "maize porridge southern africa global diaspora variants",
+        "sources": [
+          {
+            "title": "maize porridge southern africa Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=maize%20porridge%20southern%20africa",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"maize porridge southern africa\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "maize-porridge",
+            "pap",
+            "sadza",
+            "maize-porridge",
+            "mealie-pap"
+          ],
+          "regions": [
+            "Global diaspora"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "starch texture",
+            "temperature",
+            "serving ritual"
+          ],
+          "sensoryDescriptors": [
+            "starch texture",
+            "temperature",
+            "serving ritual"
+          ],
+          "culturalOccasions": [
+            "maize-porridge"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"maize porridge southern africa\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "maize-porridge-community",
+      "cacheTarget": {
+        "dishFamily": "maize-porridge",
+        "region": "Community diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "mechanisms.serving_ritual",
+        "cultureAreas.southern_africa",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "maize-porridge",
+        "query": "maize porridge southern africa community diaspora variants",
+        "sources": [
+          {
+            "title": "maize porridge southern africa Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=maize%20porridge%20southern%20africa",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"maize porridge southern africa\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "maize-porridge",
+            "pap",
+            "sadza",
+            "maize-porridge",
+            "mealie-pap"
+          ],
+          "regions": [
+            "Community diaspora"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "starch texture",
+            "temperature",
+            "serving ritual"
+          ],
+          "sensoryDescriptors": [
+            "starch texture",
+            "temperature",
+            "serving ritual"
+          ],
+          "culturalOccasions": [
+            "maize-porridge"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"maize porridge southern africa\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "maize-porridge-mechanism",
+      "cacheTarget": {
+        "dishFamily": "maize-porridge",
+        "region": "Sensory mechanism context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "mechanisms.serving_ritual",
+        "cultureAreas.southern_africa",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "maize-porridge",
+        "query": "maize porridge southern africa sensory mechanism context variants",
+        "sources": [
+          {
+            "title": "maize porridge southern africa Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=maize%20porridge%20southern%20africa",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"maize porridge southern africa\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "maize-porridge",
+            "pap",
+            "sadza",
+            "maize-porridge",
+            "mealie-pap"
+          ],
+          "regions": [
+            "Sensory mechanism context"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "starch texture",
+            "temperature",
+            "serving ritual"
+          ],
+          "sensoryDescriptors": [
+            "starch texture",
+            "temperature",
+            "serving ritual"
+          ],
+          "culturalOccasions": [
+            "maize-porridge"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"maize porridge southern africa\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "maize-porridge-naming",
+      "cacheTarget": {
+        "dishFamily": "maize-porridge",
+        "region": "Naming and alias context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "mechanisms.serving_ritual",
+        "cultureAreas.southern_africa",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "maize-porridge",
+        "query": "maize porridge southern africa naming and alias context variants",
+        "sources": [
+          {
+            "title": "maize porridge southern africa Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=maize%20porridge%20southern%20africa",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"maize porridge southern africa\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "maize-porridge",
+            "pap",
+            "sadza",
+            "maize-porridge",
+            "mealie-pap"
+          ],
+          "regions": [
+            "Naming and alias context"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "starch texture",
+            "temperature",
+            "serving ritual"
+          ],
+          "sensoryDescriptors": [
+            "starch texture",
+            "temperature",
+            "serving ritual"
+          ],
+          "culturalOccasions": [
+            "maize-porridge"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"maize porridge southern africa\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "biltong",
+      "cacheTarget": {
+        "dishFamily": "biltong",
+        "region": "Southern Africa"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.pantry_single_ingredient",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.fermentation_acid",
+        "cultureAreas.southern_africa",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "biltong",
+        "query": "biltong southern africa southern africa variants",
+        "sources": [
+          {
+            "title": "biltong southern africa Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=biltong%20southern%20africa",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"biltong southern africa\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "biltong",
+            "biltong",
+            "dried-meat",
+            "south-african-jerky"
+          ],
+          "regions": [
+            "Southern Africa",
+            "southern africa"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "aroma",
+            "texture contrast",
+            "fermentation acid"
+          ],
+          "sensoryDescriptors": [
+            "aroma",
+            "texture contrast",
+            "fermentation acid"
+          ],
+          "culturalOccasions": [
+            "biltong"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"biltong southern africa\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "biltong-diaspora",
+      "cacheTarget": {
+        "dishFamily": "biltong",
+        "region": "Southern Africa diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.pantry_single_ingredient",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.fermentation_acid",
+        "cultureAreas.southern_africa",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "biltong",
+        "query": "biltong southern africa southern africa diaspora variants",
+        "sources": [
+          {
+            "title": "biltong southern africa Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=biltong%20southern%20africa",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"biltong southern africa\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "biltong",
+            "biltong",
+            "dried-meat",
+            "south-african-jerky"
+          ],
+          "regions": [
+            "Southern Africa diaspora"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "aroma",
+            "texture contrast",
+            "fermentation acid"
+          ],
+          "sensoryDescriptors": [
+            "aroma",
+            "texture contrast",
+            "fermentation acid"
+          ],
+          "culturalOccasions": [
+            "biltong"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"biltong southern africa\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "biltong-migration",
+      "cacheTarget": {
+        "dishFamily": "biltong",
+        "region": "Southern Africa migration corridor"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.pantry_single_ingredient",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.fermentation_acid",
+        "cultureAreas.southern_africa",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "biltong",
+        "query": "biltong southern africa southern africa migration corridor variants",
+        "sources": [
+          {
+            "title": "biltong southern africa Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=biltong%20southern%20africa",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"biltong southern africa\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "biltong",
+            "biltong",
+            "dried-meat",
+            "south-african-jerky"
+          ],
+          "regions": [
+            "Southern Africa migration corridor"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "aroma",
+            "texture contrast",
+            "fermentation acid"
+          ],
+          "sensoryDescriptors": [
+            "aroma",
+            "texture contrast",
+            "fermentation acid"
+          ],
+          "culturalOccasions": [
+            "biltong"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"biltong southern africa\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "biltong-global",
+      "cacheTarget": {
+        "dishFamily": "biltong",
+        "region": "Global diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.pantry_single_ingredient",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.fermentation_acid",
+        "cultureAreas.southern_africa",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "biltong",
+        "query": "biltong southern africa global diaspora variants",
+        "sources": [
+          {
+            "title": "biltong southern africa Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=biltong%20southern%20africa",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"biltong southern africa\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "biltong",
+            "biltong",
+            "dried-meat",
+            "south-african-jerky"
+          ],
+          "regions": [
+            "Global diaspora"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "aroma",
+            "texture contrast",
+            "fermentation acid"
+          ],
+          "sensoryDescriptors": [
+            "aroma",
+            "texture contrast",
+            "fermentation acid"
+          ],
+          "culturalOccasions": [
+            "biltong"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"biltong southern africa\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "biltong-community",
+      "cacheTarget": {
+        "dishFamily": "biltong",
+        "region": "Community diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.pantry_single_ingredient",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.fermentation_acid",
+        "cultureAreas.southern_africa",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "biltong",
+        "query": "biltong southern africa community diaspora variants",
+        "sources": [
+          {
+            "title": "biltong southern africa Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=biltong%20southern%20africa",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"biltong southern africa\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "biltong",
+            "biltong",
+            "dried-meat",
+            "south-african-jerky"
+          ],
+          "regions": [
+            "Community diaspora"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "aroma",
+            "texture contrast",
+            "fermentation acid"
+          ],
+          "sensoryDescriptors": [
+            "aroma",
+            "texture contrast",
+            "fermentation acid"
+          ],
+          "culturalOccasions": [
+            "biltong"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"biltong southern africa\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "biltong-mechanism",
+      "cacheTarget": {
+        "dishFamily": "biltong",
+        "region": "Sensory mechanism context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.pantry_single_ingredient",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.fermentation_acid",
+        "cultureAreas.southern_africa",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "biltong",
+        "query": "biltong southern africa sensory mechanism context variants",
+        "sources": [
+          {
+            "title": "biltong southern africa Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=biltong%20southern%20africa",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"biltong southern africa\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "biltong",
+            "biltong",
+            "dried-meat",
+            "south-african-jerky"
+          ],
+          "regions": [
+            "Sensory mechanism context"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "aroma",
+            "texture contrast",
+            "fermentation acid"
+          ],
+          "sensoryDescriptors": [
+            "aroma",
+            "texture contrast",
+            "fermentation acid"
+          ],
+          "culturalOccasions": [
+            "biltong"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"biltong southern africa\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "biltong-naming",
+      "cacheTarget": {
+        "dishFamily": "biltong",
+        "region": "Naming and alias context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.pantry_single_ingredient",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.fermentation_acid",
+        "cultureAreas.southern_africa",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "biltong",
+        "query": "biltong southern africa naming and alias context variants",
+        "sources": [
+          {
+            "title": "biltong southern africa Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=biltong%20southern%20africa",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"biltong southern africa\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "biltong",
+            "biltong",
+            "dried-meat",
+            "south-african-jerky"
+          ],
+          "regions": [
+            "Naming and alias context"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "aroma",
+            "texture contrast",
+            "fermentation acid"
+          ],
+          "sensoryDescriptors": [
+            "aroma",
+            "texture contrast",
+            "fermentation acid"
+          ],
+          "culturalOccasions": [
+            "biltong"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"biltong southern africa\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "plov",
+      "cacheTarget": {
+        "dishFamily": "plov",
+        "region": "Central Asia"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "cultureAreas.central_asia",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "plov",
+        "query": "plov central asia central asia variants",
+        "sources": [
+          {
+            "title": "plov central asia Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=plov%20central%20asia",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"plov central asia\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "plov",
+            "plov",
+            "osh",
+            "uzbek-pilaf",
+            "central-asian-pilaf"
+          ],
+          "regions": [
+            "Central Asia",
+            "central asia"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "aroma",
+            "fat mouthfeel",
+            "browning",
+            "serving ritual"
+          ],
+          "sensoryDescriptors": [
+            "aroma",
+            "fat mouthfeel",
+            "browning",
+            "serving ritual"
+          ],
+          "culturalOccasions": [
+            "plov"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"plov central asia\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "plov-diaspora",
+      "cacheTarget": {
+        "dishFamily": "plov",
+        "region": "Central Asia diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "cultureAreas.central_asia",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "plov",
+        "query": "plov central asia central asia diaspora variants",
+        "sources": [
+          {
+            "title": "plov central asia Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=plov%20central%20asia",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"plov central asia\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "plov",
+            "plov",
+            "osh",
+            "uzbek-pilaf",
+            "central-asian-pilaf"
+          ],
+          "regions": [
+            "Central Asia diaspora"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "aroma",
+            "fat mouthfeel",
+            "browning",
+            "serving ritual"
+          ],
+          "sensoryDescriptors": [
+            "aroma",
+            "fat mouthfeel",
+            "browning",
+            "serving ritual"
+          ],
+          "culturalOccasions": [
+            "plov"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"plov central asia\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "plov-migration",
+      "cacheTarget": {
+        "dishFamily": "plov",
+        "region": "Central Asia migration corridor"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "cultureAreas.central_asia",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "plov",
+        "query": "plov central asia central asia migration corridor variants",
+        "sources": [
+          {
+            "title": "plov central asia Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=plov%20central%20asia",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"plov central asia\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "plov",
+            "plov",
+            "osh",
+            "uzbek-pilaf",
+            "central-asian-pilaf"
+          ],
+          "regions": [
+            "Central Asia migration corridor"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "aroma",
+            "fat mouthfeel",
+            "browning",
+            "serving ritual"
+          ],
+          "sensoryDescriptors": [
+            "aroma",
+            "fat mouthfeel",
+            "browning",
+            "serving ritual"
+          ],
+          "culturalOccasions": [
+            "plov"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"plov central asia\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "plov-global",
+      "cacheTarget": {
+        "dishFamily": "plov",
+        "region": "Global diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "cultureAreas.central_asia",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "plov",
+        "query": "plov central asia global diaspora variants",
+        "sources": [
+          {
+            "title": "plov central asia Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=plov%20central%20asia",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"plov central asia\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "plov",
+            "plov",
+            "osh",
+            "uzbek-pilaf",
+            "central-asian-pilaf"
+          ],
+          "regions": [
+            "Global diaspora"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "aroma",
+            "fat mouthfeel",
+            "browning",
+            "serving ritual"
+          ],
+          "sensoryDescriptors": [
+            "aroma",
+            "fat mouthfeel",
+            "browning",
+            "serving ritual"
+          ],
+          "culturalOccasions": [
+            "plov"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"plov central asia\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "plov-community",
+      "cacheTarget": {
+        "dishFamily": "plov",
+        "region": "Community diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "cultureAreas.central_asia",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "plov",
+        "query": "plov central asia community diaspora variants",
+        "sources": [
+          {
+            "title": "plov central asia Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=plov%20central%20asia",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"plov central asia\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "plov",
+            "plov",
+            "osh",
+            "uzbek-pilaf",
+            "central-asian-pilaf"
+          ],
+          "regions": [
+            "Community diaspora"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "aroma",
+            "fat mouthfeel",
+            "browning",
+            "serving ritual"
+          ],
+          "sensoryDescriptors": [
+            "aroma",
+            "fat mouthfeel",
+            "browning",
+            "serving ritual"
+          ],
+          "culturalOccasions": [
+            "plov"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"plov central asia\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "plov-mechanism",
+      "cacheTarget": {
+        "dishFamily": "plov",
+        "region": "Sensory mechanism context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "cultureAreas.central_asia",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "plov",
+        "query": "plov central asia sensory mechanism context variants",
+        "sources": [
+          {
+            "title": "plov central asia Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=plov%20central%20asia",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"plov central asia\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "plov",
+            "plov",
+            "osh",
+            "uzbek-pilaf",
+            "central-asian-pilaf"
+          ],
+          "regions": [
+            "Sensory mechanism context"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "aroma",
+            "fat mouthfeel",
+            "browning",
+            "serving ritual"
+          ],
+          "sensoryDescriptors": [
+            "aroma",
+            "fat mouthfeel",
+            "browning",
+            "serving ritual"
+          ],
+          "culturalOccasions": [
+            "plov"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"plov central asia\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "plov-naming",
+      "cacheTarget": {
+        "dishFamily": "plov",
+        "region": "Naming and alias context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "cultureAreas.central_asia",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "plov",
+        "query": "plov central asia naming and alias context variants",
+        "sources": [
+          {
+            "title": "plov central asia Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=plov%20central%20asia",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"plov central asia\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "plov",
+            "plov",
+            "osh",
+            "uzbek-pilaf",
+            "central-asian-pilaf"
+          ],
+          "regions": [
+            "Naming and alias context"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "aroma",
+            "fat mouthfeel",
+            "browning",
+            "serving ritual"
+          ],
+          "sensoryDescriptors": [
+            "aroma",
+            "fat mouthfeel",
+            "browning",
+            "serving ritual"
+          ],
+          "culturalOccasions": [
+            "plov"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"plov central asia\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "lagman",
+      "cacheTarget": {
+        "dishFamily": "lagman",
+        "region": "Central Asia"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.starch_texture",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "cultureAreas.central_asia",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "lagman",
+        "query": "lagman central asia central asia variants",
+        "sources": [
+          {
+            "title": "lagman central asia Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=lagman%20central%20asia",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"lagman central asia\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "lagman",
+            "lagman",
+            "laghman",
+            "hand-pulled-noodle",
+            "uyghur-noodle"
+          ],
+          "regions": [
+            "Central Asia",
+            "central asia"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "starch texture",
+            "aroma",
+            "sauce balance"
+          ],
+          "sensoryDescriptors": [
+            "starch texture",
+            "aroma",
+            "sauce balance"
+          ],
+          "culturalOccasions": [
+            "lagman"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"lagman central asia\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "lagman-diaspora",
+      "cacheTarget": {
+        "dishFamily": "lagman",
+        "region": "Central Asia diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.starch_texture",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "cultureAreas.central_asia",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "lagman",
+        "query": "lagman central asia central asia diaspora variants",
+        "sources": [
+          {
+            "title": "lagman central asia Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=lagman%20central%20asia",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"lagman central asia\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "lagman",
+            "lagman",
+            "laghman",
+            "hand-pulled-noodle",
+            "uyghur-noodle"
+          ],
+          "regions": [
+            "Central Asia diaspora"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "starch texture",
+            "aroma",
+            "sauce balance"
+          ],
+          "sensoryDescriptors": [
+            "starch texture",
+            "aroma",
+            "sauce balance"
+          ],
+          "culturalOccasions": [
+            "lagman"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"lagman central asia\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "lagman-migration",
+      "cacheTarget": {
+        "dishFamily": "lagman",
+        "region": "Central Asia migration corridor"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.starch_texture",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "cultureAreas.central_asia",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "lagman",
+        "query": "lagman central asia central asia migration corridor variants",
+        "sources": [
+          {
+            "title": "lagman central asia Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=lagman%20central%20asia",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"lagman central asia\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "lagman",
+            "lagman",
+            "laghman",
+            "hand-pulled-noodle",
+            "uyghur-noodle"
+          ],
+          "regions": [
+            "Central Asia migration corridor"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "starch texture",
+            "aroma",
+            "sauce balance"
+          ],
+          "sensoryDescriptors": [
+            "starch texture",
+            "aroma",
+            "sauce balance"
+          ],
+          "culturalOccasions": [
+            "lagman"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"lagman central asia\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "lagman-global",
+      "cacheTarget": {
+        "dishFamily": "lagman",
+        "region": "Global diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.starch_texture",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "cultureAreas.central_asia",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "lagman",
+        "query": "lagman central asia global diaspora variants",
+        "sources": [
+          {
+            "title": "lagman central asia Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=lagman%20central%20asia",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"lagman central asia\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "lagman",
+            "lagman",
+            "laghman",
+            "hand-pulled-noodle",
+            "uyghur-noodle"
+          ],
+          "regions": [
+            "Global diaspora"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "starch texture",
+            "aroma",
+            "sauce balance"
+          ],
+          "sensoryDescriptors": [
+            "starch texture",
+            "aroma",
+            "sauce balance"
+          ],
+          "culturalOccasions": [
+            "lagman"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"lagman central asia\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "lagman-community",
+      "cacheTarget": {
+        "dishFamily": "lagman",
+        "region": "Community diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.starch_texture",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "cultureAreas.central_asia",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "lagman",
+        "query": "lagman central asia community diaspora variants",
+        "sources": [
+          {
+            "title": "lagman central asia Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=lagman%20central%20asia",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"lagman central asia\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "lagman",
+            "lagman",
+            "laghman",
+            "hand-pulled-noodle",
+            "uyghur-noodle"
+          ],
+          "regions": [
+            "Community diaspora"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "starch texture",
+            "aroma",
+            "sauce balance"
+          ],
+          "sensoryDescriptors": [
+            "starch texture",
+            "aroma",
+            "sauce balance"
+          ],
+          "culturalOccasions": [
+            "lagman"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"lagman central asia\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "lagman-mechanism",
+      "cacheTarget": {
+        "dishFamily": "lagman",
+        "region": "Sensory mechanism context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.starch_texture",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "cultureAreas.central_asia",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "lagman",
+        "query": "lagman central asia sensory mechanism context variants",
+        "sources": [
+          {
+            "title": "lagman central asia Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=lagman%20central%20asia",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"lagman central asia\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "lagman",
+            "lagman",
+            "laghman",
+            "hand-pulled-noodle",
+            "uyghur-noodle"
+          ],
+          "regions": [
+            "Sensory mechanism context"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "starch texture",
+            "aroma",
+            "sauce balance"
+          ],
+          "sensoryDescriptors": [
+            "starch texture",
+            "aroma",
+            "sauce balance"
+          ],
+          "culturalOccasions": [
+            "lagman"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"lagman central asia\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "lagman-naming",
+      "cacheTarget": {
+        "dishFamily": "lagman",
+        "region": "Naming and alias context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.starch_texture",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "cultureAreas.central_asia",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "lagman",
+        "query": "lagman central asia naming and alias context variants",
+        "sources": [
+          {
+            "title": "lagman central asia Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=lagman%20central%20asia",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"lagman central asia\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "lagman",
+            "lagman",
+            "laghman",
+            "hand-pulled-noodle",
+            "uyghur-noodle"
+          ],
+          "regions": [
+            "Naming and alias context"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "starch texture",
+            "aroma",
+            "sauce balance"
+          ],
+          "sensoryDescriptors": [
+            "starch texture",
+            "aroma",
+            "sauce balance"
+          ],
+          "culturalOccasions": [
+            "lagman"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"lagman central asia\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "haitian-griot",
+      "cacheTarget": {
+        "dishFamily": "haitian-griot",
+        "region": "Haiti"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.protein_centered",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "cultureAreas.caribbean",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "haitian-griot",
+        "query": "haitian griot haiti variants",
+        "sources": [
+          {
+            "title": "haitian griot Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=haitian%20griot",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"haitian griot\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "haitian-griot",
+            "griot",
+            "haitian-pork",
+            "fried-pork-cubes"
+          ],
+          "regions": [
+            "Haiti",
+            "caribbean"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "browning",
+            "fat mouthfeel",
+            "aroma",
+            "texture contrast"
+          ],
+          "sensoryDescriptors": [
+            "browning",
+            "fat mouthfeel",
+            "aroma",
+            "texture contrast"
+          ],
+          "culturalOccasions": [
+            "haitian-griot"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"haitian griot\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "haitian-griot-diaspora",
+      "cacheTarget": {
+        "dishFamily": "haitian-griot",
+        "region": "Haiti diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.protein_centered",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "cultureAreas.caribbean",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "haitian-griot",
+        "query": "haitian griot haiti diaspora variants",
+        "sources": [
+          {
+            "title": "haitian griot Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=haitian%20griot",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"haitian griot\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "haitian-griot",
+            "griot",
+            "haitian-pork",
+            "fried-pork-cubes"
+          ],
+          "regions": [
+            "Haiti diaspora"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "browning",
+            "fat mouthfeel",
+            "aroma",
+            "texture contrast"
+          ],
+          "sensoryDescriptors": [
+            "browning",
+            "fat mouthfeel",
+            "aroma",
+            "texture contrast"
+          ],
+          "culturalOccasions": [
+            "haitian-griot"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"haitian griot\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "haitian-griot-migration",
+      "cacheTarget": {
+        "dishFamily": "haitian-griot",
+        "region": "Haiti migration corridor"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.protein_centered",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "cultureAreas.caribbean",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "haitian-griot",
+        "query": "haitian griot haiti migration corridor variants",
+        "sources": [
+          {
+            "title": "haitian griot Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=haitian%20griot",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"haitian griot\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "haitian-griot",
+            "griot",
+            "haitian-pork",
+            "fried-pork-cubes"
+          ],
+          "regions": [
+            "Haiti migration corridor"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "browning",
+            "fat mouthfeel",
+            "aroma",
+            "texture contrast"
+          ],
+          "sensoryDescriptors": [
+            "browning",
+            "fat mouthfeel",
+            "aroma",
+            "texture contrast"
+          ],
+          "culturalOccasions": [
+            "haitian-griot"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"haitian griot\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "haitian-griot-global",
+      "cacheTarget": {
+        "dishFamily": "haitian-griot",
+        "region": "Global diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.protein_centered",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "cultureAreas.caribbean",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "haitian-griot",
+        "query": "haitian griot global diaspora variants",
+        "sources": [
+          {
+            "title": "haitian griot Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=haitian%20griot",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"haitian griot\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "haitian-griot",
+            "griot",
+            "haitian-pork",
+            "fried-pork-cubes"
+          ],
+          "regions": [
+            "Global diaspora"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "browning",
+            "fat mouthfeel",
+            "aroma",
+            "texture contrast"
+          ],
+          "sensoryDescriptors": [
+            "browning",
+            "fat mouthfeel",
+            "aroma",
+            "texture contrast"
+          ],
+          "culturalOccasions": [
+            "haitian-griot"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"haitian griot\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "haitian-griot-community",
+      "cacheTarget": {
+        "dishFamily": "haitian-griot",
+        "region": "Community diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.protein_centered",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "cultureAreas.caribbean",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "haitian-griot",
+        "query": "haitian griot community diaspora variants",
+        "sources": [
+          {
+            "title": "haitian griot Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=haitian%20griot",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"haitian griot\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "haitian-griot",
+            "griot",
+            "haitian-pork",
+            "fried-pork-cubes"
+          ],
+          "regions": [
+            "Community diaspora"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "browning",
+            "fat mouthfeel",
+            "aroma",
+            "texture contrast"
+          ],
+          "sensoryDescriptors": [
+            "browning",
+            "fat mouthfeel",
+            "aroma",
+            "texture contrast"
+          ],
+          "culturalOccasions": [
+            "haitian-griot"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"haitian griot\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "haitian-griot-mechanism",
+      "cacheTarget": {
+        "dishFamily": "haitian-griot",
+        "region": "Sensory mechanism context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.protein_centered",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "cultureAreas.caribbean",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "haitian-griot",
+        "query": "haitian griot sensory mechanism context variants",
+        "sources": [
+          {
+            "title": "haitian griot Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=haitian%20griot",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"haitian griot\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "haitian-griot",
+            "griot",
+            "haitian-pork",
+            "fried-pork-cubes"
+          ],
+          "regions": [
+            "Sensory mechanism context"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "browning",
+            "fat mouthfeel",
+            "aroma",
+            "texture contrast"
+          ],
+          "sensoryDescriptors": [
+            "browning",
+            "fat mouthfeel",
+            "aroma",
+            "texture contrast"
+          ],
+          "culturalOccasions": [
+            "haitian-griot"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"haitian griot\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "haitian-griot-naming",
+      "cacheTarget": {
+        "dishFamily": "haitian-griot",
+        "region": "Naming and alias context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.protein_centered",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "cultureAreas.caribbean",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "haitian-griot",
+        "query": "haitian griot naming and alias context variants",
+        "sources": [
+          {
+            "title": "haitian griot Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=haitian%20griot",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"haitian griot\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "haitian-griot",
+            "griot",
+            "haitian-pork",
+            "fried-pork-cubes"
+          ],
+          "regions": [
+            "Naming and alias context"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "browning",
+            "fat mouthfeel",
+            "aroma",
+            "texture contrast"
+          ],
+          "sensoryDescriptors": [
+            "browning",
+            "fat mouthfeel",
+            "aroma",
+            "texture contrast"
+          ],
+          "culturalOccasions": [
+            "haitian-griot"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"haitian griot\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "trinidad-doubles",
+      "cacheTarget": {
+        "dishFamily": "trinidad-doubles",
+        "region": "Trinidad and Tobago"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.snack_street_food",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.sauce_balance",
+        "cultureAreas.caribbean",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "trinidad-doubles",
+        "query": "trinidad doubles trinidad and tobago variants",
+        "sources": [
+          {
+            "title": "trinidad doubles Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=trinidad%20doubles",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"trinidad doubles\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "trinidad-doubles",
+            "doubles",
+            "trinidad-doubles",
+            "chickpea-flatbread"
+          ],
+          "regions": [
+            "Trinidad and Tobago",
+            "caribbean"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "aroma",
+            "texture contrast",
+            "sauce balance"
+          ],
+          "sensoryDescriptors": [
+            "aroma",
+            "texture contrast",
+            "sauce balance"
+          ],
+          "culturalOccasions": [
+            "trinidad-doubles"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"trinidad doubles\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "trinidad-doubles-diaspora",
+      "cacheTarget": {
+        "dishFamily": "trinidad-doubles",
+        "region": "Trinidad and Tobago diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.snack_street_food",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.sauce_balance",
+        "cultureAreas.caribbean",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "trinidad-doubles",
+        "query": "trinidad doubles trinidad and tobago diaspora variants",
+        "sources": [
+          {
+            "title": "trinidad doubles Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=trinidad%20doubles",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"trinidad doubles\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "trinidad-doubles",
+            "doubles",
+            "trinidad-doubles",
+            "chickpea-flatbread"
+          ],
+          "regions": [
+            "Trinidad and Tobago diaspora"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "aroma",
+            "texture contrast",
+            "sauce balance"
+          ],
+          "sensoryDescriptors": [
+            "aroma",
+            "texture contrast",
+            "sauce balance"
+          ],
+          "culturalOccasions": [
+            "trinidad-doubles"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"trinidad doubles\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "trinidad-doubles-migration",
+      "cacheTarget": {
+        "dishFamily": "trinidad-doubles",
+        "region": "Trinidad and Tobago migration corridor"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.snack_street_food",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.sauce_balance",
+        "cultureAreas.caribbean",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "trinidad-doubles",
+        "query": "trinidad doubles trinidad and tobago migration corridor variants",
+        "sources": [
+          {
+            "title": "trinidad doubles Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=trinidad%20doubles",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"trinidad doubles\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "trinidad-doubles",
+            "doubles",
+            "trinidad-doubles",
+            "chickpea-flatbread"
+          ],
+          "regions": [
+            "Trinidad and Tobago migration corridor"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "aroma",
+            "texture contrast",
+            "sauce balance"
+          ],
+          "sensoryDescriptors": [
+            "aroma",
+            "texture contrast",
+            "sauce balance"
+          ],
+          "culturalOccasions": [
+            "trinidad-doubles"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"trinidad doubles\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "trinidad-doubles-global",
+      "cacheTarget": {
+        "dishFamily": "trinidad-doubles",
+        "region": "Global diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.snack_street_food",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.sauce_balance",
+        "cultureAreas.caribbean",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "trinidad-doubles",
+        "query": "trinidad doubles global diaspora variants",
+        "sources": [
+          {
+            "title": "trinidad doubles Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=trinidad%20doubles",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"trinidad doubles\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "trinidad-doubles",
+            "doubles",
+            "trinidad-doubles",
+            "chickpea-flatbread"
+          ],
+          "regions": [
+            "Global diaspora"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "aroma",
+            "texture contrast",
+            "sauce balance"
+          ],
+          "sensoryDescriptors": [
+            "aroma",
+            "texture contrast",
+            "sauce balance"
+          ],
+          "culturalOccasions": [
+            "trinidad-doubles"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"trinidad doubles\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "trinidad-doubles-community",
+      "cacheTarget": {
+        "dishFamily": "trinidad-doubles",
+        "region": "Community diaspora"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.snack_street_food",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.sauce_balance",
+        "cultureAreas.caribbean",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "trinidad-doubles",
+        "query": "trinidad doubles community diaspora variants",
+        "sources": [
+          {
+            "title": "trinidad doubles Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=trinidad%20doubles",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"trinidad doubles\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "trinidad-doubles",
+            "doubles",
+            "trinidad-doubles",
+            "chickpea-flatbread"
+          ],
+          "regions": [
+            "Community diaspora"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "aroma",
+            "texture contrast",
+            "sauce balance"
+          ],
+          "sensoryDescriptors": [
+            "aroma",
+            "texture contrast",
+            "sauce balance"
+          ],
+          "culturalOccasions": [
+            "trinidad-doubles"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"trinidad doubles\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "trinidad-doubles-mechanism",
+      "cacheTarget": {
+        "dishFamily": "trinidad-doubles",
+        "region": "Sensory mechanism context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.snack_street_food",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.sauce_balance",
+        "cultureAreas.caribbean",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "trinidad-doubles",
+        "query": "trinidad doubles sensory mechanism context variants",
+        "sources": [
+          {
+            "title": "trinidad doubles Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=trinidad%20doubles",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"trinidad doubles\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "trinidad-doubles",
+            "doubles",
+            "trinidad-doubles",
+            "chickpea-flatbread"
+          ],
+          "regions": [
+            "Sensory mechanism context"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "aroma",
+            "texture contrast",
+            "sauce balance"
+          ],
+          "sensoryDescriptors": [
+            "aroma",
+            "texture contrast",
+            "sauce balance"
+          ],
+          "culturalOccasions": [
+            "trinidad-doubles"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"trinidad doubles\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
+    },
+    {
+      "seedId": "trinidad-doubles-naming",
+      "cacheTarget": {
+        "dishFamily": "trinidad-doubles",
+        "region": "Naming and alias context"
+      },
+      "sourceIds": [
+        "wikidata-structured-food-data"
+      ],
+      "coverageTags": [
+        "foodForms.snack_street_food",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.sauce_balance",
+        "cultureAreas.caribbean",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis",
+        "evidenceLevels.researched_record",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "record": {
+        "dishName": "trinidad-doubles",
+        "query": "trinidad doubles naming and alias context variants",
+        "sources": [
+          {
+            "title": "trinidad doubles Wikidata structured data",
+            "url": "https://www.wikidata.org/wiki/Special:Search?search=trinidad%20doubles",
+            "sourceType": "other",
+            "accessedAt": "2026-05-30T00:00:00.000Z",
+            "reliability": "Medium",
+            "quotedFacts": [
+              "Wikidata structured data search for \"trinidad doubles\"."
+            ]
+          }
+        ],
+        "extractedFacts": {
+          "namesAndAliases": [
+            "trinidad-doubles",
+            "doubles",
+            "trinidad-doubles",
+            "chickpea-flatbread"
+          ],
+          "regions": [
+            "Naming and alias context"
+          ],
+          "ingredients": [],
+          "techniques": [
+            "aroma",
+            "texture contrast",
+            "sauce balance"
+          ],
+          "sensoryDescriptors": [
+            "aroma",
+            "texture contrast",
+            "sauce balance"
+          ],
+          "culturalOccasions": [
+            "trinidad-doubles"
+          ],
+          "regionalVariants": [
+            "Wikidata structured data search for \"trinidad doubles\"."
+          ]
+        },
+        "uncertainty": [
+          "Wikidata structured data provides broad labels and descriptions, not family-specific taste memory.",
+          "Specific household name, sweetness, sourness, spice level, texture, serving ritual, and ingredient substitutions need user or family confirmation."
+        ],
+        "confidence": "Medium",
+        "createdAt": "2026-05-30T00:00:00.000Z"
+      }
     }
   ]
 }

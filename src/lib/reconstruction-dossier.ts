@@ -10,7 +10,7 @@ export function buildReconstructionDossier(input: {
   const researched = input.researchedFacts ?? [];
   const inferred = input.inferredFacts ?? [];
   const dedupedResearched = [...new Set(researched)];
-  const confidence: Confidence = dedupedResearched.length >= 2 ? 'Medium' : 'Low';
+  const confidence: Confidence = dedupedResearched.length >= 1 ? 'Medium' : 'Low';
 
   const sensoryClues = input.memory.extractedClues?.sensoryClues ?? [];
   const ingredients = input.memory.extractedClues?.rememberedIngredients ?? [];

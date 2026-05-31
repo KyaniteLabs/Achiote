@@ -43,9 +43,9 @@ const COMPONENT_ROLES = {
     substitutionReason: 'Proteins that render fat carry Maillard compounds and fat-soluble aromatics the same way regardless of cut or species',
   },
   sauce: {
-    keywords: 'sauce|gravy|relish|chutney|salsa|condiment|dip|orange|creamy',
+    keywords: 'sauce|gravy|relish|chutney|salsa|condiment|dip|orange|creamy|mole|chile|chiles|pepper|tomato|tomatillo',
     criticalElement: 'acid-fat-salt balance and aromatic contrast against richness',
-    flavorProfile: 'variable — may be tomato-based, dairy-based, oil-herb, or vinegar-forward',
+    flavorProfile: 'variable, may be tomato-based, dairy-based, oil-herb, or vinegar-forward',
     localTestWith: 'grocery-store salsa, tomato paste with vinegar and sugar, or yogurt with herbs',
     substitutionReason: 'Sauces are balance systems of fat, acid, sugar, salt, and aromatics; matching the balance preserves the contrast even with different base ingredients',
   },
@@ -113,7 +113,7 @@ function decomposeIntoComponents(signals: string, userLocation?: string, overall
   if (components.length === 0) {
     components.push({
       role: 'overall',
-      criticalElement: 'the dominant sensory mechanism — aroma, texture, sauce, fat, acid, or contrast',
+      criticalElement: 'the dominant sensory mechanism: aroma, texture, sauce, fat, acid, or contrast',
       flavorProfile: 'unknown until one variable is isolated and tested',
       localTestWith: `one safe pantry ingredient ${locationPhrase}`,
       substitutionReason: 'Without a known mechanism, any substitution is guesswork; isolate one sensory variable first',
@@ -122,17 +122,17 @@ function decomposeIntoComponents(signals: string, userLocation?: string, overall
   }
 
   const confectionerySignals = signals.replace(/\b(?:not|rather than|instead of)\s+(?:a |an )?(?:candy|dessert|confection(?:ery)?|cookie|biscuit|sweet(?:ness)?|sweet-texture)(?:\s+or\s+(?:a |an )?(?:candy|dessert|confection(?:ery)?|cookie|biscuit|sweet(?:ness)?|sweet-texture))*\b/gi, '');
-  const hasStrongConfectionery = hasAnySignal(confectionerySignals, [wordSignal('caramel|dulce de leche|manjar|fudge|barfi|halva|baklava|mochi|candy|dessert|confection|cookie|biscuit|nougat|turrón|taffy|melcocha|cocada|flan|custard|pudding|chocolate|pastillas|milk candy|grainy/crystalline texture|powdery')]);
+  const hasExplicitConfectioneryForm = hasAnySignal(confectionerySignals, [wordSignal('candy|dessert|confection|cookie|biscuit|nougat|taffy|fudge|barfi|halva|baklava|mochi|melcocha|cocada|flan|custard|pudding|pastillas|milk candy|grainy/crystalline texture|powdery')]);
   const hasSavoryCueFamily = components.some((component) => ['starch', 'protein', 'sauce', 'vegetable', 'broth'].includes(component.role))
     || hasAnySignal(signals, [wordSignal('savory|curry|gravy|spiced|seasoned')]);
-  if (!hasStrongConfectionery && hasSavoryCueFamily) {
+  if (!hasExplicitConfectioneryForm && hasSavoryCueFamily) {
     components = components.filter((component) => component.role !== 'confectionery');
   }
 
   if (components.length === 0) {
     components.push({
       role: 'overall',
-      criticalElement: 'the dominant sensory mechanism — aroma, texture, sauce, fat, acid, or contrast',
+      criticalElement: 'the dominant sensory mechanism: aroma, texture, sauce, fat, acid, or contrast',
       flavorProfile: 'unknown until one variable is isolated and tested',
       localTestWith: `one safe pantry ingredient ${locationPhrase}`,
       substitutionReason: 'Without a known mechanism, any substitution is guesswork; isolate one sensory variable first',
@@ -201,7 +201,7 @@ function specificCriticalElement(role: ComponentRole, signals: string, fallback:
     return 'toasted coconut or seed aroma, grainy sugar crystallization, and chewy or sticky matrix texture';
   }
   if (role === 'confectionery' && signalIncludes(signals, 'grainy|crystalline|powdery|crumbly')) {
-    return 'sugar crystallization texture — grainy, crumbly, or powdery — plus fat or seed aroma that binds the sweet';
+    return 'sugar crystallization texture (grainy, crumbly, or powdery) plus fat or seed aroma that binds the sweet';
   }
   if (role === 'confectionery' && signalIncludes(signals, 'chewy|sticky|gummy|nougat|taffy|melcocha')) {
     return 'chewy or sticky sugar matrix with toasted seed, nut, dairy, or spice aroma carried in the stretch';
@@ -238,7 +238,7 @@ function specificFlavorProfile(role: ComponentRole, signals: string, fallback: s
     return 'toasted coconut or seed aroma, grainy sugar crystal, chewy or sticky body, and optional dairy fat';
   }
   if (role === 'confectionery' && signalIncludes(signals, 'grainy|crystalline|powdery|crumbly')) {
-    return 'sugar crystallization stage — grainy, crumbly, or powdery — with toasted seed, nut, or dairy aroma';
+    return 'sugar crystallization stage (grainy, crumbly, or powdery) with toasted seed, nut, or dairy aroma';
   }
   if (role === 'confectionery' && signalIncludes(signals, 'chewy|sticky|gummy|nougat|taffy|melcocha')) {
     return 'stretchy or sticky sugar matrix, toasted seed or nut aroma, and optional spice or dairy accent';
@@ -418,7 +418,7 @@ function beverageCueProfile(signals: string, userLocation?: string, overallConfi
       'Temperature and ice change aroma release, sweetness perception, and body, so they need to be tested directly.',
       'Carbonated memories should separate fizz from syrup; grain or dairy drinks should separate body from spice aroma and sweetness.',
     ],
-    whyThisIsMinimum: 'A half-cup sip tests the beverage mechanisms that matter most — extraction, body, sweetness, acid, carbonation, dilution, and temperature — before shopping for the exact drink.',
+    whyThisIsMinimum: 'A half-cup sip tests the beverage mechanisms that matter most (extraction, body, sweetness, acid, carbonation, dilution, and temperature) before shopping for the exact drink.',
     safetyNotes: ['Use only known edible ingredients.', 'Avoid allergens and alcohol unless explicitly intended and safe.', 'Keep caffeine, sugar, acid, and carbonation amounts small.'],
     followUpIfItWorks: ['Ask whether the original was cold, warm, iced, foamy, carbonated, thick, thin, strained, or served in a specific cup.', 'Ask whether the body came from grain starch, dairy, fruit pulp, syrup, carbonation, or fermentation.', 'Use source_ingredients to help find the exact beverage components near the user only after the sip mechanism works.'],
     components: decomposeIntoComponents(signals, userLocation, overallConfidence),
@@ -546,16 +546,17 @@ function foodScienceCueProfile(signals: string, userLocation?: string, overallCo
   }
   const hasProteinOrFat = signalIncludes(signals, 'meat|sausage|fish|shark|beef|pork|chicken|lamb|cheese|fat|butter|oil|fried|mushroom');
   const hasStarchOrBase = signalIncludes(signals, 'starch|rice|potato|potatoes|mash|masa|dough|bread|yuca|cassava|plantain|dumpling|noodle|bean|beans|acorn|jelly');
-  const hasSauceOrCondiment = signalIncludes(signals, 'sauce|gravy|relish|chutney|salsa|condiment|dip|orange|creamy|soy|vinegar');
+  const hasSauceOrCondiment = signalIncludes(signals, 'sauce|gravy|relish|chutney|salsa|condiment|dip|orange|creamy|soy|vinegar|mole|chile|chiles|pepper|tomato|tomatillo');
   const hasBeverage = isBeverageSignal(signals);
   const hasLiquid = signalIncludes(signals, 'soup|stew|broth|sip|porridge');
   const hasAroma = signalIncludes(signals, 'aroma|smell|spice|spiced|seasoned|garlic|onion|herb|pepper|cumin|coriander|clove|nutmeg|cinnamon|oregano|sesame|nutty');
   const hasTextureContrast = signalIncludes(signals, 'crispy|crunchy|chewy|creamy|soft|tender|stretchy|crisp|fried|grilled|charred|brown|golden|slippery|gelled|jelly|layered');
   const hasAcidOrSweet = signalIncludes(signals, 'sour|tangy|acid|vinegar|citrus|lime|lemon|fermented|sweet|syrup|molasses|sugar');
+  const hasSolidFoodCarrier = signalIncludes(signals, 'meat|sausage|fish|shark|beef|pork|chicken|lamb|cheese|filling|ground|starch|rice|potato|potatoes|mash|masa|dough|bread|yuca|cassava|plantain|dumpling|noodle|bean|beans|acorn|jelly|crispy|crunchy|chewy|soft|tender|stretchy|crisp|fried|grilled|charred|brown|golden|slippery|gelled|layered');
   const confectionerySignals = signals.replace(/\b(?:not|rather than|instead of)\s+(?:a |an )?(?:candy|dessert|confection(?:ery)?|cookie|biscuit|sweet(?:ness)?|sweet-texture)(?:\s+or\s+(?:a |an )?(?:candy|dessert|confection(?:ery)?|cookie|biscuit|sweet(?:ness)?|sweet-texture))*\b/gi, '');
   const hasStrongConfectionery = hasAnySignal(confectionerySignals, [wordSignal('caramel|dulce de leche|manjar|fudge|barfi|halva|baklava|mochi|candy|dessert|confection|cookie|biscuit|nougat|turrón|taffy|melcocha|cocada|flan|custard|pudding|chocolate|pastillas|milk candy|grainy/crystalline texture|powdery')]);
   const hasConfectionery = hasStrongConfectionery || hasAnySignal(confectionerySignals, [wordSignal('sweet|sugar')]);
-  const hasSavoryCueFamily = hasProteinOrFat || hasSauceOrCondiment || (hasStarchOrBase && hasAroma) || signalIncludes(signals, 'savory|curry|gravy|spiced|seasoned|umami');
+  const hasSavoryCueFamily = hasProteinOrFat || hasSauceOrCondiment || (hasStarchOrBase && hasAroma) || signalIncludes(signals, 'savory|curry|gravy|spiced|seasoned|umami|chile|chiles|tomato|tomatillo');
 
   if (hasBeverage && !hasProteinOrFat && !hasSauceOrCondiment && !signalIncludes(signals, 'not rice|not cinnamon|not horchata')) {
     return beverageCueProfile(signals, userLocation, overallConfidence);
@@ -569,7 +570,10 @@ function foodScienceCueProfile(signals: string, userLocation?: string, overallCo
     return cassavaFritterCueProfile(signals, userLocation, overallConfidence);
   }
 
-  if (hasConfectionery && (hasStrongConfectionery || !hasSavoryCueFamily)) {
+  if (
+    hasConfectionery
+    && (!hasSavoryCueFamily || hasAnySignal(confectionerySignals, [wordSignal('candy|dessert|confection|cookie|biscuit|nougat|taffy|fudge|barfi|halva|baklava|mochi|melcocha|cocada|flan|custard|pudding|pastillas|milk candy|grainy/crystalline texture|powdery')]))
+  ) {
     return {
       title: 'Minimum viable sweet-texture cue',
       goal: 'Test the memory by building a one-spoon local pantry proxy for sugar crystallization texture, toasted seed or coconut aroma, and crumbly or chewy mouthfeel before buying the suspected sweet. The first test should isolate whether the trigger is grainy sugar crystals, toasted aroma, sticky fat, or crumbly fracture.',
@@ -639,6 +643,39 @@ function foodScienceCueProfile(signals: string, userLocation?: string, overallCo
     };
   }
 
+  if (hasSauceOrCondiment && !hasSolidFoodCarrier) {
+    return {
+      title: 'Minimum viable sauce-and-carrier cue',
+      goal: 'Test whether the sauce/condiment contrast is carrying the memory using a tiny pantry sauce and a neutral carrier.',
+      effortMinutes: 10,
+      format: 'condiment',
+      ingredients: [
+        { item: 'neutral carrier such as bread, rice, potato, cracker, tortilla, or cooked starch', amount: '1-2 bites', purpose: 'bland base for judging sauce and texture' },
+        { item: 'pantry sauce base matching the researched direction: tomato, dairy, oil, vinegar, fruit, chile, or stock', amount: '1 tablespoon', purpose: 'cheap proxy for the sauce family' },
+        { item: 'aromatic/spice cue from researched facts', amount: 'pinch', purpose: 'volatile aroma trigger', optional: true },
+        { item: 'acid, sugar, salt, or fat adjustment', amount: 'drops or pinches', purpose: 'balance and mouthfeel tuning', optional: true },
+      ],
+      steps: [
+        'Make only one tablespoon of sauce proxy, not a batch.',
+        'Tune it by food-science dimensions: fat for body, acid for brightness, sugar for roundness, salt for intensity, spice/aromatics for memory.',
+        'Taste it on the neutral carrier so texture and sauce can be judged together.',
+        'Change one variable at a time and note what suddenly feels familiar or wrong.',
+      ],
+      preserves: ['sauce contrast', 'carrier-plus-condiment ritual', 'fat/acid/sweet/salt balance', 'aroma impact'],
+      doesNotPreserve: ['exact brand or restaurant sauce', 'complete dish structure', 'full garnish set'],
+      accessibilityPrinciples: ['start from pantry sauce bases', 'test one tablespoon', 'use a neutral grocery-store carrier', 'adjust balance before sourcing specialty condiments'],
+      substituteLogic: [
+        'Sauces are often families of fat, water, acid, sugar, salt, heat, and aromatics; matching that balance can matter more than matching the name.',
+        'A bland carrier exposes whether the sauce is the memory trigger or merely background.',
+        'One-variable adjustments prevent a generic sauce from becoming a confused full recipe.',
+      ],
+      whyThisIsMinimum: 'A tablespoon of sauce on a neutral carrier tests the contrast and balance that often carries the nostalgic bite.',
+      safetyNotes: ['Check condiment allergens and chile heat.', 'Do not mix unknown fermented or wild ingredients.'],
+      followUpIfItWorks: ['Ask whether the sauce was smooth or chunky.', 'Ask whether it leaned fatty, acidic, sweet, spicy, or savory.', 'Ask what carrier it was served on.', 'Use source_ingredients to help the user find sauce components near where they live.'],
+      components: decomposeIntoComponents(signals, userLocation, overallConfidence),
+    };
+  }
+
   if (hasProteinOrFat || hasStarchOrBase || hasTextureContrast) {
     return {
       title: 'Minimum viable composed-bite cue',
@@ -660,7 +697,7 @@ function foodScienceCueProfile(signals: string, userLocation?: string, overallCo
         'Starches and breads mainly control texture and sauce absorption, so a common starch can test whether the mouthfeel is central.',
         'Acid, sugar, and salt can move a bite toward the remembered balance without changing the whole dish.',
       ],
-      whyThisIsMinimum: 'A composed bite tests the reusable food-science mechanisms—aroma, fat, browning, starch texture, and balance—before committing to specialty shopping or a full recipe.',
+      whyThisIsMinimum: 'A composed bite tests the reusable food-science mechanisms (aroma, fat, browning, starch texture, and balance) before committing to specialty shopping or a full recipe.',
       safetyNotes: ['Cook proteins safely.', 'Avoid allergens and unknown ingredients.', 'Use high heat carefully if crisping or browning.'],
       followUpIfItWorks: ['Ask which part hit first: smell, texture, sauce, fat, spice, or sweetness/acidity.', 'Ask what still feels missing.', 'Use find_sensory_substitutes and source_ingredients to help the user find items near where they live now.'],
       components: decomposeIntoComponents(signals, userLocation, overallConfidence),
@@ -769,7 +806,7 @@ export function generateMinimumViableNostalgiaCue(input: MinimumViableNostalgiaI
     + wordCount(input.dossier.evidenceLedger.researched)
     + wordCount(input.dossier.evidenceLedger.inferred);
 
-  // A "concrete dish" is one we actually identified — not a generic descriptive fallback.
+  // A "concrete dish" is one we actually identified, not a generic descriptive fallback.
   const isGenericFallback = (name: string) =>
     name.startsWith('Unidentified ') ||
     name === 'unknown food memory';
