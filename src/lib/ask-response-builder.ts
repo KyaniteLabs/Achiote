@@ -69,6 +69,26 @@ export function buildSubstitutionBasisResponse(toolPayloads: Record<string, unkn
   ].filter(Boolean).join('\n'));
 }
 
+export function buildSourcingGuidanceResponse(toolPayloads: Record<string, unknown>, userMessage: string): string {
+  const sourcingLines = summarizeSourcingResults(toolPayloads);
+  const substitutionLines = summarizeSubstitutionResults(toolPayloads, inferSafetyConstraints(userMessage).length > 0);
+  const substitutionSection = substitutionLines.length > 0
+    ? ['Substitutes to try:', ...substitutionLines.map((line) => `- ${line}`)]
+    : [];
+
+  if (sourcingLines.length === 0) {
+    return buildClarificationOnlyResponse(toolPayloads, userMessage);
+  }
+
+  return sanitizeMinimumCueFallbackBlock([
+    'Where to buy:',
+    ...sourcingLines.map((line) => `- ${line}`),
+    ...(substitutionSection.length > 0 ? ['', ...substitutionSection] : []),
+    '',
+    'Next ask: tell me what city or store type you can actually reach, and I can narrow the path without claiming live inventory.',
+  ].join('\n'));
+}
+
 export function summarizeSubstitutionResults(toolPayloads: Record<string, unknown>, maskAsRestricted = false): string[] {
   const allResults = Array.isArray(toolPayloads.find_sensory_substitutes_all)
     ? toolPayloads.find_sensory_substitutes_all

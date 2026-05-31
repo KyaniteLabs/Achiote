@@ -37,7 +37,7 @@ const COOKING_METHOD_HINTS: CookingMethodHint[] = MEMORY_HINTS.cookingMethods;
 export const CONCEPT_ALIASES = MEMORY_HINTS.conceptAliases ?? {};
 
 export function isBroadRegionalHint(hint: string): boolean {
-  return /\b(?:latin\s+america|hispanic|spanish-speaking|asia|europe|africa|middle\s+east|mediterranean|caribbean|south\s+america|central\s+america)\b/i.test(hint);
+  return /\b(?:latin\s+america|latin\s+american|hispanic|spanish-speaking|asia|asian|europe|european|africa|african|west\s+africa|west\s+african|east\s+africa|east\s+african|north\s+africa|north\s+african|southern\s+africa|southern\s+african|central\s+africa|central\s+african|southeast\s+asia|southeast\s+asian|south\s+asia|south\s+asian|east\s+asia|east\s+asian|central\s+asia|central\s+asian|western\s+europe|western\s+european|eastern\s+europe|eastern\s+european|northern\s+europe|northern\s+european|southern\s+europe|southern\s+european|middle\s+east|middle\s+eastern|mediterranean|caribbean|south\s+america|central\s+america|oceania|pacific\s+islands?)\b/i.test(hint);
 }
 
 function isNegatedMention(text: string, phrase: string): boolean {
@@ -91,7 +91,9 @@ function memorySufficiencyScore(input: {
   occasions: string[];
 }): { sufficient: boolean; score: number; reason: string } {
   let score = 0;
-  if (input.culturalOrRegionalHints.length > 0) score += 2;
+  const specificRegions = input.culturalOrRegionalHints.filter((hint) => !isBroadRegionalHint(hint));
+  if (specificRegions.length > 0) score += 2;
+  else if (input.culturalOrRegionalHints.length > 0) score += 1;
   if (input.sensoryClues.length >= 3) score += 3;
   else if (input.sensoryClues.length >= 1) score += 1;
   if (input.rememberedIngredients.length > 0) score += 1;
@@ -101,8 +103,8 @@ function memorySufficiencyScore(input: {
 
   // Sufficient if we have region + rich sensory, or region + ingredient + sensory + method/occasion
   const sufficient =
-    (input.culturalOrRegionalHints.length > 0 && input.sensoryClues.length >= 2 && (input.rememberedIngredients.length > 0 || input.cookingMethodHints.length > 0 || input.occasions.length > 0))
-    || (input.culturalOrRegionalHints.length > 0 && input.sensoryClues.length >= 3)
+    (specificRegions.length > 0 && input.sensoryClues.length >= 2 && (input.rememberedIngredients.length > 0 || input.cookingMethodHints.length > 0 || input.occasions.length > 0))
+    || (specificRegions.length > 0 && input.sensoryClues.length >= 3)
     || score >= 5;
 
   return {
@@ -123,6 +125,7 @@ function buildMissingInformation(input: {
   occasions: string[];
 }): string[] {
   const sufficiency = memorySufficiencyScore(input);
+  const hasSpecificRegion = input.culturalOrRegionalHints.some((hint) => !isBroadRegionalHint(hint));
   if (sufficiency.sufficient) {
     // Only report missing items that would help confirm, not gather from scratch
     return unique([
@@ -131,7 +134,7 @@ function buildMissingInformation(input: {
   }
   return unique([
     input.possibleNames.length === 0 ? 'food or drink name or local nickname' : '',
-    input.culturalOrRegionalHints.length === 0 ? 'country, island, region, town, or community' : '',
+    !hasSpecificRegion ? 'country, island, region, town, or community' : '',
     input.cookingMethodHints.length === 0 ? 'cooking method or serving format' : '',
     input.rememberedIngredients.length === 0 ? 'core ingredients' : '',
     input.sensoryClues.length === 0 ? 'taste, texture, aroma, sauce, or heat level' : '',
@@ -163,15 +166,20 @@ function buildNextQuestions(input: {
 
   const ingredient = input.rememberedIngredients[0];
   const region = input.culturalOrRegionalHints[0];
+  const hasSpecificRegion = input.culturalOrRegionalHints.some((hint) => !isBroadRegionalHint(hint));
   const questions: string[] = [];
 
-  if (input.culturalOrRegionalHints.length === 0) {
+  if (!hasSpecificRegion) {
     const inferredFamilyContext = input.inferredContext?.culturalOrRegional.find((clue) =>
       clue.canSeedQuestions && clue.label === 'Spanish-speaking family context',
     );
-    questions.push(inferredFamilyContext
-      ? 'Where was your abuela from? Even a country, region, island, city, or "I had it in ___" is enough.'
-      : 'Where did you eat this, or where was it from? Even a country, region, island, city, or "I had it in ___" is enough.');
+    questions.push(
+      region && isBroadRegionalHint(region)
+        ? `Do you know a more specific country, region, town, language, or community inside ${region}?`
+        : inferredFamilyContext
+          ? 'Where was your abuela from? Even a country, region, island, city, or "I had it in ___" is enough.'
+          : 'Where did you eat this, or where was it from? Even a country, region, island, city, or "I had it in ___" is enough.',
+    );
   }
 
   if (input.possibleNames.length === 0) {
@@ -307,6 +315,11 @@ function inferContextFromFamilyWords(lowerText: string): InferredMemoryContext {
   return { culturalOrRegional, language };
 }
 
+function isLikelyColorUseOfOrange(lowerText: string): boolean {
+  return /\b(?:deep|bright|dark|reddish|red|golden|pale)?\s*orange\s+(?:color|colour|soup|stew|sauce|drink|liquid|broth)\b/i.test(lowerText)
+    || /\b(?:deep|bright|dark|reddish|red|golden|pale)\s+orange\b/i.test(lowerText);
+}
+
 export function collectFoodMemory(input: FoodMemoryInput): CollectedFoodMemory {
   const normalized = input.memoryText.trim();
   const lower = normalized.toLowerCase();
@@ -319,7 +332,7 @@ export function collectFoodMemory(input: FoodMemoryInput): CollectedFoodMemory {
   const rememberedIngredients = unique([
     ...INGREDIENT_HINTS.filter((ingredient) => matchesWordOrPhrase(lower, ingredient) && !isNegatedMention(lower, ingredient)),
     includesAny(lower, ['acorn jelly', 'acorn']) && !isNegatedMention(lower, 'acorn') ? 'acorn jelly' : '',
-  ]);
+  ]).filter((ingredient) => !(ingredient === 'orange' && isLikelyColorUseOfOrange(lower)));
   const cookingMethodHints = extractCookingMethodHints(lower);
   const sensoryClues = unique([
     includesAny(lower, ['sour', 'tangy', 'tart']) ? 'sour/tangy' : '',
@@ -333,8 +346,9 @@ export function collectFoodMemory(input: FoodMemoryInput): CollectedFoodMemory {
     includesAny(lower, ['smell', 'aroma', 'fragrant', 'scent', 'stink']) ? 'remembered aroma' : '',
     includesAny(lower, ['herb', 'herby', 'green', 'grassy', 'dill', 'parsley', 'cilantro', 'sorrel']) ? 'herby/green aroma' : '',
     includesAny(lower, ['sauce', 'gravy', 'broth', 'juice', 'wet']) ? 'sauce/gravy' : '',
+    includesAny(lower, ['orange color', 'orange colour', 'deep orange', 'bright orange', 'dark orange', 'reddish orange']) ? 'orange color' : '',
     includesAny(lower, ['bitter', 'burnt', 'toasted', 'charred', 'roasted']) ? 'bitter/roasted' : '',
-    includesAny(lower, ['rich', 'creamy', 'buttery', 'heavy', 'fatty', 'greasy']) ? 'rich/creamy' : '',
+    includesAny(lower, ['rich', 'creamy', 'buttery', 'heavy', 'fatty', 'greasy', 'oily', 'oil slick', 'red oil']) ? 'rich/oily' : '',
     includesAny(lower, ['smoky', 'smoke', 'wood-fired']) ? 'smoky' : '',
     includesAny(lower, ['fermented', 'funk', 'pungent', 'stinky', 'aged']) ? 'fermented/pungent' : '',
     includesAny(lower, ['umami', 'savory', 'meaty', 'mushroom']) ? 'umami/savory' : '',

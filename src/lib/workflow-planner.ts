@@ -51,10 +51,11 @@ export function planAskWorkflow(input: AskWorkflowPlannerInput): AskWorkflowPlan
     || /\b(?:tell|say|claim)\s+(?:me\s+)?(?:you\s+)?(?:browsed|searched)\b[\s\S]{0,80}\b(?:live\s+)?(?:web|results|prices)\b/i.test(msg)
     || /\bdo\s+not\s+(?:claim\s+)?(?:browse|search|use\s+live\s+web|claim\s+(?:you\s+)?(?:browsed|searched))\b/i.test(msg)
     || /\b(?:do\s+not|don't)\s+claim\s+(?:you\s+)?(?:browsed|searched)\b/i.test(msg);
-  const hasSourcingKeywords = /\b(?:where\s+(?:can|do|would|should)\s+i\s+(?:buy|find|get)|what\s+should\s+i\s+buy|buy\s+near|find\s+near|source\s+(?:for|ingredients?)|where\s+to\s+(?:buy|find|get)|grocery\s+store|supermarket|market\s+near|available\s+near)\b/i.test(msg);
-  const hasResidenceLocation = /\b(?:i\s+(?:live|am|currently\s+live|currently\s+am)|i['']?m|im|we\s+(?:live|are)|based|located)\s+in\s+[^.!?;,]{2,80}/i.test(userMessage);
-  const hasPurchaseLocation = /\b(?:buy|find|get|source|sourcing|shop(?:\s+for)?)\b[\s\S]{0,120}\b(?:in|near|around)\s+[^.!?;,]{2,80}/i.test(userMessage);
-  const needsSourcing = hasSourcingKeywords && (hasResidenceLocation || hasPurchaseLocation);
+  const hasSourcingKeywords = /\b(?:where\s+(?:can|do|would|should)\s+i\s+(?:buy|find|get)|where\s+(?:is|are|would)\s+[^.!?;,]{0,80}\b(?:sold|stocked|carried)|what\s+should\s+i\s+buy|buy\s+near|find\s+near|find\s+[^.!?;,]{0,80}\b(?:around|near)\s+me|source\s+(?:for|ingredients?)|where\s+to\s+(?:buy|find|get)|grocery\s+store|supermarket|market\s+near|stores?\s+(?:near|around|that\s+(?:carry|stock))|available\s+near|locally\s+(?:available|sold|stocked))\b/i.test(msg);
+  const hasResidenceLocation = /\b(?:i\s+(?:live|am|currently\s+live|currently\s+am)|i['’]?m|im|we\s+(?:live|are)|based|located)\s+in\s+[^.!?;,]{2,80}/i.test(userMessage);
+  const hasPurchaseLocation = /\b(?:buy|find|get|source|sourcing|shop(?:\s+for)?)\b[\s\S]{0,120}\b(?:in|near|around)\s+(?!me\b|my\b|the\b|here\b|your\b)[^.!?;,]{2,80}/i.test(userMessage);
+  const hasSourcingLocation = hasResidenceLocation || hasPurchaseLocation;
+  const needsSourcing = hasSourcingKeywords;
 
   const needsSubstitutions = (hasRestrictions || hasSubstitutionKeywords) && wantsAdaptation && !negatesSubstitutionNeed;
   const detectedIntent = detectIntent({
@@ -77,11 +78,19 @@ export function planAskWorkflow(input: AskWorkflowPlannerInput): AskWorkflowPlan
   const searchWebDisabled = input.searchDisabled === true || suppressSearchFromUserText;
   const bundledMechanismFamily = searchWebDisabled || !isMemoryIntent ? null : bundledMechanismFamilyFor(userMessage);
   let maxSearchCalls = searchWebDisabled ? 0 : 1;
+  const questionnaireFirst = isMemoryIntent
+    && !needsSubstitutions
+    && !hasRecipeKeywords
+    && !hasSourcingKeywords
+    && !isExplicitMinimumCueRequest(userMessage)
+    && shouldStartWithQuestionnaire(userMessage, bundledMechanismFamily);
   const addSearchStep = (reason: string): void => {
     if (!searchWebDisabled && !bundledMechanismFamily) steps.push({ tool: 'search_web', reason, required: false });
   };
 
-  if (needsSubstitutions) {
+  if (questionnaireFirst) {
+    maxSearchCalls = 0;
+  } else if (needsSubstitutions) {
     steps.push({ tool: 'resolve_dish_name', reason: 'Identify the base dish to substitute for', required: true });
     addSearchStep('Find authentic preparation details for the base dish');
     steps.push({ tool: 'build_reconstruction_dossier', reason: 'Assemble the original evidence boundary before substitutions', required: true });
@@ -98,6 +107,9 @@ export function planAskWorkflow(input: AskWorkflowPlannerInput): AskWorkflowPlan
     if (needsSourcing) {
       steps.push({ tool: 'source_ingredients', reason: 'Help the user find ingredients near where they live', required: false });
     }
+  } else if (needsSourcing && hasSourcingLocation && (detectedIntent === 'unknown_dish' || detectedIntent === 'general_food_inquiry')) {
+    maxSearchCalls = 0;
+    steps.push({ tool: 'source_ingredients', reason: 'Help the user find ingredients near where they live', required: true });
   } else if (detectedIntent === 'unknown_dish' || detectedIntent === 'general_food_inquiry') {
     maxSearchCalls = 0;
   } else {
@@ -115,6 +127,12 @@ export function planAskWorkflow(input: AskWorkflowPlannerInput): AskWorkflowPlan
   const bundledMechanismNote = bundledMechanismFamily
     ? ` Bundled mechanism family: ${bundledMechanismFamily}; live search deferred until the user asks for exact identity or source-backed details.`
     : '';
+  const questionnaireNote = questionnaireFirst
+    ? ' Questionnaire-first: broad or unnamed memory needs a short narrowing turn before any cue or sourcing.'
+    : '';
+  const sourcingLocationNote = needsSourcing && !hasSourcingLocation
+    ? ' Sourcing requested, but no current city or region was detected; ask for location before using source_ingredients.'
+    : '';
 
   return {
     detectedIntent,
@@ -124,8 +142,25 @@ export function planAskWorkflow(input: AskWorkflowPlannerInput): AskWorkflowPlan
     needsSourcing,
     detectedRestrictions,
     needsResolve,
-    confidenceNote: `Intent: ${detectedIntent}. Dietary restrictions: ${detectedRestrictions.length > 0 ? detectedRestrictions.join(', ') : 'none detected'}. Max search_web calls: ${maxSearchCalls}.${bundledMechanismNote}`,
+    confidenceNote: `Intent: ${detectedIntent}. Dietary restrictions: ${detectedRestrictions.length > 0 ? detectedRestrictions.join(', ') : 'none detected'}. Max search_web calls: ${maxSearchCalls}.${bundledMechanismNote}${questionnaireNote}${sourcingLocationNote}`,
   };
+}
+
+function isExplicitMinimumCueRequest(text: string): boolean {
+  return /\b(?:minimum viable|minimum|smallest|tiny|first|local)\b[\s\S]{0,60}\b(?:test|cue|try|taste|nostalgia|sip|bite|drink)\b/i.test(text)
+    || /\b(?:test|cue|try|taste|sip|bite|drink)\b[\s\S]{0,60}\b(?:minimum viable|minimum|smallest|tiny|first|local)\b/i.test(text);
+}
+
+function shouldStartWithQuestionnaire(userMessage: string, _bundledMechanismFamily: string | null): boolean {
+  const text = userMessage.toLowerCase();
+  const namesUnknown = /\b(?:never\s+(?:learned|knew)|do\s+not\s+know|don't\s+know|didn['’]?t\s+know|nobody\s+(?:left\s+)?(?:really\s+)?remembers?|no\s+one\s+(?:really\s+)?remembers?|forgot(?:ten)?|lost)\b[\s\S]{0,120}\b(?:name|called|what\s+it\s+was\s+called|dish|food|drink|making\s+it|recipe)?\b/i.test(text)
+    || /\bnobody\b[\s\S]{0,80}\bremembers?\b[\s\S]{0,120}\b(?:name|called|what\s+it\s+was\s+called|dish|food|drink|making\s+it|recipe)\b/i.test(text)
+    || /\b(?:no\s+name|unknown\s+name|not\s+sure\s+what\s+it\s+was\s+called)\b/i.test(text);
+  const broadRegion = /\b(?:somewhere\s+in|from\s+somewhere\s+in|came\s+from\s+somewhere\s+in|side\s+came\s+from\s+somewhere\s+in)\s+(?:west\s+africa|east\s+africa|north\s+africa|southern\s+africa|central\s+africa|latin\s+america|south\s+america|central\s+america|southeast\s+asia|south\s+asia|east\s+asia|central\s+asia|middle\s+east|europe|oceania|caribbean|asia|africa)\b/i.test(text)
+    || /\b(?:west\s+african|east\s+african|north\s+african|southern\s+african|central\s+african|latin\s+american|southeast\s+asian|south\s+asian|east\s+asian|central\s+asian|middle\s+eastern|european|caribbean)\b/i.test(text);
+  const vagueFoodForm = /\b(?:some|something|thing|dish|food|drink|soup|stew|sauce)\b/i.test(text);
+
+  return namesUnknown && (broadRegion || vagueFoodForm);
 }
 
 function detectIntent(input: {
