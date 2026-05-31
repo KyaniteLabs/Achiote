@@ -76,9 +76,11 @@ describe('reference seed operator integration', () => {
     ]));
     expect(operatorReport.coverage.axes.foodForms).toMatchObject({ covered: 17, total: 17, missing: [] });
     expect(operatorReport.coverage.axes.cultureAreas).toMatchObject({ covered: 20, total: 20, missing: [] });
-    expect(operatorReport.coverage.axes.regionScopes.missing).not.toEqual(expect.arrayContaining(['indigenous', 'borderland']));
-    expect(operatorReport.coverage.axes.nameSystems.missing).not.toEqual(expect.arrayContaining(['script_form', 'phonetic']));
-    expect(operatorReport.coverage.axes.mechanisms.missing).not.toEqual(expect.arrayContaining(['smoke']));
+    expect(operatorReport.coverage.axes.regionScopes.missing).not.toContain('indigenous');
+    expect(operatorReport.coverage.axes.regionScopes.missing).not.toContain('borderland');
+    expect(operatorReport.coverage.axes.nameSystems.missing).not.toContain('script_form');
+    expect(operatorReport.coverage.axes.nameSystems.missing).not.toContain('phonetic');
+    expect(operatorReport.coverage.axes.mechanisms.missing).not.toContain('smoke');
     expect(JSON.stringify(operatorReport)).not.toMatch(/rawMemory|memoryText|prompt_text|Achiote browses/i);
   });
 

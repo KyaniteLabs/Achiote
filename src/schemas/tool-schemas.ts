@@ -383,6 +383,5 @@ export const planToolWorkflowOutputSchema = z.object({
 export const readOnlyAnnotations = {
   readOnlyHint: true,
   destructiveHint: false,
-  idempotentHint: true,
   openWorldHint: false,
 };
