@@ -167,6 +167,7 @@ export function containsOverconfidentIdentityClaim(text: string): boolean {
     || /\bmost likely\s+(?:points?\s+to|matches|is|was|means|refers?\s+to)\b/i.test(text)
     || /\bit\s+points?\s+(?:strongly\s+)?toward\b/i.test(text)
     || /\b(?:your\s+)?(?:memory|description|clues?)\s+(?:points?|pointed)\s+(?:strongly\s+)?(?:toward|to)\b/i.test(text)
+    || /\b(?:your\s+)?(?:memory|description|clues?)\b[\s\S]{0,160}\bpoints?\s+(?:strongly\s+)?(?:toward|to)\b/i.test(text)
     || /\b(?:sounds like|likely maps to|maps to|is essentially|is basically)\s+(?:a|an|the)?\s*(?:classic\s+)?(?:[\p{L}\p{M}][\p{L}\p{M}'-]*)(?:\s+[\p{L}\p{M}][\p{L}\p{M}'-]*){0,5}\b/iu.test(text)
     || /\b(?:your dish is|you're remembering|you are remembering)\b/iu.test(text)
     || /\byour (?:\S+ )?dish is\b/iu.test(text)

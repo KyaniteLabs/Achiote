@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { buildClarificationOnlyResponse, buildEvidencePreamble, containsConcreteFoodCue } from '../src/lib/ask-guardrails.js';
+import {
+  buildClarificationOnlyResponse,
+  buildEvidencePreamble,
+  containsConcreteFoodCue,
+  containsOverconfidentIdentityClaim,
+} from '../src/lib/ask-guardrails.js';
 import { inferSafetyConstraints } from '../src/lib/ask-memory-correction.js';
 
 const allergenMemory = {
@@ -36,6 +41,10 @@ describe('ask guardrails', () => {
   it('recognizes concrete cue instructions even when amounts are not numeric', () => {
     expect(containsConcreteFoodCue('Try this: toast a pinch of cumin and steep it in hot water.')).toBe(true);
     expect(containsConcreteFoodCue('A few broad possibilities come to mind, but I need more clues first.')).toBe(false);
+  });
+
+  it('recognizes overconfident identity claims with descriptive clauses', () => {
+    expect(containsOverconfidentIdentityClaim('Your description — thick, sour, grayish — points strongly toward a cassava-based fermented dish.')).toBe(true);
   });
 
   it('keeps restricted allergens out of evidence anchors while preserving the safety boundary', () => {
