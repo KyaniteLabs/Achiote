@@ -65,6 +65,27 @@ describe('ask guardrails', () => {
     expect(preamble).toContain('Food boundaries: nut allergy, egg allergy, shellfish allergy, sesame allergy.');
   });
 
+  it('does not present unresolved resolver output as a resolved dish', () => {
+    const preamble = buildEvidencePreamble({
+      resolve_dish_name: {
+        canonicalName: 'something like goyura',
+        confidence: 'Low',
+        matchType: 'unknown',
+        region: 'Panama',
+      },
+      collect_food_memory: {
+        extractedClues: {
+          culturalOrRegionalHints: ['Panama'],
+          possibleDishNames: ['goyura'],
+          rememberedIngredients: ['yuca'],
+          sensoryClues: ['fried'],
+        },
+      },
+    });
+
+    expect(preamble).not.toContain('Dish resolved');
+  });
+
   it('keeps restricted allergens out of clarification anchor copy', () => {
     const response = buildClarificationOnlyResponse(
       allergenMemory,

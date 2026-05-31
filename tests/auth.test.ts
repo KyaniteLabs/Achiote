@@ -61,9 +61,9 @@ describe('auth module', () => {
     }
   });
 
-  it('accepts built-in dev key by default for zero-config harnesses', () => {
+  it('rejects built-in dev key by default for zero-config deployments', () => {
     const auth = createAuthenticator([]);
-    expect(auth.authenticate('ach_dev_test_only').authenticated).toBe(true);
+    expect(auth.authenticate('ach_dev_test_only').authenticated).toBe(false);
   });
 
   it('accepts built-in dev key when explicitly enabled for tests', () => {

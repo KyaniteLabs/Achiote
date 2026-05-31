@@ -129,6 +129,7 @@ const POSTHOG_PROJECT_API_KEY = process.env.POSTHOG_PROJECT_API_KEY?.trim();
 const POSTHOG_HOST = (process.env.POSTHOG_HOST?.trim() || 'https://us.i.posthog.com').replace(/\/+$/, '');
 const POSTHOG_DISABLED = process.env.POSTHOG_DISABLED === 'true';
 const DISABLE_SEARCH_WEB = process.env.ACHIOTE_DISABLE_SEARCH_WEB === 'true';
+const ENABLE_LOCAL_SOURCING_SEARCH = process.env.ACHIOTE_ENABLE_LOCAL_SOURCING_SEARCH === 'true';
 const ASK_TOOLS = DISABLE_SEARCH_WEB ? TOOLS.filter((tool) => tool.name !== 'search_web') : TOOLS;
 const TOOLS_BY_NAME = new Map(TOOLS.map((tool) => [tool.name, tool]));
 const DESCRIPTIVE_HYPHEN_DISH_TOKENS = new Set([
@@ -220,7 +221,7 @@ const anthropicClientOptions: ConstructorParameters<typeof Anthropic>[0] = {
 if (ANTHROPIC_BASE_URL) anthropicClientOptions.baseURL = ANTHROPIC_BASE_URL;
 const anthropic = new Anthropic(anthropicClientOptions);
 const configuredApiKeys = loadKeysFromEnv(process.env.ACHIOTE_API_KEYS);
-const authenticator = createAuthenticator(configuredApiKeys);
+const authenticator = createAuthenticator(configuredApiKeys, process.env.ACHIOTE_ENABLE_DEV_AUTH_KEY === 'true');
 const rateLimiter = createRateLimiter(process.env.ACHIOTE_RATE_LIMIT_DB);
 
 const billingConfig = loadBillingConfigFromEnv();
@@ -362,14 +363,7 @@ function modelExtractionEnabled(): boolean {
   const explicit = process.env.ACHIOTE_MODEL_EXTRACTION_ENABLED?.trim().toLowerCase();
   if (['0', 'false', 'no', 'off'].includes(explicit ?? '')) return false;
   if (['1', 'true', 'yes', 'on'].includes(explicit ?? '')) return true;
-  const configuredModel = process.env.OPENAI_MODEL?.trim()
-    || process.env.ACHIOTE_ASK_MODEL?.trim()
-    || process.env.LOCAL_INFERENCE_MODEL?.trim()
-    || process.env.GLM_MODEL?.trim()
-    || process.env.ZHIPU_MODEL?.trim()
-    || '';
-  if (/^fake[-_]/i.test(configuredModel)) return false;
-  return process.env.VITEST !== 'true';
+  return false;
 }
 
 function validateToolOutput(toolName: string, result: unknown): void {
@@ -1221,12 +1215,12 @@ function deriveResearchedFactsForReceipt(toolPayloads: Record<string, unknown>):
 
   // resolve_dish_name: emit canonical name + region when a real match was found
   const resolved = toolPayloads.resolve_dish_name as
-    | { dishName?: string; canonicalName?: string; region?: string; confidence?: string; aliases?: string[] }
+    | { dishName?: string; canonicalName?: string; region?: string; confidence?: string; aliases?: string[]; matchType?: string }
     | undefined;
   const sourcing = toolPayloads.source_ingredients as
     | { ingredients?: string[]; location?: string; regionalData?: { region?: string; ethnicCorridors?: unknown; majorStores?: unknown } }
     | undefined;
-  if (resolved?.canonicalName && !/^Unknown$/i.test(resolved.canonicalName)) {
+  if (hasResolvedDishEvidence(resolved)) {
     const hasResearchProduct = (searched?.results?.length ?? 0) > 0;
     const effectiveConfidence = (resolved.confidence === 'Low' && hasResearchProduct) ? 'Medium' : resolved.confidence;
     const userRegionHint = (toolPayloads.collect_food_memory as { extractedClues?: { culturalOrRegionalHints?: string[] } } | undefined)?.extractedClues?.culturalOrRegionalHints?.find((h) => Boolean(h));
@@ -1272,13 +1266,21 @@ function sourceBackedDossierFacts(toolPayloads: Record<string, unknown>): string
   const resolved = toolPayloads.resolve_dish_name as
     | { canonicalName?: string; region?: string; confidence?: string; matchType?: string }
     | undefined;
-  if (resolved?.canonicalName
-    && !/^Unknown$/i.test(resolved.canonicalName)
-    && resolved.matchType !== 'unknown'
-    && resolved.confidence !== 'Low') {
+  if (hasResolvedDishEvidence(resolved)) {
     facts.unshift(`Dish resolved: "${resolved.canonicalName}" (confidence: ${resolved.confidence ?? 'unknown'}, region: ${resolved.region ?? 'unknown'})`);
   }
   return [...new Set(facts)].slice(0, 5);
+}
+
+function hasResolvedDishEvidence<T extends { canonicalName?: string; matchType?: string; confidence?: string }>(
+  resolved: T | undefined,
+): resolved is T & { canonicalName: string } {
+  return Boolean(
+    resolved?.canonicalName
+    && !/^Unknown$/i.test(resolved.canonicalName)
+    && resolved.matchType !== 'unknown'
+    && resolved.confidence !== 'Low',
+  );
 }
 
 function flattenReceiptSourcingHints(value: unknown): string[] {
@@ -1970,12 +1972,17 @@ async function maybeRunLocalSourcingSearch({
   location: string;
 }): Promise<void> {
   if (DISABLE_SEARCH_WEB || toolPayloads.local_sourcing_search) return;
+  if (!ENABLE_LOCAL_SOURCING_SEARCH && !isExplicitLocalSourcingSearchRequest(userMessage)) return;
   const plan = toolPayloads.plan_tool_workflow as { maxSearchCalls?: number } | undefined;
   if (typeof plan?.maxSearchCalls === 'number' && plan.maxSearchCalls <= 0) return;
   const query = buildLocalSourcingSearchQuery(ingredients, location);
   if (!query) return;
   send('status', { stage: 'calling_tools', tools: ['search_web'], deterministic: true, reason: 'local_sourcing' });
   await executeAndStreamTool('search_web', { query, purpose: 'local_sourcing' }, userMessage, send, calledTools, toolPayloads);
+}
+
+function isExplicitLocalSourcingSearchRequest(userMessage: string): boolean {
+  return /\b(?:where\s+(?:can|could|should)\s+i\s+(?:buy|find|get|source)|where\s+to\s+(?:buy|find|get|source)|near\s+me|nearby|local\s+(?:store|market|grocery|shop|source|supplier)|grocery\s+(?:store|market)|source\s+(?:ingredients?|this)|buy\s+(?:ingredients?|it)|find\s+(?:ingredients?|it))\b/i.test(userMessage);
 }
 
 function buildLocalSourcingSearchQuery(ingredients: string[], location: string): string {

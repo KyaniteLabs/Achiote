@@ -370,6 +370,44 @@ describe('shared tool registry', () => {
     expect(receipt.content[0].type === 'text' ? receipt.content[0].text : '').toContain('# Achiote Memory Receipt');
   });
 
+  it('preserves generated cue details in first-test-ready memory receipts', async () => {
+    const memory = (await executeToolDefinition('collect_food_memory', {
+      memoryText: 'My abuela made something sour and herby.',
+    }, defaultToolExecutionContext)).payload;
+    const researchPlan = (await executeToolDefinition('plan_dish_research', { memory }, defaultToolExecutionContext)).payload;
+    const cue = {
+      title: 'Minimum viable sour herb bite',
+      goal: 'Check sour herb aroma with a tiny warm sip.',
+      effortMinutes: 5,
+      format: 'sip',
+      ingredients: [],
+      steps: [],
+      preserves: [],
+      doesNotPreserve: [],
+      accessibilityPrinciples: [],
+      substituteLogic: [],
+      whyThisIsMinimum: 'It tests the acid and herb cue first.',
+      confidence: 'Low',
+      safetyNotes: [],
+      followUpIfItWorks: [],
+      components: [],
+    };
+
+    const receipt = await executeToolDefinition('build_memory_receipt', {
+      memory,
+      researchPlan,
+      cue,
+      assistantText: 'Start with the tiny sour herb sip.',
+    }, defaultToolExecutionContext);
+
+    expect(receipt.payload.status).toBe('first_test_ready');
+    expect(receipt.payload.firstTinyTasteTest).toMatchObject({
+      title: 'Minimum viable sour herb bite',
+      cue: 'Check sour herb aroma with a tiny warm sip.',
+      estimatedTime: '5 minutes',
+    });
+  });
+
   it('keeps protocol wrappers and package smoke wired to the registry', () => {
     const serverSource = fs.readFileSync('src/server.ts', 'utf8');
     const httpSource = fs.readFileSync('src/http-server.ts', 'utf8');

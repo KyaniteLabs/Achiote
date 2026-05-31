@@ -390,9 +390,9 @@ export function buildEvidencePreamble(toolPayloads: Record<string, unknown>, use
 
   const researchedFacts: string[] = [];
   const resolved = toolPayloads.resolve_dish_name as
-    | { dishName?: string; canonicalName?: string; region?: string; confidence?: string; aliases?: string[] }
+    | { dishName?: string; canonicalName?: string; region?: string; confidence?: string; aliases?: string[]; matchType?: string }
     | undefined;
-  if (resolved?.canonicalName && !/^Unknown$/i.test(resolved.canonicalName)) {
+  if (resolved?.canonicalName && !/^Unknown$/i.test(resolved.canonicalName) && resolved.matchType !== 'unknown' && resolved.confidence !== 'Low') {
     const userRegionHint = (toolPayloads.collect_food_memory as { extractedClues?: { culturalOrRegionalHints?: string[] } } | undefined)?.extractedClues?.culturalOrRegionalHints?.find((h) => Boolean(h));
     const displayRegion = (resolved.region && !/^unknown$/i.test(resolved.region)) ? resolved.region : (userRegionHint ?? 'unknown');
     researchedFacts.push(`Dish resolved: "${resolved.canonicalName}" (confidence: ${resolved.confidence ?? 'unknown'}, region: ${displayRegion})`);

@@ -599,6 +599,7 @@ export const toolRegistry = [
       inputSchema: {
         memory: collectedFoodMemorySchema.describe('Structured output from collect_food_memory'),
         researchPlan: dishResearchPlanSchema.optional().describe('Structured output from plan_dish_research'),
+        cue: minimumViableNostalgiaOutputSchema.optional().describe('Structured output from generate_minimum_viable_nostalgia when a first test has been produced'),
         assistantText: z.string().optional().describe('Final assistant-facing summary to include in the receipt'),
       },
       outputSchema: memoryReceiptOutputSchema,
@@ -607,11 +608,12 @@ export const toolRegistry = [
     anthropicInputSchema: {
       type: 'object' as const,
       required: ['memory'],
-      properties: {
-        memory: { type: 'object' as const, description: 'Structured output from collect_food_memory' },
-        researchPlan: { type: 'object' as const, description: 'Structured output from plan_dish_research' },
-        assistantText: { type: 'string' as const, description: 'Final assistant-facing summary to include in the receipt' },
-      },
+        properties: {
+          memory: { type: 'object' as const, description: 'Structured output from collect_food_memory' },
+          researchPlan: { type: 'object' as const, description: 'Structured output from plan_dish_research' },
+          cue: { type: 'object' as const, description: 'Structured output from generate_minimum_viable_nostalgia when available' },
+          assistantText: { type: 'string' as const, description: 'Final assistant-facing summary to include in the receipt' },
+        },
     },
     execute: (raw) => {
       const input = asInput(raw);
@@ -619,6 +621,9 @@ export const toolRegistry = [
         memory: memoryFromModelInput(input.memory),
         researchPlan: dishResearchPlanSchema.safeParse(input.researchPlan).success
           ? dishResearchPlanSchema.parse(input.researchPlan)
+          : undefined,
+        cue: minimumViableNostalgiaOutputSchema.safeParse(input.cue).success
+          ? minimumViableNostalgiaOutputSchema.parse(input.cue)
           : undefined,
         assistantText: typeof input.assistantText === 'string' ? input.assistantText : undefined,
       });

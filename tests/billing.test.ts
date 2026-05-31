@@ -229,16 +229,20 @@ describe('billing-stripe config', () => {
     expect(loadBillingConfigFromEnv()).toBeNull();
   });
 
-  it('returns config without requiring billing key encryption', () => {
+  it('returns null without billing key encryption because checkout delivery depends on it', () => {
     process.env.STRIPE_SECRET_KEY = 'sk_test_123';
     process.env.STRIPE_WEBHOOK_SECRET = 'whsec_123';
     process.env.STRIPE_PERSONAL_PRICE_ID = 'price_personal';
     delete process.env.ACHIOTE_KEY_ENCRYPTION_KEY;
-    expect(loadBillingConfigFromEnv()).toMatchObject({
-      secretKey: 'sk_test_123',
-      webhookSecret: 'whsec_123',
-      personalPriceId: 'price_personal',
-    });
+    expect(loadBillingConfigFromEnv()).toBeNull();
+  });
+
+  it('returns null when billing key encryption is malformed', () => {
+    process.env.STRIPE_SECRET_KEY = 'sk_test_123';
+    process.env.STRIPE_WEBHOOK_SECRET = 'whsec_123';
+    process.env.STRIPE_PERSONAL_PRICE_ID = 'price_personal';
+    process.env.ACHIOTE_KEY_ENCRYPTION_KEY = 'not-hex';
+    expect(loadBillingConfigFromEnv()).toBeNull();
   });
 
   it('returns config for personal, annual personal, family, and memory-pack prices', () => {

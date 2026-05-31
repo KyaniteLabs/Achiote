@@ -98,11 +98,11 @@ describe('researched evidence — receipt provenance', () => {
       // Turn 6: generate_cue
       // Turn 7: text response
       const turns: Array<Array<{ id: string; type: string; function: { name: string; arguments: string } }>> = [
-        [{ id: 'c1', type: 'function', function: { name: 'collect_food_memory', arguments: JSON.stringify({ memoryText: 'A nutty peppery stew with greens from Nigeria', userLocation: 'Chicago' }) } }],
-        [{ id: 'c2', type: 'function', function: { name: 'plan_dish_research', arguments: JSON.stringify({ memory: { rawMemory: 'A nutty peppery stew with greens from Nigeria', normalizedMemory: 'nutty peppery stew greens', userLocation: 'Chicago', extractedClues: { possibleDishNames: [], culturalOrRegionalHints: ['Nigeria'], rememberedIngredients: ['peppery'], sensoryClues: [], occasions: ['funerals'] }, inferredContext: { culturalOrRegional: [], language: [] }, missingInformation: [], nextQuestions: [], reassurance: '' } }) } }],
-        [{ id: 'c3', type: 'function', function: { name: 'search_web', arguments: JSON.stringify({ query: 'Nigerian egusi soup leafy greens' }) } }],
-        [{ id: 'c4', type: 'function', function: { name: 'resolve_dish_name', arguments: JSON.stringify({ input: 'egusi soup' }) } }],
-        [{ id: 'c5', type: 'function', function: { name: 'build_reconstruction_dossier', arguments: JSON.stringify({ memory: { rawMemory: 'A nutty peppery stew with greens from Nigeria', normalizedMemory: 'nutty peppery stew greens', userLocation: 'Chicago', extractedClues: { possibleDishNames: [], culturalOrRegionalHints: ['Nigeria'], rememberedIngredients: ['peppery'], sensoryClues: [], occasions: ['funerals'] }, inferredContext: { culturalOrRegional: [], language: [] }, missingInformation: [], nextQuestions: [], reassurance: '' } }) } }],
+        [{ id: 'c1', type: 'function', function: { name: 'collect_food_memory', arguments: JSON.stringify({ memoryText: 'A smoky red rice from Nigeria', userLocation: 'Chicago' }) } }],
+        [{ id: 'c2', type: 'function', function: { name: 'plan_dish_research', arguments: JSON.stringify({ memory: { rawMemory: 'A smoky red rice from Nigeria', normalizedMemory: 'smoky red rice nigeria', userLocation: 'Chicago', extractedClues: { possibleDishNames: ['jollof'], culturalOrRegionalHints: ['Nigeria'], rememberedIngredients: ['rice'], sensoryClues: ['smoky'], occasions: ['funerals'] }, inferredContext: { culturalOrRegional: [], language: [] }, missingInformation: [], nextQuestions: [], reassurance: '' } }) } }],
+        [{ id: 'c3', type: 'function', function: { name: 'search_web', arguments: JSON.stringify({ query: 'Nigerian jollof rice smoky party rice' }) } }],
+        [{ id: 'c4', type: 'function', function: { name: 'resolve_dish_name', arguments: JSON.stringify({ input: 'jollof' }) } }],
+        [{ id: 'c5', type: 'function', function: { name: 'build_reconstruction_dossier', arguments: JSON.stringify({ memory: { rawMemory: 'A smoky red rice from Nigeria', normalizedMemory: 'smoky red rice nigeria', userLocation: 'Chicago', extractedClues: { possibleDishNames: ['jollof'], culturalOrRegionalHints: ['Nigeria'], rememberedIngredients: ['rice'], sensoryClues: ['smoky'], occasions: ['funerals'] }, inferredContext: { culturalOrRegional: [], language: [] }, missingInformation: [], nextQuestions: [], reassurance: '' } }) } }],
         [{ id: 'c6', type: 'function', function: { name: 'generate_minimum_viable_nostalgia', arguments: JSON.stringify({ dossier: { title: 'Dossier', evidenceLedger: { userSaid: ['A nutty peppery stew with greens from Nigeria'], researched: [], inferred: [], unknown: [] }, hypotheses: [], nostalgiaCriticalElements: [], recreationStrategy: [], whatToAskFamily: [], confidence: 'Medium' }, userLocation: 'Chicago', maxEffortMinutes: 15 }) } }],
       ];
       const toolCalls = turns[callCount - 1];
@@ -130,22 +130,22 @@ describe('researched evidence — receipt provenance', () => {
 
   it('populates researched field in receipt when search_web and resolve_dish_name ran', async () => {
     callCount = 0;
-    const events = await runAsk(base, 'A nutty peppery stew with greens my Nigerian aunt made for funerals. I live in Chicago.');
+    const events = await runAsk(base, 'A smoky red rice my Nigerian aunt made for funerals. I live in Chicago.');
     const receiptEvent = events.find((e) => e.event === 'receipt');
     expect(receiptEvent, 'receipt event must be present').toBeDefined();
     const receipt = JSON.parse(receiptEvent!.data);
     expect(receipt.evidence.researched, 'researched array must not be empty after search + resolve').not.toHaveLength(0);
     // Must contain the canonical name from resolve_dish_name
     const researchedText = receipt.evidence.researched.join(' ');
-    expect(researchedText).toMatch(/egusi/i);
+    expect(researchedText).toMatch(/rice-dish/i);
   });
 
   it('receipt userSaid is always populated from raw memory', async () => {
     callCount = 0;
-    const events = await runAsk(base, 'A nutty peppery stew with greens my Nigerian aunt made for funerals. I live in Chicago.');
+    const events = await runAsk(base, 'A smoky red rice my Nigerian aunt made for funerals. I live in Chicago.');
     const receiptEvent = events.find((e) => e.event === 'receipt');
     const receipt = JSON.parse(receiptEvent!.data);
-    expect(receipt.evidence.userSaid[0]).toContain('nutty');
+    expect(receipt.evidence.userSaid[0]).toContain('smoky');
     expect(receipt.evidence.userSaid.length).toBeGreaterThanOrEqual(1);
   });
 });

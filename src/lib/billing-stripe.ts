@@ -22,6 +22,7 @@ export type BillingCycle = 'monthly' | 'annual';
 export function loadBillingConfigFromEnv(): BillingConfig | null {
   const secretKey = process.env.STRIPE_SECRET_KEY?.trim();
   const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET?.trim();
+  const encryptionKey = process.env.ACHIOTE_KEY_ENCRYPTION_KEY?.trim();
   const personalPriceId = process.env.STRIPE_PERSONAL_PRICE_ID?.trim();
   const personalAnnualPriceId = process.env.STRIPE_PERSONAL_ANNUAL_PRICE_ID?.trim();
   const proPriceId = process.env.STRIPE_PRO_PRICE_ID?.trim();
@@ -33,6 +34,7 @@ export function loadBillingConfigFromEnv(): BillingConfig | null {
   const baseUrl = process.env.STRIPE_BASE_URL?.trim() || process.env.ACHIOTE_BASE_URL?.trim();
 
   if (!secretKey || !webhookSecret) return null;
+  if (!encryptionKey || !/^[0-9a-fA-F]{64}$/.test(encryptionKey)) return null;
   if (!personalPriceId && !personalAnnualPriceId && !proPriceId && !familyPriceId && !legacyBusinessPriceId && !creditPackPriceId && !familySprintPriceId) return null;
 
   return {
