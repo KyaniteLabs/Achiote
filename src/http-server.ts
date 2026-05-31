@@ -820,6 +820,17 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       return;
     }
 
+    if (calledTools.has('generate_minimum_viable_nostalgia') && shouldReplaceWithSourcingGuidance(trustBoundedResponseText, calledTools)) {
+      console.warn('[ask] replaced sourcing response that failed to render source_ingredients guidance');
+      const responseText = calledTools.has('find_sensory_substitutes') || isSubstitutionPlan(toolPayloads)
+        ? buildSubstitutionBasisResponse(toolPayloads, userMessage)
+        : buildMinimumCueCompletedResponse(toolPayloads, userMessage);
+      send('text', responseText);
+      maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
+      finish({ guarded: 'sourcing_guidance_deterministic_completion' });
+      return;
+    }
+
     if (calledTools.has('generate_minimum_viable_nostalgia') && contradictsLatestCorrection(trustBoundedResponseText, userMessage)) {
       console.warn('[ask] replaced stale correction-conflicting response with deterministic minimum cue');
       const responseText = buildLatestCorrectionAlignedResponse(buildMinimumCueCompletedResponse(toolPayloads, userMessage), userMessage, toolPayloads);
@@ -915,6 +926,12 @@ function enforceAllergyProfessionalBoundary(text: string, userMessage: string): 
 
 function containsRawToolMarkup(text: string): boolean {
   return /<\/?tool_(?:call|result)\??>/i.test(text);
+}
+
+function shouldReplaceWithSourcingGuidance(text: string, calledTools: Set<string>): boolean {
+  if (!calledTools.has('source_ingredients')) return false;
+  if (!/\bWhere to buy\b/i.test(text)) return true;
+  return /\b(?:let me|I'll|I will|I can|I'd love to)\s+(?:research|find|track|look up|source)\b/i.test(text);
 }
 
 function recordAskCompletion(toolPayloads: Record<string, unknown>, calledTools: Set<string>, donePayload: Record<string, unknown>, consent: DataConsent): void {

@@ -745,10 +745,68 @@ describe('/ask failure surface regressions', () => {
     expect(finalText).toMatch(/Where to buy/i);
     expect(finalText).not.toMatch(/I need to gather substitution and sourcing information/i);
     expect(finalText).not.toMatch(/<\/?tool_(?:call|result)\??>/i);
-    expect(finalText).not.toMatch(/User-said anchors|What I heard:/i);
+    expect(finalText).not.toMatch(/User-said anchors/i);
     expect(events.at(-1)?.event).toBe('done');
     expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'raw_tool_markup_sanitized' });
     expect(requestCount).toBe(6);
+  }, 20_000);
+
+  it('renders planned sourcing instead of passing through sourcing deferrals', async () => {
+    const fakePort = await getFreePort();
+    let requestCount = 0;
+    fakeOpenAi = createServer(async (req, res) => {
+      if (req.url !== '/v1/chat/completions' || req.method !== 'POST') {
+        res.writeHead(404).end();
+        return;
+      }
+      requestCount++;
+      await readBody(req);
+      const toolCallsByTurn = [
+        [{ id: 'call_1', type: 'function', function: { name: 'collect_food_memory', arguments: JSON.stringify({ memoryText: 'My grandmother in Oaxaca made mole negro with chilhuacle chiles. I live in Des Moines, Iowa. Where can I buy chilhuacle chiles near me?' }) } }],
+        [{ id: 'call_2', type: 'function', function: { name: 'plan_dish_research', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_3', type: 'function', function: { name: 'build_reconstruction_dossier', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_4', type: 'function', function: { name: 'generate_minimum_viable_nostalgia', arguments: JSON.stringify({}) } }],
+      ];
+      const toolCalls = toolCallsByTurn[requestCount - 1];
+      res.setHeader('content-type', 'application/json');
+      res.end(JSON.stringify({
+        choices: [{
+          finish_reason: toolCalls ? 'tool_calls' : 'stop',
+          message: toolCalls
+            ? { role: 'assistant', content: '', tool_calls: toolCalls }
+            : { role: 'assistant', content: 'I would love to help you track those chiles down. Let me research sourcing options in Des Moines and then I can give you a list.' },
+        }],
+      }));
+    });
+    await new Promise<void>((resolveListen) => fakeOpenAi?.listen(fakePort, '127.0.0.1', resolveListen));
+
+    const achiotePort = await getFreePort();
+    achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`);
+
+    const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: 'My grandmother in Oaxaca made mole negro with chilhuacle chiles. I live in Des Moines, Iowa. Where can I buy chilhuacle chiles near me?',
+      }),
+    });
+
+    expect(response.status).toBe(200);
+    const events = parseSse(await response.text());
+    const toolNames = events.filter((event) => event.event === 'tool_call').map((event) => JSON.parse(event.data).name);
+    const finalText = events
+      .filter((event) => event.event === 'text')
+      .map((event) => JSON.parse(event.data))
+      .join('\n\n');
+
+    expect(toolNames).toContain('source_ingredients');
+    expect(finalText).toMatch(/Where to buy/i);
+    expect(finalText).toMatch(/chilhuacle chiles/i);
+    expect(finalText).toMatch(/Des Moines/i);
+    expect(finalText).not.toMatch(/let me research|track those chiles down/i);
+    expect(finalText).not.toMatch(/User-said anchors/i);
+    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'sourcing_guidance_deterministic_completion' });
+    expect(requestCount).toBe(5);
   }, 20_000);
 
   it('filters duplicate tool calls while allowing new calls in the same batch', async () => {
