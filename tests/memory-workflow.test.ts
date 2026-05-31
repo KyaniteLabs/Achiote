@@ -51,6 +51,14 @@ describe('research-first food memory workflow', () => {
     expect(memory.nextQuestions.join(' ')).not.toMatch(/\b(?:shrimp|crab|shellfish)\b/i);
   });
 
+  it('extracts lowercase Panama as a stated regional clue', () => {
+    const memory = collectFoodMemory({
+      memoryText: 'something like goyura in panama. savory, thick cut fried, not potatoes, sweet syrup on top.',
+    });
+
+    expect(memory.extractedClues.culturalOrRegionalHints).toContain('Panamanian');
+  });
+
   it('plans research instead of pretending sparse fragments are resolved', () => {
     const memory = collectFoodMemory({
       memoryText: 'My grandma made something like pass-teh-lay for Christmas. Puerto Rican family.',

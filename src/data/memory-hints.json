@@ -918,12 +918,12 @@
         },
         {
             "label": "Panamanian",
-            "regexSource": "\bpanama(?:nian)?\b",
+            "regexSource": "\\bpanama(?:nian)?\\b",
             "flags": "i"
         },
         {
             "label": "Chiriqui",
-            "regexSource": "\bchiriqu[íi]\b",
+            "regexSource": "\\bchiriqu[íi]\\b",
             "flags": "i"
         }
     ],
