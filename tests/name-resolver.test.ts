@@ -1,5 +1,33 @@
 import { describe, it, expect } from 'vitest';
 import { resolveDishName } from '../src/lib/name-resolver.js';
+import type { CollectedFoodMemory } from '../src/lib/types.js';
+
+function panamaFriedMemory(): CollectedFoodMemory {
+  return {
+    rawMemory: 'something like goyura in panama. savory, thick cut fried, not potatoes, sweet syrup on top.',
+    normalizedMemory: 'something like goyura in panama. savory, thick cut fried, not potatoes, sweet syrup on top.',
+    extractedClues: {
+      possibleDishNames: ['goyura'],
+      culturalOrRegionalHints: ['Panama', 'Panamanian'],
+      rememberedIngredients: [],
+      ruledOutIngredients: ['potatoes'],
+      cookingMethods: ['fried', 'thick cut'],
+      sensoryClues: ['savory', 'sweet syrup on top', 'crispy/fried texture'],
+      occasions: [],
+    },
+    inferredContext: { culturalOrRegional: [], language: [] },
+    missingInformation: [],
+    nextQuestions: [],
+    reassurance: 'Sound-alikes are enough to start.',
+    extractionMetadata: {
+      source: 'model',
+      originRegion: 'Panama',
+      ruledOutIngredients: ['potatoes'],
+      cookingMethod: ['fried', 'thick cut'],
+      timeoutMs: 8000,
+    },
+  };
+}
 
 describe('resolveDishName', () => {
   it('resolves exact alias match', () => {
@@ -24,6 +52,21 @@ describe('resolveDishName', () => {
     const result = resolveDishName('some-completely-unknown-dish-xyz');
     expect(result.confidence).toBe('Low');
     expect(result.canonicalName).toBe('some-completely-unknown-dish-xyz');
+  });
+
+  it('uses extracted region and mechanism context for unresolved sound-alikes', () => {
+    const result = resolveDishName('goyura', { memory: panamaFriedMemory() });
+
+    expect(result).toMatchObject({
+      input: 'goyura',
+      canonicalName: 'goyura',
+      dishFamily: 'regional fried-starch clue',
+      region: 'Panama',
+      confidence: 'Low',
+      matchType: 'unknown',
+      needsClarification: true,
+    });
+    expect(result.clarificationPrompt).toContain('unresolved Panama food-memory clue');
   });
 
   it('finds family match for empanada', () => {

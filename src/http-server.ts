@@ -1350,6 +1350,9 @@ function normalizeDependentToolInput(toolName: string, input: unknown, userMessa
   if (toolName === 'plan_dish_research' && collectedMemory) {
     return { ...record, memory: collectedMemory };
   }
+  if (toolName === 'resolve_dish_name' && collectedMemory) {
+    return { ...record, memory: collectedMemory };
+  }
   if (toolName === 'build_reconstruction_dossier') {
     return {
       ...record,

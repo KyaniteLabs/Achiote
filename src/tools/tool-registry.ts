@@ -660,16 +660,34 @@ export const toolRegistry = [
     mcp: {
       title: 'Resolve Dish Name',
       description: 'Resolve a dish name to its canonical family, aliases, transliterations, and broad region. Handles fuzzy matching and transliteration data from the bundled dataset.',
-      inputSchema: { input: z.string().min(1).max(500).describe('The dish name as the user described it, including spelling variants or transliterations') },
+      inputSchema: {
+        input: z.string().min(1).max(500).describe('The dish name as the user described it, including spelling variants or transliterations'),
+        memory: collectedFoodMemorySchema.optional().describe('Optional structured memory context from collect_food_memory'),
+        researchedFacts: z.array(z.string()).optional().describe('Optional source-backed facts already gathered for this unresolved name'),
+      },
       outputSchema: dishNameResolutionSchema,
     },
     outputSchema: dishNameResolutionSchema,
     anthropicInputSchema: {
       type: 'object' as const,
       required: ['input'],
-      properties: { input: { type: 'string' as const, description: 'The dish name as the user described it, including spelling variants or transliterations' } },
+      properties: {
+        input: { type: 'string' as const, description: 'The dish name as the user described it, including spelling variants or transliterations' },
+        memory: { type: 'object' as const, description: 'Optional structured memory context from collect_food_memory' },
+        researchedFacts: { type: 'array' as const, items: { type: 'string' as const }, description: 'Optional source-backed facts already gathered for this unresolved name' },
+      },
     },
-    execute: (raw) => output({ ...resolveDishName(text(asInput(raw).input)) }),
+    execute: (raw) => {
+      const input = asInput(raw);
+      const memory = collectedFoodMemorySchema.safeParse(input.memory);
+      const researchedFacts = stringArrayValue(input.researchedFacts);
+      return output({
+        ...resolveDishName(text(input.input), {
+          ...(memory.success ? { memory: memory.data } : {}),
+          ...(researchedFacts.length > 0 ? { researchedFacts } : {}),
+        }),
+      });
+    },
   }),
   createTool({
     name: 'analyze_nostalgic_dish',

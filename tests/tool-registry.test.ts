@@ -56,6 +56,48 @@ describe('shared tool registry', () => {
     expect(plan.payload.researchRequired).toBe(true);
   });
 
+  it('lets resolve_dish_name use collected memory context for unresolved names', async () => {
+    const memory = {
+      rawMemory: 'something like goyura in panama. savory, thick cut fried, not potatoes, sweet syrup on top.',
+      normalizedMemory: 'something like goyura in panama. savory, thick cut fried, not potatoes, sweet syrup on top.',
+      extractedClues: {
+        possibleDishNames: ['goyura'],
+        culturalOrRegionalHints: ['Panama', 'Panamanian'],
+        rememberedIngredients: [],
+        ruledOutIngredients: ['potatoes'],
+        cookingMethods: ['fried', 'thick cut'],
+        sensoryClues: ['savory', 'sweet syrup on top', 'crispy/fried texture'],
+        occasions: [],
+      },
+      inferredContext: { culturalOrRegional: [], language: [] },
+      missingInformation: [],
+      nextQuestions: [],
+      reassurance: 'Sound-alikes are enough to start.',
+      extractionMetadata: {
+        source: 'model',
+        originRegion: 'Panama',
+        ruledOutIngredients: ['potatoes'],
+        cookingMethod: ['fried', 'thick cut'],
+        timeoutMs: 8000,
+      },
+    };
+
+    const resolution = await executeToolDefinition('resolve_dish_name', {
+      input: 'goyura',
+      memory,
+    }, defaultToolExecutionContext);
+
+    expect(resolution.payload).toMatchObject({
+      canonicalName: 'goyura',
+      dishFamily: 'regional fried-starch clue',
+      region: 'Panama',
+      confidence: 'Low',
+      matchType: 'unknown',
+      needsClarification: true,
+    });
+    expect(outputSchemas.resolve_dish_name.safeParse(resolution.payload).success).toBe(true);
+  });
+
   it('routes dietary substitution only when the user asks for adaptation', async () => {
     const incidentalRestriction = await executeToolDefinition('plan_tool_workflow', {
       userMessage: 'My father used to make Syrian lentil soup after his heart attack, no more salt, but I remember the lemon and cumin smell most.',
