@@ -79,6 +79,7 @@ import {
   hasSubstitutionBasisReady,
   isSubstitutionPlan,
   buildSubstitutionBasisResponse,
+  buildSourcingGuidanceResponse,
   summarizeSubstitutionResults,
   extractSubstitutionTargets,
   normalizeSubstitutionTarget,
@@ -614,15 +615,16 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
           if (call.name === 'search_web' && searchCallCount >= getMaxSearchCalls()) {
             const cached = toolPayloads.search_web;
             const maxSearchCalls = getMaxSearchCalls();
+            const normalizedInput = normalizeDependentToolInput('search_web', call.input, userMessage, toolPayloads, history);
             console.warn(`[ask] search_web cap hard-block (${searchCallCount}/${maxSearchCalls}), ${cached ? 'reusing cached' : 'returning cap message'}`);
             const resultPayload = cached ?? { capReached: true, message: `search_web capped at ${maxSearchCalls} call(s). Use prior research results.` };
-            send('tool_call', { name: 'search_web', input: call.input, blocked: true });
+            send('tool_call', { name: 'search_web', input: normalizedInput, blocked: true });
             send('tool_result', { name: 'search_web', result: resultPayload, blocked: true });
             if (maxSearchCalls === 0) {
               send('status', { iteration: iterations, stage: 'search_web_blocked', reason: 'no_search_plan' });
             }
             toolResults.push({ id: call.id, content: JSON.stringify(resultPayload) });
-            toolCallHistory.push({ name: call.name, input: call.input });
+            toolCallHistory.push({ name: call.name, input: normalizedInput });
             continue;
           }
           const payload = await executeAndStreamTool(call.name, call.input, userMessage, send, calledTools, toolPayloads, history);
@@ -700,6 +702,15 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
         guarded: 'provider_tool_deterministic_recovery',
         reason: 'missing_required_memory_tool',
       })) return;
+    }
+
+    if (shouldAskForSourcingLocation(userMessage, toolPayloads, calledTools)) {
+      console.warn('[ask] sourcing requested without a current location, asking for sourcing location');
+      const responseText = enforceAllergyProfessionalBoundary(buildSourcingLocationClarificationResponse(toolPayloads, userMessage), userMessage);
+      send('text', responseText);
+      maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
+      finish({ guarded: 'sourcing_location_clarification' });
+      return;
     }
 
     if (await maybeSendForcedMinimumCue({ userMessage, toolPayloads, calledTools, send, finish })) {
@@ -809,6 +820,20 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
     const trustBoundedResponseText = enforceAllergyProfessionalBoundary(sanitizeFinalAnswerTrustBoundaryLanguage(responseText), userMessage);
     const didSanitizeTrustBoundary = trustBoundedResponseText !== responseText;
 
+    if (calledTools.has('source_ingredients') && containsRawToolMarkup(trustBoundedResponseText)) {
+      console.warn('[ask] replaced raw tool markup sourcing synthesis with deterministic sourcing guide');
+      const responseText = calledTools.has('generate_minimum_viable_nostalgia')
+        ? (calledTools.has('find_sensory_substitutes') || isSubstitutionPlan(toolPayloads)
+          ? buildSubstitutionBasisResponse(toolPayloads, userMessage)
+          : buildMinimumCueCompletedResponse(toolPayloads, userMessage))
+        : buildSourcingGuidanceResponse(toolPayloads, userMessage);
+      const boundedResponseText = enforceAllergyProfessionalBoundary(responseText, userMessage);
+      send('text', boundedResponseText);
+      maybeSendMemoryReceipt({ toolPayloads, assistantText: boundedResponseText, send });
+      finish({ guarded: 'raw_tool_markup_sanitized' });
+      return;
+    }
+
     if (calledTools.has('generate_minimum_viable_nostalgia') && containsRawToolMarkup(trustBoundedResponseText)) {
       console.warn('[ask] replaced raw tool markup synthesis with deterministic response');
       const responseText = calledTools.has('find_sensory_substitutes') || isSubstitutionPlan(toolPayloads)
@@ -820,13 +845,16 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       return;
     }
 
-    if (calledTools.has('generate_minimum_viable_nostalgia') && shouldReplaceWithSourcingGuidance(trustBoundedResponseText, calledTools)) {
+    if (shouldReplaceWithSourcingGuidance(trustBoundedResponseText, calledTools)) {
       console.warn('[ask] replaced sourcing response that failed to render source_ingredients guidance');
-      const responseText = calledTools.has('find_sensory_substitutes') || isSubstitutionPlan(toolPayloads)
-        ? buildSubstitutionBasisResponse(toolPayloads, userMessage)
-        : buildMinimumCueCompletedResponse(toolPayloads, userMessage);
-      send('text', responseText);
-      maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
+      const responseText = calledTools.has('generate_minimum_viable_nostalgia')
+        ? (calledTools.has('find_sensory_substitutes') || isSubstitutionPlan(toolPayloads)
+          ? buildSubstitutionBasisResponse(toolPayloads, userMessage)
+          : buildMinimumCueCompletedResponse(toolPayloads, userMessage))
+        : buildSourcingGuidanceResponse(toolPayloads, userMessage);
+      const boundedResponseText = enforceAllergyProfessionalBoundary(responseText, userMessage);
+      send('text', boundedResponseText);
+      maybeSendMemoryReceipt({ toolPayloads, assistantText: boundedResponseText, send });
       finish({ guarded: 'sourcing_guidance_deterministic_completion' });
       return;
     }
@@ -952,6 +980,32 @@ function shouldReplaceWithSourcingGuidance(text: string, calledTools: Set<string
   return /\b(?:let me|I'll|I will|I can|I'd love to)\s+(?:research|find|track|look up|source)\b/i.test(text);
 }
 
+function shouldAskForSourcingLocation(userMessage: string, toolPayloads: Record<string, unknown>, calledTools: Set<string>): boolean {
+  if (calledTools.has('source_ingredients')) return false;
+  const plan = toolPayloads.plan_tool_workflow as { needsSourcing?: boolean } | undefined;
+  if (plan?.needsSourcing !== true) return false;
+  const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
+  return !memory?.userLocation && !inferUserLocation(userMessage);
+}
+
+function buildSourcingLocationClarificationResponse(toolPayloads: Record<string, unknown>, userMessage: string): string {
+  const ingredients = extractSourcingIngredients(userMessage, toolPayloads.collect_food_memory).slice(0, 5);
+  const targetLine = ingredients.length > 0
+    ? `I have ${ingredients.join(', ')} as sourcing targets.`
+    : 'I can help source the remembered ingredients once the target is clear.';
+  const substitutionLine = isSubstitutionPlan(toolPayloads)
+    ? 'If you also need substitutes, I will match them by sensory role after you give the shopping location.'
+    : '';
+
+  return sanitizeMinimumCueFallbackBlock([
+    'Where should I source this from?',
+    targetLine,
+    'I need your current city, metro area, or country before I name markets or area-specific substitutes.',
+    'Reply with a location like "Des Moines, Iowa" and whether online ordering is okay.',
+    substitutionLine,
+  ].filter((line) => line.length > 0).join('\n'));
+}
+
 function recordAskCompletion(toolPayloads: Record<string, unknown>, calledTools: Set<string>, donePayload: Record<string, unknown>, consent: DataConsent): void {
   if (!consent.qualitySignals) return;
   const guarded = typeof donePayload.guarded === 'string' ? donePayload.guarded : 'none';
@@ -977,12 +1031,14 @@ function maybeSendMemoryReceipt(input: {
   if (!parsedMemory.success) return;
   const parsedResearchPlan = outputSchemas.plan_dish_research.safeParse(input.toolPayloads.plan_dish_research);
   const parsedCue = outputSchemas.generate_minimum_viable_nostalgia.safeParse(input.toolPayloads.generate_minimum_viable_nostalgia);
+  const researchedFacts = deriveResearchedFactsForReceipt(input.toolPayloads);
+  if (!parsedCue.success && researchedFacts.length === 0) return;
   input.send('receipt', buildMemoryReceipt({
     memory: parsedMemory.data as CollectedFoodMemory,
     researchPlan: parsedResearchPlan.success ? parsedResearchPlan.data as DishResearchPlan : undefined,
     cue: parsedCue.success ? parsedCue.data as MinimumViableNostalgiaCue : undefined,
     assistantText: input.assistantText,
-    researchedFacts: deriveResearchedFactsForReceipt(input.toolPayloads),
+    researchedFacts,
   }));
 }
 
@@ -999,6 +1055,9 @@ function deriveResearchedFactsForReceipt(toolPayloads: Record<string, unknown>):
   const resolved = toolPayloads.resolve_dish_name as
     | { dishName?: string; canonicalName?: string; region?: string; confidence?: string; aliases?: string[] }
     | undefined;
+  const sourcing = toolPayloads.source_ingredients as
+    | { ingredients?: string[]; location?: string; regionalData?: { region?: string; ethnicCorridors?: unknown; majorStores?: unknown } }
+    | undefined;
   if (resolved?.canonicalName && !/^Unknown$/i.test(resolved.canonicalName)) {
     const hasResearchProduct = (searched?.results?.length ?? 0) > 0;
     const effectiveConfidence = (resolved.confidence === 'Low' && hasResearchProduct) ? 'Medium' : resolved.confidence;
@@ -1007,12 +1066,41 @@ function deriveResearchedFactsForReceipt(toolPayloads: Record<string, unknown>):
     if (aliases.length) facts.push(`Also known as: ${aliases.join(', ')}`);
   }
 
+  const sourcedIngredients = (sourcing?.ingredients ?? []).filter((ingredient) => typeof ingredient === 'string' && ingredient.trim().length > 0);
+  if (sourcedIngredients.length > 0) {
+    facts.push(`Sourcing guide: ${sourcedIngredients.slice(0, 5).join(', ')} near ${sourcing?.location?.trim() || 'the requested area'}`);
+    if (sourcing?.regionalData?.region) {
+      facts.push(`Static regional availability matched: ${sourcing.regionalData.region}`);
+    }
+    const localHints = [
+      ...flattenReceiptSourcingHints(sourcing?.regionalData?.majorStores),
+      ...flattenReceiptSourcingHints(sourcing?.regionalData?.ethnicCorridors),
+    ].slice(0, 3);
+    if (localHints.length > 0) facts.push(`Starting points: ${localHints.join(', ')}`);
+  }
+
   // search_web: emit the snippet from each top result (up to 3)
   for (const result of (searched?.results ?? []).slice(0, 3)) {
     if (result.snippet?.trim()) facts.push(result.snippet.trim().replace(/[\u2014\u2013]/g, ', '));
   }
 
   return facts;
+}
+
+function flattenReceiptSourcingHints(value: unknown): string[] {
+  if (Array.isArray(value)) {
+    return value.flatMap((entry) => {
+      if (typeof entry === 'string' && entry.trim()) return [entry.trim()];
+      if (!isRecord(entry)) return [];
+      const name = typeof entry.name === 'string' ? entry.name.trim() : '';
+      const city = typeof entry.city === 'string' ? entry.city.trim() : '';
+      return name ? [city ? `${name} in ${city}` : name] : [];
+    });
+  }
+  if (!isRecord(value)) return [];
+  return Object.values(value)
+    .flatMap((entry) => Array.isArray(entry) ? entry : [])
+    .filter((item): item is string => typeof item === 'string' && item.trim().length > 0);
 }
 
 async function executeAndStreamTool(
@@ -1254,7 +1342,7 @@ function inferUserLocation(userMessage: string): string | undefined {
     .replace(/\s+(?:now|currently|these days|at the moment)\b.*$/i, '')
     .replace(/\s+(?:and|but|so|because|while)\b.*$/i, '')
     .trim();
-  if (location.length < 2 || /^(the|a|an|this|that|it|there)$/i.test(location)) return undefined;
+  if (location.length < 2 || /^(the|a|an|this|that|it|there|me|my|my area|here|your area)$/i.test(location)) return undefined;
   return location.slice(0, 80);
 }
 

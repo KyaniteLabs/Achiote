@@ -89,6 +89,51 @@ describe('WorkflowPlanner', () => {
     expect(lowercaseLocation.workflowSteps.map((step) => step.tool)).toContain('source_ingredients');
   });
 
+  it('tracks sourcing intent without silently inventing a location', () => {
+    const nearMe = planAskWorkflow({
+      userMessage: 'Where can I buy chilhuacle chiles near me?',
+    });
+    expect(nearMe.needsSourcing).toBe(true);
+    expect(nearMe.workflowSteps.map((step) => step.tool)).not.toContain('source_ingredients');
+    expect(nearMe.confidenceNote).toContain('ask for location');
+
+    const sourceOnly = planAskWorkflow({
+      userMessage: 'Where can I buy chilhuacle chiles near Des Moines?',
+    });
+    expect(sourceOnly.needsSourcing).toBe(true);
+    expect(sourceOnly.workflowSteps.map((step) => step.tool)).toContain('source_ingredients');
+    expect(sourceOnly.workflowSteps.map((step) => step.tool)).not.toContain('generate_minimum_viable_nostalgia');
+  });
+
+  it('keeps sparse demo memories on a questionnaire-first path', () => {
+    const soup = planAskWorkflow({
+      userMessage: "There's a soup my grandmother used to make. I never learned the name. I just remember it being deep orange and a little oily, and only when the whole family came together. My dad's side came from somewhere in West Africa.",
+    });
+    expect(soup.workflowSteps.map((step) => step.tool)).toEqual([
+      'collect_food_memory',
+      'plan_dish_research',
+    ]);
+    expect(soup.maxSearchCalls).toBe(0);
+    expect(soup.confidenceNote).toContain('Questionnaire-first');
+
+    const drink = planAskWorkflow({
+      userMessage: "A cold, sweet drink from when I was little. My family stopped making it. Cinnamon, maybe, kind of milky? My mom's family is from somewhere in Latin America but nobody really remembers.",
+    });
+    expect(drink.workflowSteps.map((step) => step.tool)).toEqual([
+      'collect_food_memory',
+      'plan_dish_research',
+    ]);
+    expect(drink.workflowSteps.map((step) => step.tool)).not.toContain('generate_minimum_viable_nostalgia');
+
+    const leafWrapped = planAskWorkflow({
+      userMessage: 'Some savory thing wrapped in a banana leaf that my great-grandmother used to steam. Nobody left in the family remembers what it was called. We only know we came from somewhere in Southeast Asia.',
+    });
+    expect(leafWrapped.workflowSteps.map((step) => step.tool)).toEqual([
+      'collect_food_memory',
+      'plan_dish_research',
+    ]);
+  });
+
   it('keeps search for exact-identity research requests', () => {
     const exactIdentity = planAskWorkflow({
       userMessage: 'Someone served a tart green-herb broth with pale potato or egg pieces. What exact regional dish is this, and what sources confirm the name?',

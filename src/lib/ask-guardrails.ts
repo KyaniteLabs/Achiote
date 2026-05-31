@@ -188,6 +188,7 @@ export function containsPrematureCandidateSpeculation(text: string, toolPayloads
   if (hasStableAnchor) return false;
   return /\bcould\s+be\s+(?:a|an|the)?\s*[\s\S]{0,120}\b(?:or\s+even|,\s*(?:a|an|the)?\s*[\p{L}\p{M}])/iu.test(text)
     || /\bmight\s+be\s+(?:a|an|the)?\s*[\s\S]{0,120}\b(?:or\s+even|,\s*(?:a|an|the)?\s*[\p{L}\p{M}])/iu.test(text)
+    || /\bcould\s+come\s+from\b[\s\S]{0,160}\bbut\s+(?:it\s+)?could\s+also\b/iu.test(text)
     || /\bfrom\s+(?:a|an|the)?\s*[\s\S]{0,160}\bto\s+(?:a|an|the)?\s*[\s\S]{0,160}\bto\b/iu.test(text)
     || /\bfor example\s+[\s\S]{0,160},\s*[\s\S]{0,80}\bor\s+[\s\S]{0,80}\b/iu.test(text);
 }
@@ -197,7 +198,8 @@ export function shouldClarifyBroadUncertainMemory(userMessage: string, toolPaylo
   if (!memory) return false;
 
   const text = `${userMessage}\n${memory.normalizedMemory}`.toLowerCase();
-  const explicitUncertainty = /\b(?:do\s+not|don't|not\s+sure|uncertain|no\s+idea|unknown)\b[\s\S]{0,180}\b(?:country|region|dish\s+name|name|ingredients?|soup|sauce|stew)\b/i.test(text)
+  const explicitUncertainty = /\b(?:do\s+not|don't|not\s+sure|uncertain|no\s+idea|unknown|never\s+(?:learned|knew)|nobody\s+(?:left\s+)?(?:really\s+)?remembers?|no\s+one\s+(?:really\s+)?remembers?)\b[\s\S]{0,180}\b(?:country|region|dish\s+name|name|called|ingredients?|soup|sauce|stew)\b/i.test(text)
+    || /\b(?:no\s+name|unknown\s+name|not\s+sure\s+what\s+it\s+was\s+called)\b/i.test(text)
     || /\bwhether\s+(?:it\s+)?(?:was\s+)?(?:a\s+)?(?:soup|sauce|stew)\b/i.test(text);
   const asksNotToGuess = /\b(?:do\s+not|don't)\s+(?:list\s+candidate(?:\s+dishes|\s+lists?|s)?|guess|pretend\s+certainty)\b/i.test(text)
     || /\bno\s+(?:guesses|candidate\s+lists?)\b/i.test(text);
