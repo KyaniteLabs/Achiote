@@ -39,7 +39,7 @@ describe('Achiote MCP server', () => {
         expect(Object.keys(tool.outputSchema?.properties ?? {})).not.toHaveLength(0);
         expect(tool.annotations?.readOnlyHint).toBe(true);
         expect(tool.annotations?.destructiveHint).toBe(false);
-        expect(tool.annotations?.idempotentHint).toBe(true);
+        expect(tool.annotations).not.toHaveProperty('idempotentHint');
       }
     } finally {
       await client.close();
