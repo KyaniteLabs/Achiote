@@ -100,7 +100,7 @@ export function summarizeSubstitutionResults(toolPayloads: Record<string, unknow
     const ingredient = maskAsRestricted ? 'the restricted ingredient' : rawIngredient;
     const substitutes = Array.isArray(entry.substitutes) ? entry.substitutes : [];
     const first = substitutes.find(isRecord);
-    if (!first) return [`${ingredient} -> match the original sensory role, then mark the result uncertain`];
+    if (!first) return [fallbackSubstitutionLine(rawIngredient, ingredient) ?? `${ingredient} -> match the original sensory role, then mark the result uncertain`];
     const substitute = typeof first.substitute === 'string' ? first.substitute : 'role-matched substitute';
     const reasoning = typeof first.reasoning === 'string' ? first.reasoning : '';
     return [`${ingredient} -> ${substitute}${reasoning ? ` (${sanitizeMinimumCueFallbackText(reasoning).replace(/\.$/, '')})` : ''}`];
@@ -125,12 +125,55 @@ export function summarizeSourcingResults(toolPayloads: Record<string, unknown>):
   const localLine = localHints.length > 0
     ? `Start with ${localHints.join(', ')}. Treat that as static guidance, not live inventory.`
     : 'Start with Mexican, Latin, international, or spice-focused markets, then check online specialty chile importers if local shelves miss.';
+  const localSearchLeads = summarizeLocalSourcingSearch(toolPayloads.local_sourcing_search);
 
   return [
     `Where to buy near ${location}: look for ${ingredients.join(', ')}.`,
+    ...localSearchLeads,
     localLine,
     'Call ahead or check labels yourself; this is sourcing guidance, not a live inventory claim.',
   ];
+}
+
+function fallbackSubstitutionLine(rawIngredient: string, displayIngredient: string): string | undefined {
+  if (/\bchilhuacle(?:\s+(?:negro|rojo|amarillo))?\s+chiles?\b/i.test(rawIngredient)) {
+    return `${displayIngredient} -> start with ancho plus pasilla negro; if you can find cascabel, add a little for round heat and nutty smoke. Mark it uncertain because chilhuacle has a specific Oaxacan character.`;
+  }
+  return undefined;
+}
+
+function summarizeLocalSourcingSearch(value: unknown): string[] {
+  if (!isRecord(value) || !Array.isArray(value.results)) return [];
+  const leads = value.results
+    .map(formatLocalSourcingLead)
+    .filter((line): line is string => Boolean(line))
+    .slice(0, 3);
+  if (leads.length === 0) return [];
+  return [
+    `Local search leads to check: ${leads.join('; ')}. Treat these as candidate stores or source paths, not proof of current stock.`,
+  ];
+}
+
+function formatLocalSourcingLead(value: unknown): string | undefined {
+  if (!isRecord(value)) return undefined;
+  const title = typeof value.title === 'string' ? sanitizeMinimumCueFallbackText(value.title).trim() : '';
+  const snippet = typeof value.snippet === 'string' ? sanitizeMinimumCueFallbackText(value.snippet).trim() : '';
+  const link = typeof value.link === 'string' ? value.link : typeof value.url === 'string' ? value.url : '';
+  const combined = `${title} ${snippet} ${link}`.toLowerCase();
+  if (!title) return undefined;
+  if (/\brecipe\b/i.test(combined) && !/\b(?:market|store|shop|grocery|supermarket|spice|mexican|latin|oaxacan|chile|chiles)\b/i.test(combined)) {
+    return undefined;
+  }
+  const domain = domainFromUrl(link);
+  return `${title}${domain ? ` (${domain})` : ''}`;
+}
+
+function domainFromUrl(value: string): string {
+  try {
+    return new URL(value).hostname.replace(/^www\./i, '');
+  } catch {
+    return '';
+  }
 }
 
 function flattenRegionalStores(value: unknown): string[] {

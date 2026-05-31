@@ -51,7 +51,7 @@ export function planAskWorkflow(input: AskWorkflowPlannerInput): AskWorkflowPlan
     || /\b(?:tell|say|claim)\s+(?:me\s+)?(?:you\s+)?(?:browsed|searched)\b[\s\S]{0,80}\b(?:live\s+)?(?:web|results|prices)\b/i.test(msg)
     || /\bdo\s+not\s+(?:claim\s+)?(?:browse|search|use\s+live\s+web|claim\s+(?:you\s+)?(?:browsed|searched))\b/i.test(msg)
     || /\b(?:do\s+not|don't)\s+claim\s+(?:you\s+)?(?:browsed|searched)\b/i.test(msg);
-  const hasSourcingKeywords = /\b(?:where\s+(?:can|do|would|should)\s+i\s+(?:buy|find|get)|where\s+(?:is|are|would)\s+[^.!?;,]{0,80}\b(?:sold|stocked|carried)|what\s+should\s+i\s+buy|buy\s+near|find\s+near|find\s+[^.!?;,]{0,80}\b(?:around|near)\s+me|source\s+(?:for|ingredients?)|where\s+to\s+(?:buy|find|get)|grocery\s+store|supermarket|market\s+near|stores?\s+(?:near|around|that\s+(?:carry|stock))|available\s+near|locally\s+(?:available|sold|stocked))\b/i.test(msg);
+  const hasSourcingKeywords = /\b(?:where\s+(?:can|do|would|should)\s+i\s+(?:buy|find|get|look|shop)|where\s+should\s+i\s+look(?:\s+for)?|where\s+(?:is|are|would)\s+[^.!?;,]{0,80}\b(?:sold|stocked|carried)|what\s+should\s+i\s+buy|buy\s+near|find\s+near|look\s+near|find\s+[^.!?;,]{0,80}\b(?:around|near)\s+me|look\s+[^.!?;,]{0,80}\b(?:around|near)\s+me|source\s+(?:for|ingredients?)|where\s+to\s+(?:buy|find|get|look|shop)|grocery\s+store|supermarket|market\s+near|stores?\s+(?:near|around|that\s+(?:carry|stock))|available\s+near|locally\s+(?:available|sold|stocked))\b/i.test(msg);
   const hasResidenceLocation = /\b(?:i\s+(?:live|am|currently\s+live|currently\s+am)|i['’]?m|im|we\s+(?:live|are)|based|located)\s+in\s+[^.!?;,]{2,80}/i.test(userMessage);
   const hasPurchaseLocation = /\b(?:buy|find|get|source|sourcing|shop(?:\s+for)?)\b[\s\S]{0,120}\b(?:in|near|around)\s+(?!me\b|my\b|the\b|here\b|your\b)[^.!?;,]{2,80}/i.test(userMessage);
   const hasSourcingLocation = hasResidenceLocation || hasPurchaseLocation;
@@ -123,6 +123,9 @@ export function planAskWorkflow(input: AskWorkflowPlannerInput): AskWorkflowPlan
   }
 
   if (bundledMechanismFamily) maxSearchCalls = 0;
+  if (!searchWebDisabled && needsSourcing && hasSourcingLocation && !bundledMechanismFamily) {
+    maxSearchCalls = Math.max(maxSearchCalls, 2);
+  }
   const needsResolve = steps.some((step) => step.tool === 'resolve_dish_name');
   const bundledMechanismNote = bundledMechanismFamily
     ? ` Bundled mechanism family: ${bundledMechanismFamily}; live search deferred until the user asks for exact identity or source-backed details.`

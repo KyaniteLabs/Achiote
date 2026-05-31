@@ -1,6 +1,6 @@
 try { process.loadEnvFile(); } catch { /* no .env file present */ }
 
-import { randomUUID, timingSafeEqual } from 'node:crypto';
+import { createHash, randomUUID, timingSafeEqual } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http';
 import { dirname, resolve, sep } from 'node:path';
@@ -118,6 +118,9 @@ const ALLOWED_ORIGINS = (process.env.ACHIOTE_ALLOWED_ORIGINS || 'http://localhos
   .filter(Boolean);
 const TELEMETRY_LIMIT_PER_MINUTE = parseInt(process.env.ACHIOTE_TELEMETRY_LIMIT_PER_MINUTE || '120', 10);
 const EVENTS_ADMIN_TOKEN = process.env.ACHIOTE_EVENTS_ADMIN_TOKEN?.trim();
+const POSTHOG_PROJECT_API_KEY = process.env.POSTHOG_PROJECT_API_KEY?.trim();
+const POSTHOG_HOST = (process.env.POSTHOG_HOST?.trim() || 'https://us.i.posthog.com').replace(/\/+$/, '');
+const POSTHOG_DISABLED = process.env.POSTHOG_DISABLED === 'true';
 const DISABLE_SEARCH_WEB = process.env.ACHIOTE_DISABLE_SEARCH_WEB === 'true';
 const ASK_TOOLS = DISABLE_SEARCH_WEB ? TOOLS.filter((tool) => tool.name !== 'search_web') : TOOLS;
 const TOOLS_BY_NAME = new Map(TOOLS.map((tool) => [tool.name, tool]));
@@ -256,7 +259,7 @@ Do not give a concrete food cue, tasting test, substitute, recipe move, or recon
 \`generate_minimum_viable_nostalgia\` has returned. If the right move is a clarification-only response,
 ask the targeted questions and stop; do not sneak in a cue.
 
-If the user asked for substitutes, include a short \`Substitutes to try\` section grounded in \`find_sensory_substitutes\` and the original cue. If the user asked where to buy, include a short \`Where to buy\` section grounded in \`source_ingredients\`. Use \`promptForAgent\` guidance from both tools when present. Never replace these sections with a raw evidence dump.
+If the user asked for substitutes, include a short \`Substitutes to try\` section grounded in \`find_sensory_substitutes\` and the original cue. If the user asked where to buy, include a short \`Where to buy\` section grounded in \`source_ingredients\` and any local sourcing search leads the server supplies. Name candidate stores or source paths only as leads to check or call, never as proof of live stock. Use \`promptForAgent\` guidance from both tools when present. Never replace these sections with a raw evidence dump.
 
 ## HOW TO WRITE YOUR RESPONSE
 
@@ -294,7 +297,7 @@ Then include one targeted follow-up that would most reduce uncertainty if they w
 - Keep responses under 220 words.
 - Be warm and direct, like a knowledgeable friend who wants to help them taste the memory again.
 - Write like a real person talking to a friend. Use plain words and short sentences. No exclamation points. Avoid AI-tell words like "delve", "tapestry", "crucial", "elevate", "unleash", or "testament". Generated answer text does not need to be rewritten just because a model uses an em-dash.
-- FOOD SAFETY OVERRIDES EVERYTHING. If the person mentions any allergy, intolerance, or dietary restriction, never suggest tasting, buying, or substituting anything that could contain it; build cues only from ingredients they have confirmed are safe for them. Name common allergens (nuts, peanuts, dairy, egg, wheat or gluten, soy, shellfish, fish, sesame) whenever a suggestion could contain them. Never call anything "safe", "allergen-free", or "medically safe". You do not give medical, allergy, or nutritional advice; point people to a qualified professional for those. Every taste is optional and at the person's own discretion.
+- FOOD SAFETY OVERRIDES EVERYTHING. If the person mentions any allergy, intolerance, or dietary restriction, never suggest tasting, buying, or substituting anything that could contain it; build cues only from ingredients they have already tolerated and confirmed for themselves. Name common allergens (nuts, peanuts, dairy, egg, wheat or gluten, soy, shellfish, fish, sesame) whenever a suggestion could contain them. Never call anything "safe", "safely prepared", "allergen-free", or "medically safe"; do not frame an allergy answer as a safety guarantee. You do not give medical, allergy, or nutritional advice; point people to a qualified professional for those. Every taste is optional and at the person's own discretion.
 - If the user shares a photo, describe what you see in the image and combine it with any text description they provide before calling tools.
 - If researched facts were gathered (e.g., from search_web or resolve_dish_name), explicitly reference at least one specific finding in your prose. Do not summarize vaguely. Name the exact fact.`;
 
@@ -374,6 +377,37 @@ function telemetryClientKey(req: IncomingMessage): string {
     trustedProxyIps: TRUSTED_PROXY_IPS,
   });
   return identity?.keyId ?? 'anon:ip:unknown';
+}
+
+function telemetryDistinctId(req: IncomingMessage): string {
+  return `anon_${createHash('sha256').update(telemetryClientKey(req)).digest('hex').slice(0, 24)}`;
+}
+
+async function forwardTelemetryToPostHog(eventName: string, properties: Record<string, string>, req: IncomingMessage): Promise<void> {
+  if (POSTHOG_DISABLED || !POSTHOG_PROJECT_API_KEY) return;
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 1500);
+  try {
+    await fetch(`${POSTHOG_HOST}/capture/`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        api_key: POSTHOG_PROJECT_API_KEY,
+        event: eventName,
+        properties: {
+          ...properties,
+          distinct_id: telemetryDistinctId(req),
+          $process_person_profile: false,
+          $lib: 'achiote-server',
+        },
+      }),
+      signal: controller.signal,
+    });
+  } catch (err) {
+    console.warn('[telemetry] posthog capture failed:', err instanceof Error ? err.message : String(err));
+  } finally {
+    clearTimeout(timeout);
+  }
 }
 
 function hasEventsAdminAccess(req: IncomingMessage): boolean {
@@ -845,7 +879,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       return;
     }
 
-    if (shouldReplaceWithSourcingGuidance(trustBoundedResponseText, calledTools)) {
+    if (shouldReplaceWithSourcingGuidance(trustBoundedResponseText, calledTools, toolPayloads)) {
       console.warn('[ask] replaced sourcing response that failed to render source_ingredients guidance');
       const responseText = calledTools.has('generate_minimum_viable_nostalgia')
         ? (calledTools.has('find_sensory_substitutes') || isSubstitutionPlan(toolPayloads)
@@ -945,9 +979,10 @@ type DoneSender = (data?: Record<string, unknown>) => void;
 
 function enforceAllergyProfessionalBoundary(text: string, userMessage: string): string {
   if (!/\b(?:allerg(?:y|ic|ies|en)|intoleran(?:ce|t)|anaphylaxis|severely allergic|tree nuts?|peanuts?)\b/i.test(userMessage)) return text;
-  if (/\b(?:qualified professional|medical professional|doctor|allergist|clinician|dietitian)\b/i.test(text)) return text;
+  const boundedText = sanitizeFoodSafetyClaimLanguage(text);
+  if (/\b(?:qualified professional|medical professional|doctor|allergist|clinician|dietitian)\b/i.test(boundedText)) return boundedText;
   return [
-    text,
+    boundedText,
     'Because you named an allergy, check any new substitute with a qualified professional before tasting.',
   ].filter(Boolean).join('\n\n');
 }
@@ -957,6 +992,9 @@ function sanitizeFoodSafetyClaimLanguage(text: string): string {
     .replace(/\bmedically safe\b/gi, 'medically appropriate')
     .replace(/\ballergen-free\b/gi, 'without the named allergen only when labels and a qualified professional support that')
     .replace(/\blegally safe\b/gi, 'legally appropriate')
+    .replace(/\bsafety note\b/gi, 'allergy boundary')
+    .replace(/\bfood safety\b/gi, 'food boundary')
+    .replace(/\bsafely\b/gi, 'with the allergy boundary in mind')
     .replace(/\bsafe neutral\b/gi, 'plain neutral')
     .replace(/\bsafe liquid\b/gi, 'plain liquid')
     .replace(/\bsafe pantry\b/gi, 'known tolerated pantry')
@@ -974,9 +1012,13 @@ function containsRawToolMarkup(text: string): boolean {
   return /<\/?tool_(?:call|result)\??>/i.test(text);
 }
 
-function shouldReplaceWithSourcingGuidance(text: string, calledTools: Set<string>): boolean {
+function shouldReplaceWithSourcingGuidance(text: string, calledTools: Set<string>, toolPayloads: Record<string, unknown>): boolean {
   if (!calledTools.has('source_ingredients')) return false;
   if (!/\bWhere to buy\b/i.test(text)) return true;
+  const localSourcingSearch = toolPayloads.local_sourcing_search as { results?: unknown[] } | undefined;
+  if ((localSourcingSearch?.results?.length ?? 0) > 0 && !/\b(?:Local search leads|candidate stores|not proof of current stock)\b/i.test(text)) {
+    return true;
+  }
   return /\b(?:let me|I'll|I will|I can|I'd love to)\s+(?:research|find|track|look up|source)\b/i.test(text);
 }
 
@@ -1132,7 +1174,12 @@ async function executeAndStreamTool(
   const result = await executeToolDefinition(toolName, normalizedInput, toolContext);
   validateToolOutput(toolName, result.payload);
   calledTools.add(toolName);
-  toolPayloads[toolName] = result.payload;
+  const payloadKey = toolName === 'search_web'
+    && isRecord(normalizedInput)
+    && normalizedInput.purpose === 'local_sourcing'
+    ? 'local_sourcing_search'
+    : toolName;
+  toolPayloads[payloadKey] = result.payload;
   if (toolName === 'find_sensory_substitutes') {
     const existing = Array.isArray(toolPayloads.find_sensory_substitutes_all)
       ? toolPayloads.find_sensory_substitutes_all
@@ -1205,6 +1252,12 @@ function normalizeDependentToolInput(toolName: string, input: unknown, userMessa
       ...(collectedMemory ? { memory: collectedMemory } : {}),
       ...(researchPlan ? { researchPlan } : {}),
     };
+  }
+  if (toolName === 'search_web'
+    && record.purpose === 'local_sourcing'
+    && typeof record.query === 'string'
+    && record.query.trim()) {
+    return { ...record, query: sanitizeGroundedSearchQuery(record.query) };
   }
   if (toolName === 'search_web' && collectedMemory) {
     return { ...record, query: buildGroundedSearchQuery(collectedMemory, toolPayloads.resolve_dish_name) };
@@ -1557,7 +1610,9 @@ function shouldForceMinimumCue(userMessage: string, toolPayloads: Record<string,
   if (shouldClarifyBroadUncertainMemory(userMessage, toolPayloads)) return false;
   if (shouldClarifySparseUnanchoredMemory(userMessage, toolPayloads)) return false;
 
-  const workflowPlan = toolPayloads.plan_tool_workflow as { needsSubstitutions?: boolean } | undefined;
+  const workflowPlan = toolPayloads.plan_tool_workflow as { needsSubstitutions?: boolean; workflowSteps?: Array<{ tool?: string }> } | undefined;
+  const plannedTools = workflowPlan?.workflowSteps?.map((step) => step.tool) ?? [];
+  if (plannedTools.includes('source_ingredients') && !plannedTools.includes('generate_minimum_viable_nostalgia')) return false;
   if (workflowPlan?.needsSubstitutions && calledTools.has('find_sensory_substitutes')) return true;
 
   // Explicit minimum-cue request, force whenever we have memory + plan + any sensory signal.
@@ -1676,15 +1731,55 @@ async function maybeRunPlannedSourcing({
 }): Promise<void> {
   const plan = toolPayloads.plan_tool_workflow as { workflowSteps?: Array<{ tool?: string }> } | undefined;
   const plannedTools = plan?.workflowSteps?.map((step) => step.tool) ?? [];
-  if (!plannedTools.includes('source_ingredients') || calledTools.has('source_ingredients')) return;
+  if (!plannedTools.includes('source_ingredients')) return;
 
   const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
   const location = memory?.userLocation ?? inferUserLocation(userMessage);
   const ingredients = extractSourcingIngredients(userMessage, toolPayloads.collect_food_memory);
   if (!location || ingredients.length === 0) return;
 
-  send('status', { stage: 'calling_tools', tools: ['source_ingredients'], deterministic: true });
-  await executeAndStreamTool('source_ingredients', { ingredients: ingredients.slice(0, 10), location }, userMessage, send, calledTools, toolPayloads);
+  if (!calledTools.has('source_ingredients')) {
+    send('status', { stage: 'calling_tools', tools: ['source_ingredients'], deterministic: true });
+    await executeAndStreamTool('source_ingredients', { ingredients: ingredients.slice(0, 10), location }, userMessage, send, calledTools, toolPayloads);
+  }
+  await maybeRunLocalSourcingSearch({ userMessage, toolPayloads, calledTools, send, ingredients, location });
+}
+
+async function maybeRunLocalSourcingSearch({
+  userMessage,
+  toolPayloads,
+  calledTools,
+  send,
+  ingredients,
+  location,
+}: {
+  userMessage: string;
+  toolPayloads: Record<string, unknown>;
+  calledTools: Set<string>;
+  send: SseSender;
+  ingredients: string[];
+  location: string;
+}): Promise<void> {
+  if (DISABLE_SEARCH_WEB || toolPayloads.local_sourcing_search) return;
+  const plan = toolPayloads.plan_tool_workflow as { maxSearchCalls?: number } | undefined;
+  if (typeof plan?.maxSearchCalls === 'number' && plan.maxSearchCalls <= 0) return;
+  const query = buildLocalSourcingSearchQuery(ingredients, location);
+  if (!query) return;
+  send('status', { stage: 'calling_tools', tools: ['search_web'], deterministic: true, reason: 'local_sourcing' });
+  await executeAndStreamTool('search_web', { query, purpose: 'local_sourcing' }, userMessage, send, calledTools, toolPayloads);
+}
+
+function buildLocalSourcingSearchQuery(ingredients: string[], location: string): string {
+  const ingredientQuery = ingredients
+    .map((ingredient) => ingredient.trim())
+    .filter(Boolean)
+    .slice(0, 3)
+    .join(' ');
+  if (!ingredientQuery || !location.trim()) return '';
+  const specialtyTerms = /\b(?:chilhuacle|chile|chiles|mole|masa|maiz|maize|achiote|annatto|epazote|quesillo|oaxac)/i.test(ingredientQuery)
+    ? 'Mexican Oaxacan grocery dried chiles spice shop'
+    : 'specialty grocery market store shop';
+  return sanitizeGroundedSearchQuery(`${ingredientQuery} ${location.trim()} ${specialtyTerms}`);
 }
 
 function extractSourcingIngredients(userMessage: string, collectedMemory: unknown): string[] {
@@ -1959,6 +2054,7 @@ const server = createServer(async (req, res) => {
       }
       const properties = sanitizeTelemetryProps(parsed.properties);
       telemetryCollector.record(eventName, properties);
+      void forwardTelemetryToPostHog(eventName, properties, req);
       sendJson(res, 202, { ok: true });
     } catch (err) {
       sendJson(res, err instanceof Error && err.message === 'Body too large' ? 413 : 400, { error: 'Invalid telemetry event' });

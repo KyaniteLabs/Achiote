@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 import {
   buildMinimumCueCompletedResponse,
   extractSubstitutionTargets,
+  summarizeSourcingResults,
+  summarizeSubstitutionResults,
 } from '../src/lib/ask-response-builder.js';
 import type { MinimumViableNostalgiaCue } from '../src/lib/types.js';
 
@@ -87,5 +89,43 @@ describe('ask response builder', () => {
     expect(response).toMatch(/Where to buy|Sourcing/i);
     expect(response).toMatch(/Des Moines/i);
     expect(response).toMatch(/Mexican markets/i);
+  });
+
+  it('uses a specific chilhuacle fallback when the substitute dataset has no record', () => {
+    const lines = summarizeSubstitutionResults({
+      find_sensory_substitutes: {
+        ingredient: 'chilhuacle chiles',
+        mode: 'prompt-only',
+        substitutes: [],
+      },
+    });
+
+    expect(lines.join('\n')).toMatch(/ancho/i);
+    expect(lines.join('\n')).toMatch(/pasilla negro/i);
+    expect(lines.join('\n')).toMatch(/cascabel/i);
+  });
+
+  it('renders actual local search leads as candidate sourcing paths', () => {
+    const lines = summarizeSourcingResults({
+      source_ingredients: {
+        ingredients: ['chilhuacle chiles'],
+        location: 'Queens, New York',
+        regionalData: {},
+      },
+      local_sourcing_search: {
+        query: 'chilhuacle chiles Queens New York Mexican Oaxacan grocery dried chiles spice shop',
+        results: [
+          {
+            title: 'Mi Tierra Supermarket Queens dried chiles',
+            link: 'https://example.test/mi-tierra',
+            snippet: 'Mexican grocery in Queens with dried chile and spice sections.',
+          },
+        ],
+      },
+    });
+
+    expect(lines.join('\n')).toMatch(/Queens, New York/i);
+    expect(lines.join('\n')).toMatch(/Mi Tierra Supermarket/i);
+    expect(lines.join('\n')).toMatch(/not proof of current stock/i);
   });
 });

@@ -32,6 +32,9 @@ const ALLOWED_EVENTS = new Set([
   'receipt_share_copied',
   'family_questions_copied',
   'waitlist_submitted',
+  'voice_started',
+  'voice_transcribed',
+  'voice_failed',
 ]);
 
 const ALLOWED_PROPERTIES = new Set([
