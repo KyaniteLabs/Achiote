@@ -2,6 +2,7 @@ import regionalData from '../data/regional-availability.json' with { type: 'json
 
 export type MatchedRegion = {
   key: string;
+  matchLevel?: 'metro' | 'worldwide_fallback';
   data: {
     cities: string[];
     majorEthnicCorridors: { name: string; city: string; cuisines: string[] }[];
@@ -15,15 +16,25 @@ export function findMatchingRegion(location: string): MatchedRegion | null {
 
   for (const [key, data] of Object.entries(regionalData.regions)) {
     if (normalized.includes(key.replace(/-/g, ' ')) || key.replace(/-/g, ' ').includes(normalized)) {
-      return { key, data };
+      return { key, matchLevel: 'metro', data };
     }
 
     for (const city of data.cities) {
       if (normalized.includes(city.toLowerCase()) || city.toLowerCase().includes(normalized)) {
-        return { key, data };
+        return { key, matchLevel: 'metro', data };
       }
     }
   }
 
-  return null;
+  const worldwide = regionalData.layers?.worldwide;
+  if (!worldwide) return null;
+  return {
+    key: 'worldwide-fallback',
+    matchLevel: 'worldwide_fallback',
+    data: {
+      cities: [location],
+      majorEthnicCorridors: worldwide.majorEthnicCorridors,
+      majorStores: worldwide.majorStores,
+    },
+  };
 }

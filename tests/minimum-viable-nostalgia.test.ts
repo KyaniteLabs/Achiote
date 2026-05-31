@@ -129,6 +129,24 @@ function trinidadFishSauceDossier() {
   });
 }
 
+function moleNegroDossier() {
+  const memory = collectFoodMemory({
+    memoryText: 'My grandmother in Oaxaca made mole negro with chilhuacle chiles. I live in Des Moines, Iowa. Where can I buy the chiles near me and what can I substitute?',
+  });
+  const researchPlan = planDishResearch(memory);
+  return buildReconstructionDossier({
+    memory,
+    researchPlan,
+    researchedFacts: [
+      'Oaxacan mole negro is a dark chile sauce built around chilhuacle chiles, toasted spices, nuts or seeds, and controlled bitterness and sweetness.',
+      'Chocolate can appear in some versions, but the remembered anchor is chilhuacle chile aroma and sauce body rather than confectionery.',
+    ],
+    inferredFacts: [
+      'The first test should isolate toasted chile aroma, sauce body, fat, acid, salt, and mild sweetness without turning the cue into a dessert.',
+    ],
+  });
+}
+
 function beverageDossier(memoryText: string, researchedFacts: string[] = [], inferredFacts: string[] = []) {
   const memory = collectFoodMemory({ memoryText });
   const researchPlan = planDishResearch(memory);
@@ -671,6 +689,20 @@ describe('minimum viable nostalgia cue', () => {
     expect(cue.title).toBe('Minimum viable composed-bite cue');
     expect(fullCueText(cue)).toMatch(/plantain|beef|protein|savory|starch/i);
     expect(cue.title).not.toContain('sweet-texture');
+  });
+
+  it('treats mole negro and chilhuacle as a savory sauce cue, not a sweet-texture cue', () => {
+    const cue = generateMinimumViableNostalgiaCue({
+      dossier: moleNegroDossier(),
+      userLocation: 'Des Moines, Iowa',
+      maxEffortMinutes: 10,
+    });
+    const recommendationText = fullCueText(cue);
+
+    expect(cue.title).toContain('sauce');
+    expect(cue.title).not.toContain('sweet-texture');
+    expect(recommendationText).toMatch(/chile|sauce|tomato|acid|salt|fat|aroma/i);
+    expect(recommendationText).not.toMatch(/granulated sugar|sugar cube|coconut flakes|toasted oats|plain cracker/);
   });
 
   it('respects explicit non-Latin Korean anchors and gel texture', () => {

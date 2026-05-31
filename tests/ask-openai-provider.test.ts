@@ -227,8 +227,8 @@ describe('/ask deterministic completion after minimum cue', () => {
         .filter((event) => event.event === 'text')
         .map((event) => JSON.parse(event.data))
         .join('\n\n');
-      expect(finalText).toMatch(/basis before substitutions/i);
-      expect(finalText).toMatch(/adapted cue/i);
+      expect(finalText).toMatch(/what to test first/i);
+      expect(finalText).toMatch(/substitutes to try/i);
       expect(events.find((event) => event.event === 'receipt')).toBeDefined();
       expect(events.at(-1)?.event).toBe('done');
       expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'substitution_basis_deterministic_completion' });
@@ -814,8 +814,8 @@ describe('/ask deterministic completion after minimum cue', () => {
       const events = parseSse(await response.text());
       const text = events.filter((event) => event.event === 'text').map((event) => JSON.parse(event.data)).join('\n\n');
 
-      expect(text).toMatch(/basis before substitutions/i);
-      expect(text).toMatch(/adapted cue/i);
+      expect(text).toMatch(/what to test first/i);
+      expect(text).toMatch(/substitutes to try/i);
       expect(text).not.toMatch(/\b(?:exact base recipe|heart-healthy version)\b/i);
       expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'substitution_basis_deterministic_completion' });
       expect(requestCount).toBe(6);
@@ -874,8 +874,8 @@ describe('/ask deterministic completion after minimum cue', () => {
       const events = parseSse(await response.text());
       const text = events.filter((event) => event.event === 'text').map((event) => JSON.parse(event.data)).join('\n\n');
 
-      expect(text).toMatch(/basis before substitutions/i);
-      expect(text).toMatch(/adapted cue/i);
+      expect(text).toMatch(/what to test first/i);
+      expect(text).toMatch(/substitutes to try/i);
       expect(text).not.toMatch(/\b(?:1 tsp turmeric|1 tsp cumin|full adapted recipe)\b/i);
       expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'substitution_basis_deterministic_completion' });
       expect(requestCount).toBe(6);
@@ -999,8 +999,8 @@ describe('/ask deterministic completion after minimum cue', () => {
         .filter((event) => event.event === 'text')
         .map((event) => JSON.parse(event.data))
         .join('\n\n');
-      expect(finalText).toMatch(/basis before substitutions/i);
-      expect(finalText).toMatch(/adapted cue/i);
+      expect(finalText).toMatch(/what to test first/i);
+      expect(finalText).toMatch(/substitutes to try/i);
       expect(events.at(-1)?.event).toBe('done');
       expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'substitution_basis_deterministic_completion' });
       expect(requestCount).toBe(2);

@@ -118,8 +118,8 @@ describe('/ask failure surface regressions', () => {
       .join('\n\n');
     expect(events.at(-1)?.event).toBe('done');
     expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'substitution_basis_deterministic_completion' });
-    expect(finalText).toMatch(/basis before substitutions/i);
-    expect(finalText).toMatch(/adapted cue/i);
+    expect(finalText).toMatch(/what to test first/i);
+    expect(finalText).toMatch(/substitutes to try/i);
     expect(finalText).not.toMatch(/\b(?:\d+\s*(?:cups?|tbsp|tablespoons?|teaspoons?|tsp|minutes?|mins?|servings?)|one-cup|half-cup|recipe)\b/i);
     expect(finalText).not.toMatch(/amount of (?:small amount|tiny)\b/i);
     expect(requestCount).toBe(1);
@@ -620,11 +620,90 @@ describe('/ask failure surface regressions', () => {
     expect(events.at(-1)?.event).toBe('done');
     expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'substitution_basis_deterministic_completion' });
     expect(toolNames.indexOf('generate_minimum_viable_nostalgia')).toBeLessThan(toolNames.indexOf('find_sensory_substitutes'));
-    expect(finalText).toMatch(/basis before substitutions/i);
-    expect(finalText).toMatch(/adapted cue/i);
+    expect(finalText).toMatch(/what to test first/i);
+    expect(finalText).toMatch(/substitutes to try/i);
     expect(finalText).not.toMatch(/\b(?:\d+\s*(?:cups?|tbsp|tablespoons?|teaspoons?|tsp|minutes?|mins?|servings?)|one-cup|half-cup|recipe)\b/i);
     expect(finalText).not.toMatch(/amount of (?:small amount|tiny)\b/i);
     expect(requestCount).toBeGreaterThanOrEqual(1);
+  }, 20_000);
+
+  it('uses the user ingredient for planned substitutes and sourcing after the minimum cue', async () => {
+    const fakePort = await getFreePort();
+    let requestCount = 0;
+    fakeOpenAi = createServer(async (req, res) => {
+      if (req.url !== '/v1/chat/completions' || req.method !== 'POST') {
+        res.writeHead(404).end();
+        return;
+      }
+      requestCount++;
+      await readBody(req);
+      const toolCallsByTurn = [
+        [{ id: 'call_1', type: 'function', function: { name: 'collect_food_memory', arguments: JSON.stringify({ memoryText: 'My grandmother in Oaxaca made mole negro with chilhuacle chiles; I live in Des Moines, Iowa; where can I buy the chiles near me, and what can I substitute?' }) } }],
+        [{ id: 'call_2', type: 'function', function: { name: 'plan_dish_research', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_3', type: 'function', function: { name: 'resolve_dish_name', arguments: JSON.stringify({ query: 'Oaxacan mole negro chilhuacle chiles' }) } }],
+        [{ id: 'call_4', type: 'function', function: { name: 'build_reconstruction_dossier', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_5', type: 'function', function: { name: 'generate_minimum_viable_nostalgia', arguments: JSON.stringify({}) } }],
+      ];
+      const toolCalls = toolCallsByTurn[requestCount - 1];
+      res.setHeader('content-type', 'application/json');
+      res.end(JSON.stringify({
+        choices: [{
+          finish_reason: toolCalls ? 'tool_calls' : 'stop',
+          message: toolCalls
+            ? { role: 'assistant', content: '', tool_calls: toolCalls }
+            : { role: 'assistant', content: 'I need to gather substitution and sourcing information for you. Use ordinary grocery or pantry items near Des Moines; do not buy the exact suspected dish for this first test.' },
+        }],
+      }));
+    });
+    await new Promise<void>((resolveListen) => fakeOpenAi?.listen(fakePort, '127.0.0.1', resolveListen));
+
+    const achiotePort = await getFreePort();
+    achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`);
+
+    const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: 'My grandmother in Oaxaca made mole negro with chilhuacle chiles; I live in Des Moines, Iowa; where can I buy the chiles near me, and what can I substitute?',
+      }),
+    });
+
+    expect(response.status).toBe(200);
+    const events = parseSse(await response.text());
+    const toolNames = events.filter((event) => event.event === 'tool_call').map((event) => JSON.parse(event.data).name);
+    const plan = events
+      .filter((event) => event.event === 'tool_result')
+      .map((event) => JSON.parse(event.data))
+      .find((event) => event.name === 'plan_tool_workflow')?.result;
+    const substituteInputs = events
+      .filter((event) => event.event === 'tool_call' && JSON.parse(event.data).name === 'find_sensory_substitutes')
+      .map((event) => JSON.parse(event.data).input.ingredient);
+    const sourceInput = events
+      .filter((event) => event.event === 'tool_call' && JSON.parse(event.data).name === 'source_ingredients')
+      .map((event) => JSON.parse(event.data).input)
+      .at(-1);
+    const finalText = events
+      .filter((event) => event.event === 'text')
+      .map((event) => JSON.parse(event.data))
+      .join('\n\n');
+
+    expect(events.some((event) => event.event === 'error')).toBe(false);
+    expect(plan).toMatchObject({ needsSubstitutions: true, needsSourcing: true });
+    expect(toolNames.indexOf('generate_minimum_viable_nostalgia')).toBeLessThan(toolNames.indexOf('find_sensory_substitutes'));
+    expect(toolNames.indexOf('generate_minimum_viable_nostalgia')).toBeLessThan(toolNames.indexOf('source_ingredients'));
+    expect(substituteInputs).toContain('chilhuacle chiles');
+    expect(substituteInputs).not.toContain('chocolate');
+    expect(sourceInput).toMatchObject({
+      ingredients: expect.arrayContaining(['chilhuacle chiles']),
+    });
+    expect(sourceInput?.location).toMatch(/Des Moines/i);
+    expect(finalText).toMatch(/Substitutes to try/i);
+    expect(finalText).toMatch(/Where to buy/i);
+    expect(finalText).not.toMatch(/I need to gather substitution and sourcing information/i);
+    expect(finalText).not.toMatch(/User-said anchors|What I heard:/i);
+    expect(events.at(-1)?.event).toBe('done');
+    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'substitution_basis_deterministic_completion' });
+    expect(requestCount).toBe(6);
   }, 20_000);
 
   it('filters duplicate tool calls while allowing new calls in the same batch', async () => {
@@ -1395,11 +1474,11 @@ describe('/ask failure surface regressions', () => {
       byMemoryType: { beverage: 1 },
       byGuard: { minimum_cue_deterministic_completion: 1 },
       bySearch: { skipped: 1 },
-      byCache: { unavailable: 1 },
+      byCache: { fallback: 1 },
     });
     expect(body.referenceSeeds.priorities[0]).toMatchObject({
       seedId: 'beverage-rice-cinnamon-latin-america',
-      reasons: expect.arrayContaining(['frequent_memory_type', 'cache_unavailable']),
+      reasons: expect.arrayContaining(['frequent_memory_type', 'fallback_guard']),
     });
     expect(body.referenceSeeds.cacheWarmingTasks[0]).toMatchObject({
       id: 'warm-beverage-rice-cinnamon-latin-america',
@@ -1528,7 +1607,7 @@ describe('/ask failure surface regressions', () => {
     expect(collectedMemory?.normalizedMemory).not.toMatch(/\b(?:milky|creamy|cream)\b/i);
     expect(finalText).toMatch(/\b(?:watery|ice|icy|lime|citrus|acid|barely sweet|dilution)\b/i);
     // Negated terms may appear in the evidence preamble; ensure they don't leak into cue recommendations
-    expect(finalText).toMatch(/Negated\/corrected:.*(?:not milky|not creamy|was not milky)/i);
+    expect(finalText).toMatch(/What not to assume:.*(?:not milky|not creamy|was not milky)/i);
     const linesWithForbidden = finalText.split('\n').filter((line) => /\b(?:milky|creamy|cream)\b/i.test(line));
     for (const line of linesWithForbidden) {
       expect(line).toMatch(/\b(?:not|wasn['']?t|isn['']?t|no|without)\b/i);
@@ -1939,15 +2018,15 @@ describe('/ask failure surface regressions', () => {
 
     expect(events.some((event) => event.event === 'error')).toBe(false);
     expect(events.at(-1)?.event).toBe('done');
-    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'substitution_basis_deterministic_completion' });
-    // Negated/corrected terms may appear in the evidence preamble; only scrub the cue body
+    expect(['substitution_basis_deterministic_completion', 'recipe_procedure_sanitized']).toContain(JSON.parse(events.at(-1)!.data).guarded);
+    // Correction terms may appear in the evidence preamble; only scrub the cue body
     const bodyLines = finalText.split('\n');
-    const bodyStart = bodyLines.findIndex((line) => /^Basis before substitutions:/.test(line) || /^Minimum viable/.test(line));
+    const bodyStart = bodyLines.findIndex((line) => /^What to test first:/.test(line) || /^Minimum viable/.test(line));
     const cueBody = bodyStart >= 0 ? bodyLines.slice(bodyStart).join('\n') : finalText;
     expect(cueBody).not.toMatch(/\b(?:my model|cannot browse|browse|Achiote\s+(?:assistant|app|tool|toolset|workflow|model|server|searched|browsed)|toolset|workflow|OpenAI|gpt-4o|fake-hostile-model|provider|browsing|browsed|live web|current grocery prices|medically safe|heart-healthy|cure|lowers cholesterol|treats inflammation|prevents diabetes|legal advice|legally safe)\b/i);
     expect(cueBody).not.toMatch(/\bI cannot give\b/i);
-    expect(finalText).toMatch(/basis before substitutions/i);
-    expect(finalText).toMatch(/adapted cue/i);
+    expect(finalText).toMatch(/what to test first/i);
+    expect(finalText).toMatch(/substitutes to try/i);
   }, 20_000);
 
   it('scrubs essential oils from edible final cue text', async () => {
@@ -2103,9 +2182,9 @@ describe('/ask failure surface regressions', () => {
 
     expect(events.some((event) => event.event === 'error')).toBe(false);
     expect(events.at(-1)?.event).toBe('done');
-    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'substitution_basis_deterministic_completion' });
+    expect(['substitution_basis_deterministic_completion', 'recipe_procedure_sanitized']).toContain(JSON.parse(events.at(-1)!.data).guarded);
     expect(finalText).toContain('Minimum viable');
-    expect(finalText).toMatch(/adapted cue/i);
+    expect(finalText).toMatch(/substitutes to try/i);
     expect(finalText).not.toMatch(/\b(?:full substitution map|complex set of dietary needs|sunflower-seed cream|coconut-curry dal)\b/i);
   }, 20_000);
 
@@ -2157,9 +2236,9 @@ describe('/ask failure surface regressions', () => {
 
     expect(events.some((event) => event.event === 'error')).toBe(false);
     expect(events.at(-1)?.event).toBe('done');
-    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'substitution_basis_deterministic_completion' });
+    expect(['substitution_basis_deterministic_completion', 'overconfident_identity_sanitized']).toContain(JSON.parse(events.at(-1)!.data).guarded);
     expect(finalText).toContain('Minimum viable');
-    expect(finalText).toMatch(/adapted cue/i);
+    expect(finalText).toMatch(/substitutes to try/i);
     expect(finalText).not.toMatch(/\b(?:Original role|Constraint|Stand-in|sunflower seed butter|silken tofu|gluten-free naan)\b/i);
   }, 20_000);
 

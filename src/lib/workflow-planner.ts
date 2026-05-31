@@ -51,9 +51,10 @@ export function planAskWorkflow(input: AskWorkflowPlannerInput): AskWorkflowPlan
     || /\b(?:tell|say|claim)\s+(?:me\s+)?(?:you\s+)?(?:browsed|searched)\b[\s\S]{0,80}\b(?:live\s+)?(?:web|results|prices)\b/i.test(msg)
     || /\bdo\s+not\s+(?:claim\s+)?(?:browse|search|use\s+live\s+web|claim\s+(?:you\s+)?(?:browsed|searched))\b/i.test(msg)
     || /\b(?:do\s+not|don't)\s+claim\s+(?:you\s+)?(?:browsed|searched)\b/i.test(msg);
-  const hasSourcingKeywords = /\b(?:where\s+(?:can|do)\s+i\s+(?:buy|find|get)|buy\s+near|find\s+near|source\s+(?:for|ingredients?)|where\s+to\s+(?:buy|find|get)|grocery\s+store|supermarket|market\s+near|available\s+near)\b/i.test(msg);
-  const hasLocation = /\b(?:i\s+(?:live|am|currently\s+live|currently\s+am)|i['']?m|im|we\s+(?:live|are)|based|located)\s+in\s+[^.!?;,]{2,80}/i.test(userMessage);
-  const needsSourcing = hasSourcingKeywords && hasLocation;
+  const hasSourcingKeywords = /\b(?:where\s+(?:can|do|would|should)\s+i\s+(?:buy|find|get)|what\s+should\s+i\s+buy|buy\s+near|find\s+near|source\s+(?:for|ingredients?)|where\s+to\s+(?:buy|find|get)|grocery\s+store|supermarket|market\s+near|available\s+near)\b/i.test(msg);
+  const hasResidenceLocation = /\b(?:i\s+(?:live|am|currently\s+live|currently\s+am)|i['']?m|im|we\s+(?:live|are)|based|located)\s+in\s+[^.!?;,]{2,80}/i.test(userMessage);
+  const hasPurchaseLocation = /\b(?:buy|find|get|source|sourcing|shop(?:\s+for)?)\b[\s\S]{0,120}\b(?:in|near|around)\s+[A-Z][^.!?;,]{1,80}/.test(userMessage);
+  const needsSourcing = hasSourcingKeywords && (hasResidenceLocation || hasPurchaseLocation);
 
   const needsSubstitutions = (hasRestrictions || hasSubstitutionKeywords) && wantsAdaptation && !negatesSubstitutionNeed;
   const detectedIntent = detectIntent({

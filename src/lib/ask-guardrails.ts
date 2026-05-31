@@ -105,11 +105,11 @@ export function containsConcreteFoodCue(text: string): boolean {
 
 export function containsRecipeMeasurementLanguage(text: string): boolean {
   const spelledAmount = String.raw`(?:a|an|half|quarter|one|two|three|four|five|six|seven|eight|nine|ten)`;
-  return /\b\d+(?:\s*[-–]\s*\d+)?(?:\s*\/\s*\d+)?\s*(?:tsp|tbsp|teaspoons?|tablespoons?|cups?|ounces?|oz|pounds?|lbs?|grams?|g|ml|milliliters?|liters?|quarts?|gallons?|sticks?|cloves?|heads?|bunches?)\b/i.test(text)
+  return /\b\d+(?:\s*[-\u2013]\s*\d+)?(?:\s*\/\s*\d+)?\s*(?:tsp|tbsp|teaspoons?|tablespoons?|cups?|ounces?|oz|pounds?|lbs?|grams?|g|ml|milliliters?|liters?|quarts?|gallons?|sticks?|cloves?|heads?|bunches?)\b/i.test(text)
     || /(?:[¼½¾⅓⅔⅛⅜⅝⅞]|\b\d+\/\d+)\s*(?:tsp|tbsp|teaspoons?|tablespoons?|cups?|ounces?|oz|pounds?|lbs?|grams?|g|ml|milliliters?|liters?|quarts?|gallons?|sticks?|cloves?|heads?|bunches?)\b/i.test(text)
     || /\b(?:one|half)[-\s]?cup\b/i.test(text)
     || new RegExp(String.raw`\b${spelledAmount}\s+(?:(?:small|large|tiny)\s+)?(?:of\s+|a\s+)?(?:tsp|tbsp|teaspoons?|tablespoons?|cups?|glass(?:es)?|bowls?|spoonfuls?|ounces?|oz|pounds?|lbs?|grams?|milliliters?|liters?|quarts?|gallons?|sticks?|cloves?|heads?|bunches?)\b`, 'i').test(text)
-    || /\b\d+(?:\s*[-–]\s*\d+)?\s*(?:mins?|minutes?|hrs?|hours?)\b/i.test(text)
+    || /\b\d+(?:\s*[-\u2013]\s*\d+)?\s*(?:mins?|minutes?|hrs?|hours?)\b/i.test(text)
     || /\b\d{2,4}\s*°?\s*[FC]\b/i.test(text)
     || /\bpreheat\b.*\b(?:oven|to)\b/i.test(text)
     || /\b(?:bake|roast|simmer|boil)\b.*\b(?:minutes?|hours?|degrees?|°)\b/i.test(text)
@@ -263,9 +263,9 @@ export function sanitizeRecipeStyleCueLanguage(text: string): string {
     .replace(/(?:[¼½¾⅓⅔⅛⅜⅝⅞]|\b\d+\/\d+)\s*(?:tsp|tbsp|teaspoons?|tablespoons?|cups?|ounces?|oz|pounds?|lbs?|grams?|g|ml|milliliters?|liters?|quarts?|gallons?|sticks?|cloves?|heads?|bunches?)\b/gi, 'a small amount of')
     .replace(/\b(?:one|half)[-\s]?cup\b/gi, 'tiny sip')
     .replace(/\bfull\s+recipe\b/gi, 'full dish')
-    .replace(/\b\d+(?:\s*[-–]\s*\d+)?(?:\s*\/\s*\d+)?\s*(?:tsp|tbsp|teaspoons?|tablespoons?|cups?|ounces?|oz|pounds?|lbs?|grams?|g|ml|milliliters?|liters?|quarts?|gallons?|sticks?|cloves?|heads?|bunches?)\b/gi, 'a small amount of')
+    .replace(/\b\d+(?:\s*[-\u2013]\s*\d+)?(?:\s*\/\s*\d+)?\s*(?:tsp|tbsp|teaspoons?|tablespoons?|cups?|ounces?|oz|pounds?|lbs?|grams?|g|ml|milliliters?|liters?|quarts?|gallons?|sticks?|cloves?|heads?|bunches?)\b/gi, 'a small amount of')
     .replace(/\b(?:a|an|half|quarter|one|two|three|four|five|six|seven|eight|nine|ten)\s+(?:(?:small|large|tiny)\s+)?(?:of\s+|a\s+)?(?:tsp|tbsp|teaspoons?|tablespoons?|cups?|glass(?:es)?|bowls?|spoonfuls?|ounces?|oz|pounds?|lbs?|grams?|milliliters?|liters?|quarts?|gallons?|sticks?|cloves?|heads?|bunches?)\b/gi, 'a tiny sip or bite')
-    .replace(/\b\d+(?:\s*[-–]\s*\d+)?\s*(?:mins?|minutes?|hrs?|hours?)\b/gi, 'briefly')
+    .replace(/\b\d+(?:\s*[-\u2013]\s*\d+)?\s*(?:mins?|minutes?|hrs?|hours?)\b/gi, 'briefly')
     .replace(/\b\d{2,4}\s*°?\s*[FC]\b/gi, 'gentle heat')
     .replace(/\b(?:gentle\s+simmer|rolling\s+boil)\b/gi, 'gentle heat')
     .replace(/\bpreheat\b[^.?!]*(?:[.?!]|$)/gi, 'Keep this to a tiny tasting cue, not an oven recipe. ')
@@ -375,12 +375,12 @@ export function buildEvidencePreamble(toolPayloads: Record<string, unknown>, use
 
   if (userAnchors.length === 0 && inferred.length === 0 && negated.length === 0 && constraints.length === 0 && researchedFacts.length === 0) return '';
   return [
-    `User-said anchors: ${userAnchors.length > 0 ? userAnchors.join(', ') : 'not enough yet'}.`,
-    negated.length > 0 ? `Negated/corrected: ${negated.join('; ')}.` : '',
-    inferred.length > 0 ? `Inferred research start: ${inferred.join('; ')}.${correction}` : '',
-    constraints.length > 0 ? `Constraints: ${constraints.join(', ')}.` : '',
-    researchedFacts.length > 0 ? `Researched facts: ${researchedFacts.join('; ')}.` : '',
-    `Unknown: ${unknown}.`,
+    `What I heard: ${userAnchors.length > 0 ? userAnchors.join(', ') : 'not enough yet'}.`,
+    negated.length > 0 ? `What not to assume: ${negated.join('; ')}.` : '',
+    inferred.length > 0 ? `Best research start: ${inferred.join('; ')}.${correction}` : '',
+    constraints.length > 0 ? `Food boundaries: ${constraints.join(', ')}.` : '',
+    researchedFacts.length > 0 ? `What the tools found: ${researchedFacts.join('; ')}.` : '',
+    `Still uncertain: ${unknown}.`,
   ].filter(Boolean).join('\n');
 }
 

@@ -25,8 +25,12 @@ describe('findMatchingRegion', () => {
     expect(result!.key).toBe('atlanta-metro');
   });
 
-  it('returns null for unknown location', () => {
-    expect(findMatchingRegion('antarctica-research-station')).toBeNull();
+  it('uses the worldwide fallback for locations without a metro overlay', () => {
+    const result = findMatchingRegion('Des Moines, Iowa');
+    expect(result).not.toBeNull();
+    expect(result!.key).toBe('worldwide-fallback');
+    expect(result!.matchLevel).toBe('worldwide_fallback');
+    expect(result!.data.majorStores).toHaveProperty('online');
   });
 
   it('matches hyphenated input (southern-california)', () => {

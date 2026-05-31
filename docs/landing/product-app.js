@@ -17,7 +17,7 @@
 
   function explainHttpStatus(status, detail) {
     const suffix = String(detail || '').trim();
-    if (status === 401) return `Authentication required. Enter your API key or demo password. ${suffix}`.trim();
+    if (status === 401) return `The public demo should be open. Reload once, then contact support if this continues. ${suffix}`.trim();
     if (status === 429) return `Rate limit exceeded. ${suffix}`.trim();
     if (status === 413) return `Message is too large. ${suffix}`.trim();
     if (status === 415) return `Server expected JSON but received a different content type. ${suffix}`.trim();

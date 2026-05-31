@@ -58,7 +58,8 @@ describe('P1 launch hardening guardrails', () => {
     const app = fs.readFileSync('docs/landing/app.js', 'utf8');
     const productApp = fs.readFileSync('docs/landing/product-app.js', 'utf8');
     expect(app).toContain('ProductApp.explainHttpStatus');
-    expect(productApp).toContain('Authentication required');
+    expect(productApp).toContain('The public demo should be open');
+    expect(productApp).not.toContain('demo password');
     expect(productApp).toContain('Rate limit exceeded');
     expect(productApp).toContain('Could not parse server response');
   });

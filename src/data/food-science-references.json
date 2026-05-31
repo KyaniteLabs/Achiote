@@ -2,7 +2,7 @@
   "meta": {
     "version": "1.0.0",
     "description": "Citation-backed food-science mechanisms for nostalgic dish reconstruction",
-    "lastUpdated": "2026-04-19",
+    "lastUpdated": "2026-05-31",
     "scope": "Peer-reviewed research supporting the sensory chemistry, taste perception, and food-evoked memory mechanisms referenced by MCP tools and the skill definition. Citations are organized by mechanism area. Each entry includes a DOI for verification."
   },
   "mechanisms": {
@@ -20,6 +20,10 @@
             "The type of lipid influences which aroma compounds are available for perception"
           ]
         }
+      ],
+      "coverageMechanisms": [
+        "aroma",
+        "fat_mouthfeel"
       ]
     },
     "maillard-browning": {
@@ -36,6 +40,10 @@
             "Different amino acids produce distinct flavor profiles (e.g., cysteine yields meaty sulfur notes; proline yields bready notes)"
           ]
         }
+      ],
+      "coverageMechanisms": [
+        "browning",
+        "aroma"
       ]
     },
     "astringency-fat-opponency": {
@@ -52,6 +60,10 @@
             "The interaction occurs at the perceptual level, not just at the chemical level"
           ]
         }
+      ],
+      "coverageMechanisms": [
+        "fat_mouthfeel",
+        "sauce_balance"
       ]
     },
     "starch-texture": {
@@ -68,6 +80,9 @@
             "Retrogradation behavior (staling/setting) varies by starch source and affects texture over time"
           ]
         }
+      ],
+      "coverageMechanisms": [
+        "starch_texture"
       ]
     },
     "sweet-sour-balance": {
@@ -84,6 +99,10 @@
             "Cultural exposure influences the preferred sweet-sour balance point"
           ]
         }
+      ],
+      "coverageMechanisms": [
+        "sauce_balance",
+        "sugar_crystal"
       ]
     },
     "crispiness-and-nostalgia": {
@@ -100,6 +119,10 @@
             "Multimodal texture contrast is a stronger driver of positive emotional response than unimodal texture"
           ]
         }
+      ],
+      "coverageMechanisms": [
+        "texture_contrast",
+        "browning"
       ]
     },
     "food-evoked-nostalgia": {
@@ -116,6 +139,10 @@
             "The emotional intensity is linked to the social context of the original eating occasion, not just the food itself"
           ]
         }
+      ],
+      "coverageMechanisms": [
+        "serving_ritual",
+        "aroma"
       ]
     },
     "umami-synergy": {
@@ -142,6 +169,9 @@
             "Palatable cuisines worldwide contain high amounts of glutamate, inosinate, and guanylate regardless of cultural or regional differences"
           ]
         }
+      ],
+      "coverageMechanisms": [
+        "sauce_balance"
       ]
     },
     "salt-taste-complexity": {
@@ -168,6 +198,9 @@
             "NaCl saltiness depends on both sodium and chloride — the anion effect is real and measurable"
           ]
         }
+      ],
+      "coverageMechanisms": [
+        "sauce_balance"
       ]
     },
     "temperature-taste-interaction": {
@@ -185,6 +218,9 @@
             "Temperature affects taste at the molecular transduction level, not just at the cognitive level"
           ]
         }
+      ],
+      "coverageMechanisms": [
+        "temperature"
       ]
     },
     "fermentation-flavor": {
@@ -201,6 +237,10 @@
             "Different LAB strains produce measurably different volatile profiles from the same substrate"
           ]
         }
+      ],
+      "coverageMechanisms": [
+        "fermentation_acid",
+        "aroma"
       ]
     },
     "cross-cultural-texture": {
@@ -215,6 +255,52 @@
             "Thickness, firmness, and sweetness detection thresholds do not differ significantly between Dutch and Chinese adults",
             "Saliva flow rate, fungiform papillae density, and PROP taster status do not explain inter-individual variation in texture sensitivity",
             "Differences in food preferences across cultures are driven by dietary experience rather than physiological sensitivity"
+          ]
+        }
+      ],
+      "coverageMechanisms": [
+        "texture_contrast"
+      ]
+    },
+    "smoke-phenolic-aroma": {
+      "summary": "Wood smoke and liquid smoke carry phenolic odorants such as guaiacol and syringol that strongly shape smoky taste and aroma. The exact perception depends on concentration, matrix, and the balance of phenols, carbonyls, acids, and other smoke fractions.",
+      "practicalImplication": "For a smoke memory, the first cue should separate smoke aroma from heat, sweetness, fat, and char. A tiny smoked spice, tea, chile, fish, or salt cue can test the phenolic direction before sourcing the exact smoked food.",
+      "coverageMechanisms": [
+        "smoke",
+        "aroma"
+      ],
+      "sources": [
+        {
+          "id": "various-phenolic-smoke-2018",
+          "citation": "Wang, H. et al. (2018). Sensory Characteristics of Various Concentrations of Phenolic Compounds Potentially Associated with Smoked Aroma in Foods. Molecules, 23(4), 780.",
+          "doi": "10.3390/molecules23040780",
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6017423/",
+          "keyFindings": [
+            "Guaiacol, syringol, and related phenolic compounds are associated with smoked aroma in food systems",
+            "Different phenolic compounds produce different smoky, medicinal, spicy, or sweet odor notes",
+            "Concentration changes whether smoke reads pleasant, harsh, medicinal, or overpowering"
+          ]
+        }
+      ]
+    },
+    "alkaline-processing-corn-and-noodle": {
+      "summary": "Alkaline processing changes starch, protein, hull, color, aroma, and texture in foods such as nixtamalized maize and alkaline noodles. Calcium hydroxide, ash, lye water, kansui, or carbonate salts can create distinctive chew, aroma, color, and mineral notes.",
+      "practicalImplication": "For alkaline-processing memories, test the alkaline aroma and texture as its own mechanism. Do not replace nixtamal, masa, or alkaline noodles with plain cornmeal or wheat noodles without checking the aroma and chew difference.",
+      "coverageMechanisms": [
+        "alkaline_processing",
+        "starch_texture",
+        "aroma"
+      ],
+      "sources": [
+        {
+          "id": "cabrera-ramirez-nixtamal-2021",
+          "citation": "Cabrera-Ramirez, A. H. et al. (2021). Understanding the functionality and manufacturing of nixtamalized maize products. Journal of Cereal Science, 101, 103205.",
+          "doi": "10.1016/j.jcs.2021.103205",
+          "url": "https://www.sciencedirect.com/science/article/pii/S0733521021000461",
+          "keyFindings": [
+            "Mature maize kernels are lime-cooked into nixtamal, ground into masa, and made into tortillas, chips, and related products",
+            "Lime, water, corn type, cooking, steeping, baking, and frying affect texture, color, and flavor",
+            "The process creates a functional dough and sensory profile that differs from untreated maize"
           ]
         }
       ]

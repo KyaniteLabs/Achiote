@@ -105,13 +105,37 @@ export function buildAskCaseFile(input: BuildAskCaseFileInput): AskCaseFile {
   addMany(inferred, arrayStrings(dossier.nostalgiaCriticalElements).map((element) => `critical element: ${element}`));
   addMany(inferred, arrayStrings(dossier.recreationStrategy).map((strategy) => `strategy: ${strategy}`));
 
-  const substitutes = asRecord(toolPayloads.find_sensory_substitutes);
-  const substituteIngredient = stringValue(substitutes.ingredient);
-  for (const substitute of arrayRecords(substitutes.substitutes).slice(0, 4)) {
-    const original = stringValue(substitute.original) ?? substituteIngredient;
-    const replacement = stringValue(substitute.substitute);
-    const reason = stringValue(substitute.reasoning);
-    if (original && replacement) add(researched, `substitute: ${original} -> ${replacement}${reason ? ` (${reason})` : ''}`);
+  const substitutionPayloads = Array.isArray(toolPayloads.find_sensory_substitutes_all)
+    ? toolPayloads.find_sensory_substitutes_all
+    : [toolPayloads.find_sensory_substitutes].filter(Boolean);
+  for (const payload of substitutionPayloads) {
+    const substitutes = asRecord(payload);
+    const substituteIngredient = stringValue(substitutes.ingredient);
+    const promptForAgent = stringValue(substitutes.promptForAgent);
+    if (promptForAgent) add(retrievedReferences, `substitution tool guidance: ${promptForAgent}`);
+    for (const substitute of arrayRecords(substitutes.substitutes).slice(0, 4)) {
+      const original = stringValue(substitute.original) ?? substituteIngredient;
+      const replacement = stringValue(substitute.substitute);
+      const reason = stringValue(substitute.reasoning);
+      if (original && replacement) add(researched, `substitute: ${original} -> ${replacement}${reason ? ` (${reason})` : ''}`);
+    }
+    if (substituteIngredient && arrayRecords(substitutes.substitutes).length === 0) {
+      add(researched, `substitute target: ${substituteIngredient}, host-model analysis required`);
+    }
+  }
+
+  const sourcing = asRecord(toolPayloads.source_ingredients);
+  const sourcingLocation = stringValue(sourcing.location);
+  const sourcingIngredients = arrayStrings(sourcing.ingredients);
+  if (sourcingIngredients.length > 0) {
+    add(researched, `sourcing request: ${sourcingIngredients.join(', ')} near ${sourcingLocation ?? 'the user'}`);
+  }
+  const regionalData = asRecord(sourcing.regionalData);
+  addMany(researched, arrayStrings(regionalData.majorStores).slice(0, 3).map((store) => `sourcing store/corridor: ${store}`));
+  addMany(researched, arrayStrings(regionalData.ethnicCorridors).slice(0, 3).map((corridor) => `sourcing store/corridor: ${corridor}`));
+  const sourcingPrompt = stringValue(sourcing.promptForAgent);
+  if (sourcingPrompt) {
+    add(retrievedReferences, `sourcing tool guidance: ${sourcingPrompt}`);
   }
 
   const cue = asRecord(toolPayloads.generate_minimum_viable_nostalgia);

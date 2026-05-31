@@ -43,7 +43,7 @@ const COMPONENT_ROLES = {
     substitutionReason: 'Proteins that render fat carry Maillard compounds and fat-soluble aromatics the same way regardless of cut or species',
   },
   sauce: {
-    keywords: 'sauce|gravy|relish|chutney|salsa|condiment|dip|orange|creamy',
+    keywords: 'sauce|gravy|relish|chutney|salsa|condiment|dip|orange|creamy|mole|chile|chiles|pepper|tomato|tomatillo',
     criticalElement: 'acid-fat-salt balance and aromatic contrast against richness',
     flavorProfile: 'variable, may be tomato-based, dairy-based, oil-herb, or vinegar-forward',
     localTestWith: 'grocery-store salsa, tomato paste with vinegar and sugar, or yogurt with herbs',
@@ -122,10 +122,10 @@ function decomposeIntoComponents(signals: string, userLocation?: string, overall
   }
 
   const confectionerySignals = signals.replace(/\b(?:not|rather than|instead of)\s+(?:a |an )?(?:candy|dessert|confection(?:ery)?|cookie|biscuit|sweet(?:ness)?|sweet-texture)(?:\s+or\s+(?:a |an )?(?:candy|dessert|confection(?:ery)?|cookie|biscuit|sweet(?:ness)?|sweet-texture))*\b/gi, '');
-  const hasStrongConfectionery = hasAnySignal(confectionerySignals, [wordSignal('caramel|dulce de leche|manjar|fudge|barfi|halva|baklava|mochi|candy|dessert|confection|cookie|biscuit|nougat|turrón|taffy|melcocha|cocada|flan|custard|pudding|chocolate|pastillas|milk candy|grainy/crystalline texture|powdery')]);
+  const hasExplicitConfectioneryForm = hasAnySignal(confectionerySignals, [wordSignal('candy|dessert|confection|cookie|biscuit|nougat|taffy|fudge|barfi|halva|baklava|mochi|melcocha|cocada|flan|custard|pudding|pastillas|milk candy|grainy/crystalline texture|powdery')]);
   const hasSavoryCueFamily = components.some((component) => ['starch', 'protein', 'sauce', 'vegetable', 'broth'].includes(component.role))
     || hasAnySignal(signals, [wordSignal('savory|curry|gravy|spiced|seasoned')]);
-  if (!hasStrongConfectionery && hasSavoryCueFamily) {
+  if (!hasExplicitConfectioneryForm && hasSavoryCueFamily) {
     components = components.filter((component) => component.role !== 'confectionery');
   }
 
@@ -546,16 +546,17 @@ function foodScienceCueProfile(signals: string, userLocation?: string, overallCo
   }
   const hasProteinOrFat = signalIncludes(signals, 'meat|sausage|fish|shark|beef|pork|chicken|lamb|cheese|fat|butter|oil|fried|mushroom');
   const hasStarchOrBase = signalIncludes(signals, 'starch|rice|potato|potatoes|mash|masa|dough|bread|yuca|cassava|plantain|dumpling|noodle|bean|beans|acorn|jelly');
-  const hasSauceOrCondiment = signalIncludes(signals, 'sauce|gravy|relish|chutney|salsa|condiment|dip|orange|creamy|soy|vinegar');
+  const hasSauceOrCondiment = signalIncludes(signals, 'sauce|gravy|relish|chutney|salsa|condiment|dip|orange|creamy|soy|vinegar|mole|chile|chiles|pepper|tomato|tomatillo');
   const hasBeverage = isBeverageSignal(signals);
   const hasLiquid = signalIncludes(signals, 'soup|stew|broth|sip|porridge');
   const hasAroma = signalIncludes(signals, 'aroma|smell|spice|spiced|seasoned|garlic|onion|herb|pepper|cumin|coriander|clove|nutmeg|cinnamon|oregano|sesame|nutty');
   const hasTextureContrast = signalIncludes(signals, 'crispy|crunchy|chewy|creamy|soft|tender|stretchy|crisp|fried|grilled|charred|brown|golden|slippery|gelled|jelly|layered');
   const hasAcidOrSweet = signalIncludes(signals, 'sour|tangy|acid|vinegar|citrus|lime|lemon|fermented|sweet|syrup|molasses|sugar');
+  const hasSolidFoodCarrier = signalIncludes(signals, 'meat|sausage|fish|shark|beef|pork|chicken|lamb|cheese|filling|ground|starch|rice|potato|potatoes|mash|masa|dough|bread|yuca|cassava|plantain|dumpling|noodle|bean|beans|acorn|jelly|crispy|crunchy|chewy|soft|tender|stretchy|crisp|fried|grilled|charred|brown|golden|slippery|gelled|layered');
   const confectionerySignals = signals.replace(/\b(?:not|rather than|instead of)\s+(?:a |an )?(?:candy|dessert|confection(?:ery)?|cookie|biscuit|sweet(?:ness)?|sweet-texture)(?:\s+or\s+(?:a |an )?(?:candy|dessert|confection(?:ery)?|cookie|biscuit|sweet(?:ness)?|sweet-texture))*\b/gi, '');
   const hasStrongConfectionery = hasAnySignal(confectionerySignals, [wordSignal('caramel|dulce de leche|manjar|fudge|barfi|halva|baklava|mochi|candy|dessert|confection|cookie|biscuit|nougat|turrón|taffy|melcocha|cocada|flan|custard|pudding|chocolate|pastillas|milk candy|grainy/crystalline texture|powdery')]);
   const hasConfectionery = hasStrongConfectionery || hasAnySignal(confectionerySignals, [wordSignal('sweet|sugar')]);
-  const hasSavoryCueFamily = hasProteinOrFat || hasSauceOrCondiment || (hasStarchOrBase && hasAroma) || signalIncludes(signals, 'savory|curry|gravy|spiced|seasoned|umami');
+  const hasSavoryCueFamily = hasProteinOrFat || hasSauceOrCondiment || (hasStarchOrBase && hasAroma) || signalIncludes(signals, 'savory|curry|gravy|spiced|seasoned|umami|chile|chiles|tomato|tomatillo');
 
   if (hasBeverage && !hasProteinOrFat && !hasSauceOrCondiment && !signalIncludes(signals, 'not rice|not cinnamon|not horchata')) {
     return beverageCueProfile(signals, userLocation, overallConfidence);
@@ -569,7 +570,10 @@ function foodScienceCueProfile(signals: string, userLocation?: string, overallCo
     return cassavaFritterCueProfile(signals, userLocation, overallConfidence);
   }
 
-  if (hasConfectionery && (hasStrongConfectionery || !hasSavoryCueFamily)) {
+  if (
+    hasConfectionery
+    && (!hasSavoryCueFamily || hasAnySignal(confectionerySignals, [wordSignal('candy|dessert|confection|cookie|biscuit|nougat|taffy|fudge|barfi|halva|baklava|mochi|melcocha|cocada|flan|custard|pudding|pastillas|milk candy|grainy/crystalline texture|powdery')]))
+  ) {
     return {
       title: 'Minimum viable sweet-texture cue',
       goal: 'Test the memory by building a one-spoon local pantry proxy for sugar crystallization texture, toasted seed or coconut aroma, and crumbly or chewy mouthfeel before buying the suspected sweet. The first test should isolate whether the trigger is grainy sugar crystals, toasted aroma, sticky fat, or crumbly fracture.',
@@ -635,6 +639,39 @@ function foodScienceCueProfile(signals: string, userLocation?: string, overallCo
       whyThisIsMinimum: 'A one-cup sip tests the chemistry of aroma release, body, acid, salt, and fat before wasting ingredients on a full pot.',
       safetyNotes: ['Use only known edible ingredients.', 'Keep tasting amounts small while adjusting salt, acid, or heat.'],
       followUpIfItWorks: ['Ask whether the liquid body came from grain starch, broth, dairy/plant milk, fruit pulp, fat, or dilution.', 'Ask whether the brightness came from citrus, vinegar, dairy, fermentation, or tomato.', 'Ask what texture or garnish is missing.', 'Use source_ingredients to help find key items near the user.'],
+      components: decomposeIntoComponents(signals, userLocation, overallConfidence),
+    };
+  }
+
+  if (hasSauceOrCondiment && !hasSolidFoodCarrier) {
+    return {
+      title: 'Minimum viable sauce-and-carrier cue',
+      goal: 'Test whether the sauce/condiment contrast is carrying the memory using a tiny pantry sauce and a neutral carrier.',
+      effortMinutes: 10,
+      format: 'condiment',
+      ingredients: [
+        { item: 'neutral carrier such as bread, rice, potato, cracker, tortilla, or cooked starch', amount: '1-2 bites', purpose: 'bland base for judging sauce and texture' },
+        { item: 'pantry sauce base matching the researched direction: tomato, dairy, oil, vinegar, fruit, chile, or stock', amount: '1 tablespoon', purpose: 'cheap proxy for the sauce family' },
+        { item: 'aromatic/spice cue from researched facts', amount: 'pinch', purpose: 'volatile aroma trigger', optional: true },
+        { item: 'acid, sugar, salt, or fat adjustment', amount: 'drops or pinches', purpose: 'balance and mouthfeel tuning', optional: true },
+      ],
+      steps: [
+        'Make only one tablespoon of sauce proxy, not a batch.',
+        'Tune it by food-science dimensions: fat for body, acid for brightness, sugar for roundness, salt for intensity, spice/aromatics for memory.',
+        'Taste it on the neutral carrier so texture and sauce can be judged together.',
+        'Change one variable at a time and note what suddenly feels familiar or wrong.',
+      ],
+      preserves: ['sauce contrast', 'carrier-plus-condiment ritual', 'fat/acid/sweet/salt balance', 'aroma impact'],
+      doesNotPreserve: ['exact brand or restaurant sauce', 'complete dish structure', 'full garnish set'],
+      accessibilityPrinciples: ['start from pantry sauce bases', 'test one tablespoon', 'use a neutral grocery-store carrier', 'adjust balance before sourcing specialty condiments'],
+      substituteLogic: [
+        'Sauces are often families of fat, water, acid, sugar, salt, heat, and aromatics; matching that balance can matter more than matching the name.',
+        'A bland carrier exposes whether the sauce is the memory trigger or merely background.',
+        'One-variable adjustments prevent a generic sauce from becoming a confused full recipe.',
+      ],
+      whyThisIsMinimum: 'A tablespoon of sauce on a neutral carrier tests the contrast and balance that often carries the nostalgic bite.',
+      safetyNotes: ['Check condiment allergens and chile heat.', 'Do not mix unknown fermented or wild ingredients.'],
+      followUpIfItWorks: ['Ask whether the sauce was smooth or chunky.', 'Ask whether it leaned fatty, acidic, sweet, spicy, or savory.', 'Ask what carrier it was served on.', 'Use source_ingredients to help the user find sauce components near where they live.'],
       components: decomposeIntoComponents(signals, userLocation, overallConfidence),
     };
   }
