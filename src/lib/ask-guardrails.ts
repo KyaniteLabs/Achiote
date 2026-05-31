@@ -339,27 +339,50 @@ function extractNegatedTerms(text: string): string[] {
   return [...new Set(matches.map((m) => m[0].trim()))].filter((m) => m.length > 4).slice(0, 4);
 }
 
+function isRestrictedAnchorForConstraints(anchor: string, constraints: string[]): boolean {
+  const lower = anchor.toLowerCase();
+  return constraints.some((constraint) => {
+    if (/nut allergy/.test(constraint)) return /\b(?:nuts?|nutty|peanuts?|tree nuts?|cashews?|almonds?|walnuts?|pecans?|pistachios?|hazelnuts?|macadamias?)\b/i.test(lower);
+    if (/egg allergy/.test(constraint)) return /\b(?:eggs?|mayonnaise|mayo|meringue)\b/i.test(lower);
+    if (/shellfish allergy/.test(constraint)) return /\b(?:shellfish|shrimp|prawns?|crab|lobster|oysters?|clams?|mussels?|scallops?)\b/i.test(lower);
+    if (/fish allergy/.test(constraint)) return /\b(?:fish|seafood|anchov(?:y|ies)|sardines?|bonito|tuna|salmon|mackerel|fish sauce)\b/i.test(lower);
+    if (/sesame allergy/.test(constraint)) return /\b(?:sesame|tahini|benne)\b/i.test(lower);
+    if (/dairy-free/.test(constraint)) return /\b(?:milk|cream|butter|cheese|yogurt|dairy)\b/i.test(lower);
+    if (/gluten-free/.test(constraint)) return /\b(?:wheat|gluten|barley|rye|bread|naan)\b/i.test(lower);
+    if (/soy allergy/.test(constraint)) return /\bsoy\b/i.test(lower);
+    if (/pork-free/.test(constraint)) return /\bpork\b/i.test(lower);
+    return false;
+  });
+}
+
+function filterAnchorsForConstraints(anchors: string[], constraints: string[]): string[] {
+  return anchors.filter((anchor) => !isRestrictedAnchorForConstraints(anchor, constraints));
+}
+
 export function buildEvidencePreamble(toolPayloads: Record<string, unknown>, userMessage?: string): string {
   const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
   const plan = toolPayloads.plan_dish_research as DishResearchPlan | undefined;
   const top = plan?.hypotheses?.[0];
   const clues = memory?.extractedClues;
+  const constraints = userMessage ? inferSafetyConstraints(userMessage) : [];
+  const topName = top && !/^Unidentified\b/i.test(top.name) && !isRestrictedAnchorForConstraints(top.name, constraints)
+    ? top.name
+    : '';
   const userAnchors = [
     ...(clues?.culturalOrRegionalHints ?? []),
     ...(clues?.possibleDishNames ?? []),
     ...(clues?.rememberedIngredients ?? []),
     ...(clues?.sensoryClues ?? []),
-  ].filter((anchor) => !isBroadRegionalHint(anchor)).slice(0, 8);
+  ].filter((anchor) => !isBroadRegionalHint(anchor) && !isRestrictedAnchorForConstraints(anchor, constraints)).slice(0, 8);
   const inferred = [
-    top && !/^Unidentified\b/i.test(top.name) ? top.name : '',
+    topName,
     ...(top?.whatWouldConfirm ?? []).slice(0, 3),
-  ].filter(Boolean);
+  ].filter((anchor) => Boolean(anchor) && !isRestrictedAnchorForConstraints(anchor, constraints));
   const unknown = top?.confidence === 'Low' || !top ? 'exact name and family version' : 'family version and exact proportions';
-  const correction = userMessage && /\b(?:spelling|wrong|mistake|sound(?:ed)? like|called it)\b/i.test(userMessage) && top && !/^Unidentified\b/i.test(top.name)
-    ? ` Likely correction: your fragment points toward ${top.name}; keep that as a research start, not a final identity.`
+  const correction = userMessage && /\b(?:spelling|wrong|mistake|sound(?:ed)? like|called it)\b/i.test(userMessage) && topName
+    ? ` Likely correction: your fragment points toward ${topName}; keep that as a research start, not a final identity.`
     : '';
   const negated = userMessage ? extractNegatedTerms(userMessage) : [];
-  const constraints = userMessage ? inferSafetyConstraints(userMessage) : [];
 
   const researchedFacts: string[] = [];
   const resolved = toolPayloads.resolve_dish_name as
@@ -387,8 +410,9 @@ export function buildEvidencePreamble(toolPayloads: Record<string, unknown>, use
 }
 
 export function buildClarificationOnlyResponse(toolPayloads: Record<string, unknown>, userMessage?: string): string {
-  const memoryQuestions = getStringArray(toolPayloads.collect_food_memory, 'nextQuestions');
-  const planQuestions = getStringArray(toolPayloads.plan_dish_research, 'questionsForUser');
+  const constraints = userMessage ? inferSafetyConstraints(userMessage) : [];
+  const memoryQuestions = filterAnchorsForConstraints(getStringArray(toolPayloads.collect_food_memory, 'nextQuestions'), constraints);
+  const planQuestions = filterAnchorsForConstraints(getStringArray(toolPayloads.plan_dish_research, 'questionsForUser'), constraints);
   const questions = [...new Set([...planQuestions, ...memoryQuestions])].slice(0, 3);
   const selectedQuestions = questions.length > 0 ? questions : [
     'Where did you eat this, or where was it from? Even a country, region, city, or community helps.',
@@ -397,8 +421,8 @@ export function buildClarificationOnlyResponse(toolPayloads: Record<string, unkn
 
   // Build a context-aware preamble based on what signals are already present
   const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
-  const sensoryClues = memory?.extractedClues?.sensoryClues ?? [];
-  const ingredients = memory?.extractedClues?.rememberedIngredients ?? [];
+  const sensoryClues = filterAnchorsForConstraints(memory?.extractedClues?.sensoryClues ?? [], constraints);
+  const ingredients = filterAnchorsForConstraints(memory?.extractedClues?.rememberedIngredients ?? [], constraints);
   const inferred = memory?.inferredContext?.culturalOrRegional ?? [];
   const nonBroadInferred = inferred.filter((c) => !isBroadRegionalHint(c.label));
 

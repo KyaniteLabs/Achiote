@@ -167,6 +167,8 @@ describe('/ask failure surface regressions', () => {
 
     expect(finalText).toContain('qualified professional');
     expect(finalText).not.toMatch(/\bsafe\b/i);
+    expect(finalText).not.toMatch(/What I heard:[^\n]*(?:peanuts?|tree nuts?|nuts?)/i);
+    expect(finalText).not.toMatch(/(?:peanuts?|tree nuts?|nuts?) you mentioned/i);
   }, 20_000);
 
   it('recovers deterministically from llama.cpp n_keep/n_ctx context errors', async () => {
