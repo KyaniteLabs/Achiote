@@ -53,7 +53,7 @@ export function planAskWorkflow(input: AskWorkflowPlannerInput): AskWorkflowPlan
     || /\b(?:do\s+not|don't)\s+claim\s+(?:you\s+)?(?:browsed|searched)\b/i.test(msg);
   const hasSourcingKeywords = /\b(?:where\s+(?:can|do|would|should)\s+i\s+(?:buy|find|get)|what\s+should\s+i\s+buy|buy\s+near|find\s+near|source\s+(?:for|ingredients?)|where\s+to\s+(?:buy|find|get)|grocery\s+store|supermarket|market\s+near|available\s+near)\b/i.test(msg);
   const hasResidenceLocation = /\b(?:i\s+(?:live|am|currently\s+live|currently\s+am)|i['']?m|im|we\s+(?:live|are)|based|located)\s+in\s+[^.!?;,]{2,80}/i.test(userMessage);
-  const hasPurchaseLocation = /\b(?:buy|find|get|source|sourcing|shop(?:\s+for)?)\b[\s\S]{0,120}\b(?:in|near|around)\s+[A-Z][^.!?;,]{1,80}/.test(userMessage);
+  const hasPurchaseLocation = /\b(?:buy|find|get|source|sourcing|shop(?:\s+for)?)\b[\s\S]{0,120}\b(?:in|near|around)\s+[^.!?;,]{2,80}/i.test(userMessage);
   const needsSourcing = hasSourcingKeywords && (hasResidenceLocation || hasPurchaseLocation);
 
   const needsSubstitutions = (hasRestrictions || hasSubstitutionKeywords) && wantsAdaptation && !negatesSubstitutionNeed;

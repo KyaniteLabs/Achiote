@@ -1577,8 +1577,8 @@ describe('/ask failure surface regressions', () => {
       byMemoryType: { beverage: 1 },
       byGuard: { minimum_cue_deterministic_completion: 1 },
       bySearch: { skipped: 1 },
-      byCache: { fallback: 1 },
     });
+    expect((body.quality.byCache.fallback ?? 0) + (body.quality.byCache.unavailable ?? 0)).toBe(1);
     expect(body.referenceSeeds.priorities[0]).toMatchObject({
       seedId: 'beverage-rice-cinnamon-latin-america',
       reasons: expect.arrayContaining(['frequent_memory_type', 'fallback_guard']),

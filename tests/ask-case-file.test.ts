@@ -87,6 +87,16 @@ describe('ask compact case file', () => {
           whatToAskFamily: ['Was it creamy?'],
           confidence: 'Medium',
         },
+        source_ingredients: {
+          ingredients: ['pickle brine'],
+          location: 'Des Moines, Iowa',
+          regionalData: {
+            majorStores: {
+              specialty: ['Polish deli'],
+            },
+            ethnicCorridors: [{ name: 'Polish corridor', city: 'West Side', cuisines: ['Polish'] }],
+          },
+        },
         generate_minimum_viable_nostalgia: {
           title: 'Warm dill brine spoon test',
           goal: 'Test sour dill aroma before cooking soup.',
@@ -113,6 +123,8 @@ describe('ask compact case file', () => {
     expect(caseFile.currentWorkflowState).toBe('minimum_cue_ready');
     expect(caseFile.userSaid).toContain('Warm sour dill soup with pale chunks.');
     expect(caseFile.researched).toContain('Dill pickle soup is commonly soured with pickle brine.');
+    expect(caseFile.researched).toContain('purchase location: des moines, iowa');
+    expect(caseFile.researched).toContain('sourcing request: pickle brine near Des Moines, Iowa');
     expect(caseFile.inferred).toContain('Likely Central/Eastern European soup family.');
     expect(caseFile.unknowns).toContain('Whether pale chunks were potato or cucumber.');
     expect(caseFile.constraints).toContain('ordinary grocery ingredients first');
@@ -127,6 +139,84 @@ describe('ask compact case file', () => {
       hasMinimumCue: true,
       hasSearch: true,
     });
+  });
+
+  it('keeps structured substitute and sourcing guidance visible after compaction', () => {
+    const caseFile = buildAskCaseFile({
+      userMessage: 'Where can I buy chilhuacle chiles near des moines, and what should I substitute if I cannot find them?',
+      calledTools: [
+        'plan_tool_workflow',
+        'collect_food_memory',
+        'plan_dish_research',
+        'find_sensory_substitutes',
+        'source_ingredients',
+      ],
+      toolPayloads: {
+        plan_tool_workflow: {
+          detectedIntent: 'dietary_substitution',
+          needsSubstitutions: true,
+          detectedRestrictions: [],
+          maxSearchCalls: 1,
+        },
+        collect_food_memory: {
+          rawMemory: 'Mole negro with chilhuacle chiles.',
+          normalizedMemory: 'mole negro with chilhuacle chiles',
+          extractedClues: {
+            possibleDishNames: ['mole negro'],
+            culturalOrRegionalHints: ['Oaxaca'],
+            rememberedIngredients: ['chilhuacle chiles', 'chocolate'],
+            sensoryClues: ['dark', 'smoky', 'fruity'],
+            occasions: [],
+          },
+          inferredContext: { culturalOrRegional: [], language: [] },
+          missingInformation: [],
+          nextQuestions: [],
+        },
+        plan_dish_research: {
+          researchedFacts: Array.from({ length: 10 }, (_, index) => `older researched fact ${index + 1}`),
+          searchQueries: Array.from({ length: 6 }, (_, index) => `older query ${index + 1}`),
+        },
+        find_sensory_substitutes: {
+          ingredient: 'chilhuacle chiles',
+          substitutes: [
+            {
+              original: 'chilhuacle chiles',
+              substitute: 'ancho plus pasilla',
+              reasoning: 'keeps dark fruit and mild heat',
+            },
+          ],
+          promptForAgent: 'Use the substitute guidance when exact chilhuacle chiles are unavailable.',
+        },
+        source_ingredients: {
+          ingredients: ['chilhuacle chiles'],
+          location: 'des moines',
+          regionalData: {
+            majorStores: {
+              mexican: ['La Tapatia', 'Masienda online'],
+              spice: ['The Spice House online'],
+            },
+            ethnicCorridors: [
+              { name: 'Latino grocery corridor', city: 'Des Moines', cuisines: ['Mexican', 'Oaxacan'] },
+            ],
+          },
+          promptForAgent: 'Use source_ingredients stores and corridors as static sourcing guidance, not live inventory.',
+        },
+      },
+    });
+
+    const formatted = formatAskCaseFileForModel(caseFile);
+
+    expect(caseFile.researched).toEqual(expect.arrayContaining([
+      'sourcing request: chilhuacle chiles near des moines',
+      'purchase location: des moines',
+      'sourcing store/corridor: mexican: La Tapatia, Masienda online',
+      'sourcing store/corridor: Latino grocery corridor in Des Moines (Mexican, Oaxacan)',
+    ]));
+    expect(caseFile.retrievedReferences[0]).toContain('sourcing tool guidance');
+    expect(caseFile.retrievedReferences[1]).toContain('substitution tool guidance');
+    expect(formatted).toContain('La Tapatia');
+    expect(formatted).toContain('source_ingredients stores and corridors');
+    expect(formatted).toContain('Use the substitute guidance');
   });
 
   it('formats compact context as data, not user instructions, and bounds oversized fields', () => {

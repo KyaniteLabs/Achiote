@@ -81,6 +81,12 @@ describe('WorkflowPlanner', () => {
     });
     expect(whatShouldBuy.needsSourcing).toBe(true);
     expect(whatShouldBuy.workflowSteps.map((step) => step.tool)).toContain('source_ingredients');
+
+    const lowercaseLocation = planAskWorkflow({
+      userMessage: 'My grandmother made mole negro with chilhuacle chiles. where can i buy chilhuacle chiles near des moines?',
+    });
+    expect(lowercaseLocation.needsSourcing).toBe(true);
+    expect(lowercaseLocation.workflowSteps.map((step) => step.tool)).toContain('source_ingredients');
   });
 
   it('keeps search for exact-identity research requests', () => {
