@@ -359,12 +359,27 @@ export function buildEvidencePreamble(toolPayloads: Record<string, unknown>, use
   const negated = userMessage ? extractNegatedTerms(userMessage) : [];
   const constraints = userMessage ? inferSafetyConstraints(userMessage) : [];
 
-  if (userAnchors.length === 0 && inferred.length === 0 && negated.length === 0 && constraints.length === 0) return '';
+  const researchedFacts: string[] = [];
+  const resolved = toolPayloads.resolve_dish_name as
+    | { dishName?: string; canonicalName?: string; region?: string; confidence?: string; aliases?: string[] }
+    | undefined;
+  if (resolved?.canonicalName && !/^Unknown$/i.test(resolved.canonicalName)) {
+    researchedFacts.push(`Dish resolved: "${resolved.canonicalName}" (confidence: ${resolved.confidence ?? 'unknown'}, region: ${resolved.region ?? 'unknown'})`);
+  }
+  const searched = toolPayloads.search_web as
+    | { results?: Array<{ title?: string; snippet?: string }> }
+    | undefined;
+  for (const result of (searched?.results ?? []).slice(0, 2)) {
+    if (result.snippet?.trim()) researchedFacts.push(result.snippet.trim().replace(/[\u2014\u2013]/g, ', '));
+  }
+
+  if (userAnchors.length === 0 && inferred.length === 0 && negated.length === 0 && constraints.length === 0 && researchedFacts.length === 0) return '';
   return [
     `User-said anchors: ${userAnchors.length > 0 ? userAnchors.join(', ') : 'not enough yet'}.`,
     negated.length > 0 ? `Negated/corrected: ${negated.join('; ')}.` : '',
     inferred.length > 0 ? `Inferred research start: ${inferred.join('; ')}.${correction}` : '',
     constraints.length > 0 ? `Constraints: ${constraints.join(', ')}.` : '',
+    researchedFacts.length > 0 ? `Researched facts: ${researchedFacts.join('; ')}.` : '',
     `Unknown: ${unknown}.`,
   ].filter(Boolean).join('\n');
 }
@@ -389,7 +404,7 @@ export function buildClarificationOnlyResponse(toolPayloads: Record<string, unkn
   if (nonBroadInferred.length > 0) {
     // Acknowledge the cultural inference so the user knows we heard them
     const context = nonBroadInferred[0].label.replace(/\s+context$/i, '').toLowerCase();
-    preamble = `Your description already points toward a ${context} tradition — I just need one more anchor to give you a real test instead of a guess.`;
+    preamble = `Your description already points toward a ${context} tradition. I just need one more anchor to give you a real test instead of a guess.`;
   } else if (sensoryClues.length > 0 || ingredients.length > 0) {
     const anchor = [...sensoryClues, ...ingredients].slice(0, 2).join(' and ');
     preamble = `The ${anchor} you mentioned is a real anchor. One more detail will keep the first test specific rather than generic.`;

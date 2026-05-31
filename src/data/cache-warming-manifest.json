@@ -45405,6 +45405,2568 @@
           "Warm only from approved public research artifacts."
         ]
       }
+    },
+    {
+      "id": "warm-nordic-rye-bread",
+      "seedId": "nordic-rye-bread",
+      "cacheTarget": {
+        "dishFamily": "nordic-rye-bread",
+        "region": "Scandinavia"
+      },
+      "coverageTags": [
+        "foodForms.bread_flatbread",
+        "mechanisms.starch_texture",
+        "mechanisms.fermentation_acid",
+        "mechanisms.aroma",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-nordic-rye-bread-diaspora",
+      "seedId": "nordic-rye-bread-diaspora",
+      "cacheTarget": {
+        "dishFamily": "nordic-rye-bread",
+        "region": "Scandinavia diaspora"
+      },
+      "coverageTags": [
+        "foodForms.bread_flatbread",
+        "mechanisms.starch_texture",
+        "mechanisms.fermentation_acid",
+        "mechanisms.aroma",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-nordic-rye-bread-migration",
+      "seedId": "nordic-rye-bread-migration",
+      "cacheTarget": {
+        "dishFamily": "nordic-rye-bread",
+        "region": "Scandinavia migration corridor"
+      },
+      "coverageTags": [
+        "foodForms.bread_flatbread",
+        "mechanisms.starch_texture",
+        "mechanisms.fermentation_acid",
+        "mechanisms.aroma",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-nordic-rye-bread-global",
+      "seedId": "nordic-rye-bread-global",
+      "cacheTarget": {
+        "dishFamily": "nordic-rye-bread",
+        "region": "Global diaspora"
+      },
+      "coverageTags": [
+        "foodForms.bread_flatbread",
+        "mechanisms.starch_texture",
+        "mechanisms.fermentation_acid",
+        "mechanisms.aroma",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-nordic-rye-bread-community",
+      "seedId": "nordic-rye-bread-community",
+      "cacheTarget": {
+        "dishFamily": "nordic-rye-bread",
+        "region": "Community diaspora"
+      },
+      "coverageTags": [
+        "foodForms.bread_flatbread",
+        "mechanisms.starch_texture",
+        "mechanisms.fermentation_acid",
+        "mechanisms.aroma",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-nordic-rye-bread-mechanism",
+      "seedId": "nordic-rye-bread-mechanism",
+      "cacheTarget": {
+        "dishFamily": "nordic-rye-bread",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "foodForms.bread_flatbread",
+        "mechanisms.starch_texture",
+        "mechanisms.fermentation_acid",
+        "mechanisms.aroma",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-nordic-rye-bread-naming",
+      "seedId": "nordic-rye-bread-naming",
+      "cacheTarget": {
+        "dishFamily": "nordic-rye-bread",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "foodForms.bread_flatbread",
+        "mechanisms.starch_texture",
+        "mechanisms.fermentation_acid",
+        "mechanisms.aroma",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-swedish-meatball",
+      "seedId": "swedish-meatball",
+      "cacheTarget": {
+        "dishFamily": "swedish-meatball",
+        "region": "Scandinavia"
+      },
+      "coverageTags": [
+        "foodForms.protein_centered",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-swedish-meatball-diaspora",
+      "seedId": "swedish-meatball-diaspora",
+      "cacheTarget": {
+        "dishFamily": "swedish-meatball",
+        "region": "Scandinavia diaspora"
+      },
+      "coverageTags": [
+        "foodForms.protein_centered",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-swedish-meatball-migration",
+      "seedId": "swedish-meatball-migration",
+      "cacheTarget": {
+        "dishFamily": "swedish-meatball",
+        "region": "Scandinavia migration corridor"
+      },
+      "coverageTags": [
+        "foodForms.protein_centered",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-swedish-meatball-global",
+      "seedId": "swedish-meatball-global",
+      "cacheTarget": {
+        "dishFamily": "swedish-meatball",
+        "region": "Global diaspora"
+      },
+      "coverageTags": [
+        "foodForms.protein_centered",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-swedish-meatball-community",
+      "seedId": "swedish-meatball-community",
+      "cacheTarget": {
+        "dishFamily": "swedish-meatball",
+        "region": "Community diaspora"
+      },
+      "coverageTags": [
+        "foodForms.protein_centered",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-swedish-meatball-mechanism",
+      "seedId": "swedish-meatball-mechanism",
+      "cacheTarget": {
+        "dishFamily": "swedish-meatball",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "foodForms.protein_centered",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-swedish-meatball-naming",
+      "seedId": "swedish-meatball-naming",
+      "cacheTarget": {
+        "dishFamily": "swedish-meatball",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "foodForms.protein_centered",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-gravlax-sweden",
+      "seedId": "gravlax-sweden",
+      "cacheTarget": {
+        "dishFamily": "smoked-fish",
+        "region": "Sweden"
+      },
+      "coverageTags": [
+        "foodForms.protein_centered",
+        "cultureAreas.europe",
+        "regionScopes.nation",
+        "nameSystems.alias",
+        "mechanisms.aroma"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-skyr-iceland",
+      "seedId": "skyr-iceland",
+      "cacheTarget": {
+        "dishFamily": "fermented-dairy",
+        "region": "Iceland"
+      },
+      "coverageTags": [
+        "foodForms.pantry_single_ingredient",
+        "cultureAreas.europe",
+        "regionScopes.nation",
+        "nameSystems.alias",
+        "mechanisms.fermentation_acid"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-french-braise",
+      "seedId": "french-braise",
+      "cacheTarget": {
+        "dishFamily": "french-braise",
+        "region": "France"
+      },
+      "coverageTags": [
+        "foodForms.stew_braise",
+        "mechanisms.browning",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "mechanisms.temperature",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-french-braise-diaspora",
+      "seedId": "french-braise-diaspora",
+      "cacheTarget": {
+        "dishFamily": "french-braise",
+        "region": "France diaspora"
+      },
+      "coverageTags": [
+        "foodForms.stew_braise",
+        "mechanisms.browning",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "mechanisms.temperature",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-french-braise-migration",
+      "seedId": "french-braise-migration",
+      "cacheTarget": {
+        "dishFamily": "french-braise",
+        "region": "France migration corridor"
+      },
+      "coverageTags": [
+        "foodForms.stew_braise",
+        "mechanisms.browning",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "mechanisms.temperature",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-french-braise-global",
+      "seedId": "french-braise-global",
+      "cacheTarget": {
+        "dishFamily": "french-braise",
+        "region": "Global diaspora"
+      },
+      "coverageTags": [
+        "foodForms.stew_braise",
+        "mechanisms.browning",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "mechanisms.temperature",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-french-braise-community",
+      "seedId": "french-braise-community",
+      "cacheTarget": {
+        "dishFamily": "french-braise",
+        "region": "Community diaspora"
+      },
+      "coverageTags": [
+        "foodForms.stew_braise",
+        "mechanisms.browning",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "mechanisms.temperature",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-french-braise-mechanism",
+      "seedId": "french-braise-mechanism",
+      "cacheTarget": {
+        "dishFamily": "french-braise",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "foodForms.stew_braise",
+        "mechanisms.browning",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "mechanisms.temperature",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-french-braise-naming",
+      "seedId": "french-braise-naming",
+      "cacheTarget": {
+        "dishFamily": "french-braise",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "foodForms.stew_braise",
+        "mechanisms.browning",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "mechanisms.temperature",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-iberian-custard-tart",
+      "seedId": "iberian-custard-tart",
+      "cacheTarget": {
+        "dishFamily": "iberian-custard-tart",
+        "region": "Portugal"
+      },
+      "coverageTags": [
+        "foodForms.dessert",
+        "mechanisms.browning",
+        "mechanisms.sugar_crystal",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast",
+        "cultureAreas.europe",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-iberian-custard-tart-diaspora",
+      "seedId": "iberian-custard-tart-diaspora",
+      "cacheTarget": {
+        "dishFamily": "iberian-custard-tart",
+        "region": "Portugal diaspora"
+      },
+      "coverageTags": [
+        "foodForms.dessert",
+        "mechanisms.browning",
+        "mechanisms.sugar_crystal",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast",
+        "cultureAreas.europe",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-iberian-custard-tart-migration",
+      "seedId": "iberian-custard-tart-migration",
+      "cacheTarget": {
+        "dishFamily": "iberian-custard-tart",
+        "region": "Portugal migration corridor"
+      },
+      "coverageTags": [
+        "foodForms.dessert",
+        "mechanisms.browning",
+        "mechanisms.sugar_crystal",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast",
+        "cultureAreas.europe",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-iberian-custard-tart-global",
+      "seedId": "iberian-custard-tart-global",
+      "cacheTarget": {
+        "dishFamily": "iberian-custard-tart",
+        "region": "Global diaspora"
+      },
+      "coverageTags": [
+        "foodForms.dessert",
+        "mechanisms.browning",
+        "mechanisms.sugar_crystal",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast",
+        "cultureAreas.europe",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-iberian-custard-tart-community",
+      "seedId": "iberian-custard-tart-community",
+      "cacheTarget": {
+        "dishFamily": "iberian-custard-tart",
+        "region": "Community diaspora"
+      },
+      "coverageTags": [
+        "foodForms.dessert",
+        "mechanisms.browning",
+        "mechanisms.sugar_crystal",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast",
+        "cultureAreas.europe",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-iberian-custard-tart-mechanism",
+      "seedId": "iberian-custard-tart-mechanism",
+      "cacheTarget": {
+        "dishFamily": "iberian-custard-tart",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "foodForms.dessert",
+        "mechanisms.browning",
+        "mechanisms.sugar_crystal",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast",
+        "cultureAreas.europe",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-iberian-custard-tart-naming",
+      "seedId": "iberian-custard-tart-naming",
+      "cacheTarget": {
+        "dishFamily": "iberian-custard-tart",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "foodForms.dessert",
+        "mechanisms.browning",
+        "mechanisms.sugar_crystal",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast",
+        "cultureAreas.europe",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-irish-stew-ireland",
+      "seedId": "irish-stew-ireland",
+      "cacheTarget": {
+        "dishFamily": "hearty-soup",
+        "region": "Ireland"
+      },
+      "coverageTags": [
+        "foodForms.soup_broth",
+        "cultureAreas.europe",
+        "regionScopes.nation",
+        "nameSystems.alias",
+        "mechanisms.temperature"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-flammkuchen-alsace",
+      "seedId": "flammkuchen-alsace",
+      "cacheTarget": {
+        "dishFamily": "flatbread",
+        "region": "Alsace"
+      },
+      "coverageTags": [
+        "foodForms.bread_flatbread",
+        "cultureAreas.europe",
+        "regionScopes.subregion",
+        "nameSystems.alias",
+        "mechanisms.browning"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-maize-porridge",
+      "seedId": "maize-porridge",
+      "cacheTarget": {
+        "dishFamily": "maize-porridge",
+        "region": "Southern Africa"
+      },
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "mechanisms.serving_ritual",
+        "cultureAreas.southern_africa",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-maize-porridge-diaspora",
+      "seedId": "maize-porridge-diaspora",
+      "cacheTarget": {
+        "dishFamily": "maize-porridge",
+        "region": "Southern Africa diaspora"
+      },
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "mechanisms.serving_ritual",
+        "cultureAreas.southern_africa",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-maize-porridge-migration",
+      "seedId": "maize-porridge-migration",
+      "cacheTarget": {
+        "dishFamily": "maize-porridge",
+        "region": "Southern Africa migration corridor"
+      },
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "mechanisms.serving_ritual",
+        "cultureAreas.southern_africa",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-maize-porridge-global",
+      "seedId": "maize-porridge-global",
+      "cacheTarget": {
+        "dishFamily": "maize-porridge",
+        "region": "Global diaspora"
+      },
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "mechanisms.serving_ritual",
+        "cultureAreas.southern_africa",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-maize-porridge-community",
+      "seedId": "maize-porridge-community",
+      "cacheTarget": {
+        "dishFamily": "maize-porridge",
+        "region": "Community diaspora"
+      },
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "mechanisms.serving_ritual",
+        "cultureAreas.southern_africa",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-maize-porridge-mechanism",
+      "seedId": "maize-porridge-mechanism",
+      "cacheTarget": {
+        "dishFamily": "maize-porridge",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "mechanisms.serving_ritual",
+        "cultureAreas.southern_africa",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-maize-porridge-naming",
+      "seedId": "maize-porridge-naming",
+      "cacheTarget": {
+        "dishFamily": "maize-porridge",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "mechanisms.serving_ritual",
+        "cultureAreas.southern_africa",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-biltong",
+      "seedId": "biltong",
+      "cacheTarget": {
+        "dishFamily": "biltong",
+        "region": "Southern Africa"
+      },
+      "coverageTags": [
+        "foodForms.pantry_single_ingredient",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.fermentation_acid",
+        "cultureAreas.southern_africa",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-biltong-diaspora",
+      "seedId": "biltong-diaspora",
+      "cacheTarget": {
+        "dishFamily": "biltong",
+        "region": "Southern Africa diaspora"
+      },
+      "coverageTags": [
+        "foodForms.pantry_single_ingredient",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.fermentation_acid",
+        "cultureAreas.southern_africa",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-biltong-migration",
+      "seedId": "biltong-migration",
+      "cacheTarget": {
+        "dishFamily": "biltong",
+        "region": "Southern Africa migration corridor"
+      },
+      "coverageTags": [
+        "foodForms.pantry_single_ingredient",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.fermentation_acid",
+        "cultureAreas.southern_africa",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-biltong-global",
+      "seedId": "biltong-global",
+      "cacheTarget": {
+        "dishFamily": "biltong",
+        "region": "Global diaspora"
+      },
+      "coverageTags": [
+        "foodForms.pantry_single_ingredient",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.fermentation_acid",
+        "cultureAreas.southern_africa",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-biltong-community",
+      "seedId": "biltong-community",
+      "cacheTarget": {
+        "dishFamily": "biltong",
+        "region": "Community diaspora"
+      },
+      "coverageTags": [
+        "foodForms.pantry_single_ingredient",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.fermentation_acid",
+        "cultureAreas.southern_africa",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-biltong-mechanism",
+      "seedId": "biltong-mechanism",
+      "cacheTarget": {
+        "dishFamily": "biltong",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "foodForms.pantry_single_ingredient",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.fermentation_acid",
+        "cultureAreas.southern_africa",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-biltong-naming",
+      "seedId": "biltong-naming",
+      "cacheTarget": {
+        "dishFamily": "biltong",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "foodForms.pantry_single_ingredient",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.fermentation_acid",
+        "cultureAreas.southern_africa",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-morogo-south-africa",
+      "seedId": "morogo-south-africa",
+      "cacheTarget": {
+        "dishFamily": "simmered-vegetable-greens",
+        "region": "South Africa"
+      },
+      "coverageTags": [
+        "foodForms.vegetable_fungi",
+        "cultureAreas.southern_africa",
+        "regionScopes.nation",
+        "nameSystems.alias",
+        "mechanisms.aroma"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-koeksister-south-africa",
+      "seedId": "koeksister-south-africa",
+      "cacheTarget": {
+        "dishFamily": "sweet-beignet",
+        "region": "South Africa"
+      },
+      "coverageTags": [
+        "foodForms.confectionery",
+        "cultureAreas.southern_africa",
+        "regionScopes.nation",
+        "nameSystems.alias",
+        "mechanisms.sugar_crystal"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-plov",
+      "seedId": "plov",
+      "cacheTarget": {
+        "dishFamily": "plov",
+        "region": "Central Asia"
+      },
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "cultureAreas.central_asia",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-plov-diaspora",
+      "seedId": "plov-diaspora",
+      "cacheTarget": {
+        "dishFamily": "plov",
+        "region": "Central Asia diaspora"
+      },
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "cultureAreas.central_asia",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-plov-migration",
+      "seedId": "plov-migration",
+      "cacheTarget": {
+        "dishFamily": "plov",
+        "region": "Central Asia migration corridor"
+      },
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "cultureAreas.central_asia",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-plov-global",
+      "seedId": "plov-global",
+      "cacheTarget": {
+        "dishFamily": "plov",
+        "region": "Global diaspora"
+      },
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "cultureAreas.central_asia",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-plov-community",
+      "seedId": "plov-community",
+      "cacheTarget": {
+        "dishFamily": "plov",
+        "region": "Community diaspora"
+      },
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "cultureAreas.central_asia",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-plov-mechanism",
+      "seedId": "plov-mechanism",
+      "cacheTarget": {
+        "dishFamily": "plov",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "cultureAreas.central_asia",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-plov-naming",
+      "seedId": "plov-naming",
+      "cacheTarget": {
+        "dishFamily": "plov",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "cultureAreas.central_asia",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-lagman",
+      "seedId": "lagman",
+      "cacheTarget": {
+        "dishFamily": "lagman",
+        "region": "Central Asia"
+      },
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.starch_texture",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "cultureAreas.central_asia",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-lagman-diaspora",
+      "seedId": "lagman-diaspora",
+      "cacheTarget": {
+        "dishFamily": "lagman",
+        "region": "Central Asia diaspora"
+      },
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.starch_texture",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "cultureAreas.central_asia",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-lagman-migration",
+      "seedId": "lagman-migration",
+      "cacheTarget": {
+        "dishFamily": "lagman",
+        "region": "Central Asia migration corridor"
+      },
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.starch_texture",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "cultureAreas.central_asia",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-lagman-global",
+      "seedId": "lagman-global",
+      "cacheTarget": {
+        "dishFamily": "lagman",
+        "region": "Global diaspora"
+      },
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.starch_texture",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "cultureAreas.central_asia",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-lagman-community",
+      "seedId": "lagman-community",
+      "cacheTarget": {
+        "dishFamily": "lagman",
+        "region": "Community diaspora"
+      },
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.starch_texture",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "cultureAreas.central_asia",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-lagman-mechanism",
+      "seedId": "lagman-mechanism",
+      "cacheTarget": {
+        "dishFamily": "lagman",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.starch_texture",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "cultureAreas.central_asia",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-lagman-naming",
+      "seedId": "lagman-naming",
+      "cacheTarget": {
+        "dishFamily": "lagman",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.starch_texture",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "cultureAreas.central_asia",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-qurut-central-asia",
+      "seedId": "qurut-central-asia",
+      "cacheTarget": {
+        "dishFamily": "fermented-dairy",
+        "region": "Central Asia"
+      },
+      "coverageTags": [
+        "foodForms.pantry_single_ingredient",
+        "cultureAreas.central_asia",
+        "regionScopes.macro_region",
+        "nameSystems.alias",
+        "mechanisms.fermentation_acid"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-samsa-central-asia",
+      "seedId": "samsa-central-asia",
+      "cacheTarget": {
+        "dishFamily": "dumpling",
+        "region": "Central Asia"
+      },
+      "coverageTags": [
+        "foodForms.dumpling_pocket",
+        "cultureAreas.central_asia",
+        "regionScopes.macro_region",
+        "nameSystems.alias",
+        "mechanisms.aroma"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-haitian-griot",
+      "seedId": "haitian-griot",
+      "cacheTarget": {
+        "dishFamily": "haitian-griot",
+        "region": "Haiti"
+      },
+      "coverageTags": [
+        "foodForms.protein_centered",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "cultureAreas.caribbean",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-haitian-griot-diaspora",
+      "seedId": "haitian-griot-diaspora",
+      "cacheTarget": {
+        "dishFamily": "haitian-griot",
+        "region": "Haiti diaspora"
+      },
+      "coverageTags": [
+        "foodForms.protein_centered",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "cultureAreas.caribbean",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-haitian-griot-migration",
+      "seedId": "haitian-griot-migration",
+      "cacheTarget": {
+        "dishFamily": "haitian-griot",
+        "region": "Haiti migration corridor"
+      },
+      "coverageTags": [
+        "foodForms.protein_centered",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "cultureAreas.caribbean",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-haitian-griot-global",
+      "seedId": "haitian-griot-global",
+      "cacheTarget": {
+        "dishFamily": "haitian-griot",
+        "region": "Global diaspora"
+      },
+      "coverageTags": [
+        "foodForms.protein_centered",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "cultureAreas.caribbean",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-haitian-griot-community",
+      "seedId": "haitian-griot-community",
+      "cacheTarget": {
+        "dishFamily": "haitian-griot",
+        "region": "Community diaspora"
+      },
+      "coverageTags": [
+        "foodForms.protein_centered",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "cultureAreas.caribbean",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-haitian-griot-mechanism",
+      "seedId": "haitian-griot-mechanism",
+      "cacheTarget": {
+        "dishFamily": "haitian-griot",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "foodForms.protein_centered",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "cultureAreas.caribbean",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-haitian-griot-naming",
+      "seedId": "haitian-griot-naming",
+      "cacheTarget": {
+        "dishFamily": "haitian-griot",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "foodForms.protein_centered",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "cultureAreas.caribbean",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-trinidad-doubles",
+      "seedId": "trinidad-doubles",
+      "cacheTarget": {
+        "dishFamily": "trinidad-doubles",
+        "region": "Trinidad and Tobago"
+      },
+      "coverageTags": [
+        "foodForms.snack_street_food",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.sauce_balance",
+        "cultureAreas.caribbean",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-trinidad-doubles-diaspora",
+      "seedId": "trinidad-doubles-diaspora",
+      "cacheTarget": {
+        "dishFamily": "trinidad-doubles",
+        "region": "Trinidad and Tobago diaspora"
+      },
+      "coverageTags": [
+        "foodForms.snack_street_food",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.sauce_balance",
+        "cultureAreas.caribbean",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-trinidad-doubles-migration",
+      "seedId": "trinidad-doubles-migration",
+      "cacheTarget": {
+        "dishFamily": "trinidad-doubles",
+        "region": "Trinidad and Tobago migration corridor"
+      },
+      "coverageTags": [
+        "foodForms.snack_street_food",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.sauce_balance",
+        "cultureAreas.caribbean",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-trinidad-doubles-global",
+      "seedId": "trinidad-doubles-global",
+      "cacheTarget": {
+        "dishFamily": "trinidad-doubles",
+        "region": "Global diaspora"
+      },
+      "coverageTags": [
+        "foodForms.snack_street_food",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.sauce_balance",
+        "cultureAreas.caribbean",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-trinidad-doubles-community",
+      "seedId": "trinidad-doubles-community",
+      "cacheTarget": {
+        "dishFamily": "trinidad-doubles",
+        "region": "Community diaspora"
+      },
+      "coverageTags": [
+        "foodForms.snack_street_food",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.sauce_balance",
+        "cultureAreas.caribbean",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-trinidad-doubles-mechanism",
+      "seedId": "trinidad-doubles-mechanism",
+      "cacheTarget": {
+        "dishFamily": "trinidad-doubles",
+        "region": "Sensory mechanism context"
+      },
+      "coverageTags": [
+        "foodForms.snack_street_food",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.sauce_balance",
+        "cultureAreas.caribbean",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-trinidad-doubles-naming",
+      "seedId": "trinidad-doubles-naming",
+      "cacheTarget": {
+        "dishFamily": "trinidad-doubles",
+        "region": "Naming and alias context"
+      },
+      "coverageTags": [
+        "foodForms.snack_street_food",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.sauce_balance",
+        "cultureAreas.caribbean",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-soup-joumou-haiti",
+      "seedId": "soup-joumou-haiti",
+      "cacheTarget": {
+        "dishFamily": "hearty-soup",
+        "region": "Haiti"
+      },
+      "coverageTags": [
+        "foodForms.soup_broth",
+        "cultureAreas.caribbean",
+        "regionScopes.nation",
+        "nameSystems.alias",
+        "mechanisms.temperature"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
+    },
+    {
+      "id": "warm-mangu-dominican",
+      "seedId": "mangu-dominican",
+      "cacheTarget": {
+        "dishFamily": "grain-rice-noodle-staple",
+        "region": "Dominican Republic"
+      },
+      "coverageTags": [
+        "foodForms.breakfast",
+        "cultureAreas.caribbean",
+        "regionScopes.nation",
+        "nameSystems.alias",
+        "mechanisms.starch_texture"
+      ],
+      "qualityTriggers": [
+        "missing_region",
+        "cache_unavailable"
+      ],
+      "doneWhen": [
+        "typed ResearchRecord has aliases, regions, ingredients, sensory descriptors, uncertainty, and confidence"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Warm only from approved public research artifacts."
+        ]
+      }
     }
   ]
 }

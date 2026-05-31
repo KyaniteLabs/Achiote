@@ -1,0 +1,551 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Achiote Background Proof</title>
+  <style>
+    :root {
+      --base: #1d0e08;
+      --card: #2a160d;
+      --card-2: #3a2013;
+      --cream: #fff4de;
+      --cream-soft: rgba(255, 244, 222, 0.74);
+      --muted: #cfb99e;
+      --line: rgba(255, 214, 158, 0.16);
+      --gold: #f2b84b;
+      --achiote: #d4653a;
+      --green: #8dbb83;
+      --shadow: rgba(0, 0, 0, 0.42);
+      --bg-image: url("images/bg-option-1.jpg");
+      --bg-size: cover;
+      --bg-repeat: no-repeat;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--cream);
+      background: var(--base);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.45;
+    }
+
+    button {
+      font: inherit;
+      color: inherit;
+      cursor: pointer;
+    }
+
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(29, 14, 8, 0.86);
+      backdrop-filter: blur(18px);
+    }
+
+    .toolbar h1 {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.05rem, 1.8vw, 1.45rem);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .choice,
+    .mode {
+      min-width: 42px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 11px;
+      background: rgba(42, 22, 13, 0.82);
+      transition: border-color 140ms ease, background 140ms ease, transform 140ms ease;
+    }
+
+    .choice:hover,
+    .mode:hover,
+    .choice.is-active,
+    .mode.is-active {
+      border-color: rgba(242, 184, 75, 0.68);
+      background: rgba(58, 32, 19, 0.96);
+      transform: translateY(-1px);
+    }
+
+    .stage {
+      min-height: calc(100svh - 60px);
+      background-color: var(--base);
+      background-image: var(--bg-image);
+      background-repeat: var(--bg-repeat);
+      background-size: var(--bg-size);
+      background-position: center;
+    }
+
+    .stage-scrim {
+      min-height: calc(100svh - 60px);
+      background:
+        linear-gradient(90deg, rgba(29, 14, 8, 0.08), rgba(29, 14, 8, 0.42)),
+        radial-gradient(circle at 12% 18%, rgba(212, 101, 58, 0.16), transparent 24rem);
+    }
+
+    .page {
+      width: min(1180px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 24px 0 56px;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 12px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.08rem;
+      font-weight: 700;
+    }
+
+    .mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: conic-gradient(from 210deg, #b5451b, #d4653a, #f2b84b, #7aa870, #b5451b);
+      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.28);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 18px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(330px, 0.92fr);
+      gap: clamp(24px, 5vw, 72px);
+      align-items: center;
+      min-height: 70svh;
+      padding: clamp(44px, 8vw, 92px) 0 36px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      width: fit-content;
+      margin: 0 0 18px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 7px 12px;
+      color: var(--cream-soft);
+      background: rgba(42, 22, 13, 0.56);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin: 0;
+      max-width: 11ch;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(4rem, 11vw, 9.4rem);
+      line-height: 0.84;
+      letter-spacing: -0.045em;
+      text-wrap: balance;
+      text-shadow: 0 20px 60px rgba(0, 0, 0, 0.42);
+    }
+
+    .hero p {
+      max-width: 620px;
+      margin: 24px 0 0;
+      color: var(--cream-soft);
+      font-size: clamp(1.04rem, 1.45vw, 1.28rem);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .button {
+      border: 1px solid transparent;
+      border-radius: 999px;
+      padding: 12px 18px;
+      background: var(--cream);
+      color: var(--base);
+      font-weight: 800;
+      text-decoration: none;
+      box-shadow: 0 18px 42px rgba(0, 0, 0, 0.24);
+    }
+
+    .button.secondary {
+      border-color: var(--line);
+      background: rgba(42, 22, 13, 0.7);
+      color: var(--cream);
+      box-shadow: none;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(42, 22, 13, 0.82);
+      box-shadow: 0 28px 80px var(--shadow);
+      overflow: hidden;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(29, 14, 8, 0.34);
+    }
+
+    .panel-title {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+    }
+
+    .status {
+      border-radius: 999px;
+      padding: 6px 9px;
+      color: #e6ffd6;
+      background: rgba(141, 187, 131, 0.18);
+      font-size: 0.74rem;
+      font-weight: 800;
+    }
+
+    .prompt {
+      padding: 20px;
+    }
+
+    .textarea {
+      min-height: 156px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      color: rgba(255, 244, 222, 0.86);
+      background: rgba(29, 14, 8, 0.72);
+    }
+
+    .meter {
+      display: grid;
+      grid-template-columns: 1fr 0.72fr 0.5fr;
+      gap: 10px;
+      padding: 0 20px 20px;
+    }
+
+    .metric {
+      min-height: 88px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      background: rgba(58, 32, 19, 0.46);
+    }
+
+    .metric strong {
+      display: block;
+      margin-bottom: 12px;
+      color: var(--gold);
+      font-size: 1.34rem;
+      line-height: 1;
+    }
+
+    .metric span {
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .compare {
+      width: min(1180px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 34px 0 56px;
+    }
+
+    .compare h3 {
+      margin: 0 0 18px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.5rem, 3vw, 2.3rem);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(170px, 1fr));
+      gap: 14px;
+    }
+
+    .tile {
+      min-height: 360px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      background-color: var(--base);
+      background-image: var(--tile-image);
+      background-repeat: repeat;
+      background-size: 420px 420px;
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.26);
+      overflow: hidden;
+    }
+
+    .tile:nth-child(1) { --tile-image: url("images/bg-option-1.jpg"); }
+    .tile:nth-child(2) { --tile-image: url("images/bg-option-2.jpg"); }
+    .tile:nth-child(3) { --tile-image: url("images/bg-option-3.jpg"); }
+    .tile:nth-child(4) { --tile-image: url("images/bg-option-4.jpg"); }
+    .tile:nth-child(5) { --tile-image: url("images/bg-option-5.jpg"); }
+
+    .tile-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .tag,
+    .pick {
+      border-radius: 999px;
+      padding: 6px 9px;
+      background: rgba(29, 14, 8, 0.72);
+      color: var(--cream);
+      font-size: 0.76rem;
+      font-weight: 800;
+    }
+
+    .pick {
+      color: var(--gold);
+    }
+
+    .mini-card {
+      margin-top: 96px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      background: rgba(42, 22, 13, 0.84);
+      backdrop-filter: blur(12px);
+    }
+
+    .mini-card strong {
+      display: block;
+      margin-bottom: 8px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 1.12rem;
+    }
+
+    .mini-card p {
+      margin: 0;
+      color: var(--cream-soft);
+      font-size: 0.83rem;
+    }
+
+    .notes {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .note {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 16px;
+      background: rgba(42, 22, 13, 0.68);
+    }
+
+    .note strong {
+      color: var(--gold);
+    }
+
+    .note p {
+      margin: 8px 0 0;
+      color: var(--cream-soft);
+    }
+
+    @media (max-width: 1000px) {
+      .hero {
+        grid-template-columns: 1fr;
+        min-height: auto;
+      }
+
+      .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .notes {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .toolbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .page,
+      .compare {
+        width: min(100% - 28px, 1180px);
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .meter,
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="toolbar">
+    <h1>Achiote background mock-up</h1>
+    <div class="controls" aria-label="Background controls">
+      <button class="choice is-active" type="button" data-bg="1">1</button>
+      <button class="choice" type="button" data-bg="2">2</button>
+      <button class="choice" type="button" data-bg="3">3</button>
+      <button class="choice" type="button" data-bg="4">4</button>
+      <button class="choice" type="button" data-bg="5">5</button>
+      <button class="mode is-active" type="button" data-mode="cover">Cover</button>
+      <button class="mode" type="button" data-mode="tile">Tile</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="stage" id="stage">
+      <div class="stage-scrim">
+        <div class="page">
+          <nav class="nav" aria-label="Preview navigation">
+            <div class="brand"><span class="mark" aria-hidden="true"></span>Achiote</div>
+            <div class="nav-links" aria-hidden="true">
+              <span>How it works</span>
+              <span>Pricing</span>
+              <span>Safety</span>
+            </div>
+          </nav>
+
+          <div class="hero">
+            <div>
+              <p class="eyebrow">Food-memory detective</p>
+              <h2>Find the taste again.</h2>
+              <p>Turn a half-remembered family dish or drink into a grounded Memory Receipt and one cheap taste test.</p>
+              <div class="actions">
+                <a class="button" href="#compare">Try the background</a>
+                <a class="button secondary" href="#compare">Compare all five</a>
+              </div>
+            </div>
+
+            <aside class="panel" aria-label="Product card preview">
+              <div class="panel-header">
+                <p class="panel-title">Memory Receipt</p>
+                <span class="status">Ready</span>
+              </div>
+              <div class="prompt">
+                <div class="textarea">
+                  My grandmother made a dark red-orange stew. I remember toasted oil, soft starch, and a sour finish, but not the name.
+                </div>
+              </div>
+              <div class="meter">
+                <div class="metric"><strong>3</strong><span>likely cues</span></div>
+                <div class="metric"><strong>15m</strong><span>taste test</span></div>
+                <div class="metric"><strong>$8</strong><span>pantry-first</span></div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="compare" id="compare">
+      <h3>All options in tile mode</h3>
+      <div class="grid">
+        <article class="tile">
+          <div class="tile-top"><span class="tag">Option 1</span><span class="pick">crosshatch</span></div>
+          <div class="mini-card"><strong>Achiote</strong><p>Most textile-like; may read patterned behind large quiet sections.</p></div>
+        </article>
+        <article class="tile">
+          <div class="tile-top"><span class="tag">Option 2</span><span class="pick">fiber</span></div>
+          <div class="mini-card"><strong>Achiote</strong><p>Organic and warm; visible bright flecks can compete with small text.</p></div>
+        </article>
+        <article class="tile">
+          <div class="tile-top"><span class="tag">Option 3</span><span class="pick">paper</span></div>
+          <div class="mini-card"><strong>Achiote</strong><p>Quietest and closest to the base color; best readability candidate.</p></div>
+        </article>
+        <article class="tile">
+          <div class="tile-top"><span class="tag">Option 4</span><span class="pick">straw</span></div>
+          <div class="mini-card"><strong>Achiote</strong><p>Strong organic character; tile repetition and bright fibers are noticeable.</p></div>
+        </article>
+        <article class="tile">
+          <div class="tile-top"><span class="tag">Option 5</span><span class="pick">woven</span></div>
+          <div class="mini-card"><strong>Achiote</strong><p>Beautiful material, but too zoomed and object-like for the page base.</p></div>
+        </article>
+      </div>
+
+      <div class="notes">
+        <div class="note"><strong>My pick</strong><p>Option 3 for the actual site background. It keeps the Achiote color quiet and supports text best.</p></div>
+        <div class="note"><strong>Runner-up</strong><p>Option 1 if you want a more textile/editorial feel, but I would darken it before shipping.</p></div>
+        <div class="note"><strong>Use mode</strong><p>Tile/repeat for 1-4. Option 5 should not be tiled; it exposes the weave scale immediately.</p></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const root = document.documentElement;
+    const choiceButtons = [...document.querySelectorAll(".choice")];
+    const modeButtons = [...document.querySelectorAll(".mode")];
+
+    function setBackground(option) {
+      root.style.setProperty("--bg-image", `url("images/bg-option-${option}.jpg")`);
+      choiceButtons.forEach((button) => {
+        button.classList.toggle("is-active", button.dataset.bg === option);
+      });
+    }
+
+    function setMode(mode) {
+      const isTile = mode === "tile";
+      root.style.setProperty("--bg-size", isTile ? "560px 560px" : "cover");
+      root.style.setProperty("--bg-repeat", isTile ? "repeat" : "no-repeat");
+      modeButtons.forEach((button) => {
+        button.classList.toggle("is-active", button.dataset.mode === mode);
+      });
+    }
+
+    choiceButtons.forEach((button) => {
+      button.addEventListener("click", () => setBackground(button.dataset.bg));
+    });
+
+    modeButtons.forEach((button) => {
+      button.addEventListener("click", () => setMode(button.dataset.mode));
+    });
+  </script>
+</body>
+</html>

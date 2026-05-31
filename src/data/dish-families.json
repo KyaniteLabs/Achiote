@@ -3400,6 +3400,429 @@
           "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
         ]
       }
+    },
+    {
+      "canonicalName": "nordic-rye-bread",
+      "aliases": [
+        "rugbrod",
+        "nordic-rye",
+        "sourdough-rye",
+        "rugbrods",
+        "nordic-ryes",
+        "sourdough-ryes"
+      ],
+      "transliterations": {
+        "English": [
+          "rugbrod"
+        ]
+      },
+      "regions": [
+        "Scandinavia"
+      ],
+      "sharedElements": [
+        "starch texture",
+        "fermentation acid",
+        "aroma"
+      ],
+      "divergentElements": [
+        "regional ingredient variation",
+        "serving context",
+        "household name"
+      ],
+      "nostalgiaTriggers": [
+        "aroma from childhood kitchen",
+        "texture of specific preparation",
+        "family serving ritual"
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
+    },
+    {
+      "canonicalName": "swedish-meatball",
+      "aliases": [
+        "kottbullar",
+        "swedish-meatball",
+        "lingonberry-meatball",
+        "kottbullars",
+        "swedish-meatballs",
+        "lingonberry-meatballs"
+      ],
+      "transliterations": {
+        "English": [
+          "kottbullar"
+        ]
+      },
+      "regions": [
+        "Scandinavia"
+      ],
+      "sharedElements": [
+        "browning",
+        "fat mouthfeel",
+        "sauce balance",
+        "aroma"
+      ],
+      "divergentElements": [
+        "regional ingredient variation",
+        "serving context",
+        "household name"
+      ],
+      "nostalgiaTriggers": [
+        "aroma from childhood kitchen",
+        "texture of specific preparation",
+        "family serving ritual"
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
+    },
+    {
+      "canonicalName": "french-braise",
+      "aliases": [
+        "cassoulet",
+        "coq-au-vin",
+        "pot-au-feu",
+        "french-stew",
+        "cassoulets",
+        "coq-au-vins",
+        "pot-au-feus",
+        "french-stews"
+      ],
+      "transliterations": {
+        "English": [
+          "cassoulet"
+        ]
+      },
+      "regions": [
+        "France"
+      ],
+      "sharedElements": [
+        "browning",
+        "sauce balance",
+        "aroma",
+        "temperature"
+      ],
+      "divergentElements": [
+        "regional ingredient variation",
+        "serving context",
+        "household name"
+      ],
+      "nostalgiaTriggers": [
+        "aroma from childhood kitchen",
+        "texture of specific preparation",
+        "family serving ritual"
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
+    },
+    {
+      "canonicalName": "iberian-custard-tart",
+      "aliases": [
+        "pasteis-de-nata",
+        "custard-tart",
+        "portuguese-tart",
+        "pasteis-de-natas",
+        "custard-tarts",
+        "portuguese-tarts"
+      ],
+      "transliterations": {
+        "English": [
+          "pasteis-de-nata"
+        ]
+      },
+      "regions": [
+        "Portugal"
+      ],
+      "sharedElements": [
+        "browning",
+        "sugar crystal",
+        "temperature",
+        "texture contrast"
+      ],
+      "divergentElements": [
+        "regional ingredient variation",
+        "serving context",
+        "household name"
+      ],
+      "nostalgiaTriggers": [
+        "aroma from childhood kitchen",
+        "texture of specific preparation",
+        "family serving ritual"
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
+    },
+    {
+      "canonicalName": "maize-porridge",
+      "aliases": [
+        "pap",
+        "sadza",
+        "maize-porridge",
+        "mealie-pap",
+        "paps",
+        "sadzas",
+        "maize-porridges",
+        "mealie-paps"
+      ],
+      "transliterations": {
+        "English": [
+          "pap"
+        ]
+      },
+      "regions": [
+        "Southern Africa"
+      ],
+      "sharedElements": [
+        "starch texture",
+        "temperature",
+        "serving ritual"
+      ],
+      "divergentElements": [
+        "regional ingredient variation",
+        "serving context",
+        "household name"
+      ],
+      "nostalgiaTriggers": [
+        "aroma from childhood kitchen",
+        "texture of specific preparation",
+        "family serving ritual"
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
+    },
+    {
+      "canonicalName": "biltong",
+      "aliases": [
+        "biltong",
+        "dried-meat",
+        "south-african-jerky",
+        "biltongs",
+        "dried-meats",
+        "south-african-jerkys"
+      ],
+      "transliterations": {
+        "English": [
+          "biltong"
+        ]
+      },
+      "regions": [
+        "Southern Africa"
+      ],
+      "sharedElements": [
+        "aroma",
+        "texture contrast",
+        "fermentation acid"
+      ],
+      "divergentElements": [
+        "regional ingredient variation",
+        "serving context",
+        "household name"
+      ],
+      "nostalgiaTriggers": [
+        "aroma from childhood kitchen",
+        "texture of specific preparation",
+        "family serving ritual"
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
+    },
+    {
+      "canonicalName": "plov",
+      "aliases": [
+        "plov",
+        "osh",
+        "uzbek-pilaf",
+        "central-asian-pilaf",
+        "plovs",
+        "oshs",
+        "uzbek-pilafs",
+        "central-asian-pilafs"
+      ],
+      "transliterations": {
+        "English": [
+          "plov"
+        ]
+      },
+      "regions": [
+        "Central Asia"
+      ],
+      "sharedElements": [
+        "aroma",
+        "fat mouthfeel",
+        "browning",
+        "serving ritual"
+      ],
+      "divergentElements": [
+        "regional ingredient variation",
+        "serving context",
+        "household name"
+      ],
+      "nostalgiaTriggers": [
+        "aroma from childhood kitchen",
+        "texture of specific preparation",
+        "family serving ritual"
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
+    },
+    {
+      "canonicalName": "lagman",
+      "aliases": [
+        "lagman",
+        "laghman",
+        "hand-pulled-noodle",
+        "uyghur-noodle",
+        "lagmans",
+        "laghmans",
+        "hand-pulled-noodles",
+        "uyghur-noodles"
+      ],
+      "transliterations": {
+        "English": [
+          "lagman"
+        ]
+      },
+      "regions": [
+        "Central Asia"
+      ],
+      "sharedElements": [
+        "starch texture",
+        "aroma",
+        "sauce balance"
+      ],
+      "divergentElements": [
+        "regional ingredient variation",
+        "serving context",
+        "household name"
+      ],
+      "nostalgiaTriggers": [
+        "aroma from childhood kitchen",
+        "texture of specific preparation",
+        "family serving ritual"
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
+    },
+    {
+      "canonicalName": "haitian-griot",
+      "aliases": [
+        "griot",
+        "haitian-pork",
+        "fried-pork-cubes",
+        "griots",
+        "haitian-porks",
+        "fried-pork-cubess"
+      ],
+      "transliterations": {
+        "English": [
+          "griot"
+        ]
+      },
+      "regions": [
+        "Haiti"
+      ],
+      "sharedElements": [
+        "browning",
+        "fat mouthfeel",
+        "aroma",
+        "texture contrast"
+      ],
+      "divergentElements": [
+        "regional ingredient variation",
+        "serving context",
+        "household name"
+      ],
+      "nostalgiaTriggers": [
+        "aroma from childhood kitchen",
+        "texture of specific preparation",
+        "family serving ritual"
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
+    },
+    {
+      "canonicalName": "trinidad-doubles",
+      "aliases": [
+        "doubles",
+        "trinidad-doubles",
+        "chickpea-flatbread",
+        "doubless",
+        "trinidad-doubless",
+        "chickpea-flatbreads"
+      ],
+      "transliterations": {
+        "English": [
+          "doubles"
+        ]
+      },
+      "regions": [
+        "Trinidad and Tobago"
+      ],
+      "sharedElements": [
+        "aroma",
+        "texture contrast",
+        "sauce balance"
+      ],
+      "divergentElements": [
+        "regional ingredient variation",
+        "serving context",
+        "household name"
+      ],
+      "nostalgiaTriggers": [
+        "aroma from childhood kitchen",
+        "texture of specific preparation",
+        "family serving ritual"
+      ],
+      "provenance": {
+        "sourceType": "curated cultural taxonomy",
+        "notes": [
+          "Initial launch taxonomy compiled from common culinary reference knowledge and repo test fixtures.",
+          "Use as a hypothesis generator; verify regional and family-specific facts with external sources before recipe handoff."
+        ]
+      }
     }
   ]
 }

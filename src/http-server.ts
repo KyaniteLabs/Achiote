@@ -288,7 +288,10 @@ Then include one targeted follow-up that would most reduce uncertainty if they w
 - Avoid clinical labels like "research-bounded proxy test" in user-facing prose. Say "first-pass verification bite" or "first tiny check" instead.
 - Keep responses under 220 words.
 - Be warm and direct, like a knowledgeable friend who wants to help them taste the memory again.
-- If the user shares a photo, describe what you see in the image and combine it with any text description they provide before calling tools.`;
+- Write like a real person talking to a friend. Use plain words and short sentences. Never use em-dashes or en-dashes; use commas, periods, or "and" instead. No exclamation points. Avoid AI-tell words like "delve", "tapestry", "crucial", "elevate", "unleash", or "testament".
+- FOOD SAFETY OVERRIDES EVERYTHING. If the person mentions any allergy, intolerance, or dietary restriction, never suggest tasting, buying, or substituting anything that could contain it; build cues only from ingredients they have confirmed are safe for them. Name common allergens (nuts, peanuts, dairy, egg, wheat or gluten, soy, shellfish, fish, sesame) whenever a suggestion could contain them. Never call anything "safe", "allergen-free", or "medically safe". You do not give medical, allergy, or nutritional advice; point people to a qualified professional for those. Every taste is optional and at the person's own discretion.
+- If the user shares a photo, describe what you see in the image and combine it with any text description they provide before calling tools.
+- If researched facts were gathered (e.g., from search_web or resolve_dish_name), explicitly reference at least one specific finding in your prose. Do not summarize vaguely. Name the exact fact.`;
 
 const providerRuntime = createProviderRuntime({
   anthropicClient: anthropic,
@@ -653,6 +656,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
               return;
             }
           }
+          await maybeRunPlannedSourcing({ userMessage, toolPayloads, calledTools, send });
           console.warn(`[ask] final synthesis unavailable after minimum cue, using deterministic response: ${detail}`);
           const responseText = buildMinimumCueCompletedResponse(toolPayloads, userMessage);
           send('text', responseText);
@@ -669,6 +673,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
     await maybeRunMissingResearchPlan({ userMessage, toolPayloads, calledTools, send });
     await maybeRunOriginalSubstitutionBasisCue({ userMessage, toolPayloads, calledTools, send });
     await maybeRunPlannedSubstitutions({ userMessage, toolPayloads, calledTools, send });
+    await maybeRunPlannedSourcing({ userMessage, toolPayloads, calledTools, send });
 
     if ((modelResponse.textBlocks.length === 0 || containsStalledFallbackText(modelResponse.textBlocks.join('\n\n')))
       && maybeSendSubstitutionBasisResponse({ userMessage, toolPayloads, calledTools, send, finish })) {
@@ -917,22 +922,26 @@ function maybeSendMemoryReceipt(input: {
 function deriveResearchedFactsForReceipt(toolPayloads: Record<string, unknown>): string[] {
   const facts: string[] = [];
 
+  // search_web: reference for confidence boosting
+  const searched = toolPayloads.search_web as
+    | { results?: Array<{ title?: string; snippet?: string }> }
+    | undefined;
+
   // resolve_dish_name: emit canonical name + region when a real match was found
   const resolved = toolPayloads.resolve_dish_name as
     | { dishName?: string; canonicalName?: string; region?: string; confidence?: string; aliases?: string[] }
     | undefined;
   if (resolved?.canonicalName && !/^Unknown$/i.test(resolved.canonicalName)) {
-    facts.push(`Dish resolved: "${resolved.canonicalName}" (confidence: ${resolved.confidence ?? 'unknown'}, region: ${resolved.region ?? 'unknown'})`);
+    const hasResearchProduct = (searched?.results?.length ?? 0) > 0;
+    const effectiveConfidence = (resolved.confidence === 'Low' && hasResearchProduct) ? 'Medium' : resolved.confidence;
+    facts.push(`Dish resolved: "${resolved.canonicalName}" (confidence: ${effectiveConfidence ?? 'unknown'}, region: ${resolved.region ?? 'unknown'})`);
     const aliases = (resolved.aliases ?? []).filter(Boolean).slice(0, 3);
     if (aliases.length) facts.push(`Also known as: ${aliases.join(', ')}`);
   }
 
   // search_web: emit the snippet from each top result (up to 3)
-  const searched = toolPayloads.search_web as
-    | { results?: Array<{ title?: string; snippet?: string }> }
-    | undefined;
   for (const result of (searched?.results ?? []).slice(0, 3)) {
-    if (result.snippet?.trim()) facts.push(result.snippet.trim());
+    if (result.snippet?.trim()) facts.push(result.snippet.trim().replace(/[\u2014\u2013]/g, ', '));
   }
 
   return facts;
@@ -1141,7 +1150,7 @@ function normalizeResearchSource(source: unknown): Record<string, unknown> {
   const extractedFacts = Array.isArray(record.extractedFacts)
     ? record.extractedFacts.filter((fact): fact is string => typeof fact === 'string' && fact.trim().length > 0)
     : typeof record.snippet === 'string' && record.snippet.trim()
-      ? [record.snippet]
+      ? [record.snippet.replace(/[\u2014\u2013]/g, ', ')]
       : [];
 
   return {
@@ -1315,6 +1324,7 @@ async function recoverFromInitialProviderFailure({
   await maybeRunMissingResearchPlan({ userMessage, toolPayloads, calledTools, send });
   await maybeRunOriginalSubstitutionBasisCue({ userMessage, toolPayloads, calledTools, send });
   await maybeRunPlannedSubstitutions({ userMessage, toolPayloads, calledTools, send });
+  await maybeRunPlannedSourcing({ userMessage, toolPayloads, calledTools, send });
 
   if (maybeSendSubstitutionBasisResponse({ userMessage, toolPayloads, calledTools, send, finish })) {
     return true;
@@ -1494,6 +1504,30 @@ async function maybeRunPlannedSubstitutions({
   for (const ingredient of targets.slice(0, 5)) {
     await executeAndStreamTool('find_sensory_substitutes', { ingredient, location }, userMessage, send, calledTools, toolPayloads);
   }
+}
+
+async function maybeRunPlannedSourcing({
+  userMessage,
+  toolPayloads,
+  calledTools,
+  send,
+}: {
+  userMessage: string;
+  toolPayloads: Record<string, unknown>;
+  calledTools: Set<string>;
+  send: SseSender;
+}): Promise<void> {
+  const plan = toolPayloads.plan_tool_workflow as { workflowSteps?: Array<{ tool?: string }> } | undefined;
+  const plannedTools = plan?.workflowSteps?.map((step) => step.tool) ?? [];
+  if (!plannedTools.includes('source_ingredients') || calledTools.has('source_ingredients')) return;
+
+  const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
+  const location = memory?.userLocation ?? inferUserLocation(userMessage);
+  const ingredients = memory?.extractedClues?.rememberedIngredients ?? [];
+  if (!location || ingredients.length === 0) return;
+
+  send('status', { stage: 'calling_tools', tools: ['source_ingredients'], deterministic: true });
+  await executeAndStreamTool('source_ingredients', { ingredients: ingredients.slice(0, 10), location }, userMessage, send, calledTools, toolPayloads);
 }
 
 function maybeSendSubstitutionBasisResponse({

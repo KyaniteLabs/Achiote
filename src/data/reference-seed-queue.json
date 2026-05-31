@@ -70348,6 +70348,3725 @@
           "Use for pudding-custard memories with sweet custard or starch-thickened base, smooth creamy texture clues."
         ]
       }
+    },
+    {
+      "id": "nordic-rye-bread",
+      "forms": [
+        "foodForms.bread_flatbread"
+      ],
+      "regions": [
+        "macro:Scandinavia",
+        "nation:Scandinavia"
+      ],
+      "nameSignals": [
+        "rugbrød",
+        "ruisleipä",
+        "Nordic rye bread",
+        "dense sourdough rye"
+      ],
+      "mechanisms": [
+        "mechanisms.starch_texture",
+        "mechanisms.fermentation_acid",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "nordic rye bread scandinavia variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "nordic-rye-bread",
+          "region": "Scandinavia"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.bread_flatbread",
+        "mechanisms.starch_texture",
+        "mechanisms.fermentation_acid",
+        "mechanisms.aroma",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "nordic-rye-bread-diaspora",
+      "forms": [
+        "foodForms.bread_flatbread"
+      ],
+      "regions": [
+        "macro:Scandinavia",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "rugbrød",
+        "ruisleipä"
+      ],
+      "mechanisms": [
+        "mechanisms.starch_texture",
+        "mechanisms.fermentation_acid",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "nordic rye bread scandinavia diaspora variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "nordic-rye-bread",
+          "region": "Scandinavia diaspora"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.bread_flatbread",
+        "mechanisms.starch_texture",
+        "mechanisms.fermentation_acid",
+        "mechanisms.aroma",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "nordic-rye-bread-migration",
+      "forms": [
+        "foodForms.bread_flatbread"
+      ],
+      "regions": [
+        "macro:Scandinavia",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "rugbrød",
+        "ruisleipä"
+      ],
+      "mechanisms": [
+        "mechanisms.starch_texture",
+        "mechanisms.fermentation_acid",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "nordic rye bread scandinavia migration corridor variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "nordic-rye-bread",
+          "region": "Scandinavia migration corridor"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.bread_flatbread",
+        "mechanisms.starch_texture",
+        "mechanisms.fermentation_acid",
+        "mechanisms.aroma",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "nordic-rye-bread-global",
+      "forms": [
+        "foodForms.bread_flatbread"
+      ],
+      "regions": [
+        "macro:Scandinavia",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "rugbrød",
+        "ruisleipä"
+      ],
+      "mechanisms": [
+        "mechanisms.starch_texture",
+        "mechanisms.fermentation_acid",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "nordic rye bread global diaspora variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "nordic-rye-bread",
+          "region": "Global diaspora"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.bread_flatbread",
+        "mechanisms.starch_texture",
+        "mechanisms.fermentation_acid",
+        "mechanisms.aroma",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "nordic-rye-bread-community",
+      "forms": [
+        "foodForms.bread_flatbread"
+      ],
+      "regions": [
+        "macro:Scandinavia",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "rugbrød",
+        "ruisleipä"
+      ],
+      "mechanisms": [
+        "mechanisms.starch_texture",
+        "mechanisms.fermentation_acid",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "nordic rye bread community diaspora variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "nordic-rye-bread",
+          "region": "Community diaspora"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.bread_flatbread",
+        "mechanisms.starch_texture",
+        "mechanisms.fermentation_acid",
+        "mechanisms.aroma",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "nordic-rye-bread-mechanism",
+      "forms": [
+        "foodForms.bread_flatbread"
+      ],
+      "regions": [
+        "macro:Scandinavia",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "rugbrød",
+        "ruisleipä"
+      ],
+      "mechanisms": [
+        "mechanisms.starch_texture",
+        "mechanisms.fermentation_acid",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "nordic rye bread sensory mechanism context variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "nordic-rye-bread",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.bread_flatbread",
+        "mechanisms.starch_texture",
+        "mechanisms.fermentation_acid",
+        "mechanisms.aroma",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "nordic-rye-bread-naming",
+      "forms": [
+        "foodForms.bread_flatbread"
+      ],
+      "regions": [
+        "macro:Scandinavia",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "rugbrød",
+        "ruisleipä"
+      ],
+      "mechanisms": [
+        "mechanisms.starch_texture",
+        "mechanisms.fermentation_acid",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "nordic rye bread naming and alias context variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "nordic-rye-bread",
+          "region": "Naming and alias context"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.bread_flatbread",
+        "mechanisms.starch_texture",
+        "mechanisms.fermentation_acid",
+        "mechanisms.aroma",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "swedish-meatball",
+      "forms": [
+        "foodForms.protein_centered"
+      ],
+      "regions": [
+        "macro:Scandinavia",
+        "nation:Scandinavia"
+      ],
+      "nameSignals": [
+        "köttbullar",
+        "Swedish meatballs",
+        "lingonberry meatball",
+        "cream gravy meatball"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "swedish meatball scandinavia variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "swedish-meatball",
+          "region": "Scandinavia"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.protein_centered",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "swedish-meatball-diaspora",
+      "forms": [
+        "foodForms.protein_centered"
+      ],
+      "regions": [
+        "macro:Scandinavia",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "köttbullar",
+        "Swedish meatballs"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "swedish meatball scandinavia diaspora variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "swedish-meatball",
+          "region": "Scandinavia diaspora"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.protein_centered",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "swedish-meatball-migration",
+      "forms": [
+        "foodForms.protein_centered"
+      ],
+      "regions": [
+        "macro:Scandinavia",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "köttbullar",
+        "Swedish meatballs"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "swedish meatball scandinavia migration corridor variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "swedish-meatball",
+          "region": "Scandinavia migration corridor"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.protein_centered",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "swedish-meatball-global",
+      "forms": [
+        "foodForms.protein_centered"
+      ],
+      "regions": [
+        "macro:Scandinavia",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "köttbullar",
+        "Swedish meatballs"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "swedish meatball global diaspora variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "swedish-meatball",
+          "region": "Global diaspora"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.protein_centered",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "swedish-meatball-community",
+      "forms": [
+        "foodForms.protein_centered"
+      ],
+      "regions": [
+        "macro:Scandinavia",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "köttbullar",
+        "Swedish meatballs"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "swedish meatball community diaspora variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "swedish-meatball",
+          "region": "Community diaspora"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.protein_centered",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "swedish-meatball-mechanism",
+      "forms": [
+        "foodForms.protein_centered"
+      ],
+      "regions": [
+        "macro:Scandinavia",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "köttbullar",
+        "Swedish meatballs"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "swedish meatball sensory mechanism context variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "swedish-meatball",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.protein_centered",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "swedish-meatball-naming",
+      "forms": [
+        "foodForms.protein_centered"
+      ],
+      "regions": [
+        "macro:Scandinavia",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "köttbullar",
+        "Swedish meatballs"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "swedish meatball naming and alias context variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "swedish-meatball",
+          "region": "Naming and alias context"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.protein_centered",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "gravlax-sweden",
+      "forms": [
+        "foodForms.protein_centered"
+      ],
+      "regions": [
+        "nation:Sweden",
+        "macro:Scandinavia"
+      ],
+      "nameSignals": [
+        "gravlax",
+        "gravad lax",
+        "cured salmon",
+        "dill cured fish"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "gravlax Sweden regional variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "smoked-fish",
+          "region": "Sweden"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.protein_centered",
+        "mechanisms.aroma",
+        "mechanisms.fermentation_acid",
+        "mechanisms.texture_contrast",
+        "cultureAreas.europe",
+        "regionScopes.nation",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for cured salmon memories with dill, sugar, salt, or Nordic serving cues."
+        ]
+      }
+    },
+    {
+      "id": "skyr-iceland",
+      "forms": [
+        "foodForms.pantry_single_ingredient"
+      ],
+      "regions": [
+        "nation:Iceland",
+        "macro:Scandinavia"
+      ],
+      "nameSignals": [
+        "skyr",
+        "Icelandic yogurt",
+        "strained dairy"
+      ],
+      "mechanisms": [
+        "mechanisms.fermentation_acid",
+        "mechanisms.temperature",
+        "mechanisms.starch_texture"
+      ],
+      "querySeeds": [
+        "skyr Iceland regional variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "fermented-dairy",
+          "region": "Iceland"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.pantry_single_ingredient",
+        "mechanisms.fermentation_acid",
+        "mechanisms.temperature",
+        "mechanisms.starch_texture",
+        "cultureAreas.europe",
+        "regionScopes.nation",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for thick tangy dairy memories with Nordic or Icelandic context."
+        ]
+      }
+    },
+    {
+      "id": "french-braise",
+      "forms": [
+        "foodForms.stew_braise"
+      ],
+      "regions": [
+        "macro:France",
+        "nation:France"
+      ],
+      "nameSignals": [
+        "cassoulet",
+        "coq au vin",
+        "pot-au-feu",
+        "French slow-cooked stew",
+        "daube"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "mechanisms.temperature"
+      ],
+      "querySeeds": [
+        "french braise france variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "french-braise",
+          "region": "France"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.stew_braise",
+        "mechanisms.browning",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "mechanisms.temperature",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "french-braise-diaspora",
+      "forms": [
+        "foodForms.stew_braise"
+      ],
+      "regions": [
+        "macro:France",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "cassoulet",
+        "coq au vin"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "mechanisms.temperature"
+      ],
+      "querySeeds": [
+        "french braise france diaspora variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "french-braise",
+          "region": "France diaspora"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.stew_braise",
+        "mechanisms.browning",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "mechanisms.temperature",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "french-braise-migration",
+      "forms": [
+        "foodForms.stew_braise"
+      ],
+      "regions": [
+        "macro:France",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "cassoulet",
+        "coq au vin"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "mechanisms.temperature"
+      ],
+      "querySeeds": [
+        "french braise france migration corridor variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "french-braise",
+          "region": "France migration corridor"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.stew_braise",
+        "mechanisms.browning",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "mechanisms.temperature",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "french-braise-global",
+      "forms": [
+        "foodForms.stew_braise"
+      ],
+      "regions": [
+        "macro:France",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "cassoulet",
+        "coq au vin"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "mechanisms.temperature"
+      ],
+      "querySeeds": [
+        "french braise global diaspora variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "french-braise",
+          "region": "Global diaspora"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.stew_braise",
+        "mechanisms.browning",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "mechanisms.temperature",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "french-braise-community",
+      "forms": [
+        "foodForms.stew_braise"
+      ],
+      "regions": [
+        "macro:France",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "cassoulet",
+        "coq au vin"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "mechanisms.temperature"
+      ],
+      "querySeeds": [
+        "french braise community diaspora variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "french-braise",
+          "region": "Community diaspora"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.stew_braise",
+        "mechanisms.browning",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "mechanisms.temperature",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "french-braise-mechanism",
+      "forms": [
+        "foodForms.stew_braise"
+      ],
+      "regions": [
+        "macro:France",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "cassoulet",
+        "coq au vin"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "mechanisms.temperature"
+      ],
+      "querySeeds": [
+        "french braise sensory mechanism context variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "french-braise",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.stew_braise",
+        "mechanisms.browning",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "mechanisms.temperature",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "french-braise-naming",
+      "forms": [
+        "foodForms.stew_braise"
+      ],
+      "regions": [
+        "macro:France",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "cassoulet",
+        "coq au vin"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "mechanisms.temperature"
+      ],
+      "querySeeds": [
+        "french braise naming and alias context variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "french-braise",
+          "region": "Naming and alias context"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.stew_braise",
+        "mechanisms.browning",
+        "mechanisms.sauce_balance",
+        "mechanisms.aroma",
+        "mechanisms.temperature",
+        "cultureAreas.europe",
+        "regionScopes.macro_region",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "iberian-custard-tart",
+      "forms": [
+        "foodForms.dessert"
+      ],
+      "regions": [
+        "macro:Portugal",
+        "nation:Portugal"
+      ],
+      "nameSignals": [
+        "pastéis de nata",
+        "custard tart",
+        "Portuguese egg tart",
+        "pastel de nata"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.sugar_crystal",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "iberian custard tart portugal variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "iberian-custard-tart",
+          "region": "Portugal"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.dessert",
+        "mechanisms.browning",
+        "mechanisms.sugar_crystal",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast",
+        "cultureAreas.europe",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "iberian-custard-tart-diaspora",
+      "forms": [
+        "foodForms.dessert"
+      ],
+      "regions": [
+        "macro:Portugal",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "pastéis de nata",
+        "custard tart"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.sugar_crystal",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "iberian custard tart portugal diaspora variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "iberian-custard-tart",
+          "region": "Portugal diaspora"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.dessert",
+        "mechanisms.browning",
+        "mechanisms.sugar_crystal",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast",
+        "cultureAreas.europe",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "iberian-custard-tart-migration",
+      "forms": [
+        "foodForms.dessert"
+      ],
+      "regions": [
+        "macro:Portugal",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "pastéis de nata",
+        "custard tart"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.sugar_crystal",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "iberian custard tart portugal migration corridor variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "iberian-custard-tart",
+          "region": "Portugal migration corridor"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.dessert",
+        "mechanisms.browning",
+        "mechanisms.sugar_crystal",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast",
+        "cultureAreas.europe",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "iberian-custard-tart-global",
+      "forms": [
+        "foodForms.dessert"
+      ],
+      "regions": [
+        "macro:Portugal",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "pastéis de nata",
+        "custard tart"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.sugar_crystal",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "iberian custard tart global diaspora variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "iberian-custard-tart",
+          "region": "Global diaspora"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.dessert",
+        "mechanisms.browning",
+        "mechanisms.sugar_crystal",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast",
+        "cultureAreas.europe",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "iberian-custard-tart-community",
+      "forms": [
+        "foodForms.dessert"
+      ],
+      "regions": [
+        "macro:Portugal",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "pastéis de nata",
+        "custard tart"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.sugar_crystal",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "iberian custard tart community diaspora variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "iberian-custard-tart",
+          "region": "Community diaspora"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.dessert",
+        "mechanisms.browning",
+        "mechanisms.sugar_crystal",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast",
+        "cultureAreas.europe",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "iberian-custard-tart-mechanism",
+      "forms": [
+        "foodForms.dessert"
+      ],
+      "regions": [
+        "macro:Portugal",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "pastéis de nata",
+        "custard tart"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.sugar_crystal",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "iberian custard tart sensory mechanism context variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "iberian-custard-tart",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.dessert",
+        "mechanisms.browning",
+        "mechanisms.sugar_crystal",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast",
+        "cultureAreas.europe",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "iberian-custard-tart-naming",
+      "forms": [
+        "foodForms.dessert"
+      ],
+      "regions": [
+        "macro:Portugal",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "pastéis de nata",
+        "custard tart"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.sugar_crystal",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "iberian custard tart naming and alias context variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "iberian-custard-tart",
+          "region": "Naming and alias context"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.dessert",
+        "mechanisms.browning",
+        "mechanisms.sugar_crystal",
+        "mechanisms.temperature",
+        "mechanisms.texture_contrast",
+        "cultureAreas.europe",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "irish-stew-ireland",
+      "forms": [
+        "foodForms.soup_broth"
+      ],
+      "regions": [
+        "nation:Ireland",
+        "macro:British Isles"
+      ],
+      "nameSignals": [
+        "Irish stew",
+        "lamb stew",
+        "potato stew",
+        "Irish broth"
+      ],
+      "mechanisms": [
+        "mechanisms.temperature",
+        "mechanisms.starch_texture",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "Irish stew Ireland regional variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "hearty-soup",
+          "region": "Ireland"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.soup_broth",
+        "mechanisms.temperature",
+        "mechanisms.starch_texture",
+        "mechanisms.aroma",
+        "cultureAreas.europe",
+        "regionScopes.nation",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for lamb and potato stew memories with Irish or British Isles context."
+        ]
+      }
+    },
+    {
+      "id": "flammkuchen-alsace",
+      "forms": [
+        "foodForms.bread_flatbread"
+      ],
+      "regions": [
+        "subregion:Alsace",
+        "nation:France",
+        "nation:Germany"
+      ],
+      "nameSignals": [
+        "flammkuchen",
+        "tarte flambée",
+        "Alsatian flatbread",
+        "onion bacon bread"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "flammkuchen Alsace regional variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "flatbread",
+          "region": "Alsace"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.bread_flatbread",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.aroma",
+        "cultureAreas.europe",
+        "regionScopes.subregion",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for thin crisp bread memories with cream, onion, or bacon cues."
+        ]
+      }
+    },
+    {
+      "id": "maize-porridge",
+      "forms": [
+        "foodForms.grain_rice_noodle"
+      ],
+      "regions": [
+        "macro:Southern Africa",
+        "nation:Southern"
+      ],
+      "nameSignals": [
+        "pap",
+        "sadza",
+        "nshima",
+        "ugali",
+        "maize porridge",
+        "mealie pap"
+      ],
+      "mechanisms": [
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "maize porridge southern africa southern africa variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "maize-porridge",
+          "region": "Southern Africa"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "mechanisms.serving_ritual",
+        "cultureAreas.southern_africa",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "maize-porridge-diaspora",
+      "forms": [
+        "foodForms.grain_rice_noodle"
+      ],
+      "regions": [
+        "macro:Southern Africa",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "pap",
+        "sadza"
+      ],
+      "mechanisms": [
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "maize porridge southern africa southern africa diaspora variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "maize-porridge",
+          "region": "Southern Africa diaspora"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "mechanisms.serving_ritual",
+        "cultureAreas.southern_africa",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "maize-porridge-migration",
+      "forms": [
+        "foodForms.grain_rice_noodle"
+      ],
+      "regions": [
+        "macro:Southern Africa",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "pap",
+        "sadza"
+      ],
+      "mechanisms": [
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "maize porridge southern africa southern africa migration corridor variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "maize-porridge",
+          "region": "Southern Africa migration corridor"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "mechanisms.serving_ritual",
+        "cultureAreas.southern_africa",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "maize-porridge-global",
+      "forms": [
+        "foodForms.grain_rice_noodle"
+      ],
+      "regions": [
+        "macro:Southern Africa",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "pap",
+        "sadza"
+      ],
+      "mechanisms": [
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "maize porridge southern africa global diaspora variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "maize-porridge",
+          "region": "Global diaspora"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "mechanisms.serving_ritual",
+        "cultureAreas.southern_africa",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "maize-porridge-community",
+      "forms": [
+        "foodForms.grain_rice_noodle"
+      ],
+      "regions": [
+        "macro:Southern Africa",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "pap",
+        "sadza"
+      ],
+      "mechanisms": [
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "maize porridge southern africa community diaspora variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "maize-porridge",
+          "region": "Community diaspora"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "mechanisms.serving_ritual",
+        "cultureAreas.southern_africa",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "maize-porridge-mechanism",
+      "forms": [
+        "foodForms.grain_rice_noodle"
+      ],
+      "regions": [
+        "macro:Southern Africa",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "pap",
+        "sadza"
+      ],
+      "mechanisms": [
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "maize porridge southern africa sensory mechanism context variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "maize-porridge",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "mechanisms.serving_ritual",
+        "cultureAreas.southern_africa",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "maize-porridge-naming",
+      "forms": [
+        "foodForms.grain_rice_noodle"
+      ],
+      "regions": [
+        "macro:Southern Africa",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "pap",
+        "sadza"
+      ],
+      "mechanisms": [
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "maize porridge southern africa naming and alias context variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "maize-porridge",
+          "region": "Naming and alias context"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.starch_texture",
+        "mechanisms.temperature",
+        "mechanisms.serving_ritual",
+        "cultureAreas.southern_africa",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "biltong",
+      "forms": [
+        "foodForms.pantry_single_ingredient"
+      ],
+      "regions": [
+        "macro:Southern Africa",
+        "nation:Southern"
+      ],
+      "nameSignals": [
+        "biltong",
+        "dried beef strips",
+        "South African jerky",
+        "vinegar cured meat"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.fermentation_acid"
+      ],
+      "querySeeds": [
+        "biltong southern africa southern africa variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "biltong",
+          "region": "Southern Africa"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.pantry_single_ingredient",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.fermentation_acid",
+        "cultureAreas.southern_africa",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "biltong-diaspora",
+      "forms": [
+        "foodForms.pantry_single_ingredient"
+      ],
+      "regions": [
+        "macro:Southern Africa",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "biltong",
+        "dried beef strips"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.fermentation_acid"
+      ],
+      "querySeeds": [
+        "biltong southern africa southern africa diaspora variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "biltong",
+          "region": "Southern Africa diaspora"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.pantry_single_ingredient",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.fermentation_acid",
+        "cultureAreas.southern_africa",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "biltong-migration",
+      "forms": [
+        "foodForms.pantry_single_ingredient"
+      ],
+      "regions": [
+        "macro:Southern Africa",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "biltong",
+        "dried beef strips"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.fermentation_acid"
+      ],
+      "querySeeds": [
+        "biltong southern africa southern africa migration corridor variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "biltong",
+          "region": "Southern Africa migration corridor"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.pantry_single_ingredient",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.fermentation_acid",
+        "cultureAreas.southern_africa",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "biltong-global",
+      "forms": [
+        "foodForms.pantry_single_ingredient"
+      ],
+      "regions": [
+        "macro:Southern Africa",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "biltong",
+        "dried beef strips"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.fermentation_acid"
+      ],
+      "querySeeds": [
+        "biltong southern africa global diaspora variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "biltong",
+          "region": "Global diaspora"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.pantry_single_ingredient",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.fermentation_acid",
+        "cultureAreas.southern_africa",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "biltong-community",
+      "forms": [
+        "foodForms.pantry_single_ingredient"
+      ],
+      "regions": [
+        "macro:Southern Africa",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "biltong",
+        "dried beef strips"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.fermentation_acid"
+      ],
+      "querySeeds": [
+        "biltong southern africa community diaspora variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "biltong",
+          "region": "Community diaspora"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.pantry_single_ingredient",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.fermentation_acid",
+        "cultureAreas.southern_africa",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "biltong-mechanism",
+      "forms": [
+        "foodForms.pantry_single_ingredient"
+      ],
+      "regions": [
+        "macro:Southern Africa",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "biltong",
+        "dried beef strips"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.fermentation_acid"
+      ],
+      "querySeeds": [
+        "biltong southern africa sensory mechanism context variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "biltong",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.pantry_single_ingredient",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.fermentation_acid",
+        "cultureAreas.southern_africa",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "biltong-naming",
+      "forms": [
+        "foodForms.pantry_single_ingredient"
+      ],
+      "regions": [
+        "macro:Southern Africa",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "biltong",
+        "dried beef strips"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.fermentation_acid"
+      ],
+      "querySeeds": [
+        "biltong southern africa naming and alias context variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "biltong",
+          "region": "Naming and alias context"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.pantry_single_ingredient",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.fermentation_acid",
+        "cultureAreas.southern_africa",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "morogo-south-africa",
+      "forms": [
+        "foodForms.vegetable_fungi"
+      ],
+      "regions": [
+        "nation:South Africa",
+        "macro:Southern Africa"
+      ],
+      "nameSignals": [
+        "morogo",
+        "wild spinach",
+        "African leafy greens",
+        "amaranth greens"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "morogo South Africa regional variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "simmered-vegetable-greens",
+          "region": "South Africa"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.vegetable_fungi",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "cultureAreas.southern_africa",
+        "regionScopes.nation",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for wild green vegetable memories with Southern African context."
+        ]
+      }
+    },
+    {
+      "id": "koeksister-south-africa",
+      "forms": [
+        "foodForms.confectionery"
+      ],
+      "regions": [
+        "nation:South Africa",
+        "macro:Southern Africa"
+      ],
+      "nameSignals": [
+        "koeksister",
+        "koeksisters",
+        "plaited syrup doughnut",
+        "Cape Malay sweet"
+      ],
+      "mechanisms": [
+        "mechanisms.sugar_crystal",
+        "mechanisms.texture_contrast",
+        "mechanisms.aroma"
+      ],
+      "querySeeds": [
+        "koeksister South Africa regional variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "sweet-beignet",
+          "region": "South Africa"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.confectionery",
+        "mechanisms.sugar_crystal",
+        "mechanisms.texture_contrast",
+        "mechanisms.aroma",
+        "cultureAreas.southern_africa",
+        "regionScopes.nation",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for syrup-soaked fried dough memories with South African or Cape Malay context."
+        ]
+      }
+    },
+    {
+      "id": "plov",
+      "forms": [
+        "foodForms.grain_rice_noodle"
+      ],
+      "regions": [
+        "macro:Central Asia",
+        "nation:Central"
+      ],
+      "nameSignals": [
+        "plov",
+        "osh",
+        "palov",
+        "Uzbek rice pilaf",
+        "Central Asian pilaf"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "plov central asia central asia variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "plov",
+          "region": "Central Asia"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "cultureAreas.central_asia",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "plov-diaspora",
+      "forms": [
+        "foodForms.grain_rice_noodle"
+      ],
+      "regions": [
+        "macro:Central Asia",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "plov",
+        "osh"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "plov central asia central asia diaspora variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "plov",
+          "region": "Central Asia diaspora"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "cultureAreas.central_asia",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "plov-migration",
+      "forms": [
+        "foodForms.grain_rice_noodle"
+      ],
+      "regions": [
+        "macro:Central Asia",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "plov",
+        "osh"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "plov central asia central asia migration corridor variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "plov",
+          "region": "Central Asia migration corridor"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "cultureAreas.central_asia",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "plov-global",
+      "forms": [
+        "foodForms.grain_rice_noodle"
+      ],
+      "regions": [
+        "macro:Central Asia",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "plov",
+        "osh"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "plov central asia global diaspora variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "plov",
+          "region": "Global diaspora"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "cultureAreas.central_asia",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "plov-community",
+      "forms": [
+        "foodForms.grain_rice_noodle"
+      ],
+      "regions": [
+        "macro:Central Asia",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "plov",
+        "osh"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "plov central asia community diaspora variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "plov",
+          "region": "Community diaspora"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "cultureAreas.central_asia",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "plov-mechanism",
+      "forms": [
+        "foodForms.grain_rice_noodle"
+      ],
+      "regions": [
+        "macro:Central Asia",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "plov",
+        "osh"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "plov central asia sensory mechanism context variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "plov",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "cultureAreas.central_asia",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "plov-naming",
+      "forms": [
+        "foodForms.grain_rice_noodle"
+      ],
+      "regions": [
+        "macro:Central Asia",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "plov",
+        "osh"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "plov central asia naming and alias context variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "plov",
+          "region": "Naming and alias context"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.aroma",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.browning",
+        "mechanisms.serving_ritual",
+        "cultureAreas.central_asia",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "lagman",
+      "forms": [
+        "foodForms.grain_rice_noodle"
+      ],
+      "regions": [
+        "macro:Central Asia",
+        "nation:Central"
+      ],
+      "nameSignals": [
+        "lagman",
+        "laghman",
+        "hand-pulled noodles",
+        "Uyghur noodle soup",
+        "Central Asian noodles"
+      ],
+      "mechanisms": [
+        "mechanisms.starch_texture",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "lagman central asia central asia variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "lagman",
+          "region": "Central Asia"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.starch_texture",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "cultureAreas.central_asia",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "lagman-diaspora",
+      "forms": [
+        "foodForms.grain_rice_noodle"
+      ],
+      "regions": [
+        "macro:Central Asia",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "lagman",
+        "laghman"
+      ],
+      "mechanisms": [
+        "mechanisms.starch_texture",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "lagman central asia central asia diaspora variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "lagman",
+          "region": "Central Asia diaspora"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.starch_texture",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "cultureAreas.central_asia",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "lagman-migration",
+      "forms": [
+        "foodForms.grain_rice_noodle"
+      ],
+      "regions": [
+        "macro:Central Asia",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "lagman",
+        "laghman"
+      ],
+      "mechanisms": [
+        "mechanisms.starch_texture",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "lagman central asia central asia migration corridor variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "lagman",
+          "region": "Central Asia migration corridor"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.starch_texture",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "cultureAreas.central_asia",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "lagman-global",
+      "forms": [
+        "foodForms.grain_rice_noodle"
+      ],
+      "regions": [
+        "macro:Central Asia",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "lagman",
+        "laghman"
+      ],
+      "mechanisms": [
+        "mechanisms.starch_texture",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "lagman central asia global diaspora variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "lagman",
+          "region": "Global diaspora"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.starch_texture",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "cultureAreas.central_asia",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "lagman-community",
+      "forms": [
+        "foodForms.grain_rice_noodle"
+      ],
+      "regions": [
+        "macro:Central Asia",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "lagman",
+        "laghman"
+      ],
+      "mechanisms": [
+        "mechanisms.starch_texture",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "lagman central asia community diaspora variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "lagman",
+          "region": "Community diaspora"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.starch_texture",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "cultureAreas.central_asia",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "lagman-mechanism",
+      "forms": [
+        "foodForms.grain_rice_noodle"
+      ],
+      "regions": [
+        "macro:Central Asia",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "lagman",
+        "laghman"
+      ],
+      "mechanisms": [
+        "mechanisms.starch_texture",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "lagman central asia sensory mechanism context variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "lagman",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.starch_texture",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "cultureAreas.central_asia",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "lagman-naming",
+      "forms": [
+        "foodForms.grain_rice_noodle"
+      ],
+      "regions": [
+        "macro:Central Asia",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "lagman",
+        "laghman"
+      ],
+      "mechanisms": [
+        "mechanisms.starch_texture",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "lagman central asia naming and alias context variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "lagman",
+          "region": "Naming and alias context"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.grain_rice_noodle",
+        "mechanisms.starch_texture",
+        "mechanisms.aroma",
+        "mechanisms.sauce_balance",
+        "cultureAreas.central_asia",
+        "regionScopes.macro_region",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "qurut-central-asia",
+      "forms": [
+        "foodForms.pantry_single_ingredient"
+      ],
+      "regions": [
+        "macro:Central Asia",
+        "nation:Kazakhstan",
+        "nation:Uzbekistan"
+      ],
+      "nameSignals": [
+        "qurut",
+        "kurt",
+        "dried yogurt balls",
+        "sour milk curd",
+        "fermented dairy pellet"
+      ],
+      "mechanisms": [
+        "mechanisms.fermentation_acid",
+        "mechanisms.temperature",
+        "mechanisms.starch_texture"
+      ],
+      "querySeeds": [
+        "qurut Central Asia regional variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "fermented-dairy",
+          "region": "Central Asia"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.pantry_single_ingredient",
+        "mechanisms.fermentation_acid",
+        "mechanisms.temperature",
+        "mechanisms.starch_texture",
+        "cultureAreas.central_asia",
+        "regionScopes.macro_region",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for dried sour dairy memories with Central Asian or steppe context."
+        ]
+      }
+    },
+    {
+      "id": "samsa-central-asia",
+      "forms": [
+        "foodForms.dumpling_pocket"
+      ],
+      "regions": [
+        "macro:Central Asia",
+        "nation:Uzbekistan",
+        "nation:Kazakhstan"
+      ],
+      "nameSignals": [
+        "samsa",
+        "samosa",
+        "baked meat pie",
+        "Central Asian pastry",
+        "tandyr samsa"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.fat_mouthfeel"
+      ],
+      "querySeeds": [
+        "samsa Central Asia regional variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "dumpling",
+          "region": "Central Asia"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.dumpling_pocket",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.fat_mouthfeel",
+        "cultureAreas.central_asia",
+        "regionScopes.macro_region",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for baked savory pastry memories with Central Asian or tandyr context."
+        ]
+      }
+    },
+    {
+      "id": "haitian-griot",
+      "forms": [
+        "foodForms.protein_centered"
+      ],
+      "regions": [
+        "macro:Haiti",
+        "nation:Haiti"
+      ],
+      "nameSignals": [
+        "griot",
+        "Haitian fried pork",
+        "marinated pork cubes",
+        "Haitian creole pork"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "haitian griot haiti variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "haitian-griot",
+          "region": "Haiti"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.protein_centered",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "cultureAreas.caribbean",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "haitian-griot-diaspora",
+      "forms": [
+        "foodForms.protein_centered"
+      ],
+      "regions": [
+        "macro:Haiti",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "griot",
+        "Haitian fried pork"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "haitian griot haiti diaspora variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "haitian-griot",
+          "region": "Haiti diaspora"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.protein_centered",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "cultureAreas.caribbean",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "haitian-griot-migration",
+      "forms": [
+        "foodForms.protein_centered"
+      ],
+      "regions": [
+        "macro:Haiti",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "griot",
+        "Haitian fried pork"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "haitian griot haiti migration corridor variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "haitian-griot",
+          "region": "Haiti migration corridor"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.protein_centered",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "cultureAreas.caribbean",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "haitian-griot-global",
+      "forms": [
+        "foodForms.protein_centered"
+      ],
+      "regions": [
+        "macro:Haiti",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "griot",
+        "Haitian fried pork"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "haitian griot global diaspora variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "haitian-griot",
+          "region": "Global diaspora"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.protein_centered",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "cultureAreas.caribbean",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "haitian-griot-community",
+      "forms": [
+        "foodForms.protein_centered"
+      ],
+      "regions": [
+        "macro:Haiti",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "griot",
+        "Haitian fried pork"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "haitian griot community diaspora variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "haitian-griot",
+          "region": "Community diaspora"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.protein_centered",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "cultureAreas.caribbean",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "haitian-griot-mechanism",
+      "forms": [
+        "foodForms.protein_centered"
+      ],
+      "regions": [
+        "macro:Haiti",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "griot",
+        "Haitian fried pork"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "haitian griot sensory mechanism context variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "haitian-griot",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.protein_centered",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "cultureAreas.caribbean",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "haitian-griot-naming",
+      "forms": [
+        "foodForms.protein_centered"
+      ],
+      "regions": [
+        "macro:Haiti",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "griot",
+        "Haitian fried pork"
+      ],
+      "mechanisms": [
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast"
+      ],
+      "querySeeds": [
+        "haitian griot naming and alias context variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "haitian-griot",
+          "region": "Naming and alias context"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.protein_centered",
+        "mechanisms.browning",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "cultureAreas.caribbean",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "trinidad-doubles",
+      "forms": [
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "macro:Trinidad and Tobago",
+        "nation:Trinidad"
+      ],
+      "nameSignals": [
+        "doubles",
+        "chickpea flatbread",
+        "bara",
+        "Trinidad street food",
+        "curry channa"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "trinidad doubles trinidad and tobago variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "trinidad-doubles",
+          "region": "Trinidad and Tobago"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.snack_street_food",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.sauce_balance",
+        "cultureAreas.caribbean",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "trinidad-doubles-diaspora",
+      "forms": [
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "macro:Trinidad and Tobago",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "doubles",
+        "chickpea flatbread"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "trinidad doubles trinidad and tobago diaspora variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "trinidad-doubles",
+          "region": "Trinidad and Tobago diaspora"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.snack_street_food",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.sauce_balance",
+        "cultureAreas.caribbean",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "trinidad-doubles-migration",
+      "forms": [
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "macro:Trinidad and Tobago",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "doubles",
+        "chickpea flatbread"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "trinidad doubles trinidad and tobago migration corridor variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "trinidad-doubles",
+          "region": "Trinidad and Tobago migration corridor"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.snack_street_food",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.sauce_balance",
+        "cultureAreas.caribbean",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "trinidad-doubles-global",
+      "forms": [
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "macro:Trinidad and Tobago",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "doubles",
+        "chickpea flatbread"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "trinidad doubles global diaspora variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "trinidad-doubles",
+          "region": "Global diaspora"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.snack_street_food",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.sauce_balance",
+        "cultureAreas.caribbean",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "trinidad-doubles-community",
+      "forms": [
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "macro:Trinidad and Tobago",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "doubles",
+        "chickpea flatbread"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "trinidad doubles community diaspora variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "trinidad-doubles",
+          "region": "Community diaspora"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.snack_street_food",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.sauce_balance",
+        "cultureAreas.caribbean",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "trinidad-doubles-mechanism",
+      "forms": [
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "macro:Trinidad and Tobago",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "doubles",
+        "chickpea flatbread"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "trinidad doubles sensory mechanism context variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "trinidad-doubles",
+          "region": "Sensory mechanism context"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.snack_street_food",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.sauce_balance",
+        "cultureAreas.caribbean",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "trinidad-doubles-naming",
+      "forms": [
+        "foodForms.snack_street_food"
+      ],
+      "regions": [
+        "macro:Trinidad and Tobago",
+        "diaspora:Global"
+      ],
+      "nameSignals": [
+        "doubles",
+        "chickpea flatbread"
+      ],
+      "mechanisms": [
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.sauce_balance"
+      ],
+      "querySeeds": [
+        "trinidad doubles naming and alias context variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "trinidad-doubles",
+          "region": "Naming and alias context"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.snack_street_food",
+        "mechanisms.aroma",
+        "mechanisms.texture_contrast",
+        "mechanisms.sauce_balance",
+        "cultureAreas.caribbean",
+        "regionScopes.nation",
+        "regionScopes.diaspora",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for memories with related name, texture, or serving cues."
+        ]
+      }
+    },
+    {
+      "id": "soup-joumou-haiti",
+      "forms": [
+        "foodForms.soup_broth"
+      ],
+      "regions": [
+        "nation:Haiti",
+        "macro:Caribbean"
+      ],
+      "nameSignals": [
+        "soup joumou",
+        "Haitian pumpkin soup",
+        "squash soup",
+        "New Year soup",
+        "soup jumou"
+      ],
+      "mechanisms": [
+        "mechanisms.temperature",
+        "mechanisms.starch_texture",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual"
+      ],
+      "querySeeds": [
+        "soup joumou Haiti regional variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "hearty-soup",
+          "region": "Haiti"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.soup_broth",
+        "mechanisms.temperature",
+        "mechanisms.starch_texture",
+        "mechanisms.aroma",
+        "mechanisms.serving_ritual",
+        "cultureAreas.caribbean",
+        "regionScopes.nation",
+        "nameSystems.alias",
+        "regionScopes.religious_ritual",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for pumpkin soup memories with Haitian independence day or New Year context."
+        ]
+      }
+    },
+    {
+      "id": "mangu-dominican",
+      "forms": [
+        "foodForms.breakfast"
+      ],
+      "regions": [
+        "nation:Dominican Republic",
+        "macro:Caribbean"
+      ],
+      "nameSignals": [
+        "mangú",
+        "Dominican plantain mash",
+        "mangu con los tres golpes",
+        "green plantain puree"
+      ],
+      "mechanisms": [
+        "mechanisms.starch_texture",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.temperature"
+      ],
+      "querySeeds": [
+        "mangu Dominican Republic regional variants"
+      ],
+      "cacheTargets": [
+        {
+          "dishFamily": "grain-rice-noodle-staple",
+          "region": "Dominican Republic"
+        }
+      ],
+      "coverageTags": [
+        "foodForms.breakfast",
+        "mechanisms.starch_texture",
+        "mechanisms.fat_mouthfeel",
+        "mechanisms.temperature",
+        "cultureAreas.caribbean",
+        "regionScopes.nation",
+        "nameSystems.alias",
+        "evidenceLevels.seed_hypothesis"
+      ],
+      "provenance": {
+        "sourceType": "curated seed hypothesis",
+        "notes": [
+          "Use for mashed plantain memories with Dominican or Caribbean breakfast context."
+        ]
+      }
     }
   ]
 }
