@@ -809,6 +809,17 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
     const trustBoundedResponseText = enforceAllergyProfessionalBoundary(sanitizeFinalAnswerTrustBoundaryLanguage(responseText), userMessage);
     const didSanitizeTrustBoundary = trustBoundedResponseText !== responseText;
 
+    if (calledTools.has('generate_minimum_viable_nostalgia') && containsRawToolMarkup(trustBoundedResponseText)) {
+      console.warn('[ask] replaced raw tool markup synthesis with deterministic response');
+      const responseText = calledTools.has('find_sensory_substitutes') || isSubstitutionPlan(toolPayloads)
+        ? buildSubstitutionBasisResponse(toolPayloads, userMessage)
+        : buildMinimumCueCompletedResponse(toolPayloads, userMessage);
+      send('text', responseText);
+      maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
+      finish({ guarded: 'raw_tool_markup_sanitized' });
+      return;
+    }
+
     if (calledTools.has('generate_minimum_viable_nostalgia') && contradictsLatestCorrection(trustBoundedResponseText, userMessage)) {
       console.warn('[ask] replaced stale correction-conflicting response with deterministic minimum cue');
       const responseText = buildLatestCorrectionAlignedResponse(buildMinimumCueCompletedResponse(toolPayloads, userMessage), userMessage, toolPayloads);
@@ -900,6 +911,10 @@ function enforceAllergyProfessionalBoundary(text: string, userMessage: string): 
     text,
     'Because you named an allergy, check any new substitute with a qualified professional before tasting.',
   ].filter(Boolean).join('\n\n');
+}
+
+function containsRawToolMarkup(text: string): boolean {
+  return /<\/?tool_(?:call|result)\??>/i.test(text);
 }
 
 function recordAskCompletion(toolPayloads: Record<string, unknown>, calledTools: Set<string>, donePayload: Record<string, unknown>, consent: DataConsent): void {

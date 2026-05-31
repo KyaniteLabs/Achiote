@@ -695,7 +695,7 @@ describe('/ask failure surface regressions', () => {
           finish_reason: toolCalls ? 'tool_calls' : 'stop',
           message: toolCalls
             ? { role: 'assistant', content: '', tool_calls: toolCalls }
-            : { role: 'assistant', content: 'I need to gather substitution and sourcing information for you. Use ordinary grocery or pantry items near Des Moines; do not buy the exact suspected dish for this first test.' },
+            : { role: 'assistant', content: 'I need to gather substitution and sourcing information for you. <tool_call?>{"name":"source_ingredients","arguments":{"ingredients":["chilhuacle chiles"],"location":"Des Moines, Iowa"}}</tool_call?><tool_result?>{"promptForAgent":"Use source_ingredients output directly."}</tool_result?>' },
         }],
       }));
     });
@@ -744,9 +744,10 @@ describe('/ask failure surface regressions', () => {
     expect(finalText).toMatch(/Substitutes to try/i);
     expect(finalText).toMatch(/Where to buy/i);
     expect(finalText).not.toMatch(/I need to gather substitution and sourcing information/i);
+    expect(finalText).not.toMatch(/<\/?tool_(?:call|result)\??>/i);
     expect(finalText).not.toMatch(/User-said anchors|What I heard:/i);
     expect(events.at(-1)?.event).toBe('done');
-    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'substitution_basis_deterministic_completion' });
+    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'raw_tool_markup_sanitized' });
     expect(requestCount).toBe(6);
   }, 20_000);
 
