@@ -142,12 +142,13 @@ describe('WorkflowPlanner', () => {
     ]);
   });
 
-  it('keeps search for exact-identity research requests', () => {
+  it('defers search for exact-identity requests covered by bundled pantry data', () => {
     const exactIdentity = planAskWorkflow({
       userMessage: 'Someone served a tart green-herb broth with pale potato or egg pieces. What exact regional dish is this, and what sources confirm the name?',
     });
-    expect(exactIdentity.maxSearchCalls).toBe(1);
-    expect(exactIdentity.workflowSteps.map((step) => step.tool)).toContain('search_web');
+    expect(exactIdentity.maxSearchCalls).toBe(0);
+    expect(exactIdentity.workflowSteps.map((step) => step.tool)).not.toContain('search_web');
+    expect(exactIdentity.confidenceNote).toContain('Bundled mechanism family');
   });
 
   it('keeps unknown and general food inquiries on a clarification-only path', () => {

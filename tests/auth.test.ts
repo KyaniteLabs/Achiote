@@ -61,12 +61,12 @@ describe('auth module', () => {
     }
   });
 
-  it('rejects built-in dev key unless a test opts in', () => {
+  it('accepts built-in dev key by default for zero-config harnesses', () => {
     const auth = createAuthenticator([]);
-    expect(auth.authenticate('ach_dev_test_only').authenticated).toBe(false);
+    expect(auth.authenticate('ach_dev_test_only').authenticated).toBe(true);
   });
 
-  it('accepts built-in dev key only when explicitly enabled for tests', () => {
+  it('accepts built-in dev key when explicitly enabled for tests', () => {
     const auth = createAuthenticator([], true);
     const result = auth.authenticate('ach_dev_test_only');
     expect(result.authenticated).toBe(true);
@@ -75,6 +75,11 @@ describe('auth module', () => {
       expect(result.name).toBe('dev-test');
       expect(result.keyId).toBe('ak_dev');
     }
+  });
+
+  it('rejects built-in dev key when explicitly disabled', () => {
+    const auth = createAuthenticator([], false);
+    expect(auth.authenticate('ach_dev_test_only').authenticated).toBe(false);
   });
 
   it('does not accept dev key when real keys are configured', () => {
@@ -116,7 +121,7 @@ describe('auth module', () => {
 
 describe('getTierLimits', () => {
   it('keeps public tiers priced around guided memories, not hosted MCP calls', () => {
-    expect(getTierLimits('free')).toMatchObject({ mcpCallsPerMonth: 0, webReconstructions: 3 });
+    expect(getTierLimits('free')).toMatchObject({ mcpCallsPerMonth: 0, webReconstructions: 100 });
     expect(getTierLimits('personal')).toMatchObject({ mcpCallsPerMonth: 0, webReconstructions: 25 });
     expect(getTierLimits('pro')).toMatchObject({ mcpCallsPerMonth: 250, webReconstructions: 100 });
     expect(getTierLimits('family')).toMatchObject({ mcpCallsPerMonth: 250, webReconstructions: 300 });

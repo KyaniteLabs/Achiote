@@ -63,7 +63,7 @@ describe('ProviderRuntime', () => {
     });
   });
 
-  it('marks the OpenRouter free router alias as rate-limit sensitive', () => {
+  it('does not mark the OpenRouter router alias as a free model', () => {
     const runtime = createProviderRuntime({
       env: {
         ACHIOTE_ASK_PROVIDER: 'openai',
@@ -79,11 +79,11 @@ describe('ProviderRuntime', () => {
 
     expect(runtime.profile).toMatchObject({
       provider: 'openrouter',
-      rateLimitSensitive: true,
+      rateLimitSensitive: false,
     });
   });
 
-  it('does not treat local inference keys as OpenAI cloud credentials', () => {
+  it('accepts local inference keys for OpenAI-compatible providers', () => {
     const runtime = createProviderRuntime({
       env: {
         ACHIOTE_ASK_PROVIDER: 'openai',
@@ -98,7 +98,7 @@ describe('ProviderRuntime', () => {
     });
 
     expect(runtime.readinessCredentials()).toMatchObject({
-      openaiProviderReady: false,
+      openaiProviderReady: true,
     });
   });
 

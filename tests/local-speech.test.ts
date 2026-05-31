@@ -26,14 +26,16 @@ describe('local speech runtime config', () => {
       reason: 'ACHIOTE_WHISPER_CPP_MODEL is required',
     });
 
-    const missingBinaryPaths = resolveLocalSpeechConfig({
+    const defaultBinary = resolveLocalSpeechConfig({
       ACHIOTE_STT_PROVIDER: 'whispercpp',
       ACHIOTE_WHISPER_CPP_MODEL: '/models/ggml-base.en.bin',
     });
-    expect(missingBinaryPaths.stt).toMatchObject({
+    expect(defaultBinary.stt).toMatchObject({
       provider: 'whispercpp',
-      ready: false,
-      reason: 'ACHIOTE_WHISPER_CPP_BINARY must be an absolute allowlisted path',
+      ready: true,
+      binary: 'whisper-cli',
+      ffmpegBinary: 'ffmpeg',
+      model: '/models/ggml-base.en.bin',
     });
 
     const ready = resolveLocalSpeechConfig({

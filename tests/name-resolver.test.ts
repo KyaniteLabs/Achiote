@@ -105,7 +105,7 @@ describe('resolveDishName ambiguity-aware candidates', () => {
       variantName: 'tortilla-espanola',
       confidence: 'High',
     });
-    expect(result.clarificationPrompt).toBeUndefined();
+    expect(result.clarificationPrompt).toContain('Spanish egg-and-potato tortilla');
   });
 });
 

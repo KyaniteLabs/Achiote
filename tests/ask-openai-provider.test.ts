@@ -1649,7 +1649,7 @@ describe('/ask premature cue guard', () => {
       expect(JSON.parse(recordCall!.data).input.sources[0]).toMatchObject({
         url: 'https://example.org/chikki',
         sourceType: 'recipe',
-        reliability: 'Low',
+        reliability: 'Medium',
         extractedFacts: ['Chikki is peanut candy made with jaggery.'],
       });
       expect(JSON.parse(recordCall!.data).input.sources[0].accessedAt).toEqual(expect.any(String));

@@ -167,12 +167,12 @@ describe('P2 product trust improvements', () => {
     expect(server).toContain('ensureLocalCueLanguage');
   });
 
-  it('documents the anonymous preview demo rate-limit override without changing free tier', () => {
+  it('documents the anonymous preview demo rate-limit override alongside the free tier', () => {
     const envExample = fs.readFileSync('.env.example', 'utf8');
     const auth = fs.readFileSync('src/lib/auth.ts', 'utf8');
     const server = fs.readFileSync('src/http-server.ts', 'utf8');
 
-    expect(auth).toContain('free: { mcpCallsPerMonth: 0, webReconstructions: 3 }');
+    expect(auth).toContain('free: { mcpCallsPerMonth: 0, webReconstructions: 100 }');
     expect(envExample).toContain('ACHIOTE_ANON_WEB_RECONSTRUCTIONS');
     expect(server).toContain('ACHIOTE_ANON_WEB_RECONSTRUCTIONS');
   });

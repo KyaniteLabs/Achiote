@@ -151,9 +151,18 @@ describe('shared tool registry', () => {
     }
   });
 
-  it('keeps search available when bundled pantry cues ask for source-backed identity', async () => {
+  it('defers live search when bundled pantry cues cover source-backed identity phrasing', async () => {
+    const plan = await executeToolDefinition('plan_tool_workflow', {
+      userMessage: 'Someone served a tart green-herb broth with pale potato or egg pieces. What exact regional dish is this, and what sources confirm the name?',
+    }, defaultToolExecutionContext);
+
+    expect(plan.payload.maxSearchCalls).toBe(0);
+    expect(plan.payload.workflowSteps.map((step: { tool: string }) => step.tool)).not.toContain('search_web');
+    expect(plan.payload.confidenceNote).toContain('Bundled mechanism family');
+  });
+
+  it('keeps search available for source-backed safety and spelling requests', async () => {
     const messages = [
-      'Someone served a tart green-herb broth with pale potato or egg pieces. What exact regional dish is this, and what sources confirm the name?',
       'Someone served a tart green-herb broth with pale potato or egg pieces. What is the safe exact regional identity from sources?',
       'I miss a cold pale grain drink, maybe barley or rice. Please identify the exact drink and verify the regional spelling from sources.',
     ];
@@ -163,7 +172,7 @@ describe('shared tool registry', () => {
 
       expect(plan.payload.maxSearchCalls).toBe(1);
       expect(plan.payload.workflowSteps.map((step: { tool: string }) => step.tool)).toContain('search_web');
-      expect(plan.payload.confidenceNote).toContain('Bundled mechanism family');
+      expect(plan.payload.confidenceNote).not.toContain('Bundled mechanism family');
     }
   });
 

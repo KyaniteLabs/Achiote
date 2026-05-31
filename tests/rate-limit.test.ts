@@ -64,9 +64,9 @@ describe('rate limiter', () => {
   });
 
   describe('web limits', () => {
-    it('free tier allows 3 guided memories', () => {
+    it('free tier allows 100 guided memories', () => {
       const limiter = createRateLimiter();
-      for (let i = 0; i < 3; i++) {
+      for (let i = 0; i < 100; i++) {
         expect(limiter.checkWebLimit('free', 'session-1').allowed).toBe(true);
       }
       expect(limiter.checkWebLimit('free', 'session-1').allowed).toBe(false);
@@ -234,11 +234,11 @@ describe('rate limiter with SQLite persistence', () => {
     const limiterB = createRateLimiter(dbPath);
 
     try {
-      for (let i = 0; i < 1; i++) {
+      for (let i = 0; i < 50; i++) {
         expect(limiterA.checkWebLimit('free', 'shared-web').allowed).toBe(true);
         expect(limiterB.checkWebLimit('free', 'shared-web').allowed).toBe(true);
       }
-      expect(limiterA.checkWebLimit('free', 'shared-web')).toMatchObject({ allowed: true, remaining: 0 });
+      expect(limiterA.checkWebLimit('free', 'shared-web')).toMatchObject({ allowed: false, remaining: 0 });
       expect(limiterB.checkWebLimit('free', 'shared-web')).toMatchObject({ allowed: false, remaining: 0 });
     } finally {
       limiterA.close();

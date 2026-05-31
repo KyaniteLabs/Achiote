@@ -124,6 +124,33 @@ const POSTHOG_DISABLED = process.env.POSTHOG_DISABLED === 'true';
 const DISABLE_SEARCH_WEB = process.env.ACHIOTE_DISABLE_SEARCH_WEB === 'true';
 const ASK_TOOLS = DISABLE_SEARCH_WEB ? TOOLS.filter((tool) => tool.name !== 'search_web') : TOOLS;
 const TOOLS_BY_NAME = new Map(TOOLS.map((tool) => [tool.name, tool]));
+const DESCRIPTIVE_HYPHEN_DISH_TOKENS = new Set([
+  'aroma',
+  'broth',
+  'cold',
+  'crispy',
+  'drink',
+  'egg',
+  'fat',
+  'green',
+  'gravy',
+  'herb',
+  'hot',
+  'oily',
+  'pale',
+  'potato',
+  'rice',
+  'sauce',
+  'savory',
+  'sour',
+  'spice',
+  'starch',
+  'sweet',
+  'tart',
+  'thick',
+  'thin',
+  'warm',
+]);
 
 const MIME: Record<string, string> = {
   '.html': 'text/html',
@@ -924,9 +951,18 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
     }
 
     const collectedMemoryForIdentity = toolPayloads.collect_food_memory as { rawMemory?: string; extractedClues?: { possibleDishNames?: unknown[] } } | undefined;
-    const possibleDishNameCount = collectedMemoryForIdentity?.extractedClues?.possibleDishNames?.length ?? 0;
+    const possibleDishNames = collectedMemoryForIdentity?.extractedClues?.possibleDishNames ?? [];
     const dishNameIsExplicitlyApproximate = /\b(?:something\s+like|sounds?\s+like|sounded\s+like|kind\s+of\s+like|sort\s+of\s+like|like\s+[\p{L}\p{M}'-]+(?:\s+[\p{L}\p{M}'-]+){0,4}\s+but|rough(?:ly)?|phonetic(?:ally)?|maybe\s+called)\b/iu.test(collectedMemoryForIdentity?.rawMemory ?? userMessage);
-    const userNamedDishAnchor = possibleDishNameCount > 0 && !dishNameIsExplicitlyApproximate;
+    const userNamedDishAnchor = possibleDishNames.some((name) => {
+      if (typeof name !== 'string') return false;
+      const normalized = name.toLowerCase().trim();
+      if (!normalized) return false;
+      if (normalized.includes('-')) {
+        const tokens = normalized.split(/[\s-]+/).filter(Boolean);
+        if (tokens.length > 0 && tokens.every((token) => DESCRIPTIVE_HYPHEN_DISH_TOKENS.has(token))) return false;
+      }
+      return true;
+    }) && !dishNameIsExplicitlyApproximate;
     if (calledTools.has('generate_minimum_viable_nostalgia') && containsOverconfidentIdentityClaim(trustBoundedResponseText) && !userNamedDishAnchor && !researchGrounded) {
       console.warn('[ask] replaced overconfident identity claim with deterministic minimum cue');
       const memoryPayload = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
