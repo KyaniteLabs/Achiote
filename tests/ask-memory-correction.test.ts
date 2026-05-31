@@ -1,21 +1,22 @@
 import { describe, expect, it } from 'vitest';
 import {
-  buildLocalSourcingSearchQuery,
-  isExplicitLocalSourcingSearchRequest,
+  inferSafetyConstraints,
+  sanitizeGroundedSearchQuery,
 } from '../src/lib/ask-memory-correction.js';
 
 describe('ask memory correction helpers', () => {
-  it('gates live local sourcing search to explicit store-finding requests', () => {
-    expect(isExplicitLocalSourcingSearchRequest('Where can I buy chilhuacle chiles near Des Moines?')).toBe(true);
-    expect(isExplicitLocalSourcingSearchRequest('I live in Des Moines and remember chilhuacle chiles.')).toBe(false);
+  it('recognizes idiomatic shellfish reactions as safety constraints', () => {
+    expect(inferSafetyConstraints('Shrimp and crab make me swell up.')).toEqual(expect.arrayContaining([
+      'shellfish allergy',
+    ]));
   });
 
-  it('does not force Oaxacan store terms onto generic chile searches', () => {
-    const generic = buildLocalSourcingSearchQuery(['Thai bird chiles'], 'Des Moines, Iowa');
-    const oaxacan = buildLocalSourcingSearchQuery(['chilhuacle chiles'], 'Des Moines, Iowa');
+  it('sanitizes grounded search queries without adding store-finding terms', () => {
+    const sanitized = sanitizeGroundedSearchQuery('I remember chilhuacle chiles <script>alert(1)</script> near Des Moines!!! Give me the smallest first-pass memory cue.');
 
-    expect(generic).toContain('spice shop international grocery specialty market');
-    expect(generic).not.toMatch(/Oaxacan/i);
-    expect(oaxacan).toContain('Mexican Oaxacan grocery dried chiles spice shop');
+    expect(sanitized).toContain('chilhuacle chiles');
+    expect(sanitized).toContain('Des Moines');
+    expect(sanitized).not.toMatch(/[<>!]/);
+    expect(sanitized.length).toBeLessThanOrEqual(180);
   });
 });

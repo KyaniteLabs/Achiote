@@ -100,8 +100,6 @@ export function boundedEditDistance(left: string, right: string, maxDistance: nu
 export function containsConcreteFoodCue(text: string): boolean {
   return /\b(?:smallest safe cue|tasting cue|concrete food cue|recipe move|try this|try it tonight)\b/i.test(text)
     || /\b\d+\s*(?:teaspoons?|tablespoons?|cups?|pinch(?:es)?)\b/i.test(text)
-    || /\b(?:heat|stir|steep|mix|toast|bloom|sip|taste|sprinkle|swirl)\b[\s\S]{0,80}\b(?:pinch(?:es)?|spoonfuls?|splash(?:es)?|drops?|pieces?|slices?|strips?|cloves?|leaves|seeds?)\b/i.test(text)
-    || /\b(?:pinch(?:es)?|spoonfuls?|splash(?:es)?|drops?|pieces?|slices?|strips?|cloves?|leaves|seeds?)\b[\s\S]{0,80}\b(?:heat|stir|steep|mix|toast|bloom|sip|taste|sprinkle|swirl)\b/i.test(text)
     || /\b(?:heat|stir|steep|mix)\b[\s\S]{0,60}\b\d+\s*(?:mins?|minutes?|hours?|°[FC])\b/i.test(text);
 }
 
@@ -155,7 +153,10 @@ export function containsGenericUncertaintyWaffle(text: string): boolean {
 }
 
 export function containsStalledFallbackText(text: string): boolean {
-  return /\bI've gathered enough information so far\.?\s+Let me work with what we have\.?\b/i.test(text.trim());
+  const trimmed = text.trim();
+  return /\bI've gathered enough information so far\.?\s+Let me work with what we have\.?\b/i.test(trimmed)
+    || /\bI['’]?ll work through (?:the )?(?:pipeline|tool workflow|workflow)\b/i.test(trimmed)
+    || /\blet me research this further\b[\s\S]{0,140}\b(?:pipeline|tool workflow|workflow)\b/i.test(trimmed);
 }
 
 export function containsBlockedRecipeToolSynthesis(text: string): boolean {
@@ -165,11 +166,11 @@ export function containsBlockedRecipeToolSynthesis(text: string): boolean {
 }
 
 export function containsOverconfidentIdentityClaim(text: string): boolean {
-  return /\b(?:almost certainly|you(?:'re| are) thinking of|your memory is spot[-\s]?on|it'?s called)\b/i.test(text)
-    || /\b(?:definitely|clearly)\b[\s\S]{0,48}\b(?:called|is|was|matches|points?\s+to|maps?\s+to|thinking\s+of|remembering)\b/i.test(text)
+  return /\b(?:almost certainly|definitely|clearly|you(?:'re| are) thinking of|your memory is spot[-\s]?on|it'?s called)\b/i.test(text)
     || /\bmost likely\s+(?:points?\s+to|matches|is|was|means|refers?\s+to)\b/i.test(text)
     || /\bit\s+points?\s+(?:strongly\s+)?toward\b/i.test(text)
     || /\b(?:your\s+)?(?:memory|description|clues?)\s+(?:points?|pointed)\s+(?:strongly\s+)?(?:toward|to)\b/i.test(text)
+    || /\b(?:your\s+)?(?:memory|description|clues?)\b[\s\S]{0,160}\bpoints?\s+(?:strongly\s+)?(?:toward|to)\b/i.test(text)
     || /\b(?:sounds like|likely maps to|maps to|is essentially|is basically)\s+(?:a|an|the)?\s*(?:classic\s+)?(?:[\p{L}\p{M}][\p{L}\p{M}'-]*)(?:\s+[\p{L}\p{M}][\p{L}\p{M}'-]*){0,5}\b/iu.test(text)
     || /\b(?:your dish is|you're remembering|you are remembering)\b/iu.test(text)
     || /\byour (?:\S+ )?dish is\b/iu.test(text)
@@ -389,10 +390,12 @@ export function buildEvidencePreamble(toolPayloads: Record<string, unknown>, use
 
   const researchedFacts: string[] = [];
   const resolved = toolPayloads.resolve_dish_name as
-    | { dishName?: string; canonicalName?: string; region?: string; confidence?: string; aliases?: string[] }
+    | { dishName?: string; canonicalName?: string; region?: string; confidence?: string; aliases?: string[]; matchType?: string }
     | undefined;
-  if (resolved?.canonicalName && !/^Unknown$/i.test(resolved.canonicalName)) {
-    researchedFacts.push(`Dish resolved: "${resolved.canonicalName}" (confidence: ${resolved.confidence ?? 'unknown'}, region: ${resolved.region ?? 'unknown'})`);
+  if (resolved?.canonicalName && !/^Unknown$/i.test(resolved.canonicalName) && resolved.matchType !== 'unknown' && resolved.confidence !== 'Low') {
+    const userRegionHint = (toolPayloads.collect_food_memory as { extractedClues?: { culturalOrRegionalHints?: string[] } } | undefined)?.extractedClues?.culturalOrRegionalHints?.find((h) => Boolean(h));
+    const displayRegion = (resolved.region && !/^unknown$/i.test(resolved.region)) ? resolved.region : (userRegionHint ?? 'unknown');
+    researchedFacts.push(`Dish resolved: "${resolved.canonicalName}" (confidence: ${resolved.confidence ?? 'unknown'}, region: ${displayRegion})`);
   }
   const searched = toolPayloads.search_web as
     | { results?: Array<{ title?: string; snippet?: string }> }
@@ -412,18 +415,37 @@ export function buildEvidencePreamble(toolPayloads: Record<string, unknown>, use
   ].filter(Boolean).join('\n');
 }
 
-export function buildClarificationOnlyResponse(toolPayloads: Record<string, unknown>, userMessage?: string): string {
+export function buildClarificationOnlyResponse(
+  toolPayloads: Record<string, unknown>,
+  userMessage?: string,
+  options: { includeEvidencePreamble?: boolean } = {},
+): string {
   const constraints = userMessage ? inferSafetyConstraints(userMessage) : [];
   const memoryQuestions = filterAnchorsForConstraints(getStringArray(toolPayloads.collect_food_memory, 'nextQuestions'), constraints);
   const planQuestions = filterAnchorsForConstraints(getStringArray(toolPayloads.plan_dish_research, 'questionsForUser'), constraints);
-  const questions = [...new Set([...planQuestions, ...memoryQuestions])].slice(0, 3);
+  const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
+  const explicitlyUnnamed = userMessage
+    ? /\b(?:never knew the name|don['’]?t know the name|didn['’]?t know the name|no name|unnamed)\b/i.test(userMessage)
+    : false;
+  const extracted = memory?.extractedClues;
+  const unnamedQuestions = explicitlyUnnamed ? [
+    (extracted?.culturalOrRegionalHints?.length ?? 0) === 0
+      ? 'What country, region, language, or community was this tied to?'
+      : undefined,
+    ((extracted?.cookingMethods?.length ?? 0) > 0 || (extracted?.sensoryClues?.length ?? 0) > 0)
+      ? 'Was the texture spoonable like porridge, sliceable or firm after steaming, or something else?'
+      : undefined,
+    (extracted?.possibleDishNames?.length ?? 0) === 0
+      ? 'Do you remember any local name or sound-alike, even one syllable?'
+      : undefined,
+  ].filter((question): question is string => Boolean(question)) : [];
+  const questions = [...new Set([...unnamedQuestions, ...planQuestions, ...memoryQuestions])].slice(0, 3);
   const selectedQuestions = questions.length > 0 ? questions : [
     'Where did you eat this, or where was it from? Even a country, region, city, or community helps.',
     'Do you remember anything about the name, even a rough sound-alike?',
   ];
 
   // Build a context-aware preamble based on what signals are already present
-  const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
   const sensoryClues = filterAnchorsForConstraints(memory?.extractedClues?.sensoryClues ?? [], constraints);
   const ingredients = filterAnchorsForConstraints(memory?.extractedClues?.rememberedIngredients ?? [], constraints);
   const inferred = memory?.inferredContext?.culturalOrRegional ?? [];
@@ -441,7 +463,9 @@ export function buildClarificationOnlyResponse(toolPayloads: Record<string, unkn
     preamble = 'Before I give you a tasting cue, I need one or two details so I do not fake certainty.';
   }
 
-  const evidencePreamble = buildEvidencePreamble(toolPayloads, userMessage);
+  const evidencePreamble = options.includeEvidencePreamble === false
+    ? ''
+    : buildEvidencePreamble(toolPayloads, userMessage);
   const parts = evidencePreamble ? [evidencePreamble, '', preamble] : [preamble];
   return [
     ...parts,

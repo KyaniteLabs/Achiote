@@ -48,7 +48,10 @@ describe('memory receipt', () => {
     });
 
     expect(receipt.title).toBe('Achiote Memory Receipt');
-    expect(receipt.evidence.userSaid).toEqual(['My abuela made something sour and herby.']);
+    expect(receipt.evidence.userSaid).toContain('My abuela made something sour and herby.');
+    expect(receipt.evidence.userSaid).toContain('Sensory cues: sour/tangy');
+    expect(receipt.evidence.userSaid).toContain('Occasion or person: grandmother/family context');
+    expect(receipt.evidence.ruledOut).toEqual([]);
     expect(receipt.evidence.inferred[0]).toContain('Spanish-speaking family context');
     expect(receipt.status).toBe('needs_more_clues');
     expect(receipt.nextBestQuestions).toContain('Where was your abuela from?');
@@ -56,6 +59,7 @@ describe('memory receipt', () => {
     const markdown = formatMemoryReceiptMarkdown(receipt);
     expect(markdown).toContain('# Achiote Memory Receipt');
     expect(markdown).toContain('## User-Said Evidence');
+    expect(markdown).toContain('## Ruled-Out Evidence');
     expect(markdown).toContain('## Inferred Context');
     expect(markdown).toContain('## Unknowns');
     expect(markdown).toContain('## Family Questions');
@@ -104,6 +108,117 @@ describe('memory receipt', () => {
     expect(receipt.nextBestQuestions).toEqual(['Where did you eat this?']);
     expect(receipt.hypotheses).toEqual([]);
     expect(receipt.evidence.researched).toEqual([]);
+    expect(receipt.evidence.userSaid.join(' ')).not.toMatch(/\bRemembered ingredients: peanuts\b/i);
     expect(receipt.evidence.unknown.join(' ')).not.toMatch(/\bpeanuts?\b/i);
+  });
+
+  it('keeps model-extracted allergy terms visible as ruled-out evidence', () => {
+    const receipt = buildMemoryReceipt({
+      memory: {
+        rawMemory: 'my dad made a seafood rice dish, but shrimp and crab make me swell up. help me recreate it.',
+        normalizedMemory: 'my dad made a seafood rice dish, but shrimp and crab make me swell up. help me recreate it.',
+        extractedClues: {
+          possibleDishNames: ['seafood'],
+          culturalOrRegionalHints: [],
+          rememberedIngredients: ['rice'],
+          ruledOutIngredients: ['shrimp', 'crab'],
+          cookingMethods: ['rice dish'],
+          sensoryClues: [],
+          occasions: ['father/grandfather context'],
+        },
+        inferredContext: {
+          culturalOrRegional: [],
+          language: [],
+        },
+        missingInformation: ['country, island, region, town, or community'],
+        nextQuestions: ['Where was this rice dish from?'],
+        reassurance: "You don't need to spell it correctly or know the original language; sound-alikes and tiny clues are enough to start.",
+        extractionMetadata: {
+          source: 'model',
+          ruledOutIngredients: ['shrimp', 'crab'],
+          cookingMethod: ['rice dish'],
+        },
+      },
+      createdAt: '2026-04-27T12:00:00.000Z',
+    });
+
+    expect(receipt.evidence.ruledOut).toEqual(['shrimp', 'crab']);
+    expect(receipt.evidence.userSaid).toContain('Ruled out: shrimp, crab');
+    expect(formatMemoryReceiptMarkdown(receipt)).toContain('Ruled out: shrimp, crab');
+  });
+
+  it('surfaces negated clues as ruled-out receipt evidence', () => {
+    const receipt = buildMemoryReceipt({
+      memory: {
+        rawMemory: 'something like goyura in panama. savory, thick cut fried, not potatoes, sweet syrup on top.',
+        normalizedMemory: 'something like goyura in panama. savory, thick cut fried, not potatoes, sweet syrup on top.',
+        extractedClues: {
+          possibleDishNames: ['goyura'],
+          culturalOrRegionalHints: ['Panamanian'],
+          rememberedIngredients: [],
+          cookingMethods: ['thick cut fried'],
+          sensoryClues: ['savory', 'thick cut fried', 'sweet syrup on top'],
+          occasions: [],
+        },
+        inferredContext: {
+          culturalOrRegional: [],
+          language: [],
+        },
+        missingInformation: ['exact dish family'],
+        nextQuestions: ['Where in Panama did you have it?'],
+        reassurance: "You don't need to spell it correctly or know the original language; sound-alikes and tiny clues are enough to start.",
+      },
+      createdAt: '2026-04-27T12:00:00.000Z',
+    });
+
+    expect(receipt.evidence.ruledOut).toEqual(['potatoes']);
+    expect(receipt.evidence.userSaid).toContain('Possible name or sound-alike: goyura');
+    expect(receipt.evidence.userSaid).toContain('Region or community: Panamanian');
+    expect(receipt.evidence.userSaid).toContain('Cooking or serving method: thick cut fried');
+    expect(receipt.evidence.userSaid).toContain('Ruled out: potatoes');
+    expect(formatMemoryReceiptMarkdown(receipt)).toContain('Ruled out: potatoes');
+  });
+
+  it('lists only empty extracted clue fields as unknowns', () => {
+    const receipt = buildMemoryReceipt({
+      memory: {
+        rawMemory: 'my mom made arepas con queso, my family is from Venezuela.',
+        normalizedMemory: 'my mom made arepas con queso, my family is from Venezuela.',
+        extractedClues: {
+          possibleDishNames: ['arepas con queso'],
+          culturalOrRegionalHints: ['Venezuela'],
+          rememberedIngredients: ['cheese', 'corn'],
+          cookingMethods: ['griddled'],
+          sensoryClues: ['toasted corn aroma'],
+          occasions: ['mother/family context'],
+        },
+        inferredContext: {
+          culturalOrRegional: [],
+          language: [],
+        },
+        missingInformation: [
+          'cooking method or serving format',
+          'core ingredients',
+          'taste, texture, aroma, sauce, or heat level',
+        ],
+        nextQuestions: [],
+        reassurance: "You don't need to spell it correctly or know the original language; sound-alikes and tiny clues are enough to start.",
+      },
+      researchPlan: {
+        researchRequired: true,
+        hypotheses: [],
+        searchQueries: [],
+        preferredSourceTypes: [],
+        factsToVerify: [
+          'base ingredient, beverage base, or starch',
+          'cooking, extraction, mixing, or serving method',
+          'sensory cues: aroma, texture, flavor, appearance, temperature, or dilution',
+        ],
+        questionsForUser: [],
+      },
+      createdAt: '2026-04-27T12:00:00.000Z',
+    });
+
+    expect(receipt.evidence.unknown).toEqual([]);
   });
 });

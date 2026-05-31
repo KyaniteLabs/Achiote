@@ -57,6 +57,18 @@ export function planAskWorkflow(input: AskWorkflowPlannerInput): AskWorkflowPlan
   const hasSourcingLocation = hasResidenceLocation || hasPurchaseLocation;
   const needsSourcing = hasSourcingKeywords;
 
+  // A sound-alike candidate name the user is unsure of ("something like goyura", "we called it X")
+  // that is NOT a known dish alias MUST be researched, not answered from a generic bundled
+  // mechanism family. This is the whole premise of the product: investigate the sound-alike.
+  const soundAlikeMatch = userMessage.match(/\b(?:something\s+(?:like|called)|sounds?\s+like|kind\s+of\s+called|kind\s+of\s+like|called|named|we\s+called\s+it|name\s+was)\s+["“'']?([\p{L}][\p{L}-]{2,})/iu);
+  const candidateName = soundAlikeMatch ? normalizeKnowledgeText(soundAlikeMatch[1]) : '';
+  const hasUnresolvedSoundAlike = Boolean(candidateName) && !ALIAS_TO_CANONICAL.has(candidateName);
+
+  // A stated origin/region ("from Venezuela", "my grandmother in Peru", "in Panama") means we should
+  // research the REGIONAL version, not answer generically from a bundled family. Search, don't shrug.
+  const hasOriginRegion = hasResidenceLocation
+    || /\b(?:from|in)\s+(?!the\b|a\b|an\b|my\b|her\b|his\b|our\b|their\b|that\b|this\b|one\b|some\b|front\b|back\b|order\b)[a-zà-ÿ][a-zà-ÿ'’-]{2,}/i.test(userMessage);
+
   const needsSubstitutions = (hasRestrictions || hasSubstitutionKeywords) && wantsAdaptation && !negatesSubstitutionNeed;
   const detectedIntent = detectIntent({
     hasSubstitutions: needsSubstitutions,
@@ -76,8 +88,7 @@ export function planAskWorkflow(input: AskWorkflowPlannerInput): AskWorkflowPlan
 
   const isMemoryIntent = detectedIntent === 'nostalgic_memory' || detectedIntent === 'ritual_ceremony' || detectedIntent === 'multilingual_inquiry' || detectedIntent === 'contradictory_memory';
   const searchWebDisabled = input.searchDisabled === true || suppressSearchFromUserText;
-  const exactIdentityResearch = isExactIdentityResearchRequest(userMessage);
-  const bundledMechanismFamily = searchWebDisabled || !isMemoryIntent ? null : bundledMechanismFamilyFor(userMessage);
+  const bundledMechanismFamily = (searchWebDisabled || !isMemoryIntent || hasUnresolvedSoundAlike || hasOriginRegion) ? null : bundledMechanismFamilyFor(userMessage);
   let maxSearchCalls = searchWebDisabled ? 0 : 1;
   const questionnaireFirst = isMemoryIntent
     && !needsSubstitutions
@@ -86,7 +97,7 @@ export function planAskWorkflow(input: AskWorkflowPlannerInput): AskWorkflowPlan
     && !isExplicitMinimumCueRequest(userMessage)
     && shouldStartWithQuestionnaire(userMessage, bundledMechanismFamily);
   const addSearchStep = (reason: string): void => {
-    if (!searchWebDisabled && (!bundledMechanismFamily || exactIdentityResearch)) steps.push({ tool: 'search_web', reason, required: false });
+    if (!searchWebDisabled && !bundledMechanismFamily) steps.push({ tool: 'search_web', reason, required: false });
   };
 
   if (questionnaireFirst) {
@@ -123,9 +134,19 @@ export function planAskWorkflow(input: AskWorkflowPlannerInput): AskWorkflowPlan
     }
   }
 
-  if (bundledMechanismFamily && !exactIdentityResearch) maxSearchCalls = 0;
+  if (bundledMechanismFamily) maxSearchCalls = 0;
   if (!searchWebDisabled && needsSourcing && hasSourcingLocation && !bundledMechanismFamily) {
     maxSearchCalls = Math.max(maxSearchCalls, 2);
+  }
+  // Research an unresolved sound-alike name OR a stated region even when other signals would defer search.
+  if (!searchWebDisabled && !questionnaireFirst && (hasUnresolvedSoundAlike || hasOriginRegion)) {
+    maxSearchCalls = Math.max(maxSearchCalls, 1);
+    if (!steps.some((step) => step.tool === 'resolve_dish_name')) {
+      steps.splice(2, 0, { tool: 'resolve_dish_name', reason: 'Resolve the likely dish from the sound-alike name and region', required: false });
+    }
+    if (!steps.some((step) => step.tool === 'search_web')) {
+      steps.push({ tool: 'search_web', reason: 'Research the unresolved sound-alike dish name and its region', required: false });
+    }
   }
   const needsResolve = steps.some((step) => step.tool === 'resolve_dish_name');
   const bundledMechanismNote = bundledMechanismFamily
@@ -153,13 +174,6 @@ export function planAskWorkflow(input: AskWorkflowPlannerInput): AskWorkflowPlan
 function isExplicitMinimumCueRequest(text: string): boolean {
   return /\b(?:minimum viable|minimum|smallest|tiny|first|local)\b[\s\S]{0,60}\b(?:test|cue|try|taste|nostalgia|sip|bite|drink)\b/i.test(text)
     || /\b(?:test|cue|try|taste|sip|bite|drink)\b[\s\S]{0,60}\b(?:minimum viable|minimum|smallest|tiny|first|local)\b/i.test(text);
-}
-
-function isExactIdentityResearchRequest(text: string): boolean {
-  return /\b(?:source(?:s|d)?|confirm|verify|source-backed)\b[\s\S]{0,120}\b(?:dish|drink|food|name|identity|called|regional|spelling)\b/i.test(text)
-    || /\b(?:dish|drink|food|name|identity|called|regional|spelling)\b[\s\S]{0,120}\b(?:source(?:s|d)?|confirm|verify|source-backed)\b/i.test(text)
-    || /\b(?:exact|specific|regional)\b[\s\S]{0,80}\b(?:dish|drink|food|name|identity|called|spelling)\b/i.test(text)
-    || /\b(?:identify|name)\b[\s\S]{0,80}\b(?:exact|specific|regional|source(?:s|d)?|confirm|verify|identity|spelling)\b/i.test(text);
 }
 
 function shouldStartWithQuestionnaire(userMessage: string, _bundledMechanismFamily: string | null): boolean {

@@ -343,23 +343,11 @@ export function renderTelemetryMarkdown(input: {
 }
 
 function renderPreLiveQualityGateLines(events: NormalizedTelemetryEvent[]): string[] {
-  const pairedKeys = new Set<string>();
-  const modesByKey = new Map<string, Set<string>>();
-  for (const event of events) {
-    const key = repairPairKey(event);
-    const modes = modesByKey.get(key) ?? new Set<string>();
-    modes.add(event.mode);
-    modesByKey.set(key, modes);
-  }
-  for (const [key, modes] of modesByKey) {
-    if (modes.has('naked') && modes.has('achiote')) pairedKeys.add(key);
-  }
-
   const gates = [
     {
       id: 'tool_workflow_skipped',
       title: 'No skipped Achiote tool workflow',
-      match: (event: NormalizedTelemetryEvent) => event.mode === 'achiote' && /\b(?:tool_workflow_skipped|missing_tool_workflow)\b/.test(combinedSignals(event)),
+      match: (event: NormalizedTelemetryEvent) => event.mode === 'achiote' && combinedSignals(event).includes('tool_workflow_skipped'),
     },
     {
       id: 'provider_identity_leak',
@@ -374,7 +362,7 @@ function renderPreLiveQualityGateLines(events: NormalizedTelemetryEvent[]): stri
     {
       id: 'residual_achiote_issue',
       title: 'No residual Achiote quality issue in paired runs',
-      match: (event: NormalizedTelemetryEvent) => event.mode === 'achiote' && pairedKeys.has(repairPairKey(event)) && issueSignalsForScorecard(event).length > 0,
+      match: (event: NormalizedTelemetryEvent) => event.mode === 'achiote' && issueSignalsForScorecard(event).length > 0,
     },
   ];
 
@@ -421,30 +409,32 @@ function buildRepairScorecardRows(events: NormalizedTelemetryEvent[]): Array<{
 }> {
   const groups = new Map<string, NormalizedTelemetryEvent[]>();
   for (const event of events) {
-    const key = repairPairKey(event);
+    const key = [
+      event.provider,
+      event.model,
+      event.prompt,
+      event.endpointStyle ?? '',
+      event.baseUrl ?? '',
+    ].join('\u0000');
     groups.set(key, [...(groups.get(key) ?? []), event]);
   }
 
   const rows = [];
   for (const groupEvents of groups.values()) {
-    const nakedEvents = groupEvents.filter((event) => event.mode === 'naked');
-    const achioteEvents = groupEvents.filter((event) => event.mode === 'achiote');
-    const pairCount = Math.min(nakedEvents.length, achioteEvents.length);
-    for (let index = 0; index < pairCount; index += 1) {
-      const naked = nakedEvents[index];
-      const achiote = achioteEvents[index];
-      const nakedIssues = issueSignalsForScorecard(naked);
-      const achioteIssues = issueSignalsForScorecard(achiote);
-      rows.push({
-        provider: achiote.provider,
-        model: achiote.model,
-        prompt: achiote.prompt,
-        endpointStyle: achiote.endpointStyle,
-        repaired: nakedIssues.filter((issue) => !achioteIssues.includes(issue)),
-        achioteIssues,
-        guardReason: achiote.guardReason,
-      });
-    }
+    const naked = groupEvents.find((event) => event.mode === 'naked');
+    const achiote = groupEvents.find((event) => event.mode === 'achiote');
+    if (!naked || !achiote) continue;
+    const nakedIssues = issueSignalsForScorecard(naked);
+    const achioteIssues = issueSignalsForScorecard(achiote);
+    rows.push({
+      provider: achiote.provider,
+      model: achiote.model,
+      prompt: achiote.prompt,
+      endpointStyle: achiote.endpointStyle,
+      repaired: nakedIssues.filter((issue) => !achioteIssues.includes(issue)),
+      achioteIssues,
+      guardReason: achiote.guardReason,
+    });
   }
 
   return rows.sort((left, right) => {
@@ -454,16 +444,6 @@ function buildRepairScorecardRows(events: NormalizedTelemetryEvent[]): Array<{
     if (residualDelta !== 0) return residualDelta;
     return `${left.provider}/${left.model}/${left.prompt}`.localeCompare(`${right.provider}/${right.model}/${right.prompt}`);
   });
-}
-
-function repairPairKey(event: NormalizedTelemetryEvent): string {
-  return [
-    event.provider,
-    event.model,
-    event.prompt,
-    event.endpointStyle ?? '',
-    event.baseUrl ?? '',
-  ].join('\u0000');
 }
 
 function issueSignalsForScorecard(event: NormalizedTelemetryEvent): string[] {

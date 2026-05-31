@@ -63,7 +63,7 @@ describe('ProviderRuntime', () => {
     });
   });
 
-  it('marks the OpenRouter free router alias as rate-limit sensitive', () => {
+  it('does not mark the OpenRouter router alias as a free model', () => {
     const runtime = createProviderRuntime({
       env: {
         ACHIOTE_ASK_PROVIDER: 'openai',
@@ -79,11 +79,15 @@ describe('ProviderRuntime', () => {
 
     expect(runtime.profile).toMatchObject({
       provider: 'openrouter',
-      rateLimitSensitive: true,
+      rateLimitSensitive: false,
+    });
+    expect(runtime.readinessCredentials()).toMatchObject({
+      openaiProviderReady: true,
+      anthropicApiKey: 'openai-compatible-provider',
     });
   });
 
-  it('does not treat local inference keys as OpenAI cloud credentials', () => {
+  it('does not use local inference keys for OpenAI cloud routing', () => {
     const runtime = createProviderRuntime({
       env: {
         ACHIOTE_ASK_PROVIDER: 'openai',
@@ -99,6 +103,25 @@ describe('ProviderRuntime', () => {
 
     expect(runtime.readinessCredentials()).toMatchObject({
       openaiProviderReady: false,
+    });
+  });
+
+  it('keeps local inference keys scoped to local providers', () => {
+    const runtime = createProviderRuntime({
+      env: {
+        ACHIOTE_ASK_PROVIDER: 'local',
+        LOCAL_INFERENCE_BASE_URL: 'http://127.0.0.1:1234/v1',
+        LOCAL_INFERENCE_MODEL: 'qwen3.5-0.8b',
+        LOCAL_INFERENCE_API_KEY: 'local-only',
+      },
+      anthropicClient: {} as never,
+      systemPrompt: 'system',
+      tools: [tool],
+      openAITimeoutMs: 5678,
+    });
+
+    expect(runtime.readinessCredentials()).toMatchObject({
+      openaiProviderReady: true,
     });
   });
 

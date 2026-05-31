@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   buildReconstructionDossier,
   collectFoodMemory,
+  collectFoodMemoryWithModel,
   generateFamilyFollowupQuestions,
   planDishResearch,
 } from '../src/lib/memory-workflow.js';
@@ -38,6 +39,25 @@ describe('research-first food memory workflow', () => {
 
     expect(memory.extractedClues.rememberedIngredients).not.toEqual(expect.arrayContaining(['egg', 'sesame']));
     expect(memory.nextQuestions.join(' ')).not.toMatch(/\b(?:eggs?|sesame)\b/i);
+  });
+
+  it('keeps idiomatic shellfish reaction terms out of remembered ingredients and follow-up targets', () => {
+    const memory = collectFoodMemory({
+      memoryText: 'my dad made a seafood rice dish, but shrimp and crab make me swell up. help me recreate it.',
+    });
+
+    expect(memory.extractedClues.rememberedIngredients).not.toContain('shrimp');
+    expect(memory.extractedClues.rememberedIngredients).not.toContain('crab');
+    expect(memory.extractedClues.rememberedIngredients).not.toContain('shellfish');
+    expect(memory.nextQuestions.join(' ')).not.toMatch(/\b(?:shrimp|crab|shellfish)\b/i);
+  });
+
+  it('extracts lowercase Panama as a stated regional clue', () => {
+    const memory = collectFoodMemory({
+      memoryText: 'something like goyura in panama. savory, thick cut fried, not potatoes, sweet syrup on top.',
+    });
+
+    expect(memory.extractedClues.culturalOrRegionalHints).toContain('Panamanian');
   });
 
   it('plans research instead of pretending sparse fragments are resolved', () => {
@@ -117,6 +137,100 @@ describe('research-first food memory workflow', () => {
     expect(selfishMemory.extractedClues.rememberedIngredients).not.toContain('fish');
     expect(selfishMemory.missingInformation).toContain('core ingredients');
     expect(breadfruitMemory.missingInformation).toContain('cooking method or serving format');
+  });
+});
+
+describe('model-assisted food memory extraction', () => {
+  it('merges structured model extraction into the collected memory payload', async () => {
+    const memory = await collectFoodMemoryWithModel({
+      memoryText: 'something like goyura in panama. savory, thick cut fried, not potatoes, sweet syrup on top.',
+    }, {
+      extractor: async () => ({
+        possibleDishNames: ['goyura'],
+        originRegion: 'Panama',
+        residenceLocation: '',
+        ingredients: ['yuca'],
+        ruledOutIngredients: ['potatoes'],
+        cookingMethod: ['fried'],
+        sensoryCues: ['savory', 'thick cut', 'sweet syrup'],
+        occasion: [],
+        language: 'Spanish',
+      }),
+      timeoutMs: 100,
+    });
+
+    expect(memory.extractedClues.possibleDishNames).toContain('goyura');
+    expect(memory.extractedClues.culturalOrRegionalHints).toEqual(expect.arrayContaining(['Panama', 'Panamanian']));
+    expect(memory.extractedClues.rememberedIngredients).toContain('yuca');
+    expect(memory.extractedClues.rememberedIngredients).not.toContain('potatoes');
+    expect(memory.extractedClues.ruledOutIngredients).toContain('potatoes');
+    expect(memory.extractedClues.cookingMethods).toContain('fried');
+    expect(memory.extractedClues.sensoryClues).toEqual(expect.arrayContaining(['savory', 'thick cut', 'sweet']));
+    expect(memory.missingInformation).not.toContain('cooking method or serving format');
+    expect(memory.extractionMetadata).toMatchObject({
+      source: 'model',
+      originRegion: 'Panama',
+      ruledOutIngredients: ['potatoes'],
+      cookingMethod: ['fried'],
+      language: 'Spanish',
+    });
+  });
+
+  it('does not let model-only shellfish reaction terms become ingredients or cue anchors', async () => {
+    const memory = await collectFoodMemoryWithModel({
+      memoryText: 'my dad made a seafood rice dish, but shrimp and crab make me swell up. help me recreate it.',
+    }, {
+      extractor: async () => ({
+        possibleDishNames: ['seafood rice dish', 'shrimp rice'],
+        originRegion: '',
+        residenceLocation: '',
+        ingredients: ['rice', 'seafood', 'shrimp', 'crab'],
+        ruledOutIngredients: ['shrimp', 'crab'],
+        cookingMethod: ['rice dish'],
+        sensoryCues: ['seafood aroma', 'savory'],
+        occasion: ['father/grandfather context'],
+        language: '',
+      }),
+      timeoutMs: 100,
+    });
+
+    expect(memory.extractedClues.rememberedIngredients).toContain('rice');
+    expect(memory.extractedClues.rememberedIngredients).not.toEqual(expect.arrayContaining(['seafood', 'shrimp', 'crab']));
+    expect(memory.extractedClues.possibleDishNames).not.toContain('shrimp rice');
+    expect(memory.extractedClues.sensoryClues).not.toContain('seafood aroma');
+    expect(memory.extractedClues.ruledOutIngredients).toEqual(expect.arrayContaining(['shrimp', 'crab']));
+    expect(memory.extractedClues.cookingMethods).toContain('rice dish');
+    expect(memory.nextQuestions.join(' ')).not.toMatch(/\b(?:shrimp|crab|shellfish)\b/i);
+  });
+
+  it('falls back to regex extraction when the model response is malformed', async () => {
+    const memory = await collectFoodMemoryWithModel({
+      memoryText: 'My mom made arepas con queso, my family is from Venezuela.',
+    }, {
+      extractor: async () => ({ possibleDishNames: 'arepas con queso' }),
+      timeoutMs: 100,
+    });
+
+    expect(memory.extractedClues.possibleDishNames).toContain('arepas con queso');
+    expect(memory.extractedClues.rememberedIngredients).toContain('queso');
+    expect(memory.extractedClues.culturalOrRegionalHints).toContain('Venezuela');
+    expect(memory.missingInformation).not.toContain('core ingredients');
+    expect(memory.extractionMetadata?.source).toBe('regex_fallback');
+    expect(memory.extractionMetadata?.fallbackReason).toMatch(/schema/i);
+  });
+
+  it('falls back to regex extraction when model extraction times out', async () => {
+    const memory = await collectFoodMemoryWithModel({
+      memoryText: 'my dad made a seafood rice dish, but shrimp and crab make me swell up. help me recreate it.',
+    }, {
+      extractor: async () => new Promise(() => {}),
+      timeoutMs: 5,
+    });
+
+    expect(memory.extractedClues.rememberedIngredients).not.toContain('shrimp');
+    expect(memory.extractedClues.rememberedIngredients).not.toContain('crab');
+    expect(memory.extractionMetadata?.source).toBe('regex_fallback');
+    expect(memory.extractionMetadata?.fallbackReason).toMatch(/timed out/i);
   });
 });
 

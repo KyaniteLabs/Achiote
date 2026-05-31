@@ -56,6 +56,48 @@ describe('shared tool registry', () => {
     expect(plan.payload.researchRequired).toBe(true);
   });
 
+  it('lets resolve_dish_name use collected memory context for unresolved names', async () => {
+    const memory = {
+      rawMemory: 'something like goyura in panama. savory, thick cut fried, not potatoes, sweet syrup on top.',
+      normalizedMemory: 'something like goyura in panama. savory, thick cut fried, not potatoes, sweet syrup on top.',
+      extractedClues: {
+        possibleDishNames: ['goyura'],
+        culturalOrRegionalHints: ['Panama', 'Panamanian'],
+        rememberedIngredients: [],
+        ruledOutIngredients: ['potatoes'],
+        cookingMethods: ['fried', 'thick cut'],
+        sensoryClues: ['savory', 'sweet syrup on top', 'crispy/fried texture'],
+        occasions: [],
+      },
+      inferredContext: { culturalOrRegional: [], language: [] },
+      missingInformation: [],
+      nextQuestions: [],
+      reassurance: 'Sound-alikes are enough to start.',
+      extractionMetadata: {
+        source: 'model',
+        originRegion: 'Panama',
+        ruledOutIngredients: ['potatoes'],
+        cookingMethod: ['fried', 'thick cut'],
+        timeoutMs: 8000,
+      },
+    };
+
+    const resolution = await executeToolDefinition('resolve_dish_name', {
+      input: 'goyura',
+      memory,
+    }, defaultToolExecutionContext);
+
+    expect(resolution.payload).toMatchObject({
+      canonicalName: 'goyura',
+      dishFamily: 'regional fried-starch clue',
+      region: 'Panama',
+      confidence: 'Low',
+      matchType: 'unknown',
+      needsClarification: true,
+    });
+    expect(outputSchemas.resolve_dish_name.safeParse(resolution.payload).success).toBe(true);
+  });
+
   it('routes dietary substitution only when the user asks for adaptation', async () => {
     const incidentalRestriction = await executeToolDefinition('plan_tool_workflow', {
       userMessage: 'My father used to make Syrian lentil soup after his heart attack, no more salt, but I remember the lemon and cumin smell most.',
@@ -151,9 +193,18 @@ describe('shared tool registry', () => {
     }
   });
 
-  it('keeps search available when bundled pantry cues ask for source-backed identity', async () => {
+  it('defers live search when bundled pantry cues cover source-backed identity phrasing', async () => {
+    const plan = await executeToolDefinition('plan_tool_workflow', {
+      userMessage: 'Someone served a tart green-herb broth with pale potato or egg pieces. What exact regional dish is this, and what sources confirm the name?',
+    }, defaultToolExecutionContext);
+
+    expect(plan.payload.maxSearchCalls).toBe(0);
+    expect(plan.payload.workflowSteps.map((step: { tool: string }) => step.tool)).not.toContain('search_web');
+    expect(plan.payload.confidenceNote).toContain('Bundled mechanism family');
+  });
+
+  it('keeps search available for source-backed safety and spelling requests', async () => {
     const messages = [
-      'Someone served a tart green-herb broth with pale potato or egg pieces. What exact regional dish is this, and what sources confirm the name?',
       'Someone served a tart green-herb broth with pale potato or egg pieces. What is the safe exact regional identity from sources?',
       'I miss a cold pale grain drink, maybe barley or rice. Please identify the exact drink and verify the regional spelling from sources.',
     ];
@@ -163,7 +214,7 @@ describe('shared tool registry', () => {
 
       expect(plan.payload.maxSearchCalls).toBe(1);
       expect(plan.payload.workflowSteps.map((step: { tool: string }) => step.tool)).toContain('search_web');
-      expect(plan.payload.confidenceNote).toContain('Bundled mechanism family');
+      expect(plan.payload.confidenceNote).not.toContain('Bundled mechanism family');
     }
   });
 
@@ -215,6 +266,48 @@ describe('shared tool registry', () => {
 
     expect(outputSchemas.generate_minimum_viable_nostalgia.safeParse(cue.payload).success).toBe(true);
     expect(cue.payload.confidence).toBe('High');
+  });
+
+  it('uses model-assisted collection when an extractor is present in tool context', async () => {
+    const result = await executeToolDefinition('collect_food_memory', {
+      memoryText: 'something like goyura in panama. savory, thick cut fried, not potatoes, sweet syrup on top.',
+    }, {
+      ...defaultToolExecutionContext,
+      foodMemoryExtractor: async () => ({
+        possibleDishNames: ['goyura'],
+        originRegion: 'Panama',
+        residenceLocation: '',
+        ingredients: ['yuca'],
+        ruledOutIngredients: ['potatoes'],
+        cookingMethod: ['fried'],
+        sensoryCues: ['sweet syrup', 'savory'],
+        occasion: [],
+        language: 'Spanish',
+      }),
+    });
+
+    expect(outputSchemas.collect_food_memory.safeParse(result.payload).success).toBe(true);
+    expect(result.payload.extractedClues).toMatchObject({
+      ruledOutIngredients: ['potatoes'],
+      cookingMethods: ['fried'],
+    });
+    expect(result.payload.extractionMetadata).toMatchObject({
+      source: 'model',
+      ruledOutIngredients: ['potatoes'],
+      cookingMethod: ['fried'],
+    });
+  });
+
+  it('keeps collect_food_memory schema-valid when no model extractor is available', async () => {
+    const result = await executeToolDefinition('collect_food_memory', {
+      memoryText: 'My mom made arepas con queso, my family is from Venezuela.',
+    }, defaultToolExecutionContext);
+
+    expect(outputSchemas.collect_food_memory.safeParse(result.payload).success).toBe(true);
+    expect(result.payload.extractedClues).toMatchObject({
+      culturalOrRegionalHints: expect.arrayContaining(['Venezuela']),
+    });
+    expect(result.payload.extractionMetadata).toMatchObject({ source: 'regex' });
   });
 
   it('recovers reconstruction dossiers when a model passes an incomplete research plan', async () => {
@@ -275,6 +368,44 @@ describe('shared tool registry', () => {
     expect(outputSchemas.build_memory_receipt.safeParse(receipt.payload).success).toBe(true);
     expect(receipt.payload.title).toBe('Achiote Memory Receipt');
     expect(receipt.content[0].type === 'text' ? receipt.content[0].text : '').toContain('# Achiote Memory Receipt');
+  });
+
+  it('preserves generated cue details in first-test-ready memory receipts', async () => {
+    const memory = (await executeToolDefinition('collect_food_memory', {
+      memoryText: 'My abuela made something sour and herby.',
+    }, defaultToolExecutionContext)).payload;
+    const researchPlan = (await executeToolDefinition('plan_dish_research', { memory }, defaultToolExecutionContext)).payload;
+    const cue = {
+      title: 'Minimum viable sour herb bite',
+      goal: 'Check sour herb aroma with a tiny warm sip.',
+      effortMinutes: 5,
+      format: 'sip',
+      ingredients: [],
+      steps: [],
+      preserves: [],
+      doesNotPreserve: [],
+      accessibilityPrinciples: [],
+      substituteLogic: [],
+      whyThisIsMinimum: 'It tests the acid and herb cue first.',
+      confidence: 'Low',
+      safetyNotes: [],
+      followUpIfItWorks: [],
+      components: [],
+    };
+
+    const receipt = await executeToolDefinition('build_memory_receipt', {
+      memory,
+      researchPlan,
+      cue,
+      assistantText: 'Start with the tiny sour herb sip.',
+    }, defaultToolExecutionContext);
+
+    expect(receipt.payload.status).toBe('first_test_ready');
+    expect(receipt.payload.firstTinyTasteTest).toMatchObject({
+      title: 'Minimum viable sour herb bite',
+      cue: 'Check sour herb aroma with a tiny warm sip.',
+      estimatedTime: '5 minutes',
+    });
   });
 
   it('keeps protocol wrappers and package smoke wired to the registry', () => {

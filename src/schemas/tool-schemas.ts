@@ -166,6 +166,17 @@ const inferredMemoryContextSchema = z.object({
   language: z.array(inferredContextClueSchema),
 });
 
+const foodMemoryExtractionMetadataSchema = z.object({
+  source: z.enum(['regex', 'model', 'regex_fallback']),
+  originRegion: z.string().optional(),
+  residenceLocation: z.string().optional(),
+  ruledOutIngredients: z.array(z.string()),
+  cookingMethod: z.array(z.string()),
+  language: z.string().optional(),
+  timeoutMs: z.number().optional(),
+  fallbackReason: z.string().optional(),
+});
+
 export const collectedFoodMemorySchema = z.object({
   rawMemory: z.string(),
   normalizedMemory: z.string(),
@@ -174,6 +185,8 @@ export const collectedFoodMemorySchema = z.object({
     possibleDishNames: z.array(z.string()),
     culturalOrRegionalHints: z.array(z.string()),
     rememberedIngredients: z.array(z.string()),
+    ruledOutIngredients: z.array(z.string()).optional(),
+    cookingMethods: z.array(z.string()).optional(),
     sensoryClues: z.array(z.string()),
     occasions: z.array(z.string()),
   }),
@@ -181,6 +194,7 @@ export const collectedFoodMemorySchema = z.object({
   missingInformation: z.array(z.string()),
   nextQuestions: z.array(z.string()),
   reassurance: z.string(),
+  extractionMetadata: foodMemoryExtractionMetadataSchema.optional(),
 });
 
 const dishHypothesisSchema = z.object({
@@ -228,6 +242,7 @@ export const memoryReceiptOutputSchema = z.object({
   status: z.enum(['needs_more_clues', 'first_test_ready', 'recipe_handoff_ready']),
   evidence: z.object({
     userSaid: z.array(z.string()),
+    ruledOut: z.array(z.string()),
     inferred: z.array(z.string()),
     researched: z.array(z.string()),
     unknown: z.array(z.string()),
@@ -346,7 +361,6 @@ export const minimumViableNostalgiaOutputSchema = z.object({
 
 export const webSearchOutputSchema = z.object({
   query: z.string(),
-  searchStatus: z.enum(['ok', 'not_configured', 'error']),
   results: z.array(
     z.object({
       title: z.string(),
@@ -383,5 +397,6 @@ export const planToolWorkflowOutputSchema = z.object({
 export const readOnlyAnnotations = {
   readOnlyHint: true,
   destructiveHint: false,
+  idempotentHint: true,
   openWorldHint: false,
 };

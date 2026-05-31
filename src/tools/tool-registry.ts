@@ -8,11 +8,13 @@ import type { ResearchCache } from '../lib/research-cache.js';
 import {
   buildReconstructionDossier,
   collectFoodMemory,
+  collectFoodMemoryWithModel,
   formatCollectedFoodMemory,
   generateFamilyFollowupQuestions,
   generateMinimumViableNostalgiaCue,
   planDishResearch,
 } from '../lib/memory-workflow.js';
+import type { FoodMemoryModelExtractor } from '../lib/types.js';
 import { buildMemoryReceipt, formatMemoryReceiptMarkdown } from '../lib/memory-receipt.js';
 import { buildResearchRecord, extractResearchFindings, validateResearchRecord } from '../lib/research-provenance.js';
 import { assembleRecipePrompt, validateRecipeOutput } from '../lib/recipe-generator.js';
@@ -50,6 +52,8 @@ export type AchioteToolExecutionContext = {
   cache: ResearchCache | null;
   sensoryProfilesData: typeof sensoryProfilesData;
   dishFamiliesData: typeof dishFamiliesData;
+  foodMemoryExtractor?: FoodMemoryModelExtractor;
+  foodMemoryExtractionTimeoutMs?: number;
 };
 
 export type AchioteToolExecutionResult = {
@@ -523,8 +527,11 @@ export const toolRegistry = [
         userLocation: { type: 'string' as const, description: 'Optional current location for later adaptation' },
       },
     },
-    execute: (raw) => {
-      const memory = collectFoodMemory(raw as Parameters<typeof collectFoodMemory>[0]);
+    execute: async (raw, context) => {
+      const memory = await collectFoodMemoryWithModel(raw as Parameters<typeof collectFoodMemory>[0], {
+        extractor: context.foodMemoryExtractor,
+        timeoutMs: context.foodMemoryExtractionTimeoutMs,
+      });
       return output({ ...memory }, formatCollectedFoodMemory(memory));
     },
   }),
@@ -592,7 +599,7 @@ export const toolRegistry = [
       inputSchema: {
         memory: collectedFoodMemorySchema.describe('Structured output from collect_food_memory'),
         researchPlan: dishResearchPlanSchema.optional().describe('Structured output from plan_dish_research'),
-        cue: minimumViableNostalgiaOutputSchema.optional().describe('Structured output from generate_minimum_viable_nostalgia'),
+        cue: minimumViableNostalgiaOutputSchema.optional().describe('Structured output from generate_minimum_viable_nostalgia when a first test has been produced'),
         assistantText: z.string().optional().describe('Final assistant-facing summary to include in the receipt'),
       },
       outputSchema: memoryReceiptOutputSchema,
@@ -601,12 +608,12 @@ export const toolRegistry = [
     anthropicInputSchema: {
       type: 'object' as const,
       required: ['memory'],
-      properties: {
-        memory: { type: 'object' as const, description: 'Structured output from collect_food_memory' },
-        researchPlan: { type: 'object' as const, description: 'Structured output from plan_dish_research' },
-        cue: { type: 'object' as const, description: 'Structured output from generate_minimum_viable_nostalgia' },
-        assistantText: { type: 'string' as const, description: 'Final assistant-facing summary to include in the receipt' },
-      },
+        properties: {
+          memory: { type: 'object' as const, description: 'Structured output from collect_food_memory' },
+          researchPlan: { type: 'object' as const, description: 'Structured output from plan_dish_research' },
+          cue: { type: 'object' as const, description: 'Structured output from generate_minimum_viable_nostalgia when available' },
+          assistantText: { type: 'string' as const, description: 'Final assistant-facing summary to include in the receipt' },
+        },
     },
     execute: (raw) => {
       const input = asInput(raw);
@@ -658,16 +665,34 @@ export const toolRegistry = [
     mcp: {
       title: 'Resolve Dish Name',
       description: 'Resolve a dish name to its canonical family, aliases, transliterations, and broad region. Handles fuzzy matching and transliteration data from the bundled dataset.',
-      inputSchema: { input: z.string().min(1).max(500).describe('The dish name as the user described it, including spelling variants or transliterations') },
+      inputSchema: {
+        input: z.string().min(1).max(500).describe('The dish name as the user described it, including spelling variants or transliterations'),
+        memory: collectedFoodMemorySchema.optional().describe('Optional structured memory context from collect_food_memory'),
+        researchedFacts: z.array(z.string()).optional().describe('Optional source-backed facts already gathered for this unresolved name'),
+      },
       outputSchema: dishNameResolutionSchema,
     },
     outputSchema: dishNameResolutionSchema,
     anthropicInputSchema: {
       type: 'object' as const,
       required: ['input'],
-      properties: { input: { type: 'string' as const, description: 'The dish name as the user described it, including spelling variants or transliterations' } },
+      properties: {
+        input: { type: 'string' as const, description: 'The dish name as the user described it, including spelling variants or transliterations' },
+        memory: { type: 'object' as const, description: 'Optional structured memory context from collect_food_memory' },
+        researchedFacts: { type: 'array' as const, items: { type: 'string' as const }, description: 'Optional source-backed facts already gathered for this unresolved name' },
+      },
     },
-    execute: (raw) => output({ ...resolveDishName(text(asInput(raw).input)) }),
+    execute: (raw) => {
+      const input = asInput(raw);
+      const memory = collectedFoodMemorySchema.safeParse(input.memory);
+      const researchedFacts = stringArrayValue(input.researchedFacts);
+      return output({
+        ...resolveDishName(text(input.input), {
+          ...(memory.success ? { memory: memory.data } : {}),
+          ...(researchedFacts.length > 0 ? { researchedFacts } : {}),
+        }),
+      });
+    },
   }),
   createTool({
     name: 'analyze_nostalgic_dish',
@@ -876,7 +901,7 @@ export const toolRegistry = [
       const query = text(asInput(raw).query);
       const apiKey = process.env.SERPER_API_KEY?.trim();
       if (!apiKey) {
-        return output({ query, searchStatus: 'not_configured', results: [], note: 'Host web search is not configured for this run. Use prior evidence or ask a targeted follow-up question.' });
+        return output({ query, results: [], note: 'Host web search is not configured for this run. Use prior evidence or ask a targeted follow-up question.' });
       }
       try {
         const response = await fetch('https://google.serper.dev/search', {
@@ -886,7 +911,7 @@ export const toolRegistry = [
         });
         if (!response.ok) {
           const body = await response.text();
-          return output({ query, searchStatus: 'error', results: [], error: `Search API returned ${response.status}: ${body.slice(0, 200)}` });
+          return output({ query, results: [], error: `Search API returned ${response.status}: ${body.slice(0, 200)}` });
         }
         const data = await response.json() as {
           organic?: Array<{ title: string; link: string; snippet: string }>;
@@ -897,9 +922,9 @@ export const toolRegistry = [
           link: r.link ?? '',
           snippet: r.snippet ?? '',
         }));
-        return output({ query, searchStatus: 'ok', results: organic });
+        return output({ query, results: organic });
       } catch (err) {
-        return output({ query, searchStatus: 'error', results: [], error: err instanceof Error ? err.message : String(err) });
+        return output({ query, results: [], error: err instanceof Error ? err.message : String(err) });
       }
     },
   }),

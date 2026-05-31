@@ -6,6 +6,7 @@ import { escapeRegExp } from './food-memory-text.js';
 export function inferSafetyConstraints(userMessage: string): string[] {
   const constraints: string[] = [];
   const hasAllergyContext = /\ballerg(?:y|ic|ies)\b/i.test(userMessage);
+  const hasAdverseReactionContext = /\b(?:make|makes|made|causes?|trigger(?:s|ed)?|gives?|gave)\s+me\s+[^.!?]{0,80}\b(?:swell(?:ing)?|swollen|hives?|rash|itch(?:y|ing)?|wheez(?:e|ing)|throat|anaphylaxis)\b|\b(?:swell(?:ing)?|swollen|hives?|rash|itch(?:y|ing)?|wheez(?:e|ing)|throat|anaphylaxis)\b[^.!?]{0,80}\b(?:after|from|when\s+I\s+eat)\b/i.test(userMessage);
   if (/\bvegan\b|\bplant[-\s]?based\b|\bno animal products?\b/i.test(userMessage)) constraints.push('vegan');
   if (/\bvegetarian\b|\bmeat[-\s]?free\b|\bno meat\b/i.test(userMessage)) constraints.push('vegetarian');
   if (/\bsoy allerg|\ballergic to soy\b|\bno soy\b|\bsoy[-\s]?free\b/i.test(userMessage)) constraints.push('soy allergy');
@@ -14,9 +15,9 @@ export function inferSafetyConstraints(userMessage: string): string[] {
   if (/\b(?:egg|eggs)\s+allerg|\ballergic\s+to\s+eggs?\b|\bno eggs?\b|\begg[-\s]?free\b/i.test(userMessage)
     || (hasAllergyContext && /\beggs?\b/i.test(userMessage))) constraints.push('egg allergy');
   if (/\b(?:shellfish|shrimp|prawns?|crab|lobster|oysters?|clams?|mussels?|scallops?)\s+allerg|\ballergic\s+to\s+(?:shellfish|shrimp|prawns?|crab|lobster|oysters?|clams?|mussels?|scallops?)\b|\bno shellfish\b|\bshellfish[-\s]?free\b/i.test(userMessage)
-    || (hasAllergyContext && /\b(?:shellfish|shrimp|prawns?|crab|lobster|oysters?|clams?|mussels?|scallops?)\b/i.test(userMessage))) constraints.push('shellfish allergy');
+    || ((hasAllergyContext || hasAdverseReactionContext) && /\b(?:shellfish|shrimp|prawns?|crab|lobster|oysters?|clams?|mussels?|scallops?)\b/i.test(userMessage))) constraints.push('shellfish allergy');
   if (/\b(?:fish|seafood)\s+allerg|\ballergic\s+to\s+(?:fish|seafood)\b|\bno fish\b|\bfish[-\s]?free\b|\bseafood[-\s]?free\b/i.test(userMessage)
-    || (hasAllergyContext && /\b(?:fish|seafood)\b/i.test(userMessage))) constraints.push('fish allergy');
+    || ((hasAllergyContext || hasAdverseReactionContext) && /\b(?:fish|seafood)\b/i.test(userMessage))) constraints.push('fish allergy');
   if (/\b(?:sesame|tahini)\s+allerg|\ballergic\s+to\s+(?:sesame|tahini)\b|\bno sesame\b|\bsesame[-\s]?free\b/i.test(userMessage)
     || (hasAllergyContext && /\b(?:sesame|tahini)\b/i.test(userMessage))) constraints.push('sesame allergy');
   if (/\bdairy[-\s]?free\b|\bno dairy\b|\bmilk allerg|\blactose\b/i.test(userMessage)) constraints.push('dairy-free');
@@ -52,27 +53,6 @@ export function sanitizeGroundedSearchQuery(query: string): string {
     .replace(/\s{2,}/g, ' ')
     .trim()
     .slice(0, 180);
-}
-
-export function isExplicitLocalSourcingSearchRequest(userMessage: string): boolean {
-  return /\b(?:where\s+(?:can|could)\s+i\s+(?:buy|find)|where\s+to\s+(?:buy|find)|find\s+(?:actual\s+)?(?:stores?|markets?|grocer(?:y|ies)|shops?)|actual\s+(?:stores?|markets?|grocer(?:y|ies)|shops?)|local\s+(?:stores?|markets?|grocer(?:y|ies)|shops?)|near\s+me|near\s+[a-z][\p{L}\p{M}\s,.-]{2,80})\b/iu.test(userMessage);
-}
-
-export function buildLocalSourcingSearchQuery(ingredients: string[], location: string): string {
-  const ingredientQuery = ingredients
-    .map((ingredient) => ingredient.trim())
-    .filter(Boolean)
-    .slice(0, 3)
-    .join(' ');
-  if (!ingredientQuery || !location.trim()) return '';
-  const specialtyTerms = /\b(?:chilhuacle|mole\s+negro|quesillo|tlayuda|oaxac)/i.test(ingredientQuery)
-    ? 'Mexican Oaxacan grocery dried chiles spice shop'
-    : /\b(?:chiles?|chilis?|chillies|peppers?)\b/i.test(ingredientQuery)
-      ? 'spice shop international grocery specialty market'
-      : /\b(?:masa|maiz|maize|achiote|annatto|epazote)\b/i.test(ingredientQuery)
-        ? 'Mexican Latin grocery specialty market'
-        : 'specialty grocery market store shop';
-  return sanitizeGroundedSearchQuery(`${ingredientQuery} ${location.trim()} ${specialtyTerms}`);
 }
 
 export function isLatestCorrectionMessage(userMessage: string): boolean {

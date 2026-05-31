@@ -2,6 +2,7 @@ import Anthropic from '@anthropic-ai/sdk';
 import {
   createAnthropicAskSession,
   createOpenAICompatibleAskSession,
+  isLocalInferenceUrl,
   isOpenRouterUrl,
   openAIBaseUrlFromEnv,
   openAICompatibleProviderReady,
@@ -145,20 +146,27 @@ export function createProviderRuntime(input: ProviderRuntimeInput): ProviderRunt
 
   function openAIApiKey(): string | null {
     const provider = env.ACHIOTE_ASK_PROVIDER?.trim().toLowerCase();
-    if (provider === 'local' || provider === 'lmstudio' || provider === 'lm-studio') {
+    const isLocalProvider = provider === 'local' || provider === 'lmstudio' || provider === 'lm-studio';
+    if (isLocalProvider) {
       return env.LOCAL_INFERENCE_API_KEY
         || env.LMSTUDIO_API_KEY
         || env.LM_STUDIO_API_KEY
+        || null;
+    }
+    if (isOpenRouterUrl(openAIBaseUrl)) {
+      return env.OPENROUTER_API_KEY
         || env.OPENAI_API_KEY
         || null;
     }
     if (provider === 'glm' || provider === 'zhipu') {
-      return env.GLM_API_KEY || env.ZHIPU_API_KEY || null;
+      return env.GLM_API_KEY
+        || env.ZHIPU_API_KEY
+        || null;
     }
-    if (openAIBaseUrl && openAIBaseUrl.includes('openrouter.ai')) {
-      return env.OPENROUTER_API_KEY || env.OPENAI_API_KEY || null;
-    }
-    return env.OPENAI_API_KEY || null;
+    return env.OPENAI_API_KEY
+      || (isLocalInferenceUrl(openAIBaseUrl)
+        ? env.LOCAL_INFERENCE_API_KEY || env.LMSTUDIO_API_KEY || env.LM_STUDIO_API_KEY || null
+        : null);
   }
 
   return {

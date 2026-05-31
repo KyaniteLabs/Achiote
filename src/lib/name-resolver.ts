@@ -1,4 +1,4 @@
-import type { Confidence, DishNameCandidate, DishNameMatchType, DishNameResolution } from './types.js';
+import type { CollectedFoodMemory, Confidence, DishNameCandidate, DishNameMatchType, DishNameResolution } from './types.js';
 import dishFamiliesData from '../data/dish-families.json' with { type: 'json' };
 
 const families = dishFamiliesData.families;
@@ -10,6 +10,11 @@ type Variant = {
   regions: string[];
   distinguishingElements?: string[];
   clarificationPrompt?: string;
+};
+
+export type DishNameResolutionContext = {
+  memory?: CollectedFoodMemory;
+  researchedFacts?: string[];
 };
 
 function levenshtein(a: string, b: string): number {
@@ -157,7 +162,7 @@ function buildResolution(input: string, candidate: DishNameCandidate, candidates
 
   const clarificationPrompt = needsClarification
     ? `I found multiple plausible meanings for "${input}". Which regional dish or technique do you mean?`
-    : undefined;
+    : candidate.clarificationPrompt;
   if (clarificationPrompt) resolution.clarificationPrompt = clarificationPrompt;
 
   return resolution;
@@ -181,7 +186,58 @@ function chooseBestCandidate(candidates: DishNameCandidate[]): DishNameCandidate
   })[0];
 }
 
-export function resolveDishName(input: string): DishNameResolution {
+function cleanLabel(value: unknown): string | undefined {
+  if (typeof value !== 'string') return undefined;
+  const trimmed = value.trim().replace(/\s+/g, ' ');
+  if (!trimmed || /^unknown$/i.test(trimmed)) return undefined;
+  return trimmed;
+}
+
+function extractedRegionFrom(context?: DishNameResolutionContext): string | undefined {
+  const memory = context?.memory;
+  const metadataRegion = cleanLabel(memory?.extractionMetadata?.originRegion);
+  if (metadataRegion) return metadataRegion;
+
+  const explicitHint = memory?.extractedClues.culturalOrRegionalHints
+    .map(cleanLabel)
+    .find(Boolean);
+  if (explicitHint) return explicitHint;
+
+  return memory?.inferredContext.culturalOrRegional
+    .map((clue) => cleanLabel(clue.label))
+    .find(Boolean);
+}
+
+function contextTextFor(memory: CollectedFoodMemory | undefined): string {
+  if (!memory) return '';
+  return [
+    memory.rawMemory,
+    ...memory.extractedClues.rememberedIngredients,
+    ...(memory.extractedClues.cookingMethods ?? []),
+    ...memory.extractedClues.sensoryClues,
+    ...memory.extractedClues.occasions,
+  ].join(' ').toLowerCase();
+}
+
+function unresolvedFamilyFrom(context?: DishNameResolutionContext): string | undefined {
+  const memory = context?.memory;
+  const text = contextTextFor(memory);
+  const researched = (context?.researchedFacts ?? []).join(' ').toLowerCase();
+  const combined = `${text} ${researched}`;
+
+  if (/\b(?:rice|arroz)\b/.test(combined)) return 'regional rice-dish clue';
+  if (/\b(?:porridge|ferment|fermented|sour|banana leaf|steamed)\b/.test(combined)) {
+    return 'regional steamed-fermented starch clue';
+  }
+  if (/\b(?:fried|frit|crispy|crisp|thick cut|syrup|sweet|plantain|yuca|cassava|maiz|corn)\b/.test(combined)) {
+    return 'regional fried-starch clue';
+  }
+  if (/\b(?:drink|beverage|agua|juice|tea|coffee)\b/.test(combined)) return 'regional drink clue';
+  if (extractedRegionFrom(context)) return 'regional food-memory clue';
+  return undefined;
+}
+
+export function resolveDishName(input: string, context?: DishNameResolutionContext): DishNameResolution {
   const candidates = allCandidatesFor(input);
 
   if (candidates.length > 0) {
@@ -193,18 +249,22 @@ export function resolveDishName(input: string): DishNameResolution {
 
   const normalized = normalize(input);
   const safeName = normalized.length > 80 ? normalized.slice(0, 80) : input;
+  const contextRegion = extractedRegionFrom(context);
+  const contextFamily = unresolvedFamilyFrom(context);
   return {
     input,
     canonicalName: safeName,
     aliases: [],
     transliterations: [],
-    dishFamily: 'unknown',
-    region: 'unknown',
+    dishFamily: contextFamily ?? 'unknown',
+    region: contextRegion ?? 'unknown',
     confidence: 'Low',
     matchType: 'unknown',
     score: 0,
     needsClarification: true,
     candidates: [],
-    clarificationPrompt: `I could not confidently match "${input}". Ask for region, ingredients, language, or cooking method before adapting it.`,
+    clarificationPrompt: contextRegion || contextFamily
+      ? `I could not confidently match "${input}" in the reference database. Treat it as an unresolved ${contextRegion ?? 'regional'} food-memory clue and ask for local spelling, base ingredient, language, or cooking method before adapting it.`
+      : `I could not confidently match "${input}". Ask for region, ingredients, language, or cooking method before adapting it.`,
   };
 }

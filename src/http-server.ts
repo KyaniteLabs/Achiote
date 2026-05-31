@@ -23,6 +23,12 @@ import { getHttpReadiness, getRequestRateLimitIdentity, shouldApplyRateLimit } f
 import { resolveLocalSpeechConfig } from './lib/local-speech.js';
 import { createLocalSpeechController } from './lib/local-speech-controller.js';
 import { buildMemoryReceipt } from './lib/memory-receipt.js';
+import { DEFAULT_MODEL_EXTRACTION_TIMEOUT_MS } from './lib/food-memory-collector.js';
+import {
+  FOOD_MEMORY_EXTRACTION_SYSTEM_PROMPT,
+  createProviderFoodMemoryExtractor,
+  foodMemoryExtractionTools,
+} from './lib/food-memory-model-extractor.js';
 import { buildAskQualitySignal, emptyQualitySignalReport, inferAskCacheOutcome, recordQualitySignal } from './lib/quality-signals.js';
 import { createProviderRuntime } from './lib/provider-runtime.js';
 import { buildReferenceSeedOperatorReport } from './lib/reference-seed-operator.js';
@@ -41,8 +47,6 @@ import {
 import {
   inferSafetyConstraints,
   buildGroundedSearchQuery,
-  buildLocalSourcingSearchQuery,
-  isExplicitLocalSourcingSearchRequest,
   sanitizeGroundedSearchQuery,
   isLatestCorrectionMessage,
   buildCorrectedMemoryText,
@@ -92,6 +96,7 @@ import {
   compactMinimumCueWhy,
   buildMinimumCueCompletedResponse,
   buildEvidenceBoundedMinimumCueResponse,
+  buildResearchGroundedForcedCueResponse,
   containsCueFamilyMismatch,
   buildUserMessageMechanismCueResponse,
   ensureLocalCueLanguage,
@@ -127,6 +132,33 @@ const DISABLE_SEARCH_WEB = process.env.ACHIOTE_DISABLE_SEARCH_WEB === 'true';
 const ENABLE_LOCAL_SOURCING_SEARCH = process.env.ACHIOTE_ENABLE_LOCAL_SOURCING_SEARCH === 'true';
 const ASK_TOOLS = DISABLE_SEARCH_WEB ? TOOLS.filter((tool) => tool.name !== 'search_web') : TOOLS;
 const TOOLS_BY_NAME = new Map(TOOLS.map((tool) => [tool.name, tool]));
+const DESCRIPTIVE_HYPHEN_DISH_TOKENS = new Set([
+  'aroma',
+  'broth',
+  'cold',
+  'crispy',
+  'drink',
+  'egg',
+  'fat',
+  'green',
+  'gravy',
+  'herb',
+  'hot',
+  'oily',
+  'pale',
+  'potato',
+  'rice',
+  'sauce',
+  'savory',
+  'sour',
+  'spice',
+  'starch',
+  'sweet',
+  'tart',
+  'thick',
+  'thin',
+  'warm',
+]);
 
 const MIME: Record<string, string> = {
   '.html': 'text/html',
@@ -181,31 +213,15 @@ const cacheState = createCacheWithStatus({});
 const cache = cacheState.cache;
 const toolContext: AchioteToolExecutionContext = { ...defaultToolExecutionContext, cache };
 const ANTHROPIC_BASE_URL = anthropicBaseUrlFromEnv();
-function anthropicApiKeyFromEnv(): string | null {
-  const provider = process.env.ACHIOTE_ASK_PROVIDER?.trim().toLowerCase();
-  if ((provider === 'local' || provider === 'lmstudio' || provider === 'lm-studio') && ANTHROPIC_BASE_URL) {
-    return process.env.LOCAL_INFERENCE_API_KEY?.trim()
-      || process.env.LMSTUDIO_API_KEY?.trim()
-      || process.env.LM_STUDIO_API_KEY?.trim()
-      || null;
-  }
-  if (provider === 'glm' || provider === 'zhipu') {
-    return process.env.GLM_API_KEY?.trim()
-      || process.env.ZHIPU_API_KEY?.trim()
-      || process.env.ANTHROPIC_API_KEY?.trim()
-      || null;
-  }
-  return process.env.ANTHROPIC_API_KEY?.trim() || null;
-}
 const anthropicClientOptions: ConstructorParameters<typeof Anthropic>[0] = {
   timeout: ANTHROPIC_TIMEOUT_MS,
-  apiKey: anthropicApiKeyFromEnv(),
+  apiKey: process.env.ANTHROPIC_API_KEY?.trim() || process.env.GLM_API_KEY?.trim() || process.env.ZHIPU_API_KEY?.trim() || process.env.LOCAL_INFERENCE_API_KEY?.trim() || process.env.LMSTUDIO_API_KEY?.trim() || process.env.LM_STUDIO_API_KEY?.trim() || null,
   authToken: process.env.ANTHROPIC_AUTH_TOKEN?.trim() || null,
 };
 if (ANTHROPIC_BASE_URL) anthropicClientOptions.baseURL = ANTHROPIC_BASE_URL;
 const anthropic = new Anthropic(anthropicClientOptions);
 const configuredApiKeys = loadKeysFromEnv(process.env.ACHIOTE_API_KEYS);
-const authenticator = createAuthenticator(configuredApiKeys);
+const authenticator = createAuthenticator(configuredApiKeys, process.env.ACHIOTE_ENABLE_DEV_AUTH_KEY === 'true');
 const rateLimiter = createRateLimiter(process.env.ACHIOTE_RATE_LIMIT_DB);
 
 const billingConfig = loadBillingConfigFromEnv();
@@ -320,14 +336,35 @@ Then include one targeted follow-up that would most reduce uncertainty if they w
 - If the user shares a photo, describe what you see in the image and combine it with any text description they provide before calling tools.
 - If researched facts were gathered (e.g., from search_web or resolve_dish_name), explicitly reference at least one specific finding in your prose. Do not summarize vaguely. Name the exact fact.`;
 
+const MODEL_EXTRACTION_TIMEOUT_MS = Math.min(
+  parsePositiveInteger(process.env.ACHIOTE_MODEL_EXTRACTION_TIMEOUT_MS) ?? DEFAULT_MODEL_EXTRACTION_TIMEOUT_MS,
+  DEFAULT_MODEL_EXTRACTION_TIMEOUT_MS,
+);
 const providerRuntime = createProviderRuntime({
   anthropicClient: anthropic,
   systemPrompt: SYSTEM_PROMPT,
   tools: ASK_TOOLS,
   openAITimeoutMs: OPENAI_TIMEOUT_MS,
 });
+const foodMemoryProviderRuntime = createProviderRuntime({
+  anthropicClient: anthropic,
+  systemPrompt: FOOD_MEMORY_EXTRACTION_SYSTEM_PROMPT,
+  tools: foodMemoryExtractionTools,
+  openAITimeoutMs: MODEL_EXTRACTION_TIMEOUT_MS,
+});
+toolContext.foodMemoryExtractionTimeoutMs = MODEL_EXTRACTION_TIMEOUT_MS;
+if (modelExtractionEnabled()) {
+  toolContext.foodMemoryExtractor = createProviderFoodMemoryExtractor(foodMemoryProviderRuntime);
+}
 
 // ── Tool execution ──────────────────────────────────────────────────────────
+
+function modelExtractionEnabled(): boolean {
+  const explicit = process.env.ACHIOTE_MODEL_EXTRACTION_ENABLED?.trim().toLowerCase();
+  if (['0', 'false', 'no', 'off'].includes(explicit ?? '')) return false;
+  if (['1', 'true', 'yes', 'on'].includes(explicit ?? '')) return true;
+  return false;
+}
 
 function validateToolOutput(toolName: string, result: unknown): void {
   const schema = outputSchemas[toolName];
@@ -582,7 +619,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       iterations++;
       const normalizedToolCalls = normalizeModelToolCalls(modelResponse.toolCalls);
       if (normalizedToolCalls.normalizedAny) {
-        modelResponse = syncProviderMessageWithToolCalls({ ...modelResponse, toolCalls: normalizedToolCalls.toolCalls });
+        modelResponse = { ...modelResponse, toolCalls: normalizedToolCalls.toolCalls };
         for (const correction of normalizedToolCalls.corrections) {
           console.warn(`[ask] normalized model tool name typo: ${correction.from} -> ${correction.to}`);
           send('status', { iteration: iterations, stage: 'tool_name_normalized', from: correction.from, to: correction.to });
@@ -617,7 +654,6 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
           toolCalls: filteredCalls,
           providerMessage: modelResponse.providerMessage ?? null,
         };
-        modelResponse = syncProviderMessageWithToolCalls(modelResponse);
       }
 
       if (modelResponse.toolCalls.length === 0) break;
@@ -683,7 +719,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
           }
           const payload = await executeAndStreamTool(call.name, call.input, userMessage, send, calledTools, toolPayloads, history);
           if (call.name === 'search_web') searchCallCount++;
-          const content = JSON.stringify(payload);
+          const content = JSON.stringify(payloadForModelToolResult(call.name, payload, userMessage));
           toolResults.push({ id: call.id, content });
           toolCallHistory.push({ name: call.name, input: call.input });
         } catch (err) {
@@ -861,7 +897,9 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
     if (calledTools.has('generate_minimum_viable_nostalgia')
       && (modelResponse.textBlocks.length === 0 || containsStalledFallbackText(modelResponse.textBlocks.join('\n\n')))) {
       console.warn('[ask] replaced stalled post-cue response with deterministic minimum cue');
-      const responseText = buildMinimumCueCompletedResponse(toolPayloads, userMessage);
+      const responseText = calledTools.has('search_web')
+        ? buildResearchGroundedForcedCueResponse(toolPayloads, userMessage)
+        : buildMinimumCueCompletedResponse(toolPayloads, userMessage);
       send('text', responseText);
       maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
       finish({ guarded: 'minimum_cue_deterministic_completion' });
@@ -922,7 +960,17 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       return;
     }
 
-    if (calledTools.has('generate_minimum_viable_nostalgia') && containsCueFamilyMismatch(trustBoundedResponseText, userMessage)) {
+    // If the answer is grounded in research or concrete resolver evidence, trust the model. The quality guards below were
+    // discarding good tool-backed synthesis as false positives and replacing it with generic templates.
+    const resolvedForGrounding = toolPayloads.resolve_dish_name as
+      | { region?: string; confidence?: string; matchType?: string }
+      | undefined;
+    const resolverGrounded = calledTools.has('resolve_dish_name')
+      && resolvedForGrounding?.matchType !== 'unknown'
+      && resolvedForGrounding?.confidence !== 'Low'
+      && Boolean(resolvedForGrounding?.region && !/^unknown$/i.test(resolvedForGrounding.region));
+    const researchGrounded = calledTools.has('search_web') || resolverGrounded;
+    if (calledTools.has('generate_minimum_viable_nostalgia') && containsCueFamilyMismatch(trustBoundedResponseText, userMessage) && !researchGrounded) {
       console.warn('[ask] replaced cue-family mismatch with deterministic mechanism cue');
       const responseText = buildUserMessageMechanismCueResponse(userMessage, toolPayloads);
       send('text', responseText);
@@ -940,16 +988,33 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       return;
     }
 
-    if (calledTools.has('generate_minimum_viable_nostalgia') && containsOverconfidentIdentityClaim(trustBoundedResponseText)) {
+    const collectedMemoryForIdentity = toolPayloads.collect_food_memory as { rawMemory?: string; extractedClues?: { possibleDishNames?: unknown[] } } | undefined;
+    const possibleDishNames = collectedMemoryForIdentity?.extractedClues?.possibleDishNames ?? [];
+    const dishNameIsExplicitlyApproximate = /\b(?:something\s+like|sounds?\s+like|sounded\s+like|kind\s+of\s+like|sort\s+of\s+like|like\s+[\p{L}\p{M}'-]+(?:\s+[\p{L}\p{M}'-]+){0,4}\s+but|rough(?:ly)?|phonetic(?:ally)?|maybe\s+called)\b/iu.test(collectedMemoryForIdentity?.rawMemory ?? userMessage);
+    const userNamedDishAnchor = possibleDishNames.some((name) => {
+      if (typeof name !== 'string') return false;
+      const normalized = name.toLowerCase().trim();
+      if (!normalized) return false;
+      if (normalized.includes('-')) {
+        const tokens = normalized.split(/[\s-]+/).filter(Boolean);
+        if (tokens.length > 0 && tokens.every((token) => DESCRIPTIVE_HYPHEN_DISH_TOKENS.has(token))) return false;
+      }
+      return true;
+    }) && !dishNameIsExplicitlyApproximate;
+    if (calledTools.has('generate_minimum_viable_nostalgia') && containsOverconfidentIdentityClaim(trustBoundedResponseText) && !userNamedDishAnchor && !researchGrounded) {
       console.warn('[ask] replaced overconfident identity claim with deterministic minimum cue');
-      const responseText = buildMinimumCueCompletedResponse(toolPayloads, userMessage);
+      const memoryPayload = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
+      const isExplicitlyUnnamedMemory = /\b(?:never knew the name|don['’]?t know the name|didn['’]?t know the name|no name|unnamed)\b/i.test(userMessage);
+      const responseText = isExplicitlyUnnamedMemory && (memoryPayload?.nextQuestions?.length ?? 0) > 0
+        ? buildClarificationOnlyResponse(toolPayloads, userMessage, { includeEvidencePreamble: false })
+        : buildMinimumCueCompletedResponse(toolPayloads, userMessage);
       send('text', responseText);
       maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
       finish({ guarded: 'overconfident_identity_sanitized' });
       return;
     }
 
-    if (calledTools.has('generate_minimum_viable_nostalgia') && containsRecipeProcedureOrAdaptationLanguage(trustBoundedResponseText)) {
+    if (calledTools.has('generate_minimum_viable_nostalgia') && containsRecipeProcedureOrAdaptationLanguage(trustBoundedResponseText) && !researchGrounded) {
       console.warn('[ask] replaced recipe procedure drift with deterministic minimum cue');
       const responseText = buildMinimumCueCompletedResponse(toolPayloads, userMessage);
       send('text', responseText);
@@ -963,7 +1028,9 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       const sanitized = sanitizeRecipeStyleCueLanguage(trustBoundedResponseText);
       if (lacksMinimumCueLanguage(sanitized)) {
         console.warn('[ask] sanitized measurement text still lacks minimum cue language; falling back to deterministic minimum cue');
-        const responseText = buildMinimumCueCompletedResponse(toolPayloads, userMessage);
+        const responseText = calledTools.has('search_web')
+          ? buildResearchGroundedForcedCueResponse(toolPayloads, userMessage)
+          : buildMinimumCueCompletedResponse(toolPayloads, userMessage);
         send('text', responseText);
         maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
         finish({ guarded: 'minimum_cue_language_sanitized' });
@@ -975,9 +1042,21 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       return;
     }
 
+    if (calledTools.has('generate_minimum_viable_nostalgia')
+      && shouldClarifyUnresolvedUnnamedMemory(userMessage, toolPayloads, calledTools, trustBoundedResponseText)) {
+      console.warn('[ask] replaced unresolved unnamed cue with targeted clarification');
+      const responseText = buildClarificationOnlyResponse(toolPayloads, userMessage, { includeEvidencePreamble: false });
+      send('text', responseText);
+      maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
+      finish({ guarded: 'unnamed_memory_clarification' });
+      return;
+    }
+
     if (calledTools.has('generate_minimum_viable_nostalgia') && lacksMinimumCueLanguage(trustBoundedResponseText)) {
       console.warn('[ask] replaced missing-minimum-cue response with deterministic minimum cue');
-      const responseText = buildMinimumCueCompletedResponse(toolPayloads, userMessage);
+      const responseText = calledTools.has('search_web')
+        ? buildResearchGroundedForcedCueResponse(toolPayloads, userMessage)
+        : buildMinimumCueCompletedResponse(toolPayloads, userMessage);
       send('text', responseText);
       maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
       finish({ guarded: 'minimum_cue_language_sanitized' });
@@ -998,7 +1077,10 @@ type SseSender = (event: string, data: unknown) => void;
 type DoneSender = (data?: Record<string, unknown>) => void;
 
 function enforceAllergyProfessionalBoundary(text: string, userMessage: string): string {
-  if (!/\b(?:allerg(?:y|ic|ies|en)|intoleran(?:ce|t)|anaphylaxis|severely allergic|tree nuts?|peanuts?)\b/i.test(userMessage)) return text;
+  const constraints = inferSafetyConstraints(userMessage);
+  const hasAllergyBoundary = constraints.some((constraint) => /\ballergy\b|dairy-free|gluten-free/i.test(constraint))
+    || /\b(?:allerg(?:y|ic|ies|en)|intoleran(?:ce|t)|anaphylaxis|severely allergic|tree nuts?|peanuts?)\b/i.test(userMessage);
+  if (!hasAllergyBoundary) return text;
   const boundedText = sanitizeFoodSafetyClaimLanguage(text);
   if (/\b(?:qualified professional|medical professional|doctor|allergist|clinician|dietitian)\b/i.test(boundedText)) return boundedText;
   return [
@@ -1026,6 +1108,24 @@ function sanitizeFoodSafetyClaimLanguage(text: string): string {
     .replace(/\bonly if safe\b/gi, 'only if already tolerated')
     .replace(/\bif safe\b/gi, 'if already tolerated')
     .replace(/\bsafe\b/gi, 'already tolerated');
+}
+
+function payloadForModelToolResult(toolName: string, payload: unknown, userMessage: string): unknown {
+  if (toolName !== 'collect_food_memory') return payload;
+  const constraints = inferSafetyConstraints(userMessage);
+  if (constraints.length === 0 || !isRecord(payload)) return payload;
+  const extractedClues = isRecord(payload.extractedClues) ? payload.extractedClues : {};
+  return {
+    ...payload,
+    extractionMetadata: undefined,
+    extractedClues: {
+      possibleDishNames: Array.isArray(extractedClues.possibleDishNames) ? extractedClues.possibleDishNames : [],
+      culturalOrRegionalHints: Array.isArray(extractedClues.culturalOrRegionalHints) ? extractedClues.culturalOrRegionalHints : [],
+      rememberedIngredients: [],
+      sensoryClues: Array.isArray(extractedClues.sensoryClues) ? extractedClues.sensoryClues : [],
+      occasions: Array.isArray(extractedClues.occasions) ? extractedClues.occasions : [],
+    },
+  };
 }
 
 function containsRawToolMarkup(text: string): boolean {
@@ -1115,15 +1215,17 @@ function deriveResearchedFactsForReceipt(toolPayloads: Record<string, unknown>):
 
   // resolve_dish_name: emit canonical name + region when a real match was found
   const resolved = toolPayloads.resolve_dish_name as
-    | { dishName?: string; canonicalName?: string; region?: string; confidence?: string; aliases?: string[] }
+    | { dishName?: string; canonicalName?: string; region?: string; confidence?: string; aliases?: string[]; matchType?: string }
     | undefined;
   const sourcing = toolPayloads.source_ingredients as
     | { ingredients?: string[]; location?: string; regionalData?: { region?: string; ethnicCorridors?: unknown; majorStores?: unknown } }
     | undefined;
-  if (resolved?.canonicalName && !/^Unknown$/i.test(resolved.canonicalName)) {
+  if (hasResolvedDishEvidence(resolved)) {
     const hasResearchProduct = (searched?.results?.length ?? 0) > 0;
     const effectiveConfidence = (resolved.confidence === 'Low' && hasResearchProduct) ? 'Medium' : resolved.confidence;
-    facts.push(`Dish resolved: "${resolved.canonicalName}" (confidence: ${effectiveConfidence ?? 'unknown'}, region: ${resolved.region ?? 'unknown'})`);
+    const userRegionHint = (toolPayloads.collect_food_memory as { extractedClues?: { culturalOrRegionalHints?: string[] } } | undefined)?.extractedClues?.culturalOrRegionalHints?.find((h) => Boolean(h));
+    const displayRegion = (resolved.region && !/^unknown$/i.test(resolved.region)) ? resolved.region : (userRegionHint ?? 'unknown');
+    facts.push(`Dish resolved: "${resolved.canonicalName}" (confidence: ${effectiveConfidence ?? 'unknown'}, region: ${displayRegion})`);
     const aliases = (resolved.aliases ?? []).filter(Boolean).slice(0, 3);
     if (aliases.length) facts.push(`Also known as: ${aliases.join(', ')}`);
   }
@@ -1147,6 +1249,38 @@ function deriveResearchedFactsForReceipt(toolPayloads: Record<string, unknown>):
   }
 
   return facts;
+}
+
+function sourceBackedSearchFacts(toolPayloads: Record<string, unknown>): string[] {
+  const searchResults = toolPayloads.search_web as
+    | { results?: Array<{ title?: string; snippet?: string }> }
+    | undefined;
+  return (searchResults?.results ?? [])
+    .filter((r) => r.snippet?.trim())
+    .map((r) => `${r.title}: ${r.snippet}`)
+    .slice(0, 5);
+}
+
+function sourceBackedDossierFacts(toolPayloads: Record<string, unknown>): string[] {
+  const facts = [...sourceBackedSearchFacts(toolPayloads)];
+  const resolved = toolPayloads.resolve_dish_name as
+    | { canonicalName?: string; region?: string; confidence?: string; matchType?: string }
+    | undefined;
+  if (hasResolvedDishEvidence(resolved)) {
+    facts.unshift(`Dish resolved: "${resolved.canonicalName}" (confidence: ${resolved.confidence ?? 'unknown'}, region: ${resolved.region ?? 'unknown'})`);
+  }
+  return [...new Set(facts)].slice(0, 5);
+}
+
+function hasResolvedDishEvidence<T extends { canonicalName?: string; matchType?: string; confidence?: string }>(
+  resolved: T | undefined,
+): resolved is T & { canonicalName: string } {
+  return Boolean(
+    resolved?.canonicalName
+    && !/^Unknown$/i.test(resolved.canonicalName)
+    && resolved.matchType !== 'unknown'
+    && resolved.confidence !== 'Low',
+  );
 }
 
 function flattenReceiptSourcingHints(value: unknown): string[] {
@@ -1266,12 +1400,33 @@ function normalizeDependentToolInput(toolName: string, input: unknown, userMessa
   if (toolName === 'plan_dish_research' && collectedMemory) {
     return { ...record, memory: collectedMemory };
   }
+  if (toolName === 'resolve_dish_name' && collectedMemory) {
+    const normalized: Record<string, unknown> = { ...record, memory: collectedMemory };
+    const researchedFacts = sourceBackedSearchFacts(toolPayloads);
+    if (researchedFacts.length > 0) {
+      normalized.researchedFacts = researchedFacts;
+    } else if (!shouldPreserveModelProvidedResearchFacts(collectedMemory as CollectedFoodMemory, userMessage)) {
+      delete normalized.researchedFacts;
+    }
+    return normalized;
+  }
   if (toolName === 'build_reconstruction_dossier') {
-    return {
+    const normalized: Record<string, unknown> = {
       ...record,
       ...(collectedMemory ? { memory: collectedMemory } : {}),
       ...(researchPlan ? { researchPlan } : {}),
     };
+    const researchedFacts = sourceBackedDossierFacts(toolPayloads);
+    if (researchedFacts.length > 0) {
+      normalized.researchedFacts = researchedFacts;
+    } else if (!shouldPreserveModelProvidedResearchFacts(collectedMemory as CollectedFoodMemory | undefined, userMessage)) {
+      delete normalized.researchedFacts;
+    }
+    if (sourceBackedSearchFacts(toolPayloads).length === 0
+      && !shouldPreserveModelProvidedResearchFacts(collectedMemory as CollectedFoodMemory | undefined, userMessage)) {
+      delete normalized.inferredFacts;
+    }
+    return normalized;
   }
   if (toolName === 'search_web'
     && record.purpose === 'local_sourcing'
@@ -1368,30 +1523,6 @@ function normalizeResearchRecordInput(record: Record<string, unknown>, toolPaylo
   };
 }
 
-function syncProviderMessageWithToolCalls(response: AskModelResponse): AskModelResponse {
-  const allowedIds = new Set(response.toolCalls.map((call) => call.id));
-  const providerMessage = response.providerMessage;
-  if (Array.isArray(providerMessage)) {
-    return {
-      ...response,
-      providerMessage: providerMessage.filter((block) => {
-        if (!isRecord(block) || block.type !== 'tool_use') return true;
-        return typeof block.id === 'string' && allowedIds.has(block.id);
-      }),
-    };
-  }
-  if (isRecord(providerMessage) && Array.isArray(providerMessage.tool_calls)) {
-    return {
-      ...response,
-      providerMessage: {
-        ...providerMessage,
-        tool_calls: providerMessage.tool_calls.filter((call) => isRecord(call) && typeof call.id === 'string' && allowedIds.has(call.id)),
-      },
-    };
-  }
-  return response;
-}
-
 function normalizeResearchSource(source: unknown): Record<string, unknown> {
   const record = isRecord(source) ? source : {};
   const title = typeof record.title === 'string' && record.title.trim() ? record.title : 'Untitled source';
@@ -1400,20 +1531,18 @@ function normalizeResearchSource(source: unknown): Record<string, unknown> {
     : typeof record.link === 'string'
       ? record.link
       : '';
-  const extractedFacts = [
-    ...(Array.isArray(record.extractedFacts) ? record.extractedFacts : []),
-    ...(Array.isArray(record.quotedFacts) ? record.quotedFacts : []),
-    typeof record.snippet === 'string' ? record.snippet : '',
-  ]
-    .filter((fact): fact is string => typeof fact === 'string' && fact.trim().length > 0)
-    .map((fact) => fact.trim().replace(/[\u2014\u2013]/g, ', '));
+  const extractedFacts = Array.isArray(record.extractedFacts)
+    ? record.extractedFacts.filter((fact): fact is string => typeof fact === 'string' && fact.trim().length > 0)
+    : typeof record.snippet === 'string' && record.snippet.trim()
+      ? [record.snippet.replace(/[\u2014\u2013]/g, ', ')]
+      : [];
 
   return {
     title,
     url,
     sourceType: normalizeSourceType(record.sourceType, title, url),
     accessedAt: typeof record.accessedAt === 'string' && record.accessedAt.trim() ? record.accessedAt : new Date().toISOString(),
-    reliability: normalizeConfidence(record.reliability, 'Low'),
+    reliability: normalizeConfidence(record.reliability),
     author: typeof record.author === 'string' ? record.author : undefined,
     extractedFacts,
   };
@@ -1429,17 +1558,17 @@ function normalizeSourceType(value: unknown, title: string, url: string): string
   return 'article';
 }
 
-function normalizeConfidence(value: unknown, fallback: 'High' | 'Medium' | 'Low' = 'Medium'): 'High' | 'Medium' | 'Low' {
-  return value === 'High' || value === 'Medium' || value === 'Low' ? value : fallback;
+function normalizeConfidence(value: unknown): 'High' | 'Medium' | 'Low' {
+  return value === 'High' || value === 'Medium' || value === 'Low' ? value : 'Medium';
 }
 
 function inferUserLocation(userMessage: string): string | undefined {
-  const match = userMessage.match(/\b(?:(?:i|we)\s+(?:live|currently\s+live|am|are|currently\s+am|currently\s+are|am\s+based|are\s+based|am\s+located|are\s+located)|i['’]?m|im)\s+in\s+([^.!?;,]{2,80})/i)
+  const match = userMessage.match(/\b(?:i\s+(?:live|am|currently\s+live|currently\s+am)|i['’]?m|im|we\s+(?:live|are)|based|located)\s+in\s+([^.!?;,]{2,80})/i)
     ?? userMessage.match(/\b(?:buy|find|get|source|shop\s+for)\b[^.!?;,]{0,80}\b(?:in|near|around)\s+([^.!?;,]{2,80})/i);
   if (!match?.[1]) return undefined;
   const location = match[1]
     .replace(/\s+(?:now|currently|these days|at the moment)\b.*$/i, '')
-    .replace(/\s+(?:but|so|because|while)\b.*$/i, '')
+    .replace(/\s+(?:and|but|so|because|while)\b.*$/i, '')
     .trim();
   if (location.length < 2 || /^(the|a|an|this|that|it|there|me|my|my area|here|your area)$/i.test(location)) return undefined;
   return location.slice(0, 80);
@@ -1472,18 +1601,17 @@ async function createWithTimeout(
 function isProviderContextLimitError(err: unknown): boolean {
   const message = err instanceof Error ? err.message : String(err);
   if (/\bn_keep\b[\s\S]{0,80}\bn_ctx\b/i.test(message)) return true;
-  return /\b(?:context size|context length|maximum context|context window|prompt is too long|input is too long|token limit|too many tokens)\b/i.test(message)
+  return /\b(?:context size|context length|maximum context|token limit|too many tokens)\b/i.test(message)
     && /\b(?:exceeded|limit|too large|too many)\b/i.test(message);
 }
 
 function isRecoverableAskProviderFailure(err: unknown): boolean {
   if (isProviderContextLimitError(err)) return true;
   const message = err instanceof Error ? err.message : String(err);
-  if (isRecoverableWrappedDownstreamProviderFailure(message)) return true;
+  if (isDownstreamProviderWrappedFailure(message)) return true;
   if (/\b(?:401|402|403|api[_ -]?key|invalid key|authorization|bearer|token|credential|secret|moderation|flagged|insufficient credits)\b/i.test(message)) {
     return false;
   }
-  if (isDownstreamProviderWrappedFailure(message)) return true;
 
   if (/\b(?:Failed to parse tool arguments|no assistant message|finish_reason: length|fetch failed|ECONNREFUSED|ETIMEDOUT|ENOTFOUND|AbortError|timed out)\b/i.test(message)) {
     return true;
@@ -1500,12 +1628,6 @@ function isRecoverableAskProviderFailure(err: unknown): boolean {
 function isDownstreamProviderWrappedFailure(message: string): boolean {
   return /\bProvider returned error\b/i.test(message)
     && /\b(?:metadata|provider_name|is_byok|googleapis\.com|temporarily rate-limited upstream|google\.rpc\.ErrorInfo)\b/i.test(message);
-}
-
-function isRecoverableWrappedDownstreamProviderFailure(message: string): boolean {
-  return isDownstreamProviderWrappedFailure(message)
-    && !/(?:\\?["']?is_byok\\?["']?\s*:\s*true)\b/i.test(message)
-    && !/\b(?:401|402|403|moderation|flagged|insufficient credits|authorization|bearer|secret|sk-[A-Za-z0-9_-]{8,})\b/i.test(message);
 }
 
 function providerRecoveryLogSummary(err: unknown): string {
@@ -1651,7 +1773,9 @@ async function maybeSendForcedMinimumCue({
     maxEffortMinutes: 10,
   }, userMessage, send, calledTools, toolPayloads) as MinimumViableNostalgiaCue;
 
-  const responseText = buildEvidenceBoundedMinimumCueResponse(toolPayloads, userMessage);
+  const responseText = calledTools.has('search_web')
+    ? buildResearchGroundedForcedCueResponse(toolPayloads, userMessage)
+    : buildEvidenceBoundedMinimumCueResponse(toolPayloads, userMessage);
   send('text', responseText);
   maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
   finish({ guarded: 'explicit_minimum_cue_fallback' });
@@ -1690,6 +1814,40 @@ function shouldForceMinimumCue(userMessage: string, toolPayloads: Record<string,
   }
 
   return false;
+}
+
+function shouldClarifyUnresolvedUnnamedMemory(
+  userMessage: string,
+  toolPayloads: Record<string, unknown>,
+  calledTools: Set<string>,
+  responseText: string,
+): boolean {
+  if (!/\b(?:never knew the name|don['’]?t know the name|didn['’]?t know the name|no name|unnamed)\b/i.test(userMessage)) return false;
+  if (calledTools.has('search_web')) return false;
+  const resolved = toolPayloads.resolve_dish_name as
+    | { confidence?: string; matchType?: string; region?: string; needsClarification?: boolean }
+    | undefined;
+  const unresolved = !resolved
+    || resolved.needsClarification === true
+    || resolved.matchType === 'unknown'
+    || resolved.confidence === 'Low'
+    || !resolved.region
+    || /^unknown$/i.test(resolved.region);
+  if (!unresolved) return false;
+
+  const questionCount = (responseText.match(/\?/g) ?? []).length;
+  const cueBeforeIdentity = containsConcreteFoodCue(responseText)
+    || /\b(?:first[-\s]?pass verification bite|minimum viable|sensory test|buy one|pan[-\s]?fry|simmer|recipe)\b/i.test(responseText);
+  return questionCount === 0 || cueBeforeIdentity;
+}
+
+function shouldPreserveModelProvidedResearchFacts(memory: CollectedFoodMemory | undefined, userMessage: string): boolean {
+  if (!memory) return false;
+  const explicitlyUnnamed = /\b(?:never knew the name|don['’]?t know the name|didn['’]?t know the name|no name|unnamed)\b/i.test(userMessage);
+  const hasNameAnchor = (memory.extractedClues.possibleDishNames ?? []).some((name) => name.trim().length > 0);
+  const hasRegionAnchor = (memory.extractedClues.culturalOrRegionalHints ?? []).some((hint) => hint.trim().length > 0);
+  if (explicitlyUnnamed && !hasRegionAnchor) return false;
+  return hasNameAnchor || hasRegionAnchor;
 }
 
 async function maybeRunMissingResearchPlan({
@@ -1814,13 +1972,30 @@ async function maybeRunLocalSourcingSearch({
   location: string;
 }): Promise<void> {
   if (DISABLE_SEARCH_WEB || toolPayloads.local_sourcing_search) return;
-  if (!ENABLE_LOCAL_SOURCING_SEARCH || !isExplicitLocalSourcingSearchRequest(userMessage)) return;
+  if (!ENABLE_LOCAL_SOURCING_SEARCH && !isExplicitLocalSourcingSearchRequest(userMessage)) return;
   const plan = toolPayloads.plan_tool_workflow as { maxSearchCalls?: number } | undefined;
   if (typeof plan?.maxSearchCalls === 'number' && plan.maxSearchCalls <= 0) return;
   const query = buildLocalSourcingSearchQuery(ingredients, location);
   if (!query) return;
   send('status', { stage: 'calling_tools', tools: ['search_web'], deterministic: true, reason: 'local_sourcing' });
   await executeAndStreamTool('search_web', { query, purpose: 'local_sourcing' }, userMessage, send, calledTools, toolPayloads);
+}
+
+function isExplicitLocalSourcingSearchRequest(userMessage: string): boolean {
+  return /\b(?:where\s+(?:can|could|should)\s+i\s+(?:buy|find|get|source)|where\s+to\s+(?:buy|find|get|source)|near\s+me|nearby|local\s+(?:store|market|grocery|shop|source|supplier)|grocery\s+(?:store|market)|source\s+(?:ingredients?|this)|buy\s+(?:ingredients?|it)|find\s+(?:ingredients?|it))\b/i.test(userMessage);
+}
+
+function buildLocalSourcingSearchQuery(ingredients: string[], location: string): string {
+  const ingredientQuery = ingredients
+    .map((ingredient) => ingredient.trim())
+    .filter(Boolean)
+    .slice(0, 3)
+    .join(' ');
+  if (!ingredientQuery || !location.trim()) return '';
+  const specialtyTerms = /\b(?:chilhuacle|chile|chiles|mole|masa|maiz|maize|achiote|annatto|epazote|quesillo|oaxac)/i.test(ingredientQuery)
+    ? 'Mexican Oaxacan grocery dried chiles spice shop'
+    : 'specialty grocery market store shop';
+  return sanitizeGroundedSearchQuery(`${ingredientQuery} ${location.trim()} ${specialtyTerms}`);
 }
 
 function extractSourcingIngredients(userMessage: string, collectedMemory: unknown): string[] {
@@ -2124,18 +2299,6 @@ const server = createServer(async (req, res) => {
 
   if (pathname === '/health' || pathname === '/ready') {
     const providerReadiness = providerRuntime.readinessCredentials();
-    const nativeToolSupport = await providerRuntime.selectedProviderSupportsNativeTools();
-    const providerProfile = {
-      ...providerRuntime.profile,
-      nativeTools: nativeToolSupport === true
-        ? 'supported'
-        : nativeToolSupport === false
-          ? 'unsupported'
-          : providerRuntime.profile.nativeTools,
-      compatibilitySource: nativeToolSupport === undefined
-        ? providerRuntime.profile.compatibilitySource
-        : 'live-provider-capability',
-    };
     const readiness = getHttpReadiness({
       authEnabled: AUTH_ENABLED,
       apiKeyCount: configuredApiKeys.length,
@@ -2155,13 +2318,13 @@ const server = createServer(async (req, res) => {
       readiness,
       uptime: process.uptime(),
       provider: {
-        kind: providerProfile.providerKind,
-        provider: providerProfile.provider,
-        model: providerProfile.model,
-        endpointStyle: providerProfile.endpointStyle,
-        nativeTools: providerProfile.nativeTools,
-        rateLimitSensitive: providerProfile.rateLimitSensitive,
-        compatibilitySource: providerProfile.compatibilitySource,
+        kind: providerRuntime.profile.providerKind,
+        provider: providerRuntime.profile.provider,
+        model: providerRuntime.profile.model,
+        endpointStyle: providerRuntime.profile.endpointStyle,
+        nativeTools: providerRuntime.profile.nativeTools,
+        rateLimitSensitive: providerRuntime.profile.rateLimitSensitive,
+        compatibilitySource: providerRuntime.profile.compatibilitySource,
         fallback: providerRuntime.fallbackConfig.enabled
           ? {
               enabled: true,
