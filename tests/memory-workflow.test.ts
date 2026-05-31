@@ -21,6 +21,16 @@ describe('research-first food memory workflow', () => {
     expect(memory.reassurance).toContain("don't need to spell");
   });
 
+  it('does not treat allergy terms as remembered ingredients or follow-up targets', () => {
+    const memory = collectFoodMemory({
+      memoryText: 'I am severely allergic to peanuts and tree nuts. Help me recreate a satay-like sauce I remember.',
+    });
+
+    expect(memory.extractedClues.rememberedIngredients).not.toEqual(expect.arrayContaining(['nuts', 'peanuts']));
+    expect(memory.extractedClues.sensoryClues).not.toContain('nutty aroma');
+    expect(memory.nextQuestions.join(' ')).not.toMatch(/\b(?:nuts?|peanuts?)\b/i);
+  });
+
   it('plans research instead of pretending sparse fragments are resolved', () => {
     const memory = collectFoodMemory({
       memoryText: 'My grandma made something like pass-teh-lay for Christmas. Puerto Rican family.',

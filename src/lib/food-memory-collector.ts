@@ -48,6 +48,18 @@ function isNegatedMention(text: string, phrase: string): boolean {
   ).test(text);
 }
 
+function isAllergyConstraintMention(text: string, phrase: string): boolean {
+  const pattern = escapeRegExp(phrase).replace(/\s+/g, '\\s+');
+  return new RegExp(
+    `\\ballerg(?:y|ic|ies)\\b[^.:?!;]{0,96}\\b${pattern}\\b|\\b${pattern}\\b[^.:?!;]{0,48}\\ballerg(?:y|ic|ies)\\b`,
+    'i',
+  ).test(text);
+}
+
+function isExcludedIngredientMention(text: string, phrase: string): boolean {
+  return isNegatedMention(text, phrase) || isAllergyConstraintMention(text, phrase);
+}
+
 function likelyDishPhrases(text: string): string[] {
   const lower = text.toLowerCase();
   const patterns = [
@@ -330,8 +342,8 @@ export function collectFoodMemory(input: FoodMemoryInput): CollectedFoodMemory {
     ...extractRegionHints(lower, normalized),
   ].filter((value): value is string => Boolean(value)));
   const rememberedIngredients = unique([
-    ...INGREDIENT_HINTS.filter((ingredient) => matchesWordOrPhrase(lower, ingredient) && !isNegatedMention(lower, ingredient)),
-    includesAny(lower, ['acorn jelly', 'acorn']) && !isNegatedMention(lower, 'acorn') ? 'acorn jelly' : '',
+    ...INGREDIENT_HINTS.filter((ingredient) => matchesWordOrPhrase(lower, ingredient) && !isExcludedIngredientMention(lower, ingredient)),
+    includesAny(lower, ['acorn jelly', 'acorn']) && !isExcludedIngredientMention(lower, 'acorn') ? 'acorn jelly' : '',
   ]).filter((ingredient) => !(ingredient === 'orange' && isLikelyColorUseOfOrange(lower)));
   const cookingMethodHints = extractCookingMethodHints(lower);
   const sensoryClues = unique([
@@ -342,7 +354,7 @@ export function collectFoodMemory(input: FoodMemoryInput): CollectedFoodMemory {
     includesAny(lower, ['soft', 'mushy', 'melt', 'melting', 'tender']) ? 'soft texture' : '',
     includesAny(lower, ['slippery', 'slick', 'gelatinous', 'jelly']) ? 'slippery/gelled texture' : '',
     includesAny(lower, ['chewy', 'stretchy', 'elastic', 'bouncy']) ? 'chewy texture' : '',
-    includesAny(lower, ['nutty', 'toasty nut', 'roasted nut']) ? 'nutty aroma' : '',
+    includesAny(lower, ['nutty', 'toasty nut', 'roasted nut']) && !isAllergyConstraintMention(lower, 'nut') ? 'nutty aroma' : '',
     includesAny(lower, ['smell', 'aroma', 'fragrant', 'scent', 'stink']) ? 'remembered aroma' : '',
     includesAny(lower, ['herb', 'herby', 'green', 'grassy', 'dill', 'parsley', 'cilantro', 'sorrel']) ? 'herby/green aroma' : '',
     includesAny(lower, ['sauce', 'gravy', 'broth', 'juice', 'wet']) ? 'sauce/gravy' : '',
