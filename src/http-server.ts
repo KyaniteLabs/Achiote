@@ -41,8 +41,6 @@ import {
 import {
   inferSafetyConstraints,
   buildGroundedSearchQuery,
-  buildLocalSourcingSearchQuery,
-  isExplicitLocalSourcingSearchRequest,
   sanitizeGroundedSearchQuery,
   isLatestCorrectionMessage,
   buildCorrectedMemoryText,
@@ -124,7 +122,6 @@ const POSTHOG_PROJECT_API_KEY = process.env.POSTHOG_PROJECT_API_KEY?.trim();
 const POSTHOG_HOST = (process.env.POSTHOG_HOST?.trim() || 'https://us.i.posthog.com').replace(/\/+$/, '');
 const POSTHOG_DISABLED = process.env.POSTHOG_DISABLED === 'true';
 const DISABLE_SEARCH_WEB = process.env.ACHIOTE_DISABLE_SEARCH_WEB === 'true';
-const ENABLE_LOCAL_SOURCING_SEARCH = process.env.ACHIOTE_ENABLE_LOCAL_SOURCING_SEARCH === 'true';
 const ASK_TOOLS = DISABLE_SEARCH_WEB ? TOOLS.filter((tool) => tool.name !== 'search_web') : TOOLS;
 const TOOLS_BY_NAME = new Map(TOOLS.map((tool) => [tool.name, tool]));
 
@@ -181,25 +178,9 @@ const cacheState = createCacheWithStatus({});
 const cache = cacheState.cache;
 const toolContext: AchioteToolExecutionContext = { ...defaultToolExecutionContext, cache };
 const ANTHROPIC_BASE_URL = anthropicBaseUrlFromEnv();
-function anthropicApiKeyFromEnv(): string | null {
-  const provider = process.env.ACHIOTE_ASK_PROVIDER?.trim().toLowerCase();
-  if ((provider === 'local' || provider === 'lmstudio' || provider === 'lm-studio') && ANTHROPIC_BASE_URL) {
-    return process.env.LOCAL_INFERENCE_API_KEY?.trim()
-      || process.env.LMSTUDIO_API_KEY?.trim()
-      || process.env.LM_STUDIO_API_KEY?.trim()
-      || null;
-  }
-  if (provider === 'glm' || provider === 'zhipu') {
-    return process.env.GLM_API_KEY?.trim()
-      || process.env.ZHIPU_API_KEY?.trim()
-      || process.env.ANTHROPIC_API_KEY?.trim()
-      || null;
-  }
-  return process.env.ANTHROPIC_API_KEY?.trim() || null;
-}
 const anthropicClientOptions: ConstructorParameters<typeof Anthropic>[0] = {
   timeout: ANTHROPIC_TIMEOUT_MS,
-  apiKey: anthropicApiKeyFromEnv(),
+  apiKey: process.env.ANTHROPIC_API_KEY?.trim() || process.env.GLM_API_KEY?.trim() || process.env.ZHIPU_API_KEY?.trim() || process.env.LOCAL_INFERENCE_API_KEY?.trim() || process.env.LMSTUDIO_API_KEY?.trim() || process.env.LM_STUDIO_API_KEY?.trim() || null,
   authToken: process.env.ANTHROPIC_AUTH_TOKEN?.trim() || null,
 };
 if (ANTHROPIC_BASE_URL) anthropicClientOptions.baseURL = ANTHROPIC_BASE_URL;
@@ -582,7 +563,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       iterations++;
       const normalizedToolCalls = normalizeModelToolCalls(modelResponse.toolCalls);
       if (normalizedToolCalls.normalizedAny) {
-        modelResponse = syncProviderMessageWithToolCalls({ ...modelResponse, toolCalls: normalizedToolCalls.toolCalls });
+        modelResponse = { ...modelResponse, toolCalls: normalizedToolCalls.toolCalls };
         for (const correction of normalizedToolCalls.corrections) {
           console.warn(`[ask] normalized model tool name typo: ${correction.from} -> ${correction.to}`);
           send('status', { iteration: iterations, stage: 'tool_name_normalized', from: correction.from, to: correction.to });
@@ -617,7 +598,6 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
           toolCalls: filteredCalls,
           providerMessage: modelResponse.providerMessage ?? null,
         };
-        modelResponse = syncProviderMessageWithToolCalls(modelResponse);
       }
 
       if (modelResponse.toolCalls.length === 0) break;
@@ -922,7 +902,10 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       return;
     }
 
-    if (calledTools.has('generate_minimum_viable_nostalgia') && containsCueFamilyMismatch(trustBoundedResponseText, userMessage)) {
+    // If the answer is grounded in real web research, trust the model. The quality guards below were
+    // discarding good research-backed synthesis as false positives and replacing it with generic templates.
+    const researchGrounded = calledTools.has('search_web');
+    if (calledTools.has('generate_minimum_viable_nostalgia') && containsCueFamilyMismatch(trustBoundedResponseText, userMessage) && !researchGrounded) {
       console.warn('[ask] replaced cue-family mismatch with deterministic mechanism cue');
       const responseText = buildUserMessageMechanismCueResponse(userMessage, toolPayloads);
       send('text', responseText);
@@ -940,7 +923,8 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       return;
     }
 
-    if (calledTools.has('generate_minimum_viable_nostalgia') && containsOverconfidentIdentityClaim(trustBoundedResponseText)) {
+    const userNamedDishAnchor = Boolean((toolPayloads.collect_food_memory as { extractedClues?: { possibleDishNames?: unknown[] } } | undefined)?.extractedClues?.possibleDishNames?.length);
+    if (calledTools.has('generate_minimum_viable_nostalgia') && containsOverconfidentIdentityClaim(trustBoundedResponseText) && !userNamedDishAnchor && !researchGrounded) {
       console.warn('[ask] replaced overconfident identity claim with deterministic minimum cue');
       const responseText = buildMinimumCueCompletedResponse(toolPayloads, userMessage);
       send('text', responseText);
@@ -949,7 +933,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       return;
     }
 
-    if (calledTools.has('generate_minimum_viable_nostalgia') && containsRecipeProcedureOrAdaptationLanguage(trustBoundedResponseText)) {
+    if (calledTools.has('generate_minimum_viable_nostalgia') && containsRecipeProcedureOrAdaptationLanguage(trustBoundedResponseText) && !researchGrounded) {
       console.warn('[ask] replaced recipe procedure drift with deterministic minimum cue');
       const responseText = buildMinimumCueCompletedResponse(toolPayloads, userMessage);
       send('text', responseText);
@@ -1123,7 +1107,9 @@ function deriveResearchedFactsForReceipt(toolPayloads: Record<string, unknown>):
   if (resolved?.canonicalName && !/^Unknown$/i.test(resolved.canonicalName)) {
     const hasResearchProduct = (searched?.results?.length ?? 0) > 0;
     const effectiveConfidence = (resolved.confidence === 'Low' && hasResearchProduct) ? 'Medium' : resolved.confidence;
-    facts.push(`Dish resolved: "${resolved.canonicalName}" (confidence: ${effectiveConfidence ?? 'unknown'}, region: ${resolved.region ?? 'unknown'})`);
+    const userRegionHint = (toolPayloads.collect_food_memory as { extractedClues?: { culturalOrRegionalHints?: string[] } } | undefined)?.extractedClues?.culturalOrRegionalHints?.find((h) => Boolean(h));
+    const displayRegion = (resolved.region && !/^unknown$/i.test(resolved.region)) ? resolved.region : (userRegionHint ?? 'unknown');
+    facts.push(`Dish resolved: "${resolved.canonicalName}" (confidence: ${effectiveConfidence ?? 'unknown'}, region: ${displayRegion})`);
     const aliases = (resolved.aliases ?? []).filter(Boolean).slice(0, 3);
     if (aliases.length) facts.push(`Also known as: ${aliases.join(', ')}`);
   }
@@ -1368,30 +1354,6 @@ function normalizeResearchRecordInput(record: Record<string, unknown>, toolPaylo
   };
 }
 
-function syncProviderMessageWithToolCalls(response: AskModelResponse): AskModelResponse {
-  const allowedIds = new Set(response.toolCalls.map((call) => call.id));
-  const providerMessage = response.providerMessage;
-  if (Array.isArray(providerMessage)) {
-    return {
-      ...response,
-      providerMessage: providerMessage.filter((block) => {
-        if (!isRecord(block) || block.type !== 'tool_use') return true;
-        return typeof block.id === 'string' && allowedIds.has(block.id);
-      }),
-    };
-  }
-  if (isRecord(providerMessage) && Array.isArray(providerMessage.tool_calls)) {
-    return {
-      ...response,
-      providerMessage: {
-        ...providerMessage,
-        tool_calls: providerMessage.tool_calls.filter((call) => isRecord(call) && typeof call.id === 'string' && allowedIds.has(call.id)),
-      },
-    };
-  }
-  return response;
-}
-
 function normalizeResearchSource(source: unknown): Record<string, unknown> {
   const record = isRecord(source) ? source : {};
   const title = typeof record.title === 'string' && record.title.trim() ? record.title : 'Untitled source';
@@ -1400,20 +1362,18 @@ function normalizeResearchSource(source: unknown): Record<string, unknown> {
     : typeof record.link === 'string'
       ? record.link
       : '';
-  const extractedFacts = [
-    ...(Array.isArray(record.extractedFacts) ? record.extractedFacts : []),
-    ...(Array.isArray(record.quotedFacts) ? record.quotedFacts : []),
-    typeof record.snippet === 'string' ? record.snippet : '',
-  ]
-    .filter((fact): fact is string => typeof fact === 'string' && fact.trim().length > 0)
-    .map((fact) => fact.trim().replace(/[\u2014\u2013]/g, ', '));
+  const extractedFacts = Array.isArray(record.extractedFacts)
+    ? record.extractedFacts.filter((fact): fact is string => typeof fact === 'string' && fact.trim().length > 0)
+    : typeof record.snippet === 'string' && record.snippet.trim()
+      ? [record.snippet.replace(/[\u2014\u2013]/g, ', ')]
+      : [];
 
   return {
     title,
     url,
     sourceType: normalizeSourceType(record.sourceType, title, url),
     accessedAt: typeof record.accessedAt === 'string' && record.accessedAt.trim() ? record.accessedAt : new Date().toISOString(),
-    reliability: normalizeConfidence(record.reliability, 'Low'),
+    reliability: normalizeConfidence(record.reliability),
     author: typeof record.author === 'string' ? record.author : undefined,
     extractedFacts,
   };
@@ -1429,17 +1389,17 @@ function normalizeSourceType(value: unknown, title: string, url: string): string
   return 'article';
 }
 
-function normalizeConfidence(value: unknown, fallback: 'High' | 'Medium' | 'Low' = 'Medium'): 'High' | 'Medium' | 'Low' {
-  return value === 'High' || value === 'Medium' || value === 'Low' ? value : fallback;
+function normalizeConfidence(value: unknown): 'High' | 'Medium' | 'Low' {
+  return value === 'High' || value === 'Medium' || value === 'Low' ? value : 'Medium';
 }
 
 function inferUserLocation(userMessage: string): string | undefined {
-  const match = userMessage.match(/\b(?:(?:i|we)\s+(?:live|currently\s+live|am|are|currently\s+am|currently\s+are|am\s+based|are\s+based|am\s+located|are\s+located)|i['’]?m|im)\s+in\s+([^.!?;,]{2,80})/i)
+  const match = userMessage.match(/\b(?:i\s+(?:live|am|currently\s+live|currently\s+am)|i['’]?m|im|we\s+(?:live|are)|based|located)\s+in\s+([^.!?;,]{2,80})/i)
     ?? userMessage.match(/\b(?:buy|find|get|source|shop\s+for)\b[^.!?;,]{0,80}\b(?:in|near|around)\s+([^.!?;,]{2,80})/i);
   if (!match?.[1]) return undefined;
   const location = match[1]
     .replace(/\s+(?:now|currently|these days|at the moment)\b.*$/i, '')
-    .replace(/\s+(?:but|so|because|while)\b.*$/i, '')
+    .replace(/\s+(?:and|but|so|because|while)\b.*$/i, '')
     .trim();
   if (location.length < 2 || /^(the|a|an|this|that|it|there|me|my|my area|here|your area)$/i.test(location)) return undefined;
   return location.slice(0, 80);
@@ -1472,18 +1432,17 @@ async function createWithTimeout(
 function isProviderContextLimitError(err: unknown): boolean {
   const message = err instanceof Error ? err.message : String(err);
   if (/\bn_keep\b[\s\S]{0,80}\bn_ctx\b/i.test(message)) return true;
-  return /\b(?:context size|context length|maximum context|context window|prompt is too long|input is too long|token limit|too many tokens)\b/i.test(message)
+  return /\b(?:context size|context length|maximum context|token limit|too many tokens)\b/i.test(message)
     && /\b(?:exceeded|limit|too large|too many)\b/i.test(message);
 }
 
 function isRecoverableAskProviderFailure(err: unknown): boolean {
   if (isProviderContextLimitError(err)) return true;
   const message = err instanceof Error ? err.message : String(err);
-  if (isRecoverableWrappedDownstreamProviderFailure(message)) return true;
+  if (isDownstreamProviderWrappedFailure(message)) return true;
   if (/\b(?:401|402|403|api[_ -]?key|invalid key|authorization|bearer|token|credential|secret|moderation|flagged|insufficient credits)\b/i.test(message)) {
     return false;
   }
-  if (isDownstreamProviderWrappedFailure(message)) return true;
 
   if (/\b(?:Failed to parse tool arguments|no assistant message|finish_reason: length|fetch failed|ECONNREFUSED|ETIMEDOUT|ENOTFOUND|AbortError|timed out)\b/i.test(message)) {
     return true;
@@ -1500,12 +1459,6 @@ function isRecoverableAskProviderFailure(err: unknown): boolean {
 function isDownstreamProviderWrappedFailure(message: string): boolean {
   return /\bProvider returned error\b/i.test(message)
     && /\b(?:metadata|provider_name|is_byok|googleapis\.com|temporarily rate-limited upstream|google\.rpc\.ErrorInfo)\b/i.test(message);
-}
-
-function isRecoverableWrappedDownstreamProviderFailure(message: string): boolean {
-  return isDownstreamProviderWrappedFailure(message)
-    && !/(?:\\?["']?is_byok\\?["']?\s*:\s*true)\b/i.test(message)
-    && !/\b(?:401|402|403|moderation|flagged|insufficient credits|authorization|bearer|secret|sk-[A-Za-z0-9_-]{8,})\b/i.test(message);
 }
 
 function providerRecoveryLogSummary(err: unknown): string {
@@ -1814,13 +1767,25 @@ async function maybeRunLocalSourcingSearch({
   location: string;
 }): Promise<void> {
   if (DISABLE_SEARCH_WEB || toolPayloads.local_sourcing_search) return;
-  if (!ENABLE_LOCAL_SOURCING_SEARCH || !isExplicitLocalSourcingSearchRequest(userMessage)) return;
   const plan = toolPayloads.plan_tool_workflow as { maxSearchCalls?: number } | undefined;
   if (typeof plan?.maxSearchCalls === 'number' && plan.maxSearchCalls <= 0) return;
   const query = buildLocalSourcingSearchQuery(ingredients, location);
   if (!query) return;
   send('status', { stage: 'calling_tools', tools: ['search_web'], deterministic: true, reason: 'local_sourcing' });
   await executeAndStreamTool('search_web', { query, purpose: 'local_sourcing' }, userMessage, send, calledTools, toolPayloads);
+}
+
+function buildLocalSourcingSearchQuery(ingredients: string[], location: string): string {
+  const ingredientQuery = ingredients
+    .map((ingredient) => ingredient.trim())
+    .filter(Boolean)
+    .slice(0, 3)
+    .join(' ');
+  if (!ingredientQuery || !location.trim()) return '';
+  const specialtyTerms = /\b(?:chilhuacle|chile|chiles|mole|masa|maiz|maize|achiote|annatto|epazote|quesillo|oaxac)/i.test(ingredientQuery)
+    ? 'Mexican Oaxacan grocery dried chiles spice shop'
+    : 'specialty grocery market store shop';
+  return sanitizeGroundedSearchQuery(`${ingredientQuery} ${location.trim()} ${specialtyTerms}`);
 }
 
 function extractSourcingIngredients(userMessage: string, collectedMemory: unknown): string[] {
@@ -2124,18 +2089,6 @@ const server = createServer(async (req, res) => {
 
   if (pathname === '/health' || pathname === '/ready') {
     const providerReadiness = providerRuntime.readinessCredentials();
-    const nativeToolSupport = await providerRuntime.selectedProviderSupportsNativeTools();
-    const providerProfile = {
-      ...providerRuntime.profile,
-      nativeTools: nativeToolSupport === true
-        ? 'supported'
-        : nativeToolSupport === false
-          ? 'unsupported'
-          : providerRuntime.profile.nativeTools,
-      compatibilitySource: nativeToolSupport === undefined
-        ? providerRuntime.profile.compatibilitySource
-        : 'live-provider-capability',
-    };
     const readiness = getHttpReadiness({
       authEnabled: AUTH_ENABLED,
       apiKeyCount: configuredApiKeys.length,
@@ -2155,13 +2108,13 @@ const server = createServer(async (req, res) => {
       readiness,
       uptime: process.uptime(),
       provider: {
-        kind: providerProfile.providerKind,
-        provider: providerProfile.provider,
-        model: providerProfile.model,
-        endpointStyle: providerProfile.endpointStyle,
-        nativeTools: providerProfile.nativeTools,
-        rateLimitSensitive: providerProfile.rateLimitSensitive,
-        compatibilitySource: providerProfile.compatibilitySource,
+        kind: providerRuntime.profile.providerKind,
+        provider: providerRuntime.profile.provider,
+        model: providerRuntime.profile.model,
+        endpointStyle: providerRuntime.profile.endpointStyle,
+        nativeTools: providerRuntime.profile.nativeTools,
+        rateLimitSensitive: providerRuntime.profile.rateLimitSensitive,
+        compatibilitySource: providerRuntime.profile.compatibilitySource,
         fallback: providerRuntime.fallbackConfig.enabled
           ? {
               enabled: true,

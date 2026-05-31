@@ -346,7 +346,6 @@ export const minimumViableNostalgiaOutputSchema = z.object({
 
 export const webSearchOutputSchema = z.object({
   query: z.string(),
-  searchStatus: z.enum(['ok', 'not_configured', 'error']),
   results: z.array(
     z.object({
       title: z.string(),
@@ -383,5 +382,6 @@ export const planToolWorkflowOutputSchema = z.object({
 export const readOnlyAnnotations = {
   readOnlyHint: true,
   destructiveHint: false,
+  idempotentHint: true,
   openWorldHint: false,
 };

@@ -592,7 +592,6 @@ export const toolRegistry = [
       inputSchema: {
         memory: collectedFoodMemorySchema.describe('Structured output from collect_food_memory'),
         researchPlan: dishResearchPlanSchema.optional().describe('Structured output from plan_dish_research'),
-        cue: minimumViableNostalgiaOutputSchema.optional().describe('Structured output from generate_minimum_viable_nostalgia'),
         assistantText: z.string().optional().describe('Final assistant-facing summary to include in the receipt'),
       },
       outputSchema: memoryReceiptOutputSchema,
@@ -604,7 +603,6 @@ export const toolRegistry = [
       properties: {
         memory: { type: 'object' as const, description: 'Structured output from collect_food_memory' },
         researchPlan: { type: 'object' as const, description: 'Structured output from plan_dish_research' },
-        cue: { type: 'object' as const, description: 'Structured output from generate_minimum_viable_nostalgia' },
         assistantText: { type: 'string' as const, description: 'Final assistant-facing summary to include in the receipt' },
       },
     },
@@ -614,9 +612,6 @@ export const toolRegistry = [
         memory: memoryFromModelInput(input.memory),
         researchPlan: dishResearchPlanSchema.safeParse(input.researchPlan).success
           ? dishResearchPlanSchema.parse(input.researchPlan)
-          : undefined,
-        cue: minimumViableNostalgiaOutputSchema.safeParse(input.cue).success
-          ? minimumViableNostalgiaOutputSchema.parse(input.cue)
           : undefined,
         assistantText: typeof input.assistantText === 'string' ? input.assistantText : undefined,
       });
@@ -876,7 +871,7 @@ export const toolRegistry = [
       const query = text(asInput(raw).query);
       const apiKey = process.env.SERPER_API_KEY?.trim();
       if (!apiKey) {
-        return output({ query, searchStatus: 'not_configured', results: [], note: 'Host web search is not configured for this run. Use prior evidence or ask a targeted follow-up question.' });
+        return output({ query, results: [], note: 'Host web search is not configured for this run. Use prior evidence or ask a targeted follow-up question.' });
       }
       try {
         const response = await fetch('https://google.serper.dev/search', {
@@ -886,7 +881,7 @@ export const toolRegistry = [
         });
         if (!response.ok) {
           const body = await response.text();
-          return output({ query, searchStatus: 'error', results: [], error: `Search API returned ${response.status}: ${body.slice(0, 200)}` });
+          return output({ query, results: [], error: `Search API returned ${response.status}: ${body.slice(0, 200)}` });
         }
         const data = await response.json() as {
           organic?: Array<{ title: string; link: string; snippet: string }>;
@@ -897,9 +892,9 @@ export const toolRegistry = [
           link: r.link ?? '',
           snippet: r.snippet ?? '',
         }));
-        return output({ query, searchStatus: 'ok', results: organic });
+        return output({ query, results: organic });
       } catch (err) {
-        return output({ query, searchStatus: 'error', results: [], error: err instanceof Error ? err.message : String(err) });
+        return output({ query, results: [], error: err instanceof Error ? err.message : String(err) });
       }
     },
   }),

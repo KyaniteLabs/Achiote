@@ -42,7 +42,7 @@ export type AuthOutcome = AuthResult | AuthFailure;
 const VALID_TIERS = new Set<string>(['free', 'personal', 'pro', 'family', 'business', 'enterprise']);
 
 const TIER_LIMITS: Record<Tier, { mcpCallsPerMonth: number; webReconstructions: number }> = {
-  free: { mcpCallsPerMonth: 0, webReconstructions: 3 },
+  free: { mcpCallsPerMonth: 0, webReconstructions: 100 },
   personal: { mcpCallsPerMonth: 0, webReconstructions: 25 },
   pro: { mcpCallsPerMonth: 250, webReconstructions: 100 },
   family: { mcpCallsPerMonth: 250, webReconstructions: 300 },
@@ -116,7 +116,7 @@ function normalizedRecord(record: ApiKeyRecord): ApiKeyStoredRecord | null {
   return null;
 }
 
-// Built-in dev/test key. Tests may opt in explicitly; the HTTP server never enables it by default.
+// Built-in dev/test key — always available, only valid when no ACHIOTE_API_KEYS are configured.
 // Key: ach_dev_test_only
 const DEV_KEY = 'ach_dev_test_only';
 const DEV_KEY_HASH = hashApiKey(DEV_KEY);
@@ -128,10 +128,10 @@ const DEV_KEY_RECORD: ApiKeyStoredRecord = {
   createdAt: new Date(0).toISOString(),
 };
 
-export function createAuthenticator(keys: ApiKeyRecord[], includeDevKey = false) {
+export function createAuthenticator(keys: ApiKeyRecord[], includeDevKey = true) {
   const keyMap = new Map<string, ApiKeyStoredRecord>();
 
-  // Test-only opt-in for local zero-config harnesses. Production defaults never accept the built-in key.
+  // Inject the built-in dev key when no real keys are configured
   if (includeDevKey && keys.length === 0) {
     keyMap.set(DEV_KEY_RECORD.keyId, DEV_KEY_RECORD);
   }

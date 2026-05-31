@@ -157,7 +157,7 @@ function buildResolution(input: string, candidate: DishNameCandidate, candidates
 
   const clarificationPrompt = needsClarification
     ? `I found multiple plausible meanings for "${input}". Which regional dish or technique do you mean?`
-    : undefined;
+    : candidate.clarificationPrompt;
   if (clarificationPrompt) resolution.clarificationPrompt = clarificationPrompt;
 
   return resolution;

@@ -1,7 +1,6 @@
 import Stripe from 'stripe';
 import type { Tier } from './auth.js';
 import type { BillingDb } from './billing-db.js';
-import { assertBillingEncryptionKeyConfigured } from './billing-db.js';
 
 export interface BillingConfig {
   secretKey: string;
@@ -35,12 +34,6 @@ export function loadBillingConfigFromEnv(): BillingConfig | null {
 
   if (!secretKey || !webhookSecret) return null;
   if (!personalPriceId && !personalAnnualPriceId && !proPriceId && !familyPriceId && !legacyBusinessPriceId && !creditPackPriceId && !familySprintPriceId) return null;
-  try {
-    assertBillingEncryptionKeyConfigured();
-  } catch (error) {
-    console.warn(`[billing] disabling Stripe checkout: ${error instanceof Error ? error.message : String(error)}`);
-    return null;
-  }
 
   return {
     secretKey,

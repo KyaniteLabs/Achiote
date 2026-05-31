@@ -48,24 +48,8 @@ function isNegatedMention(text: string, phrase: string): boolean {
   ).test(text);
 }
 
-function userMentionPattern(phrase: string): string {
-  return phrase
-    .trim()
-    .split(/\s+/)
-    .map((word) => {
-      const escaped = escapeRegExp(word);
-      if (!/^[\p{L}\p{M}]+$/u.test(word)) return escaped;
-      if (/[^aeiou]y$/i.test(word)) {
-        return `(?:${escaped}|${escapeRegExp(word.slice(0, -1))}ies)`;
-      }
-      if (/s$/i.test(word)) return escaped;
-      return `${escaped}s?`;
-    })
-    .join('\\s+');
-}
-
 function isAllergyConstraintMention(text: string, phrase: string): boolean {
-  const pattern = userMentionPattern(phrase);
+  const pattern = escapeRegExp(phrase).replace(/\s+/g, '\\s+');
   return new RegExp(
     `\\ballerg(?:y|ic|ies)\\b[^.:?!;]{0,96}\\b${pattern}\\b|\\b${pattern}\\b[^.:?!;]{0,48}\\ballerg(?:y|ic|ies)\\b`,
     'i',

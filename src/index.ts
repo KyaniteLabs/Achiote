@@ -3,7 +3,6 @@
 try { process.loadEnvFile(); } catch { /* no .env file present */ }
 
 import path from 'node:path';
-import { realpathSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { runAchioteStdioServer } from './cli.js';
 
@@ -30,15 +29,7 @@ export type {
 } from './lib/reference-pantry-population.js';
 export type { ReferencePantryFixtureReport, ReferenceSeedOperatorReport, ReferenceSeedOperatorTask } from './lib/reference-seed-operator.js';
 
-function sameRealPath(left: string, right: string): boolean {
-  try {
-    return realpathSync(left) === realpathSync(right);
-  } catch {
-    return path.resolve(left) === path.resolve(right);
-  }
-}
-
-const isCliEntrypoint = process.argv[1] ? sameRealPath(process.argv[1], fileURLToPath(import.meta.url)) : false;
+const isCliEntrypoint = process.argv[1] ? path.resolve(process.argv[1]) === fileURLToPath(import.meta.url) : false;
 
 if (isCliEntrypoint) {
   runAchioteStdioServer().catch((error) => {
