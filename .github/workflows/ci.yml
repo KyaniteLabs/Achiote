@@ -28,6 +28,9 @@ jobs:
       - name: Check
         run: npm run check
 
+      - name: Validate citations
+        run: npm run validate:citations
+
       - name: Audit production dependency vulnerabilities
         run: npm audit --audit-level=moderate
 

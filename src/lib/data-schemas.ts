@@ -515,6 +515,10 @@ function validateRegex(issues: ValidationIssue[], path: string, source: unknown,
     pushIssue(issues, path.replace(/\.regexSource$/, '.flags'), 'must be a non-empty string');
     return;
   }
+  if (typeof flags === 'string' && /[gy]/.test(flags)) {
+    pushIssue(issues, path.replace(/\.regexSource$/, '.flags'), 'must not use stateful g or y flags');
+    return;
+  }
 
   try {
     new RegExp(source, typeof flags === 'string' ? flags : undefined);
@@ -683,13 +687,15 @@ function validateCoverageTags(
   path: string,
   value: unknown,
   validTags: Set<string>,
-  options: { requireNonEmpty?: boolean } = { requireNonEmpty: true },
+  options: { requireNonEmpty?: boolean; allowedAxisIds?: string[] } = { requireNonEmpty: true },
 ): void {
   validateStringArray(issues, path, value, { requireNonEmpty: options.requireNonEmpty, unique: true });
   if (!Array.isArray(value)) return;
   value.forEach((tag, index) => {
     if (isNonEmptyString(tag) && !validTags.has(tag)) {
       pushIssue(issues, `${path}[${index}]`, 'unknown coverage tag');
+    } else if (isNonEmptyString(tag) && options.allowedAxisIds && !options.allowedAxisIds.some((axisId) => tag.startsWith(`${axisId}.`))) {
+      pushIssue(issues, `${path}[${index}]`, `must use ${options.allowedAxisIds.join(' or ')} coverage tag`);
     }
   });
 }
@@ -738,10 +744,10 @@ function validateReferenceSeedQueue(
       if (seedIds.has(seed.id)) pushIssue(issues, `${base}.id`, 'duplicate seed id');
       seedIds.add(seed.id);
     }
-    validateCoverageTags(issues, `${base}.forms`, seed.forms, validTags);
+    validateCoverageTags(issues, `${base}.forms`, seed.forms, validTags, { allowedAxisIds: ['foodForms'] });
     validateStringArray(issues, `${base}.regions`, seed.regions, { requireNonEmpty: true, unique: true });
     validateStringArray(issues, `${base}.nameSignals`, seed.nameSignals, { requireNonEmpty: true, unique: true });
-    validateCoverageTags(issues, `${base}.mechanisms`, seed.mechanisms, validTags);
+    validateCoverageTags(issues, `${base}.mechanisms`, seed.mechanisms, validTags, { allowedAxisIds: ['mechanisms'] });
     validateStringArray(issues, `${base}.querySeeds`, seed.querySeeds, { requireNonEmpty: true, unique: true });
     validateCacheTargets(issues, `${base}.cacheTargets`, seed.cacheTargets);
     validateCoverageTags(issues, `${base}.coverageTags`, seed.coverageTags, validTags);

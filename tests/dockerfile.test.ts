@@ -8,7 +8,7 @@ describe('Docker runtime hardening', () => {
   it('runs the production image as non-root with an HTTP healthcheck', () => {
     expect(dockerfile).toMatch(/\nUSER\s+node\b/);
     expect(dockerfile).toMatch(/\nHEALTHCHECK\b/);
-    expect(dockerfile).toContain("fetch('http://127.0.0.1:3000/health')");
+    expect(dockerfile).toContain("process.env.PORT||'3000'");
   });
 
   it('does not copy source data into the runtime image when dist data is built', () => {

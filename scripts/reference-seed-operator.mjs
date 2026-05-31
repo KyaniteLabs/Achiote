@@ -58,7 +58,9 @@ function emptyQualityReport() {
 }
 
 function writeApprovedFixtures(fixturePath, cachePath) {
-  const fixture = fixturePath === 'bundled' ? readJson('src/data/reference-pantry-fixtures.json') : readJson(fixturePath);
+  const fixture = fixturePath === 'bundled' && !fs.existsSync(resolve(fixturePath))
+    ? readJson('src/data/reference-pantry-fixtures.json')
+    : readJson(fixturePath);
   const cache = new ResearchCache(resolve(cachePath));
   try {
     return writeReferenceSeedFixturesToCache(fixture, cache);

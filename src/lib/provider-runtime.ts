@@ -144,13 +144,21 @@ export function createProviderRuntime(input: ProviderRuntimeInput): ProviderRunt
   let openRouterToolsSupportPromise: Promise<boolean | undefined> | undefined;
 
   function openAIApiKey(): string | null {
-    return env.LOCAL_INFERENCE_API_KEY
-      || env.OPENAI_API_KEY
-      || env.GLM_API_KEY
-      || env.ZHIPU_API_KEY
-      || env.LMSTUDIO_API_KEY
-      || env.LM_STUDIO_API_KEY
-      || null;
+    const provider = env.ACHIOTE_ASK_PROVIDER?.trim().toLowerCase();
+    if (provider === 'local' || provider === 'lmstudio' || provider === 'lm-studio') {
+      return env.LOCAL_INFERENCE_API_KEY
+        || env.LMSTUDIO_API_KEY
+        || env.LM_STUDIO_API_KEY
+        || env.OPENAI_API_KEY
+        || null;
+    }
+    if (provider === 'glm' || provider === 'zhipu') {
+      return env.GLM_API_KEY || env.ZHIPU_API_KEY || null;
+    }
+    if (openAIBaseUrl && openAIBaseUrl.includes('openrouter.ai')) {
+      return env.OPENROUTER_API_KEY || env.OPENAI_API_KEY || null;
+    }
+    return env.OPENAI_API_KEY || null;
   }
 
   return {

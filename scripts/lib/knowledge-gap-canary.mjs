@@ -40,8 +40,14 @@ export function analyzeKnowledgeGaps(rows) {
       regressionCandidates.push(regressionCandidate('control_flow_regression', 'Add a fake-provider regression that proves no-browse prompts cannot plan or execute search_web.', excluded));
       continue;
     }
-    if (quality.includes('missed_minimum_cue_frame') || quality.includes('empty_text')) {
+    if (quality.includes('empty_text')) {
       excludedEvidence.push(excludedRow('provider_path_failure', 'The provider path did not surface usable text; do not infer taxonomy gaps from this row.', context));
+      continue;
+    }
+    if (quality.includes('missed_minimum_cue_frame')) {
+      const excluded = excludedRow('wrapper_quality_regression', 'Achiote missed its minimum-cue framing; add a fake-provider regression before taxonomy work.', context);
+      excludedEvidence.push(excluded);
+      regressionCandidates.push(regressionCandidate('wrapper_quality_regression', 'Add a fake-provider regression that proves final answers keep the minimum-cue frame.', excluded));
       continue;
     }
     if (quality.includes('full_recipe_drift') || quality.includes('overconfident_identity') || quality.includes('false_browsing_claim')) {
@@ -140,6 +146,14 @@ function reconcileTaxonomyItem(item, coverage) {
 
   const coveredSeedIds = candidateSeedIds.filter((seedId) => seedIds.has(seedId));
   const coveredFixtures = coveredSeedIds.flatMap((seedId) => fixtureBySeed.get(seedId) ?? []);
+  const seedsWithFixtures = coveredSeedIds.filter((seedId) => {
+    const fixtures = fixtureBySeed.get(seedId) ?? [];
+    return fixtures.some((fixture) => {
+      const family = String(fixture?.cacheTarget?.dishFamily ?? '');
+      const region = String(fixture?.cacheTarget?.region ?? '');
+      return family && region;
+    });
+  });
   const coveredFixtureTargets = coveredFixtures
     .map((fixture) => {
       const family = String(fixture?.cacheTarget?.dishFamily ?? '');
@@ -153,12 +167,12 @@ function reconcileTaxonomyItem(item, coverage) {
 
   const complete = candidateSeedIds.length > 0
     && coveredSeedIds.length === candidateSeedIds.length
-    && coveredFixtureTargets.length >= candidateSeedIds.length
+    && seedsWithFixtures.length === candidateSeedIds.length
     && coveredDishFamilies.length > 0;
 
   return {
     ...item,
-    status: complete ? 'landed_in_taxonomy' : item.status,
+    status: complete ? 'landed_in_taxonomy' : item.status === 'landed_in_taxonomy' ? 'ready_for_taxonomy' : item.status,
     landedIn: complete ? String(coverage.landedIn ?? item.landedIn ?? '') : item.landedIn,
     coverageEvidence: {
       seedIds: coveredSeedIds,

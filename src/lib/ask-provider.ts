@@ -265,7 +265,8 @@ export function defaultGlmEndpointStyleForModel(model: string): GlmEndpointStyle
 }
 
 export function isOpenRouterFreeModel(model: string): boolean {
-  return /:free$/i.test(model.trim());
+  const normalized = model.trim().toLowerCase();
+  return normalized === 'openrouter/free' || /:free$/i.test(normalized);
 }
 
 export function resolveProviderCapabilityProfile(

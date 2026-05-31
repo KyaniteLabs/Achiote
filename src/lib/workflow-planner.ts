@@ -76,6 +76,7 @@ export function planAskWorkflow(input: AskWorkflowPlannerInput): AskWorkflowPlan
 
   const isMemoryIntent = detectedIntent === 'nostalgic_memory' || detectedIntent === 'ritual_ceremony' || detectedIntent === 'multilingual_inquiry' || detectedIntent === 'contradictory_memory';
   const searchWebDisabled = input.searchDisabled === true || suppressSearchFromUserText;
+  const exactIdentityResearch = isExactIdentityResearchRequest(userMessage);
   const bundledMechanismFamily = searchWebDisabled || !isMemoryIntent ? null : bundledMechanismFamilyFor(userMessage);
   let maxSearchCalls = searchWebDisabled ? 0 : 1;
   const questionnaireFirst = isMemoryIntent
@@ -85,7 +86,7 @@ export function planAskWorkflow(input: AskWorkflowPlannerInput): AskWorkflowPlan
     && !isExplicitMinimumCueRequest(userMessage)
     && shouldStartWithQuestionnaire(userMessage, bundledMechanismFamily);
   const addSearchStep = (reason: string): void => {
-    if (!searchWebDisabled && !bundledMechanismFamily) steps.push({ tool: 'search_web', reason, required: false });
+    if (!searchWebDisabled && (!bundledMechanismFamily || exactIdentityResearch)) steps.push({ tool: 'search_web', reason, required: false });
   };
 
   if (questionnaireFirst) {
@@ -122,7 +123,7 @@ export function planAskWorkflow(input: AskWorkflowPlannerInput): AskWorkflowPlan
     }
   }
 
-  if (bundledMechanismFamily) maxSearchCalls = 0;
+  if (bundledMechanismFamily && !exactIdentityResearch) maxSearchCalls = 0;
   if (!searchWebDisabled && needsSourcing && hasSourcingLocation && !bundledMechanismFamily) {
     maxSearchCalls = Math.max(maxSearchCalls, 2);
   }
@@ -152,6 +153,13 @@ export function planAskWorkflow(input: AskWorkflowPlannerInput): AskWorkflowPlan
 function isExplicitMinimumCueRequest(text: string): boolean {
   return /\b(?:minimum viable|minimum|smallest|tiny|first|local)\b[\s\S]{0,60}\b(?:test|cue|try|taste|nostalgia|sip|bite|drink)\b/i.test(text)
     || /\b(?:test|cue|try|taste|sip|bite|drink)\b[\s\S]{0,60}\b(?:minimum viable|minimum|smallest|tiny|first|local)\b/i.test(text);
+}
+
+function isExactIdentityResearchRequest(text: string): boolean {
+  return /\b(?:source(?:s|d)?|confirm|verify|source-backed)\b[\s\S]{0,120}\b(?:dish|drink|food|name|identity|called|regional|spelling)\b/i.test(text)
+    || /\b(?:dish|drink|food|name|identity|called|regional|spelling)\b[\s\S]{0,120}\b(?:source(?:s|d)?|confirm|verify|source-backed)\b/i.test(text)
+    || /\b(?:exact|specific|regional)\b[\s\S]{0,80}\b(?:dish|drink|food|name|identity|called|spelling)\b/i.test(text)
+    || /\b(?:identify|name)\b[\s\S]{0,80}\b(?:exact|specific|regional|source(?:s|d)?|confirm|verify|identity|spelling)\b/i.test(text);
 }
 
 function shouldStartWithQuestionnaire(userMessage: string, _bundledMechanismFamily: string | null): boolean {
