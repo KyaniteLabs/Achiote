@@ -923,10 +923,17 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       return;
     }
 
-    const userNamedDishAnchor = Boolean((toolPayloads.collect_food_memory as { extractedClues?: { possibleDishNames?: unknown[] } } | undefined)?.extractedClues?.possibleDishNames?.length);
+    const collectedMemoryForIdentity = toolPayloads.collect_food_memory as { rawMemory?: string; extractedClues?: { possibleDishNames?: unknown[] } } | undefined;
+    const possibleDishNameCount = collectedMemoryForIdentity?.extractedClues?.possibleDishNames?.length ?? 0;
+    const dishNameIsExplicitlyApproximate = /\b(?:something\s+like|sounds?\s+like|sounded\s+like|kind\s+of\s+like|sort\s+of\s+like|like\s+[\p{L}\p{M}'-]+(?:\s+[\p{L}\p{M}'-]+){0,4}\s+but|rough(?:ly)?|phonetic(?:ally)?|maybe\s+called)\b/iu.test(collectedMemoryForIdentity?.rawMemory ?? userMessage);
+    const userNamedDishAnchor = possibleDishNameCount > 0 && !dishNameIsExplicitlyApproximate;
     if (calledTools.has('generate_minimum_viable_nostalgia') && containsOverconfidentIdentityClaim(trustBoundedResponseText) && !userNamedDishAnchor && !researchGrounded) {
       console.warn('[ask] replaced overconfident identity claim with deterministic minimum cue');
-      const responseText = buildMinimumCueCompletedResponse(toolPayloads, userMessage);
+      const memoryPayload = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
+      const isExplicitlyUnnamedMemory = /\b(?:never knew the name|don['’]?t know the name|didn['’]?t know the name|no name|unnamed)\b/i.test(userMessage);
+      const responseText = isExplicitlyUnnamedMemory && (memoryPayload?.nextQuestions?.length ?? 0) > 0
+        ? buildClarificationOnlyResponse(toolPayloads, userMessage)
+        : buildMinimumCueCompletedResponse(toolPayloads, userMessage);
       send('text', responseText);
       maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
       finish({ guarded: 'overconfident_identity_sanitized' });
