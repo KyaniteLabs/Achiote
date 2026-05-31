@@ -232,6 +232,7 @@ export interface MemoryReceipt {
   status: MemoryReceiptStatus;
   evidence: {
     userSaid: string[];
+    ruledOut: string[];
     inferred: string[];
     researched: string[];
     unknown: string[];

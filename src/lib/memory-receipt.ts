@@ -32,14 +32,73 @@ function extractRuledOutTerms(text: string): string[] {
   })).slice(0, 4);
 }
 
-function buildUnknownsFromExtractedClues(memory: CollectedFoodMemory): string[] {
+function extractedValuesLine(label: string, values: string[]): string | undefined {
+  const cleaned = unique(values.map((value) => value.trim()).filter(Boolean));
+  return cleaned.length > 0 ? `${label}: ${cleaned.join(', ')}` : undefined;
+}
+
+function buildReceiptExtractionProjection(memory: CollectedFoodMemory): {
+  userSaid: string[];
+  ruledOut: string[];
+  names: string[];
+  regions: string[];
+  ingredients: string[];
+  methods: string[];
+  sensory: string[];
+  occasions: string[];
+} {
   const clues = memory.extractedClues;
+  const names = unique(clues.possibleDishNames);
+  const regions = unique([
+    ...clues.culturalOrRegionalHints,
+    memory.extractionMetadata?.originRegion ?? '',
+  ]);
+  const ingredients = unique(clues.rememberedIngredients);
+  const methods = unique([
+    ...(clues.cookingMethods ?? []),
+    ...(memory.extractionMetadata?.cookingMethod ?? []),
+  ]);
+  const sensory = unique(clues.sensoryClues);
+  const occasions = unique(clues.occasions);
+  const ruledOut = unique([
+    ...extractRuledOutTerms(memory.rawMemory),
+    ...(clues.ruledOutIngredients ?? []),
+    ...(memory.extractionMetadata?.ruledOutIngredients ?? []),
+  ]);
+  const language = memory.extractionMetadata?.language?.trim();
+  const residence = memory.extractionMetadata?.residenceLocation?.trim() || memory.userLocation?.trim();
+
+  return {
+    userSaid: unique([
+      memory.rawMemory,
+      extractedValuesLine('Possible name or sound-alike', names) ?? '',
+      extractedValuesLine('Region or community', regions) ?? '',
+      extractedValuesLine('Remembered ingredients', ingredients) ?? '',
+      extractedValuesLine('Ruled out', ruledOut) ?? '',
+      extractedValuesLine('Cooking or serving method', methods) ?? '',
+      extractedValuesLine('Sensory cues', sensory) ?? '',
+      extractedValuesLine('Occasion or person', occasions) ?? '',
+      language ? `Language clue: ${language}` : '',
+      residence ? `Current/residence context: ${residence}` : '',
+    ]),
+    ruledOut,
+    names,
+    regions,
+    ingredients,
+    methods,
+    sensory,
+    occasions,
+  };
+}
+
+function buildUnknownsFromProjection(projection: ReturnType<typeof buildReceiptExtractionProjection>): string[] {
   return unique([
-    clues.possibleDishNames.length === 0 ? 'food or drink name or local nickname' : '',
-    clues.culturalOrRegionalHints.length === 0 ? 'country, island, region, town, or community' : '',
-    clues.rememberedIngredients.length === 0 ? 'core ingredients' : '',
-    clues.sensoryClues.length === 0 ? 'taste, texture, aroma, sauce, or heat level' : '',
-    clues.occasions.length === 0 ? 'where/when they ate it or who made it' : '',
+    projection.names.length === 0 ? 'food or drink name or local nickname' : '',
+    projection.regions.length === 0 ? 'country, island, region, town, or community' : '',
+    projection.ingredients.length === 0 ? 'core ingredients' : '',
+    projection.methods.length === 0 ? 'cooking method or serving format' : '',
+    projection.sensory.length === 0 ? 'taste, texture, aroma, sauce, or heat level' : '',
+    projection.occasions.length === 0 ? 'where/when they ate it or who made it' : '',
   ]);
 }
 
@@ -64,12 +123,17 @@ export function buildMemoryReceipt(input: {
     ...input.memory.inferredContext.language,
   ].map((clue) => `${clue.label} (${clue.confidence} confidence): ${clue.basis}`);
 
-  const unknown = buildUnknownsFromExtractedClues(input.memory);
-  const ruledOut = unique([
-    ...extractRuledOutTerms(input.memory.rawMemory),
-    ...(input.memory.extractedClues.ruledOutIngredients ?? []),
-    ...(input.memory.extractionMetadata?.ruledOutIngredients ?? []),
-  ]);
+  const projection = buildReceiptExtractionProjection(input.memory);
+  const unknown = buildUnknownsFromProjection(projection);
+  const ruledOutLine = extractedValuesLine('Ruled out', projection.ruledOut);
+  const extractedUserSaid = projection.userSaid
+    .slice(1)
+    .filter((line) => line !== ruledOutLine);
+  const userSaid = [
+    projection.userSaid[0],
+    ...filterSafetyBounded(extractedUserSaid),
+    ruledOutLine ?? '',
+  ].filter(Boolean);
   const hypotheses = (input.researchPlan?.hypotheses ?? [])
     .filter((hypothesis) => !isRestrictedAnchorForConstraints(hypothesis.name, safetyConstraints))
     .map((hypothesis) => ({
@@ -86,10 +150,8 @@ export function buildMemoryReceipt(input: {
     createdAt: input.createdAt ?? new Date().toISOString(),
     status: input.cue ? 'first_test_ready' : 'needs_more_clues',
     evidence: {
-      userSaid: [
-        input.memory.rawMemory,
-        ...(ruledOut.length ? [`Ruled out: ${ruledOut.join(', ')}`] : []),
-      ],
+      userSaid,
+      ruledOut: projection.ruledOut,
       inferred: filterSafetyBounded(inferred),
       researched: filterSafetyBounded(input.researchedFacts ?? []),
       unknown: filterSafetyBounded(unknown),
@@ -120,6 +182,9 @@ export function formatMemoryReceiptMarkdown(receipt: MemoryReceipt): string {
     '',
     '## User-Said Evidence',
     list(receipt.evidence.userSaid),
+    '',
+    '## Ruled-Out Evidence',
+    list(receipt.evidence.ruledOut),
     '',
     '## Inferred Context',
     list(receipt.evidence.inferred),

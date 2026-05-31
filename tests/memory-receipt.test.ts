@@ -48,7 +48,10 @@ describe('memory receipt', () => {
     });
 
     expect(receipt.title).toBe('Achiote Memory Receipt');
-    expect(receipt.evidence.userSaid).toEqual(['My abuela made something sour and herby.']);
+    expect(receipt.evidence.userSaid).toContain('My abuela made something sour and herby.');
+    expect(receipt.evidence.userSaid).toContain('Sensory cues: sour/tangy');
+    expect(receipt.evidence.userSaid).toContain('Occasion or person: grandmother/family context');
+    expect(receipt.evidence.ruledOut).toEqual([]);
     expect(receipt.evidence.inferred[0]).toContain('Spanish-speaking family context');
     expect(receipt.status).toBe('needs_more_clues');
     expect(receipt.nextBestQuestions).toContain('Where was your abuela from?');
@@ -56,6 +59,7 @@ describe('memory receipt', () => {
     const markdown = formatMemoryReceiptMarkdown(receipt);
     expect(markdown).toContain('# Achiote Memory Receipt');
     expect(markdown).toContain('## User-Said Evidence');
+    expect(markdown).toContain('## Ruled-Out Evidence');
     expect(markdown).toContain('## Inferred Context');
     expect(markdown).toContain('## Unknowns');
     expect(markdown).toContain('## Family Questions');
@@ -104,6 +108,7 @@ describe('memory receipt', () => {
     expect(receipt.nextBestQuestions).toEqual(['Where did you eat this?']);
     expect(receipt.hypotheses).toEqual([]);
     expect(receipt.evidence.researched).toEqual([]);
+    expect(receipt.evidence.userSaid.join(' ')).not.toMatch(/\bRemembered ingredients: peanuts\b/i);
     expect(receipt.evidence.unknown.join(' ')).not.toMatch(/\bpeanuts?\b/i);
   });
 
@@ -137,6 +142,7 @@ describe('memory receipt', () => {
       createdAt: '2026-04-27T12:00:00.000Z',
     });
 
+    expect(receipt.evidence.ruledOut).toEqual(['shrimp', 'crab']);
     expect(receipt.evidence.userSaid).toContain('Ruled out: shrimp, crab');
     expect(formatMemoryReceiptMarkdown(receipt)).toContain('Ruled out: shrimp, crab');
   });
@@ -150,6 +156,7 @@ describe('memory receipt', () => {
           possibleDishNames: ['goyura'],
           culturalOrRegionalHints: ['Panamanian'],
           rememberedIngredients: [],
+          cookingMethods: ['thick cut fried'],
           sensoryClues: ['savory', 'thick cut fried', 'sweet syrup on top'],
           occasions: [],
         },
@@ -164,6 +171,10 @@ describe('memory receipt', () => {
       createdAt: '2026-04-27T12:00:00.000Z',
     });
 
+    expect(receipt.evidence.ruledOut).toEqual(['potatoes']);
+    expect(receipt.evidence.userSaid).toContain('Possible name or sound-alike: goyura');
+    expect(receipt.evidence.userSaid).toContain('Region or community: Panamanian');
+    expect(receipt.evidence.userSaid).toContain('Cooking or serving method: thick cut fried');
     expect(receipt.evidence.userSaid).toContain('Ruled out: potatoes');
     expect(formatMemoryReceiptMarkdown(receipt)).toContain('Ruled out: potatoes');
   });
@@ -177,6 +188,7 @@ describe('memory receipt', () => {
           possibleDishNames: ['arepas con queso'],
           culturalOrRegionalHints: ['Venezuela'],
           rememberedIngredients: ['cheese', 'corn'],
+          cookingMethods: ['griddled'],
           sensoryClues: ['toasted corn aroma'],
           occasions: ['mother/family context'],
         },

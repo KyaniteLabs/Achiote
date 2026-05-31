@@ -242,6 +242,7 @@ export const memoryReceiptOutputSchema = z.object({
   status: z.enum(['needs_more_clues', 'first_test_ready', 'recipe_handoff_ready']),
   evidence: z.object({
     userSaid: z.array(z.string()),
+    ruledOut: z.array(z.string()),
     inferred: z.array(z.string()),
     researched: z.array(z.string()),
     unknown: z.array(z.string()),

@@ -145,8 +145,8 @@ describe('researched evidence — receipt provenance', () => {
     const events = await runAsk(base, 'A nutty peppery stew with greens my Nigerian aunt made for funerals. I live in Chicago.');
     const receiptEvent = events.find((e) => e.event === 'receipt');
     const receipt = JSON.parse(receiptEvent!.data);
-    expect(receipt.evidence.userSaid).toHaveLength(1);
     expect(receipt.evidence.userSaid[0]).toContain('nutty');
+    expect(receipt.evidence.userSaid.length).toBeGreaterThanOrEqual(1);
   });
 });
 
