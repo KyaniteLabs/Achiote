@@ -226,6 +226,48 @@ describe('shared tool registry', () => {
     expect(cue.payload.confidence).toBe('High');
   });
 
+  it('uses model-assisted collection when an extractor is present in tool context', async () => {
+    const result = await executeToolDefinition('collect_food_memory', {
+      memoryText: 'something like goyura in panama. savory, thick cut fried, not potatoes, sweet syrup on top.',
+    }, {
+      ...defaultToolExecutionContext,
+      foodMemoryExtractor: async () => ({
+        possibleDishNames: ['goyura'],
+        originRegion: 'Panama',
+        residenceLocation: '',
+        ingredients: ['yuca'],
+        ruledOutIngredients: ['potatoes'],
+        cookingMethod: ['fried'],
+        sensoryCues: ['sweet syrup', 'savory'],
+        occasion: [],
+        language: 'Spanish',
+      }),
+    });
+
+    expect(outputSchemas.collect_food_memory.safeParse(result.payload).success).toBe(true);
+    expect(result.payload.extractedClues).toMatchObject({
+      ruledOutIngredients: ['potatoes'],
+      cookingMethods: ['fried'],
+    });
+    expect(result.payload.extractionMetadata).toMatchObject({
+      source: 'model',
+      ruledOutIngredients: ['potatoes'],
+      cookingMethod: ['fried'],
+    });
+  });
+
+  it('keeps collect_food_memory schema-valid when no model extractor is available', async () => {
+    const result = await executeToolDefinition('collect_food_memory', {
+      memoryText: 'My mom made arepas con queso, my family is from Venezuela.',
+    }, defaultToolExecutionContext);
+
+    expect(outputSchemas.collect_food_memory.safeParse(result.payload).success).toBe(true);
+    expect(result.payload.extractedClues).toMatchObject({
+      culturalOrRegionalHints: expect.arrayContaining(['Venezuela']),
+    });
+    expect(result.payload.extractionMetadata).toMatchObject({ source: 'regex' });
+  });
+
   it('recovers reconstruction dossiers when a model passes an incomplete research plan', async () => {
     const memory = (await executeToolDefinition('collect_food_memory', {
       memoryText: 'Warm sour dill soup with pale chunks, dairy-free and allergic to tree nuts.',

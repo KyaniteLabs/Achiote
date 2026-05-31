@@ -107,6 +107,40 @@ describe('memory receipt', () => {
     expect(receipt.evidence.unknown.join(' ')).not.toMatch(/\bpeanuts?\b/i);
   });
 
+  it('keeps model-extracted allergy terms visible as ruled-out evidence', () => {
+    const receipt = buildMemoryReceipt({
+      memory: {
+        rawMemory: 'my dad made a seafood rice dish, but shrimp and crab make me swell up. help me recreate it.',
+        normalizedMemory: 'my dad made a seafood rice dish, but shrimp and crab make me swell up. help me recreate it.',
+        extractedClues: {
+          possibleDishNames: ['seafood'],
+          culturalOrRegionalHints: [],
+          rememberedIngredients: ['rice'],
+          ruledOutIngredients: ['shrimp', 'crab'],
+          cookingMethods: ['rice dish'],
+          sensoryClues: [],
+          occasions: ['father/grandfather context'],
+        },
+        inferredContext: {
+          culturalOrRegional: [],
+          language: [],
+        },
+        missingInformation: ['country, island, region, town, or community'],
+        nextQuestions: ['Where was this rice dish from?'],
+        reassurance: "You don't need to spell it correctly or know the original language; sound-alikes and tiny clues are enough to start.",
+        extractionMetadata: {
+          source: 'model',
+          ruledOutIngredients: ['shrimp', 'crab'],
+          cookingMethod: ['rice dish'],
+        },
+      },
+      createdAt: '2026-04-27T12:00:00.000Z',
+    });
+
+    expect(receipt.evidence.userSaid).toContain('Ruled out: shrimp, crab');
+    expect(formatMemoryReceiptMarkdown(receipt)).toContain('Ruled out: shrimp, crab');
+  });
+
   it('surfaces negated clues as ruled-out receipt evidence', () => {
     const receipt = buildMemoryReceipt({
       memory: {

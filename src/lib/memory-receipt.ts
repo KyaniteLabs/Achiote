@@ -65,7 +65,11 @@ export function buildMemoryReceipt(input: {
   ].map((clue) => `${clue.label} (${clue.confidence} confidence): ${clue.basis}`);
 
   const unknown = buildUnknownsFromExtractedClues(input.memory);
-  const ruledOut = filterSafetyBounded(extractRuledOutTerms(input.memory.rawMemory));
+  const ruledOut = unique([
+    ...extractRuledOutTerms(input.memory.rawMemory),
+    ...(input.memory.extractedClues.ruledOutIngredients ?? []),
+    ...(input.memory.extractionMetadata?.ruledOutIngredients ?? []),
+  ]);
   const hypotheses = (input.researchPlan?.hypotheses ?? [])
     .filter((hypothesis) => !isRestrictedAnchorForConstraints(hypothesis.name, safetyConstraints))
     .map((hypothesis) => ({

@@ -2,9 +2,12 @@ import memoryHintsData from '../data/memory-hints.json' with { type: 'json' };
 import type {
   CollectedFoodMemory,
   FoodMemoryInput,
+  FoodMemoryModelExtractor,
   InferredContextClue,
   InferredMemoryContext,
+  ModelFoodMemoryExtraction,
 } from './types.js';
+import { foodMemoryModelExtractionSchema } from '../schemas/food-memory-extraction.js';
 import { unique, includesAny, escapeRegExp, matchesWordOrPhrase } from './food-memory-text.js';
 
 const RESEARCH_STOPWORDS = new Set([
@@ -35,6 +38,7 @@ const MEMORY_HINTS = memoryHintsData as MemoryHintsData;
 const INGREDIENT_HINTS = MEMORY_HINTS.ingredients;
 const COOKING_METHOD_HINTS: CookingMethodHint[] = MEMORY_HINTS.cookingMethods;
 export const CONCEPT_ALIASES = MEMORY_HINTS.conceptAliases ?? {};
+export const DEFAULT_MODEL_EXTRACTION_TIMEOUT_MS = 8_000;
 
 export function isBroadRegionalHint(hint: string): boolean {
   return /\b(?:latin\s+america|latin\s+american|hispanic|spanish-speaking|asia|asian|europe|european|africa|african|west\s+africa|west\s+african|east\s+africa|east\s+african|north\s+africa|north\s+african|southern\s+africa|southern\s+african|central\s+africa|central\s+african|southeast\s+asia|southeast\s+asian|south\s+asia|south\s+asian|east\s+asia|east\s+asian|central\s+asia|central\s+asian|western\s+europe|western\s+european|eastern\s+europe|eastern\s+european|northern\s+europe|northern\s+european|southern\s+europe|southern\s+european|middle\s+east|middle\s+eastern|mediterranean|caribbean|south\s+america|central\s+america|oceania|pacific\s+islands?)\b/i.test(hint);
@@ -343,6 +347,238 @@ function isLikelyColorUseOfOrange(lowerText: string): boolean {
     || /\b(?:deep|bright|dark|reddish|red|golden|pale)\s+orange\b/i.test(lowerText);
 }
 
+function cleanString(value: string | undefined): string {
+  return (value ?? '')
+    .replace(/^["'“”‘’]+|["'“”‘’]+$/g, '')
+    .replace(/^(?:not|no|without|avoid|ruled\s+out|cannot\s+eat|can't\s+eat)\s+/i, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function cleanArray(values: string[] | undefined): string[] {
+  return unique((values ?? []).map(cleanString).filter(Boolean)).slice(0, 12);
+}
+
+function normalizedTerm(value: string): string {
+  return value.toLowerCase()
+    .replace(/[^\p{L}\p{M}\p{N}\s-]/gu, ' ')
+    .replace(/\bpotatoes\b/g, 'potato')
+    .replace(/\bprawns\b/g, 'prawn')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .replace(/\b(\p{L}{4,})s\b/gu, '$1');
+}
+
+function hasSameNormalizedValue(values: string[], candidate: string): boolean {
+  const normalizedCandidate = normalizedTerm(candidate);
+  return values.some((value) => normalizedTerm(value) === normalizedCandidate);
+}
+
+function containsNormalizedTerm(value: string, terms: string[]): boolean {
+  const normalizedValue = ` ${normalizedTerm(value)} `;
+  return terms.some((term) => {
+    const normalized = normalizedTerm(term);
+    return normalized.length > 1 && normalizedValue.includes(` ${normalized} `);
+  });
+}
+
+function isAdviceLikeExtractionValue(value: string): boolean {
+  return /\b(?:substitut(?:e|es|ion|ing)|replacement|safe|safely|allergen[-\s]?free|free\s+of|avoid|doctor|professional|medical)\b/i.test(value);
+}
+
+function isSafetyBoundedModelValue(lowerText: string, value: string, ruledOut: string[]): boolean {
+  if (hasSameNormalizedValue(ruledOut, value) || containsNormalizedTerm(value, ruledOut)) return true;
+  const hasReaction = /\b(?:make|makes|made|causes?|trigger(?:s|ed)?|gives?|gave)\s+me\s+[^.!?;]{0,80}\b(?:swell(?:ing)?|swollen|hives?|rash|itch(?:y|ing)?|wheez(?:e|ing)|throat|anaphylaxis)\b|\b(?:swell(?:ing)?|swollen|hives?|rash|itch(?:y|ing)?|wheez(?:e|ing)|throat|anaphylaxis)\b[^.!?;]{0,80}\b(?:after|from|when\s+I\s+eat)\b/i.test(lowerText);
+  const mentionsShellfishConcern = /\b(?:shellfish|shrimp|prawns?|crab|lobster|oysters?|clams?|mussels?|scallops?)\b/i.test(lowerText);
+  const mentionsFishConcern = /\b(?:fish|seafood)\b/i.test(lowerText);
+  if (hasReaction && mentionsShellfishConcern && /\b(?:seafood|shellfish|shrimp|prawns?|crab|lobster|oysters?|clams?|mussels?|scallops?)\b/i.test(value)) return true;
+  if (hasReaction && mentionsFishConcern && /\b(?:seafood|fish|anchov(?:y|ies)|sardines?|bonito|tuna|salmon|mackerel|fish\s+sauce)\b/i.test(value)) return true;
+  return false;
+}
+
+function isDirectAdverseReactionMention(lowerText: string, phrase: string): boolean {
+  const pattern = escapeRegExp(phrase).replace(/\s+/g, '\\s+');
+  return new RegExp(
+    `\\b${pattern}\\b(?:\\s+(?:and|or)\\s+[\\p{L}\\p{M}\\s-]{1,32})?\\s+(?:make|makes|made|causes?|trigger(?:s|ed)?|gives?|gave)\\s+me\\s+[^.:?!;]{0,80}\\b(?:swell(?:ing)?|swollen|hives?|rash|itch(?:y|ing)?|wheez(?:e|ing)|throat|anaphylaxis)\\b`,
+    'iu',
+  ).test(lowerText);
+}
+
+function isModelIngredientExcluded(lowerText: string, ingredient: string, ruledOut: string[]): boolean {
+  if (isSafetyBoundedModelValue(lowerText, ingredient, ruledOut)) return true;
+  if (isNegatedMention(lowerText, ingredient) || isAllergyConstraintMention(lowerText, ingredient)) return true;
+  return isDirectAdverseReactionMention(lowerText, ingredient);
+}
+
+function safeModelValues(values: string[], lowerText: string, ruledOut: string[]): string[] {
+  return cleanArray(values)
+    .filter((value) => !isAdviceLikeExtractionValue(value))
+    .filter((value) => !isSafetyBoundedModelValue(lowerText, value, ruledOut));
+}
+
+function removeRuledOutValues(values: string[], ruledOut: string[]): string[] {
+  return values.filter((value) => !hasSameNormalizedValue(ruledOut, value) && !containsNormalizedTerm(value, ruledOut));
+}
+
+function extractionLanguageClue(language: string): InferredContextClue | undefined {
+  const label = cleanString(language);
+  if (!label) return undefined;
+  return {
+    label: `${label} language clue`,
+    basis: 'Model extraction identified this language or dialect clue in the user memory.',
+    confidence: 'Low',
+    evidenceKind: 'model_inferred',
+    canSeedQuestions: true,
+    canSeedCandidateDishes: false,
+  };
+}
+
+function attachExtractionMetadata(
+  memory: CollectedFoodMemory,
+  metadata: NonNullable<CollectedFoodMemory['extractionMetadata']>,
+): CollectedFoodMemory {
+  return {
+    ...memory,
+    extractedClues: {
+      ...memory.extractedClues,
+      ruledOutIngredients: metadata.ruledOutIngredients,
+      cookingMethods: metadata.cookingMethod,
+    },
+    extractionMetadata: metadata,
+  };
+}
+
+function mergeModelExtractionWithRegex(
+  input: FoodMemoryInput,
+  regexMemory: CollectedFoodMemory,
+  model: ModelFoodMemoryExtraction,
+  timeoutMs: number,
+): CollectedFoodMemory {
+  const lower = regexMemory.normalizedMemory.toLowerCase();
+  const modelRegion = cleanString(model.originRegion);
+  const residenceLocation = cleanString(model.residenceLocation);
+  const language = cleanString(model.language || input.knownLanguage);
+  const ruledOutIngredients = cleanArray([
+    ...(regexMemory.extractedClues.ruledOutIngredients ?? []),
+    ...model.ruledOutIngredients,
+  ]);
+  const modelIngredients = removeRuledOutValues(
+    cleanArray(model.ingredients).filter((ingredient) =>
+      !isAdviceLikeExtractionValue(ingredient)
+      && !isModelIngredientExcluded(lower, ingredient, ruledOutIngredients),
+    ),
+    ruledOutIngredients,
+  );
+  const modelDishNames = safeModelValues(model.possibleDishNames, lower, ruledOutIngredients)
+    .filter((name) => !RESEARCH_STOPWORDS.has(name.toLowerCase()) && !isNegatedMention(lower, name));
+  const cookingMethodHints = cleanArray([
+    ...(regexMemory.extractedClues.cookingMethods ?? []),
+    ...safeModelValues(model.cookingMethod, lower, ruledOutIngredients),
+  ]);
+  const languageClue = extractionLanguageClue(language);
+  const languageClues = unique([
+    ...regexMemory.inferredContext.language.map((clue) => clue.label),
+    ...(languageClue ? [languageClue.label] : []),
+  ]).map((label) =>
+    regexMemory.inferredContext.language.find((clue) => clue.label === label)
+    ?? (languageClue?.label === label ? languageClue : undefined)
+    ?? {
+      label,
+      basis: 'Language clue inferred from the user memory.',
+      confidence: 'Low' as const,
+      evidenceKind: 'model_inferred' as const,
+      canSeedQuestions: true,
+      canSeedCandidateDishes: false,
+    },
+  );
+
+  const possibleDishNames = cleanArray([
+    ...modelDishNames,
+    ...regexMemory.extractedClues.possibleDishNames,
+  ]);
+  const culturalOrRegionalHints = cleanArray([
+    input.knownRegion,
+    modelRegion && !isNegatedMention(lower, modelRegion) ? modelRegion : '',
+    ...regexMemory.extractedClues.culturalOrRegionalHints,
+  ].filter((value): value is string => Boolean(value)));
+  const rememberedIngredients = cleanArray([
+    ...modelIngredients,
+    ...regexMemory.extractedClues.rememberedIngredients,
+  ]);
+  const sensoryClues = cleanArray([
+    ...safeModelValues(model.sensoryCues, lower, ruledOutIngredients),
+    ...regexMemory.extractedClues.sensoryClues,
+  ]);
+  const occasions = cleanArray([
+    ...safeModelValues(model.occasion, lower, ruledOutIngredients),
+    ...regexMemory.extractedClues.occasions,
+  ]);
+  const inferredContext: InferredMemoryContext = {
+    culturalOrRegional: regexMemory.inferredContext.culturalOrRegional,
+    language: languageClues,
+  };
+
+  const nextQuestions = buildNextQuestions({
+    possibleNames: possibleDishNames,
+    culturalOrRegionalHints,
+    rememberedIngredients,
+    cookingMethodHints,
+    sensoryClues,
+    occasions,
+    inferredContext,
+  });
+
+  return {
+    ...regexMemory,
+    userLocation: input.userLocation ?? (residenceLocation || regexMemory.userLocation),
+    extractedClues: {
+      possibleDishNames,
+      culturalOrRegionalHints,
+      rememberedIngredients,
+      ruledOutIngredients,
+      cookingMethods: cookingMethodHints,
+      sensoryClues,
+      occasions,
+    },
+    inferredContext,
+    missingInformation: buildMissingInformation({
+      possibleNames: possibleDishNames,
+      culturalOrRegionalHints,
+      rememberedIngredients,
+      cookingMethodHints,
+      sensoryClues,
+      occasions,
+    }),
+    nextQuestions,
+    extractionMetadata: {
+      source: 'model',
+      ...(modelRegion ? { originRegion: modelRegion } : {}),
+      ...(residenceLocation ? { residenceLocation } : {}),
+      ruledOutIngredients,
+      cookingMethod: cookingMethodHints,
+      ...(language ? { language } : {}),
+      timeoutMs,
+    },
+  };
+}
+
+async function withModelExtractionTimeout<T>(
+  promise: Promise<T>,
+  timeoutMs: number,
+): Promise<T> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  try {
+    return await Promise.race([
+      promise,
+      new Promise<never>((_, reject) => {
+        timer = setTimeout(() => reject(new Error(`model extraction timed out after ${timeoutMs}ms`)), timeoutMs);
+      }),
+    ]);
+  } finally {
+    if (timer) clearTimeout(timer);
+  }
+}
+
 export function collectFoodMemory(input: FoodMemoryInput): CollectedFoodMemory {
   const normalized = input.memoryText.trim();
   const lower = normalized.toLowerCase();
@@ -417,6 +653,8 @@ export function collectFoodMemory(input: FoodMemoryInput): CollectedFoodMemory {
       possibleDishNames,
       culturalOrRegionalHints,
       rememberedIngredients,
+      ruledOutIngredients: [],
+      cookingMethods: cookingMethodHints,
       sensoryClues,
       occasions,
     },
@@ -431,5 +669,45 @@ export function collectFoodMemory(input: FoodMemoryInput): CollectedFoodMemory {
     }),
     nextQuestions,
     reassurance: "You don't need to spell it correctly or know the original language; sound-alikes and tiny clues are enough to start.",
+    extractionMetadata: {
+      source: 'regex',
+      ruledOutIngredients: [],
+      cookingMethod: cookingMethodHints,
+    },
   };
+}
+
+export async function collectFoodMemoryWithModel(
+  input: FoodMemoryInput,
+  options: {
+    extractor?: FoodMemoryModelExtractor;
+    timeoutMs?: number;
+  } = {},
+): Promise<CollectedFoodMemory> {
+  const regexMemory = collectFoodMemory(input);
+  if (!options.extractor) return regexMemory;
+
+  const timeoutMs = Math.min(
+    Math.max(1, Math.trunc(options.timeoutMs ?? DEFAULT_MODEL_EXTRACTION_TIMEOUT_MS)),
+    DEFAULT_MODEL_EXTRACTION_TIMEOUT_MS,
+  );
+
+  try {
+    const rawExtraction = await withModelExtractionTimeout(options.extractor(input), timeoutMs);
+    const parsed = foodMemoryModelExtractionSchema.safeParse(rawExtraction);
+    if (!parsed.success) {
+      const issueSummary = parsed.error.issues.map((issue) => `${issue.path.join('.') || 'root'}: ${issue.message}`).join('; ');
+      throw new Error(`model extraction schema invalid: ${issueSummary}`);
+    }
+    return mergeModelExtractionWithRegex(input, regexMemory, parsed.data, timeoutMs);
+  } catch (error) {
+    const detail = error instanceof Error ? error.message : String(error);
+    return attachExtractionMetadata(regexMemory, {
+      source: 'regex_fallback',
+      ruledOutIngredients: regexMemory.extractedClues.ruledOutIngredients ?? [],
+      cookingMethod: regexMemory.extractedClues.cookingMethods ?? [],
+      timeoutMs,
+      fallbackReason: detail.slice(0, 240),
+    });
+  }
 }

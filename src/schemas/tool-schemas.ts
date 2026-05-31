@@ -166,6 +166,17 @@ const inferredMemoryContextSchema = z.object({
   language: z.array(inferredContextClueSchema),
 });
 
+const foodMemoryExtractionMetadataSchema = z.object({
+  source: z.enum(['regex', 'model', 'regex_fallback']),
+  originRegion: z.string().optional(),
+  residenceLocation: z.string().optional(),
+  ruledOutIngredients: z.array(z.string()),
+  cookingMethod: z.array(z.string()),
+  language: z.string().optional(),
+  timeoutMs: z.number().optional(),
+  fallbackReason: z.string().optional(),
+});
+
 export const collectedFoodMemorySchema = z.object({
   rawMemory: z.string(),
   normalizedMemory: z.string(),
@@ -174,6 +185,8 @@ export const collectedFoodMemorySchema = z.object({
     possibleDishNames: z.array(z.string()),
     culturalOrRegionalHints: z.array(z.string()),
     rememberedIngredients: z.array(z.string()),
+    ruledOutIngredients: z.array(z.string()).optional(),
+    cookingMethods: z.array(z.string()).optional(),
     sensoryClues: z.array(z.string()),
     occasions: z.array(z.string()),
   }),
@@ -181,6 +194,7 @@ export const collectedFoodMemorySchema = z.object({
   missingInformation: z.array(z.string()),
   nextQuestions: z.array(z.string()),
   reassurance: z.string(),
+  extractionMetadata: foodMemoryExtractionMetadataSchema.optional(),
 });
 
 const dishHypothesisSchema = z.object({

@@ -8,11 +8,13 @@ import type { ResearchCache } from '../lib/research-cache.js';
 import {
   buildReconstructionDossier,
   collectFoodMemory,
+  collectFoodMemoryWithModel,
   formatCollectedFoodMemory,
   generateFamilyFollowupQuestions,
   generateMinimumViableNostalgiaCue,
   planDishResearch,
 } from '../lib/memory-workflow.js';
+import type { FoodMemoryModelExtractor } from '../lib/types.js';
 import { buildMemoryReceipt, formatMemoryReceiptMarkdown } from '../lib/memory-receipt.js';
 import { buildResearchRecord, extractResearchFindings, validateResearchRecord } from '../lib/research-provenance.js';
 import { assembleRecipePrompt, validateRecipeOutput } from '../lib/recipe-generator.js';
@@ -50,6 +52,8 @@ export type AchioteToolExecutionContext = {
   cache: ResearchCache | null;
   sensoryProfilesData: typeof sensoryProfilesData;
   dishFamiliesData: typeof dishFamiliesData;
+  foodMemoryExtractor?: FoodMemoryModelExtractor;
+  foodMemoryExtractionTimeoutMs?: number;
 };
 
 export type AchioteToolExecutionResult = {
@@ -523,8 +527,11 @@ export const toolRegistry = [
         userLocation: { type: 'string' as const, description: 'Optional current location for later adaptation' },
       },
     },
-    execute: (raw) => {
-      const memory = collectFoodMemory(raw as Parameters<typeof collectFoodMemory>[0]);
+    execute: async (raw, context) => {
+      const memory = await collectFoodMemoryWithModel(raw as Parameters<typeof collectFoodMemory>[0], {
+        extractor: context.foodMemoryExtractor,
+        timeoutMs: context.foodMemoryExtractionTimeoutMs,
+      });
       return output({ ...memory }, formatCollectedFoodMemory(memory));
     },
   }),

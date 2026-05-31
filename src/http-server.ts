@@ -23,6 +23,12 @@ import { getHttpReadiness, getRequestRateLimitIdentity, shouldApplyRateLimit } f
 import { resolveLocalSpeechConfig } from './lib/local-speech.js';
 import { createLocalSpeechController } from './lib/local-speech-controller.js';
 import { buildMemoryReceipt } from './lib/memory-receipt.js';
+import { DEFAULT_MODEL_EXTRACTION_TIMEOUT_MS } from './lib/food-memory-collector.js';
+import {
+  FOOD_MEMORY_EXTRACTION_SYSTEM_PROMPT,
+  createProviderFoodMemoryExtractor,
+  foodMemoryExtractionTools,
+} from './lib/food-memory-model-extractor.js';
 import { buildAskQualitySignal, emptyQualitySignalReport, inferAskCacheOutcome, recordQualitySignal } from './lib/quality-signals.js';
 import { createProviderRuntime } from './lib/provider-runtime.js';
 import { buildReferenceSeedOperatorReport } from './lib/reference-seed-operator.js';
@@ -328,14 +334,42 @@ Then include one targeted follow-up that would most reduce uncertainty if they w
 - If the user shares a photo, describe what you see in the image and combine it with any text description they provide before calling tools.
 - If researched facts were gathered (e.g., from search_web or resolve_dish_name), explicitly reference at least one specific finding in your prose. Do not summarize vaguely. Name the exact fact.`;
 
+const MODEL_EXTRACTION_TIMEOUT_MS = Math.min(
+  parsePositiveInteger(process.env.ACHIOTE_MODEL_EXTRACTION_TIMEOUT_MS) ?? DEFAULT_MODEL_EXTRACTION_TIMEOUT_MS,
+  DEFAULT_MODEL_EXTRACTION_TIMEOUT_MS,
+);
 const providerRuntime = createProviderRuntime({
   anthropicClient: anthropic,
   systemPrompt: SYSTEM_PROMPT,
   tools: ASK_TOOLS,
   openAITimeoutMs: OPENAI_TIMEOUT_MS,
 });
+const foodMemoryProviderRuntime = createProviderRuntime({
+  anthropicClient: anthropic,
+  systemPrompt: FOOD_MEMORY_EXTRACTION_SYSTEM_PROMPT,
+  tools: foodMemoryExtractionTools,
+  openAITimeoutMs: MODEL_EXTRACTION_TIMEOUT_MS,
+});
+toolContext.foodMemoryExtractionTimeoutMs = MODEL_EXTRACTION_TIMEOUT_MS;
+if (modelExtractionEnabled()) {
+  toolContext.foodMemoryExtractor = createProviderFoodMemoryExtractor(foodMemoryProviderRuntime);
+}
 
 // ── Tool execution ──────────────────────────────────────────────────────────
+
+function modelExtractionEnabled(): boolean {
+  const explicit = process.env.ACHIOTE_MODEL_EXTRACTION_ENABLED?.trim().toLowerCase();
+  if (['0', 'false', 'no', 'off'].includes(explicit ?? '')) return false;
+  if (['1', 'true', 'yes', 'on'].includes(explicit ?? '')) return true;
+  const configuredModel = process.env.OPENAI_MODEL?.trim()
+    || process.env.ACHIOTE_ASK_MODEL?.trim()
+    || process.env.LOCAL_INFERENCE_MODEL?.trim()
+    || process.env.GLM_MODEL?.trim()
+    || process.env.ZHIPU_MODEL?.trim()
+    || '';
+  if (/^fake[-_]/i.test(configuredModel)) return false;
+  return process.env.VITEST !== 'true';
+}
 
 function validateToolOutput(toolName: string, result: unknown): void {
   const schema = outputSchemas[toolName];
@@ -690,7 +724,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
           }
           const payload = await executeAndStreamTool(call.name, call.input, userMessage, send, calledTools, toolPayloads, history);
           if (call.name === 'search_web') searchCallCount++;
-          const content = JSON.stringify(payload);
+          const content = JSON.stringify(payloadForModelToolResult(call.name, payload, userMessage));
           toolResults.push({ id: call.id, content });
           toolCallHistory.push({ name: call.name, input: call.input });
         } catch (err) {
@@ -1056,6 +1090,24 @@ function sanitizeFoodSafetyClaimLanguage(text: string): string {
     .replace(/\bonly if safe\b/gi, 'only if already tolerated')
     .replace(/\bif safe\b/gi, 'if already tolerated')
     .replace(/\bsafe\b/gi, 'already tolerated');
+}
+
+function payloadForModelToolResult(toolName: string, payload: unknown, userMessage: string): unknown {
+  if (toolName !== 'collect_food_memory') return payload;
+  const constraints = inferSafetyConstraints(userMessage);
+  if (constraints.length === 0 || !isRecord(payload)) return payload;
+  const extractedClues = isRecord(payload.extractedClues) ? payload.extractedClues : {};
+  return {
+    ...payload,
+    extractionMetadata: undefined,
+    extractedClues: {
+      possibleDishNames: Array.isArray(extractedClues.possibleDishNames) ? extractedClues.possibleDishNames : [],
+      culturalOrRegionalHints: Array.isArray(extractedClues.culturalOrRegionalHints) ? extractedClues.culturalOrRegionalHints : [],
+      rememberedIngredients: [],
+      sensoryClues: Array.isArray(extractedClues.sensoryClues) ? extractedClues.sensoryClues : [],
+      occasions: Array.isArray(extractedClues.occasions) ? extractedClues.occasions : [],
+    },
+  };
 }
 
 function containsRawToolMarkup(text: string): boolean {

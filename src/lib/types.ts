@@ -124,6 +124,33 @@ export interface FoodMemoryInput {
   userLocation?: string;
 }
 
+export interface ModelFoodMemoryExtraction {
+  possibleDishNames: string[];
+  originRegion: string;
+  residenceLocation: string;
+  ingredients: string[];
+  ruledOutIngredients: string[];
+  cookingMethod: string[];
+  sensoryCues: string[];
+  occasion: string[];
+  language: string;
+}
+
+export type FoodMemoryModelExtractor = (input: FoodMemoryInput) => Promise<unknown>;
+
+export type FoodMemoryExtractionSource = 'regex' | 'model' | 'regex_fallback';
+
+export interface FoodMemoryExtractionMetadata {
+  source: FoodMemoryExtractionSource;
+  originRegion?: string;
+  residenceLocation?: string;
+  ruledOutIngredients: string[];
+  cookingMethod: string[];
+  language?: string;
+  timeoutMs?: number;
+  fallbackReason?: string;
+}
+
 export type EvidenceKind = 'user_said' | 'model_inferred' | 'source_researched' | 'unknown';
 
 export interface InferredContextClue {
@@ -148,6 +175,8 @@ export interface CollectedFoodMemory {
     possibleDishNames: string[];
     culturalOrRegionalHints: string[];
     rememberedIngredients: string[];
+    ruledOutIngredients?: string[];
+    cookingMethods?: string[];
     sensoryClues: string[];
     occasions: string[];
   };
@@ -155,6 +184,7 @@ export interface CollectedFoodMemory {
   missingInformation: string[];
   nextQuestions: string[];
   reassurance: string;
+  extractionMetadata?: FoodMemoryExtractionMetadata;
 }
 
 export interface DishHypothesis {
