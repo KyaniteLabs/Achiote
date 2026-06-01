@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  buildAccumulatedMemoryText,
   buildCorrectedMemoryText,
   inferSafetyConstraints,
   sanitizeGroundedSearchQuery,
@@ -50,5 +51,45 @@ describe('ask memory correction helpers', () => {
     expect(corrected).toMatch(/\brice[-\s]?cinnamon drink\b/i);
     expect(corrected).toMatch(/\b(?:watery|icy|barely sweet|lime)\b/i);
     expect(corrected).not.toMatch(/\b(?:milky|creamy|cream)\b/i);
+  });
+});
+
+describe('buildAccumulatedMemoryText (cross-turn memory persistence)', () => {
+  it('folds earlier-turn clues into a non-correction follow-up so nothing resets', () => {
+    const accumulated = buildAccumulatedMemoryText(
+      'oven baked. it was in puerto rico but i dont think the recipe is from there',
+      [
+        { role: 'user', content: 'A cake my mom made — moist, with grated coconut and a caramel top.' },
+        { role: 'assistant', content: '(memory receipt)' },
+      ],
+    );
+
+    // The earlier dessert + ingredient clues must survive into this turn's memory.
+    expect(accumulated).toMatch(/\bcake\b/i);
+    expect(accumulated).toMatch(/\bcoconut\b/i);
+    expect(accumulated).toMatch(/\bcaramel\b/i);
+    // The latest clue is still present.
+    expect(accumulated).toMatch(/\boven baked\b/i);
+  });
+
+  it('returns the latest text unchanged when there is no prior user history (single turn)', () => {
+    expect(buildAccumulatedMemoryText('a cold cinnamon drink', [])).toBe('a cold cinnamon drink');
+    expect(buildAccumulatedMemoryText('a cold cinnamon drink')).toBe('a cold cinnamon drink');
+  });
+
+  it('does not duplicate the latest clue when the model echoes the prior user turn', () => {
+    const accumulated = buildAccumulatedMemoryText('oven baked dessert', [
+      { role: 'user', content: 'oven baked dessert' },
+    ]);
+    expect(accumulated).toBe('oven baked dessert');
+  });
+
+  it('keeps the latest clue even when older turns overflow the character cap', () => {
+    const huge = 'x'.repeat(9000);
+    const accumulated = buildAccumulatedMemoryText('the newest decisive clue', [
+      { role: 'user', content: huge },
+    ]);
+    expect(accumulated).toContain('the newest decisive clue');
+    expect(accumulated.length).toBeLessThanOrEqual(6000);
   });
 });

@@ -438,6 +438,7 @@ async function streamResponse(res, el, userMessage) {
   let hasError = false;
   let trace = null;
   let contentEl = null;
+  lastReceipt = null; // turn-scoped: avoid carrying a prior turn's receipt into this one
 
   function ensureContentEl() {
     if (!contentEl) {
@@ -471,9 +472,13 @@ async function streamResponse(res, el, userMessage) {
           if (typeof d === 'string') text += d;
           else text += d.message || d.text || JSON.stringify(d);
         } else if (event.type === 'done') {
-          if (text) {
+          // Always record the turn when anything came back — prose OR a receipt — so the
+          // user's message is never dropped from history (which would reset the conversation
+          // and lose earlier clues). For receipt-only turns, carry a compact receipt summary.
+          const assistantTurnText = text || ProductApp.summarizeReceiptForHistory(lastReceipt);
+          if (assistantTurnText) {
             lastAssistantText = text;
-            chatHistory = ProductApp.appendChatTurn(chatHistory, userMessage, text, 20);
+            chatHistory = ProductApp.appendChatTurn(chatHistory, userMessage, assistantTurnText, 20);
             if (hasError) {
               trackEvent('ask_failed', { route: '/app', source: currentAskSource, category: currentAskCategory, reason: 'model_or_tool' });
             } else {
