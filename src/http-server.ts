@@ -52,6 +52,7 @@ import {
   sanitizeGroundedSearchQuery,
   isLatestCorrectionMessage,
   buildCorrectedMemoryText,
+  buildAccumulatedMemoryText,
   sanitizeLatestCorrectionMemoryText,
   stripNegatedCorrectionTerms,
   sanitizeStaleModelMemoryText,
@@ -1473,7 +1474,7 @@ function normalizeDependentToolInput(toolName: string, input: unknown, userMessa
       : userMessage;
     const memoryText = isLatestCorrectionMessage(userMessage)
       ? buildCorrectedMemoryText(rawMemoryText, userMessage, history)
-      : rawMemoryText;
+      : buildAccumulatedMemoryText(rawMemoryText, history);
     const normalizedRecord: Record<string, unknown> = { ...record, memoryText };
     delete normalizedRecord.knownRegion;
     delete normalizedRecord.knownLanguage;

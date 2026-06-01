@@ -79,6 +79,47 @@ export function buildCorrectedMemoryText(modelMemoryText: string, userMessage: s
   ].filter((entry) => entry.trim().length > 0).join('\n'), userMessage);
 }
 
+const ACCUMULATED_MEMORY_CHAR_LIMIT = 6000;
+
+/**
+ * Fold prior user-turn clues into the latest memory text so the extractor sees the
+ * whole conversation rather than only the most recent message. This is the
+ * non-correction counterpart to buildCorrectedMemoryText: it accumulates instead of
+ * resetting, fixing the cross-turn "memory reset" where earlier clues (dish type,
+ * ingredients) silently vanished from the receipt. With no prior user turns it returns
+ * the latest text unchanged, preserving single-turn behavior exactly.
+ */
+export function buildAccumulatedMemoryText(latestMemoryText: string, history?: AskHistoryItem[]): string {
+  const latest = (latestMemoryText ?? '').trim();
+  const priorUserTurns = (history ?? [])
+    .filter((item) => item.role === 'user')
+    .map((item) => (typeof item.content === 'string' ? item.content.trim() : ''))
+    .filter((content) => content.length > 0);
+  if (priorUserTurns.length === 0) return latest;
+
+  // Oldest prior turns first, then the latest clue last. Dedupe exact repeats because
+  // the model often echoes the latest user message verbatim as memoryText.
+  const ordered: string[] = [];
+  const seen = new Set<string>();
+  const push = (value: string) => {
+    const key = value.toLowerCase();
+    if (!value || seen.has(key)) return;
+    seen.add(key);
+    ordered.push(value);
+  };
+  priorUserTurns.forEach(push);
+  push(latest);
+
+  // Always keep the latest clue; drop the oldest turns first if we exceed the cap.
+  while (ordered.length > 1 && ordered.join('\n').length > ACCUMULATED_MEMORY_CHAR_LIMIT) {
+    ordered.shift();
+  }
+  const joined = ordered.join('\n');
+  return joined.length > ACCUMULATED_MEMORY_CHAR_LIMIT
+    ? joined.slice(joined.length - ACCUMULATED_MEMORY_CHAR_LIMIT)
+    : joined;
+}
+
 export function sanitizeLatestCorrectionMemoryText(userMessage: string): string {
   return stripNegatedCorrectionTerms(userMessage)
     .replace(/\b(?:not|no|wasn['’]?t|weren['’]?t|isn['’]?t|aren['’]?t|was\s+not|were\s+not|is\s+not|are\s+not)\s+(?:milky|creamy|cream|thick|warm|hot|sweet)(?:\s+or\s+(?:milky|creamy|cream|thick|warm|hot|sweet))*[;,.]?\s*/gi, '')
