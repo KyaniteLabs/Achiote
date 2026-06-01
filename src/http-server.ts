@@ -1923,12 +1923,12 @@ function shouldClarifyUnresolvedUnnamedMemory(
   responseText: string,
 ): boolean {
   if (!/\b(?:never knew the name|do not know the name|don['’]?t know the name|did not know the name|didn['’]?t know the name|no name|unnamed)\b/i.test(userMessage)) return false;
-  if (calledTools.has('search_web')) return false;
   const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
   const hasNameAnchor = (memory?.extractedClues?.possibleDishNames ?? []).some((name) => name.trim().length > 0);
   const hasRegionAnchor = (memory?.extractedClues?.culturalOrRegionalHints ?? []).some((hint) => hint.trim().length > 0);
+  if (calledTools.has('search_web') && hasRegionAnchor) return false;
   const cueBeforeIdentity = containsConcreteFoodCue(responseText)
-    || /\b(?:first[-\s]?pass verification bite|minimum viable|sensory test|buy one|pan[-\s]?fry|simmer|recipe)\b/i.test(responseText);
+    || /\b(?:first[-\s]?pass verification bite|first\s+tiny\s+check|tiny\s+check|minimum viable|sensory test|buy one|pan[-\s]?fry|simmer|recipe)\b/i.test(responseText);
   const identityOverclaim = containsOverconfidentIdentityClaim(responseText);
   if (!hasRegionAnchor && (cueBeforeIdentity || identityOverclaim)) return true;
 
