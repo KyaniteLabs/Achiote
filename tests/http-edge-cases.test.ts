@@ -109,9 +109,10 @@ describe('HTTP method edge cases', () => {
 
   afterAll(() => { server?.kill('SIGINT'); });
 
-  it('GET /ask returns 404 or method-not-allowed', async () => {
-    const res = await fetch(`${baseUrl}/ask`);
-    expect([404, 405]).toContain(res.status);
+  it('GET /ask redirects browser clicks to the app', async () => {
+    const res = await fetch(`${baseUrl}/ask`, { redirect: 'manual' });
+    expect(res.status).toBe(303);
+    expect(res.headers.get('location')).toBe('/app');
   });
 
   it('PUT /health returns 405 method not allowed', async () => {

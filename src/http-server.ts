@@ -2661,6 +2661,12 @@ const server = createServer(async (req, res) => {
     return;
   }
 
+  if (pathname === '/ask' && (req.method === 'GET' || req.method === 'HEAD')) {
+    res.writeHead(303, { Location: '/app' });
+    res.end();
+    return;
+  }
+
   if (pathname === '/ask' && req.method !== 'POST') {
     sendMethodNotAllowed(res, ['POST']);
     return;
