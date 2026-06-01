@@ -50,6 +50,7 @@ describe('ask guardrails', () => {
 
   it('recognizes process-leak prose as stalled fallback text', () => {
     expect(containsStalledFallbackText("Let me research this further to pin down the exact dish. I'll work through the pipeline now.")).toBe(true);
+    expect(containsStalledFallbackText('Let me work through your memory to track this down.')).toBe(true);
     expect(containsStalledFallbackText('I can work with this memory, but I need one region detail first.')).toBe(false);
   });
 

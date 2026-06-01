@@ -221,4 +221,84 @@ describe('memory receipt', () => {
 
     expect(receipt.evidence.unknown).toEqual([]);
   });
+
+  it('does not let shopping snippets or overconfident guesses pollute unresolved receipts', () => {
+    const receipt = buildMemoryReceipt({
+      memory: {
+        rawMemory: 'Goyitos Panama green plantain sweet syrup',
+        normalizedMemory: 'Goyitos Panama green plantain sweet syrup',
+        extractedClues: {
+          possibleDishNames: ['Goyitos'],
+          culturalOrRegionalHints: ['Panama'],
+          rememberedIngredients: ['green plantain', 'sweet syrup'],
+          cookingMethods: [],
+          sensoryClues: ['sweet', 'green aroma'],
+          occasions: [],
+        },
+        inferredContext: {
+          culturalOrRegional: [],
+          language: [],
+        },
+        missingInformation: [],
+        nextQuestions: ['Was this home cooking or street food?'],
+        reassurance: "You don't need to spell it correctly or know the original language; sound-alikes and tiny clues are enough to start.",
+      },
+      researchedFacts: [
+        'Get Goya Maduros Sweet Plantain products you love delivered to you in as fast as 1 hour via Instacart.',
+      ],
+      assistantText: 'Your "Goyitos" is almost certainly platanos en miel from Panama.',
+      cue: {
+        title: 'Minimum viable plantain-syrup bite',
+        goal: 'Test one tiny bite of plantain with a light sweet syrup.',
+        effortMinutes: 10,
+        format: 'bite',
+        ingredients: [],
+        steps: [],
+        preserves: [],
+        doesNotPreserve: [],
+        accessibilityPrinciples: [],
+        substituteLogic: [],
+        whyThisIsMinimum: 'It tests plantain chew and syrup cling.',
+        confidence: 'Medium',
+        safetyNotes: [],
+        followUpIfItWorks: [],
+        components: [],
+      },
+      createdAt: '2026-04-27T12:00:00.000Z',
+    });
+
+    expect(receipt.evidence.researched).toEqual([]);
+    expect(receipt.assistantSummary).toMatch(/still unresolved/i);
+    expect(receipt.assistantSummary).toMatch(/first-pass memory test/i);
+    expect(receipt.assistantSummary).not.toMatch(/almost certainly|Instacart/i);
+  });
+
+  it('does not copy guardrail preamble prose into unresolved receipt summaries', () => {
+    const receipt = buildMemoryReceipt({
+      memory: {
+        rawMemory: 'Goyitos Panama green plantain sweet syrup',
+        normalizedMemory: 'Goyitos Panama green plantain sweet syrup',
+        extractedClues: {
+          possibleDishNames: ['Goyitos'],
+          culturalOrRegionalHints: ['Panama'],
+          rememberedIngredients: ['green plantain', 'sweet syrup'],
+          cookingMethods: [],
+          sensoryClues: ['sweet', 'green aroma'],
+          occasions: [],
+        },
+        inferredContext: {
+          culturalOrRegional: [],
+          language: [],
+        },
+        missingInformation: [],
+        nextQuestions: ['Was this home cooking or street food?'],
+        reassurance: "You don't need to spell it correctly or know the original language; sound-alikes and tiny clues are enough to start.",
+      },
+      assistantText: 'What I heard: Panama, Goyitos, green plantain, sweet syrup.\nStill uncertain: family version and exact proportions.',
+      createdAt: '2026-04-27T12:00:00.000Z',
+    });
+
+    expect(receipt.assistantSummary).toMatch(/still unresolved/i);
+    expect(receipt.assistantSummary).not.toMatch(/^What I heard:/i);
+  });
 });

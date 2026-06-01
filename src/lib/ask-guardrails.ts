@@ -156,6 +156,7 @@ export function containsStalledFallbackText(text: string): boolean {
   const trimmed = text.trim();
   return /\bI've gathered enough information so far\.?\s+Let me work with what we have\.?\b/i.test(trimmed)
     || /\bI['’]?ll work through (?:the )?(?:pipeline|tool workflow|workflow)\b/i.test(trimmed)
+    || /\blet me work through (?:your|the) memory\b[\s\S]{0,80}\btrack this down\b/i.test(trimmed)
     || /\blet me research this further\b[\s\S]{0,140}\b(?:pipeline|tool workflow|workflow)\b/i.test(trimmed);
 }
 

@@ -190,7 +190,7 @@ describe('/ask failure surface regressions', () => {
           finish_reason: 'stop',
           message: {
             role: 'assistant',
-            content: 'I can help narrow the seafood rice memory and suggest shellfish-free swaps that will not trigger your reaction. What color was the rice, and where was your dad from?',
+            content: 'I can help narrow the seafood rice memory and suggest shellfish-free swaps that will not trigger your reaction. A Louisiana shrimp-and-crab dirty rice and Filipino sinigang na hipon work differently from other versions. What color was the rice, and where was your dad from?',
           },
         }],
       }));
@@ -221,6 +221,8 @@ describe('/ask failure surface regressions', () => {
     expect(finalText).not.toMatch(/\bsafely\b|\bsafety note\b/i);
     expect(finalText).not.toMatch(/\b(?:will|would|should|can)\s+not\s+trigger\b|\b(?:won['’]?t|wouldn['’]?t|shouldn['’]?t|cannot|can['’]?t)\s+trigger\b/i);
     expect(finalText).not.toMatch(/\bshellfish-free\b/i);
+    expect(finalText).not.toMatch(/\b(?:shrimp|crab|shellfish|hipon|mariscos)\b/i);
+    expect((finalText.match(/Different regional rice dishes use very different seasoning, color, and texture\./g) ?? []).length).toBeLessThanOrEqual(1);
   }, 20_000);
 
   it('recovers deterministically from llama.cpp n_keep/n_ctx context errors', async () => {
@@ -1238,6 +1240,57 @@ describe('/ask failure surface regressions', () => {
     expect(finalText).toMatch(/region|where|language|called|texture|street food|home cooking|holiday|person/i);
     expect(finalText).not.toMatch(/Minimum viable|first-pass verification bite|tiny amount/i);
     expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'overconfident_identity_sanitized' });
+  }, 20_000);
+
+  it('limits unnamed-memory clarification to three sharp questions', async () => {
+    const fakePort = await getFreePort();
+    let requestCount = 0;
+    fakeOpenAi = createServer(async (req, res) => {
+      if (req.url !== '/v1/chat/completions' || req.method !== 'POST') {
+        res.writeHead(404).end();
+        return;
+      }
+      requestCount++;
+      await readBody(req);
+      const toolCallsByTurn = [
+        [{ id: 'call_1', type: 'function', function: { name: 'collect_food_memory', arguments: JSON.stringify({ memoryText: 'thick sour fermented porridge, steamed in a banana leaf, grayish savory, served at funerals. I never knew the name.' }) } }],
+        [{ id: 'call_2', type: 'function', function: { name: 'plan_dish_research', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_3', type: 'function', function: { name: 'build_reconstruction_dossier', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_4', type: 'function', function: { name: 'generate_minimum_viable_nostalgia', arguments: JSON.stringify({}) } }],
+      ];
+      const toolCalls = toolCallsByTurn[requestCount - 1];
+      res.setHeader('content-type', 'application/json');
+      res.end(JSON.stringify({
+        choices: [{
+          finish_reason: toolCalls ? 'tool_calls' : 'stop',
+          message: toolCalls
+            ? { role: 'assistant', content: '', tool_calls: toolCalls }
+            : { role: 'assistant', content: 'What country or region did you eat this in? What was the base grain or starch? Did it taste like corn, cassava, rice, or something you could not identify? Do you remember anything about how the name sounded?' },
+        }],
+      }));
+    });
+    await new Promise<void>((resolveListen) => fakeOpenAi?.listen(fakePort, '127.0.0.1', resolveListen));
+
+    const achiotePort = await getFreePort();
+    achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`);
+
+    const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: 'thick sour fermented porridge, steamed in a banana leaf, grayish savory, served at funerals. I never knew the name.' }),
+    });
+
+    expect(response.status).toBe(200);
+    const events = parseSse(await response.text());
+    const finalText = events
+      .filter((event) => event.event === 'text')
+      .map((event) => JSON.parse(event.data))
+      .join('\n\n');
+
+    const questionCount = (finalText.match(/\?/g) ?? []).length;
+    expect(questionCount).toBeGreaterThanOrEqual(1);
+    expect(questionCount).toBeLessThanOrEqual(3);
+    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'unnamed_memory_clarification' });
   }, 20_000);
 
   it('removes live grocery price claims after the minimum cue tool', async () => {
