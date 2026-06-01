@@ -35,6 +35,7 @@ import { buildReferenceSeedOperatorReport } from './lib/reference-seed-operator.
 import { filterMemoryResearchFacts, filterMemoryResearchSearchResults } from './lib/research-evidence-filter.js';
 import { filterRepeatedToolCalls } from './lib/tool-loop.js';
 import { createTelemetryCollector, sanitizeTelemetryProperties as sanitizeTelemetryProps } from './lib/telemetry-collector.js';
+import { inferUserLocationFromMessage as inferUserLocation } from './lib/user-location.js';
 import type { Tier } from './lib/auth.js';
 import type { CollectedFoodMemory, DishResearchPlan, MinimumViableNostalgiaCue, ReconstructionDossier } from './lib/types.js';
 import {
@@ -1604,18 +1605,6 @@ function normalizeSourceType(value: unknown, title: string, url: string): string
 
 function normalizeConfidence(value: unknown): 'High' | 'Medium' | 'Low' {
   return value === 'High' || value === 'Medium' || value === 'Low' ? value : 'Medium';
-}
-
-function inferUserLocation(userMessage: string): string | undefined {
-  const match = userMessage.match(/\b(?:i\s+(?:live|am|currently\s+live|currently\s+am)|i['’]?m|im|we\s+(?:live|are)|based|located)\s+in\s+([^.!?;,]{2,80})/i)
-    ?? userMessage.match(/\b(?:buy|find|get|source|shop\s+for)\b[^.!?;,]{0,80}\b(?:in|near|around)\s+([^.!?;,]{2,80})/i);
-  if (!match?.[1]) return undefined;
-  const location = match[1]
-    .replace(/\s+(?:now|currently|these days|at the moment)\b.*$/i, '')
-    .replace(/\s+(?:and|but|so|because|while)\b.*$/i, '')
-    .trim();
-  if (location.length < 2 || /^(the|a|an|this|that|it|there|me|my|my area|here|your area)$/i.test(location)) return undefined;
-  return location.slice(0, 80);
 }
 
 function parsePositiveInteger(value: string | undefined): number | undefined {
