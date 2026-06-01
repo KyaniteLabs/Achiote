@@ -396,12 +396,11 @@ describe('/ask deterministic completion after minimum cue', () => {
       expect(toolNames).toEqual(expect.arrayContaining([
         'collect_food_memory',
         'plan_dish_research',
-        'build_reconstruction_dossier',
-        'generate_minimum_viable_nostalgia',
       ]));
-      expect(events.find((event) => event.event === 'receipt')).toBeDefined();
+      expect(toolNames).not.toContain('generate_minimum_viable_nostalgia');
+      expect(events.find((event) => event.event === 'receipt')).toBeUndefined();
       expect(events.at(-1)?.event).toBe('done');
-      expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'explicit_minimum_cue_fallback' });
+      expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'provider_context_deterministic_recovery' });
       expect(requestCount).toBe(1);
     } finally {
       achiote.kill('SIGINT');
@@ -590,7 +589,7 @@ describe('/ask deterministic completion after minimum cue', () => {
     }
   }, 20_000);
 
-  it('sanitizes final synthesis browse claims and recipe drift before canary scoring', async () => {
+  it('sanitizes final synthesis browse claims and measurements while procedure drift stays advisory', async () => {
     const fakePort = await getFreePort();
     let requestCount = 0;
     const fakeOpenAi = createServer(async (req, res) => {
@@ -638,8 +637,8 @@ describe('/ask deterministic completion after minimum cue', () => {
       const text = events.filter((event) => event.event === 'text').map((event) => JSON.parse(event.data)).join('\n\n');
 
       expect(text).toMatch(/\bfirst-pass verification bite\b/i);
-      expect(text).not.toMatch(/\b(?:searched the web|current grocery prices|under\s+\$|full recipe|2 cups|1 tsp|20 minutes|simmer)\b/i);
-      expect(JSON.parse(events.at(-1)!.data).guarded).toMatch(/^(trust_boundary_sanitized|recipe_procedure_sanitized|recipe_measurement_sanitized|minimum_cue_deterministic_completion)$/);
+      expect(text).not.toMatch(/\b(?:searched the web|current grocery prices|under\s+\$|2 cups|1 tsp|20 minutes)\b/i);
+      expect(JSON.parse(events.at(-1)!.data).guarded).toMatch(/^(trust_boundary_sanitized|recipe_measurement_sanitized|minimum_cue_deterministic_completion)$/);
       expect(requestCount).toBe(5);
     } finally {
       achiote.kill('SIGINT');
@@ -699,7 +698,7 @@ describe('/ask deterministic completion after minimum cue', () => {
 
       expect(text).toMatch(/\bfirst-pass verification bite\b/i);
       expect(text).not.toMatch(/\b(?:boil|let steep|then sip|specific ingredients)\b/i);
-      expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'recipe_procedure_sanitized' });
+      expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'minimum_cue_language_sanitized' });
       expect(requestCount).toBe(5);
     } finally {
       achiote.kill('SIGINT');
@@ -755,9 +754,10 @@ describe('/ask deterministic completion after minimum cue', () => {
       const events = parseSse(await response.text());
       const text = events.filter((event) => event.event === 'text').map((event) => JSON.parse(event.data)).join('\n\n');
 
-      expect(text).toMatch(/\bfirst-pass verification bite\b/i);
+      expect(text).toMatch(/\?/);
+      expect(text).toMatch(/region|where|language|called|texture|community/i);
       expect(text).not.toMatch(/\bpoints?\s+toward\b/i);
-      expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'overconfident_identity_sanitized' });
+      expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'unnamed_memory_clarification' });
       expect(requestCount).toBe(5);
     } finally {
       achiote.kill('SIGINT');
@@ -1810,12 +1810,18 @@ describe('/ask premature cue guard', () => {
       expect(response.status).toBe(200);
       const events = parseSse(await response.text());
       const text = events.filter((event) => event.event === 'text').map((event) => JSON.parse(event.data)).join('');
+      const toolNames = events
+        .filter((event) => event.event === 'tool_call')
+        .map((event) => JSON.parse(event.data).name);
 
-      expect(text).toContain('Those answers decide the dish family');
+      expect(toolNames).toContain('build_reconstruction_dossier');
+      expect(toolNames).toContain('generate_minimum_viable_nostalgia');
+      expect(text).toContain('Minimum viable');
       expect(text).not.toContain('recado');
       expect(text).not.toContain('chimichurri');
       expect(text).not.toContain('🌿');
-      expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'premature_candidate_speculation' });
+      expect(events.some((event) => event.event === 'receipt')).toBe(true);
+      expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'premature_candidate_minimum_cue' });
       expect(requestCount).toBe(3);
     } finally {
       achiote.kill('SIGINT');
@@ -1916,12 +1922,17 @@ describe('/ask premature cue guard', () => {
       expect(response.status).toBe(200);
       const events = parseSse(await response.text());
       const text = events.filter((event) => event.event === 'text').map((event) => JSON.parse(event.data)).join('');
+      const toolNames = events
+        .filter((event) => event.event === 'tool_call')
+        .map((event) => JSON.parse(event.data).name);
 
-      expect(text).toContain('Those answers decide the dish family');
-      expect(text).toContain('Where was your abuela from?');
+      expect(toolNames).toContain('build_reconstruction_dossier');
+      expect(toolNames).toContain('generate_minimum_viable_nostalgia');
+      expect(text).toContain('Minimum viable');
       expect(text).not.toContain('chimichurri');
       expect(text).not.toContain('ceviche');
-      expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'premature_candidate_speculation' });
+      expect(events.some((event) => event.event === 'receipt')).toBe(true);
+      expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'premature_candidate_minimum_cue' });
       expect(requestCount).toBe(2);
     } finally {
       achiote.kill('SIGINT');

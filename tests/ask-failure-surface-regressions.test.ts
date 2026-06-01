@@ -262,11 +262,11 @@ describe('/ask failure surface regressions', () => {
     expect(toolNames).toEqual(expect.arrayContaining([
       'collect_food_memory',
       'plan_dish_research',
-      'build_reconstruction_dossier',
-      'generate_minimum_viable_nostalgia',
     ]));
+    expect(toolNames).not.toContain('generate_minimum_viable_nostalgia');
+    expect(events.find((event) => event.event === 'receipt')).toBeUndefined();
     expect(events.at(-1)?.event).toBe('done');
-    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'explicit_minimum_cue_fallback' });
+    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'provider_context_deterministic_recovery' });
     expect(requestCount).toBe(1);
   }, 20_000);
 
@@ -1191,7 +1191,7 @@ describe('/ask failure surface regressions', () => {
     expect(finalText).toContain('first-pass verification bite');
   }, 20_000);
 
-  it('replaces overconfident dish identity claims after the minimum cue tool', async () => {
+  it('preserves overconfident dish identity claims as advisory quality signals after the minimum cue tool', async () => {
     const fakePort = await getFreePort();
     let requestCount = 0;
     fakeOpenAi = createServer(async (req, res) => {
@@ -1238,9 +1238,9 @@ describe('/ask failure surface regressions', () => {
 
     expect(events.some((event) => event.event === 'error')).toBe(false);
     expect(finalText).toMatch(/first-pass verification (?:bite|sip)/i);
-    expect(finalText).not.toMatch(/\b(?:points strongly toward|sounds like|most likely|almost certainly|Horchata de Arroz)\b/i);
+    expect(finalText).toMatch(/\bpoints strongly toward a classic Horchata de Arroz\b/i);
     expect(events.at(-1)?.event).toBe('done');
-    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'overconfident_identity_sanitized' });
+    expect(JSON.parse(events.at(-1)!.data).guarded).not.toBe('overconfident_identity_sanitized');
   }, 20_000);
 
   it('asks narrowing questions instead of emitting a generic cue for unnamed overconfident memories', async () => {
@@ -1292,7 +1292,7 @@ describe('/ask failure surface regressions', () => {
     expect(finalText).toMatch(/\?/);
     expect(finalText).toMatch(/region|where|language|called|texture|street food|home cooking|holiday|person/i);
     expect(finalText).not.toMatch(/Minimum viable|first-pass verification bite|tiny amount/i);
-    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'overconfident_identity_sanitized' });
+    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'unnamed_memory_clarification' });
   }, 20_000);
 
   it('limits unnamed-memory clarification to three sharp questions', async () => {
@@ -2062,7 +2062,7 @@ describe('/ask failure surface regressions', () => {
     expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'latest_correction_sanitized' });
   }, 20_000);
 
-  it('replaces non-correction cue-family drift with a user-message mechanism cue', async () => {
+  it('preserves non-correction cue-family drift as an advisory quality signal', async () => {
     const fakePort = await getFreePort();
     let requestCount = 0;
     fakeOpenAi = createServer(async (req, res) => {
@@ -2108,14 +2108,13 @@ describe('/ask failure surface regressions', () => {
       .join('\n\n');
 
     expect(events.some((event) => event.event === 'error')).toBe(false);
-    expect(finalText).toContain('Minimum viable memory-family cue');
-    expect(finalText).toMatch(/neutral liquid carrier/i);
-    expect(finalText).not.toMatch(/\bbeverage-memory|exact drink|carbonation|foamy|over ice\b/i);
+    expect(finalText).toContain('Minimum viable beverage-memory cue');
+    expect(finalText).toMatch(/\b(?:carbonation|foamy|over ice)\b/i);
     expect(events.at(-1)?.event).toBe('done');
-    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'cue_family_sanitized' });
+    expect(JSON.parse(events.at(-1)!.data).guarded).not.toBe('cue_family_sanitized');
   }, 20_000);
 
-  it('aligns deterministic overconfident-identity fallbacks to the user message family', async () => {
+  it('keeps ungrounded overconfident identity drift advisory instead of replacing the model synthesis', async () => {
     const fakePort = await getFreePort();
     let requestCount = 0;
     fakeOpenAi = createServer(async (req, res) => {
@@ -2175,10 +2174,11 @@ describe('/ask failure surface regressions', () => {
       .join('\n\n');
 
     expect(events.some((event) => event.event === 'error')).toBe(false);
-    expect(finalText).toContain('Minimum viable memory-family cue');
+    expect(finalText).toMatch(/\bdefinitely a classic Eastern European soup\b/i);
+    expect(finalText).toMatch(/\balmost certainly zurek\b/i);
     expect(finalText).not.toMatch(/\bbeverage-memory|exact drink|carbonation|foamy|over ice\b/i);
     expect(events.at(-1)?.event).toBe('done');
-    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'overconfident_identity_sanitized' });
+    expect(JSON.parse(events.at(-1)!.data).guarded).not.toBe('overconfident_identity_sanitized');
   }, 20_000);
 
   it('clarifies broad uncertain memories instead of forcing a generic post-cue fallback', async () => {
@@ -2662,7 +2662,7 @@ describe('/ask failure surface regressions', () => {
     expect(finalText).toMatch(/Sip it warm/i);
   }, 20_000);
 
-  it('replaces post-cue simple broth procedure drift with a deterministic cue', async () => {
+  it('preserves post-cue simple broth procedure drift as advisory quality signal', async () => {
     const fakePort = await getFreePort();
     let requestCount = 0;
     fakeOpenAi = createServer(async (req, res) => {
@@ -2709,10 +2709,9 @@ describe('/ask failure surface regressions', () => {
 
     expect(events.some((event) => event.event === 'error')).toBe(false);
     expect(events.at(-1)?.event).toBe('done');
-    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'recipe_procedure_sanitized' });
-    expect(finalText).toContain('Minimum viable');
+    expect(JSON.parse(events.at(-1)!.data).guarded).not.toBe('recipe_procedure_sanitized');
     expect(finalText).toMatch(/first-pass verification bite/i);
-    expect(finalText).not.toMatch(/\bmake a simple broth\b/i);
+    expect(finalText).toMatch(/\bmake a simple broth\b/i);
   }, 20_000);
 
   it('replaces post-cue bullet recipe drift with a deterministic cue', async () => {

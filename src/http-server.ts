@@ -866,6 +866,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
 
     if (!isFollowUpWithAnchors && !calledTools.has('generate_minimum_viable_nostalgia') && containsPrematureCandidateSpeculation(modelResponse.textBlocks.join('\n\n'), toolPayloads)) {
       console.warn('[ask] replaced premature candidate list with structured clarification');
+      if (await maybeSendPrematureCandidateMinimumCue({ userMessage, toolPayloads, calledTools, send, finish })) return;
       const responseText = buildClarificationOnlyResponse(toolPayloads, userMessage);
       send('text', responseText);
       maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
@@ -931,7 +932,9 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       console.warn('[ask] replaced raw tool markup synthesis with deterministic response');
       const responseText = calledTools.has('find_sensory_substitutes') || isSubstitutionPlan(toolPayloads)
         ? buildSubstitutionBasisResponse(toolPayloads, userMessage)
-        : buildMinimumCueCompletedResponse(toolPayloads, userMessage);
+        : hasUsableSearchEvidence(toolPayloads)
+          ? buildResearchGroundedForcedCueResponse(toolPayloads, userMessage)
+          : buildMinimumCueCompletedResponse(toolPayloads, userMessage);
       send('text', responseText);
       maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
       finish({ guarded: 'raw_tool_markup_sanitized' });
@@ -972,12 +975,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       && Boolean(resolvedForGrounding?.region && !/^unknown$/i.test(resolvedForGrounding.region));
     const researchGrounded = hasUsableSearchEvidence(toolPayloads) || resolverGrounded;
     if (calledTools.has('generate_minimum_viable_nostalgia') && containsCueFamilyMismatch(trustBoundedResponseText, userMessage) && !researchGrounded) {
-      console.warn('[ask] replaced cue-family mismatch with deterministic mechanism cue');
-      const responseText = buildUserMessageMechanismCueResponse(userMessage, toolPayloads);
-      send('text', responseText);
-      maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
-      finish({ guarded: 'cue_family_sanitized' });
-      return;
+      console.warn('[ask] advisory cue-family mismatch detected; preserving model synthesis');
     }
 
     if (shouldReplaceWithSubstitutionBasisResponse(trustBoundedResponseText, toolPayloads, calledTools)) {
@@ -1003,25 +1001,11 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       return true;
     }) && !dishNameIsExplicitlyApproximate && researchGrounded;
     if (calledTools.has('generate_minimum_viable_nostalgia') && containsOverconfidentIdentityClaim(trustBoundedResponseText) && !userNamedDishAnchor && !researchGrounded) {
-      console.warn('[ask] replaced overconfident identity claim with deterministic minimum cue');
-      const memoryPayload = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
-      const isExplicitlyUnnamedMemory = /\b(?:never knew the name|don['’]?t know the name|didn['’]?t know the name|no name|unnamed)\b/i.test(userMessage);
-      const responseText = isExplicitlyUnnamedMemory && (memoryPayload?.nextQuestions?.length ?? 0) > 0
-        ? buildClarificationOnlyResponse(toolPayloads, userMessage, { includeEvidencePreamble: false })
-        : buildMinimumCueCompletedResponse(toolPayloads, userMessage);
-      send('text', responseText);
-      maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
-      finish({ guarded: 'overconfident_identity_sanitized' });
-      return;
+      console.warn('[ask] advisory overconfident identity claim detected; preserving model synthesis');
     }
 
     if (calledTools.has('generate_minimum_viable_nostalgia') && containsRecipeProcedureOrAdaptationLanguage(trustBoundedResponseText) && !researchGrounded) {
-      console.warn('[ask] replaced recipe procedure drift with deterministic minimum cue');
-      const responseText = buildMinimumCueCompletedResponse(toolPayloads, userMessage);
-      send('text', responseText);
-      maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
-      finish({ guarded: 'recipe_procedure_sanitized' });
-      return;
+      console.warn('[ask] advisory recipe procedure drift detected; preserving model synthesis');
     }
 
     if (calledTools.has('generate_minimum_viable_nostalgia')
@@ -1842,12 +1826,75 @@ async function maybeSendForcedMinimumCue({
   return true;
 }
 
+async function maybeSendPrematureCandidateMinimumCue({
+  userMessage,
+  toolPayloads,
+  calledTools,
+  send,
+  finish,
+}: {
+  userMessage: string;
+  toolPayloads: Record<string, unknown>;
+  calledTools: Set<string>;
+  send: SseSender;
+  finish: DoneSender;
+}): Promise<boolean> {
+  if (calledTools.has('generate_minimum_viable_nostalgia')) return false;
+  if (!shouldForceMinimumCueAfterPrematureCandidate(userMessage, toolPayloads)) return false;
+
+  const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
+  const researchPlan = toolPayloads.plan_dish_research as DishResearchPlan | undefined;
+  if (!memory || !researchPlan) return false;
+
+  console.warn('[ask] converting premature candidate list into deterministic minimum cue');
+  send('status', { stage: 'calling_tools', tools: ['build_reconstruction_dossier', 'generate_minimum_viable_nostalgia'], guarded: 'premature_candidate_minimum_cue' });
+
+  let dossier = toolPayloads.build_reconstruction_dossier as ReconstructionDossier | undefined;
+  if (!dossier) {
+    dossier = await executeAndStreamTool('build_reconstruction_dossier', {
+      memory,
+      researchPlan,
+      inferredFacts: [
+        'The model produced candidate speculation before the minimum cue, so the server preserved the sensory anchors and withheld identity claims.',
+      ],
+    }, userMessage, send, calledTools, toolPayloads) as ReconstructionDossier;
+  }
+
+  await executeAndStreamTool('generate_minimum_viable_nostalgia', {
+    dossier,
+    userLocation: memory.userLocation,
+    constraints: inferSafetyConstraints(userMessage),
+    maxEffortMinutes: 10,
+  }, userMessage, send, calledTools, toolPayloads);
+
+  const responseText = buildEvidenceBoundedMinimumCueResponse(toolPayloads, userMessage);
+  send('text', responseText);
+  maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
+  finish({ guarded: 'premature_candidate_minimum_cue' });
+  return true;
+}
+
+function shouldForceMinimumCueAfterPrematureCandidate(userMessage: string, toolPayloads: Record<string, unknown>): boolean {
+  const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
+  const researchPlan = toolPayloads.plan_dish_research as DishResearchPlan | undefined;
+  if (!memory || !researchPlan) return false;
+  if (/\b(?:never knew the name|never learned the name|do not know the name|don['’]?t know the name|did not know the name|didn['’]?t know the name|no name|unnamed)\b/i.test(userMessage)) return false;
+  if (shouldClarifyBroadUncertainMemory(userMessage, toolPayloads)) return false;
+
+  const clues = memory.extractedClues;
+  return hasSensorySignal(userMessage, memory)
+    || (clues.rememberedIngredients?.length ?? 0) > 0
+    || (clues.cookingMethods?.length ?? 0) > 0
+    || (clues.possibleDishNames?.length ?? 0) > 0
+    || (clues.culturalOrRegionalHints?.length ?? 0) > 0;
+}
+
 function shouldForceMinimumCue(userMessage: string, toolPayloads: Record<string, unknown>, calledTools: Set<string>): boolean {
   if (!toolPayloads.collect_food_memory || !toolPayloads.plan_dish_research) return false;
   if (shouldClarifyBroadUncertainMemory(userMessage, toolPayloads)) return false;
   if (shouldClarifySparseUnanchoredMemory(userMessage, toolPayloads)) return false;
   const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
-  const explicitlyUnnamed = /\b(?:never knew the name|don['’]?t know the name|didn['’]?t know the name|no name|unnamed)\b/i.test(userMessage);
+  const explicitlyUnnamed = /\b(?:never knew the name|do not know the name|don['’]?t know the name|did not know the name|didn['’]?t know the name|no name|unnamed)\b/i.test(userMessage);
   const hasRegionAnchor = (memory?.extractedClues?.culturalOrRegionalHints ?? []).some((hint) => hint.trim().length > 0);
   if (explicitlyUnnamed && !hasRegionAnchor) return false;
 
@@ -1886,14 +1933,15 @@ function shouldClarifyUnresolvedUnnamedMemory(
   calledTools: Set<string>,
   responseText: string,
 ): boolean {
-  if (!/\b(?:never knew the name|don['’]?t know the name|didn['’]?t know the name|no name|unnamed)\b/i.test(userMessage)) return false;
+  if (!/\b(?:never knew the name|do not know the name|don['’]?t know the name|did not know the name|didn['’]?t know the name|no name|unnamed)\b/i.test(userMessage)) return false;
   if (calledTools.has('search_web')) return false;
   const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
   const hasNameAnchor = (memory?.extractedClues?.possibleDishNames ?? []).some((name) => name.trim().length > 0);
   const hasRegionAnchor = (memory?.extractedClues?.culturalOrRegionalHints ?? []).some((hint) => hint.trim().length > 0);
   const cueBeforeIdentity = containsConcreteFoodCue(responseText)
     || /\b(?:first[-\s]?pass verification bite|minimum viable|sensory test|buy one|pan[-\s]?fry|simmer|recipe)\b/i.test(responseText);
-  if (!hasRegionAnchor && cueBeforeIdentity) return true;
+  const identityOverclaim = containsOverconfidentIdentityClaim(responseText);
+  if (!hasRegionAnchor && (cueBeforeIdentity || identityOverclaim)) return true;
 
   const resolved = toolPayloads.resolve_dish_name as
     | { confidence?: string; matchType?: string; region?: string; needsClarification?: boolean }
@@ -1907,12 +1955,12 @@ function shouldClarifyUnresolvedUnnamedMemory(
   if (!unresolved) return false;
 
   const questionCount = (responseText.match(/\?/g) ?? []).length;
-  return questionCount === 0 || questionCount > 3 || cueBeforeIdentity;
+  return questionCount === 0 || questionCount > 3 || cueBeforeIdentity || identityOverclaim;
 }
 
 function shouldPreserveModelProvidedResearchFacts(memory: CollectedFoodMemory | undefined, userMessage: string): boolean {
   if (!memory) return false;
-  const explicitlyUnnamed = /\b(?:never knew the name|don['’]?t know the name|didn['’]?t know the name|no name|unnamed)\b/i.test(userMessage);
+  const explicitlyUnnamed = /\b(?:never knew the name|do not know the name|don['’]?t know the name|did not know the name|didn['’]?t know the name|no name|unnamed)\b/i.test(userMessage);
   const hasNameAnchor = (memory.extractedClues.possibleDishNames ?? []).some((name) => name.trim().length > 0);
   const hasRegionAnchor = (memory.extractedClues.culturalOrRegionalHints ?? []).some((hint) => hint.trim().length > 0);
   if (explicitlyUnnamed && !hasRegionAnchor) return false;

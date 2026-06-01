@@ -426,7 +426,7 @@ export function buildClarificationOnlyResponse(
   const planQuestions = filterAnchorsForConstraints(getStringArray(toolPayloads.plan_dish_research, 'questionsForUser'), constraints);
   const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
   const explicitlyUnnamed = userMessage
-    ? /\b(?:never knew the name|don['’]?t know the name|didn['’]?t know the name|no name|unnamed)\b/i.test(userMessage)
+    ? /\b(?:never knew the name|never learned the name|do not know the name|don['’]?t know the name|did not know the name|didn['’]?t know the name|no name|unnamed)\b/i.test(userMessage)
     : false;
   const extracted = memory?.extractedClues;
   const unnamedQuestions = explicitlyUnnamed ? [
