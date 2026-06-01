@@ -370,6 +370,7 @@ function cleanArray(values: string[] | undefined): string[] {
 function normalizedTerm(value: string): string {
   return value.toLowerCase()
     .replace(/[^\p{L}\p{M}\p{N}\s-]/gu, ' ')
+    .replace(/-/g, ' ')
     .replace(/\bpotatoes\b/g, 'potato')
     .replace(/\bprawns\b/g, 'prawn')
     .replace(/\s+/g, ' ')
@@ -500,19 +501,19 @@ function mergeModelExtractionWithRegex(
     },
   );
 
-  const possibleDishNames = cleanArray([
+  const possibleDishNames = removeRuledOutValues(cleanArray([
     ...modelDishNames,
     ...regexMemory.extractedClues.possibleDishNames,
-  ]);
+  ]), ruledOutIngredients);
   const culturalOrRegionalHints = cleanArray([
     input.knownRegion,
     modelRegion && !isNegatedMention(lower, modelRegion) ? modelRegion : '',
     ...regexMemory.extractedClues.culturalOrRegionalHints,
   ].filter((value): value is string => Boolean(value)));
-  const rememberedIngredients = cleanArray([
+  const rememberedIngredients = removeRuledOutValues(cleanArray([
     ...modelIngredients,
     ...regexMemory.extractedClues.rememberedIngredients,
-  ]);
+  ]), ruledOutIngredients);
   const sensoryClues = cleanArray([
     ...safeModelValues(model.sensoryCues, lower, ruledOutIngredients),
     ...regexMemory.extractedClues.sensoryClues,

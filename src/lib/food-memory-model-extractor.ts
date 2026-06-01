@@ -41,6 +41,7 @@ function buildExtractionPrompt(input: FoodMemoryInput): string {
     '',
     'Rules:',
     '- Preserve rough sound-alike names as possibleDishNames.',
+    '- If the memory says a previous clue was misremembered or mistaken, do not put that previous clue in positive fields.',
     '- originRegion is where the remembered food is from, not where the user lives.',
     '- residenceLocation is the user current location only if stated.',
     '- cookingMethod includes preparation or serving format clues such as fried, steamed, wrapped, rice dish, porridge, or griddled.',
