@@ -101,6 +101,21 @@ describe('flavor-polarity relevance gate', () => {
     expect(contradictsMemoryRelevance('A sweet chocolate cake dessert recipe.', savory)).toBe(true);
   });
 
+  it('does not treat ambiguous acidity/pastry words (tart, pie) as sweet cues', () => {
+    // "tart" is an acidity descriptor, not a dessert-only signal; a tart tamarind
+    // memory must NOT classify as sweet (which would drop savory evidence).
+    expect(classifyFlavorPolarity('tart')).toBeNull();
+    const tartTamarind = buildMemoryRelevanceContext({
+      extractedClues: { possibleDishNames: [], rememberedIngredients: ['tamarind'], sensoryClues: ['tart', 'sour'] },
+    });
+    expect(tartTamarind.polarity).toBeNull();
+    // A savory broth/fish research result is therefore retained, not dropped.
+    expect(filterMemoryResearchSearchResults([
+      { title: 'Tamarind fish soup', link: 'https://example.com/sour-soup', snippet: 'A traditional sour fish soup simmered in tamarind broth.' },
+    ], tartTamarind)).toHaveLength(1);
+    expect(contradictsMemoryRelevance('A savory fish broth recipe.', tartTamarind)).toBe(false);
+  });
+
   it('filterMemoryResearchFacts also drops flavor-contradicting fact strings', () => {
     const dessert = buildMemoryRelevanceContext({ extractedClues: { possibleDishNames: ['cake'], rememberedIngredients: ['caramel'], sensoryClues: [] } });
     expect(filterMemoryResearchFacts([

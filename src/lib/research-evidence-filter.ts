@@ -33,8 +33,12 @@ const FOOD_CULTURE_SIGNAL =
 export type FlavorPolarity = 'sweet' | 'savory' | null;
 export type MemoryRelevanceContext = { polarity: FlavorPolarity };
 
+// Only genuinely unambiguous dessert cues. Acidity/pastry words that also occur
+// in savory dishes (e.g. "tart" tamarind, meat "pie") are deliberately excluded
+// so the gate never misclassifies a sour/savory memory as sweet and drops valid
+// savory evidence.
 const SWEET_FLAVOR_SIGNAL =
-  /\b(?:dessert|sweets?|cakes?|bizcocho|cookies?|brownies?|pie|tart|custard|flan|pudding|mousse|candy|caramel|dulce de leche|chocolate|frosting|icing|meringue|sponge cake|tres leches|cheesecake|honey|syrup)\b/gi;
+  /\b(?:dessert|sweets?|cakes?|bizcocho|cookies?|brownies?|custard|flan|pudding|mousse|candy|caramel|dulce de leche|chocolate|frosting|icing|meringue|sponge cake|tres leches|cheesecake|honey|syrup)\b/gi;
 
 const SAVORY_FLAVOR_SIGNAL =
   /\b(?:beef|pork|chicken|lamb|fish|seafood|shrimp|prawns?|meat|meatballs?|sausage|bacon|ham|stew|soup|broth|gravy|casserole|roast(?:ed)?|savou?ry|sofrito|gumbo|chili)\b/gi;
