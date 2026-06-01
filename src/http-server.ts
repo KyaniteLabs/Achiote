@@ -866,6 +866,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
 
     if (!isFollowUpWithAnchors && !calledTools.has('generate_minimum_viable_nostalgia') && containsPrematureCandidateSpeculation(modelResponse.textBlocks.join('\n\n'), toolPayloads)) {
       console.warn('[ask] replaced premature candidate list with structured clarification');
+      if (await maybeSendPrematureCandidateMinimumCue({ userMessage, toolPayloads, calledTools, send, finish })) return;
       const responseText = buildClarificationOnlyResponse(toolPayloads, userMessage);
       send('text', responseText);
       maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
@@ -1840,6 +1841,69 @@ async function maybeSendForcedMinimumCue({
   maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
   finish({ guarded: 'explicit_minimum_cue_fallback' });
   return true;
+}
+
+async function maybeSendPrematureCandidateMinimumCue({
+  userMessage,
+  toolPayloads,
+  calledTools,
+  send,
+  finish,
+}: {
+  userMessage: string;
+  toolPayloads: Record<string, unknown>;
+  calledTools: Set<string>;
+  send: SseSender;
+  finish: DoneSender;
+}): Promise<boolean> {
+  if (calledTools.has('generate_minimum_viable_nostalgia')) return false;
+  if (!shouldForceMinimumCueAfterPrematureCandidate(userMessage, toolPayloads)) return false;
+
+  const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
+  const researchPlan = toolPayloads.plan_dish_research as DishResearchPlan | undefined;
+  if (!memory || !researchPlan) return false;
+
+  console.warn('[ask] converting premature candidate list into deterministic minimum cue');
+  send('status', { stage: 'calling_tools', tools: ['build_reconstruction_dossier', 'generate_minimum_viable_nostalgia'], guarded: 'premature_candidate_minimum_cue' });
+
+  let dossier = toolPayloads.build_reconstruction_dossier as ReconstructionDossier | undefined;
+  if (!dossier) {
+    dossier = await executeAndStreamTool('build_reconstruction_dossier', {
+      memory,
+      researchPlan,
+      inferredFacts: [
+        'The model produced candidate speculation before the minimum cue, so the server preserved the sensory anchors and withheld identity claims.',
+      ],
+    }, userMessage, send, calledTools, toolPayloads) as ReconstructionDossier;
+  }
+
+  await executeAndStreamTool('generate_minimum_viable_nostalgia', {
+    dossier,
+    userLocation: memory.userLocation,
+    constraints: inferSafetyConstraints(userMessage),
+    maxEffortMinutes: 10,
+  }, userMessage, send, calledTools, toolPayloads);
+
+  const responseText = buildEvidenceBoundedMinimumCueResponse(toolPayloads, userMessage);
+  send('text', responseText);
+  maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
+  finish({ guarded: 'premature_candidate_minimum_cue' });
+  return true;
+}
+
+function shouldForceMinimumCueAfterPrematureCandidate(userMessage: string, toolPayloads: Record<string, unknown>): boolean {
+  const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
+  const researchPlan = toolPayloads.plan_dish_research as DishResearchPlan | undefined;
+  if (!memory || !researchPlan) return false;
+  if (/\b(?:never knew the name|never learned the name|don['’]?t know the name|didn['’]?t know the name|no name|unnamed)\b/i.test(userMessage)) return false;
+  if (shouldClarifyBroadUncertainMemory(userMessage, toolPayloads)) return false;
+
+  const clues = memory.extractedClues;
+  return hasSensorySignal(userMessage, memory)
+    || (clues.rememberedIngredients?.length ?? 0) > 0
+    || (clues.cookingMethods?.length ?? 0) > 0
+    || (clues.possibleDishNames?.length ?? 0) > 0
+    || (clues.culturalOrRegionalHints?.length ?? 0) > 0;
 }
 
 function shouldForceMinimumCue(userMessage: string, toolPayloads: Record<string, unknown>, calledTools: Set<string>): boolean {

@@ -1810,12 +1810,18 @@ describe('/ask premature cue guard', () => {
       expect(response.status).toBe(200);
       const events = parseSse(await response.text());
       const text = events.filter((event) => event.event === 'text').map((event) => JSON.parse(event.data)).join('');
+      const toolNames = events
+        .filter((event) => event.event === 'tool_call')
+        .map((event) => JSON.parse(event.data).name);
 
-      expect(text).toContain('Those answers decide the dish family');
+      expect(toolNames).toContain('build_reconstruction_dossier');
+      expect(toolNames).toContain('generate_minimum_viable_nostalgia');
+      expect(text).toContain('Minimum viable');
       expect(text).not.toContain('recado');
       expect(text).not.toContain('chimichurri');
       expect(text).not.toContain('🌿');
-      expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'premature_candidate_speculation' });
+      expect(events.some((event) => event.event === 'receipt')).toBe(true);
+      expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'premature_candidate_minimum_cue' });
       expect(requestCount).toBe(3);
     } finally {
       achiote.kill('SIGINT');
@@ -1916,12 +1922,17 @@ describe('/ask premature cue guard', () => {
       expect(response.status).toBe(200);
       const events = parseSse(await response.text());
       const text = events.filter((event) => event.event === 'text').map((event) => JSON.parse(event.data)).join('');
+      const toolNames = events
+        .filter((event) => event.event === 'tool_call')
+        .map((event) => JSON.parse(event.data).name);
 
-      expect(text).toContain('Those answers decide the dish family');
-      expect(text).toContain('Where was your abuela from?');
+      expect(toolNames).toContain('build_reconstruction_dossier');
+      expect(toolNames).toContain('generate_minimum_viable_nostalgia');
+      expect(text).toContain('Minimum viable');
       expect(text).not.toContain('chimichurri');
       expect(text).not.toContain('ceviche');
-      expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'premature_candidate_speculation' });
+      expect(events.some((event) => event.event === 'receipt')).toBe(true);
+      expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'premature_candidate_minimum_cue' });
       expect(requestCount).toBe(2);
     } finally {
       achiote.kill('SIGINT');

@@ -49,6 +49,7 @@ const KNOWN_GUARDS = new Set([
   'premature_concrete_cue',
   'generic_uncertainty_clarification',
   'premature_candidate_speculation',
+  'premature_candidate_minimum_cue',
   'broad_memory_clarification',
   'recipe_measurement_sanitized',
   'trust_boundary_sanitized',
