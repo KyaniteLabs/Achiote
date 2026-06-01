@@ -50,6 +50,8 @@ describe('ask guardrails', () => {
 
   it('recognizes process-leak prose as stalled fallback text', () => {
     expect(containsStalledFallbackText("Let me research this further to pin down the exact dish. I'll work through the pipeline now.")).toBe(true);
+    expect(containsStalledFallbackText('Let me work through your memory to track this down.')).toBe(true);
+    expect(containsStalledFallbackText('Let me work through your memory to narrow this down.')).toBe(true);
     expect(containsStalledFallbackText('I can work with this memory, but I need one region detail first.')).toBe(false);
   });
 
@@ -58,10 +60,10 @@ describe('ask guardrails', () => {
       allergenMemory,
       'I am allergic to peanuts, shrimp, eggs, and sesame. Help me recreate the sauce.',
     );
-    const whatHeard = preamble.split('\n')[0];
+    const anchorLine = preamble.split('\n')[0];
 
-    expect(whatHeard).toBe('What I heard: satay-like sauce, sauce/gravy.');
-    expect(whatHeard).not.toMatch(/\b(?:peanuts?|shrimp|eggs?|sesame|nutty)\b/i);
+    expect(anchorLine).toBe('Useful anchors: satay-like sauce, sauce/gravy.');
+    expect(anchorLine).not.toMatch(/\b(?:peanuts?|shrimp|eggs?|sesame|nutty)\b/i);
     expect(preamble).toContain('Food boundaries: nut allergy, egg allergy, shellfish allergy, sesame allergy.');
   });
 

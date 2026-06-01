@@ -156,6 +156,7 @@ export function containsStalledFallbackText(text: string): boolean {
   const trimmed = text.trim();
   return /\bI've gathered enough information so far\.?\s+Let me work with what we have\.?\b/i.test(trimmed)
     || /\bI['’]?ll work through (?:the )?(?:pipeline|tool workflow|workflow)\b/i.test(trimmed)
+    || /\blet me work through (?:your|the) memory\b[\s\S]{0,80}\b(?:track|narrow|pin|work)\b[\s\S]{0,40}\b(?:down|out|this)\b/i.test(trimmed)
     || /\blet me research this further\b[\s\S]{0,140}\b(?:pipeline|tool workflow|workflow)\b/i.test(trimmed);
 }
 
@@ -406,8 +407,8 @@ export function buildEvidencePreamble(toolPayloads: Record<string, unknown>, use
 
   if (userAnchors.length === 0 && inferred.length === 0 && negated.length === 0 && constraints.length === 0 && researchedFacts.length === 0) return '';
   return [
-    `What I heard: ${userAnchors.length > 0 ? userAnchors.join(', ') : 'not enough yet'}.`,
-    negated.length > 0 ? `What not to assume: ${negated.join('; ')}.` : '',
+    `Useful anchors: ${userAnchors.length > 0 ? userAnchors.join(', ') : 'not enough yet'}.`,
+    negated.length > 0 ? `Ruled out by the memory: ${negated.join('; ')}.` : '',
     inferred.length > 0 ? `Best research start: ${inferred.join('; ')}.${correction}` : '',
     constraints.length > 0 ? `Food boundaries: ${constraints.join(', ')}.` : '',
     researchedFacts.length > 0 ? `What the tools found: ${researchedFacts.join('; ')}.` : '',

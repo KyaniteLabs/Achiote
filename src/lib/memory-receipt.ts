@@ -1,5 +1,6 @@
 import type { CollectedFoodMemory, DishResearchPlan, MemoryReceipt, MinimumViableNostalgiaCue } from './types.js';
 import { inferSafetyConstraints } from './ask-memory-correction.js';
+import { filterMemoryResearchFacts, isLowQualityMemoryResearchText } from './research-evidence-filter.js';
 
 function unique(values: string[]): string[] {
   return [...new Set(values.filter(Boolean))];
@@ -102,6 +103,46 @@ function buildUnknownsFromProjection(projection: ReturnType<typeof buildReceiptE
   ]);
 }
 
+function hasOverconfidentReceiptIdentity(text: string): boolean {
+  return /\b(?:almost certainly|definitely|clearly|it'?s called|most likely\s+(?:is|was|means|refers?\s+to)|sounds like|this is exactly|your description matches|matches it perfectly)\b/i.test(text);
+}
+
+function buildUnresolvedReceiptSummary(
+  projection: ReturnType<typeof buildReceiptExtractionProjection>,
+  cue: MinimumViableNostalgiaCue | undefined,
+): string {
+  const name = projection.names[0] ? `"${projection.names[0]}"` : 'The dish name';
+  const anchors = unique([
+    ...projection.regions,
+    ...projection.ingredients,
+    ...projection.methods,
+    ...projection.sensory,
+  ]).slice(0, 5);
+  const anchorText = anchors.length > 0
+    ? ` User-said anchors: ${anchors.join(', ')}.`
+    : '';
+  const cueText = cue
+    ? ` First tiny test: ${cue.title}. ${cue.goal}`
+    : ' Answer the family questions before treating this as a recipe.';
+  return `${name} is still unresolved, so this receipt should be read as a first-pass memory test, not a confirmed identity.${anchorText} ${cueText}`.trim();
+}
+
+function buildReceiptAssistantSummary(
+  assistantText: string,
+  projection: ReturnType<typeof buildReceiptExtractionProjection>,
+  researchedFacts: string[],
+  cue: MinimumViableNostalgiaCue | undefined,
+): string {
+  const text = assistantText.trim();
+  if (!text) return '';
+  const unresolvedNamedMemory = projection.names.length > 0 && researchedFacts.length === 0;
+  const guardrailPreamble = /^What I heard:/i.test(text);
+  if (unresolvedNamedMemory && (guardrailPreamble || hasOverconfidentReceiptIdentity(text) || isLowQualityMemoryResearchText(text))) {
+    return buildUnresolvedReceiptSummary(projection, cue);
+  }
+  return text;
+}
+
 export function buildMemoryReceipt(input: {
   memory: CollectedFoodMemory;
   researchPlan?: DishResearchPlan;
@@ -144,6 +185,7 @@ export function buildMemoryReceipt(input: {
   const nextBestQuestions = filterSafetyBounded(input.researchPlan?.questionsForUser.length
     ? input.researchPlan.questionsForUser
     : input.memory.nextQuestions).slice(0, 5);
+  const researched = filterSafetyBounded(filterMemoryResearchFacts(input.researchedFacts ?? []));
 
   return {
     title: 'Achiote Memory Receipt',
@@ -153,7 +195,7 @@ export function buildMemoryReceipt(input: {
       userSaid,
       ruledOut: projection.ruledOut,
       inferred: filterSafetyBounded(inferred),
-      researched: filterSafetyBounded(input.researchedFacts ?? []),
+      researched,
       unknown: filterSafetyBounded(unknown),
     },
     hypotheses,
@@ -165,7 +207,7 @@ export function buildMemoryReceipt(input: {
           estimatedTime: `${input.cue.effortMinutes} minutes`,
         }
       : undefined,
-    assistantSummary: input.assistantText ?? '',
+    assistantSummary: buildReceiptAssistantSummary(input.assistantText ?? '', projection, researched, input.cue),
   };
 }
 

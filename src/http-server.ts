@@ -32,6 +32,7 @@ import {
 import { buildAskQualitySignal, emptyQualitySignalReport, inferAskCacheOutcome, recordQualitySignal } from './lib/quality-signals.js';
 import { createProviderRuntime } from './lib/provider-runtime.js';
 import { buildReferenceSeedOperatorReport } from './lib/reference-seed-operator.js';
+import { filterMemoryResearchFacts, filterMemoryResearchSearchResults } from './lib/research-evidence-filter.js';
 import { filterRepeatedToolCalls } from './lib/tool-loop.js';
 import { createTelemetryCollector, sanitizeTelemetryProperties as sanitizeTelemetryProps } from './lib/telemetry-collector.js';
 import type { Tier } from './lib/auth.js';
@@ -897,7 +898,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
     if (calledTools.has('generate_minimum_viable_nostalgia')
       && (modelResponse.textBlocks.length === 0 || containsStalledFallbackText(modelResponse.textBlocks.join('\n\n')))) {
       console.warn('[ask] replaced stalled post-cue response with deterministic minimum cue');
-      const responseText = calledTools.has('search_web')
+      const responseText = hasUsableSearchEvidence(toolPayloads)
         ? buildResearchGroundedForcedCueResponse(toolPayloads, userMessage)
         : buildMinimumCueCompletedResponse(toolPayloads, userMessage);
       send('text', responseText);
@@ -969,7 +970,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       && resolvedForGrounding?.matchType !== 'unknown'
       && resolvedForGrounding?.confidence !== 'Low'
       && Boolean(resolvedForGrounding?.region && !/^unknown$/i.test(resolvedForGrounding.region));
-    const researchGrounded = calledTools.has('search_web') || resolverGrounded;
+    const researchGrounded = hasUsableSearchEvidence(toolPayloads) || resolverGrounded;
     if (calledTools.has('generate_minimum_viable_nostalgia') && containsCueFamilyMismatch(trustBoundedResponseText, userMessage) && !researchGrounded) {
       console.warn('[ask] replaced cue-family mismatch with deterministic mechanism cue');
       const responseText = buildUserMessageMechanismCueResponse(userMessage, toolPayloads);
@@ -1000,7 +1001,7 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
         if (tokens.length > 0 && tokens.every((token) => DESCRIPTIVE_HYPHEN_DISH_TOKENS.has(token))) return false;
       }
       return true;
-    }) && !dishNameIsExplicitlyApproximate;
+    }) && !dishNameIsExplicitlyApproximate && researchGrounded;
     if (calledTools.has('generate_minimum_viable_nostalgia') && containsOverconfidentIdentityClaim(trustBoundedResponseText) && !userNamedDishAnchor && !researchGrounded) {
       console.warn('[ask] replaced overconfident identity claim with deterministic minimum cue');
       const memoryPayload = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
@@ -1023,12 +1024,22 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       return;
     }
 
+    if (calledTools.has('generate_minimum_viable_nostalgia')
+      && shouldClarifyUnresolvedUnnamedMemory(userMessage, toolPayloads, calledTools, trustBoundedResponseText)) {
+      console.warn('[ask] replaced unresolved unnamed cue with targeted clarification');
+      const responseText = buildClarificationOnlyResponse(toolPayloads, userMessage, { includeEvidencePreamble: false });
+      send('text', responseText);
+      maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
+      finish({ guarded: 'unnamed_memory_clarification' });
+      return;
+    }
+
     if (calledTools.has('generate_minimum_viable_nostalgia') && containsRecipeMeasurementLanguage(trustBoundedResponseText)) {
       console.warn('[ask] suppressed recipe-style measurements in cue response');
       const sanitized = sanitizeRecipeStyleCueLanguage(trustBoundedResponseText);
       if (lacksMinimumCueLanguage(sanitized)) {
         console.warn('[ask] sanitized measurement text still lacks minimum cue language; falling back to deterministic minimum cue');
-        const responseText = calledTools.has('search_web')
+        const responseText = hasUsableSearchEvidence(toolPayloads)
           ? buildResearchGroundedForcedCueResponse(toolPayloads, userMessage)
           : buildMinimumCueCompletedResponse(toolPayloads, userMessage);
         send('text', responseText);
@@ -1042,19 +1053,9 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       return;
     }
 
-    if (calledTools.has('generate_minimum_viable_nostalgia')
-      && shouldClarifyUnresolvedUnnamedMemory(userMessage, toolPayloads, calledTools, trustBoundedResponseText)) {
-      console.warn('[ask] replaced unresolved unnamed cue with targeted clarification');
-      const responseText = buildClarificationOnlyResponse(toolPayloads, userMessage, { includeEvidencePreamble: false });
-      send('text', responseText);
-      maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
-      finish({ guarded: 'unnamed_memory_clarification' });
-      return;
-    }
-
     if (calledTools.has('generate_minimum_viable_nostalgia') && lacksMinimumCueLanguage(trustBoundedResponseText)) {
       console.warn('[ask] replaced missing-minimum-cue response with deterministic minimum cue');
-      const responseText = calledTools.has('search_web')
+      const responseText = hasUsableSearchEvidence(toolPayloads)
         ? buildResearchGroundedForcedCueResponse(toolPayloads, userMessage)
         : buildMinimumCueCompletedResponse(toolPayloads, userMessage);
       send('text', responseText);
@@ -1081,7 +1082,7 @@ function enforceAllergyProfessionalBoundary(text: string, userMessage: string): 
   const hasAllergyBoundary = constraints.some((constraint) => /\ballergy\b|dairy-free|gluten-free/i.test(constraint))
     || /\b(?:allerg(?:y|ic|ies|en)|intoleran(?:ce|t)|anaphylaxis|severely allergic|tree nuts?|peanuts?)\b/i.test(userMessage);
   if (!hasAllergyBoundary) return text;
-  const boundedText = sanitizeFoodSafetyClaimLanguage(text);
+  const boundedText = sanitizeNamedAllergenExamples(sanitizeFoodSafetyClaimLanguage(text), constraints);
   if (/\b(?:qualified professional|medical professional|doctor|allergist|clinician|dietitian)\b/i.test(boundedText)) return boundedText;
   return [
     boundedText,
@@ -1093,6 +1094,14 @@ function sanitizeFoodSafetyClaimLanguage(text: string): string {
   return text
     .replace(/\bmedically safe\b/gi, 'medically appropriate')
     .replace(/\ballergen-free\b/gi, 'without the named allergen only when labels and a qualified professional support that')
+    .replace(/\b(?:shellfish|shrimp|crab|lobster|clam|mussel|oyster|scallop|fish|seafood|nut|peanut|tree nut|dairy|gluten|egg|soy|sesame)[-\s]?free\s+swaps?\b/gi, 'substitutes that avoid the named allergen only when labels and a qualified professional support that')
+    .replace(/\b(?:will|would|should|can)\s+not\s+trigger\s+(?:your\s+)?reaction\b/gi, 'still need your own label checks and professional guidance')
+    .replace(/\b(?:won['’]?t|wouldn['’]?t|shouldn['’]?t|cannot|can['’]?t)\s+trigger\s+(?:your\s+)?reaction\b/gi, 'still need your own label checks and professional guidance')
+    .replace(/\ball\s+use\s+shellfish\b/gi, 'may involve the named allergen')
+    .replace(/\bno\s+shrimp\s+or\s+crab\s+involved\b/gi, 'without the named allergens')
+    .replace(/\bno\s+shellfish\s+anywhere\s+near\s+it\b/gi, 'without the named allergens')
+    .replace(/\bno\s+shellfish\b/gi, 'without the named allergens')
+    .replace(/\bwithout\s+(?:the\s+)?shrimp\s+and\s+crab\b/gi, 'without the named allergens')
     .replace(/\blegally safe\b/gi, 'legally appropriate')
     .replace(/\bsafety note\b/gi, 'allergy boundary')
     .replace(/\bfood safety\b/gi, 'food boundary')
@@ -1108,6 +1117,31 @@ function sanitizeFoodSafetyClaimLanguage(text: string): string {
     .replace(/\bonly if safe\b/gi, 'only if already tolerated')
     .replace(/\bif safe\b/gi, 'if already tolerated')
     .replace(/\bsafe\b/gi, 'already tolerated');
+}
+
+function sanitizeNamedAllergenExamples(text: string, constraints: string[]): string {
+  let revised = text;
+  if (constraints.includes('shellfish allergy')) {
+    revised = revised
+      .replace(/\b[A-Z][^.!?]{0,240}\b(?:arroz\s+con\s+mariscos|hipon|paella|jambalaya|shellfish|shrimp|crab)[^.!?]*[.!?]/g, 'Different regional rice dishes use very different seasoning, color, and texture. ')
+      .replace(/\b(?:shrimp\s*(?:-|and|&)\s*crab|crab\s*(?:-|and|&)\s*shrimp)\s+([a-z][a-z -]{1,40})\b/gi, 'restricted-ingredient $1')
+      .replace(/\b(?:shrimp\s*(?:-|and|&)\s*crab|crab\s*(?:-|and|&)\s*shrimp)\b/gi, 'the named allergens')
+      .replace(/\b(?:arroz\s+con\s+mariscos|hipon|shrimp|prawns?|crab|lobster|oysters?|clams?|mussels?|scallops?)\b/gi, 'the named allergen')
+      .replace(/\bshellfish\b/gi, 'the named allergen')
+      .replace(/(?:Different regional rice dishes use very different seasoning, color, and texture\.\s*){2,}/g, 'Different regional rice dishes use very different seasoning, color, and texture. ');
+    revised = keepFirstRepeatedSentence(revised, 'Different regional rice dishes use very different seasoning, color, and texture.');
+  }
+  return revised;
+}
+
+function keepFirstRepeatedSentence(text: string, sentence: string): string {
+  let seen = false;
+  const pattern = new RegExp(`${escapeRegExp(sentence)}\\s*`, 'g');
+  return text.replace(pattern, () => {
+    if (seen) return '';
+    seen = true;
+    return `${sentence} `;
+  });
 }
 
 function payloadForModelToolResult(toolName: string, payload: unknown, userMessage: string): unknown {
@@ -1129,7 +1163,10 @@ function payloadForModelToolResult(toolName: string, payload: unknown, userMessa
 }
 
 function containsRawToolMarkup(text: string): boolean {
-  return /<\/?tool_(?:call|result)\??>/i.test(text);
+  return /<\/?tool_[a-z_?]+>/i.test(text)
+    || /<details\b[\s\S]{0,1200}\btool calls?\b/i.test(text)
+    || /\btool calls?\s*\(click to expand\)/i.test(text)
+    || /\*\*(?:collect_food_memory|plan_dish_research|resolve_dish_name|search_web|build_reconstruction_dossier|generate_minimum_viable_nostalgia|source_ingredients|find_sensory_substitutes)\*\*/i.test(text);
 }
 
 function shouldReplaceWithSourcingGuidance(text: string, calledTools: Set<string>, toolPayloads: Record<string, unknown>): boolean {
@@ -1243,22 +1280,29 @@ function deriveResearchedFactsForReceipt(toolPayloads: Record<string, unknown>):
     if (localHints.length > 0) facts.push(`Starting points: ${localHints.join(', ')}`);
   }
 
-  // search_web: emit the snippet from each top result (up to 3)
-  for (const result of (searched?.results ?? []).slice(0, 3)) {
+  // search_web: emit only source-like cultural/cooking snippets, never shopping noise
+  for (const result of filterMemoryResearchSearchResults(searched?.results ?? []).slice(0, 3)) {
     if (result.snippet?.trim()) facts.push(result.snippet.trim().replace(/[\u2014\u2013]/g, ', '));
   }
 
-  return facts;
+  return filterMemoryResearchFacts(facts);
 }
 
 function sourceBackedSearchFacts(toolPayloads: Record<string, unknown>): string[] {
   const searchResults = toolPayloads.search_web as
     | { results?: Array<{ title?: string; snippet?: string }> }
     | undefined;
-  return (searchResults?.results ?? [])
+  return filterMemoryResearchSearchResults(searchResults?.results ?? [])
     .filter((r) => r.snippet?.trim())
     .map((r) => `${r.title}: ${r.snippet}`)
     .slice(0, 5);
+}
+
+function hasUsableSearchEvidence(toolPayloads: Record<string, unknown>): boolean {
+  const searchResults = toolPayloads.search_web as
+    | { results?: Array<{ title?: string; snippet?: string }> }
+    | undefined;
+  return filterMemoryResearchSearchResults(searchResults?.results ?? []).length > 0;
 }
 
 function sourceBackedDossierFacts(toolPayloads: Record<string, unknown>): string[] {
@@ -1326,22 +1370,38 @@ async function executeAndStreamTool(
   const normalizedInput = normalizeDependentToolInput(toolName, input, userMessage, toolPayloads, history);
   send('tool_call', { name: toolName, input: normalizedInput });
   const result = await executeToolDefinition(toolName, normalizedInput, toolContext);
-  validateToolOutput(toolName, result.payload);
+  const payload = normalizeAskToolPayload(toolName, normalizedInput, result.payload);
+  validateToolOutput(toolName, payload);
   calledTools.add(toolName);
   const payloadKey = toolName === 'search_web'
     && isRecord(normalizedInput)
     && normalizedInput.purpose === 'local_sourcing'
     ? 'local_sourcing_search'
     : toolName;
-  toolPayloads[payloadKey] = result.payload;
+  toolPayloads[payloadKey] = payload;
   if (toolName === 'find_sensory_substitutes') {
     const existing = Array.isArray(toolPayloads.find_sensory_substitutes_all)
       ? toolPayloads.find_sensory_substitutes_all
       : [];
     toolPayloads.find_sensory_substitutes_all = [...existing, result.payload];
   }
-  send('tool_result', { name: toolName, result: result.payload });
-  return result.payload;
+  send('tool_result', { name: toolName, result: payload });
+  return payload;
+}
+
+function normalizeAskToolPayload(toolName: string, input: unknown, payload: unknown): unknown {
+  if (toolName !== 'search_web' || !isRecord(payload)) return payload;
+  if (isRecord(input) && input.purpose === 'local_sourcing') return payload;
+  const rawResults = Array.isArray(payload.results)
+    ? payload.results.filter((result): result is { title?: string; link?: string; snippet?: string } => isRecord(result))
+    : [];
+  const filteredResults = filterMemoryResearchSearchResults(rawResults)
+    .map((result) => ({
+      title: typeof result.title === 'string' ? result.title : '',
+      link: typeof result.link === 'string' ? result.link : '',
+      snippet: typeof result.snippet === 'string' ? result.snippet : '',
+    }));
+  return { ...payload, results: filteredResults };
 }
 
 function shouldBuildMissingDossier(toolInput: unknown, toolPayloads: Record<string, unknown>): boolean {
@@ -1773,7 +1833,7 @@ async function maybeSendForcedMinimumCue({
     maxEffortMinutes: 10,
   }, userMessage, send, calledTools, toolPayloads) as MinimumViableNostalgiaCue;
 
-  const responseText = calledTools.has('search_web')
+  const responseText = hasUsableSearchEvidence(toolPayloads)
     ? buildResearchGroundedForcedCueResponse(toolPayloads, userMessage)
     : buildEvidenceBoundedMinimumCueResponse(toolPayloads, userMessage);
   send('text', responseText);
@@ -1786,6 +1846,10 @@ function shouldForceMinimumCue(userMessage: string, toolPayloads: Record<string,
   if (!toolPayloads.collect_food_memory || !toolPayloads.plan_dish_research) return false;
   if (shouldClarifyBroadUncertainMemory(userMessage, toolPayloads)) return false;
   if (shouldClarifySparseUnanchoredMemory(userMessage, toolPayloads)) return false;
+  const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
+  const explicitlyUnnamed = /\b(?:never knew the name|don['’]?t know the name|didn['’]?t know the name|no name|unnamed)\b/i.test(userMessage);
+  const hasRegionAnchor = (memory?.extractedClues?.culturalOrRegionalHints ?? []).some((hint) => hint.trim().length > 0);
+  if (explicitlyUnnamed && !hasRegionAnchor) return false;
 
   const workflowPlan = toolPayloads.plan_tool_workflow as { needsSubstitutions?: boolean; workflowSteps?: Array<{ tool?: string }> } | undefined;
   const plannedTools = workflowPlan?.workflowSteps?.map((step) => step.tool) ?? [];
@@ -1824,6 +1888,13 @@ function shouldClarifyUnresolvedUnnamedMemory(
 ): boolean {
   if (!/\b(?:never knew the name|don['’]?t know the name|didn['’]?t know the name|no name|unnamed)\b/i.test(userMessage)) return false;
   if (calledTools.has('search_web')) return false;
+  const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
+  const hasNameAnchor = (memory?.extractedClues?.possibleDishNames ?? []).some((name) => name.trim().length > 0);
+  const hasRegionAnchor = (memory?.extractedClues?.culturalOrRegionalHints ?? []).some((hint) => hint.trim().length > 0);
+  const cueBeforeIdentity = containsConcreteFoodCue(responseText)
+    || /\b(?:first[-\s]?pass verification bite|minimum viable|sensory test|buy one|pan[-\s]?fry|simmer|recipe)\b/i.test(responseText);
+  if (!hasRegionAnchor && cueBeforeIdentity) return true;
+
   const resolved = toolPayloads.resolve_dish_name as
     | { confidence?: string; matchType?: string; region?: string; needsClarification?: boolean }
     | undefined;
@@ -1836,9 +1907,7 @@ function shouldClarifyUnresolvedUnnamedMemory(
   if (!unresolved) return false;
 
   const questionCount = (responseText.match(/\?/g) ?? []).length;
-  const cueBeforeIdentity = containsConcreteFoodCue(responseText)
-    || /\b(?:first[-\s]?pass verification bite|minimum viable|sensory test|buy one|pan[-\s]?fry|simmer|recipe)\b/i.test(responseText);
-  return questionCount === 0 || cueBeforeIdentity;
+  return questionCount === 0 || questionCount > 3 || cueBeforeIdentity;
 }
 
 function shouldPreserveModelProvidedResearchFacts(memory: CollectedFoodMemory | undefined, userMessage: string): boolean {

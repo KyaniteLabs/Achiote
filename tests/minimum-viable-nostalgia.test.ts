@@ -691,6 +691,29 @@ describe('minimum viable nostalgia cue', () => {
     expect(cue.title).not.toContain('sweet-texture');
   });
 
+  it('uses the reusable starch-syrup cue for solid plantain syrup memories', () => {
+    const memory = collectFoodMemory({
+      memoryText: 'Goyitos Panama green plantain sweet syrup',
+    });
+    const cue = generateMinimumViableNostalgiaCue({
+      dossier: buildReconstructionDossier({
+        memory,
+        researchPlan: planDishResearch(memory),
+        researchedFacts: [
+          'Green plantain with sweet syrup points to a solid plantain preparation, not a drink.',
+        ],
+        inferredFacts: [
+          'The dish likely involves green or semi-ripe plantains cooked in cane syrup with spices like cinnamon, clove, or anise.',
+        ],
+      }),
+      maxEffortMinutes: 10,
+    });
+
+    expect(cue.title).toContain('starch-syrup');
+    expect(cue.format).toBe('bite');
+    expect(fullCueText(cue)).toMatch(/plantain|starch|syrup|sweet/i);
+  });
+
   it('treats mole negro and chilhuacle as a savory sauce cue, not a sweet-texture cue', () => {
     const cue = generateMinimumViableNostalgiaCue({
       dossier: moleNegroDossier(),
