@@ -1163,7 +1163,10 @@ function payloadForModelToolResult(toolName: string, payload: unknown, userMessa
 }
 
 function containsRawToolMarkup(text: string): boolean {
-  return /<\/?tool_(?:call|result)\??>/i.test(text);
+  return /<\/?tool_[a-z_?]+>/i.test(text)
+    || /<details\b[\s\S]{0,1200}\btool calls?\b/i.test(text)
+    || /\btool calls?\s*\(click to expand\)/i.test(text)
+    || /\*\*(?:collect_food_memory|plan_dish_research|resolve_dish_name|search_web|build_reconstruction_dossier|generate_minimum_viable_nostalgia|source_ingredients|find_sensory_substitutes)\*\*/i.test(text);
 }
 
 function shouldReplaceWithSourcingGuidance(text: string, calledTools: Set<string>, toolPayloads: Record<string, unknown>): boolean {

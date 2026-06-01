@@ -691,7 +691,7 @@ describe('minimum viable nostalgia cue', () => {
     expect(cue.title).not.toContain('sweet-texture');
   });
 
-  it('does not let syrup-spice research turn a solid plantain memory into a beverage cue', () => {
+  it('uses the reusable starch-syrup cue for solid plantain syrup memories', () => {
     const memory = collectFoodMemory({
       memoryText: 'Goyitos Panama green plantain sweet syrup',
     });
@@ -709,7 +709,7 @@ describe('minimum viable nostalgia cue', () => {
       maxEffortMinutes: 10,
     });
 
-    expect(cue.title).toContain('plantain-syrup');
+    expect(cue.title).toContain('starch-syrup');
     expect(cue.format).toBe('bite');
     expect(fullCueText(cue)).toMatch(/plantain|starch|syrup|sweet/i);
   });

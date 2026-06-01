@@ -807,6 +807,59 @@ describe('/ask failure surface regressions', () => {
     expect(requestCount).toBe(6);
   }, 20_000);
 
+  it('replaces user-visible tool trace details with the receipt-safe minimum cue', async () => {
+    const fakePort = await getFreePort();
+    let requestCount = 0;
+    fakeOpenAi = createServer(async (req, res) => {
+      if (req.url !== '/v1/chat/completions' || req.method !== 'POST') {
+        res.writeHead(404).end();
+        return;
+      }
+      requestCount++;
+      await readBody(req);
+      const toolCallsByTurn = [
+        [{ id: 'call_1', type: 'function', function: { name: 'collect_food_memory', arguments: JSON.stringify({ memoryText: 'something like goyura in panama. savory, thick cut fried, not potatoes, sweet syrup on top.' }) } }],
+        [{ id: 'call_2', type: 'function', function: { name: 'plan_dish_research', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_3', type: 'function', function: { name: 'resolve_dish_name', arguments: JSON.stringify({ input: 'goyura' }) } }],
+        [{ id: 'call_4', type: 'function', function: { name: 'build_reconstruction_dossier', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_5', type: 'function', function: { name: 'generate_minimum_viable_nostalgia', arguments: JSON.stringify({}) } }],
+      ];
+      const toolCalls = toolCallsByTurn[requestCount - 1];
+      res.setHeader('content-type', 'application/json');
+      res.end(JSON.stringify({
+        choices: [{
+          finish_reason: toolCalls ? 'tool_calls' : 'stop',
+          message: toolCalls
+            ? { role: 'assistant', content: '', tool_calls: toolCalls }
+            : { role: 'assistant', content: 'I will work through your memory now. <tool_call_call>{"name":"collect_food_memory"}</tool_call_call> <details><summary>Tool calls (click to expand)</summary> **collect_food_memory** parsed it. **plan_dish_research** researched it. **generate_minimum_viable_nostalgia** built the cue.</details> Minimum viable starch-syrup bite: test plantain and syrup.' },
+        }],
+      }));
+    });
+    await new Promise<void>((resolveListen) => fakeOpenAi?.listen(fakePort, '127.0.0.1', resolveListen));
+
+    const achiotePort = await getFreePort();
+    achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`);
+
+    const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: 'something like goyura in panama. savory, thick cut fried, not potatoes, sweet syrup on top.' }),
+    });
+
+    expect(response.status).toBe(200);
+    const events = parseSse(await response.text());
+    const finalText = events
+      .filter((event) => event.event === 'text')
+      .map((event) => JSON.parse(event.data))
+      .join('\n\n');
+
+    expect(events.some((event) => event.event === 'error')).toBe(false);
+    expect(finalText).toMatch(/Minimum viable/i);
+    expect(finalText).not.toMatch(/Tool calls|<details|collect_food_memory|plan_dish_research|generate_minimum_viable_nostalgia/i);
+    expect(events.at(-1)?.event).toBe('done');
+    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'raw_tool_markup_sanitized' });
+  }, 20_000);
+
   it('renders planned sourcing instead of passing through sourcing deferrals', async () => {
     const fakePort = await getFreePort();
     let requestCount = 0;
@@ -1869,7 +1922,7 @@ describe('/ask failure surface regressions', () => {
     expect(collectedMemory?.normalizedMemory).not.toMatch(/\b(?:milky|creamy|cream)\b/i);
     expect(finalText).toMatch(/\b(?:watery|ice|icy|lime|citrus|acid|barely sweet|dilution)\b/i);
     // Negated terms may appear in the evidence preamble; ensure they don't leak into cue recommendations
-    expect(finalText).toMatch(/What not to assume:.*(?:not milky|not creamy|was not milky)/i);
+    expect(finalText).toMatch(/Ruled out by the memory:.*(?:not milky|not creamy|was not milky)/i);
     const linesWithForbidden = finalText.split('\n').filter((line) => /\b(?:milky|creamy|cream)\b/i.test(line));
     for (const line of linesWithForbidden) {
       expect(line).toMatch(/\b(?:not|wasn['']?t|isn['']?t|no|without)\b/i);
