@@ -32,6 +32,7 @@ function spawnAchioteServer(port: number, openAiBaseUrl: string, env?: Record<st
       OPENAI_MODEL: 'fake-openai-model',
       OPENAI_API_KEY: 'test-openai-key',
       OPENAI_TIMEOUT_MS: '30000',
+      ACHIOTE_DETERMINISTIC_TOOL_CHAIN: 'false',
       ACHIOTE_RATE_LIMIT_DB: '',
       ...env,
     },
@@ -860,6 +861,58 @@ describe('/ask failure surface regressions', () => {
     expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'raw_tool_markup_sanitized' });
   }, 20_000);
 
+  it('replaces process narration without explicit tool markup', async () => {
+    const fakePort = await getFreePort();
+    let requestCount = 0;
+    fakeOpenAi = createServer(async (req, res) => {
+      if (req.url !== '/v1/chat/completions' || req.method !== 'POST') {
+        res.writeHead(404).end();
+        return;
+      }
+      requestCount++;
+      await readBody(req);
+      const toolCallsByTurn = [
+        [{ id: 'call_1', type: 'function', function: { name: 'collect_food_memory', arguments: JSON.stringify({ memoryText: 'tamarind candy from Trinidad, sticky, sour-sweet, wrapped in plastic.' }) } }],
+        [{ id: 'call_2', type: 'function', function: { name: 'plan_dish_research', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_3', type: 'function', function: { name: 'build_reconstruction_dossier', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_4', type: 'function', function: { name: 'generate_minimum_viable_nostalgia', arguments: JSON.stringify({}) } }],
+      ];
+      const toolCalls = toolCallsByTurn[requestCount - 1];
+      res.setHeader('content-type', 'application/json');
+      res.end(JSON.stringify({
+        choices: [{
+          finish_reason: toolCalls ? 'tool_calls' : 'stop',
+          message: toolCalls
+            ? { role: 'assistant', content: '', tool_calls: toolCalls }
+            : { role: 'assistant', content: 'Let me walk through the tool chain to build your first-pass verification bite. ---' },
+        }],
+      }));
+    });
+    await new Promise<void>((resolveListen) => fakeOpenAi?.listen(fakePort, '127.0.0.1', resolveListen));
+
+    const achiotePort = await getFreePort();
+    achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`);
+
+    const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: 'tamarind candy from Trinidad, sticky, sour-sweet, wrapped in plastic. Give me the first tiny taste check.' }),
+    });
+
+    expect(response.status).toBe(200);
+    const events = parseSse(await response.text());
+    const finalText = events
+      .filter((event) => event.event === 'text')
+      .map((event) => JSON.parse(event.data))
+      .join('\n\n');
+
+    expect(events.some((event) => event.event === 'error')).toBe(false);
+    expect(finalText).toMatch(/Minimum viable|First-pass verification/i);
+    expect(finalText).not.toMatch(/tool chain|walk through the tool|reasoning trace/i);
+    expect(events.at(-1)?.event).toBe('done');
+    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'raw_tool_markup_sanitized' });
+  }, 20_000);
+
   it('renders planned sourcing instead of passing through sourcing deferrals', async () => {
     const fakePort = await getFreePort();
     let requestCount = 0;
@@ -1292,6 +1345,60 @@ describe('/ask failure surface regressions', () => {
     expect(finalText).toMatch(/\?/);
     expect(finalText).toMatch(/region|where|language|called|texture|street food|home cooking|holiday|person/i);
     expect(finalText).not.toMatch(/Minimum viable|first-pass verification bite|tiny amount/i);
+    expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'unnamed_memory_clarification' });
+  }, 20_000);
+
+  it('keeps unnamed memories on clarification even after noisy search results', async () => {
+    const fakePort = await getFreePort();
+    let requestCount = 0;
+    fakeOpenAi = createServer(async (req, res) => {
+      if (req.url !== '/v1/chat/completions' || req.method !== 'POST') {
+        res.writeHead(404).end();
+        return;
+      }
+      requestCount++;
+      await readBody(req);
+      const toolCallsByTurn = [
+        [{ id: 'call_1', type: 'function', function: { name: 'collect_food_memory', arguments: JSON.stringify({ memoryText: 'sour gray dumpling steamed in leaves at a funeral, firm outside and soft inside. I never knew the name.' }) } }],
+        [{ id: 'call_2', type: 'function', function: { name: 'plan_dish_research', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_3', type: 'function', function: { name: 'search_web', arguments: JSON.stringify({ query: 'sour gray dumpling steamed leaves funeral' }) } }],
+        [{ id: 'call_4', type: 'function', function: { name: 'resolve_dish_name', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_5', type: 'function', function: { name: 'build_reconstruction_dossier', arguments: JSON.stringify({}) } }],
+        [{ id: 'call_6', type: 'function', function: { name: 'generate_minimum_viable_nostalgia', arguments: JSON.stringify({}) } }],
+      ];
+      const toolCalls = toolCallsByTurn[requestCount - 1];
+      res.setHeader('content-type', 'application/json');
+      res.end(JSON.stringify({
+        choices: [{
+          finish_reason: toolCalls ? 'tool_calls' : 'stop',
+          message: toolCalls
+            ? { role: 'assistant', content: '', tool_calls: toolCalls }
+            : { role: 'assistant', content: 'First tiny check: mix a spoon of cassava flour with water and steam it in a leaf to test the dumpling texture.' },
+        }],
+      }));
+    });
+    await new Promise<void>((resolveListen) => fakeOpenAi?.listen(fakePort, '127.0.0.1', resolveListen));
+
+    const achiotePort = await getFreePort();
+    achiote = await spawnAchioteServer(achiotePort, `http://127.0.0.1:${fakePort}/v1`);
+
+    const response = await fetch(`http://127.0.0.1:${achiotePort}/ask`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: 'sour gray dumpling steamed in leaves at a funeral, firm outside and soft inside. I never knew the name.' }),
+    });
+
+    expect(response.status).toBe(200);
+    const events = parseSse(await response.text());
+    const finalText = events
+      .filter((event) => event.event === 'text')
+      .map((event) => JSON.parse(event.data))
+      .join('\n\n');
+
+    expect(events.some((event) => event.event === 'error')).toBe(false);
+    expect(finalText).toMatch(/\?/);
+    expect(finalText).toMatch(/country|region|language|community|texture|name|sound-alike/i);
+    expect(finalText).not.toMatch(/First tiny check|cassava flour|steam it in a leaf/i);
     expect(JSON.parse(events.at(-1)!.data)).toMatchObject({ guarded: 'unnamed_memory_clarification' });
   }, 20_000);
 

@@ -99,6 +99,8 @@ export function boundedEditDistance(left: string, right: string, maxDistance: nu
 
 export function containsConcreteFoodCue(text: string): boolean {
   return /\b(?:smallest safe cue|tasting cue|concrete food cue|recipe move|try this|try it tonight)\b/i.test(text)
+    || /\b(?:first[-\s]?pass verification bite|first\s+tiny\s+check|tiny\s+check|minimum viable|sensory test|sensory cue)\b/i.test(text)
+    || /\btake\s+(?:a|one|1|small|tiny)\s+(?:spoonful|bite|sip)\b/i.test(text)
     || /\b\d+\s*(?:teaspoons?|tablespoons?|cups?|pinch(?:es)?)\b/i.test(text)
     || /\b(?:heat|stir|steep|mix)\b[\s\S]{0,60}\b\d+\s*(?:mins?|minutes?|hours?|°[FC])\b/i.test(text);
 }

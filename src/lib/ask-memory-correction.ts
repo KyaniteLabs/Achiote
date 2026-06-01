@@ -59,7 +59,15 @@ export function isLatestCorrectionMessage(userMessage: string): boolean {
   return /\b(?:correction|actually|wait\s+no|remembered\s+wrong)\b/i.test(userMessage);
 }
 
+function isFoodFamilyResetCorrection(userMessage: string): boolean {
+  if (!isLatestCorrectionMessage(userMessage) || !/\bremembered\s+wrong\b/i.test(userMessage)) return false;
+  return /\b(?:it|this|that|they)\s+(?:was|were|is|are)\s+(?:not|never)\s+(?:(?:a|an|the)\s+)?(?:drink|beverage|soup|broth|stew|porridge|rice\s+dish|grain\s+drink|dessert|sweet|candy|bread|pastry|snack|sauce|dip|pickle|salad|noodle|pasta|dumpling|wrap|wrapped\s+dish)\b/i.test(userMessage);
+}
+
 export function buildCorrectedMemoryText(modelMemoryText: string, userMessage: string, history?: AskHistoryItem[]): string {
+  if (isFoodFamilyResetCorrection(userMessage)) {
+    return sanitizeLatestCorrectionMemoryText(userMessage);
+  }
   const userHistory = (history ?? [])
     .filter((item) => item.role === 'user')
     .map((item) => item.content)

@@ -203,6 +203,30 @@ describe('model-assisted food memory extraction', () => {
     expect(memory.nextQuestions.join(' ')).not.toMatch(/\b(?:shrimp|crab|shellfish)\b/i);
   });
 
+  it('does not let ruled-out stale correction compounds survive as positive clues', async () => {
+    const memory = await collectFoodMemoryWithModel({
+      memoryText: 'Correction: I remembered wrong. It was a sour soup from my Polish neighbor. Cold rice-cinnamon drink was a mistaken memory.',
+    }, {
+      extractor: async () => ({
+        possibleDishNames: ['sour soup', 'rice-cinnamon'],
+        originRegion: 'Polish',
+        residenceLocation: '',
+        ingredients: ['rice', 'cinnamon'],
+        ruledOutIngredients: ['rice', 'cinnamon'],
+        cookingMethod: ['soup'],
+        sensoryCues: ['sour'],
+        occasion: ['neighbor'],
+        language: 'Polish',
+      }),
+      timeoutMs: 100,
+    });
+
+    expect(memory.extractedClues.possibleDishNames).toContain('sour soup');
+    expect(memory.extractedClues.possibleDishNames).not.toContain('rice-cinnamon');
+    expect(memory.extractedClues.rememberedIngredients).not.toEqual(expect.arrayContaining(['rice', 'cinnamon']));
+    expect(memory.extractedClues.ruledOutIngredients).toEqual(expect.arrayContaining(['rice', 'cinnamon']));
+  });
+
   it('falls back to regex extraction when the model response is malformed', async () => {
     const memory = await collectFoodMemoryWithModel({
       memoryText: 'My mom made arepas con queso, my family is from Venezuela.',

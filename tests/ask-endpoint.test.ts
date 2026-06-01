@@ -10,7 +10,7 @@ const ROOT = resolve(__dirname, '..');
 
 function spawnServer(port: number, authEnabled: string, env?: Record<string, string>): Promise<ChildProcess> {
   const server = spawn('node', [resolve(ROOT, 'dist/http-server.js')], {
-    env: { ...process.env, PORT: String(port), ACHIOTE_AUTH_ENABLED: authEnabled, ...env },
+    env: { ...process.env, PORT: String(port), ACHIOTE_AUTH_ENABLED: authEnabled, ACHIOTE_DETERMINISTIC_TOOL_CHAIN: 'false', ...env },
     stdio: ['pipe', 'pipe', 'pipe'],
   });
 

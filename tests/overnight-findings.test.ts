@@ -47,6 +47,7 @@ function spawnAchiote(port: number, openAiBase: string): Promise<ChildProcess> {
       OPENAI_MODEL: 'test-model',
       OPENAI_API_KEY: 'test-key',
       OPENAI_TIMEOUT_MS: '30000',
+      ACHIOTE_DETERMINISTIC_TOOL_CHAIN: 'false',
       ACHIOTE_RATE_LIMIT_DB: '',
     },
     stdio: ['ignore', 'pipe', 'pipe'],
