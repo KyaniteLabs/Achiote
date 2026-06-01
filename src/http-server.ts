@@ -32,7 +32,7 @@ import {
 import { buildAskQualitySignal, emptyQualitySignalReport, inferAskCacheOutcome, recordQualitySignal } from './lib/quality-signals.js';
 import { createProviderRuntime } from './lib/provider-runtime.js';
 import { buildReferenceSeedOperatorReport } from './lib/reference-seed-operator.js';
-import { filterMemoryResearchFacts, filterMemoryResearchSearchResults } from './lib/research-evidence-filter.js';
+import { filterMemoryResearchFacts, filterMemoryResearchSearchResults, buildMemoryRelevanceContext } from './lib/research-evidence-filter.js';
 import { filterRepeatedToolCalls } from './lib/tool-loop.js';
 import { createTelemetryCollector, sanitizeTelemetryProperties as sanitizeTelemetryProps } from './lib/telemetry-collector.js';
 import { inferUserLocationFromMessage as inferUserLocation } from './lib/user-location.js';
@@ -1276,6 +1276,7 @@ function maybeSendMemoryReceipt(input: {
 /** Extract a compact set of sourced facts from search_web and resolve_dish_name payloads. */
 function deriveResearchedFactsForReceipt(toolPayloads: Record<string, unknown>): string[] {
   const facts: string[] = [];
+  const relevance = buildMemoryRelevanceContext(toolPayloads.collect_food_memory);
 
   // search_web: reference for confidence boosting
   const searched = toolPayloads.search_web as
@@ -1313,18 +1314,22 @@ function deriveResearchedFactsForReceipt(toolPayloads: Record<string, unknown>):
   }
 
   // search_web: emit only source-like cultural/cooking snippets, never shopping noise
-  for (const result of filterMemoryResearchSearchResults(searched?.results ?? []).slice(0, 3)) {
+  // or flavor-contradicting results (e.g. a savory dish for a remembered dessert).
+  for (const result of filterMemoryResearchSearchResults(searched?.results ?? [], relevance).slice(0, 3)) {
     if (result.snippet?.trim()) facts.push(result.snippet.trim().replace(/[\u2014\u2013]/g, ', '));
   }
 
-  return filterMemoryResearchFacts(facts);
+  return filterMemoryResearchFacts(facts, relevance);
 }
 
 function sourceBackedSearchFacts(toolPayloads: Record<string, unknown>): string[] {
   const searchResults = toolPayloads.search_web as
     | { results?: Array<{ title?: string; snippet?: string }> }
     | undefined;
-  return filterMemoryResearchSearchResults(searchResults?.results ?? [])
+  return filterMemoryResearchSearchResults(
+    searchResults?.results ?? [],
+    buildMemoryRelevanceContext(toolPayloads.collect_food_memory),
+  )
     .filter((r) => r.snippet?.trim())
     .map((r) => `${r.title}: ${r.snippet}`)
     .slice(0, 5);
@@ -1386,10 +1391,13 @@ async function executeAndStreamTool(
 ): Promise<unknown> {
   if (toolName === 'generate_minimum_viable_nostalgia' && shouldBuildMissingDossier(input, toolPayloads)) {
     const searchResults = toolPayloads.search_web as { results?: Array<{ title?: string; snippet?: string }> } | undefined;
-    const researchedFacts = searchResults?.results
-      ?.filter((r) => r.snippet)
+    const researchedFacts = filterMemoryResearchSearchResults(
+      searchResults?.results ?? [],
+      buildMemoryRelevanceContext(toolPayloads.collect_food_memory),
+    )
+      .filter((r) => r.snippet)
       .map((r) => `${r.title}: ${r.snippet}`)
-      .slice(0, 5) ?? [];
+      .slice(0, 5);
     await executeAndStreamTool('build_reconstruction_dossier', {
       memory: toolPayloads.collect_food_memory,
       researchPlan: toolPayloads.plan_dish_research,
@@ -2002,10 +2010,13 @@ async function maybeSendForcedMinimumCue({
   let dossier = toolPayloads.build_reconstruction_dossier as ReconstructionDossier | undefined;
   if (!dossier) {
     const searchResults = toolPayloads.search_web as { results?: Array<{ title?: string; snippet?: string }> } | undefined;
-    const researchedFacts = searchResults?.results
-      ?.filter((r) => r.snippet)
+    const researchedFacts = filterMemoryResearchSearchResults(
+      searchResults?.results ?? [],
+      buildMemoryRelevanceContext(memory),
+    )
+      .filter((r) => r.snippet)
       .map((r) => `${r.title}: ${r.snippet}`)
-      .slice(0, 5) ?? [];
+      .slice(0, 5);
     dossier = await executeAndStreamTool('build_reconstruction_dossier', {
       memory,
       researchPlan,
