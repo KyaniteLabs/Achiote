@@ -17,7 +17,7 @@ describe('HTTP server integration', () => {
     baseUrl = `http://127.0.0.1:${port}`;
 
     server = spawn('node', [resolve(ROOT, 'dist/http-server.js')], {
-      env: { ...process.env, PORT: String(port), ACHIOTE_AUTH_ENABLED: 'false' },
+      env: { ...process.env, PORT: String(port), ACHIOTE_AUTH_ENABLED: 'false', ACHIOTE_DETERMINISTIC_TOOL_CHAIN: 'false' },
       stdio: ['pipe', 'pipe', 'pipe'],
     });
 
@@ -96,7 +96,7 @@ describe('HTTP server integration', () => {
     baseUrl = `http://127.0.0.1:${port}`;
 
     server = spawn('node', [resolve(ROOT, 'dist/http-server.js')], {
-      env: { ...process.env, PORT: String(port), ACHIOTE_AUTH_ENABLED: 'false', ACHIOTE_ALLOW_ANON_ASK: 'true' },
+      env: { ...process.env, PORT: String(port), ACHIOTE_AUTH_ENABLED: 'false', ACHIOTE_ALLOW_ANON_ASK: 'true', ACHIOTE_DETERMINISTIC_TOOL_CHAIN: 'false' },
       stdio: ['pipe', 'pipe', 'pipe'],
     });
 
@@ -247,7 +247,7 @@ describe('HTTP server integration', () => {
     baseUrl = `http://127.0.0.1:${port}`;
 
     server = spawn('node', [resolve(ROOT, 'dist/http-server.js')], {
-      env: { ...process.env, PORT: String(port), ACHIOTE_AUTH_ENABLED: 'false', ACHIOTE_EVENTS_ADMIN_TOKEN: 'operator-test-token' },
+      env: { ...process.env, PORT: String(port), ACHIOTE_AUTH_ENABLED: 'false', ACHIOTE_EVENTS_ADMIN_TOKEN: 'operator-test-token', ACHIOTE_DETERMINISTIC_TOOL_CHAIN: 'false' },
       stdio: ['pipe', 'pipe', 'pipe'],
     });
 
@@ -381,6 +381,7 @@ describe('HTTP server billing integration', () => {
         ...process.env,
         PORT: String(port),
         ACHIOTE_AUTH_ENABLED: 'false',
+        ACHIOTE_DETERMINISTIC_TOOL_CHAIN: 'false',
         STRIPE_SECRET_KEY: 'sk_test_dummy',
         STRIPE_WEBHOOK_SECRET: 'whsec_dummy_secret_for_testing_only',
         STRIPE_PERSONAL_PRICE_ID: 'price_test',

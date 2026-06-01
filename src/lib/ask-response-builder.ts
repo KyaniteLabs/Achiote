@@ -500,6 +500,7 @@ export function ensureLocalCueLanguage(text: string, toolPayloads: Record<string
 export function ensureCueQualityLanguage(text: string, toolPayloads: Record<string, unknown>, calledTools: Set<string>): string {
   let revised = ensureLocalCueLanguage(text, toolPayloads, calledTools);
   if (!calledTools.has('generate_minimum_viable_nostalgia')) return revised;
+  revised = ensureGroundedCarrierLanguage(revised, toolPayloads);
   revised = ensureComposedCueCoverage(revised, toolPayloads);
   revised = revised.replace(/\bnarrow,\s*research-bounded proxy test\b/gi, 'first-pass verification bite');
   if (!/\bfirst[-\s]?pass verification bite\b/i.test(revised)) {
@@ -512,6 +513,18 @@ export function ensureCueQualityLanguage(text: string, toolPayloads: Record<stri
   if (/\b(?:verify|verification|narrow|first[-\s]?pass|tiny check|rule out|revise)\b/i.test(revised)) return revised;
   revised = `${revised.trim()}\n\nThis is only a first-pass verification bite: if the aroma, texture, or aftertaste is wrong, we should revise the guess before chasing exact components.`;
   return revised;
+}
+
+function ensureGroundedCarrierLanguage(text: string, toolPayloads: Record<string, unknown>): string {
+  const candidates = groundedCarrierCandidates(toolPayloads);
+  const needsArepaDough = candidates.some((candidate) => /masarepa|P\.A\.N\./i.test(candidate));
+  if (!needsArepaDough) return text;
+
+  let revised = text.replace(/\b(?:plain|regular)\s+cornmeal\b/gi, 'pre-cooked white cornmeal (masarepa or P.A.N.-style)');
+  if (/\b(?:masarepa|P\.?A\.?N\.?|pre[-\s]?cooked\s+(?:white\s+)?corn(?:meal)?|harina\s+de\s+ma[ií]z\s+precocida)\b/i.test(revised)) {
+    return revised;
+  }
+  return `${revised.trim()}\n\nKeep the first test anchored to pre-cooked white cornmeal, specifically masarepa or P.A.N.-style arepa dough, before trying ordinary cornmeal.`;
 }
 
 export function ensureComposedCueCoverage(text: string, toolPayloads: Record<string, unknown>): string {

@@ -32,6 +32,7 @@ function spawnAchioteServer(port: number, openAiBaseUrl: string, env?: Record<st
       OPENAI_MODEL: 'fake-openai-model',
       OPENAI_API_KEY: 'test-openai-key',
       OPENAI_TIMEOUT_MS: '30000',
+      ACHIOTE_DETERMINISTIC_TOOL_CHAIN: 'false',
       ACHIOTE_RATE_LIMIT_DB: '',
       ...env,
     },
