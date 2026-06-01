@@ -15,6 +15,10 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=3000
+      - ACHIOTE_ALLOW_ANON_ASK=${ACHIOTE_ALLOW_ANON_ASK:-false}
+      - ACHIOTE_ANON_WEB_RECONSTRUCTIONS=${ACHIOTE_ANON_WEB_RECONSTRUCTIONS:-10000}
+      - ACHIOTE_TRUST_PROXY=${ACHIOTE_TRUST_PROXY:-false}
+      - ACHIOTE_TRUSTED_PROXY_IPS=${ACHIOTE_TRUSTED_PROXY_IPS:-}
       - ACHIOTE_WHISPER_CPP_BINARY=/usr/local/bin/whisper-cli
     extra_hosts:
       - "host.docker.internal:host-gateway"

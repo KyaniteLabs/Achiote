@@ -1023,6 +1023,16 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       return;
     }
 
+    if (calledTools.has('generate_minimum_viable_nostalgia')
+      && shouldClarifyUnresolvedUnnamedMemory(userMessage, toolPayloads, calledTools, trustBoundedResponseText)) {
+      console.warn('[ask] replaced unresolved unnamed cue with targeted clarification');
+      const responseText = buildClarificationOnlyResponse(toolPayloads, userMessage, { includeEvidencePreamble: false });
+      send('text', responseText);
+      maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
+      finish({ guarded: 'unnamed_memory_clarification' });
+      return;
+    }
+
     if (calledTools.has('generate_minimum_viable_nostalgia') && containsRecipeMeasurementLanguage(trustBoundedResponseText)) {
       console.warn('[ask] suppressed recipe-style measurements in cue response');
       const sanitized = sanitizeRecipeStyleCueLanguage(trustBoundedResponseText);
@@ -1039,16 +1049,6 @@ async function handleAsk(req: IncomingMessage, res: ServerResponse): Promise<voi
       send('text', sanitized);
       maybeSendMemoryReceipt({ toolPayloads, assistantText: sanitized, send });
       finish({ guarded: 'recipe_measurement_sanitized' });
-      return;
-    }
-
-    if (calledTools.has('generate_minimum_viable_nostalgia')
-      && shouldClarifyUnresolvedUnnamedMemory(userMessage, toolPayloads, calledTools, trustBoundedResponseText)) {
-      console.warn('[ask] replaced unresolved unnamed cue with targeted clarification');
-      const responseText = buildClarificationOnlyResponse(toolPayloads, userMessage, { includeEvidencePreamble: false });
-      send('text', responseText);
-      maybeSendMemoryReceipt({ toolPayloads, assistantText: responseText, send });
-      finish({ guarded: 'unnamed_memory_clarification' });
       return;
     }
 
@@ -1093,6 +1093,14 @@ function sanitizeFoodSafetyClaimLanguage(text: string): string {
   return text
     .replace(/\bmedically safe\b/gi, 'medically appropriate')
     .replace(/\ballergen-free\b/gi, 'without the named allergen only when labels and a qualified professional support that')
+    .replace(/\b(?:shellfish|shrimp|crab|lobster|clam|mussel|oyster|scallop|fish|seafood|nut|peanut|tree nut|dairy|gluten|egg|soy|sesame)[-\s]?free\s+swaps?\b/gi, 'substitutes that avoid the named allergen only when labels and a qualified professional support that')
+    .replace(/\b(?:will|would|should|can)\s+not\s+trigger\s+(?:your\s+)?reaction\b/gi, 'still need your own label checks and professional guidance')
+    .replace(/\b(?:won['’]?t|wouldn['’]?t|shouldn['’]?t|cannot|can['’]?t)\s+trigger\s+(?:your\s+)?reaction\b/gi, 'still need your own label checks and professional guidance')
+    .replace(/\ball\s+use\s+shellfish\b/gi, 'may involve the named allergen')
+    .replace(/\bno\s+shrimp\s+or\s+crab\s+involved\b/gi, 'without the named allergens')
+    .replace(/\bno\s+shellfish\s+anywhere\s+near\s+it\b/gi, 'without the named allergens')
+    .replace(/\bno\s+shellfish\b/gi, 'without the named allergens')
+    .replace(/\bwithout\s+(?:the\s+)?shrimp\s+and\s+crab\b/gi, 'without the named allergens')
     .replace(/\blegally safe\b/gi, 'legally appropriate')
     .replace(/\bsafety note\b/gi, 'allergy boundary')
     .replace(/\bfood safety\b/gi, 'food boundary')
@@ -1786,6 +1794,10 @@ function shouldForceMinimumCue(userMessage: string, toolPayloads: Record<string,
   if (!toolPayloads.collect_food_memory || !toolPayloads.plan_dish_research) return false;
   if (shouldClarifyBroadUncertainMemory(userMessage, toolPayloads)) return false;
   if (shouldClarifySparseUnanchoredMemory(userMessage, toolPayloads)) return false;
+  const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
+  const explicitlyUnnamed = /\b(?:never knew the name|don['’]?t know the name|didn['’]?t know the name|no name|unnamed)\b/i.test(userMessage);
+  const hasRegionAnchor = (memory?.extractedClues?.culturalOrRegionalHints ?? []).some((hint) => hint.trim().length > 0);
+  if (explicitlyUnnamed && !hasRegionAnchor) return false;
 
   const workflowPlan = toolPayloads.plan_tool_workflow as { needsSubstitutions?: boolean; workflowSteps?: Array<{ tool?: string }> } | undefined;
   const plannedTools = workflowPlan?.workflowSteps?.map((step) => step.tool) ?? [];
@@ -1824,6 +1836,13 @@ function shouldClarifyUnresolvedUnnamedMemory(
 ): boolean {
   if (!/\b(?:never knew the name|don['’]?t know the name|didn['’]?t know the name|no name|unnamed)\b/i.test(userMessage)) return false;
   if (calledTools.has('search_web')) return false;
+  const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
+  const hasNameAnchor = (memory?.extractedClues?.possibleDishNames ?? []).some((name) => name.trim().length > 0);
+  const hasRegionAnchor = (memory?.extractedClues?.culturalOrRegionalHints ?? []).some((hint) => hint.trim().length > 0);
+  const cueBeforeIdentity = containsConcreteFoodCue(responseText)
+    || /\b(?:first[-\s]?pass verification bite|minimum viable|sensory test|buy one|pan[-\s]?fry|simmer|recipe)\b/i.test(responseText);
+  if (!hasRegionAnchor && cueBeforeIdentity) return true;
+
   const resolved = toolPayloads.resolve_dish_name as
     | { confidence?: string; matchType?: string; region?: string; needsClarification?: boolean }
     | undefined;
@@ -1836,8 +1855,6 @@ function shouldClarifyUnresolvedUnnamedMemory(
   if (!unresolved) return false;
 
   const questionCount = (responseText.match(/\?/g) ?? []).length;
-  const cueBeforeIdentity = containsConcreteFoodCue(responseText)
-    || /\b(?:first[-\s]?pass verification bite|minimum viable|sensory test|buy one|pan[-\s]?fry|simmer|recipe)\b/i.test(responseText);
   return questionCount === 0 || cueBeforeIdentity;
 }
 

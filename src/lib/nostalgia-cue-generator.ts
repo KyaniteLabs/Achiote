@@ -337,8 +337,14 @@ function composedBiteSteps(signals: string): string[] {
 }
 
 function isBeverageSignal(signals: string): boolean {
-  return signalIncludes(signals, 'drink|beverage|soda|fizzy|carbonated|sparkling|seltzer|horchata|agua fresca|agua de cebada|ceba|atole|champurrado|lassi|chai|tea|coffee|espresso|cocoa|mate|milkshake|smoothie|tepache|sorrel|mauby|akasan|pinol|pinole|kombucha|over ice|foamy')
-    || conceptIncludes(signals, ['beverage', 'barley', 'rice', 'cinnamon']);
+  const explicitBeverage = signalIncludes(signals, 'drink|beverage|soda|fizzy|carbonated|sparkling|seltzer|horchata|agua fresca|agua de cebada|ceba|atole|champurrado|lassi|chai|tea|coffee|espresso|cocoa|mate|milkshake|smoothie|tepache|sorrel|mauby|akasan|pinol|pinole|kombucha|over ice|foamy');
+  if (explicitBeverage) return true;
+
+  const grainDrinkContext = signalIncludes(signals, 'cold|ice|iced|watery|milky|thin|liquid|sip|poured|glass|cup|dilution');
+  const solidStarchContext = signalIncludes(signals, 'plantain|platanos|plátanos|yuca|cassava|fried|fritter|savory|porridge|steamed|banana leaf');
+  return grainDrinkContext
+    && !solidStarchContext
+    && conceptIncludes(signals, ['beverage', 'barley', 'rice', 'cinnamon', 'grain']);
 }
 
 function beverageCarrierIngredient(signals: string): string {
@@ -436,6 +442,46 @@ function isCassavaFritterSignal(signals: string): boolean {
   const hasFriedTexture = signalIncludes(signals, 'fried|crispy|crunchy|golden|crisp');
   const hasRollOrFritterShape = signalIncludes(signals, 'roll|fritter|stuffed|filled|shape|oval|picadillo');
   return hasCassavaFamily && hasFriedTexture && hasRollOrFritterShape;
+}
+
+function isPlantainSyrupSignal(signals: string): boolean {
+  return signalIncludes(signals, 'plantain|platanos|plátanos')
+    && signalIncludes(signals, 'syrup|sweet|sugar|panela|cane|honey|miel|caramel');
+}
+
+function plantainSyrupCueProfile(signals: string, userLocation?: string, overallConfidence?: Confidence): FoodScienceCueProfile {
+  const greenPlantain = signalIncludes(signals, 'green|unripe');
+  const aromatic = signalIncludes(signals, 'cinnamon|clove|anise|orange|lime|herb|green aroma');
+  return {
+    title: 'Minimum viable plantain-syrup bite',
+    goal: 'Test one tiny bite of plantain with a light sweet syrup so the receipt checks starchy chew, syrup cling, salt, and green/herbal aroma instead of drifting into a drink or generic starch.',
+    effortMinutes: 10,
+    format: 'bite',
+    ingredients: [
+      { item: greenPlantain ? 'green or barely ripe plantain' : 'ripe or green plantain matching the memory', amount: 'one small coin', purpose: 'tests the remembered plantain starch, chew, and surface texture' },
+      { item: 'sugar, panela, honey, or simple syrup', amount: 'a few drops or a thin spoon', purpose: 'tests the sweet syrup cling without making a batch' },
+      { item: 'pinch of salt', amount: 'tiny pinch', purpose: 'keeps the bite savory-sweet instead of candy-like', optional: true },
+      { item: aromatic ? 'remembered aroma cue such as cinnamon, clove, anise, lime peel, orange peel, or a green herb leaf' : 'optional aroma cue such as cinnamon, clove, anise, lime peel, orange peel, or a green herb leaf', amount: 'tiny pinch or strip', purpose: 'tests whether the green/herbal aroma is part of the memory', optional: true },
+    ],
+    steps: [
+      'Cook or warm only one tiny plantain coin until tender enough to taste.',
+      'Touch it with a few drops of syrup and a tiny pinch of salt.',
+      'Smell the aroma cue first, then take one bite and notice plantain chew, syrup cling, and savory-sweet balance.',
+      'If the chew is right but the sweetness is wrong, adjust syrup before changing the plantain ripeness.',
+    ],
+    preserves: ['plantain starch chew', 'sweet syrup cling', 'savory-sweet balance', 'green or warm-spice aroma'],
+    doesNotPreserve: ['exact family name', 'full syrup batch', 'precise regional spelling', 'restaurant presentation'],
+    accessibilityPrinciples: ['test one plantain coin', 'use grocery-store plantain and pantry sweetener first', 'change only ripeness, syrup, or aroma one at a time', 'do not buy specialty items until the bite works'],
+    substituteLogic: [
+      'Plantain memories split into ripeness, starch texture, surface browning or tenderness, syrup cling, salt, and aroma.',
+      'A few drops of syrup test cling and sweetness without turning the memory into a dessert recipe.',
+      'A tiny citrus peel, warm spice, or green herb tests the aroma direction without claiming the exact household ingredient.',
+    ],
+    whyThisIsMinimum: 'One plantain coin with a few drops of syrup tests the memory mechanisms named by the user: plantain texture, sweet top note, salt balance, and green or spice aroma.',
+    safetyNotes: ['Use only known edible plantain and pantry aromatics.', 'Keep the syrup amount tiny while testing sweetness.'],
+    followUpIfItWorks: ['Ask whether the plantain was green, ripe, fried, boiled, or simmered.', 'Ask whether the syrup tasted like cane sugar, honey, panela, cinnamon, clove, anise, citrus, or something green.', 'Ask whether the bite should be crisp outside or soft all the way through.'],
+    components: decomposeIntoComponents(signals, userLocation, overallConfidence),
+  };
 }
 
 function cassavaFritterCueProfile(signals: string, userLocation?: string, overallConfidence?: Confidence): FoodScienceCueProfile {
@@ -564,6 +610,10 @@ function foodScienceCueProfile(signals: string, userLocation?: string, overallCo
 
   if (isSourHerbSoupSignal(signals)) {
     return sourHerbSoupCueProfile(signals, userLocation, overallConfidence);
+  }
+
+  if (isPlantainSyrupSignal(signals)) {
+    return plantainSyrupCueProfile(signals, userLocation, overallConfidence);
   }
 
   if (isCassavaFritterSignal(signals)) {

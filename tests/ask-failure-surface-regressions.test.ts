@@ -190,7 +190,7 @@ describe('/ask failure surface regressions', () => {
           finish_reason: 'stop',
           message: {
             role: 'assistant',
-            content: 'I can help narrow the seafood rice memory. What color was the rice, and where was your dad from?',
+            content: 'I can help narrow the seafood rice memory and suggest shellfish-free swaps that will not trigger your reaction. What color was the rice, and where was your dad from?',
           },
         }],
       }));
@@ -219,6 +219,8 @@ describe('/ask failure surface regressions', () => {
     expect(finalText).toContain('qualified professional');
     expect(finalText).not.toMatch(/\bsafe\b/i);
     expect(finalText).not.toMatch(/\bsafely\b|\bsafety note\b/i);
+    expect(finalText).not.toMatch(/\b(?:will|would|should|can)\s+not\s+trigger\b|\b(?:won['’]?t|wouldn['’]?t|shouldn['’]?t|cannot|can['’]?t)\s+trigger\b/i);
+    expect(finalText).not.toMatch(/\bshellfish-free\b/i);
   }, 20_000);
 
   it('recovers deterministically from llama.cpp n_keep/n_ctx context errors', async () => {
@@ -2769,7 +2771,7 @@ describe('/ask failure surface regressions', () => {
           finish_reason: toolCalls ? 'tool_calls' : 'stop',
           message: toolCalls
             ? { role: 'assistant', content: '', tool_calls: toolCalls }
-            : { role: 'assistant', content: 'Let me work through your memory to identify this dish and build a sensory test for you. This is only a first-pass verification bite.' },
+            : { role: 'assistant', content: 'Your description immediately signals a West African fermented staple. First-pass verification bite: warm 1 cup water with cornmeal, stir in yogurt or lemon, then take a tiny sip. What country, region, or language was around this food?' },
         }],
       }));
     });
