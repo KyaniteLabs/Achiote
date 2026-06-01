@@ -92,7 +92,10 @@ describe('P1 launch hardening guardrails', () => {
     const productApp = fs.readFileSync('docs/landing/product-app.js', 'utf8');
 
     expect(app).toContain('streamResponse(res, aiEl, val)');
-    expect(app).toContain('ProductApp.appendChatTurn(chatHistory, userMessage, text, 20)');
+    expect(app).toContain('ProductApp.appendChatTurn(chatHistory, userMessage, assistantTurnText, 20)');
+    // Receipt-only turns (no prose) must still record the user's message, otherwise the
+    // conversation resets and earlier clues are lost.
+    expect(app).toContain('ProductApp.summarizeReceiptForHistory(lastReceipt)');
     expect(productApp).toContain("{ role: 'user', content: String(userMessage || '') }");
     expect(app).toContain('console.warn');
     expect(app).not.toContain('content: val');

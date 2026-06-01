@@ -10,6 +10,7 @@ function loadProductApp() {
     parseSseChunk(buffer: string, chunk: string): { pending: string; events: Array<{ type: string; data: string }> };
     explainHttpStatus(status: number, detail: string): string;
     appendChatTurn(history: unknown[], userMessage: string, assistantText: string, maxEntries: number): unknown[];
+    summarizeReceiptForHistory(receipt: unknown): string;
   } }).AchioteProductApp;
 }
 
@@ -43,5 +44,35 @@ describe('ProductApp browser helpers', () => {
     expect(next.at(-2)).toEqual({ role: 'user', content: 'new user' });
     expect(next.at(-1)).toEqual({ role: 'assistant', content: 'new assistant' });
     expect(next[0]).toEqual({ role: 'user', content: 'm2' });
+  });
+
+  it('summarizes a receipt-only turn so the user message is never dropped from history', () => {
+    const app = loadProductApp();
+    const summary = app.summarizeReceiptForHistory({
+      evidence: {
+        userSaid: ['a cake my mom made', 'grated coconut', 'caramel top'],
+        researched: [],
+        inferred: ['Likely a Latin American coconut cake'],
+        unknown: ['exact dish name'],
+      },
+      firstTinyTasteTest: { cue: 'Toast coconut, then fold into a butter batter.' },
+    });
+
+    expect(summary).toContain('coconut');
+    expect(summary).toContain('caramel');
+    expect(summary).toContain('First taste');
+
+    // The whole point: a receipt-only turn now yields a non-empty assistant entry,
+    // so appendChatTurn records the user's message instead of skipping the turn.
+    const history = app.appendChatTurn([], 'oven baked, in puerto rico', summary, 20);
+    expect(history.at(-2)).toEqual({ role: 'user', content: 'oven baked, in puerto rico' });
+    expect(String((history.at(-1) as { content: string }).content)).toContain('coconut');
+  });
+
+  it('returns empty string for a missing or empty receipt (caller then skips the turn)', () => {
+    const app = loadProductApp();
+    expect(app.summarizeReceiptForHistory(null)).toBe('');
+    expect(app.summarizeReceiptForHistory({})).toBe('');
+    expect(app.summarizeReceiptForHistory({ evidence: { userSaid: [] } })).toBe('');
   });
 });
