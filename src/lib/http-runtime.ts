@@ -76,7 +76,7 @@ function isTrustedProxy(remoteAddress: string | undefined, trustedProxyIps: stri
   return (trustedProxyIps ?? []).map(normalizeAddress).includes(normalizedRemote);
 }
 
-function clientAddress(headers: HeaderBag, remoteAddress: string | undefined, trustProxy: boolean, trustedProxyIps?: string[]): string {
+export function clientAddress(headers: HeaderBag, remoteAddress: string | undefined, trustProxy: boolean, trustedProxyIps?: string[]): string {
   if (trustProxy && isTrustedProxy(remoteAddress, trustedProxyIps)) {
     const forwardedFor = normalizedHeader(headers, 'x-forwarded-for');
     const chain = forwardedFor

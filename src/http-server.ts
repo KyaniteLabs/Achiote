@@ -19,7 +19,7 @@ import { createRateLimiter } from './lib/rate-limit.js';
 import { createAccountAccess, rateLimitHeaders, type AuthedRequest } from './lib/account-access.js';
 import { BillingDb, defaultBillingDbPath } from './lib/billing-db.js';
 import { BillingStripe, loadBillingConfigFromEnv, type CheckoutTier } from './lib/billing-stripe.js';
-import { getHttpReadiness, getRequestRateLimitIdentity, shouldApplyRateLimit } from './lib/http-runtime.js';
+import { clientAddress, getHttpReadiness, getRequestRateLimitIdentity, shouldApplyRateLimit } from './lib/http-runtime.js';
 import { resolveLocalSpeechConfig } from './lib/local-speech.js';
 import { createLocalSpeechController } from './lib/local-speech-controller.js';
 import { buildMemoryReceipt } from './lib/memory-receipt.js';
@@ -452,16 +452,12 @@ function telemetryDistinctId(req: IncomingMessage): string {
 }
 
 // The visitor's real IP, so PostHog geolocates by the visitor and not by this server.
-// Behind Traefik (ACHIOTE_TRUST_PROXY=true) the client IP is the first X-Forwarded-For hop.
+// Reuses the same proxy-aware resolver as the rate-limit identity, so it only trusts
+// X-Forwarded-For when the request actually came through a configured trusted proxy
+// (ACHIOTE_TRUSTED_PROXY_IPS); otherwise it falls back to the socket address.
 function telemetryClientIp(req: IncomingMessage): string | undefined {
-  if (TRUST_PROXY) {
-    const xff = req.headers['x-forwarded-for'];
-    const first = (Array.isArray(xff) ? xff[0] : xff)?.split(',')[0]?.trim();
-    if (first) return first;
-    const xr = req.headers['x-real-ip'];
-    if (typeof xr === 'string' && xr.trim()) return xr.trim();
-  }
-  return req.socket.remoteAddress || undefined;
+  const ip = clientAddress(req.headers, req.socket.remoteAddress, TRUST_PROXY, TRUSTED_PROXY_IPS);
+  return ip && ip !== 'unknown' ? ip : undefined;
 }
 
 async function forwardTelemetryToPostHog(eventName: string, properties: Record<string, string>, req: IncomingMessage): Promise<void> {
