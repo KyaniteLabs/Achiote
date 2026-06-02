@@ -2513,6 +2513,8 @@ async function serveStatic(req: IncomingMessage, res: ServerResponse): Promise<b
   const routeMap: Record<string, string> = {
     '/': 'index.html',
     '/app': 'app.html',
+    '/meaning': 'meaning.html',
+    '/week6': 'week6.html',
     '/about': 'about.html',
     '/pricing': 'pricing.html',
     '/roadmap': 'roadmap.html',
