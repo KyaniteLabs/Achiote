@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Achiote: Week 6, The Researcher</title>
+  <meta name="description" content="Week 6 proof surface for the Achiote folder-based food-memory researcher: the folder is the researcher, and the Memory Receipt is the proof." />
+  <link rel="canonical" href="https://achiote.kyanitelabs.tech/week6" />
+  <meta property="og:title" content="Achiote: Week 6, The Researcher" />
+  <meta property="og:description" content="A model-agnostic folder researcher for food-memory reconstruction, with a live app and Memory Receipt proof surfaces." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://achiote.kyanitelabs.tech/week6" />
+  <link rel="icon" href="proof/favicon.svg" />
+  <link rel="preload" href="proof/fonts/junction-bold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="proof/images/bg-texture.jpg?v=2" as="image">
+  <link rel="stylesheet" href="site.css?v=10" />
+  <style>
+    .w6-hero { padding: clamp(48px, 7vw, 92px) 0 var(--s7); background: radial-gradient(72% 95% at 86% 28%, rgba(179, 55, 27, 0.13), transparent 78%); color: var(--text-0); }
+    .w6-hero .eyebrow { color: rgba(253, 243, 225, 0.78); }
+    .w6-hero h1 { color: var(--text-0); }
+    .w6-hero h1 em { color: var(--gold); }
+    .w6-hero .lead { color: rgba(253, 243, 225, 0.9); }
+    .w6-hero h1 { font-size: clamp(3rem, 8vw, 6rem); font-weight: 700; line-height: 0.92; letter-spacing: -0.02em; margin: var(--s4) 0 0; max-width: 14ch; }
+    .w6-hero h1 em { font-style: italic; color: var(--gold); font-weight: 700; }
+    .w6-hero .lead { max-width: 600px; margin: var(--s6) 0 0; }
+
+    .steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--s4); margin-top: var(--s7); counter-reset: st; }
+    .step { padding-top: var(--s5); border-top: 2px solid var(--line-strong); }
+    .step::before { counter-increment: st; content: counter(st, decimal-leading-zero); font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: 0.8rem; font-weight: 700; color: var(--gold); letter-spacing: 0.1em; }
+    .step h3 { margin: var(--s2) 0 6px; font-size: 1.05rem; font-weight: 700; }
+    .step p { margin: 0; color: var(--text-2); font-size: 0.85rem; line-height: 1.4; }
+
+    .proof-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s4); margin-top: var(--s6); }
+    .proof-card { position: relative; min-height: 300px; display: flex; flex-direction: column; justify-content: flex-end; overflow: hidden; border-radius: var(--r-md); padding: var(--s6); color: #fdf6ea; background: var(--bg-0); box-shadow: 0 24px 56px rgba(36,23,12,0.16); }
+    .proof-card::before { content: ""; position: absolute; inset: 0; background-image: var(--img); background-size: cover; background-position: center; filter: saturate(1.04) contrast(1.02); transform: scale(1.03); transition: transform 600ms var(--ease); }
+    .proof-card::after { content: ""; position: absolute; inset: 0; background: linear-gradient(178deg, rgba(15,10,6,0.35) 0%, rgba(15,10,6,0.58) 50%, rgba(15,10,6,0.92) 100%); }
+    .proof-card:hover::before { transform: scale(1.07); }
+    .proof-card h3, .proof-card p { position: relative; z-index: 1; }
+    .proof-card h3 { margin: 0 0 10px; font-size: clamp(1.3rem, 2.2vw, 1.7rem); font-weight: 700; line-height: 1.05; color: #fdf6ea; max-width: 12ch; }
+    .proof-card p { margin: 0; color: rgba(253,246,234,0.84); font-size: 0.9rem; line-height: 1.45; max-width: 26ch; }
+
+    .receipt-feature { display: grid; grid-template-columns: minmax(0,1fr) minmax(280px,0.92fr); gap: clamp(28px,5vw,56px); align-items: center; margin-top: var(--s6); }
+    .receipt-paper { position: relative; padding: var(--s6) 30px; background: repeating-linear-gradient(0deg, transparent 0 31px, rgba(43,26,15,0.07) 31px 32px), #efe3cb; color: #2a1a0f; border-top: 4px solid var(--achiote); border-radius: var(--r-xs); box-shadow: 0 28px 60px rgba(0,0,0,0.55); transform: rotate(-1deg); }
+    .receipt-paper h3 { margin: 0 0 var(--s5); font-size: 1.34rem; font-weight: 700; color: var(--achiote-deep); }
+    .receipt-row { display: grid; grid-template-columns: 96px 1fr; gap: var(--s4); margin: 10px 0; font-size: 0.94rem; }
+    .receipt-row strong { color: var(--achiote-deep); font-family: var(--font-mono); font-size: 0.66rem; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; padding-top: 0.3em; }
+    .script { font-family: var(--font-display); font-style: italic; color: var(--achiote-deep); }
+    .checks { display: grid; gap: 10px; margin: var(--s4) 0 var(--s5); padding: 0; list-style: none; color: var(--text-1); font-size: 0.93rem; }
+    .checks li { display: flex; gap: 12px; align-items: baseline; }
+    .checks li::before { content: ""; width: 8px; height: 8px; flex: 0 0 auto; margin-top: 0.45em; border-radius: 999px; background: var(--gold); box-shadow: 0 0 0 3px rgba(231,162,60,0.16); }
+
+    .quote { max-width: 880px; margin: var(--s9) auto 0; padding-left: var(--s7); position: relative; font-family: var(--font-display); font-optical-sizing: auto; font-size: clamp(1.5rem, 3vw, 2.15rem); font-style: italic; font-weight: 700; line-height: 1.24; color: var(--text-0); text-wrap: balance; }
+    .quote::before { content: ""; position: absolute; left: 0; top: 0.1em; bottom: 0.12em; width: 4px; background: var(--gold); opacity: 0.62; border-radius: var(--r-xs); }
+
+    @media (max-width: 900px) {
+      .steps { grid-template-columns: 1fr 1fr; }
+      .proof-grid { grid-template-columns: 1fr; }
+      .receipt-feature { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 560px) {
+      .steps { grid-template-columns: 1fr; }
+      .receipt-paper { transform: none; }
+      .receipt-row { grid-template-columns: 1fr; gap: 2px; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="container nav">
+      <a class="brand" href="/"><span class="dot" aria-hidden="true"></span>Achiote</a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="/">Home</a>
+        <a href="week6.html" aria-current="page">The proof</a>
+        <a href="meaning.html">Meaning</a>
+        <a class="btn btn-primary" href="app.html">Try it free <span class="arrow" aria-hidden="true">&rarr;</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="w6-hero">
+      <div class="container">
+        <p class="eyebrow">Week 6 · The Researcher</p>
+        <h1>The folder is the <em>researcher.</em></h1>
+        <p class="lead">Achiote is a model-agnostic folder for food-memory reconstruction. Drop it into any model workspace and it plans, researches, reasons, and returns a Memory Receipt, with local sourcing, language clues, and evidence boundaries intact.</p>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top:0">
+      <div class="container panel">
+        <p class="kicker">The system</p>
+        <h2 class="section-title">Inside the folder</h2>
+        <p class="section-copy">Each file does one job. Together they teach any frontier model to investigate before it answers, and to keep the evidence honest.</p>
+        <div class="steps">
+          <div class="step"><h3>Intake</h3><p>Your memory clues become data, not instructions.</p></div>
+          <div class="step"><h3>Plan</h3><p>A source-first path, with confirm/reject signals.</p></div>
+          <div class="step"><h3>Research</h3><p>Names, regions, techniques, and competing versions.</p></div>
+          <div class="step"><h3>Reason</h3><p>Food science connects flavor, culture, and access.</p></div>
+          <div class="step"><h3>Receipt</h3><p>A clear result with the unknowns kept visible.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" style="padding-top:0">
+      <div class="container">
+        <p class="kicker">Evidence</p>
+        <h2 class="section-title">What the proof shows</h2>
+        <div class="proof-grid">
+          <article class="proof-card" style="--img: url('proof/images/proof-system.jpg')">
+            <h3>The folder is the system</h3>
+            <p>Identity, rules, examples, and reference material live inside the project folder.</p>
+          </article>
+          <article class="proof-card" style="--img: url('proof/images/proof-research.jpg')">
+            <h3>Real research. Real sources.</h3>
+            <p>Outputs separate user-said, researched, inferred, and unknown evidence.</p>
+          </article>
+          <article class="proof-card" style="--img: url('proof/images/proof-recipe.jpg')">
+            <h3>A recipe that remembers</h3>
+            <p>Local sourcing and food-science reasoning come before any full dish.</p>
+          </article>
+        </div>
+
+        <div class="receipt-feature">
+          <div class="receipt-paper" role="img" aria-label="Example Memory Receipt">
+            <h3>Example Memory Receipt</h3>
+            <div class="receipt-row"><strong>Dish</strong><span class="script">Sancocho de gallina</span></div>
+            <div class="receipt-row"><strong>Origin</strong><span class="script">Dominican Republic</span></div>
+            <div class="receipt-row"><strong>Memory notes</strong><span class="script">Sunday gatherings, cilantro, yuca, plantains, comfort.</span></div>
+            <div class="receipt-row"><strong>First taste</strong><span class="script">Build the broth aroma first, then test the starch texture.</span></div>
+          </div>
+          <div>
+            <h3 style="margin:0 0 var(--s3); font-size:1.7rem; font-weight: 700;">What every receipt includes</h3>
+            <p class="section-copy" style="margin-top:0">Human-readable proof, while the workflow stays model-agnostic and folder-owned.</p>
+            <ul class="checks">
+              <li>Sensory analysis and mechanism reasoning</li>
+              <li>Ingredient mapping with accessible substitutes</li>
+              <li>Local sourcing before specialty exactness</li>
+              <li>Language clues preserved as evidence</li>
+              <li>One minimum-viable taste before the full roadmap</li>
+            </ul>
+            <a class="btn btn-primary" href="app.html">See it live in the app <span class="arrow" aria-hidden="true">&rarr;</span></a>
+          </div>
+        </div>
+
+        <p class="quote">The recipe was never written down. The memory was. And a researcher can bring it back to the table.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <span class="footer-brand">Achiote</span>
+      <p>Week 6 submission by Simón González De Cruz. The folder is the researcher; this page, the app, and the Memory Receipt are its proof surfaces. Built with interpretable context methodology.</p>
+    </div>
+  </footer>
+  <script src="site-telemetry.js?v=1" defer></script>
+  <script src="reveal.js" defer></script>
+</body>
+</html>

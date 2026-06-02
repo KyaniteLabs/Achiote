@@ -1,0 +1,315 @@
+/*
+ * type-scripts.css — Multi-script typography for the design system
+ * ----------------------------------------------------------------
+ * Linked AFTER site.css so these rules override Latin-only Bricolage Grotesque
+ * for non-Latin writing systems.
+ *
+ * Targets:
+ *   • Inline spans  <span lang="xx">…</span>
+ *   • Block elements with lang  <article lang="zh">…</article>
+ *   • App chat messages that carry a lang attribute
+ *
+ * Font stacks are system-first, Noto last — NO web-font downloads.
+ * All sizing in rem; line-height is unitless.
+ */
+
+/* =========================================================
+   CJK — Chinese
+   ========================================================= */
+
+:lang(zh),
+[lang|="zh"] {
+  font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  line-height: 1.7;
+}
+
+:lang(zh) h1,
+:lang(zh) h2,
+:lang(zh) h3,
+:lang(zh) h4,
+[lang|="zh"] h1,
+[lang|="zh"] h2,
+[lang|="zh"] h3,
+[lang|="zh"] h4 {
+  font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  line-height: 1.3;
+}
+
+/* =========================================================
+   CJK — Japanese
+   ========================================================= */
+
+:lang(ja),
+[lang|="ja"] {
+  font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", sans-serif;
+  line-height: 1.7;
+}
+
+:lang(ja) h1,
+:lang(ja) h2,
+:lang(ja) h3,
+:lang(ja) h4,
+[lang|="ja"] h1,
+[lang|="ja"] h2,
+[lang|="ja"] h3,
+[lang|="ja"] h4 {
+  font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", sans-serif;
+  line-height: 1.3;
+}
+
+/* =========================================================
+   CJK — Korean
+   ========================================================= */
+
+:lang(ko),
+[lang|="ko"] {
+  font-family: "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
+  line-height: 1.7;
+}
+
+:lang(ko) h1,
+:lang(ko) h2,
+:lang(ko) h3,
+:lang(ko) h4,
+[lang|="ko"] h1,
+[lang|="ko"] h2,
+[lang|="ko"] h3,
+[lang|="ko"] h4 {
+  font-family: "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
+  line-height: 1.3;
+}
+
+/* =========================================================
+   Arabic
+   ========================================================= */
+
+:lang(ar),
+[lang|="ar"] {
+  font-family: "SF Arabic", "Geeza Pro", "Noto Naskh Arabic", "Noto Sans Arabic", serif;
+  line-height: 1.8;
+}
+
+:lang(ar) h1,
+:lang(ar) h2,
+:lang(ar) h3,
+:lang(ar) h4,
+[lang|="ar"] h1,
+[lang|="ar"] h2,
+[lang|="ar"] h3,
+[lang|="ar"] h4 {
+  font-family: "SF Arabic", "Geeza Pro", "Noto Naskh Arabic", "Noto Sans Arabic", serif;
+  line-height: 1.35;
+}
+
+/* =========================================================
+   Hebrew
+   ========================================================= */
+
+:lang(he),
+[lang|="he"] {
+  font-family: "Arial Hebrew", "Noto Sans Hebrew", serif;
+  line-height: 1.8;
+}
+
+:lang(he) h1,
+:lang(he) h2,
+:lang(he) h3,
+:lang(he) h4,
+[lang|="he"] h1,
+[lang|="he"] h2,
+[lang|="he"] h3,
+[lang|="he"] h4 {
+  font-family: "Arial Hebrew", "Noto Sans Hebrew", serif;
+  line-height: 1.35;
+}
+
+/* =========================================================
+   Devanagari — Hindi, Marathi, Nepali
+   ========================================================= */
+
+:lang(hi),
+:lang(mr),
+:lang(ne),
+[lang|="hi"],
+[lang|="mr"],
+[lang|="ne"] {
+  font-family: "Kohinoor Devanagari", "Noto Sans Devanagari", "Nirmala UI", sans-serif;
+  line-height: 1.9;
+}
+
+:lang(hi) h1,
+:lang(hi) h2,
+:lang(hi) h3,
+:lang(hi) h4,
+:lang(mr) h1,
+:lang(mr) h2,
+:lang(mr) h3,
+:lang(mr) h4,
+:lang(ne) h1,
+:lang(ne) h2,
+:lang(ne) h3,
+:lang(ne) h4,
+[lang|="hi"] h1,
+[lang|="hi"] h2,
+[lang|="hi"] h3,
+[lang|="hi"] h4,
+[lang|="mr"] h1,
+[lang|="mr"] h2,
+[lang|="mr"] h3,
+[lang|="mr"] h4,
+[lang|="ne"] h1,
+[lang|="ne"] h2,
+[lang|="ne"] h3,
+[lang|="ne"] h4 {
+  font-family: "Kohinoor Devanagari", "Noto Sans Devanagari", "Nirmala UI", sans-serif;
+  line-height: 1.3;
+}
+
+/* =========================================================
+   Bengali
+   ========================================================= */
+
+:lang(bn),
+[lang|="bn"] {
+  font-family: "Bangla MN", "Noto Sans Bengali", sans-serif;
+  line-height: 1.9;
+}
+
+:lang(bn) h1,
+:lang(bn) h2,
+:lang(bn) h3,
+:lang(bn) h4,
+[lang|="bn"] h1,
+[lang|="bn"] h2,
+[lang|="bn"] h3,
+[lang|="bn"] h4 {
+  font-family: "Bangla MN", "Noto Sans Bengali", sans-serif;
+  line-height: 1.3;
+}
+
+/* =========================================================
+   Tamil
+   ========================================================= */
+
+:lang(ta),
+[lang|="ta"] {
+  font-family: "Tamil MN", "Noto Sans Tamil", sans-serif;
+  line-height: 1.9;
+}
+
+:lang(ta) h1,
+:lang(ta) h2,
+:lang(ta) h3,
+:lang(ta) h4,
+[lang|="ta"] h1,
+[lang|="ta"] h2,
+[lang|="ta"] h3,
+[lang|="ta"] h4 {
+  font-family: "Tamil MN", "Noto Sans Tamil", sans-serif;
+  line-height: 1.3;
+}
+
+/* =========================================================
+   Thai
+   ========================================================= */
+
+:lang(th),
+[lang|="th"] {
+  font-family: "Thonburi", "Noto Sans Thai", sans-serif;
+  line-height: 1.9;
+}
+
+:lang(th) h1,
+:lang(th) h2,
+:lang(th) h3,
+:lang(th) h4,
+[lang|="th"] h1,
+[lang|="th"] h2,
+[lang|="th"] h3,
+[lang|="th"] h4 {
+  font-family: "Thonburi", "Noto Sans Thai", sans-serif;
+  line-height: 1.3;
+}
+
+/* =========================================================
+   Cyrillic — Russian, Ukrainian, Serbian
+   ========================================================= */
+
+:lang(ru),
+:lang(uk),
+:lang(sr),
+[lang|="ru"],
+[lang|="uk"],
+[lang|="sr"] {
+  font-family: Georgia, "Times New Roman", serif;
+  line-height: 1.6;
+}
+
+:lang(ru) h1,
+:lang(ru) h2,
+:lang(ru) h3,
+:lang(ru) h4,
+:lang(uk) h1,
+:lang(uk) h2,
+:lang(uk) h3,
+:lang(uk) h4,
+:lang(sr) h1,
+:lang(sr) h2,
+:lang(sr) h3,
+:lang(sr) h4,
+[lang|="ru"] h1,
+[lang|="ru"] h2,
+[lang|="ru"] h3,
+[lang|="ru"] h4,
+[lang|="uk"] h1,
+[lang|="uk"] h2,
+[lang|="uk"] h3,
+[lang|="uk"] h4,
+[lang|="sr"] h1,
+[lang|="sr"] h2,
+[lang|="sr"] h3,
+[lang|="sr"] h4 {
+  font-family: Georgia, "Times New Roman", serif;
+  line-height: 1.25;
+}
+
+/* =========================================================
+   RTL — Arabic & Hebrew
+   ========================================================= */
+
+/* Block-level RTL: right-align */
+[dir="rtl"] {
+  text-align: right;
+}
+
+/* Inline RTL spans inside LTR context: isolate bidi so
+   surrounding Latin is not reordered. */
+[lang|="ar"],
+[lang|="he"],
+:lang(ar),
+:lang(he) {
+  unicode-bidi: isolate;
+}
+
+/* =========================================================
+   Global non-Latin helpers: never justify, keep measure sane
+   ========================================================= */
+
+:lang(zh),
+:lang(ja),
+:lang(ko),
+:lang(ar),
+:lang(he),
+:lang(hi),
+:lang(mr),
+:lang(ne),
+:lang(bn),
+:lang(ta),
+:lang(th),
+:lang(ru),
+:lang(uk),
+:lang(sr) {
+  text-align: start;
+  hyphens: none;
+  max-inline-size: 70rem;
+}
