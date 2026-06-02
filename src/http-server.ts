@@ -337,7 +337,8 @@ Then include one targeted follow-up that would most reduce uncertainty if they w
 - Write like a real person talking to a friend. Use plain words and short sentences. No exclamation points. Avoid AI-tell words like "delve", "tapestry", "crucial", "elevate", "unleash", or "testament". Generated answer text does not need to be rewritten just because a model uses an em-dash.
 - FOOD SAFETY OVERRIDES EVERYTHING. If the person mentions any allergy, intolerance, or dietary restriction, never suggest tasting, buying, or substituting anything that could contain it; build cues only from ingredients they have already tolerated and confirmed for themselves. Name common allergens (nuts, peanuts, dairy, egg, wheat or gluten, soy, shellfish, fish, sesame) whenever a suggestion could contain them. Never call anything "safe", "safely prepared", "allergen-free", or "medically safe"; do not frame an allergy answer as a safety guarantee. You do not give medical, allergy, or nutritional advice; point people to a qualified professional for those. Every taste is optional and at the person's own discretion.
 - If the user shares a photo, describe what you see in the image and combine it with any text description they provide before calling tools.
-- If researched facts were gathered (e.g., from search_web or resolve_dish_name), explicitly reference at least one specific finding in your prose. Do not summarize vaguely. Name the exact fact.`;
+- If researched facts were gathered (e.g., from search_web or resolve_dish_name), explicitly reference at least one specific finding in your prose. Do not summarize vaguely. Name the exact fact.
+- FORMAT FOR ON-SCREEN READING. Never write one long wall of text. Use short paragraphs of 1-2 sentences separated by blank lines. Put any brief "Label:" lead-in (for example "First tiny check:", "What you're checking:", "One question to narrow it down:") in **bold** markdown. Use a "- " bulleted list for any sequence of steps or any either/or "if it tastes X / if it tastes Y" conditions. Put a single direct question on its own line.`;
 
 const MODEL_EXTRACTION_TIMEOUT_MS = Math.min(
   parsePositiveInteger(process.env.ACHIOTE_MODEL_EXTRACTION_TIMEOUT_MS) ?? DEFAULT_MODEL_EXTRACTION_TIMEOUT_MS,
@@ -450,10 +451,24 @@ function telemetryDistinctId(req: IncomingMessage): string {
   return `anon_${createHash('sha256').update(telemetryClientKey(req)).digest('hex').slice(0, 24)}`;
 }
 
+// The visitor's real IP, so PostHog geolocates by the visitor and not by this server.
+// Behind Traefik (ACHIOTE_TRUST_PROXY=true) the client IP is the first X-Forwarded-For hop.
+function telemetryClientIp(req: IncomingMessage): string | undefined {
+  if (TRUST_PROXY) {
+    const xff = req.headers['x-forwarded-for'];
+    const first = (Array.isArray(xff) ? xff[0] : xff)?.split(',')[0]?.trim();
+    if (first) return first;
+    const xr = req.headers['x-real-ip'];
+    if (typeof xr === 'string' && xr.trim()) return xr.trim();
+  }
+  return req.socket.remoteAddress || undefined;
+}
+
 async function forwardTelemetryToPostHog(eventName: string, properties: Record<string, string>, req: IncomingMessage): Promise<void> {
   if (POSTHOG_DISABLED || !POSTHOG_PROJECT_API_KEY) return;
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 1500);
+  const clientIp = telemetryClientIp(req);
   try {
     await fetch(`${POSTHOG_HOST}/capture/`, {
       method: 'POST',
@@ -464,6 +479,8 @@ async function forwardTelemetryToPostHog(eventName: string, properties: Record<s
         properties: {
           ...properties,
           distinct_id: telemetryDistinctId(req),
+          // Override PostHog's GeoIP source: use the visitor's IP, not the server's.
+          ...(clientIp ? { $ip: clientIp } : {}),
           $process_person_profile: false,
           $lib: 'achiote-server',
         },
@@ -2523,9 +2540,11 @@ async function serveStatic(req: IncomingMessage, res: ServerResponse): Promise<b
     const data = await readFile(filePath);
     const ext = assetPath.slice(assetPath.lastIndexOf('.'));
     const contentType = MIME[ext] || 'application/octet-stream';
+    const cacheControl = contentType.includes('text/html') ? 'no-cache' : 'public, max-age=300';
     const scriptSrc = assetPath === 'billing-success.html' ? "script-src 'self' 'unsafe-inline'" : "script-src 'self'";
     res.writeHead(200, {
       'Content-Type': contentType,
+      'Cache-Control': cacheControl,
       'Content-Security-Policy': [
         "default-src 'self'",
         scriptSrc,
