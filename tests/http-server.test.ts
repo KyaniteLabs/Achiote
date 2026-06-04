@@ -171,7 +171,7 @@ describe('HTTP server integration', () => {
   });
 
   it('serves trust, launch-support, and AI-search routes with security headers', async () => {
-    for (const path of ['/privacy', '/privacy/', '/terms', '/terms/', '/support', '/support/', '/safety', '/safety/', '/ai-search', '/ai-search/']) {
+    for (const path of ['/privacy', '/privacy/', '/terms', '/terms/', '/support', '/support/', '/safety', '/safety/', '/ai-search', '/ai-search/', '/meaning', '/meaning/', '/week6', '/week6/']) {
       const res = await fetch(`${baseUrl}${path}`);
       expect(res.status).toBe(200);
       expect(res.headers.get('content-type')).toContain('text/html');

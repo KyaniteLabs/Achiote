@@ -2513,6 +2513,8 @@ async function serveStatic(req: IncomingMessage, res: ServerResponse): Promise<b
     '/safety': 'safety.html',
     '/ai-search': 'ai-search.html',
     '/compare': 'compare.html',
+    '/meaning': 'meaning.html',
+    '/week6': 'week6.html',
   };
   const assetPath = routeMap[raw] ?? raw.replace(/^\//, '');
   const filePath = resolve(STATIC_DIR, assetPath);
