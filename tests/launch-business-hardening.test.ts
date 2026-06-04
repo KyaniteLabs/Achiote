@@ -6,6 +6,7 @@ import http from 'node:http';
 const landing = () => fs.readFileSync('docs/landing/index.html', 'utf8');
 const app = () => fs.readFileSync('docs/landing/app.html', 'utf8');
 const appJs = () => fs.readFileSync('docs/landing/app.js', 'utf8');
+const researchAppJs = () => fs.readFileSync('docs/landing/research-app.js', 'utf8');
 const server = () => fs.readFileSync('src/http-server.ts', 'utf8');
 const telemetryCollector = () => fs.readFileSync('src/lib/telemetry-collector.ts', 'utf8');
 
@@ -67,9 +68,9 @@ describe('launch business hardening', () => {
     expect(appJs()).toContain('isQualitySignalsConsentEnabled');
     expect(appJs()).toContain('consent: { analytics: true }');
     expect(appJs()).toContain('qualitySignals: isQualitySignalsConsentEnabled()');
-    expect(app()).toContain('Data & memory');
-    expect(app()).toContain('id="consent-analytics"');
-    expect(app()).toContain('id="consent-quality"');
+    expect(app()).toContain('your words stay your words');
+    expect(app()).toContain('site-telemetry.js');
+    expect(appJs()).toContain('consent: { analytics: true }');
     expect(landing()).toContain('/privacy#data-memory-controls');
     expect(appJs()).toContain("sendFeedback(");
     for (const eventName of [
@@ -131,50 +132,47 @@ describe('launch business hardening', () => {
 
   it('gives first-time users a concrete memory prompt scaffold', () => {
     const page = app();
-    const js = appJs();
+    const js = researchAppJs();
 
-    expect(page).toContain('Start with any three clues');
-    expect(page).toContain('Who made it, or where you ate it');
-    expect(page).toContain('What you are unsure about');
-    expect(page).toContain('data-suggestion-category="family-region-texture"');
-    expect(page).toContain('data-suggestion-category="sensory-soup"');
-    expect(js).toContain('suggestionCategory');
-    expect(js).toContain('source: text ?');
+    expect(page).toContain('Not sure where to start?');
+    expect(page).toContain('A soup my grandmother made');
+    expect(page).toContain('A cold drink from childhood');
+    expect(page).toContain('A leaf-wrapped thing we lost');
+    expect(page).toContain('data-category="soup"');
+    expect(page).toContain('data-category="drink"');
+    expect(js).toContain("getAttribute('data-category')");
+    expect(js).toContain("source: 'suggestion'");
   });
 
   it('keeps the live tool trace readable for preview users', () => {
     const page = app();
-    const js = appJs();
+    const js = researchAppJs();
 
-    expect(page).toContain('.trace-panel');
+    expect(page).toContain('.trace');
     expect(page).toContain('font-size: 1rem');
-    expect(page).toContain('.trace-heading');
-    expect(page).toContain('.trace-phase');
-    expect(page).toContain('.trace-tool-name');
-    expect(js).toContain('assistant-content');
-    expect(js).toContain('phaseForStatus');
-    expect(js).toContain('Reading memory');
-    expect(js).toContain('Correcting likely name');
-    expect(js).toContain('Researching');
-    expect(js).toContain('Building first test');
-    expect(js).toContain("item.className = `trace-item ${type}`");
-    expect(js).toContain('Feels close');
-    expect(js).toContain('Too hard to make');
-    expect(js).toContain('Did not correct my wording');
+    expect(page).toContain('.trace-head');
+    expect(page).toContain('.trace-list');
+    expect(page).toContain('.trace-item');
+    expect(js).toContain('phaseLabel');
+    expect(js).toContain('Reading your memory');
+    expect(js).toContain('Correcting the likely name');
+    expect(js).toContain('Researching sources');
+    expect(js).toContain('Building your first taste');
+    expect(js).toContain("item.className = 'trace-item ' + type");
+    expect(js).toContain('What Achiote is doing');
     expect(js).not.toContain('font-size:12px');
     expect(js).not.toContain('font-size:11px');
   });
 
   it('lets users keep the memory receipt after a successful answer', () => {
     const page = app();
-    const js = appJs();
+    const js = researchAppJs();
 
-    expect(page).toContain('.receipt-actions');
-    expect(js).toContain("event.type === 'receipt'");
-    expect(js).toContain('downloadMemoryReceipt');
-    expect(js).toContain('copyFamilyQuestions');
-    expect(js).toContain('Achiote Memory Receipt');
-    expect(js).toContain('URL.createObjectURL');
+    expect(page).toContain('.receipt-paper');
+    expect(js).toContain("ev.type === 'receipt'");
+    expect(js).toContain('renderReceipt');
+    expect(js).toContain('Memory Receipt');
+    expect(js).toContain('history = history.concat');
     expect(js).not.toContain("localStorage.setItem('achiote-last-memory");
   });
 

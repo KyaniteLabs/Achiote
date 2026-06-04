@@ -15,6 +15,32 @@
   <link rel="preload" href="proof/fonts/junction-bold.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="proof/images/bg-texture.jpg?v=2" as="image">
   <link rel="stylesheet" href="site.css?v=10" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Achiote",
+    "applicationCategory": "LifestyleApplication",
+    "operatingSystem": "Any",
+    "url": "https://achiote.kyanitelabs.tech/",
+    "license": "https://github.com/KyaniteLabs/Achiote/blob/master/LICENSE",
+    "description": "Food-memory forensics for recovering a dish or drink from partial memories, evidence, and a first small taste test."
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Kyanite Labs",
+    "url": "https://achiote.kyanitelabs.tech/",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "customer support",
+      "email": "support@kyanitelabs.tech",
+      "url": "https://achiote.kyanitelabs.tech/support"
+    }
+  }
+  </script>
   <style>
     /* ---------- Landing-specific ---------- */
     .hero {
@@ -135,6 +161,18 @@
     .closing h2 { font-size: clamp(2rem, 4.4vw, 3.2rem); font-weight: 700; letter-spacing: -0.015em; margin: 0 auto; max-width: 16ch; line-height: 1.02; }
     .closing .lead { max-width: 560px; margin: var(--s5) auto 0; }
     .closing .hero-cta { justify-content: center; }
+    .offer-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s4); margin-top: var(--s7); }
+    .offer { padding: var(--s6) var(--s5); border: 1px solid var(--line); border-radius: var(--r-md); background: var(--card); box-shadow: 0 24px 60px rgba(0,0,0,0.4); }
+    .offer h3 { margin: 0 0 var(--s3); font-size: 1.2rem; }
+    .offer p { margin: 0 0 var(--s4); color: var(--text-2); font-size: 0.9rem; line-height: 1.5; }
+    .offer .price { display: block; margin: 0 0 var(--s3); color: var(--gold); font-family: var(--font-display); font-size: 1.8rem; font-weight: 700; line-height: 1.05; }
+    .trust-links { display: flex; flex-wrap: wrap; gap: var(--s3) var(--s5); margin-top: var(--s5); color: var(--gold-soft); font-size: 0.9rem; }
+    .footer-links { display: flex; flex-wrap: wrap; gap: var(--s3) var(--s5); color: var(--gold-soft); font-size: 0.86rem; }
+    .sources { margin-top: var(--s7); padding: var(--s6); border: 1px solid var(--line); border-radius: var(--r-md); background: var(--card); }
+    .sources h3 { margin: 0 0 var(--s4); font-size: 0.86rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); }
+    .sources ol { margin: 0; padding-left: 1.3em; color: var(--text-2); font-size: 0.82rem; line-height: 1.65; }
+    .sources li { margin: 6px 0; }
+    .sources a { color: var(--gold-soft); font-weight: 700; }
 
     @media (max-width: 900px) {
       .hero-grid, .receipt-feature { grid-template-columns: 1fr; }
@@ -142,6 +180,7 @@
       .contrast { grid-template-columns: 1fr; }
       .arch-grid { grid-template-columns: 1fr 1fr; }
       .movements { grid-template-columns: 1fr 1fr; }
+      .offer-grid { grid-template-columns: 1fr; }
     }
     @media (max-width: 560px) {
       .arch-grid { grid-template-columns: 1fr; }
@@ -158,9 +197,10 @@
       <a class="brand" href="/"><span class="dot" aria-hidden="true"></span>Achiote</a>
       <nav class="nav-links" aria-label="Primary">
         <a href="/" aria-current="page">Home</a>
-        <a href="week6.html">The proof</a>
-        <a href="meaning.html">Meaning</a>
-        <a class="btn btn-primary" href="app.html">Try it free <span class="arrow" aria-hidden="true">&rarr;</span></a>
+        <a href="/week6">The proof</a>
+        <a href="/meaning">Meaning</a>
+        <a href="/compare">Compare</a>
+        <a class="btn btn-primary" href="/app">Try it free <span class="arrow" aria-hidden="true">&rarr;</span></a>
       </nav>
     </div>
   </header>
@@ -171,10 +211,10 @@
       <div class="container hero-grid">
         <div>
           <p class="eyebrow">Food-memory researcher</p>
-          <h1>Taste your<br />way <em>home.</em></h1>
-          <p class="lead">Achiote rebuilds the dishes your family never wrote down. Give it a sound-alike, a smell, a color, a Sunday ritual. It hands back one small taste, so you can find out whether the memory is right.</p>
+          <h1 aria-label="Taste your way home.">Taste your<br />way <em>home.</em></h1>
+          <p class="lead">The dish you remember but can't name. Achiote is food-memory forensics for family recipes, lost dishes, and diaspora clues: give it a sound-alike, a smell, a color, a Sunday ritual, and it gives you one small taste test before you cook a full recipe.</p>
           <div class="hero-cta">
-            <a class="btn btn-primary" href="app.html">Bring back a memory <span class="arrow" aria-hidden="true">&rarr;</span></a>
+            <a class="btn btn-primary" href="/app">Bring back a memory <span class="arrow" aria-hidden="true">&rarr;</span></a>
             <a class="btn btn-ghost" href="#how">See how it works</a>
           </div>
         </div>
@@ -248,8 +288,8 @@
           </div>
           <div class="arch-card">
             <p class="arch-num">03</p>
-            <h4>Live web research</h4>
-            <p>Cited sources fill gaps in real time: regional variations, ingredient swaps, technique cross-references the pantry hasn't seen yet.</p>
+            <h4>Your AI does the live research</h4>
+            <p>Your host AI can search the web; Achiote plans the research strategy, structures the evidence, and keeps user-said, researched, inferred, and unknown facts separate.</p>
             <span class="arch-tag arch-tag-live">Live research</span>
           </div>
           <div class="arch-card">
@@ -271,7 +311,7 @@
             <h2 class="section-title">The Memory Receipt</h2>
             <p class="section-copy">Achiote doesn't end with a recipe card. It ends with a receipt: what you said, what it researched, what it inferred, what's still unknown, and the one small taste to try first. It shows the trail instead of claiming certainty.</p>
             <div class="hero-cta">
-              <a class="btn btn-primary" href="app.html">Get your receipt <span class="arrow" aria-hidden="true">&rarr;</span></a>
+              <a class="btn btn-primary" href="/app">Get your receipt <span class="arrow" aria-hidden="true">&rarr;</span></a>
             </div>
           </div>
           <div class="receipt-paper" role="img" aria-label="Example Memory Receipt for a remembered dish">
@@ -301,14 +341,93 @@
       </div>
     </section>
 
+    <section class="section" id="pricing">
+      <div class="container">
+        <p class="kicker">Launch access</p>
+        <h2 class="section-title">Guided memories, not generic API credits</h2>
+        <p class="section-copy">Free includes 3 guided memories per month. Personal is $9/month for 25 guided memories; Personal annual is $59/year. Hosted API and MCP access require a commercial license.</p>
+        <div class="offer-grid">
+          <article class="offer">
+            <span class="price">$9</span>
+            <h3>Personal</h3>
+            <p>25 guided memories per month for one person rebuilding family dishes and food stories.</p>
+            <a class="btn btn-primary" href="/pricing" data-checkout-tier="personal" data-checkout-mode="subscription">Choose Personal</a>
+          </article>
+          <article class="offer">
+            <span class="price">$59/year</span>
+            <h3>Personal annual</h3>
+            <p>The same 25 guided memories per month, prepaid for a calmer yearly setup.</p>
+            <a class="btn btn-ghost" href="/pricing" data-checkout-tier="personal" data-checkout-billing="annual" data-checkout-mode="subscription">Choose annual</a>
+          </article>
+          <article class="offer">
+            <span class="price">$49</span>
+            <h3>Memory Pack</h3>
+            <p>25 guided memories, no subscription, for one focused family archive pass.</p>
+            <a class="btn btn-ghost" href="/pricing" data-checkout-tier="memory-pack" data-checkout-mode="payment">Buy a pack</a>
+          </article>
+          <article class="offer">
+            <span class="price">$39</span>
+            <h3>Family Archive</h3>
+            <p>300 guided memories per month for a household or archive project.</p>
+            <a class="btn btn-ghost" href="/pricing" data-checkout-tier="family" data-checkout-mode="subscription">Choose Family</a>
+          </article>
+          <article class="offer">
+            <span class="price">$149 one-time</span>
+            <h3>Family Archive Sprint</h3>
+            <p>A bounded archive sprint when you want one concentrated pass through a set of memories.</p>
+            <a class="btn btn-ghost" href="/pricing" data-checkout-tier="family-sprint" data-checkout-mode="payment">Start sprint</a>
+          </article>
+          <article class="offer">
+            <span class="price">from $299/month</span>
+            <h3>Commercial</h3>
+            <p>Commercial hosted MCP/API starts from $299/month; pilots from $1,500 are for bounded launch integrations.</p>
+            <a class="btn btn-ghost" href="/support">Talk to support</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <p class="kicker">Trust surface</p>
+        <h2 class="section-title">Evidence first, with the boundaries visible</h2>
+        <p class="section-copy">Business Source License 1.1. Sample memories are marked as sample memories. Static sourcing guidance, not live inventory. No guesses pretending to be facts.</p>
+        <div class="trust-links" aria-label="Trust and discovery links">
+          <a href="/ai-search">/ai-search</a>
+          <a href="/llms.txt">/llms.txt</a>
+          <a href="/compare">/compare</a>
+          <a href="/pricing">/pricing</a>
+          <a href="/roadmap">/roadmap</a>
+          <a href="/blog">/blog</a>
+          <a href="/privacy">/privacy</a>
+          <a href="/privacy#data-memory-controls">/privacy#data-memory-controls</a>
+          <a href="/terms">/terms</a>
+          <a href="/support">/support</a>
+          <a href="/safety">/safety</a>
+        </div>
+        <div class="sources">
+          <h3>Sources</h3>
+          <ol>
+            <li>Shahidi &amp; Hossain (2022). &ldquo;Role of Lipids in Food Flavor Generation.&rdquo; <em>Molecules</em> 27(15): 5014. <a href="https://doi.org/10.3390/molecules27155014">doi:10.3390/molecules27155014</a></li>
+            <li>Liu et al. (2022). &ldquo;Insights into flavor and key influencing factors of Maillard reaction products.&rdquo; <em>Frontiers in Nutrition</em> 9: 973677. <a href="https://doi.org/10.3389/fnut.2022.973677">doi:10.3389/fnut.2022.973677</a></li>
+            <li>Peyrot des Gachons et al. (2012). &ldquo;Opponency of astringent and fat sensations.&rdquo; <em>Current Biology</em> 22(19): R829&ndash;R830. <a href="https://doi.org/10.1016/j.cub.2012.08.017">doi:10.1016/j.cub.2012.08.017</a></li>
+            <li>Le Thanh-Blicharz &amp; Lewandowicz (2020). &ldquo;Functionality of Native Starches in Food Systems: Cluster Analysis Grouping of Rheological Properties in Different Product Matrices.&rdquo; <em>Foods</em> 9(8): 1073. <a href="https://doi.org/10.3390/foods9081073">doi:10.3390/foods9081073</a></li>
+            <li>Mao et al. (2025). &ldquo;Dynamic interaction of sweet and sour taste perceptions based on sucrose and citric acid.&rdquo; <em>npj Science of Food</em> 9: 152. <a href="https://doi.org/10.1038/s41538-025-00507-7">doi:10.1038/s41538-025-00507-7</a></li>
+            <li>Yamamoto et al. (2025). &ldquo;Pleasantness emotions and neural activity induced by the multimodal crispiness of monaka ice cream.&rdquo; <em>Frontiers in Nutrition</em> 12. <a href="https://doi.org/10.3389/fnut.2025.1681999">doi:10.3389/fnut.2025.1681999</a></li>
+            <li>Reid et al. (2023). &ldquo;Food-evoked nostalgia.&rdquo; <em>Cognition and Emotion</em> 37(1): 34&ndash;48. <a href="https://doi.org/10.1080/02699931.2022.2142525">doi:10.1080/02699931.2022.2142525</a></li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
     <!-- CLOSING -->
     <section class="section closing">
       <div class="container">
         <h2>The recipe was never written down. The memory was.</h2>
         <p class="lead">Start with a fragment: a sound, a smell, a color. Messy input is correct input.</p>
         <div class="hero-cta">
-          <a class="btn btn-primary" href="app.html">Bring a memory back <span class="arrow" aria-hidden="true">&rarr;</span></a>
-          <a class="btn btn-ghost" href="week6.html">See the proof</a>
+          <a class="btn btn-primary" href="/app">Bring a memory back <span class="arrow" aria-hidden="true">&rarr;</span></a>
+          <a class="btn btn-ghost" href="/week6">See the proof</a>
         </div>
       </div>
     </section>
@@ -317,7 +436,18 @@
   <footer class="site-footer">
     <div class="container">
       <span class="footer-brand">Achiote</span>
-      <p>Research-first food-memory reconstruction for families, immigrants, and diaspora communities. Built by Simón González De Cruz with interpretable context methodology.</p>
+      <p>Research-first food-memory reconstruction for families, immigrants, and diaspora communities. Built by Simón González De Cruz with interpretable context methodology. Support: support@kyanitelabs.tech.</p>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/pricing">Pricing</a>
+        <a href="/roadmap">Roadmap</a>
+        <a href="/blog">Blog</a>
+        <a href="/privacy">Privacy</a>
+        <a href="/terms">Terms</a>
+        <a href="/support">Support</a>
+        <a href="/safety">Safety</a>
+        <a href="/ai-search">AI search</a>
+        <a href="/llms.txt">llms.txt</a>
+      </nav>
     </div>
   </footer>
   <script src="site-telemetry.js?v=1" defer></script>
