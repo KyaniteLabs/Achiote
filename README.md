@@ -6,7 +6,7 @@ The workflow uses a minimum viable nostalgia cue to test whether the reconstruct
 
 ## Audit and authority boundary
 
-This is one byte-identical README for two audited snapshots, not a source-of-truth declaration or a deployment/release instruction. It does not establish GitHub `master` or Forgejo `main` as operational authority. Forgejo `main` is the intended productized lineage, but operational authority cannot be proven: audited deploy/release metadata still selects GitHub `master`, and Forgejo deployment guidance targets `origin/master`, which is absent from audited Forgejo `main`. The source-of-truth markers govern the separate public mirror `simongonzalezdc/achiote-food-memory-researcher`; they do not name either audited head as authoritative. Use the two audited commit IDs—GitHub `master` `e7f151992799ae011a0598e69fe8c6b8491ed690` and Forgejo `main` `49a234e708f592db2bc3540014bdfd26d7114682`—and their branch labels below; do not infer deployment authority from this README.
+This is one byte-identical README for two historical pre-remediation audit snapshots used for cross-lineage analysis, not a source-of-truth declaration or a deployment/release instruction. It does not establish GitHub `master` or Forgejo `main` as operational authority. Forgejo `main` is the intended productized lineage, but operational authority cannot be proven: audited deploy/release metadata still selects GitHub `master`, and Forgejo deployment guidance targets `origin/master`, which is absent from audited Forgejo `main`. The source-of-truth markers govern the separate public mirror `simongonzalezdc/achiote-food-memory-researcher`; they do not name either historical audit snapshot as authoritative. Use the two historical pre-remediation audit snapshot commit IDs—GitHub `master` `e7f151992799ae011a0598e69fe8c6b8491ed690` and Forgejo `main` `49a234e708f592db2bc3540014bdfd26d7114682`—for cross-lineage analysis; they are not current branch heads. Do not infer deployment authority from this README.
 
 ## The common workflow
 
@@ -62,16 +62,16 @@ cp skill/SKILL.md ~/.codex/skills/achiote/SKILL.md
 
 No dependency-backed installation path is verified across both audited lineages:
 
-- **GitHub `master`** — `npm ci --dry-run --ignore-scripts --offline` passed (exit 0), so its lockfile resolves in the local offline cache at the audited head.
+- **GitHub `master`** — `npm ci --dry-run --ignore-scripts --offline` passed (exit 0), so its lockfile resolves in the local offline cache at the historical pre-remediation audit snapshot.
 - **Forgejo `main`** — the documented `npm ci` path is blocked before installation by `EUSAGE`: `package.json` requests `@anthropic-ai/sdk` `^0.111.0`, while `package-lock.json` records `^0.105.0` and version `0.105.0`. Do not replace this with a lockfile-mutating install.
 
-The exact audited branch surfaces are below. Do not assume that a branch-specific command exists on the other lineage.
+The exact historical pre-remediation audit snapshot branch surfaces are below. Do not assume that a branch-specific command exists on the other lineage.
 
 ## The two audited lineages
 
-| Lineage | Audited head | Support surface at that head |
+| Lineage | Historical pre-remediation audit snapshot (not current branch head) | Support surface at that snapshot |
 |---|---|---|
-| **GitHub `master`** | `e7f151992799ae011a0598e69fe8c6b8491ed690` | The shared 18-tool granular MCP server; the HTTP server’s `/ask` SSE route, `/mcp` transport, `/health`, voice routes, and its checked-in static product assets. This head does **not** expose Forgejo’s productized `reconstruct_food_memory` MCP tool or `ask`/`purge` terminal CLI. |
+| **GitHub `master`** | `e7f151992799ae011a0598e69fe8c6b8491ed690` | The shared 18-tool granular MCP server; the HTTP server’s `/ask` SSE route, `/mcp` transport, `/health`, voice routes, and its checked-in static product assets. This historical snapshot does **not** expose Forgejo’s productized `reconstruct_food_memory` MCP tool or `ask`/`purge` terminal CLI. |
 | **Forgejo `main`** | `49a234e708f592db2bc3540014bdfd26d7114682` | The shared 18-tool granular MCP server plus the productized `reconstruct_food_memory` single-call MCP tool; the `ask`, `serve`/`mcp`, and `purge` CLI commands; the versioned `/v1/ask` HTTP API; and the `/ask` compatibility alias. Forgejo-only API contracts are documented as `docs/openapi.yaml` and `docs/openapi.json` in the Forgejo checkout; its retention details are documented as `docs/PRIVACY-RETENTION.md` there. |
 
 This canonical README must remain byte-identical when placed in both audited source lineages. The two histories and implementation scopes are not interchangeable; branch-specific surfaces below are not universal claims.
