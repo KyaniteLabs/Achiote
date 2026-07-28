@@ -29,9 +29,9 @@ The core workflow is exposed as 18 granular MCP tools in both audited lineages. 
 
 ## Install and use the shared MCP surface
 
-Achiote is not published to npm at the audited revisions. Use a source checkout, a Git URL install, or a tarball produced by `npm pack`.
+Achiote is not published to npm at the audited revisions. No dependency-backed installation path is verified across both audited lineages.
 
-After dependencies are available, the build and stdio server commands are shared by both lineages:
+The following build and stdio server commands are documented for both lineages; dependency-backed build and test remain unverifiable:
 
 ```bash
 npm run build
@@ -51,7 +51,7 @@ Register the built stdio server in an MCP host such as Claude Code or Codex:
 }
 ```
 
-Install the shared teaching-skill path wherever the host loads skills:
+The documented shared teaching-skill copy path is:
 
 ```bash
 mkdir -p ~/.codex/skills/achiote
@@ -60,10 +60,10 @@ cp skill/SKILL.md ~/.codex/skills/achiote/SKILL.md
 
 ### Dependency-install note
 
-`npm ci` is the intended locked install command, but it is not currently successful on both audited heads:
+No dependency-backed installation path is verified across both audited lineages:
 
-- **GitHub `master`** has a lockfile root aligned with its `package.json` dependency ranges.
-- **Forgejo `main`** currently has a lockfile mismatch: `package.json` requests `@anthropic-ai/sdk` `^0.111.0`, while `package-lock.json` records `^0.105.0` and version `0.105.0`. `npm ci` rejects this with `EUSAGE` before installation. Do not silently replace it with a lockfile-mutating install.
+- **GitHub `master`** — `npm ci --dry-run --ignore-scripts --offline` passed (exit 0), so its lockfile resolves in the local offline cache at the audited head.
+- **Forgejo `main`** — the documented `npm ci` path is blocked before installation by `EUSAGE`: `package.json` requests `@anthropic-ai/sdk` `^0.111.0`, while `package-lock.json` records `^0.105.0` and version `0.105.0`. Do not replace this with a lockfile-mutating install.
 
 The exact audited branch surfaces are below. Do not assume that a branch-specific command exists on the other lineage.
 
@@ -99,7 +99,7 @@ Authentication is enabled by default for the HTTP server. Provider-backed reques
 
 ## Development and release checks
 
-The following shared development and release commands are available at both audited heads. Run them from a checkout with dependencies installed, except for the dependency-free checks noted below:
+The following shared development and release commands are documented at both audited heads. The audit verified `npm run lint`, `npm run coverage:guard`, `npm run reference:coverage`, and `npm run validate:citations`; dependency-backed and packaging entries remain unverified:
 
 ```bash
 npm run lint                   # dependency-free static checks
@@ -118,7 +118,7 @@ npm pack --dry-run
 
 `npm run package:smoke` is deliberately narrower than full route coverage: it packs the package, installs the tarball in a temporary project, checks the packaged MCP CLI, and probes the selected packaged HTTP and public-asset smoke paths. It does not prove that every route or every provider-backed behavior works.
 
-`npm run check`, citation validation, `npm audit`, package installation, package smoke, Docker smoke, and provider-backed examples may require dependency or network access. Keep those effects explicit in operator environments.
+`npm run check`, citation validation, `npm audit`, package installation, package smoke, and provider-backed examples may require dependency or network access. Keep those effects explicit in operator environments.
 
 ## Forgejo-only productized CLI
 
