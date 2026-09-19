@@ -1,6 +1,6 @@
 {
   "name": "achiote",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Nostalgic food memory reconstruction MCP server — recreates childhood dishes using ingredients available where you are",
   "main": "dist/index.js",
   "type": "module",
@@ -14,6 +14,9 @@
     "check": "npm run typecheck && npm run lint && npm run coverage:guard && npm run reference:coverage && npm run build && npm test",
     "check:compat": "npm run typecheck && npm run build && npm test",
     "validate:citations": "node scripts/validate-citations.mjs --tolerant",
+    "verify:dois": "node scripts/verify-dois.mjs --fail",
+    "diagnose": "node scripts/diagnose.mjs",
+    "land": "node scripts/forgejo-land.mjs",
     "pack:check": "npm run check && npm run validate:citations && npm run package:smoke && npm pack --dry-run",
     "package:smoke": "node scripts/package-smoke.mjs",
     "prepack": "npm run build",
@@ -33,15 +36,15 @@
     "reference:seeds": "npm run build && node scripts/reference-seed-operator.mjs"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.102.0",
-    "@modelcontextprotocol/sdk": "^1.12.0",
+    "@anthropic-ai/sdk": "^0.111.0",
+    "@modelcontextprotocol/sdk": "^1.29.0",
     "better-sqlite3": "^12.10.0",
     "stripe": "^22.2.0",
     "zod": "^4.4.3"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.13",
-    "@types/node": "^25.9.2",
+    "@types/node": "^26.0.0",
     "@types/stripe": "^8.0.417",
     "@vitejs/plugin-react": "^6.0.2",
     "react": "^19.2.7",
@@ -67,8 +70,12 @@
     "skill/",
     "scripts/",
     "!scripts/weak-cloud-overnight.mjs",
+    "server.json",
     "docs/ARCHITECTURE.md",
     "docs/AI_SEARCH_SUBMISSION_RUNBOOK.md",
+    "docs/PRIVACY-RETENTION.md",
+    "docs/openapi.json",
+    "docs/openapi.yaml",
     "docs/LAUNCH_RUNBOOK.md",
     "docs/ROADMAP.md",
     "docs/SELF_HOSTED_RUNNER.md",
@@ -81,9 +88,11 @@
     "docs/landing/site.css",
     "docs/landing/type-scripts.css",
     "docs/landing/site-telemetry.js",
+    "docs/landing/analytics.js",
     "docs/landing/reveal.js",
     "docs/landing/meaning.html",
-    "docs/landing/week6.html",
+    "docs/landing/how-it-works.html",
+    "docs/landing/for-professionals.html",
     "docs/landing/proof/",
     "docs/landing/blog.html",
     "docs/landing/billing-success.html",
@@ -125,10 +134,18 @@
   "homepage": "https://github.com/KyaniteLabs/Achiote#readme",
   "keywords": [
     "mcp",
+    "mcp-server",
     "model-context-protocol",
+    "cli",
+    "api",
+    "http",
+    "ai-agent",
+    "ai-tools",
     "culinary",
     "recipes",
     "food",
-    "nostalgia"
+    "food-memory",
+    "nostalgia",
+    "privacy"
   ]
 }

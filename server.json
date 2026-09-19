@@ -3,7 +3,7 @@
   "name": "io.github.kyanitelabs/achiote",
   "title": "Achiote",
   "description": "Food-memory reconstruction: recreate childhood dishes with ingredients available where you are.",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "websiteUrl": "https://github.com/KyaniteLabs/Achiote#readme",
   "repository": {
     "url": "https://github.com/KyaniteLabs/Achiote",
@@ -14,7 +14,7 @@
       "registryType": "npm",
       "registryBaseUrl": "https://registry.npmjs.org",
       "identifier": "achiote",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "runtimeHint": "npx",
       "transport": {
         "type": "stdio"
@@ -47,6 +47,5 @@
         }
       }
     }
-  },
-  "license": "BUSL-1.1"
+  }
 }
