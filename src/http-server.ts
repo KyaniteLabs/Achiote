@@ -14,6 +14,7 @@ import { createRateLimiter } from './lib/rate-limit.js';
 import { createAccountAccess, rateLimitHeaders, type AuthedRequest } from './lib/account-access.js';
 import { BillingDb, defaultBillingDbPath } from './lib/billing-db.js';
 import { BillingStripe, loadBillingConfigFromEnv, type CheckoutTier } from './lib/billing-stripe.js';
+import { CryptoCheckout, CryptoOrderError, loadCryptoConfigFromEnv } from './lib/billing-crypto.js';
 import { getHttpReadiness, getRequestRateLimitIdentity, shouldApplyRateLimit } from './lib/http-runtime.js';
 import { resolveLocalSpeechConfig } from './lib/local-speech.js';
 import { createLocalSpeechController } from './lib/local-speech-controller.js';
@@ -134,10 +135,15 @@ const authenticator = createAuthenticator(configuredApiKeys, process.env.ACHIOTE
 const rateLimiter = createRateLimiter(process.env.ACHIOTE_RATE_LIMIT_DB);
 
 const billingConfig = loadBillingConfigFromEnv();
-const billingDb = billingConfig
+const cryptoConfig = loadCryptoConfigFromEnv();
+// Crypto checkout carries its own billing rail: the DB (sessions, keys, credits) must exist
+// even when Stripe is unconfigured, so the condition is either-or.
+const billingDb = billingConfig || cryptoConfig
   ? new BillingDb(process.env.ACHIOTE_BILLING_DB ? resolve(process.env.ACHIOTE_BILLING_DB) : defaultBillingDbPath())
   : null;
 const billingStripe = billingConfig ? new BillingStripe(billingConfig) : null;
+const cryptoCheckout = cryptoConfig && billingDb ? new CryptoCheckout(cryptoConfig, billingDb) : null;
+cryptoCheckout?.start();
 const localSpeechConfig = resolveLocalSpeechConfig();
 const localSpeechController = createLocalSpeechController(localSpeechConfig);
 
@@ -671,6 +677,7 @@ const server = createServer(async (req, res) => {
       version: '0.2.2',
       authEnabled: AUTH_ENABLED,
       billingEnabled: Boolean(billingConfig),
+      cryptoEnabled: Boolean(cryptoCheckout),
       readiness,
       uptime: process.uptime(),
       provider: {
@@ -885,6 +892,74 @@ const server = createServer(async (req, res) => {
     return;
   }
 
+  if (pathname === '/billing/crypto-order' && req.method === 'POST') {
+    if (!cryptoCheckout) {
+      sendJson(res, 503, { error: 'Crypto payments not configured' });
+      return;
+    }
+    let raw: string;
+    try { raw = await readBody(req, 10_000); } catch { sendJson(res, 413, { error: 'Body too large' }); return; }
+    let parsed: { tier?: string; mode?: string; asset?: string; billing?: string };
+    try { parsed = JSON.parse(raw); } catch { sendJson(res, 400, { error: 'Invalid JSON' }); return; }
+    if (parsed.mode && parsed.mode !== 'subscription' && parsed.mode !== 'payment') {
+      sendJson(res, 400, { error: 'Invalid checkout mode. Use subscription or payment.' });
+      return;
+    }
+    if (parsed.asset && parsed.asset !== 'sol' && parsed.asset !== 'usdc') {
+      sendJson(res, 400, { error: 'Invalid asset. Use sol or usdc.' });
+      return;
+    }
+    if (parsed.billing === 'annual') {
+      sendJson(res, 400, { error: 'Annual billing is not supported for crypto checkout.' });
+      return;
+    }
+    const mode: 'subscription' | 'payment' = parsed.mode === 'payment' ? 'payment' : 'subscription';
+    const asset: 'sol' | 'usdc' = parsed.asset === 'usdc' ? 'usdc' : 'sol';
+    const requestedTier = parsed.tier ?? (mode === 'payment' ? 'memory-pack' : 'personal');
+    try {
+      const order = await cryptoCheckout.createOrder({ tier: requestedTier, mode, asset });
+      sendJson(res, 200, {
+        ref: order.ref,
+        asset: order.asset,
+        address: order.address,
+        amount: order.amount,
+        uri: order.uri,
+        expiresAtMs: order.expiresAtMs,
+      });
+    } catch (err) {
+      if (err instanceof CryptoOrderError) {
+        sendJson(res, err.status, { error: err.message });
+      } else {
+        sendJson(res, 500, { error: err instanceof Error ? err.message : 'Crypto checkout failed' });
+      }
+    }
+    return;
+  }
+
+  if (pathname === '/billing/crypto-status' && req.method === 'GET') {
+    if (!cryptoCheckout) {
+      sendJson(res, 503, { error: 'Crypto payments not configured' });
+      return;
+    }
+    const query = new URL(req.url || '', `http://localhost:${PORT}`).searchParams;
+    const ref = query.get('ref')?.trim() ?? '';
+    if (!/^[23456789ABCDEFGHJKLMNPQRSTUVWXYZ]{8}$/.test(ref)) {
+      sendJson(res, 400, { error: 'Invalid order reference' });
+      return;
+    }
+    try {
+      const { status, sessionId } = await cryptoCheckout.getOrderStatus(ref);
+      sendJson(res, 200, status === 'paid' ? { status, sessionId } : { status });
+    } catch (err) {
+      if (err instanceof CryptoOrderError) {
+        sendJson(res, err.status, { error: err.message });
+      } else {
+        sendJson(res, 500, { error: err instanceof Error ? err.message : 'Status lookup failed' });
+      }
+    }
+    return;
+  }
+
   if (pathname === '/billing/portal' && req.method === 'POST') {
     if (!billingStripe || !billingDb) {
       sendJson(res, 503, { error: 'Billing is not configured' });
@@ -960,7 +1035,9 @@ const server = createServer(async (req, res) => {
       sendJson(res, 404, { error: 'Session not found' });
       return;
     }
-    if (session.stripeCustomerId) {
+    // Crypto orders carry no email: the order ref is the buyer's proof of purchase.
+    const isCryptoSession = session.stripeCustomerId?.startsWith('crypto:') === true;
+    if (session.stripeCustomerId && !isCryptoSession) {
       if (!email) {
         sendJson(res, 400, { error: 'Email verification required. Include your checkout email as the ?email= parameter.' });
         return;
@@ -1024,6 +1101,7 @@ server.listen(PORT, () => {
 
 async function shutdown(): Promise<void> {
   await Promise.allSettled([...transports].map(([sid, entry]) => closeMcpSession(sid, entry)));
+  cryptoCheckout?.stop();
   cache?.close();
   rateLimiter.close();
   billingDb?.close();

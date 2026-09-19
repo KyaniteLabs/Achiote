@@ -49,6 +49,20 @@ export interface CheckoutSessionRecord {
   createdAt: string;
 }
 
+export interface CryptoOrderRecord {
+  ref: string;
+  tier: string;
+  mode: 'subscription' | 'payment';
+  asset: 'sol' | 'usdc';
+  amountUnits: string;
+  usdCents: number;
+  address: string;
+  status: 'pending' | 'paid' | 'expired';
+  signature: string | null;
+  createdAt: string;
+  expiresAt: string;
+}
+
 const KEY_PREFIX = 'ach_';
 const KEY_ID_PREFIX = 'ak_';
 const HASH_PREFIX = 'sha256:';
@@ -100,6 +114,36 @@ function decryptKey(stored: string): string | null {
 }
 
 const CHECKOUT_SESSION_TTL_MS = 24 * 60 * 60 * 1000;
+
+type CryptoOrderRow = {
+  ref: string;
+  tier: string;
+  mode: 'subscription' | 'payment';
+  asset: 'sol' | 'usdc';
+  amount_units: string;
+  usd_cents: number;
+  address: string;
+  status: 'pending' | 'paid' | 'expired';
+  signature: string | null;
+  created_at: string;
+  expires_at: string;
+};
+
+function cryptoOrderRowToRecord(row: CryptoOrderRow): CryptoOrderRecord {
+  return {
+    ref: row.ref,
+    tier: row.tier,
+    mode: row.mode,
+    asset: row.asset,
+    amountUnits: row.amount_units,
+    usdCents: row.usd_cents,
+    address: row.address,
+    status: row.status,
+    signature: row.signature,
+    createdAt: row.created_at,
+    expiresAt: row.expires_at,
+  };
+}
 
 export class BillingDb {
   private db: Database.Database;
@@ -158,11 +202,26 @@ export class BillingDb {
         created_at TEXT NOT NULL DEFAULT (datetime('now'))
       );
 
+      CREATE TABLE IF NOT EXISTS crypto_orders (
+        ref TEXT PRIMARY KEY,
+        tier TEXT NOT NULL,
+        mode TEXT NOT NULL,
+        asset TEXT NOT NULL,
+        amount_units TEXT NOT NULL,
+        usd_cents INTEGER NOT NULL,
+        address TEXT NOT NULL,
+        status TEXT NOT NULL DEFAULT 'pending',
+        signature TEXT,
+        created_at TEXT NOT NULL,
+        expires_at TEXT NOT NULL
+      );
+
       CREATE INDEX IF NOT EXISTS idx_billing_keys_hash ON billing_api_keys(key_hash);
       CREATE INDEX IF NOT EXISTS idx_billing_keys_customer ON billing_api_keys(stripe_customer_id);
       CREATE INDEX IF NOT EXISTS idx_billing_keys_subscription ON billing_api_keys(stripe_subscription_id);
       CREATE INDEX IF NOT EXISTS idx_billing_subscriptions_customer_status ON billing_subscriptions(stripe_customer_id, status);
       CREATE INDEX IF NOT EXISTS idx_checkout_sessions_customer ON checkout_sessions(stripe_customer_id);
+      CREATE INDEX IF NOT EXISTS idx_crypto_orders_pending ON crypto_orders(status, asset);
     `);
   }
 
@@ -478,6 +537,69 @@ export class BillingDb {
       `DELETE FROM checkout_sessions WHERE created_at < ? AND status = 'completed'`
     ).run(completedCutoff);
     return pendingResult.changes + completedResult.changes;
+  }
+
+  // ── Crypto orders (direct-to-wallet Solana checkout) ──────────────────────
+
+  createCryptoOrder(order: {
+    ref: string;
+    tier: string;
+    mode: 'subscription' | 'payment';
+    asset: 'sol' | 'usdc';
+    amountUnits: string;
+    usdCents: number;
+    address: string;
+    createdAt: string;
+    expiresAt: string;
+  }): void {
+    this.db.prepare(
+      `INSERT INTO crypto_orders (ref, tier, mode, asset, amount_units, usd_cents, address, status, created_at, expires_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, 'pending', ?, ?)`
+    ).run(
+      order.ref,
+      order.tier,
+      order.mode,
+      order.asset,
+      order.amountUnits,
+      order.usdCents,
+      order.address,
+      order.createdAt,
+      order.expiresAt
+    );
+  }
+
+  getCryptoOrder(ref: string): CryptoOrderRecord | null {
+    const row = this.db.prepare('SELECT * FROM crypto_orders WHERE ref = ?').get(ref) as CryptoOrderRow | undefined;
+    return row ? cryptoOrderRowToRecord(row) : null;
+  }
+
+  listPendingCryptoOrders(): CryptoOrderRecord[] {
+    const rows = this.db
+      .prepare("SELECT * FROM crypto_orders WHERE status = 'pending' ORDER BY created_at ASC, ref ASC")
+      .all() as CryptoOrderRow[];
+    return rows.map(cryptoOrderRowToRecord);
+  }
+
+  /** Atomically claims a pending order for fulfillment. Returns false when another worker already claimed it. */
+  markCryptoOrderPaid(ref: string, signature: string): boolean {
+    const result = this.db
+      .prepare("UPDATE crypto_orders SET status = 'paid', signature = ? WHERE ref = ? AND status = 'pending'")
+      .run(signature, ref);
+    return result.changes > 0;
+  }
+
+  /** Reverts a paid order back to pending when fulfillment failed, so the next poll retries it. */
+  reopenCryptoOrder(ref: string): void {
+    this.db
+      .prepare("UPDATE crypto_orders SET status = 'pending', signature = NULL WHERE ref = ? AND status = 'paid'")
+      .run(ref);
+  }
+
+  expireStaleCryptoOrders(nowIso: string): number {
+    const result = this.db
+      .prepare("UPDATE crypto_orders SET status = 'expired' WHERE status = 'pending' AND expires_at < ?")
+      .run(nowIso);
+    return result.changes;
   }
 
   // ── Cleanup ────────────────────────────────────────────────────────────────

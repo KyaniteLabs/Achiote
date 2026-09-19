@@ -41,8 +41,12 @@ describe('package distribution metadata', () => {
       'skill/',
       'scripts/',
       '!scripts/weak-cloud-overnight.mjs',
+      'server.json',
       'docs/ARCHITECTURE.md',
       'docs/AI_SEARCH_SUBMISSION_RUNBOOK.md',
+      'docs/PRIVACY-RETENTION.md',
+      'docs/openapi.json',
+      'docs/openapi.yaml',
       'docs/LAUNCH_RUNBOOK.md',
       'docs/ROADMAP.md',
       'docs/SELF_HOSTED_RUNNER.md',
@@ -55,12 +59,16 @@ describe('package distribution metadata', () => {
       'docs/landing/site.css',
       'docs/landing/type-scripts.css',
       'docs/landing/site-telemetry.js',
+      'docs/landing/analytics.js',
       'docs/landing/reveal.js',
       'docs/landing/meaning.html',
-      'docs/landing/week6.html',
+      'docs/landing/how-it-works.html',
+      'docs/landing/for-professionals.html',
       'docs/landing/proof/',
       'docs/landing/blog.html',
       'docs/landing/billing-success.html',
+      'docs/landing/vendor/',
+      'docs/CRYPTO-PAYMENTS.md',
       'docs/landing/changelog.html',
       'docs/landing/compare.html',
       'docs/landing/fonts/',
@@ -111,10 +119,13 @@ describe('package distribution metadata', () => {
 
   it('keeps private quality-signal telemetry inside the shipped server build', () => {
     const server = fs.readFileSync('src/http-server.ts', 'utf8');
+    // The quality-signal report is constructed in the shared engine deps factory and surfaced by the
+    // server's /events admin endpoint.
+    const deps = fs.readFileSync('src/core/ask-engine-deps.ts', 'utf8');
     const qualitySignals = fs.readFileSync('src/lib/quality-signals.ts', 'utf8');
 
     expect(pkg.files).toContain('dist/');
-    expect(server).toContain("from './lib/quality-signals.js'");
+    expect(deps).toContain("from '../lib/quality-signals.js'");
     expect(server).toContain('quality: qualitySignalReport');
     expect(qualitySignals).toContain('export function buildAskQualitySignal');
     expect(qualitySignals).not.toContain('rawMemory');
@@ -217,7 +228,8 @@ describe('package distribution metadata', () => {
 
 
   it('allows the /ask model to be overridden for Anthropic-compatible providers', () => {
-    const httpServer = fs.readFileSync('src/http-server.ts', 'utf8');
+    // The Anthropic client + provider-runtime wiring now lives in the shared engine deps factory.
+    const deps = fs.readFileSync('src/core/ask-engine-deps.ts', 'utf8');
     const askProvider = fs.readFileSync('src/lib/ask-provider.ts', 'utf8');
     const providerRuntime = fs.readFileSync('src/lib/provider-runtime.ts', 'utf8');
 
@@ -226,15 +238,14 @@ describe('package distribution metadata', () => {
     expect(providerRuntime).toContain('createAnthropicAskSession');
     expect(askProvider).toContain('ANTHROPIC_DEFAULT_SONNET_MODEL');
     expect(askProvider).toContain('ANTHROPIC_MODEL');
-    expect(httpServer).toContain('ANTHROPIC_TIMEOUT_MS');
-    expect(httpServer).toContain('API_TIMEOUT_MS');
-    expect(httpServer).toContain('anthropicClientOptions');
-    expect(httpServer).toContain('authToken');
-    expect(httpServer).toContain('createProviderRuntime');
+    expect(deps).toContain('ANTHROPIC_TIMEOUT_MS');
+    expect(deps).toContain('API_TIMEOUT_MS');
+    expect(deps).toContain('authToken');
+    expect(deps).toContain('createProviderRuntime');
     expect(askProvider).toContain('OPENAI_BASE_URL');
     expect(askProvider).toContain('LM_STUDIO_MODEL');
     expect(askProvider).toContain('glm-5v-turbo');
-    expect(httpServer).not.toContain("model: 'glm-5v-turbo'");
+    expect(deps).not.toContain("model: 'glm-5v-turbo'");
   });
 
 });
