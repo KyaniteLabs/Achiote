@@ -2,7 +2,7 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.kyanitelabs/achiote",
   "title": "Achiote",
-  "description": "Reconstruct nostalgic food memories: recreate childhood dishes using ingredients available where you are. Exposes a one-call reconstruct_food_memory tool plus granular workflow tools.",
+  "description": "Food-memory reconstruction: recreate childhood dishes with ingredients available where you are.",
   "version": "0.2.0",
   "websiteUrl": "https://github.com/KyaniteLabs/Achiote#readme",
   "repository": {
