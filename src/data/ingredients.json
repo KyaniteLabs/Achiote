@@ -4020,6 +4020,60 @@
         "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
       },
       "accessibilityTier": "ordinary_grocery_or_pantry"
+    },
+    "annatto-seeds": {
+      "name": "Annatto Seeds (Achiote)",
+      "aliases": [
+        "achiote",
+        "achiote paste",
+        "annatto paste",
+        "recado rojo",
+        "achiotl",
+        "urucum",
+        "roucou",
+        "bijol",
+        "lipstick tree seeds",
+        "Bixa orellana"
+      ],
+      "compounds": [
+        "bixin",
+        "norbixin"
+      ],
+      "sensoryContribution": {
+        "aroma": "mild, earthy, slightly peppery, faintly floral",
+        "flavor": "subtle bitter-peppery; primarily a color and fat-soluble carrier of warm earthiness"
+      },
+      "substitutionGroup": "warm-spice",
+      "commonIn": [
+        "Latin American",
+        "Caribbean",
+        "Yucatecan Mexican",
+        "Filipino"
+      ],
+      "provenance": {
+        "sourceType": "curated ingredient chemistry grouping",
+        "notes": [
+          "Bixin and norbixin are the apocarotenoid pigments of Bixa orellana seeds (the dataset-level compound references cover carotenoid chemistry).",
+          "Achiote paste (recado rojo) is a BLEND: annatto seeds plus oregano, garlic, cumin, salt, and sour orange or vinegar. When the paste is unavailable, substitute the blend components, not just the seeds.",
+          "Verify specialty or allergy-sensitive substitutions before use."
+        ]
+      },
+      "allergenFlags": {
+        "contains": {
+          "peanut": false,
+          "treeNut": false,
+          "milk": false,
+          "egg": false,
+          "wheatGluten": false,
+          "soy": false,
+          "shellfish": false,
+          "fish": false,
+          "sesame": false
+        },
+        "confidence": "Medium",
+        "notes": "Ingredient-level flags are static retrieval guardrails, not medical advice. Users must verify labels and consult a qualified professional for allergy questions."
+      },
+      "accessibilityTier": "specialty_market_or_online"
     }
   }
 }

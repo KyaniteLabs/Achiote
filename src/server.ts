@@ -2,6 +2,7 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { createCache, type AchioteServerOptions } from './lib/cache-path.js';
 import { readOnlyAnnotations } from './schemas/tool-schemas.js';
 import { structuredJsonResult, toolError } from './tools/results.js';
+import { registerReconstructTool } from './core/reconstruct-tool.js';
 import {
   defaultToolExecutionContext,
   toolRegistry,
@@ -17,7 +18,7 @@ export function createAchioteServer(options: AchioteServerOptions = {}): McpServ
   const server = new McpServer(
     {
       name: 'achiote',
-      version: '0.2.0',
+      version: '0.2.1',
     },
     {
       instructions:
@@ -46,6 +47,10 @@ export function createAchioteServer(options: AchioteServerOptions = {}): McpServ
       },
     );
   }
+
+  // The single-call reconstruction tool runs the full /ask engine (model + workflow). It is registered
+  // alongside the 18 granular tools so host models can drive a complete reconstruction in one call.
+  registerReconstructTool(server);
 
   const originalClose = server.close.bind(server);
   server.close = async () => {

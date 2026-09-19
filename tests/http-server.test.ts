@@ -50,7 +50,7 @@ describe('HTTP server integration', () => {
     const res = await fetch(`${baseUrl}/health`);
     expect(res.status).toBe(200);
     const body = await res.json();
-    expect(body).toMatchObject({ status: 'ok', version: '0.2.0' });
+    expect(body).toMatchObject({ status: 'ok', version: '0.2.1' });
     expect(body).toHaveProperty('authEnabled');
     expect(body).toHaveProperty('billingEnabled');
     expect(body).toHaveProperty('uptime');
@@ -171,7 +171,7 @@ describe('HTTP server integration', () => {
   });
 
   it('serves trust, launch-support, and AI-search routes with security headers', async () => {
-    for (const path of ['/privacy', '/privacy/', '/terms', '/terms/', '/support', '/support/', '/safety', '/safety/', '/ai-search', '/ai-search/', '/meaning', '/meaning/', '/week6', '/week6/']) {
+    for (const path of ['/privacy', '/privacy/', '/terms', '/terms/', '/support', '/support/', '/safety', '/safety/', '/ai-search', '/ai-search/', '/meaning', '/meaning/', '/how-it-works', '/how-it-works/', '/for-professionals', '/for-professionals/']) {
       const res = await fetch(`${baseUrl}${path}`);
       expect(res.status).toBe(200);
       expect(res.headers.get('content-type')).toContain('text/html');
@@ -194,6 +194,54 @@ describe('HTTP server integration', () => {
     const res = await fetch(`${baseUrl}/app.js`);
     expect(res.status).toBe(200);
     expect(res.headers.get('content-type')).toContain('text/javascript');
+  });
+
+  it('serves immutable assets (fonts/images) with long-lived cache headers and correct MIME', async () => {
+    const font = await fetch(`${baseUrl}/proof/fonts/junction-bold.woff2`);
+    expect(font.status).toBe(200);
+    // woff2 must not fall back to application/octet-stream — Cloudflare/browsers need the real type.
+    expect(font.headers.get('content-type')).toBe('font/woff2');
+    expect(font.headers.get('cache-control')).toBe('public, max-age=31536000, immutable');
+
+    const svg = await fetch(`${baseUrl}/proof/favicon.svg`);
+    expect(svg.status).toBe(200);
+    expect(svg.headers.get('content-type')).toContain('image/svg+xml');
+    expect(svg.headers.get('cache-control')).toBe('public, max-age=31536000, immutable');
+
+    const jpg = await fetch(`${baseUrl}/hero-image.jpg`);
+    expect(jpg.status).toBe(200);
+    expect(jpg.headers.get('content-type')).toContain('image/jpeg');
+    expect(jpg.headers.get('cache-control')).toBe('public, max-age=31536000, immutable');
+  });
+
+  it('serves versioned CSS/JS with a one-day cache (safe under ?v= cache-busting)', async () => {
+    const css = await fetch(`${baseUrl}/site.css`);
+    expect(css.status).toBe(200);
+    expect(css.headers.get('content-type')).toContain('text/css');
+    expect(css.headers.get('cache-control')).toBe('public, max-age=86400');
+
+    const js = await fetch(`${baseUrl}/app.js`);
+    expect(js.headers.get('cache-control')).toBe('public, max-age=86400');
+  });
+
+  it('serves HTML with a short browser TTL and a long shared (CDN) TTL', async () => {
+    const res = await fetch(`${baseUrl}/`);
+    expect(res.status).toBe(200);
+    expect(res.headers.get('cache-control')).toBe('public, max-age=300, s-maxage=86400');
+  });
+
+  it('leaves dynamic/sensitive endpoints uncached', async () => {
+    const health = await fetch(`${baseUrl}/health`);
+    // /health is served by the JSON handler, not serveStatic — it must not carry a static cache header.
+    expect(health.headers.get('cache-control')).toBeNull();
+  });
+
+  it('allows the PostHog analytics host in the static CSP without weakening core directives', async () => {
+    const res = await fetch(`${baseUrl}/`);
+    const csp = res.headers.get('content-security-policy') ?? '';
+    expect(csp).toContain("script-src 'self' https://*.posthog.com");
+    expect(csp).toContain("connect-src 'self' https://*.posthog.com");
+    expect(csp).toContain("object-src 'none'");
   });
 
   it('accepts only same-origin allowlisted telemetry events and keeps counters private', async () => {
