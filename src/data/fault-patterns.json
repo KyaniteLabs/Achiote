@@ -1,0 +1,491 @@
+{
+  "meta": {
+    "version": "1.0.0",
+    "description": "Symptom -> cited-mechanism -> fix map for the diagnose fault-finder. Every fault references a mechanism slug in food-science-references.json so the explanation and citation come straight from the verified DB. Beverage-weighted for the professional beverage/mixology vertical.",
+    "lastUpdated": "2026-06-21"
+  },
+  "faults": [
+    {
+      "id": "cork-taint",
+      "name": "Cork taint (TCA)",
+      "domain": "wine",
+      "mechanism": "cork-taint-tca",
+      "symptoms": [
+        "wet cardboard",
+        "wet newspaper",
+        "musty",
+        "moldy",
+        "mouldy",
+        "damp basement",
+        "wet dog",
+        "mildew",
+        "muted fruit",
+        "flat aroma",
+        "dull",
+        "stripped fruit"
+      ],
+      "fix": "Classic TCA: it mutes fruit and adds wet-cardboard/musty notes at parts-per-trillion. No rescue once it is in the bottle — reject the lot and trace the source (cork, wood, cellar air)."
+    },
+    {
+      "id": "reduction",
+      "name": "Reductive off-aromas (volatile sulfur)",
+      "domain": "wine",
+      "mechanism": "wine-oxidation-so2-reduction",
+      "symptoms": [
+        "rotten egg",
+        "sulfur",
+        "sulphur",
+        "struck match",
+        "burnt rubber",
+        "rubber",
+        "garlic",
+        "cabbage",
+        "drains",
+        "reductive",
+        "eggy",
+        "matchstick"
+      ],
+      "fix": "Volatile sulfur compounds from a too-reductive, low-oxygen environment. Often blows off with aeration/decanting; brief copper contact can scavenge it. Prevent with controlled oxygen and yeast nutrition."
+    },
+    {
+      "id": "oxidation",
+      "name": "Oxidation (browning / aldehyde)",
+      "domain": "wine",
+      "mechanism": "wine-oxidation-so2-reduction",
+      "symptoms": [
+        "bruised apple",
+        "sherry",
+        "brown",
+        "browning",
+        "nutty",
+        "stale",
+        "cooked",
+        "maderized",
+        "oxidized",
+        "oxidised",
+        "tired",
+        "dull color",
+        "dull colour",
+        "flat fruit"
+      ],
+      "fix": "Oxidative browning plus acetaldehyde notes from too much oxygen and/or too little SO2, catalyzed by trace iron/copper. Not reversible — prevent with free-SO2 management and tighter closures."
+    },
+    {
+      "id": "diacetyl",
+      "name": "Diacetyl (buttery)",
+      "domain": "wine|beer",
+      "mechanism": "malolactic-fermentation-oenococcus",
+      "symptoms": [
+        "buttery",
+        "butterscotch",
+        "movie popcorn",
+        "butter",
+        "slick",
+        "diacetyl"
+      ],
+      "fix": "Diacetyl from malolactic/citrate metabolism — wanted in some Chardonnay, a fault in lager and most reds. Extend lees/MLF contact so bacteria reduce it to flavorless acetoin, or block MLF to avoid it entirely."
+    },
+    {
+      "id": "over-bitter",
+      "name": "Excess / harsh bitterness",
+      "domain": "beverage",
+      "mechanism": "bitterness-perception-tas2r",
+      "symptoms": [
+        "too bitter",
+        "overly bitter",
+        "harsh bitter",
+        "aggressive bitter",
+        "bitter bomb",
+        "medicinal",
+        "overpowering bitter"
+      ],
+      "fix": "Different bitters hit different receptors and do not simply add up. Rebalance with sweetness or a pinch of salt (both suppress bitter), cut the bittering agent, or swap to a softer bitter source rather than only diluting."
+    },
+    {
+      "id": "astringency",
+      "name": "Astringency (drying tannin)",
+      "domain": "wine|beverage",
+      "mechanism": "tannin-astringency",
+      "symptoms": [
+        "astringent",
+        "drying",
+        "puckering",
+        "grippy",
+        "chalky",
+        "rough tannin",
+        "harsh tannin",
+        "mouth-drying",
+        "tannic"
+      ],
+      "fix": "Tannin-salivary-protein binding — a tactile drag, not a taste. Soften with body (sugar/glycerol), added protein/polysaccharide, or lower tannin and higher pH. Note sweetness will not mask it the way it masks bitter."
+    },
+    {
+      "id": "hot-boozy",
+      "name": "Hot / boozy alcohol burn",
+      "domain": "spirits",
+      "mechanism": "dilution-temperature-spirits",
+      "symptoms": [
+        "too hot",
+        "boozy",
+        "alcohol burn",
+        "aggressive alcohol",
+        "fiery",
+        "harsh alcohol",
+        "too strong",
+        "burns going down"
+      ],
+      "fix": "Ethanol heat. A measured water/ice cut lowers ABV and pushes aroma to the surface ('opens up') — but do not over-dilute past roughly 20% added water, which flattens and homogenizes. Specify a target dilution."
+    },
+    {
+      "id": "muted-dilution",
+      "name": "Aroma lost after dilution",
+      "domain": "spirits|beverage",
+      "mechanism": "ethanol-aroma-release",
+      "symptoms": [
+        "lost aroma",
+        "muted after watering",
+        "flat after dilution",
+        "no nose",
+        "aroma disappeared",
+        "watery aroma",
+        "no smell after ice"
+      ],
+      "fix": "Dropping ABV is not aroma-neutral — it dumps some volatiles to the headspace while muting others. Re-balance esters/aromatics for the served strength, or serve at the dilution where the nose actually peaks."
+    },
+    {
+      "id": "cloudy",
+      "name": "Cloudy / hazy drink",
+      "domain": "beverage",
+      "mechanism": "cocktail-clarification-fining",
+      "symptoms": [
+        "cloudy",
+        "hazy",
+        "murky",
+        "turbid",
+        "dull looking",
+        "not clear",
+        "milky"
+      ],
+      "fix": "Suspended proteins, polysaccharides, and polyphenols. Clarify by fining (milk-wash/casein, gelatin, agar), which also strips harsh tannins for a silkier texture. Match the agent to whatever is causing the haze."
+    },
+    {
+      "id": "flat-head",
+      "name": "Flat head / no foam (beer)",
+      "domain": "beer",
+      "mechanism": "beer-foam-head-retention",
+      "symptoms": [
+        "no head",
+        "flat foam",
+        "no foam",
+        "head collapses",
+        "no lacing",
+        "foam disappears",
+        "poor head",
+        "won't hold foam"
+      ],
+      "fix": "Foam is a protein plus iso-alpha-acid film fighting lipids and ethanol. Raise foam-positive proteins/hop acids and eliminate fatty-acid/lipid carryover (grease on the glass is a frequent culprit). Strong beers need more support."
+    },
+    {
+      "id": "banana-clove",
+      "name": "Banana / clove off-character (beer)",
+      "domain": "beer",
+      "mechanism": "beer-yeast-esters-phenols",
+      "symptoms": [
+        "banana",
+        "clove",
+        "bubblegum",
+        "phenolic",
+        "band-aid",
+        "spicy phenol",
+        "estery"
+      ],
+      "fix": "Yeast esters (banana / isoamyl acetate) and phenols (clove / 4-vinylguaiacol). Style-defining in Hefeweizen, a fault in clean lagers — control with strain choice (POF+ vs POF-), fermentation temperature, and pitch rate."
+    },
+    {
+      "id": "over-extracted-coffee",
+      "name": "Over-extracted coffee (bitter/harsh)",
+      "domain": "coffee",
+      "mechanism": "coffee-extraction-tds-yield",
+      "symptoms": [
+        "bitter coffee",
+        "over-extracted",
+        "harsh coffee",
+        "ashy",
+        "burnt coffee",
+        "hollow bitter",
+        "dry coffee finish"
+      ],
+      "fix": "Over-extraction: grind too fine, water too hot, or contact too long. Coarsen the grind, shorten contact, or lower temperature to land back in the ~18-22% yield window. Adjust grind before anything else."
+    },
+    {
+      "id": "under-extracted-coffee",
+      "name": "Under-extracted coffee (sour/weak)",
+      "domain": "coffee",
+      "mechanism": "coffee-extraction-tds-yield",
+      "symptoms": [
+        "sour coffee",
+        "weak coffee",
+        "under-extracted",
+        "watery coffee",
+        "salty coffee",
+        "thin coffee",
+        "grassy coffee"
+      ],
+      "fix": "Under-extraction: grind too coarse, water too cool, or flow too fast. Grind finer, raise temperature, or extend contact to reach the ~18-22% yield window. Sour-and-weak almost always means under-extracted."
+    },
+    {
+      "id": "over-oaked",
+      "name": "Over-oaked (too much vanilla/wood)",
+      "domain": "spirits|wine",
+      "mechanism": "barrel-maturation-oak-extraction",
+      "symptoms": [
+        "too oaky",
+        "over-oaked",
+        "too much vanilla",
+        "woody",
+        "sawdust",
+        "oak bomb",
+        "too much coconut",
+        "tannic oak",
+        "planky"
+      ],
+      "fix": "Lignin-derived vanillin / guaiacol / oak-lactone overload. Pull off the wood sooner, use older or less-toasted barrels (or fewer staves/chips), or blend back un-oaked base. Char depth and contact time are the dials."
+    },
+    {
+      "id": "weak-color",
+      "name": "Weak / pale red color (wine)",
+      "domain": "wine",
+      "mechanism": "anthocyanin-wine-color-copigmentation",
+      "symptoms": [
+        "pale red",
+        "weak color",
+        "weak colour",
+        "watery color",
+        "thin color",
+        "losing color",
+        "orange rim",
+        "faded red"
+      ],
+      "fix": "Flavylium color is pH-driven. Target pH ~3.4-3.6 to maximize the red form, and add copigment cofactors (catechin, flavonols) to deepen and stabilize the hue — more color without more anthocyanin."
+    },
+    {
+      "id": "flat-carbonation",
+      "name": "Flat carbonation / no bite",
+      "domain": "beverage",
+      "mechanism": "carbonation-perception",
+      "symptoms": [
+        "flat soda",
+        "no fizz",
+        "no bite",
+        "gone flat",
+        "lost carbonation",
+        "no sparkle",
+        "no bubbles",
+        "flat sparkling"
+      ],
+      "fix": "The 'bite' is dissolved-CO2 acidity acting on trigeminal nerves, not just visible bubbles — so you cannot fake it with acid alone. Recarbonate cold, minimize headspace and agitation, and serve well chilled to hold CO2."
+    },
+    {
+      "id": "over-steeped-tea",
+      "name": "Bitter / stewed tea (over-steeped)",
+      "domain": "tea",
+      "mechanism": "tea-catechin-oxidation-theaflavins",
+      "symptoms": [
+        "bitter tea",
+        "astringent tea",
+        "stewed tea",
+        "over-steeped",
+        "grassy tea",
+        "harsh tea",
+        "over-brewed tea"
+      ],
+      "fix": "Over-extraction of catechins. Shorten the steep, lower water temperature (especially for green/white), or use less leaf — pulling back astringency while keeping aroma and theanine sweetness."
+    },
+    {
+      "id": "greasy-fried",
+      "name": "Greasy / oil-logged fried food",
+      "domain": "food",
+      "mechanism": "deep-frying-oil-degradation",
+      "symptoms": [
+        "greasy",
+        "oily fried",
+        "soggy fry",
+        "oil-logged",
+        "heavy fried",
+        "absorbed too much oil",
+        "greasy crust"
+      ],
+      "fix": "Most oil is absorbed during cooling as steam voids fill. Fry hot enough (160-180C) to build a fast crust, do not overcrowd (temperature crash), drain while hot, and replace tired/viscous oil — degraded oil fries greasier."
+    },
+    {
+      "id": "weeping-meringue",
+      "name": "Weeping / grainy meringue",
+      "domain": "food",
+      "mechanism": "egg-white-foam-meringue-interface",
+      "symptoms": [
+        "weeping meringue",
+        "grainy meringue",
+        "meringue collapsed",
+        "watery meringue",
+        "beading meringue",
+        "deflated meringue",
+        "leaking meringue"
+      ],
+      "fix": "The foam is a protein film at the air-water interface. Stabilize with a touch of acid (cream of tartar), zero fat contamination, and avoid over-whipping; weeping/beading usually means over-whipped or undissolved sugar."
+    },
+    {
+      "id": "grainy-fudge",
+      "name": "Grainy / gritty confection",
+      "domain": "food",
+      "mechanism": "sugar-crystallization-confectionery",
+      "symptoms": [
+        "grainy fudge",
+        "gritty candy",
+        "sugary crystals",
+        "crystallized caramel",
+        "sandy fudge",
+        "seized sugar",
+        "grainy caramel"
+      ],
+      "fix": "Uncontrolled sucrose crystal growth. Cool undisturbed before beating, add a doctor (corn syrup/invertase) to interfere with crystals, and seed at the right temperature for many small, smooth crystals."
+    },
+    {
+      "id": "mushy-veg",
+      "name": "Mushy / collapsed vegetables",
+      "domain": "food",
+      "mechanism": "vegetable-cell-wall-softening",
+      "symptoms": [
+        "mushy vegetables",
+        "overcooked veg",
+        "falling apart veg",
+        "soft vegetables",
+        "collapsed vegetables",
+        "mushy veg"
+      ],
+      "fix": "Pectin beta-elimination in the middle lamella, fast above ~80C in low-acid water. Cook shorter and hotter, or use a low-temperature (50-60C) blanch plus calcium to firm the tissue before final cooking."
+    },
+    {
+      "id": "dull-green",
+      "name": "Dull / olive-green vegetables",
+      "domain": "food",
+      "mechanism": "chlorophyll-green-vegetable-color",
+      "symptoms": [
+        "dull green",
+        "olive vegetables",
+        "army green",
+        "brown broccoli",
+        "faded green",
+        "grey green",
+        "drab green"
+      ],
+      "fix": "Acid plus heat swaps magnesium out of chlorophyll into olive pheophytin, irreversibly. Cook hot-and-fast, uncovered (to vent plant acids), and shock in ice water to lock the bright green."
+    },
+    {
+      "id": "brett",
+      "name": "Brettanomyces / barnyard",
+      "domain": "wine",
+      "mechanism": "brettanomyces-4-ethylphenol-fault",
+      "symptoms": [
+        "barnyard",
+        "horse sweat",
+        "horsey",
+        "horse",
+        "band-aid",
+        "band aid",
+        "bandaid",
+        "leather",
+        "medicinal",
+        "sweaty",
+        "stable",
+        "plastic bandage",
+        "elastoplast"
+      ],
+      "fix": "Brettanomyces volatile phenols (4-ethylphenol/4-ethylguaiacol) above ~425 ug/L. A trace can add complexity; a lot suppresses fruit and reads barnyard/band-aid. Not cleanly removable — control by hygiene, SO2, and shorter/cooler oak aging."
+    },
+    {
+      "id": "volatile-acidity",
+      "name": "Volatile acidity (vinegar / nail polish)",
+      "domain": "wine",
+      "mechanism": "volatile-acidity-acetic-acid-ethyl-acetate-fault",
+      "symptoms": [
+        "vinegar",
+        "nail polish",
+        "nail-polish",
+        "nail varnish",
+        "solvent",
+        "acetone",
+        "sharp sour",
+        "vinegary",
+        "ethyl acetate"
+      ],
+      "fix": "Acetic acid + ethyl acetate from acetic-acid bacteria oxidizing ethanol under air. Above ~0.7 g/L it reads as spoilage; prevent with oxygen exclusion, topped-up vessels, and SO2 — it is not fixable after the fact."
+    },
+    {
+      "id": "hop-creep",
+      "name": "Hop creep (gushing / over-attenuation)",
+      "domain": "beer",
+      "mechanism": "dry-hopping-biotransformation-hop-creep",
+      "symptoms": [
+        "gushing",
+        "gusher",
+        "over-carbonated",
+        "overcarbonated",
+        "over carbonated",
+        "finished drier than expected",
+        "refermenting",
+        "over-attenuated",
+        "bottle bomb",
+        "buttery dry-hop"
+      ],
+      "fix": "Hop amylolytic enzymes refermenting residual dextrins after dry-hopping — raises ABV and CO2 (a real bottle-bomb/safety risk) and can throw diacetyl. Rest/cold-crash or pasteurize before packaging, and budget for the extra attenuation."
+    },
+    {
+      "id": "stale-beer",
+      "name": "Stale / cardboard beer",
+      "domain": "beer",
+      "mechanism": "beer-staling-trans-2-nonenal-oxidation",
+      "symptoms": [
+        "cardboard beer",
+        "papery beer",
+        "stale beer",
+        "wet paper beer",
+        "old beer",
+        "oxidized beer",
+        "lightstruck"
+      ],
+      "fix": "Aldehyde staling (trans-2-nonenal and Strecker/Maillard aldehydes) from oxygen, heat, and malt heat load. Minimize package oxygen, store cold, and choose low-staling malt — not reversible once stale."
+    },
+    {
+      "id": "scorched-agave",
+      "name": "Scorched / over-cooked agave spirit",
+      "domain": "spirits",
+      "mechanism": "agave-cooking-fructan-hydrolysis",
+      "symptoms": [
+        "scorched agave",
+        "burnt agave",
+        "acrid tequila",
+        "bitter mezcal",
+        "over-cooked agave",
+        "ashy tequila",
+        "burnt sugar tequila"
+      ],
+      "fix": "Over-cooked agave drives furans/HMF and methanol with scorched notes; under-cooked loses fermentable sugar and body. The cook IS the flavor — control oven/autoclave time and temperature."
+    },
+    {
+      "id": "tartrate-crystals",
+      "name": "Tartrate crystals ('wine diamonds')",
+      "domain": "wine",
+      "mechanism": "tartrate-cold-stabilization-potassium-bitartrate",
+      "symptoms": [
+        "crystals in wine",
+        "gritty deposit",
+        "wine crystals",
+        "tartrate crystals",
+        "glass shards in wine",
+        "sediment crystals",
+        "wine diamonds"
+      ],
+      "fix": "Harmless potassium bitartrate from incomplete cold stabilization — a cosmetic/stability issue, not a taste fault. Cold-stabilize, or add CMC/mannoprotein/metatartaric acid to inhibit crystal growth before bottling."
+    }
+  ]
+}

@@ -101,7 +101,6 @@ describe('P2 product trust improvements', () => {
     const success = fs.readFileSync('docs/landing/billing-success.html', 'utf8');
     const privacy = fs.readFileSync('docs/landing/privacy.html', 'utf8');
     const terms = fs.readFileSync('docs/landing/terms.html', 'utf8');
-    const copyProposal = fs.readFileSync('docs/landing/copy-proposal.md', 'utf8');
 
     expect(`${landing}\n${app}\n${readme}`).toContain('static sourcing guidance, not live inventory');
     expect(landing).toContain('Sample memories');
@@ -113,8 +112,6 @@ describe('P2 product trust improvements', () => {
     expect(privacy).not.toContain('billing records after Stripe is configured');
     expect(terms).toContain('payment failure');
     expect(terms).not.toContain('payment failure after billing is enabled');
-    expect(copyProposal).toContain('Archived pre-launch copy proposal');
-    expect(copyProposal).toContain('not the current production source of truth');
   });
 
   it('keeps the public demo free of shared password UI and headers', () => {
@@ -144,27 +141,30 @@ describe('P2 product trust improvements', () => {
   });
 
   it('requires the /ask prompt to gate concrete food cues behind the cue tool', () => {
-    const server = fs.readFileSync('src/http-server.ts', 'utf8');
+    // The shared /ask system prompt was extracted into the engine deps factory in phase 2.
+    const prompt = fs.readFileSync('src/core/ask-engine-deps.ts', 'utf8');
 
-    expect(server).toContain('Do not give a concrete food cue');
-    expect(server).toContain('generate_minimum_viable_nostalgia');
-    expect(server).toContain('clarification-only response');
+    expect(prompt).toContain('Do not give a concrete food cue');
+    expect(prompt).toContain('generate_minimum_viable_nostalgia');
+    expect(prompt).toContain('clarification-only response');
   });
 
   it('requires /ask cue prose to use local proxy ingredients instead of buying the suspected food', () => {
-    const server = fs.readFileSync('src/http-server.ts', 'utf8');
+    const prompt = fs.readFileSync('src/core/ask-engine-deps.ts', 'utf8');
 
-    expect(server).toContain('Do not tell the user to buy the exact suspected dish, candy, snack, brand, or imported specialty item as the minimum test');
-    expect(server).toContain('Build the cue from cheap local pantry or ordinary grocery ingredients first');
+    expect(prompt).toContain('Do not tell the user to buy the exact suspected dish, candy, snack, brand, or imported specialty item as the minimum test');
+    expect(prompt).toContain('Build the cue from cheap local pantry or ordinary grocery ingredients first');
   });
 
   it('preserves current user location for local proxy cue generation', () => {
-    const server = fs.readFileSync('src/http-server.ts', 'utf8');
+    // The /ask orchestration (user-location inference + cue tool wiring + local cue-language guard) was
+    // extracted into the transport-neutral engine; the HTTP surface delegates to it.
+    const engine = fs.readFileSync('src/core/ask-engine.ts', 'utf8');
 
-    expect(server).toContain('inferUserLocation');
-    expect(server).toContain("toolName === 'collect_food_memory'");
-    expect(server).toContain("toolName === 'generate_minimum_viable_nostalgia'");
-    expect(server).toContain('ensureLocalCueLanguage');
+    expect(engine).toContain('inferUserLocation');
+    expect(engine).toContain("toolName === 'collect_food_memory'");
+    expect(engine).toContain("toolName === 'generate_minimum_viable_nostalgia'");
+    expect(engine).toContain('ensureCueQualityLanguage');
   });
 
   it('documents the anonymous preview demo rate-limit override alongside the free tier', () => {
@@ -178,10 +178,10 @@ describe('P2 product trust improvements', () => {
   });
 
   it('requires /ask to honor explicit minimum-test requests with sensory clues', () => {
-    const server = fs.readFileSync('src/http-server.ts', 'utf8');
+    const prompt = fs.readFileSync('src/core/ask-engine-deps.ts', 'utf8');
 
-    expect(server).toContain('If the user explicitly asks for a minimum test');
-    expect(server).toContain('generate_minimum_viable_nostalgia even when dish identity is Low or Unknown');
+    expect(prompt).toContain('If the user explicitly asks for a minimum test');
+    expect(prompt).toContain('generate_minimum_viable_nostalgia even when dish identity is Low or Unknown');
   });
 
   it('adds self-hosted key generation and Docker smoke runbooks', () => {

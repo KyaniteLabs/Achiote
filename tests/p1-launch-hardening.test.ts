@@ -73,18 +73,21 @@ describe('P1 launch hardening guardrails', () => {
   });
 
   it('makes HTTP output validation and tool failures deterministic', () => {
-    const server = fs.readFileSync('src/http-server.ts', 'utf8');
-    expect(server).toContain('throw new Error(`[validation]');
-    expect(server).toContain("send('error', { message: 'Tool failed'");
+    // Output validation + tool-failure error streaming were extracted into the transport-neutral
+    // engine that the HTTP /ask surface delegates to.
+    const engine = fs.readFileSync('src/core/ask-engine.ts', 'utf8');
+    expect(engine).toContain('throw new Error(`[validation]');
+    expect(engine).toContain("send('error', { message: 'Tool failed'");
   });
 
   it('keeps the product ask prompt aligned with the MCP follow-up workflow', () => {
-    const server = fs.readFileSync('src/http-server.ts', 'utf8');
+    // The shared /ask system prompt was extracted into the engine deps factory in phase 2.
+    const prompt = fs.readFileSync('src/core/ask-engine-deps.ts', 'utf8');
 
-    expect(server).toContain('Ask 1-3 specific, high-value follow-up questions');
-    expect(server).toContain('quote or adapt the tool-generated nextQuestions');
-    expect(server).not.toContain('NEVER ask follow-up questions');
-    expect(server).not.toContain('The cue IS the answer');
+    expect(prompt).toContain('Ask 1-3 specific, high-value follow-up questions');
+    expect(prompt).toContain('quote or adapt the tool-generated nextQuestions');
+    expect(prompt).not.toContain('NEVER ask follow-up questions');
+    expect(prompt).not.toContain('The cue IS the answer');
   });
 
   it('does not silently drop chat history updates in the frontend SSE parser', () => {
@@ -103,19 +106,21 @@ describe('P1 launch hardening guardrails', () => {
   });
 
   it('does not stream a plain first model response when the tool workflow was skipped', () => {
-    const server = fs.readFileSync('src/http-server.ts', 'utf8');
+    // The deterministic-recovery path lives in the transport-neutral engine the HTTP surface delegates to.
+    const engine = fs.readFileSync('src/core/ask-engine.ts', 'utf8');
 
-    expect(server).toContain('provider_tool_deterministic_recovery');
-    expect(server).toContain('model skipped required Achiote tool workflow');
+    expect(engine).toContain('provider_tool_deterministic_recovery');
+    expect(engine).toContain('model skipped required Achiote tool workflow');
   });
 
   it('keeps provider and model identity out of the public ask trace', () => {
-    const server = fs.readFileSync('src/http-server.ts', 'utf8');
+    // The /ask model status events are emitted from the engine now.
+    const engine = fs.readFileSync('src/core/ask-engine.ts', 'utf8');
     const app = fs.readFileSync('docs/landing/app.js', 'utf8');
 
-    expect(server).toContain("send('status', { stage: 'model'");
-    expect(server).not.toContain("send('status', { stage: 'model', provider:");
-    expect(server).not.toContain('provider=${ASK_PROVIDER_KIND} model=${ASK_MODEL}');
+    expect(engine).toContain("send('status', { stage: 'model'");
+    expect(engine).not.toContain("send('status', { stage: 'model', provider:");
+    expect(engine).not.toContain('provider=${ASK_PROVIDER_KIND} model=${ASK_MODEL}');
     expect(app).not.toContain('model-label');
     expect(app).not.toContain('trace-provider');
   });

@@ -255,6 +255,14 @@ export const memoryReceiptOutputSchema = z.object({
     estimatedTime: z.string(),
   }).optional(),
   assistantSummary: z.string(),
+  shareCard: z.object({
+    dishName: z.string(),
+    fact: z.string(),
+    doi: z.string(),
+    citation: z.string(),
+    cueTitle: z.string().optional(),
+    cueGoal: z.string().optional(),
+  }).nullable().optional(),
 });
 
 
@@ -333,6 +341,20 @@ const cueComponentSchema = z.object({
   confidence: confidenceSchema,
 });
 
+/**
+ * Schema for a cited food-science mechanism. Engine-generated (attached by the
+ * nostalgia-cue generator from the curated, Crossref-verified DB), not model-
+ * produced — hence optional so model-output validation passes while the engine's
+ * post-processed payload is preserved through re-parse.
+ */
+export const citedMechanismSchema = z.object({
+  slug: z.string(),
+  summary: z.string(),
+  practicalImplication: z.string(),
+  citation: z.string(),
+  doi: z.string(),
+});
+
 export const minimumViableNostalgiaInputSchema = z.object({
   dossier: buildReconstructionDossierOutputSchema,
   researchFindings: researchFindingsOutputSchema.optional(),
@@ -357,6 +379,7 @@ export const minimumViableNostalgiaOutputSchema = z.object({
   safetyNotes: z.array(z.string()),
   followUpIfItWorks: z.array(z.string()),
   components: z.array(cueComponentSchema),
+  citedMechanisms: z.array(citedMechanismSchema).optional(),
 });
 
 export const webSearchOutputSchema = z.object({

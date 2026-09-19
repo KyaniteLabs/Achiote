@@ -1,6 +1,7 @@
 import type { CollectedFoodMemory, DishResearchPlan, MemoryReceipt, MinimumViableNostalgiaCue } from './types.js';
 import { inferSafetyConstraints } from './ask-memory-correction.js';
 import { filterMemoryResearchFacts, isLowQualityMemoryResearchText } from './research-evidence-filter.js';
+import { buildShareCard } from './share-card.js';
 
 function unique(values: string[]): string[] {
   return [...new Set(values.filter(Boolean))];
@@ -187,6 +188,14 @@ export function buildMemoryReceipt(input: {
     : input.memory.nextQuestions).slice(0, 5);
   const researched = filterSafetyBounded(filterMemoryResearchFacts(input.researchedFacts ?? []));
 
+  // Sanitized, public-facing share card — public food science ONLY (see share-card.ts
+  // privacy guarantee). Derived from the cue's cited mechanisms + the resolved dish
+  // name. Null when there is no cited mechanism (the opt-in gate).
+  const shareCard = buildShareCard({
+    dishName: hypotheses[0]?.name,
+    cue: input.cue,
+  });
+
   return {
     title: 'Achiote Memory Receipt',
     createdAt: input.createdAt ?? new Date().toISOString(),
@@ -208,6 +217,7 @@ export function buildMemoryReceipt(input: {
         }
       : undefined,
     assistantSummary: buildReceiptAssistantSummary(input.assistantText ?? '', projection, researched, input.cue),
+    shareCard,
   };
 }
 
@@ -248,5 +258,18 @@ export function formatMemoryReceiptMarkdown(receipt: MemoryReceipt): string {
     '## Assistant Summary',
     receipt.assistantSummary || '- No final summary recorded.',
     '',
+    receipt.shareCard
+      ? [
+          '---',
+          '',
+          '## Safe To Share (public food science only)',
+          `**${receipt.shareCard.dishName}** — ${receipt.shareCard.fact}`,
+          '',
+          `Verified source: doi:${receipt.shareCard.doi}`,
+          '',
+          '> This is the only part safe to post publicly. Everything above is your private memory record.',
+          '',
+        ].join('\n')
+      : '',
   ].join('\n');
 }

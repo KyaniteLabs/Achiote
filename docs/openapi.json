@@ -1,0 +1,224 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Achiote API",
+    "version": "0.2.0",
+    "description": "Achiote reconstructs nostalgic food and drink memories. The POST /v1/ask endpoint runs the full reconstruction workflow and streams progress as Server-Sent Events (SSE). The legacy POST /ask path is a backward-compatible alias.",
+    "license": { "name": "BUSL-1.1", "url": "https://github.com/KyaniteLabs/Achiote/blob/main/LICENSE" }
+  },
+  "servers": [
+    { "url": "https://achiote.kyanitelabs.tech", "description": "Hosted" },
+    { "url": "http://localhost:3000", "description": "Local" }
+  ],
+  "tags": [
+    { "name": "reconstruction", "description": "Food-memory reconstruction" },
+    { "name": "system", "description": "Health and readiness" }
+  ],
+  "paths": {
+    "/v1/ask": {
+      "post": {
+        "tags": ["reconstruction"],
+        "operationId": "askV1",
+        "summary": "Reconstruct a food memory (streaming)",
+        "description": "Runs the full reconstruction workflow and returns a text/event-stream of progress, tool calls, the synthesized answer (text events), an optional Memory Receipt (receipt event), and a terminal done event. Authenticate with an API key (Authorization: Bearer or x-api-key) for programmatic use, or x-demo-password for the anonymous demo when enabled.",
+        "security": [
+          { "bearerAuth": [] },
+          { "apiKeyAuth": [] },
+          { "demoPassword": [] }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/AskRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Server-Sent Events stream of the reconstruction.",
+            "content": {
+              "text/event-stream": {
+                "schema": { "$ref": "#/components/schemas/AskSseStream" }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "413": { "$ref": "#/components/responses/PayloadTooLarge" },
+          "415": { "$ref": "#/components/responses/UnsupportedMediaType" },
+          "429": { "$ref": "#/components/responses/RateLimited" }
+        }
+      }
+    },
+    "/ask": {
+      "post": {
+        "tags": ["reconstruction"],
+        "operationId": "askLegacy",
+        "summary": "Reconstruct a food memory (legacy alias of /v1/ask)",
+        "description": "Identical behavior to POST /v1/ask. Retained for the live site and existing clients.",
+        "security": [
+          { "bearerAuth": [] },
+          { "apiKeyAuth": [] },
+          { "demoPassword": [] }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/AskRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Server-Sent Events stream of the reconstruction.",
+            "content": {
+              "text/event-stream": {
+                "schema": { "$ref": "#/components/schemas/AskSseStream" }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "413": { "$ref": "#/components/responses/PayloadTooLarge" },
+          "415": { "$ref": "#/components/responses/UnsupportedMediaType" },
+          "429": { "$ref": "#/components/responses/RateLimited" }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "tags": ["system"],
+        "operationId": "health",
+        "summary": "Liveness and provider status",
+        "responses": {
+          "200": {
+            "description": "Service is up.",
+            "content": {
+              "application/json": { "schema": { "$ref": "#/components/schemas/HealthResponse" } }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": { "type": "http", "scheme": "bearer", "description": "API key from `npm run keygen`, sent as Authorization: Bearer <key>." },
+      "apiKeyAuth": { "type": "apiKey", "in": "header", "name": "x-api-key", "description": "API key from `npm run keygen`." },
+      "demoPassword": { "type": "apiKey", "in": "header", "name": "x-demo-password", "description": "Anonymous demo password; only valid when the server enables the demo path." }
+    },
+    "schemas": {
+      "AskRequest": {
+        "type": "object",
+        "description": "At least one of `message` or `images` is required.",
+        "properties": {
+          "message": { "type": "string", "maxLength": 6000, "description": "The food or drink memory to reconstruct." },
+          "history": {
+            "type": "array",
+            "maxItems": 20,
+            "items": {
+              "type": "object",
+              "properties": {
+                "role": { "type": "string", "enum": ["user", "assistant"] },
+                "content": { "type": "string" }
+              },
+              "required": ["role", "content"]
+            },
+            "description": "Prior conversation turns, oldest first."
+          },
+          "images": {
+            "type": "array",
+            "maxItems": 4,
+            "items": { "type": "string", "description": "data:image/...;base64,... data URI (jpeg, png, gif, or webp)." },
+            "description": "Optional images of the dish or packaging."
+          },
+          "consent": { "$ref": "#/components/schemas/DataConsent" }
+        }
+      },
+      "DataConsent": {
+        "type": "object",
+        "description": "Per-request consent flags; all default to false.",
+        "properties": {
+          "analytics": { "type": "boolean" },
+          "qualitySignals": { "type": "boolean" },
+          "savedMemory": { "type": "boolean" },
+          "familyConfirmation": { "type": "boolean" },
+          "publicContribution": { "type": "boolean" }
+        }
+      },
+      "AskSseStream": {
+        "type": "string",
+        "description": "A text/event-stream. Each frame is `event: <name>\\ndata: <json>\\n\\n`. Event names and the JSON shape of their data:\n- status: {stage, ...} progress markers (routing, model, calling_tools, thinking, case_file_compacted, deterministic_recovery, ...).\n- tool_call: {name, input} a workflow tool is about to run.\n- tool_result: {name, result} a workflow tool returned.\n- text: a JSON string — the synthesized answer prose (may be emitted once).\n- receipt: a MemoryReceipt object.\n- done: {guarded?} terminal event; `guarded` is set when a deterministic guard produced the answer.\n- error: {message, code?} an error occurred."
+      },
+      "MemoryReceipt": {
+        "type": "object",
+        "required": ["title", "createdAt", "status", "evidence", "hypotheses", "nextBestQuestions", "assistantSummary"],
+        "properties": {
+          "title": { "type": "string", "const": "Achiote Memory Receipt" },
+          "createdAt": { "type": "string" },
+          "status": { "type": "string", "enum": ["needs_more_clues", "first_test_ready", "recipe_handoff_ready"] },
+          "evidence": {
+            "type": "object",
+            "properties": {
+              "userSaid": { "type": "array", "items": { "type": "string" } },
+              "ruledOut": { "type": "array", "items": { "type": "string" } },
+              "inferred": { "type": "array", "items": { "type": "string" } },
+              "researched": { "type": "array", "items": { "type": "string" } },
+              "unknown": { "type": "array", "items": { "type": "string" } }
+            }
+          },
+          "hypotheses": { "type": "array", "items": { "type": "object" } },
+          "nextBestQuestions": { "type": "array", "items": { "type": "string" } },
+          "firstTinyTasteTest": {
+            "type": "object",
+            "properties": {
+              "title": { "type": "string" },
+              "cue": { "type": "string" },
+              "estimatedTime": { "type": "string" }
+            }
+          },
+          "assistantSummary": { "type": "string" }
+        }
+      },
+      "HealthResponse": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string" },
+          "version": { "type": "string" },
+          "authEnabled": { "type": "boolean" },
+          "billingEnabled": { "type": "boolean" },
+          "uptime": { "type": "number" },
+          "provider": { "type": "object" }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": { "error": { "type": "string" } }
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "description": "Invalid JSON, missing message/images, or invalid images.",
+        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } }
+      },
+      "Unauthorized": {
+        "description": "Missing or invalid API key / demo password, or anonymous access disabled.",
+        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } }
+      },
+      "PayloadTooLarge": {
+        "description": "Request body exceeds the size limit.",
+        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } }
+      },
+      "UnsupportedMediaType": {
+        "description": "Content-Type must be application/json.",
+        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } }
+      },
+      "RateLimited": {
+        "description": "Rate limit exceeded; upgrade the plan for more reconstructions.",
+        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } }
+      }
+    }
+  }
+}

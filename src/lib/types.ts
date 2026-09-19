@@ -245,6 +245,7 @@ export interface MemoryReceipt {
     estimatedTime: string;
   };
   assistantSummary: string;
+  shareCard?: ShareCard | null;
 }
 
 
@@ -316,6 +317,41 @@ export interface MinimumViableNostalgiaInput {
   maxEffortMinutes?: number;
 }
 
+/**
+ * A cited food-science mechanism retrieved from the curated, Crossref-verified
+ * reference database. Surfaced on a cue so the answer can ground its reasoning
+ * in a real DOI rather than the model's own knowledge.
+ */
+export interface CitedMechanism {
+  slug: string;
+  summary: string;
+  practicalImplication: string;
+  citation: string;
+  doi: string;
+}
+
+/**
+ * A sanitized, public-facing share card. Derived ONLY from engine-generated
+ * food-science sources (a cited mechanism + the cue's public title/goal). It is
+ * provably personal-data-free by construction: the builder has no parameter for
+ * — and no access to — raw memory, userSaid, ruledOut, inferred context, or any
+ * personal field. This is the object the "Share the science" surface emits.
+ */
+export interface ShareCard {
+  /** A public food identity (resolved dish name or mechanism slug). Never a personal detail. */
+  dishName: string;
+  /** One cited, Crossref-verified food-science fact — the thing worth sharing. */
+  fact: string;
+  /** The DOI backing the fact (Crossref-verified). */
+  doi: string;
+  /** The human-readable citation for the DOI. */
+  citation: string;
+  /** The public first-taste cue title (food science, not personal memory). */
+  cueTitle?: string;
+  /** The public first-taste cue goal. */
+  cueGoal?: string;
+}
+
 export type CueComponentRole = 'starch' | 'protein' | 'sauce' | 'vegetable' | 'broth' | 'beverage' | 'confectionery' | 'overall';
 
 export interface CueComponent {
@@ -343,4 +379,6 @@ export interface MinimumViableNostalgiaCue {
   safetyNotes: string[];
   followUpIfItWorks: string[];
   components: CueComponent[];
+  /** Cited food-science mechanisms grounding this cue (top matches from the reference DB). */
+  citedMechanisms?: CitedMechanism[];
 }

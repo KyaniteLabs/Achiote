@@ -12,6 +12,7 @@ import {
 } from './ask-guardrails.js';
 import { inferSafetyConstraints, isRecord } from './ask-memory-correction.js';
 import { escapeRegExp } from './food-memory-text.js';
+import { retrieveMechanisms } from './mechanism-retrieval.js';
 
 // ── Substitution helpers ──────────────────────────────────────────────────
 
@@ -291,6 +292,30 @@ export function formatMinimumCueFallback(cue: MinimumViableNostalgiaCue, userLoc
   ].filter((line) => line.length > 0).join('\n'));
 }
 
+/**
+ * Append one concise "Grounded in: <citation> (doi:…)" line to a reconstruction
+ * answer so it points at peer-reviewed sources from the curated, Crossref-verified
+ * food-science DB instead of the model's own knowledge.
+ *
+ * Grounding is derived from the user's own message — the engine's highest-trust,
+ * cleanest signal — falling back to the cue's pre-computed mechanisms. Using the
+ * message (not the cue) keeps citations correct even when an upstream research
+ * step mis-classified the dish and polluted the cue. Idempotent: returns the text
+ * unchanged if it already carries a grounding line, or if no mechanism is
+ * confidently relevant (a wrong citation hurts trust more than none).
+ */
+export function appendGroundedCitation(text: string, userMessage?: string, cue?: MinimumViableNostalgiaCue): string {
+  if (/(^|\n)Grounded in:/.test(text)) return text;
+  const fromMessage = userMessage && userMessage.trim() ? retrieveMechanisms(userMessage) : [];
+  const mechanisms = fromMessage.length > 0 ? fromMessage : (cue?.citedMechanisms ?? []);
+  if (mechanisms.length === 0) return text;
+  const cited = mechanisms
+    .slice(0, 2)
+    .map((mechanism) => `${mechanism.citation} (doi:${mechanism.doi})`)
+    .join('; ');
+  return `${text}\n\nGrounded in: ${cited}`;
+}
+
 export function formatMinimumCueIngredientPhrase(ingredient: MinimumViableNostalgiaCue['ingredients'][number]): string {
   const item = sanitizeMinimumCueFallbackText(ingredient.item)
     .replace(/^(?:a\s+)?(?:tiny|small)\s+(?:test\s+)?amount\s+of\s+/i, '')
@@ -339,7 +364,7 @@ export function buildUserMessageMechanismCueResponse(userMessage: string, toolPa
     ? 'a tiny amount of safe neutral liquid carrier plus one tiny remembered aroma, acid, herb, or texture cue from the user message'
     : 'a tiny amount of a safe neutral carrier plus one tiny remembered aroma, fat, acid, texture, or mouthfeel cue from the user message';
   const preamble = buildEvidencePreamble(toolPayloads, userMessage);
-  return sanitizeMinimumCueFallbackBlock([
+  const block = sanitizeMinimumCueFallbackBlock([
     preamble,
     'Minimum viable memory-family cue',
     '',
@@ -352,6 +377,7 @@ export function buildUserMessageMechanismCueResponse(userMessage: string, toolPa
     localLine,
     'If it works, next ask: Ask which detail hit first: smell, texture, acid, fat, starch, temperature, or serving ritual.',
   ].filter((line) => line.length > 0).join('\n'));
+  return appendGroundedCitation(block, userMessage);
 }
 
 export function buildMinimumCueCompletedResponse(toolPayloads: Record<string, unknown>, userMessage?: string): string {
@@ -378,7 +404,7 @@ export function buildEvidenceBoundedMinimumCueResponse(toolPayloads: Record<stri
   const sourcingSection = sourcingLines.length > 0
     ? ['Where to buy:', ...sourcingLines.map((line) => `- ${line}`)].join('\n')
     : '';
-  return sanitizeMinimumCueFallbackBlock([preamble, body, substitutionSection, sourcingSection].filter(Boolean).join('\n\n'));
+  return appendGroundedCitation(sanitizeMinimumCueFallbackBlock([preamble, body, substitutionSection, sourcingSection].filter(Boolean).join('\n\n')), userMessage, cue);
 }
 
 export function buildResearchGroundedForcedCueResponse(toolPayloads: Record<string, unknown>, userMessage?: string): string {
@@ -396,7 +422,7 @@ export function buildResearchGroundedForcedCueResponse(toolPayloads: Record<stri
   const sourcingSection = sourcingLines.length > 0
     ? ['Where to buy:', ...sourcingLines.map((line) => `- ${line}`)].join('\n')
     : '';
-  return sanitizeMinimumCueFallbackBlock([lead, body, substitutionSection, sourcingSection].filter(Boolean).join('\n\n'));
+  return appendGroundedCitation(sanitizeMinimumCueFallbackBlock([lead, body, substitutionSection, sourcingSection].filter(Boolean).join('\n\n')), userMessage, cue);
 }
 
 function buildResearchGroundedLead(toolPayloads: Record<string, unknown>): string {

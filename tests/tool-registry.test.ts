@@ -411,13 +411,20 @@ describe('shared tool registry', () => {
   it('keeps protocol wrappers and package smoke wired to the registry', () => {
     const serverSource = fs.readFileSync('src/server.ts', 'utf8');
     const httpSource = fs.readFileSync('src/http-server.ts', 'utf8');
+    // The /ask tool execution wiring was extracted into the transport-neutral engine; the HTTP surface
+    // delegates to it. The registry must stay wired (executeToolDefinition), just from the engine now.
+    const engineSource = fs.readFileSync('src/core/ask-engine.ts', 'utf8');
+    // Tool wiring for every surface now flows through the shared deps factory.
+    const depsSource = fs.readFileSync('src/core/ask-engine-deps.ts', 'utf8');
     const smokeSource = fs.readFileSync('scripts/package-smoke.mjs', 'utf8');
 
     expect(serverSource).toContain('toolRegistry');
     expect(serverSource).not.toContain("'collect_food_memory'");
-    expect(httpSource).toContain('anthropicTools as TOOLS');
-    expect(httpSource).toContain('executeToolDefinition');
+    expect(depsSource).toContain('anthropicTools as TOOLS');
+    expect(httpSource).toContain('createAskEngineDeps');
+    expect(engineSource).toContain('executeToolDefinition');
     expect(httpSource).not.toContain('function executeTool(');
+    expect(engineSource).not.toContain('function executeTool(');
     expect(smokeSource).toContain('dist');
     expect(smokeSource).toContain('tool-registry.js');
   });

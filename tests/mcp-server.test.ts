@@ -28,6 +28,7 @@ describe('Achiote MCP server', () => {
         'generate_recipe',
         'plan_dish_research',
         'plan_tool_workflow',
+        'reconstruct_food_memory',
         'resolve_dish_name',
         'search_web',
         'source_ingredients',
@@ -37,9 +38,16 @@ describe('Achiote MCP server', () => {
       for (const tool of tools) {
         expect(tool.outputSchema).toBeTruthy();
         expect(Object.keys(tool.outputSchema?.properties ?? {})).not.toHaveLength(0);
-        expect(tool.annotations?.readOnlyHint).toBe(true);
         expect(tool.annotations?.destructiveHint).toBe(false);
-        expect(tool.annotations?.idempotentHint).toBe(true);
+        // The 18 granular tools are deterministic and read-only; reconstruct_food_memory drives the
+        // full model workflow, so it is the one non-read-only, open-world tool.
+        if (tool.name === 'reconstruct_food_memory') {
+          expect(tool.annotations?.readOnlyHint).toBe(false);
+          expect(tool.annotations?.openWorldHint).toBe(true);
+        } else {
+          expect(tool.annotations?.readOnlyHint).toBe(true);
+          expect(tool.annotations?.idempotentHint).toBe(true);
+        }
       }
     } finally {
       await client.close();
