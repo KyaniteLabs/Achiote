@@ -18,7 +18,7 @@ export function createAchioteServer(options: AchioteServerOptions = {}): McpServ
   const server = new McpServer(
     {
       name: 'achiote',
-      version: '0.2.1',
+      version: '0.2.2',
     },
     {
       instructions:
