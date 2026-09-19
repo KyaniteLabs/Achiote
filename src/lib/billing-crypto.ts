@@ -32,8 +32,15 @@ export const CRYPTO_REF_LENGTH = 8;
 export const CRYPTO_ORDER_TTL_MS = 60 * 60 * 1000;
 /** Crypto subscriptions are prepaid monthly periods; no auto-renewal exists off-chain. */
 export const CRYPTO_SUB_PERIOD_MS = 30 * 24 * 60 * 60 * 1000;
-/** Chain blockTime vs server clock skew tolerance for amount-window matching. */
+/** Chain blockTime vs server clock skew tolerance on the expiry side of the amount window. */
 const WINDOW_SLACK_MS = 5 * 60 * 1000;
+/**
+ * Replay floor: an amount-matched signature must be no more than this much OLDER
+ * than the order it credits (chain-vs-server clock skew only). A payment can
+ * never credit an order created more than 60 s after it landed (payments review
+ * PR #250, BLOCK-2).
+ */
+const REPLAY_FLOOR_SLACK_MS = 60 * 1000;
 const PRICE_CACHE_TTL_MS = 60 * 1000;
 const RPC_MAX_ATTEMPTS = 5;
 const RPC_BACKOFF_BASE_MS = 500;
@@ -391,11 +398,16 @@ export interface OrderMatch {
 
 /**
  * Match rules (deterministic, oldest order first):
- *  (a) any memo in the transaction contains the order's ref, AND the transaction carries
- *      a transfer of that order's asset to a watched account → credit by memo;
+ *  (a) any memo in the transaction contains the order's ref, AND the transaction
+ *      carries a transfer of that order's asset to a watched account that is at
+ *      least the quoted amount → credit by memo. The memo alone is not proof of
+ *      payment: a 1-base-unit transfer carrying the right ref must never credit
+ *      (payments review PR #250, BLOCK-1). Underpay → no credit (ops-visible);
+ *      overpay → credit (the overage is an ops matter).
  *  (b) when no memo matched the order: an exact-amount transfer of the right asset to a
- *      watched account, with the chain blockTime inside the order window (± clock slack).
- * Each individual transfer credits at most one order.
+ *      watched account, with the chain blockTime no earlier than order creation − 60 s
+ *      (clock-skew slack only — never minutes before) and not later than expiry +
+ *      5 min. Each individual transfer credits at most one order.
  */
 export function matchTransaction(params: {
   analyzed: AnalyzedTransaction;
@@ -418,15 +430,21 @@ export function matchTransaction(params: {
 
   for (const order of orders) {
     if (analyzed.memos.some((memo) => memo.includes(order.ref))) {
+      // Claim the transfer even when the amount is insufficient: the memo ties it
+      // to this order, so it must not fall through and amount-match another one.
       const transfer = claimTransfer(order);
-      if (transfer) matches.push({ ref: order.ref, transfer, reason: 'memo' });
+      if (transfer && transfer.amountUnits >= order.amountUnits) {
+        matches.push({ ref: order.ref, transfer, reason: 'memo' });
+      }
     }
   }
 
   if (blockTimeMs === null) return matches;
   for (const order of orders) {
     if (matches.some((m) => m.ref === order.ref)) continue;
-    if (blockTimeMs + WINDOW_SLACK_MS < order.createdAtMs) continue;
+    // Replay floor: signatures older than the order by more than the clock-skew
+    // slack can never credit it, no matter how fresh the order is (BLOCK-2).
+    if (blockTimeMs + REPLAY_FLOOR_SLACK_MS < order.createdAtMs) continue;
     if (blockTimeMs - WINDOW_SLACK_MS > order.expiresAtMs) continue;
     const transfer = claimTransfer(order);
     if (transfer && transfer.amountUnits === order.amountUnits) {
@@ -470,7 +488,16 @@ export class CryptoCheckout {
   private readonly pollIntervalMs: number;
   private timer: NodeJS.Timeout | null = null;
   private ticking = false;
-  private readonly lastSeenSignature = new Map<string, string>();
+  /**
+   * Per-address poll cursor: the newest signature examined so far, with its
+   * blockTime. The cursor is only USED while it cannot hide any signature a
+   * pending order still needs (see pollWatchedAddress) — never forward-only
+   * blind spots (payments review PR #250, BLOCK-3).
+   */
+  private readonly lastSeenSignature = new Map<string, { signature: string; blockTimeMs: number | null }>();
+  /** Fetched raw transactions by signature, so whole-line re-examination costs CPU, not RPC calls. */
+  private readonly txCache = new Map<string, unknown>();
+  private readonly underpayLogged = new Set<string>();
   private priceCache: { value: number | null; at: number } = { value: null, at: 0 };
 
   constructor(
@@ -491,6 +518,9 @@ export class CryptoCheckout {
 
   start(): void {
     if (this.timer) return;
+    // One immediate tick at startup: the paid-but-unfulfilled sweep below recovers
+    // anything the previous process left behind without waiting for the interval.
+    void this.tickSafely();
     this.timer = setInterval(() => void this.tickSafely(), this.pollIntervalMs);
     this.timer.unref();
   }
@@ -585,11 +615,13 @@ export class CryptoCheckout {
     }
   }
 
-  /** One poll cycle: expire stale orders, then watch the receive address (SOL) and its USDC token accounts. */
+  /** One poll cycle: expire stale orders, sweep paid-but-unfulfilled ones, then watch the receive address (SOL) and its USDC token accounts. */
   async tick(): Promise<void> {
     const nowIso = new Date(this.now()).toISOString();
     const expired = this.billingDb.expireStaleCryptoOrders(nowIso);
     if (expired > 0) this.log(`[crypto] expired ${expired} stale order(s)`);
+
+    this.sweepPaidUnfulfilled();
 
     const pending = this.billingDb.listPendingCryptoOrders();
     if (pending.length === 0) return;
@@ -610,20 +642,55 @@ export class CryptoCheckout {
     }
   }
 
+  /**
+   * BLOCK-3 recovery: an order that reached paid without a completed checkout
+   * session (crash between payment-claim and fulfillment, or a legacy row from
+   * before claim+fulfill became atomic) is re-fulfilled here, idempotently, on
+   * every tick — a buyer's payment never strands.
+   */
+  private sweepPaidUnfulfilled(): void {
+    for (const order of this.billingDb.listPaidUnfulfilledCryptoOrders()) {
+      try {
+        this.billingDb.runInTransaction(() => this.fulfill(order));
+        this.log(`[crypto] sweep: fulfilled paid order ${order.ref} (${order.tier})`);
+      } catch (err) {
+        this.log(
+          `[crypto] sweep: fulfillment failed for paid order ${order.ref}: ${err instanceof Error ? err.message : String(err)}`
+        );
+      }
+    }
+  }
+
   private async pollWatchedAddress(address: string, orders: CryptoOrderRecord[]): Promise<void> {
     if (orders.length === 0) return;
-    const signatures = await this.rpc.getSignaturesForAddress(address, this.lastSeenSignature.get(address));
+    // The RPC `until` cursor returns only signatures STRICTLY NEWER than it. A
+    // pending order must re-examine every signature with blockTime >= its own
+    // createdAt − 60 s on every tick (a payment may land seconds before the order
+    // row is visible to a restarted poller), so the cursor may only be used while
+    // it predates the oldest pending order by more than that skew. Otherwise poll
+    // the whole visible line — getTransaction results are cached, so the cost of
+    // re-examination is CPU, not RPC calls.
+    const floorMs = Math.min(...orders.map((o) => Date.parse(o.createdAt)));
+    const cursor = this.lastSeenSignature.get(address);
+    const until =
+      cursor && cursor.blockTimeMs !== null && cursor.blockTimeMs + REPLAY_FLOOR_SLACK_MS <= floorMs
+        ? cursor.signature
+        : undefined;
+    const signatures = await this.rpc.getSignaturesForAddress(address, until);
     // Oldest first so credits apply chronologically.
     for (const sig of [...signatures].reverse()) {
       if (sig.err != null) continue;
-      let tx: unknown;
-      try {
-        tx = await this.rpc.getTransaction(sig.signature);
-      } catch (err) {
-        this.log(`[crypto] getTransaction failed for ${sig.signature.slice(0, 16)}…: ${err instanceof Error ? err.message : String(err)}`);
-        continue;
+      let tx = this.txCache.get(sig.signature);
+      if (tx === undefined) {
+        try {
+          tx = await this.rpc.getTransaction(sig.signature);
+        } catch (err) {
+          this.log(`[crypto] getTransaction failed for ${sig.signature.slice(0, 16)}…: ${err instanceof Error ? err.message : String(err)}`);
+          continue;
+        }
+        if (!tx) continue;
+        this.cacheTransaction(sig.signature, tx);
       }
-      if (!tx) continue;
       const analyzed = analyzeTransaction(tx, new Set([address]));
       if (!analyzed) continue;
       const blockTimeMs =
@@ -643,26 +710,81 @@ export class CryptoCheckout {
         })),
         blockTimeMs,
       });
+      this.logUnderpaidMemoReferences(analyzed, orders, matches, sig.signature);
       for (const match of matches) {
         const order = orders.find((o) => o.ref === match.ref);
-        if (order) await this.credit(order, sig.signature, match.reason);
+        if (order) await this.claimAndFulfill(order, sig.signature, match.reason);
       }
     }
     if (signatures.length > 0) {
-      this.lastSeenSignature.set(address, signatures[0].signature);
+      const newest = signatures[0];
+      this.lastSeenSignature.set(address, {
+        signature: newest.signature,
+        blockTimeMs: typeof newest.blockTime === 'number' ? newest.blockTime * 1000 : null,
+      });
     }
   }
 
-  private async credit(order: CryptoOrderRecord, signature: string, reason: 'memo' | 'amount'): Promise<void> {
-    const claimed = this.billingDb.markCryptoOrderPaid(order.ref, signature);
-    if (!claimed) return;
+  private cacheTransaction(signature: string, tx: unknown): void {
+    this.txCache.set(signature, tx);
+    while (this.txCache.size > 2048) {
+      const oldest = this.txCache.keys().next().value;
+      if (oldest === undefined) break;
+      this.txCache.delete(oldest);
+    }
+  }
+
+  /**
+   * Ops visibility for memo underpayments (BLOCK-1): the buyer's transfer
+   * referenced a pending order but did not cover it, so it was NOT credited.
+   * Logged once per signature/order pair.
+   */
+  private logUnderpaidMemoReferences(
+    analyzed: AnalyzedTransaction,
+    orders: CryptoOrderRecord[],
+    matches: OrderMatch[],
+    signature: string
+  ): void {
+    if (analyzed.memos.length === 0) return;
+    const memoText = analyzed.memos.join('\n');
+    for (const order of orders) {
+      if (matches.some((m) => m.ref === order.ref) || !memoText.includes(order.ref)) continue;
+      const key = `${signature}:${order.ref}`;
+      if (this.underpayLogged.has(key)) continue;
+      this.underpayLogged.add(key);
+      const got = analyzed.transfers.find((t) => t.asset === order.asset)?.amountUnits;
+      this.log(
+        `[crypto] order ${order.ref} referenced by memo but not credited: transfer ${got ?? 'none'} ${order.asset} < required ${order.amountUnits} (underpaid; ops follow-up)`
+      );
+    }
+  }
+
+  /**
+   * Claims the order for this signature and fulfills it inside ONE database
+   * transaction (BLOCK-3): either the payment is marked and the product
+   * delivered together, or both roll back and the order stays pending with its
+   * signature unconsumed — the next tick re-examines the signature (the poll
+   * cursor never hides a signature a pending order can still match), so there is
+   * no strand and no partial fulfillment that a retry could double.
+   */
+  private async claimAndFulfill(order: CryptoOrderRecord, signature: string, reason: 'memo' | 'amount'): Promise<void> {
+    let claimed = false;
     try {
-      this.fulfill(order);
-      this.log(`[crypto] order ${order.ref} paid (${reason}) via ${signature.slice(0, 16)}…`);
+      this.billingDb.runInTransaction(() => {
+        // Signature-scoped claim (BLOCK-2): false when another order already
+        // consumed this signature (enforced by UNIQUE across restarts/processes).
+        claimed = this.billingDb.markCryptoOrderPaid(order.ref, signature);
+        if (!claimed) return;
+        this.fulfill(order);
+      });
     } catch (err) {
-      // Fulfillment failed after payment: reopen so the next tick retries activation.
-      this.billingDb.reopenCryptoOrder(order.ref);
-      this.log(`[crypto] fulfillment failed for ${order.ref}: ${err instanceof Error ? err.message : String(err)}`);
+      this.log(
+        `[crypto] fulfillment failed for ${order.ref} (transaction rolled back, will retry): ${err instanceof Error ? err.message : String(err)}`
+      );
+      return;
+    }
+    if (claimed) {
+      this.log(`[crypto] order ${order.ref} paid (${reason}) via ${signature.slice(0, 16)}…`);
     }
   }
 

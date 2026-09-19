@@ -223,6 +223,44 @@ export class BillingDb {
       CREATE INDEX IF NOT EXISTS idx_checkout_sessions_customer ON checkout_sessions(stripe_customer_id);
       CREATE INDEX IF NOT EXISTS idx_crypto_orders_pending ON crypto_orders(status, asset);
     `);
+    // One on-chain signature may ever credit exactly one order — enforced by the
+    // UNIQUE index this migration creates (payments review PR #250, BLOCK-2).
+    this.migrateCryptoOrderSignatureUnique();
+  }
+
+  /**
+   * Deduplicates legacy rows that share a signature (possible before the UNIQUE
+   * constraint existed: a restart replay could store one payment on two orders),
+   * then creates the unique index. The OLDEST row keeps the claim — it is the
+   * legitimate first credit; later duplicates are detached (signature = NULL)
+   * so the index can exist. Their already-shipped fulfillments are an ops
+   * matter the DB cannot undo.
+   */
+  private migrateCryptoOrderSignatureUnique(): void {
+    const dupes = this.db
+      .prepare(
+        `SELECT signature FROM crypto_orders WHERE signature IS NOT NULL
+         GROUP BY signature HAVING COUNT(*) > 1`
+      )
+      .all() as Array<{ signature: string }>;
+    if (dupes.length > 0) {
+      const detachLaterDuplicates = this.db.prepare(
+        `UPDATE crypto_orders SET signature = NULL
+         WHERE signature = ? AND ref NOT IN (
+           SELECT ref FROM crypto_orders WHERE signature = ? ORDER BY created_at ASC, rowid ASC LIMIT 1
+         )`
+      );
+      this.db.transaction(() => {
+        for (const { signature } of dupes) detachLaterDuplicates.run(signature, signature);
+      })();
+    }
+    // Multiple NULL signatures are allowed by SQLite, so pending/expired rows coexist.
+    this.db.exec('CREATE UNIQUE INDEX IF NOT EXISTS idx_crypto_orders_signature ON crypto_orders(signature)');
+  }
+
+  /** Runs fn inside a single better-sqlite3 transaction: commits together or rolls back together. */
+  runInTransaction<T>(fn: () => T): T {
+    return this.db.transaction(fn)();
   }
 
   // ── Customers ──────────────────────────────────────────────────────────────
@@ -580,19 +618,47 @@ export class BillingDb {
     return rows.map(cryptoOrderRowToRecord);
   }
 
-  /** Atomically claims a pending order for fulfillment. Returns false when another worker already claimed it. */
+  /**
+   * Atomically claims a pending order for one signature. Returns false when the
+   * order is no longer pending OR when the signature already credited another
+   * order — the claim is signature-scoped, not order-scoped, so a replayed
+   * payment (restart, second process) can never double-credit. The UNIQUE
+   * signature index backs the check; a cross-process race that slips past the
+   * NOT EXISTS guard lands on the constraint and also returns false.
+   */
   markCryptoOrderPaid(ref: string, signature: string): boolean {
-    const result = this.db
-      .prepare("UPDATE crypto_orders SET status = 'paid', signature = ? WHERE ref = ? AND status = 'pending'")
-      .run(signature, ref);
-    return result.changes > 0;
+    try {
+      const result = this.db
+        .prepare(
+          `UPDATE crypto_orders SET status = 'paid', signature = ?
+           WHERE ref = ? AND status = 'pending'
+             AND NOT EXISTS (SELECT 1 FROM crypto_orders WHERE signature = ?)`
+        )
+        .run(signature, ref, signature);
+      return result.changes > 0;
+    } catch (err) {
+      if (err instanceof Error && /UNIQUE constraint/i.test(err.message)) return false;
+      throw err;
+    }
   }
 
-  /** Reverts a paid order back to pending when fulfillment failed, so the next poll retries it. */
-  reopenCryptoOrder(ref: string): void {
-    this.db
-      .prepare("UPDATE crypto_orders SET status = 'pending', signature = NULL WHERE ref = ? AND status = 'paid'")
-      .run(ref);
+  /**
+   * Orders that reached paid without a completed checkout session — the state a
+   * crash between payment-claim and fulfillment used to strand forever. The
+   * poller sweeps and re-fulfills these idempotently on every tick.
+   */
+  listPaidUnfulfilledCryptoOrders(): CryptoOrderRecord[] {
+    const rows = this.db
+      .prepare(
+        // crypto:<ref> is cryptoSessionId() from billing-crypto.ts (not imported
+        // here to keep the dependency direction one-way).
+        `SELECT o.* FROM crypto_orders o
+         LEFT JOIN checkout_sessions s ON s.stripe_session_id = 'crypto:' || o.ref
+         WHERE o.status = 'paid' AND (s.status IS NULL OR s.status <> 'completed')
+         ORDER BY o.created_at ASC, o.ref ASC`
+      )
+      .all() as CryptoOrderRow[];
+    return rows.map(cryptoOrderRowToRecord);
   }
 
   expireStaleCryptoOrders(nowIso: string): number {

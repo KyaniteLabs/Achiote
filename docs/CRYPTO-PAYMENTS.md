@@ -44,12 +44,16 @@ than taking payments it could never fulfill.
 2. The landing page shows a QR of the URI (`docs/landing/vendor/qrcode.js`, a vendored
    MIT `qrcode-generator` — self-hosted, CSP stays `'self'`), plus address/amount/ref copy
    buttons and an "I have sent the payment" poller (5 s interval until expiry).
-3. A server-side poller (`setInterval` 20 s, `unref`'d, only queries RPC while pending
-   orders exist) watches `getSignaturesForAddress` on the receive address (SOL) and on the
-   USDC token accounts owned by it (found via `getTokenAccountsByOwner` — SPL transfers
-   land in the ATA, and Solana Pay wallets create the recipient ATA when missing). New
-   signatures → `getTransaction` (`json`, `maxSupportedTransactionVersion: 0`) →
-   deterministic match rules below. RPC 429/5xx errors retry with exponential backoff,
+3. A server-side poller (`setInterval` 20 s, `unref`'d, immediate first tick at startup,
+   only queries RPC while pending orders exist) watches `getSignaturesForAddress` on the
+   receive address (SOL) and on the USDC token accounts owned by it (found via
+   `getTokenAccountsByOwner` — SPL transfers land in the ATA, and Solana Pay wallets
+   create the recipient ATA when missing). Signatures → `getTransaction` (`json`,
+   `maxSupportedTransactionVersion: 0`) → deterministic match rules below. While any
+   order is pending, every visible signature newer than the order's creation is
+   re-examined on each tick (fetched transactions are cached, so re-examination costs
+   CPU, not RPC quota); each tick also sweeps paid-but-unfulfilled orders for idempotent
+   re-fulfillment. RPC 429/5xx errors retry with exponential backoff,
    max 5 attempts.
 4. `GET /billing/crypto-status?ref=...` → `{status: pending|paid|expired}` (+ `sessionId`
    when paid). On paid the frontend redirects to
@@ -60,16 +64,27 @@ than taking payments it could never fulfill.
 
 A payment credits an order when a transfer **to a watched account of ours** satisfies:
 
-- **Memo rule**: any memo instruction in the transaction contains the order's `ref`, and
-  the transaction also carries a transfer of that order's asset to our address/token
-  account. Wallets embed the ref because the Solana Pay URI carries it as `memo`.
+- **Memo rule**: any memo instruction in the transaction contains the order's `ref`,
+  and the transaction also carries a transfer of that order's asset to our address/token
+  account **for at least the quoted amount**. Wallets embed the ref because the Solana Pay
+  URI carries it as `memo`. A memo-matched transfer *below* the quoted amount never credits
+  (the order stays pending and the poller logs the underpayment for ops); an overpayment
+  credits — the overage is an ops matter, not a security one.
 - **Amount rule** (when no memo matched): an exact-amount transfer of the right asset to a
-  watched account, with chain `blockTime` inside the order window (created … +60 min,
-  ±5 min clock slack). When two pending orders could claim one transfer, the oldest wins;
-  one transfer credits at most one order.
+  watched account, with chain `blockTime` no earlier than order creation **minus 60 s**
+  (chain-clock skew only — a payment can never credit an order created more than 60 s
+  after it landed) and no later than expiry + 5 min. When two pending orders could claim
+  one transfer, the oldest wins.
 
-Transfers to other addresses, failed transactions, wrong amounts, and payments after
-expiry never credit. Fulfillment mirrors the Stripe webhook path through the same tables
+Two consumption guarantees hold across restarts and processes: **one signature credits at
+most one order, ever** (a database `UNIQUE(signature)` constraint — a replayed payment is
+silently ignored), and **payment-claim plus fulfillment commit as one transaction** —
+either the order is marked paid and the product delivered together, or neither happens.
+Any order that nonetheless reaches `paid` without a completed session (a crash in an
+older deploy, for instance) is picked up by a recovery sweep that re-fulfills it
+idempotently on every poll tick and at startup. Transfers to other addresses, failed
+transactions, wrong amounts, and payments after expiry never credit. Fulfillment mirrors
+the Stripe webhook path through the same tables
 (`billing_subscriptions` + `billing_api_keys` + `checkout_sessions`, or
 `credit_balances` for one-time packs) — there is no parallel activation path. Crypto
 "subscriptions" are prepaid 30-day periods (`current_period_end = now + 30 d`); there is

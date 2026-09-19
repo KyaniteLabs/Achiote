@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
+import Database from 'better-sqlite3';
 import { BillingDb } from '../src/lib/billing-db.js';
 import {
   CryptoCheckout,
@@ -173,7 +174,13 @@ function makeFakeRpc(): { rpc: SolanaRpc; signaturesFor: Map<string, SignatureIn
   const rpc: SolanaRpc = {
     async getSignaturesForAddress(address: string, until?: string) {
       signatureCalls.push({ address, until });
-      return signaturesFor.get(address) ?? [];
+      // Faithful to the real RPC: `until` returns only signatures STRICTLY NEWER
+      // than it (the review pinned a mock that ignored `until`, which hid the
+      // BLOCK-3 cursor blind spot). Lists are newest-first, like the RPC's.
+      const all = signaturesFor.get(address) ?? [];
+      if (!until) return [...all];
+      const stop = all.findIndex((s) => s.signature === until);
+      return stop === -1 ? [...all] : all.slice(0, stop);
     },
     async getTransaction(signature: string) {
       return transactions.get(signature) ?? null;
@@ -202,6 +209,12 @@ function fakeNow(): number {
 let dbPath: string;
 let billingDb: BillingDb;
 let origEncryptionKey: string | undefined;
+
+/** Simulates a process restart on the same billing DB: fresh handle, same file. */
+function restartBillingDb(): void {
+  billingDb.close();
+  billingDb = new BillingDb(dbPath);
+}
 
 function freshCheckout(deps: ConstructorParameters<typeof CryptoCheckout>[2] = {}): CryptoCheckout {
   return new CryptoCheckout(
@@ -453,13 +466,41 @@ describe('transaction analysis and matching', () => {
     expect(analyzeTransaction(tx, watched)).toBeNull();
   });
 
-  it('credits by memo reference regardless of exact amount', () => {
-    const order = orderView({ ref: 'AB2CD3EF', asset: 'sol', amountUnits: 1n });
-    const tx = solTransferTx({ lamports: 123_456n, memo: 'AB2CD3EF', blockTime: 1_000_000_500 });
-    const analyzed = analyzeTransaction(tx, watched)!;
-    expect(matchTransaction({ analyzed, orders: [order], blockTimeMs: 1_000_000_500_000 })).toEqual([
-      { ref: 'AB2CD3EF', transfer: analyzed.transfers[0], reason: 'memo' },
+  it('credits by memo reference only when the transfer covers the quoted amount (BLOCK-1)', () => {
+    const order = orderView({ ref: 'AB2CD3EF', asset: 'usdc', amountUnits: 149_000_000n });
+    const watchedToken = new Set([TOKEN_ACCOUNT]);
+    // The exploit shape: a 1-base-unit (0.000001 USDC) transfer carrying the right
+    // memo. Must NEVER credit — this test replaced one that asserted the opposite.
+    const underpaid = analyzeTransaction(splTransferTx({ amount: 1n, memo: 'AB2CD3EF', blockTime: 1_000_000_500 }), watchedToken)!;
+    expect(matchTransaction({ analyzed: underpaid, orders: [order], blockTimeMs: 1_000_000_500_000 })).toEqual([]);
+    // Exactly the quoted amount credits.
+    const exact = analyzeTransaction(splTransferTx({ amount: 149_000_000n, memo: 'AB2CD3EF', blockTime: 1_000_000_500 }), watchedToken)!;
+    expect(matchTransaction({ analyzed: exact, orders: [order], blockTimeMs: 1_000_000_500_000 })).toEqual([
+      { ref: 'AB2CD3EF', transfer: exact.transfers[0], reason: 'memo' },
     ]);
+    // Overpaying with a memo still credits (overage is an ops matter, not a hole).
+    const over = analyzeTransaction(splTransferTx({ amount: 149_000_001n, memo: 'AB2CD3EF', blockTime: 1_000_000_500 }), watchedToken)!;
+    expect(matchTransaction({ analyzed: over, orders: [order], blockTimeMs: 1_000_000_500_000 })).toEqual([
+      { ref: 'AB2CD3EF', transfer: over.transfers[0], reason: 'memo' },
+    ]);
+  });
+
+  it('never lets an underpaid memo transfer fall through to amount-match a different order', () => {
+    const underpaidFor = orderView({ ref: 'AAAREF1', asset: 'usdc', amountUnits: 149_000_000n });
+    const sameAmount = orderView({ ref: 'BBBREF2', asset: 'usdc', amountUnits: 9n });
+    const analyzed = analyzeTransaction(splTransferTx({ amount: 9n, memo: 'AAAREF1', blockTime: 1_000_000_500 }), new Set([TOKEN_ACCOUNT]))!;
+    expect(matchTransaction({ analyzed, orders: [underpaidFor, sameAmount], blockTimeMs: 1_000_000_500_000 })).toEqual([]);
+  });
+
+  it('never amount-matches a signature more than 60 s older than the order (replay floor, BLOCK-2)', () => {
+    const order = orderView({ ref: 'AB2CD3EF', asset: 'sol', amountUnits: 60_000_000n });
+    // 61 s before creation: previously accepted (5-min backwards slack) — one
+    // payment could credit a second, later-created same-amount order.
+    const stale = analyzeTransaction(solTransferTx({ lamports: 60_000_000n, blockTime: 1_000_000_000 - 61 }), watched)!;
+    expect(matchTransaction({ analyzed: stale, orders: [order], blockTimeMs: (1_000_000_000 - 61) * 1000 })).toEqual([]);
+    // 60 s before creation: allowed — chain-clock skew only.
+    const skew = analyzeTransaction(solTransferTx({ lamports: 60_000_000n, blockTime: 1_000_000_000 - 60 }), watched)!;
+    expect(matchTransaction({ analyzed: skew, orders: [order], blockTimeMs: (1_000_000_000 - 60) * 1000 })).toHaveLength(1);
   });
 
   it('credits by exact amount when no memo exists and blockTime is inside the window', () => {
@@ -558,21 +599,115 @@ describe('crypto poller', () => {
     expect(fake.signatureCalls).toHaveLength(0);
   });
 
-  it('skips failed signatures and passes until= to the RPC after the first pass', async () => {
+  it('withholds the RPC cursor while it could hide signatures a pending order still needs (BLOCK-3)', async () => {
     const fake = makeFakeRpc();
     const checkout = freshCheckout({ rpc: fake.rpc, fetchSolPriceUsd: async () => 150 });
     const order = await checkout.createOrder({ tier: 'personal', mode: 'subscription', asset: 'sol' });
     fake.signaturesFor.set(RECEIVER, [
       { signature: 'failed-sig', blockTime: 1_000_000_100, err: { InstructionError: [0, { Custom: 1 }] } },
     ]);
-    await checkout.tick();
+    await checkout.tick(); // cursor now sits at failed-sig (blockTime 100 s after order creation)
     expect(billingDb.getCryptoOrder(order.ref)!.status).toBe('pending');
 
+    // The cursor is NEWER than the pending order's creation (minus the 60 s skew
+    // allowance), so the next tick must poll the whole line instead: passing
+    // until=failed-sig would blind the order to signatures it can still match.
     const good = addSignature(fake, RECEIVER, solTransferTx({ lamports: 60_000_000n, memo: order.ref, blockTime: 1_000_000_200 }));
     await checkout.tick();
     expect(billingDb.getCryptoOrder(order.ref)!.status).toBe('paid');
     expect(billingDb.getCryptoOrder(order.ref)!.signature).toBe(good);
-    expect(fake.signatureCalls[1].until).toBe('failed-sig');
+    expect(fake.signatureCalls[1].until).toBeUndefined();
+  });
+
+  it('advances the RPC cursor once every pending order predates it by more than the skew allowance', async () => {
+    const fake = makeFakeRpc();
+    const checkout = freshCheckout({ rpc: fake.rpc, fetchSolPriceUsd: async () => 150 });
+    // A signature 120 s old is examined while NO order exists, then an order is
+    // created 60+ s after that signature: the cursor is now safely behind it.
+    const stale = 'stale-but-processed';
+    fake.signaturesFor.set(RECEIVER, [{ signature: stale, blockTime: 1_000_000_000 - 120, err: null }]);
+    fake.transactions.set(stale, solTransferTx({ lamports: 1n, blockTime: 1_000_000_000 - 120 })); // no match
+    nowMs = 1_000_000_000_000 + 120_000;
+    const order = await checkout.createOrder({ tier: 'personal', mode: 'subscription', asset: 'sol' });
+    await checkout.tick();
+    expect(fake.signatureCalls[0].until).toBeUndefined(); // first pass: no cursor yet
+    const good = addSignature(fake, RECEIVER, solTransferTx({ lamports: 60_000_000n, memo: order.ref, blockTime: 1_000_000_100 }));
+    await checkout.tick();
+    // Cursor (blockTime createdAt−120 s) is more than 60 s behind the order, so it is safe to use.
+    expect(fake.signatureCalls[1].until).toBe(stale);
+    expect(billingDb.getCryptoOrder(order.ref)!.status).toBe('paid');
+    expect(billingDb.getCryptoOrder(order.ref)!.signature).toBe(good);
+  });
+
+  it('does not credit a memo-matched underpayment, ever (BLOCK-1 regression)', async () => {
+    const logs: string[] = [];
+    const fake = makeFakeRpc();
+    const checkout = freshCheckout({ rpc: fake.rpc, log: (m) => logs.push(m) });
+    const order = await checkout.createOrder({ tier: 'family-sprint', mode: 'payment', asset: 'usdc' }); // $149
+    // Attacker pays 0.000001 USDC with the ref as memo — the reproduced exploit.
+    addSignature(fake, TOKEN_ACCOUNT, splTransferTx({ amount: 1n, memo: order.ref, blockTime: 1_000_000_100, transferChecked: true }));
+
+    await checkout.tick();
+
+    expect(billingDb.getCryptoOrder(order.ref)!.status).toBe('pending');
+    expect(billingDb.getCheckoutSession(cryptoSessionId(order.ref))!.status).toBe('pending');
+    expect(billingDb.getCredits(`crypto:${order.ref}`)).toBeNull(); // no credits, no key
+    expect(logs.some((m) => m.includes(order.ref) && m.includes('underpaid'))).toBe(true); // ops-visible
+
+    // Re-examined on later ticks: still never credits.
+    await checkout.tick();
+    expect(billingDb.getCryptoOrder(order.ref)!.status).toBe('pending');
+    expect(billingDb.getCredits(`crypto:${order.ref}`)).toBeNull();
+  });
+
+  it('credits a memo-matched overpayment (overage is ops-visible, not a hole)', async () => {
+    const fake = makeFakeRpc();
+    const checkout = freshCheckout({ rpc: fake.rpc });
+    const order = await checkout.createOrder({ tier: 'memory-pack', mode: 'payment', asset: 'usdc' });
+    addSignature(fake, TOKEN_ACCOUNT, splTransferTx({ amount: 49_000_001n, memo: order.ref, blockTime: 1_000_000_100, transferChecked: true }));
+    await checkout.tick();
+    expect(billingDb.getCryptoOrder(order.ref)!.status).toBe('paid');
+    expect(billingDb.getCredits(`crypto:${order.ref}`)!.webCredits).toBe(25);
+  });
+
+  it('never lets one signature credit a second order across a restart (BLOCK-2 regression)', async () => {
+    const fake = makeFakeRpc();
+    const first = freshCheckout({ rpc: fake.rpc });
+    const orderA = await first.createOrder({ tier: 'personal', mode: 'subscription', asset: 'usdc' });
+    nowMs += 1000; // B is strictly newer, so A deterministically wins the first claim
+    const orderB = await first.createOrder({ tier: 'personal', mode: 'subscription', asset: 'usdc' });
+    // Memo-less manual send of exactly $9: credits the oldest pending order (A).
+    const sig = addSignature(fake, TOKEN_ACCOUNT, splTransferTx({ amount: 9_000_000n, blockTime: 1_000_000_100, transferChecked: true }));
+    await first.tick();
+    expect(billingDb.getCryptoOrder(orderA.ref)!.status).toBe('paid');
+    expect(billingDb.getCryptoOrder(orderA.ref)!.signature).toBe(sig);
+
+    // Restart: fresh DB handle, fresh poller, no in-memory cursor — the replay
+    // re-sees the signature while order B is pending.
+    restartBillingDb();
+    const restarted = freshCheckout({ rpc: fake.rpc });
+    await restarted.tick();
+
+    expect(billingDb.getCryptoOrder(orderB.ref)!.status).toBe('pending'); // NOT credited
+    expect(billingDb.getCheckoutSession(cryptoSessionId(orderB.ref))!.status).toBe('pending');
+    expect(billingDb.getSubscription(`crypto-sub:${orderB.ref}`)).toBeNull(); // nothing fulfilled for B
+    // A's fulfillment survived the restart exactly once.
+    expect(billingDb.getCheckoutSession(cryptoSessionId(orderA.ref))!.status).toBe('completed');
+  });
+
+  it('markCryptoOrderPaid refuses a signature that already credited another order', () => {
+    billingDb.createCryptoOrder({
+      ref: 'AAA33333', tier: 'personal', mode: 'subscription', asset: 'usdc', amountUnits: '9000000',
+      usdCents: 900, address: RECEIVER, createdAt: '2026-01-01T00:00:00.000Z', expiresAt: '2026-01-01T01:00:00.000Z',
+    });
+    billingDb.createCryptoOrder({
+      ref: 'BBB44444', tier: 'personal', mode: 'subscription', asset: 'usdc', amountUnits: '9000000',
+      usdCents: 900, address: RECEIVER, createdAt: '2026-01-01T00:00:01.000Z', expiresAt: '2026-01-01T01:00:01.000Z',
+    });
+    expect(billingDb.markCryptoOrderPaid('AAA33333', 'sig-once')).toBe(true);
+    expect(billingDb.markCryptoOrderPaid('BBB44444', 'sig-once')).toBe(false); // consumed
+    expect(billingDb.getCryptoOrder('BBB44444')!.status).toBe('pending');
+    expect(billingDb.markCryptoOrderPaid('BBB44444', 'sig-twice')).toBe(true); // a distinct signature still works
   });
 
   it('never credits an expired order even if the payment lands afterwards', async () => {
@@ -585,7 +720,7 @@ describe('crypto poller', () => {
     expect(billingDb.getCryptoOrder(order.ref)!.status).toBe('expired');
   });
 
-  it('retries fulfillment on the next tick after a transient activation failure', async () => {
+  it('retries fulfillment on the next tick after a transient activation failure (BLOCK-3: with an until-faithful RPC)', async () => {
     const fake = makeFakeRpc();
     const checkout = freshCheckout({ rpc: fake.rpc, fetchSolPriceUsd: async () => 150 });
     const order = await checkout.createOrder({ tier: 'personal', mode: 'subscription', asset: 'sol' });
@@ -598,12 +733,139 @@ describe('crypto poller', () => {
       return complete.apply(this, args);
     };
     await checkout.tick();
-    expect(billingDb.getCryptoOrder(order.ref)!.status).toBe('pending'); // reopened
+    // The claim+fulfill transaction rolled back: no paid-without-session state,
+    // no consumed signature — the order is cleanly pending again.
+    expect(billingDb.getCryptoOrder(order.ref)!.status).toBe('pending');
+    expect(billingDb.getCryptoOrder(order.ref)!.signature).toBeNull();
     sabotaged = false;
     await checkout.tick();
+    // The mock now honors `until`, and the cursor is newer than the pending
+    // order, so the tick polls the whole line and re-examines the signature.
+    expect(fake.signatureCalls[1].until).toBeUndefined();
     expect(billingDb.getCryptoOrder(order.ref)!.status).toBe('paid');
     expect(billingDb.getCheckoutSession(cryptoSessionId(order.ref))!.status).toBe('completed');
     billingDb.completeCheckoutSession = complete;
+  });
+
+  it('rolls back and retries a failed pack fulfillment without ever double-adding credits (BLOCK-3 regression)', async () => {
+    const fake = makeFakeRpc();
+    const checkout = freshCheckout({ rpc: fake.rpc });
+    const order = await checkout.createOrder({ tier: 'family-sprint', mode: 'payment', asset: 'usdc' });
+    addSignature(fake, TOKEN_ACCOUNT, splTransferTx({ amount: 149_000_000n, memo: order.ref, blockTime: 1_000_000_100, transferChecked: true }));
+
+    const complete = billingDb.completeCheckoutSession;
+    let sabotaged = true;
+    billingDb.completeCheckoutSession = function (this: BillingDb, ...args: Parameters<typeof complete>) {
+      if (sabotaged) throw new Error('transient failure'); // fails AFTER addCredits
+      return complete.apply(this, args);
+    };
+    await checkout.tick();
+    // addCredits ran, then completion threw — the single transaction must have
+    // rolled the credits back too (previously they stuck and every retry re-added).
+    expect(billingDb.getCryptoOrder(order.ref)!.status).toBe('pending');
+    expect(billingDb.getCredits(`crypto:${order.ref}`)).toBeNull();
+
+    sabotaged = false;
+    await checkout.tick(); // retry via whole-line re-examination
+    await checkout.tick(); // sweep/idempotency: nothing left to do
+    expect(billingDb.getCryptoOrder(order.ref)!.status).toBe('paid');
+    const credits = billingDb.getCredits(`crypto:${order.ref}`)!;
+    expect(credits.webCredits).toBe(10); // PAYMENT_OFFER_CREDITS['family-sprint'].web — exactly once
+    expect(billingDb.listKeysForCustomer(`crypto:${order.ref}`)).toHaveLength(1);
+    billingDb.completeCheckoutSession = complete;
+  });
+
+  it('fulfills exactly once when the process died between mark-paid and fulfillment (BLOCK-3 regression)', async () => {
+    const fake = makeFakeRpc();
+    const checkout = freshCheckout({ rpc: fake.rpc });
+    const order = await checkout.createOrder({ tier: 'memory-pack', mode: 'payment', asset: 'usdc' });
+    // Simulate the crash state the old code could leave behind: paid + signature
+    // consumed, fulfillment never ran.
+    expect(billingDb.markCryptoOrderPaid(order.ref, 'crash-sig')).toBe(true);
+
+    restartBillingDb(); // "restart": fresh DB handle + fresh poller instance
+    const restarted = freshCheckout({ rpc: fake.rpc });
+    await restarted.tick(); // startup sweep fulfills the stranded order
+
+    expect(billingDb.getCryptoOrder(order.ref)!.status).toBe('paid');
+    expect(billingDb.getCheckoutSession(cryptoSessionId(order.ref))!.status).toBe('completed');
+    expect(billingDb.getCredits(`crypto:${order.ref}`)!.webCredits).toBe(25);
+    expect(billingDb.listKeysForCustomer(`crypto:${order.ref}`)).toHaveLength(1);
+
+    await restarted.tick(); // a later sweep must not fulfill twice
+    expect(billingDb.getCredits(`crypto:${order.ref}`)!.webCredits).toBe(25);
+    expect(billingDb.listKeysForCustomer(`crypto:${order.ref}`)).toHaveLength(1);
+  });
+});
+
+// ── signature uniqueness migration (BLOCK-2) ────────────────────────────────
+
+describe('crypto_orders signature uniqueness migration', () => {
+  it('dedupes legacy duplicate signatures (oldest row keeps the claim) and enforces UNIQUE from then on', () => {
+    // Hand-build a legacy DB whose crypto_orders table predates the constraint,
+    // carrying the double-credit the review reproduced: one signature on two rows.
+    const dir = mkdtempSync(join(tmpdir(), 'achiote-crypto-legacy-'));
+    const legacyPath = join(dir, 'legacy.db');
+    const raw = new Database(legacyPath);
+    raw.exec(`
+      CREATE TABLE crypto_orders (
+        ref TEXT PRIMARY KEY,
+        tier TEXT NOT NULL,
+        mode TEXT NOT NULL,
+        asset TEXT NOT NULL,
+        amount_units TEXT NOT NULL,
+        usd_cents INTEGER NOT NULL,
+        address TEXT NOT NULL,
+        status TEXT NOT NULL DEFAULT 'pending',
+        signature TEXT,
+        created_at TEXT NOT NULL,
+        expires_at TEXT NOT NULL
+      );
+    `);
+    const insert = raw.prepare(
+      `INSERT INTO crypto_orders (ref, tier, mode, asset, amount_units, usd_cents, address, status, signature, created_at, expires_at)
+       VALUES (?, 'personal', 'subscription', 'usdc', '9000000', 900, ?, 'paid', ?, ?, ?)`
+    );
+    insert.run('CCC55555', RECEIVER, 'replayed-sig', '2026-01-01T00:00:00.000Z', '2026-01-01T01:00:00.000Z'); // oldest: legitimate
+    insert.run('DDD66666', RECEIVER, 'replayed-sig', '2026-01-01T00:04:00.000Z', '2026-01-01T01:04:00.000Z'); // replay duplicate
+    insert.run('EEE77777', RECEIVER, 'other-sig', '2026-01-01T00:05:00.000Z', '2026-01-01T01:05:00.000Z');
+    raw.close();
+
+    const db = new BillingDb(legacyPath); // constructor runs the migration
+    expect(db.getCryptoOrder('CCC55555')!.signature).toBe('replayed-sig'); // oldest keeps it
+    expect(db.getCryptoOrder('DDD66666')!.signature).toBeNull(); // duplicate detached
+    expect(db.getCryptoOrder('EEE77777')!.signature).toBe('other-sig'); // untouched
+
+    // The constraint is live: a fresh order can never claim a consumed signature,
+    // and a raw UPDATE violates the unique index itself.
+    db.createCryptoOrder({
+      ref: 'FFF88888', tier: 'personal', mode: 'subscription', asset: 'usdc', amountUnits: '9000000',
+      usdCents: 900, address: RECEIVER, createdAt: '2026-01-02T00:00:00.000Z', expiresAt: '2026-01-02T01:00:00.000Z',
+    });
+    expect(db.markCryptoOrderPaid('FFF88888', 'replayed-sig')).toBe(false);
+    const probe = new Database(legacyPath);
+    expect(() =>
+      probe.prepare("UPDATE crypto_orders SET signature = 'other-sig' WHERE ref = 'FFF88888'").run()
+    ).toThrow(/UNIQUE constraint/);
+    probe.close();
+    db.close();
+    rmSync(dir, { recursive: true, force: true });
+  });
+
+  it('is a no-op on databases that already satisfy the constraint (idempotent reopen)', () => {
+    const dir = mkdtempSync(join(tmpdir(), 'achiote-crypto-mig-'));
+    const path = join(dir, 'billing.db');
+    const db = new BillingDb(path);
+    db.createCryptoOrder({
+      ref: 'GGG99999', tier: 'personal', mode: 'subscription', asset: 'usdc', amountUnits: '9000000',
+      usdCents: 900, address: RECEIVER, createdAt: '2026-01-01T00:00:00.000Z', expiresAt: '2026-01-01T01:00:00.000Z',
+    });
+    expect(db.markCryptoOrderPaid('GGG99999', 'clean-sig')).toBe(true);
+    db.close();
+    const reopened = new BillingDb(path); // re-runs the migration: nothing to dedupe
+    expect(reopened.getCryptoOrder('GGG99999')!.signature).toBe('clean-sig');
+    reopened.close();
+    rmSync(dir, { recursive: true, force: true });
   });
 });
 
