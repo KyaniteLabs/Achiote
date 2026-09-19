@@ -2,12 +2,13 @@ try { process.loadEnvFile(); } catch { /* no .env file present */ }
 
 import { parseArgs } from 'node:util';
 import { Transform } from 'node:stream';
+import { StringDecoder } from 'node:string_decoder';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { createAchioteServer } from './server.js';
 import { runAskCommand } from './cli-ask.js';
 import { runPurgeCommand } from './cli-purge.js';
 
-const VERSION = '0.2.1';
+const VERSION = '0.2.2';
 
 const HELP_TEXT = `achiote — nostalgic food-memory reconstruction
 
@@ -61,13 +62,19 @@ function jsonRpcNullParamsRequestId(line: string): string | number | null {
   return null;
 }
 
-/** Start the stdio MCP server (the original behavior; default when no subcommand is given). */
-export async function runAchioteStdioServer(): Promise<void> {
-  const server = createAchioteServer();
+/**
+ * The stdio guard stream: answers JSON-RPC requests whose `params` is null with -32602
+ * directly, and reassembles lines safely across chunk boundaries (multibyte UTF-8
+ * sequences are buffered via StringDecoder — CGO-16). Exported for unit testing.
+ */
+export function createParamsGuardStream(): Transform {
   let partialLine = '';
-  const paramsGuard = new Transform({
+  // A multibyte UTF-8 sequence can straddle a chunk boundary; Buffer.toString() per chunk
+  // would decode each half into U+FFFD. StringDecoder buffers incomplete sequences.
+  const utf8Decoder = new StringDecoder('utf8');
+  return new Transform({
     transform(chunk: Buffer, _encoding: BufferEncoding, callback: (error: Error | null, data: Buffer | string | null) => void): void {
-      partialLine += chunk.toString('utf8');
+      partialLine += utf8Decoder.write(chunk);
       const lines = partialLine.split('\n');
       partialLine = lines.pop() ?? '';
       const forwarded = lines.filter((line) => {
@@ -87,6 +94,7 @@ export async function runAchioteStdioServer(): Promise<void> {
       callback(null, forwarded.length > 0 ? Buffer.from(forwarded.join('\n') + '\n', 'utf8') : null);
     },
     flush(callback: (error: Error | null, data: Buffer | string | null) => void): void {
+      partialLine += utf8Decoder.end();
       if (partialLine.length > 0) {
         const line = partialLine;
         partialLine = '';
@@ -108,6 +116,12 @@ export async function runAchioteStdioServer(): Promise<void> {
       }
     },
   });
+}
+
+/** Start the stdio MCP server (the original behavior; default when no subcommand is given). */
+export async function runAchioteStdioServer(): Promise<void> {
+  const server = createAchioteServer();
+  const paramsGuard = createParamsGuardStream();
   process.stdin.pipe(paramsGuard);
   const transport = new StdioServerTransport(paramsGuard);
 

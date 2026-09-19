@@ -50,7 +50,7 @@ describe('HTTP server integration', () => {
     const res = await fetch(`${baseUrl}/health`);
     expect(res.status).toBe(200);
     const body = await res.json();
-    expect(body).toMatchObject({ status: 'ok', version: '0.2.1' });
+    expect(body).toMatchObject({ status: 'ok', version: '0.2.2' });
     expect(body).toHaveProperty('authEnabled');
     expect(body).toHaveProperty('billingEnabled');
     expect(body).toHaveProperty('uptime');

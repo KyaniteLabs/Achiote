@@ -1,6 +1,6 @@
 {
   "name": "achiote",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Nostalgic food memory reconstruction MCP server — recreates childhood dishes using ingredients available where you are",
   "main": "dist/index.js",
   "type": "module",
