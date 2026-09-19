@@ -1,0 +1,52 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.kyanitelabs/achiote",
+  "title": "Achiote",
+  "description": "Reconstruct nostalgic food memories: recreate childhood dishes using ingredients available where you are. Exposes a one-call reconstruct_food_memory tool plus granular workflow tools.",
+  "version": "0.2.0",
+  "websiteUrl": "https://github.com/KyaniteLabs/Achiote#readme",
+  "repository": {
+    "url": "https://github.com/KyaniteLabs/Achiote",
+    "source": "github"
+  },
+  "packages": [
+    {
+      "registryType": "npm",
+      "registryBaseUrl": "https://registry.npmjs.org",
+      "identifier": "achiote",
+      "version": "0.2.0",
+      "runtimeHint": "npx",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "ANTHROPIC_API_KEY",
+          "description": "API key for the model provider that drives reconstruct_food_memory. Optional for the granular deterministic tools; required for the full single-call reconstruction.",
+          "isRequired": false,
+          "isSecret": true
+        },
+        {
+          "name": "ACHIOTE_CACHE_PATH",
+          "description": "Path to the local research cache database (.db). Holds dish/region research, never raw memories. Defaults to ~/.cache/achiote/culture-cache.db.",
+          "isRequired": false,
+          "isSecret": false
+        }
+      ]
+    }
+  ],
+  "_meta": {
+    "io.modelcontextprotocol.registry/publisher-provided": {
+      "capabilities": {
+        "primaryTool": "reconstruct_food_memory",
+        "command": "npx achiote",
+        "annotations": {
+          "readOnlyHint": false,
+          "openWorldHint": true,
+          "idempotentHint": false
+        }
+      }
+    }
+  },
+  "license": "BUSL-1.1"
+}
