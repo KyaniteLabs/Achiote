@@ -14,7 +14,9 @@ const repoRoot = path.resolve(__dirname, '..');
 const npmCommand = process.platform === 'win32' ? 'npm.cmd' : 'npm';
 async function loadExpectedTools() {
   const registry = await import(pathToFileURL(path.join(repoRoot, 'dist', 'tools', 'tool-registry.js')).href);
-  return registry.toolNames;
+  const reconstruct = await import(pathToFileURL(path.join(repoRoot, 'dist', 'core', 'reconstruct-tool.js')).href);
+  // The server registers the 18 granular registry tools plus the single-call reconstruction tool.
+  return [...registry.toolNames, reconstruct.RECONSTRUCT_TOOL_NAME].sort();
 }
 
 function run(command, args, options = {}) {
@@ -171,7 +173,7 @@ async function assertPackagedHttpServerStarts(installDir, tempRoot) {
 
   try {
     await withTimeout(waitForServer(child, port), 12_000, 'packaged HTTP startup');
-    for (const pathPart of ['/health', '/about', '/about/', '/pricing', '/roadmap', '/changelog', '/status', '/blog', '/receipt', '/receipt.js', '/privacy', '/privacy/', '/terms', '/support', '/safety', '/ai-search', '/ai-search/', '/compare', '/compare/', '/meaning', '/meaning/', '/week6', '/week6/', '/site.css', '/research-app.js', '/site-telemetry.js', '/llms.txt', '/sitemap.xml', '/robots.txt']) {
+    for (const pathPart of ['/health', '/about', '/about/', '/pricing', '/roadmap', '/changelog', '/status', '/blog', '/receipt', '/receipt.js', '/privacy', '/privacy/', '/terms', '/support', '/safety', '/ai-search', '/ai-search/', '/compare', '/compare/', '/meaning', '/meaning/', '/how-it-works', '/how-it-works/', '/for-professionals', '/for-professionals/', '/site.css', '/research-app.js', '/site-telemetry.js', '/llms.txt', '/sitemap.xml', '/robots.txt']) {
       const res = await withTimeout(fetch(`http://127.0.0.1:${port}${pathPart}`), 5_000, `GET ${pathPart}`);
       if (!res.ok) throw new Error(`GET ${pathPart} returned ${res.status}`);
       if (pathPart !== '/health' && !res.headers.get('x-content-type-options')) {
@@ -239,6 +241,9 @@ async function main() {
   try {
     fs.mkdirSync(installDir, { recursive: true });
     fs.writeFileSync(path.join(installDir, 'package.json'), '{"private":true,"type":"module"}\n');
+    // npm >= 11.19: allow-scripts must be project-scoped for installs (a user-level
+    // ~/.npmrc value hard-errors EALLOWSCRIPTS here); declare the tarball's script-bearing deps.
+    fs.writeFileSync(path.join(installDir, '.npmrc'), 'allow-scripts=better-sqlite3,fsevents\n');
 
     console.log(`Packing achiote into ${tempRoot}`);
     const packResult = run(npmCommand, ['pack', '--json', '--pack-destination', tempRoot]);
