@@ -49,6 +49,20 @@ export interface CheckoutSessionRecord {
   createdAt: string;
 }
 
+export interface CryptoOrderRecord {
+  ref: string;
+  tier: string;
+  mode: 'subscription' | 'payment';
+  asset: 'sol' | 'usdc';
+  amountUnits: string;
+  usdCents: number;
+  address: string;
+  status: 'pending' | 'paid' | 'expired';
+  signature: string | null;
+  createdAt: string;
+  expiresAt: string;
+}
+
 const KEY_PREFIX = 'ach_';
 const KEY_ID_PREFIX = 'ak_';
 const HASH_PREFIX = 'sha256:';
@@ -100,6 +114,36 @@ function decryptKey(stored: string): string | null {
 }
 
 const CHECKOUT_SESSION_TTL_MS = 24 * 60 * 60 * 1000;
+
+type CryptoOrderRow = {
+  ref: string;
+  tier: string;
+  mode: 'subscription' | 'payment';
+  asset: 'sol' | 'usdc';
+  amount_units: string;
+  usd_cents: number;
+  address: string;
+  status: 'pending' | 'paid' | 'expired';
+  signature: string | null;
+  created_at: string;
+  expires_at: string;
+};
+
+function cryptoOrderRowToRecord(row: CryptoOrderRow): CryptoOrderRecord {
+  return {
+    ref: row.ref,
+    tier: row.tier,
+    mode: row.mode,
+    asset: row.asset,
+    amountUnits: row.amount_units,
+    usdCents: row.usd_cents,
+    address: row.address,
+    status: row.status,
+    signature: row.signature,
+    createdAt: row.created_at,
+    expiresAt: row.expires_at,
+  };
+}
 
 export class BillingDb {
   private db: Database.Database;
@@ -158,12 +202,65 @@ export class BillingDb {
         created_at TEXT NOT NULL DEFAULT (datetime('now'))
       );
 
+      CREATE TABLE IF NOT EXISTS crypto_orders (
+        ref TEXT PRIMARY KEY,
+        tier TEXT NOT NULL,
+        mode TEXT NOT NULL,
+        asset TEXT NOT NULL,
+        amount_units TEXT NOT NULL,
+        usd_cents INTEGER NOT NULL,
+        address TEXT NOT NULL,
+        status TEXT NOT NULL DEFAULT 'pending',
+        signature TEXT,
+        created_at TEXT NOT NULL,
+        expires_at TEXT NOT NULL
+      );
+
       CREATE INDEX IF NOT EXISTS idx_billing_keys_hash ON billing_api_keys(key_hash);
       CREATE INDEX IF NOT EXISTS idx_billing_keys_customer ON billing_api_keys(stripe_customer_id);
       CREATE INDEX IF NOT EXISTS idx_billing_keys_subscription ON billing_api_keys(stripe_subscription_id);
       CREATE INDEX IF NOT EXISTS idx_billing_subscriptions_customer_status ON billing_subscriptions(stripe_customer_id, status);
       CREATE INDEX IF NOT EXISTS idx_checkout_sessions_customer ON checkout_sessions(stripe_customer_id);
+      CREATE INDEX IF NOT EXISTS idx_crypto_orders_pending ON crypto_orders(status, asset);
     `);
+    // One on-chain signature may ever credit exactly one order — enforced by the
+    // UNIQUE index this migration creates (payments review PR #250, BLOCK-2).
+    this.migrateCryptoOrderSignatureUnique();
+  }
+
+  /**
+   * Deduplicates legacy rows that share a signature (possible before the UNIQUE
+   * constraint existed: a restart replay could store one payment on two orders),
+   * then creates the unique index. The OLDEST row keeps the claim — it is the
+   * legitimate first credit; later duplicates are detached (signature = NULL)
+   * so the index can exist. Their already-shipped fulfillments are an ops
+   * matter the DB cannot undo.
+   */
+  private migrateCryptoOrderSignatureUnique(): void {
+    const dupes = this.db
+      .prepare(
+        `SELECT signature FROM crypto_orders WHERE signature IS NOT NULL
+         GROUP BY signature HAVING COUNT(*) > 1`
+      )
+      .all() as Array<{ signature: string }>;
+    if (dupes.length > 0) {
+      const detachLaterDuplicates = this.db.prepare(
+        `UPDATE crypto_orders SET signature = NULL
+         WHERE signature = ? AND ref NOT IN (
+           SELECT ref FROM crypto_orders WHERE signature = ? ORDER BY created_at ASC, rowid ASC LIMIT 1
+         )`
+      );
+      this.db.transaction(() => {
+        for (const { signature } of dupes) detachLaterDuplicates.run(signature, signature);
+      })();
+    }
+    // Multiple NULL signatures are allowed by SQLite, so pending/expired rows coexist.
+    this.db.exec('CREATE UNIQUE INDEX IF NOT EXISTS idx_crypto_orders_signature ON crypto_orders(signature)');
+  }
+
+  /** Runs fn inside a single better-sqlite3 transaction: commits together or rolls back together. */
+  runInTransaction<T>(fn: () => T): T {
+    return this.db.transaction(fn)();
   }
 
   // ── Customers ──────────────────────────────────────────────────────────────
@@ -478,6 +575,97 @@ export class BillingDb {
       `DELETE FROM checkout_sessions WHERE created_at < ? AND status = 'completed'`
     ).run(completedCutoff);
     return pendingResult.changes + completedResult.changes;
+  }
+
+  // ── Crypto orders (direct-to-wallet Solana checkout) ──────────────────────
+
+  createCryptoOrder(order: {
+    ref: string;
+    tier: string;
+    mode: 'subscription' | 'payment';
+    asset: 'sol' | 'usdc';
+    amountUnits: string;
+    usdCents: number;
+    address: string;
+    createdAt: string;
+    expiresAt: string;
+  }): void {
+    this.db.prepare(
+      `INSERT INTO crypto_orders (ref, tier, mode, asset, amount_units, usd_cents, address, status, created_at, expires_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, 'pending', ?, ?)`
+    ).run(
+      order.ref,
+      order.tier,
+      order.mode,
+      order.asset,
+      order.amountUnits,
+      order.usdCents,
+      order.address,
+      order.createdAt,
+      order.expiresAt
+    );
+  }
+
+  getCryptoOrder(ref: string): CryptoOrderRecord | null {
+    const row = this.db.prepare('SELECT * FROM crypto_orders WHERE ref = ?').get(ref) as CryptoOrderRow | undefined;
+    return row ? cryptoOrderRowToRecord(row) : null;
+  }
+
+  listPendingCryptoOrders(): CryptoOrderRecord[] {
+    const rows = this.db
+      .prepare("SELECT * FROM crypto_orders WHERE status = 'pending' ORDER BY created_at ASC, ref ASC")
+      .all() as CryptoOrderRow[];
+    return rows.map(cryptoOrderRowToRecord);
+  }
+
+  /**
+   * Atomically claims a pending order for one signature. Returns false when the
+   * order is no longer pending OR when the signature already credited another
+   * order — the claim is signature-scoped, not order-scoped, so a replayed
+   * payment (restart, second process) can never double-credit. The UNIQUE
+   * signature index backs the check; a cross-process race that slips past the
+   * NOT EXISTS guard lands on the constraint and also returns false.
+   */
+  markCryptoOrderPaid(ref: string, signature: string): boolean {
+    try {
+      const result = this.db
+        .prepare(
+          `UPDATE crypto_orders SET status = 'paid', signature = ?
+           WHERE ref = ? AND status = 'pending'
+             AND NOT EXISTS (SELECT 1 FROM crypto_orders WHERE signature = ?)`
+        )
+        .run(signature, ref, signature);
+      return result.changes > 0;
+    } catch (err) {
+      if (err instanceof Error && /UNIQUE constraint/i.test(err.message)) return false;
+      throw err;
+    }
+  }
+
+  /**
+   * Orders that reached paid without a completed checkout session — the state a
+   * crash between payment-claim and fulfillment used to strand forever. The
+   * poller sweeps and re-fulfills these idempotently on every tick.
+   */
+  listPaidUnfulfilledCryptoOrders(): CryptoOrderRecord[] {
+    const rows = this.db
+      .prepare(
+        // crypto:<ref> is cryptoSessionId() from billing-crypto.ts (not imported
+        // here to keep the dependency direction one-way).
+        `SELECT o.* FROM crypto_orders o
+         LEFT JOIN checkout_sessions s ON s.stripe_session_id = 'crypto:' || o.ref
+         WHERE o.status = 'paid' AND (s.status IS NULL OR s.status <> 'completed')
+         ORDER BY o.created_at ASC, o.ref ASC`
+      )
+      .all() as CryptoOrderRow[];
+    return rows.map(cryptoOrderRowToRecord);
+  }
+
+  expireStaleCryptoOrders(nowIso: string): number {
+    const result = this.db
+      .prepare("UPDATE crypto_orders SET status = 'expired' WHERE status = 'pending' AND expires_at < ?")
+      .run(nowIso);
+    return result.changes;
   }
 
   // ── Cleanup ────────────────────────────────────────────────────────────────

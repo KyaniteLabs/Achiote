@@ -51,12 +51,14 @@ export function loadBillingConfigFromEnv(): BillingConfig | null {
   };
 }
 
-const PAYMENT_OFFER_CREDITS: Record<CheckoutPaymentOffer, { mcp: number; web: number }> = {
+// Shared by Stripe webhook fulfillment and direct-to-wallet crypto fulfillment so both
+// payment rails activate one-time offers through the same tables.
+export const PAYMENT_OFFER_CREDITS: Record<CheckoutPaymentOffer, { mcp: number; web: number }> = {
   'memory-pack': { mcp: 0, web: 25 },
   'family-sprint': { mcp: 0, web: 10 },
 };
 
-const PAYMENT_OFFER_KEY_NAMES: Record<CheckoutPaymentOffer, string> = {
+export const PAYMENT_OFFER_KEY_NAMES: Record<CheckoutPaymentOffer, string> = {
   'memory-pack': 'Memory Pack',
   'family-sprint': 'Family Archive Sprint',
 };
