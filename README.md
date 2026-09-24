@@ -104,7 +104,13 @@ This executes through the full MCP workflow and is covered by `tests/reconstruct
 
 ## Installation
 
-Achiote is not published to npm yet. Use a source checkout, a Git URL install, or the tarball produced by `npm pack` until the package is published.
+Achiote is published to npm.
+
+```bash
+npm install achiote
+```
+
+The published package ships the built `dist/` output, so no build step is needed. To run from a source checkout instead:
 
 ```bash
 npm ci
