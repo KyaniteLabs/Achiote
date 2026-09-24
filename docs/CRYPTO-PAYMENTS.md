@@ -36,6 +36,13 @@ than taking payments it could never fulfill.
    - **SOL** = USD price / spot, quoted server-side from Jupiter's public price API
      (`lite-api.jup.ag/price/v3`, 60 s cache, round-half-up to lamports). If the quote
      fails, SOL orders return `503 quote-unavailable` while USDC keeps working.
+     The quote is fixed for the order's 60-minute life and never re-quoted at
+     verification. Slippage direction: if SOL's USD price DROPS during the window, the
+     quoted lamports are worth less than the tier price when paid late — buyer-favorable,
+     the org absorbs up to the drop % bounded by the tier price (e.g. ~$1.50 on a 10%
+     move for `personal`). If the price RISES, the same lamports are worth more — the
+     buyer pays the extra value, so paying promptly after quoting is in the buyer's
+     interest. USDC is USD 1:1 and unaffected.
    Returns `{ref, asset, address, amount, uri, expiresAtMs}`. `ref` is an 8-char code from
    an unambiguous charset (no `0/O/1/I`); `uri` is a Solana Pay URI
    `solana:<address>?amount=<ui>[&spl-token=<mint>]&label=Achiote&memo=<ref>`

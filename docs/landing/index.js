@@ -326,6 +326,7 @@ async function openCryptoCheckout(tier, mode, asset) {
   modal.innerHTML = ''
     + '<h2>Pay with crypto</h2>'
     + '<p class="crypto-sub">Scan with any Solana wallet (Phantom, Solflare, Backpack). The payment reference tells the server it is yours.</p>'
+    + '<p class="crypto-sub">Sending manually instead of scanning? Include the Reference above as your transaction memo — without it, your payment cannot be matched to your order.</p>'
     + '<div class="crypto-asset-toggle">'
     + '<button type="button" class="crypto-asset-btn' + (isUsdc ? '' : ' active') + '" data-asset="sol">SOL</button>'
     + '<button type="button" class="crypto-asset-btn' + (isUsdc ? ' active' : '') + '" data-asset="usdc">USDC</button>'
