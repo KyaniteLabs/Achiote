@@ -97,11 +97,12 @@ describe('agent guardrails', () => {
   });
 
   it('tells host models to make typo and sound-alike corrections visible', () => {
-    const server = read('src/http-server.ts');
+    // The shared /ask system prompt now lives in the engine deps factory (one prompt for all surfaces).
+    const prompt = read('src/core/ask-engine-deps.ts');
 
-    expect(server).toContain('likely corrected spelling');
-    expect(server).toContain('original user fragment');
-    expect(server).toContain('do not silently treat the typo as literal');
+    expect(prompt).toContain('likely corrected spelling');
+    expect(prompt).toContain('original user fragment');
+    expect(prompt).toContain('do not silently treat the typo as literal');
   });
 
   it('preserves the host-AI-does-research boundary', () => {

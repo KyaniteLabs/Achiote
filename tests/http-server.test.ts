@@ -1,6 +1,7 @@
 import { describe, expect, it, beforeAll, afterAll } from 'vitest';
 import { spawn, type ChildProcess } from 'node:child_process';
-import { resolve, dirname } from 'node:path';
+import { resolve, dirname, join } from 'node:path';
+import { existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { getFreePort } from './helpers/ports.js';
 
@@ -171,7 +172,21 @@ describe('HTTP server integration', () => {
   });
 
   it('serves trust, launch-support, and AI-search routes with security headers', async () => {
-    for (const path of ['/privacy', '/privacy/', '/terms', '/terms/', '/support', '/support/', '/safety', '/safety/', '/ai-search', '/ai-search/', '/meaning', '/meaning/', '/how-it-works', '/how-it-works/', '/for-professionals', '/for-professionals/']) {
+    // D127 (2026-09-24, crypto-closeout re-review): /how-it-works and /for-professionals
+    // are canonical-only landing docs intentionally excluded from the public mirror by the
+    // curation rule (see PR #252). The mirror must NOT stub them. Skip those routes when
+    // the landing files are absent from this tree; assert them fully where they exist.
+    const canonicalOnlyRoutes = ['/how-it-works', '/for-professionals'];
+    const skipped = canonicalOnlyRoutes.filter(
+      (r) => !existsSync(join(ROOT, 'docs/landing', `${r.slice(1)}.html`))
+    );
+    if (skipped.length > 0) {
+      console.warn(`[mirror] skipping canonical-only landing routes (no stubs by design): ${skipped.join(', ')}`);
+    }
+    const routes = ['/privacy', '/privacy/', '/terms', '/terms/', '/support', '/support/', '/safety', '/safety/', '/ai-search', '/ai-search/', '/meaning', '/meaning/', '/how-it-works', '/how-it-works/', '/for-professionals', '/for-professionals/'].filter(
+      (p) => !skipped.some((r) => p === r || p === `${r}/`)
+    );
+    for (const path of routes) {
       const res = await fetch(`${baseUrl}${path}`);
       expect(res.status).toBe(200);
       expect(res.headers.get('content-type')).toContain('text/html');

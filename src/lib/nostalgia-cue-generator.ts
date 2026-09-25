@@ -8,6 +8,7 @@ import { adaptCueProfileForConstraints } from './constraint-adapter.js';
 import { runCueProfileEngine, type FoodScienceCueProfile } from './cue-profile-engine.js';
 import { unique, escapeRegExp, normalizeForLooseMatch } from './food-memory-text.js';
 import { CONCEPT_ALIASES } from './food-memory-collector.js';
+import { retrieveMechanisms } from './mechanism-retrieval.js';
 
 
 function textSignals(input: MinimumViableNostalgiaInput): string {
@@ -932,6 +933,11 @@ export function generateMinimumViableNostalgiaCue(input: MinimumViableNostalgiaI
   const profile = constrainedCue.profile;
   const constraintGuidance = constrainedCue.guidance;
 
+  // Ground the cue in the curated, Crossref-verified food-science DB: retrieve the
+  // mechanisms whose science best matches the memory signals so the answer can cite
+  // a real DOI instead of relying on the model's own knowledge.
+  const citedMechanisms = retrieveMechanisms(signals);
+
   return {
     ...profile,
     accessibilityPrinciples: unique([...profile.accessibilityPrinciples, ...constraintGuidance.accessibilityPrinciples]),
@@ -939,5 +945,6 @@ export function generateMinimumViableNostalgiaCue(input: MinimumViableNostalgiaI
     safetyNotes: unique([...profile.safetyNotes, ...constraintGuidance.safetyNotes]),
     effortMinutes: Math.min(maxEffort, profile.effortMinutes),
     confidence: profile.title === 'Minimum viable memory-probe cue' ? 'Low' : confidence,
+    ...(citedMechanisms.length > 0 ? { citedMechanisms } : {}),
   };
 }

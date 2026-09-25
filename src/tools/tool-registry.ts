@@ -413,7 +413,7 @@ export const toolRegistry = [
     name: 'plan_tool_workflow',
     mcp: {
       title: 'Plan Tool Workflow',
-      description: 'Deterministic tool router. The server runs this before the first model turn and injects the result; do not call it again when that result is already present.',
+      description: 'Route a user message to the optimal tool workflow. Returns a plan object with the ordered tool names and sufficiency flags. Use when the server has not yet pre-injected a workflow plan for the current conversation. Pass userMessage from the raw user message; skip if a plan is already present in context.',
       inputSchema: {
         userMessage: z.string().min(1).max(6000).describe('The raw user message to analyze'),
       },
@@ -439,7 +439,7 @@ export const toolRegistry = [
     name: 'build_research_record',
     mcp: {
       title: 'Build Research Record',
-      description: 'Convert host-researched source facts into a typed provenance record with extracted ingredients, techniques, sensory descriptors, uncertainty, and confidence.',
+      description: 'Convert host-researched source facts into a typed provenance record. Returns a structured research record with extracted ingredients, techniques, sensory descriptors, uncertainty, and confidence. Use when the host AI has gathered web sources for a dish. Pass dishName, query, and sources from the host research results.',
       inputSchema: researchRecordInputSchema.shape,
       outputSchema: researchRecordOutputSchema,
     },
@@ -459,7 +459,7 @@ export const toolRegistry = [
     name: 'validate_research_record',
     mcp: {
       title: 'Validate Research Record',
-      description: 'Validate that a typed research record has source metadata and extracted facts before it is trusted downstream.',
+      description: 'Validate that a typed research record has source metadata and extracted facts. Returns a validation result with a list of issues. Use when checking a research record before passing it to dossier-building tools. Pass the record from build_research_record output.',
       inputSchema: researchRecordOutputSchema.shape,
       outputSchema: researchValidationOutputSchema,
     },
@@ -483,7 +483,7 @@ export const toolRegistry = [
     name: 'extract_research_findings',
     mcp: {
       title: 'Extract Research Findings',
-      description: 'Summarize a typed research record into researched facts, inferred signals, unknowns, and confidence for dossier handoff.',
+      description: 'Summarize a typed research record into researched facts, inferred signals, unknowns, and confidence. Returns a findings object ready for dossier handoff. Use when distilling a validated research record into actionable signals. Pass the record from build_research_record or validate_research_record output.',
       inputSchema: researchRecordOutputSchema.shape,
       outputSchema: researchFindingsOutputSchema,
     },
@@ -507,7 +507,7 @@ export const toolRegistry = [
     name: 'collect_food_memory',
     mcp: {
       title: 'Collect Food Memory',
-      description: 'Structure a raw food-or-drink memory fragment into clues, missing information, and optional follow-up questions. Returns a sufficiency score: when region + sensory details + context are present, the memory is sufficient and no follow-up questions are needed.',
+      description: 'Structure a raw food-or-drink memory fragment into clues, missing information, and optional follow-up questions. Returns a structured memory object with a sufficiency score; when region, sensory details, and context are present, no follow-up questions are needed. Use when a user first describes a nostalgic food or drink memory. Pass memoryText from the user raw memory.',
       inputSchema: {
         memoryText: z.string().min(1).max(6000).describe('Raw user memory, spelling fragment, family story, or sensory clue'),
         knownRegion: z.string().min(1).max(200).optional().describe('Optional known country, island, region, or community'),
@@ -539,7 +539,7 @@ export const toolRegistry = [
     name: 'plan_dish_research',
     mcp: {
       title: 'Plan Dish Research',
-      description: 'Turn collected food or drink memory clues into hypotheses, search queries, source preferences, and facts to verify. This plans research rather than pretending sparse fragments are resolved.',
+      description: 'Turn collected food or drink memory clues into hypotheses, search queries, source preferences, and facts to verify. Returns a research plan with named hypotheses and targeted queries. Use when preparing research directions after collecting a memory. Pass memory from collect_food_memory output.',
       inputSchema: { memory: collectedFoodMemorySchema.describe('Structured output from collect_food_memory') },
       outputSchema: planDishResearchOutputSchema,
     },
@@ -559,7 +559,7 @@ export const toolRegistry = [
     name: 'build_reconstruction_dossier',
     mcp: {
       title: 'Build Reconstruction Dossier',
-      description: 'Build an evidence-separated food or drink memory dossier from user memory, research plan, and optional researched/inferred facts.',
+      description: 'Build an evidence-separated food or drink memory dossier from user memory, research plan, and optional researched or inferred facts. Returns a structured dossier separating source-backed facts from inferences. Use when assembling the full evidence base before generating a nostalgia cue. Pass memory from collect_food_memory, researchPlan from plan_dish_research, and optionally researchedFacts.',
       inputSchema: {
         memory: collectedFoodMemorySchema.describe('Structured output from collect_food_memory'),
         researchPlan: dishResearchPlanSchema.describe('Structured output from plan_dish_research'),
@@ -595,7 +595,7 @@ export const toolRegistry = [
     name: 'build_memory_receipt',
     mcp: {
       title: 'Build Memory Receipt',
-      description: 'Create a portable evidence-bounded receipt for a food-memory reconstruction session.',
+      description: 'Create a portable evidence-bounded receipt for a food-memory reconstruction session. Returns a Memory Receipt with the evidence ledger, hypotheses, next questions, and first taste test. Use when finalizing or checkpointing a reconstruction. Pass memory from collect_food_memory and optionally researchPlan and cue from generate_minimum_viable_nostalgia.',
       inputSchema: {
         memory: collectedFoodMemorySchema.describe('Structured output from collect_food_memory'),
         researchPlan: dishResearchPlanSchema.optional().describe('Structured output from plan_dish_research'),
@@ -634,7 +634,7 @@ export const toolRegistry = [
     name: 'generate_family_followup_questions',
     mcp: {
       title: 'Generate Family Follow-up Questions',
-      description: 'Generate gentle family follow-up questions that deepen connection and clarify food-memory hypotheses without shaming the user.',
+      description: 'Generate gentle family follow-up questions that deepen connection and clarify food-memory hypotheses without shaming the user. Returns a list of warm, open-ended questions. Use when the collected memory is insufficient and more context from family would help. Pass memory from collect_food_memory and researchPlan from plan_dish_research.',
       inputSchema: {
         memory: collectedFoodMemorySchema.describe('Structured output from collect_food_memory'),
         researchPlan: dishResearchPlanSchema.describe('Structured output from plan_dish_research'),
@@ -664,7 +664,7 @@ export const toolRegistry = [
     name: 'resolve_dish_name',
     mcp: {
       title: 'Resolve Dish Name',
-      description: 'Resolve a dish name to its canonical family, aliases, transliterations, and broad region. Handles fuzzy matching and transliteration data from the bundled dataset.',
+      description: 'Resolve a dish name to its canonical family, aliases, transliterations, and broad region using fuzzy matching and bundled transliteration data. Returns a resolution object with the canonical name, family, and matched aliases. Use when the user dish name is uncertain, misspelled, or transliterated. Pass input from the dish name as the user described it.',
       inputSchema: {
         input: z.string().min(1).max(500).describe('The dish name as the user described it, including spelling variants or transliterations'),
         memory: collectedFoodMemorySchema.optional().describe('Optional structured memory context from collect_food_memory'),
@@ -698,7 +698,7 @@ export const toolRegistry = [
     name: 'analyze_nostalgic_dish',
     mcp: {
       title: 'Analyze Nostalgic Dish',
-      description: 'Provide sensory dimension criteria and a bounded host-model prompt for decomposing a nostalgic dish memory. This tool does not itself infer final sensory scores.',
+      description: 'Provide sensory dimension criteria and a bounded host-model prompt for decomposing a nostalgic dish memory. Returns structured sensory dimension criteria and a promptForAgent for the host model to complete. Use when decomposing a dish into its sensory components. Pass description from the user memory and optionally region.',
       inputSchema: {
         description: z.string().min(1).max(6000).describe("The user's memory/description of the dish"),
         region: z.string().min(1).max(200).optional().describe('Cultural/geographic region of the dish'),
@@ -720,7 +720,7 @@ export const toolRegistry = [
     name: 'find_sensory_substitutes',
     mcp: {
       title: 'Find Sensory Substitutes',
-      description: 'Find ingredient substitutions from the bundled compound dataset and provide a bounded host-model prompt for any missing host or optional provider-data analysis.',
+      description: 'Find ingredient substitutions from the bundled compound dataset and provide a bounded host-model prompt for missing analysis. Returns substitute candidates with compound-match scores and a promptForAgent for the host model. Use when an ingredient is unavailable in the user location. Pass ingredient from the item to substitute and location from the user area.',
       inputSchema: {
         ingredient: z.string().min(1).max(300).describe('The original ingredient to substitute'),
         location: z.string().min(1).max(300).describe("User's location for availability context"),
@@ -742,7 +742,7 @@ export const toolRegistry = [
     name: 'source_ingredients',
     mcp: {
       title: 'Source Ingredients',
-      description: 'Return bundled regional store/corridor context and a bounded host-model prompt for sourcing. This tool does not perform live search or pricing by itself.',
+      description: 'Return bundled regional store and corridor context plus a bounded host-model prompt for sourcing. Returns regional sourcing context and a promptForAgent for the host model to complete. Use when the user needs to find ingredients locally; does not perform live search or pricing itself. Pass ingredients from the recipe ingredient list and location from the user city or region.',
       inputSchema: {
         ingredients: z.array(z.string().min(1).max(200)).min(1).max(50).describe('List of ingredients to source'),
         location: z.string().min(1).max(300).describe("User's city/region"),
@@ -764,7 +764,7 @@ export const toolRegistry = [
     name: 'discover_regional_similars',
     mcp: {
       title: 'Discover Regional Similars',
-      description: 'Find bundled dish-family context and provide a bounded host-model prompt for similar dishes in neighboring cultures.',
+      description: 'Find bundled dish-family context and provide a bounded host-model prompt for similar dishes in neighboring cultures. Returns family context with related dishes and a promptForAgent for the host model. Use when exploring culturally adjacent dishes that may share the memory trigger. Pass dishName from the resolved dish and region from its cultural area.',
       inputSchema: {
         dishName: z.string().min(1).max(300).describe('The dish to find similars for'),
         region: z.string().min(1).max(300).describe("The dish's cultural region"),
@@ -786,7 +786,7 @@ export const toolRegistry = [
     name: 'generate_minimum_viable_nostalgia',
     mcp: {
       title: 'Generate Minimum Viable Nostalgia Cue',
-      description: 'Default first food-or-drink output: create the smallest practical aroma, bite, sip, condiment, or ritual that tests the likely memory trigger before any full recipe or drink handoff.',
+      description: 'Create the smallest practical aroma, bite, sip, condiment, or ritual that tests the likely memory trigger before any full recipe handoff. Returns a minimum-viable nostalgia cue with specific steps and a promptForAgent. Use when producing the first taste test for the user. Pass dossier from build_reconstruction_dossier and optionally researchFindings and userLocation.',
       inputSchema: minimumViableNostalgiaInputSchema.shape,
       outputSchema: minimumViableNostalgiaOutputSchema,
     },
@@ -817,7 +817,7 @@ export const toolRegistry = [
     name: 'generate_recipe',
     mcp: {
       title: 'Generate Recipe Prompt',
-      description: 'Optional later step: return the expected recipe schema and a bounded host-model prompt for final recipe generation after the minimum viable nostalgia cue has been shown and the user wants something more complex.',
+      description: 'Return the expected recipe schema and a bounded host-model prompt for final recipe generation. Returns a recipe schema template and a promptForAgent for the host model to synthesize the recipe. Use when the minimum viable nostalgia cue has been shown and the user wants a full recipe. Pass sensoryAnalysis from analyze_nostalgic_dish, substitutions from find_sensory_substitutes, and sourcing from source_ingredients.',
       inputSchema: {
         dishDescription: z.string().min(1).max(6000).describe("The user's original dish description"),
         location: z.string().min(1).max(300).describe("User's location"),
@@ -868,7 +868,7 @@ export const toolRegistry = [
     name: 'validate_recipe_output',
     mcp: {
       title: 'Validate Recipe Output',
-      description: 'Validate a host-synthesized final recipe object against the expected Achiote recipe schema before presenting it as structured output.',
+      description: 'Validate a host-synthesized final recipe object against the expected Achiote recipe schema. Returns a validation result with valid flag and a list of issues. Use when checking a recipe before presenting it to the user. Pass recipe from the host model generate_recipe output.',
       inputSchema: { recipe: z.unknown().describe('Host-synthesized recipe object to validate after generate_recipe handoff') },
       outputSchema: recipeValidationOutputSchema,
     },
@@ -887,7 +887,7 @@ export const toolRegistry = [
     name: 'search_web',
     mcp: {
       title: 'Search Web',
-      description: 'Search the web for current information about a dish, ingredient, technique, or regional variation. Returns search result titles, links, and snippets.',
+      description: 'Search the web for current information about a dish, ingredient, technique, or regional variation. Returns search result objects with titles, links, and snippets. Use when the bundled datasets lack information and live web search is needed. Pass query from the search terms.',
       inputSchema: { query: z.string().min(1).max(500).describe('Search query') },
       outputSchema: webSearchOutputSchema,
     },

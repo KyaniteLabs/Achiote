@@ -8,6 +8,7 @@ const app = () => fs.readFileSync('docs/landing/app.html', 'utf8');
 const appJs = () => fs.readFileSync('docs/landing/app.js', 'utf8');
 const researchAppJs = () => fs.readFileSync('docs/landing/research-app.js', 'utf8');
 const server = () => fs.readFileSync('src/http-server.ts', 'utf8');
+const askEngine = () => fs.readFileSync('src/core/ask-engine.ts', 'utf8');
 const telemetryCollector = () => fs.readFileSync('src/lib/telemetry-collector.ts', 'utf8');
 
 describe('launch business hardening', () => {
@@ -106,11 +107,14 @@ describe('launch business hardening', () => {
     expect(telemetryCollector()).toContain("'feedback_too_hard'");
     expect(telemetryCollector()).toContain("'feedback_missed_correction'");
     expect(server()).toContain('qualitySignalReport');
-    expect(server()).toContain('buildAskQualitySignal');
-    expect(server()).toContain('recordQualitySignal');
+    // Ask quality-signal recording was extracted into the transport-neutral engine; the HTTP surface
+    // injects the shared qualitySignalReport and the /events route still reads it.
+    expect(askEngine()).toContain('buildAskQualitySignal');
+    expect(askEngine()).toContain('recordQualitySignal');
     expect(server()).toContain('quality: qualitySignalReport');
     expect(server()).toContain("sendJson(res, 404, { error: 'Not found' })");
     expect(server()).not.toContain('event.payload');
+    expect(askEngine()).not.toContain('event.payload');
   });
 
   it('removes fake testimonials and ships launch growth routes', () => {

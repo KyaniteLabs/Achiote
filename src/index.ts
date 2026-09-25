@@ -4,9 +4,9 @@ try { process.loadEnvFile(); } catch { /* no .env file present */ }
 
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { runAchioteStdioServer } from './cli.js';
+import { runAchioteCli } from './cli.js';
 
-export { runAchioteStdioServer } from './cli.js';
+export { runAchioteStdioServer, runAchioteCli } from './cli.js';
 export { createAchioteServer } from './server.js';
 export { bundledGlobalReferenceSeeds, prioritizeReferenceSeeds } from './lib/reference-seed-planner.js';
 export { getBundledReferenceResearch, getReferenceResearch } from './lib/reference-pantry.js';
@@ -32,8 +32,18 @@ export type { ReferencePantryFixtureReport, ReferenceSeedOperatorReport, Referen
 const isCliEntrypoint = process.argv[1] ? path.resolve(process.argv[1]) === fileURLToPath(import.meta.url) : false;
 
 if (isCliEntrypoint) {
-  runAchioteStdioServer().catch((error) => {
-    console.error(error instanceof Error ? error.message : String(error));
-    process.exit(1);
-  });
+  const cliArgs = process.argv.slice(2);
+  // Terminal subcommands (`ask`, `purge`) must exit deterministically so a lingering handle (e.g. an
+  // open cache/billing DB) can never keep the CLI alive past completion. The stdio server path
+  // (`serve`/`mcp`/no-args) deliberately does NOT exit — it stays connected to the transport.
+  const isTerminalSubcommand = cliArgs[0] === 'ask' || cliArgs[0] === 'purge';
+  runAchioteCli(cliArgs)
+    .then((code) => {
+      if (isTerminalSubcommand) process.exit(code);
+      if (code !== 0) process.exit(code);
+    })
+    .catch((error) => {
+      console.error(error instanceof Error ? error.message : String(error));
+      process.exit(1);
+    });
 }
