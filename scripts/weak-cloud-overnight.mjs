@@ -328,8 +328,8 @@ function getGlmKey() {
 function getOpenRouterKey() {
   if (process.env.OPENROUTER_API_KEY?.trim()) return process.env.OPENROUTER_API_KEY.trim();
   const roots = [
-    '/Users/simongonzalezdecruz/.codex',
-    '/Users/simongonzalezdecruz/.agents',
+    '~/.codex',
+    '~/.agents',
     root,
   ];
   const candidates = new Set();
