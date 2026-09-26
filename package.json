@@ -36,9 +36,9 @@
     "reference:seeds": "npm run build && node scripts/reference-seed-operator.mjs"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.111.0",
+    "@anthropic-ai/sdk": "^0.126.0",
     "@modelcontextprotocol/sdk": "^1.29.0",
-    "better-sqlite3": "^12.10.0",
+    "better-sqlite3": "^13.0.3",
     "stripe": "^22.2.0",
     "zod": "^4.4.3"
   },
