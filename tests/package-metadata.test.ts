@@ -59,11 +59,9 @@ describe('package distribution metadata', () => {
       'docs/landing/site.css',
       'docs/landing/type-scripts.css',
       'docs/landing/site-telemetry.js',
-      'docs/landing/analytics.js',
       'docs/landing/reveal.js',
       'docs/landing/meaning.html',
-      'docs/landing/how-it-works.html',
-      'docs/landing/for-professionals.html',
+      'docs/landing/week6.html',
       'docs/landing/proof/',
       'docs/landing/blog.html',
       'docs/landing/billing-success.html',
@@ -196,6 +194,26 @@ describe('package distribution metadata', () => {
     expect(smokeScript).toContain('Package surface mismatch');
   });
 
+
+  it('enforces the curated mirror surface without canonical-only stubs', async () => {
+    const { expectedPackageFiles, assertPackageSurfaceFiles } = await import('../scripts/lib/package-surface.mjs');
+    const expected = expectedPackageFiles();
+    const excluded = [
+      'docs/landing/analytics.js',
+      'docs/landing/how-it-works.html',
+      'docs/landing/for-professionals.html',
+    ];
+
+    expect(expected).toContain('docs/landing/week6.html');
+    for (const file of expected) expect(fs.existsSync(file)).toBe(true);
+    for (const file of excluded) {
+      expect(pkg.files).not.toContain(file);
+      expect(expected).not.toContain(file);
+      expect(assertPackageSurfaceFiles([...expected, file]).forbidden).toContain(file);
+    }
+    expect(assertPackageSurfaceFiles(expected.filter((file) => file !== 'docs/landing/week6.html')).missing)
+      .toContain('docs/landing/week6.html');
+  });
 
   it('keeps live ask smoke diagnostics graceful', () => {
     const liveSmokeScript = fs.readFileSync('scripts/live-ask-smoke.mjs', 'utf8');
