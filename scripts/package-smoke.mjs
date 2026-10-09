@@ -173,12 +173,26 @@ async function assertPackagedHttpServerStarts(installDir, tempRoot) {
 
   try {
     await withTimeout(waitForServer(child, port), 12_000, 'packaged HTTP startup');
-    for (const pathPart of ['/health', '/about', '/about/', '/pricing', '/roadmap', '/changelog', '/status', '/blog', '/receipt', '/receipt.js', '/privacy', '/privacy/', '/terms', '/support', '/safety', '/ai-search', '/ai-search/', '/compare', '/compare/', '/meaning', '/meaning/', '/how-it-works', '/how-it-works/', '/for-professionals', '/for-professionals/', '/site.css', '/research-app.js', '/site-telemetry.js', '/llms.txt', '/sitemap.xml', '/robots.txt']) {
+    for (const pathPart of ['/health', '/about', '/about/', '/pricing', '/roadmap', '/changelog', '/status', '/blog', '/receipt', '/receipt.js', '/privacy', '/privacy/', '/terms', '/support', '/safety', '/ai-search', '/ai-search/', '/compare', '/compare/', '/meaning', '/meaning/', '/site.css', '/research-app.js', '/site-telemetry.js', '/llms.txt', '/sitemap.xml', '/robots.txt']) {
       const res = await withTimeout(fetch(`http://127.0.0.1:${port}${pathPart}`), 5_000, `GET ${pathPart}`);
       if (!res.ok) throw new Error(`GET ${pathPart} returned ${res.status}`);
       if (pathPart !== '/health' && !res.headers.get('x-content-type-options')) {
         throw new Error(`GET ${pathPart} did not return static security headers`);
       }
+    }
+
+    // Preserve the native retired-page redirects without following to canonical-only pages.
+    for (const pathPart of ['/week6', '/week6/']) {
+      const res = await withTimeout(fetch(`http://127.0.0.1:${port}${pathPart}`, { redirect: 'manual' }), 5_000, `GET ${pathPart}`);
+      if (res.status !== 301 || res.headers.get('location') !== '/how-it-works') {
+        throw new Error(`GET ${pathPart} did not preserve its canonical redirect`);
+      }
+    }
+
+    // These canonical-only assets must remain absent from the curated mirror.
+    for (const pathPart of ['/how-it-works', '/how-it-works/', '/for-professionals', '/for-professionals/', '/analytics.js']) {
+      const res = await withTimeout(fetch(`http://127.0.0.1:${port}${pathPart}`), 5_000, `GET ${pathPart}`);
+      if (res.status !== 404) throw new Error(`GET ${pathPart} returned ${res.status}; expected curated-mirror 404`);
     }
 
     const privateEvents = await withTimeout(fetch(`http://127.0.0.1:${port}/events`), 5_000, 'GET /events');
