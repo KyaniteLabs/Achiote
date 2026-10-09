@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.111.0",
-    "@modelcontextprotocol/sdk": "^1.29.0",
+    "@modelcontextprotocol/sdk": "^1.31.0",
     "better-sqlite3": "^12.10.0",
     "stripe": "^22.2.0",
     "zod": "^4.4.3"
