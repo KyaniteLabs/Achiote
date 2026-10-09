@@ -297,7 +297,7 @@ Business Source License 1.1 (BUSL-1.1). See [LICENSE](LICENSE).
 | **Category** | food-memory and cultural taste research product |
 | **Best for** | researchers and builders exploring food memory and heritage taste |
 | **Not** | a recipe SEO blog |
-| **Source** | [GitHub](https://github.com/KyaniteLabs/Achiote) · [Forgejo](https://git.kyanitelabs.tech/KyaniteLabs/Achiote) |
+| **Source** | [GitHub](https://github.com/KyaniteLabs/Achiote) · [Forgejo](https://git.kyanitelabs.tech/KyaniteLabs/Achiote) (private, maintainers only) |
 | **Keywords** | food memory research, cultural taste, heritage cuisine AI |
 
 ## Who it's for
@@ -328,7 +328,7 @@ Treat the README status and release tags as source of truth for maturity. Valida
 
 - Maintained as of 2026 on the default branch
 - Prefer release tags when pinning dependencies
-- Report issues on the canonical remote listed above
+- Report issues on [GitHub](https://github.com/KyaniteLabs/Achiote/issues)
 
 ## Agent surface
 
@@ -338,7 +338,7 @@ Treat the README status and release tags as source of truth for maturity. Valida
 
 ## Contributing
 
-Issues and PRs welcome on the canonical remote. Keep public docs free of secrets and machine-local paths.
+Issues and PRs welcome on [GitHub](https://github.com/KyaniteLabs/Achiote). Keep public docs free of secrets and machine-local paths.
 
 ## License
 
@@ -356,7 +356,6 @@ See [LICENSE](LICENSE) in this repository (or package metadata if license is pac
 ![docs](https://img.shields.io/badge/docs-S%2B_SEO%2FGEO-blue)
 
 
-![Project diagram placeholder](https://img.shields.io/badge/visual-see_docs-lightgrey.svg)
 
 <!-- s-plus-geo:end -->
 
