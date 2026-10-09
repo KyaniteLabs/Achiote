@@ -80,7 +80,11 @@ describe('P0 launch readiness guards', () => {
     const envExample = fs.readFileSync('.env.example', 'utf8');
 
     expect(readme).toContain('Authentication is enabled by default');
-    expect(readme).toContain('Achiote is not published to npm yet');
+    expect(readme).toContain('Achiote is published to npm.');
+    expect(readme).toContain('npm install achiote');
+    expect(readme).toContain('published package ships the built `dist/` output');
+    expect(readme).toContain('npm ci');
+    expect(readme).toContain('npm run build');
     expect(envExample).toContain('ACHIOTE_AUTH_ENABLED=true');
     expect(envExample).toContain('ACHIOTE_ASK_PROVIDER=anthropic');
     expect(envExample).toContain('ANTHROPIC_API_KEY=');
