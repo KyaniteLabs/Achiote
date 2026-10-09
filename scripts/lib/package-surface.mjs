@@ -12,10 +12,9 @@ export const PACKAGE_SURFACE = {
     'docs/landing/site.css',
     'docs/landing/type-scripts.css',
     'docs/landing/site-telemetry.js',
-    'docs/landing/analytics.js',
     'docs/landing/reveal.js',
     'docs/landing/meaning.html',
-    'docs/landing/how-it-works.html',
+    'docs/landing/week6.html',
     'docs/landing/proof/favicon.svg',
     'docs/landing/proof/sample-reconstruction-artifact.md',
     'docs/landing/blog.html',
@@ -55,6 +54,8 @@ export const PACKAGE_SURFACE = {
     'scripts/reference-seed-operator.mjs',
   ],
   forbiddenPackagePathPatterns: [
+    // Canonical-only landing assets were excluded from this mirror by PR #252.
+    /^docs\/landing\/(?:analytics\.js|how-it-works\.html|for-professionals\.html)$/,
     /^artifacts\//,
     /^\.worktrees\//,
     /^\.omx\//,

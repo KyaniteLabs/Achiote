@@ -8,53 +8,197 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   release-gate:
     name: Node 22 release gate
     runs-on: blacksmith-2vcpu-ubuntu-2404
+    timeout-minutes: 15
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Select product checks from complete event-commit diff
+        id: product-scope
+        if: ${{ github.event_name == 'pull_request' }}
+        env:
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PR_MERGE_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          if ! python3 -I -S - <<'PY'
+          import os
+          import re
+          import subprocess
+          import tempfile
+          
+          SAFE_PATHS = frozenset(('CLAUDE.md', 'docs/agent-law/empower-orchestrator.md', '.github/workflows/agent-law.yml', '.github/workflows/blacksmith-probe.yml'))
+          product_changed = True
+          try:
+              base = os.environ.get('PR_BASE_SHA', '')
+              head = os.environ.get('PR_HEAD_SHA', '')
+              merge = os.environ.get('PR_MERGE_SHA', '')
+              if not all(re.fullmatch(r'[0-9a-f]{40}', commit) for commit in (base, head, merge)):
+                  raise ValueError('invalid event commits')
+              for commit in (base, head, merge):
+                  kind = subprocess.run(['git', 'cat-file', '-t', commit], check=True, capture_output=True, timeout=15).stdout
+                  if kind != b'commit\n':
+                      raise ValueError('event SHA is not a commit')
+              checkout = subprocess.run(['git', 'rev-parse', 'HEAD'], check=True, capture_output=True, timeout=15).stdout.decode('ascii').strip()
+              parents = subprocess.run(['git', 'show', '--no-patch', '--format=%P', merge], check=True, capture_output=True, timeout=15).stdout.decode('ascii').split()
+              if checkout != merge or parents != [base, head]:
+                  raise ValueError('checkout or event merge parents changed')
+              with tempfile.TemporaryFile() as output:
+                  subprocess.run(['git', 'diff', '--no-ext-diff', '--no-textconv', '--no-renames', '--name-status', '-z', base, head],
+                                 stdout=output, stderr=subprocess.DEVNULL, check=True, timeout=45)
+                  size = output.tell()
+                  if size <= 0 or size > 1024 * 1024:
+                      raise ValueError('empty or oversized diff')
+                  output.seek(0)
+                  records = output.read().split(b'\0')
+              if records[-1] != b'' or len(records[:-1]) % 2:
+                  raise ValueError('incomplete diff records')
+              records = records[:-1]
+              # Disabling rename detection exposes both old/new paths as delete/add.
+              # Only ordinary modifications of the four reviewed existing files may skip.
+              product_changed = any(records[i] != b'M' or records[i + 1].decode('utf-8') not in SAFE_PATHS for i in range(0, len(records), 2))
+          except (OSError, ValueError, UnicodeError, subprocess.SubprocessError):
+              product_changed = True
+          
+          with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as output:
+              output.write('product_changed=' + ('true' if product_changed else 'false') + '\n')
+          print('Full product checks selected.' if product_changed else 'Only reviewed law/probe inputs changed; product checks are not executed.')
+          PY
+          then
+            echo 'product_changed=true' >> "$GITHUB_OUTPUT"
+            echo '::warning::Scope detection unavailable; full product checks selected.'
+          fi
+
+      - name: Record reviewed scope
+        if: ${{ github.event_name == 'pull_request' && steps.product-scope.outputs.product_changed == 'false' }}
+        run: echo 'Only reviewed law/probe inputs changed; product checks were not executed.'
 
       - name: Setup Node
+        if: ${{ github.event_name != 'pull_request' || steps.product-scope.outputs.product_changed != 'false' }}
         uses: actions/setup-node@v6
         with:
           node-version: 22
           cache: npm
 
       - name: Install locked dependencies
+        if: ${{ github.event_name != 'pull_request' || steps.product-scope.outputs.product_changed != 'false' }}
         run: npm ci
 
       - name: Check
+        if: ${{ github.event_name != 'pull_request' || steps.product-scope.outputs.product_changed != 'false' }}
         run: npm run check
 
       - name: Validate citations
+        if: ${{ github.event_name != 'pull_request' || steps.product-scope.outputs.product_changed != 'false' }}
         run: npm run validate:citations
 
       - name: Audit production dependency vulnerabilities
+        if: ${{ github.event_name != 'pull_request' || steps.product-scope.outputs.product_changed != 'false' }}
         run: npm audit --audit-level=moderate
 
       - name: Smoke packaged CLI
+        if: ${{ github.event_name != 'pull_request' || steps.product-scope.outputs.product_changed != 'false' }}
         run: npm run package:smoke
 
       - name: Verify package contents
+        if: ${{ github.event_name != 'pull_request' || steps.product-scope.outputs.product_changed != 'false' }}
         run: npm pack --dry-run
 
   compatibility-gate:
     name: Node 24 compatibility gate
     runs-on: blacksmith-2vcpu-ubuntu-2404
+    timeout-minutes: 15
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Select product checks from complete event-commit diff
+        id: product-scope
+        if: ${{ github.event_name == 'pull_request' }}
+        env:
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PR_MERGE_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          if ! python3 -I -S - <<'PY'
+          import os
+          import re
+          import subprocess
+          import tempfile
+          
+          SAFE_PATHS = frozenset(('CLAUDE.md', 'docs/agent-law/empower-orchestrator.md', '.github/workflows/agent-law.yml', '.github/workflows/blacksmith-probe.yml'))
+          product_changed = True
+          try:
+              base = os.environ.get('PR_BASE_SHA', '')
+              head = os.environ.get('PR_HEAD_SHA', '')
+              merge = os.environ.get('PR_MERGE_SHA', '')
+              if not all(re.fullmatch(r'[0-9a-f]{40}', commit) for commit in (base, head, merge)):
+                  raise ValueError('invalid event commits')
+              for commit in (base, head, merge):
+                  kind = subprocess.run(['git', 'cat-file', '-t', commit], check=True, capture_output=True, timeout=15).stdout
+                  if kind != b'commit\n':
+                      raise ValueError('event SHA is not a commit')
+              checkout = subprocess.run(['git', 'rev-parse', 'HEAD'], check=True, capture_output=True, timeout=15).stdout.decode('ascii').strip()
+              parents = subprocess.run(['git', 'show', '--no-patch', '--format=%P', merge], check=True, capture_output=True, timeout=15).stdout.decode('ascii').split()
+              if checkout != merge or parents != [base, head]:
+                  raise ValueError('checkout or event merge parents changed')
+              with tempfile.TemporaryFile() as output:
+                  subprocess.run(['git', 'diff', '--no-ext-diff', '--no-textconv', '--no-renames', '--name-status', '-z', base, head],
+                                 stdout=output, stderr=subprocess.DEVNULL, check=True, timeout=45)
+                  size = output.tell()
+                  if size <= 0 or size > 1024 * 1024:
+                      raise ValueError('empty or oversized diff')
+                  output.seek(0)
+                  records = output.read().split(b'\0')
+              if records[-1] != b'' or len(records[:-1]) % 2:
+                  raise ValueError('incomplete diff records')
+              records = records[:-1]
+              # Disabling rename detection exposes both old/new paths as delete/add.
+              # Only ordinary modifications of the four reviewed existing files may skip.
+              product_changed = any(records[i] != b'M' or records[i + 1].decode('utf-8') not in SAFE_PATHS for i in range(0, len(records), 2))
+          except (OSError, ValueError, UnicodeError, subprocess.SubprocessError):
+              product_changed = True
+          
+          with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as output:
+              output.write('product_changed=' + ('true' if product_changed else 'false') + '\n')
+          print('Full product checks selected.' if product_changed else 'Only reviewed law/probe inputs changed; product checks are not executed.')
+          PY
+          then
+            echo 'product_changed=true' >> "$GITHUB_OUTPUT"
+            echo '::warning::Scope detection unavailable; full product checks selected.'
+          fi
+
+      - name: Record reviewed scope
+        if: ${{ github.event_name == 'pull_request' && steps.product-scope.outputs.product_changed == 'false' }}
+        run: echo 'Only reviewed law/probe inputs changed; product checks were not executed.'
 
       - name: Setup Node
+        if: ${{ github.event_name != 'pull_request' || steps.product-scope.outputs.product_changed != 'false' }}
         uses: actions/setup-node@v6
         with:
           node-version: 24
           cache: npm
 
       - name: Install locked dependencies
+        if: ${{ github.event_name != 'pull_request' || steps.product-scope.outputs.product_changed != 'false' }}
         run: npm ci
 
       - name: Check runtime compatibility
+        if: ${{ github.event_name != 'pull_request' || steps.product-scope.outputs.product_changed != 'false' }}
         run: npm run check:compat
