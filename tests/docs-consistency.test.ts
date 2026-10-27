@@ -138,7 +138,8 @@ describe('release documentation consistency', () => {
       expect(runbook).toContain(route);
       expect(agents).toContain(route);
     }
-    expect(readme).toContain('18 MCP tools');
+    expect(readme).toContain('19 MCP tools');
+    expect(readme).toContain('reconstruct_food_memory');
     expect(readme).toContain('build_memory_receipt');
     expect(readme).toContain('plan_tool_workflow');
     expect(architecture).toContain('Named architecture boundaries');
