@@ -75,11 +75,13 @@ describe('P0 launch readiness guards', () => {
     expect(landing).not.toMatch(/\btestimonials?\b/i);
   });
 
-  it('documents secure HTTP auth defaults and source/tarball install status', () => {
+  it('documents hosted HTTP auth behaviour and source/tarball install status', () => {
     const readme = fs.readFileSync('README.md', 'utf8');
     const envExample = fs.readFileSync('.env.example', 'utf8');
 
-    expect(readme).toContain('Authentication is enabled by default');
+    expect(readme).toContain('does not enforce authentication');
+    expect(readme).toContain('authEnabled: false');
+    expect(readme).not.toContain('Authentication is enabled by default');
     expect(readme).toContain('Achiote is published to npm.');
     expect(readme).toContain('npm install achiote');
     expect(readme).toContain('published package ships the built `dist/` output');
