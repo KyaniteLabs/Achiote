@@ -55,10 +55,11 @@ Open the HTML files directly in a browser for static review; the full route beha
 
 ## What It Does Today
 
-Achiote is a research-first food-and-drink memory reconstruction server. It provides 18 MCP tools that let a host AI chat client run the workflow from a fragment to a minimum viable nostalgia cue, with optional sourcing/substitution and recipe handoff if the user wants more:
+Achiote is a research-first food-and-drink memory reconstruction server. It provides 19 MCP tools that let a host AI chat client run the workflow from a fragment to a minimum viable nostalgia cue, with optional sourcing/substitution and recipe handoff if the user wants more:
 
 | Stage | Tool | Implemented behavior |
 |------|------|----------------------|
+| Single-call reconstruction | `reconstruct_food_memory` | Runs the full `/ask` workflow in one call — collect the memory, research the dish, build the evidence dossier, and return a minimum viable nostalgia cue with a Memory Receipt. Use the granular tools below when driving individual steps. |
 | Workflow control | `plan_tool_workflow` | Deterministically plans the `/ask` tool sequence from the raw user message so provider models do not freestyle the workflow. |
 | Memory intake | `collect_food_memory` | Structures raw fragments, sound-alikes, family context, remembered ingredients, sensory clues, missing information, and gentle next questions. |
 | Research planning | `plan_dish_research` | Produces hypotheses, search queries, source preferences, facts to verify, and clarification questions for foods or drinks. It plans research instead of pretending sparse fragments are solved. |
@@ -297,7 +298,7 @@ Business Source License 1.1 (BUSL-1.1). See [LICENSE](LICENSE).
 | **Category** | food-memory and cultural taste research product |
 | **Best for** | researchers and builders exploring food memory and heritage taste |
 | **Not** | a recipe SEO blog |
-| **Source** | [GitHub](https://github.com/KyaniteLabs/Achiote) · [Forgejo](https://git.kyanitelabs.tech/KyaniteLabs/Achiote) (private, maintainers only) |
+| **Source** | [GitHub](https://github.com/KyaniteLabs/Achiote) |
 | **Keywords** | food memory research, cultural taste, heritage cuisine AI |
 
 ## Who it's for
