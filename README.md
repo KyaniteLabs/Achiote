@@ -163,7 +163,7 @@ node dist/http-server.js
 | `POST /ask` | SSE streaming AI agent (auth + rate limited) |
 | `POST /mcp` | Streamable HTTP MCP transport |
 
-Authentication is enabled by default for the HTTP server. Configure `ACHIOTE_API_KEYS` for `/ask`, `/mcp`, and voice upload endpoints. Setting `ACHIOTE_AUTH_ENABLED=false` does not by itself expose anonymous `/ask` or voice processing; set `ACHIOTE_ALLOW_ANON_ASK=true` only for local demos. Generate a self-hosted key with `npm run keygen -- --tier pro --name admin`; put the printed `envRecord` inside the `ACHIOTE_API_KEYS` JSON array, not the one-time raw key. Port defaults to 3000, configurable via `PORT` env var.
+Hosted Achiote (`https://achiote.kyanitelabs.tech`) does not enforce authentication: anonymous access is open and billing-issued API keys are honored (`GET /health` reports `authEnabled: false`). Self-hosted HTTP can still require keys: configure `ACHIOTE_API_KEYS` for `/ask`, `/mcp`, and voice upload endpoints. Setting `ACHIOTE_AUTH_ENABLED=false` does not by itself expose anonymous `/ask` or voice processing; set `ACHIOTE_ALLOW_ANON_ASK=true` only for local demos. Generate a self-hosted key with `npm run keygen -- --tier pro --name admin`; put the printed `envRecord` inside the `ACHIOTE_API_KEYS` JSON array, not the one-time raw key. Port defaults to 3000, configurable via `PORT` env var.
 
 Shareable Memory Receipt links keep receipt JSON in the URL fragment (`/receipt#data=...`). URL fragments are not sent to the server, so possession of the link is the access boundary. Do not put private family memory text into telemetry or server-side share records.
 
