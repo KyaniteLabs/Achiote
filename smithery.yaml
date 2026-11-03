@@ -1,0 +1,29 @@
+# Smithery configuration for Achiote (staged; deploy is a separate, account-gated step).
+# Format: Smithery stdio server config — https://smithery.ai/docs
+# Mirrors the official MCP Registry record (server.json, tech.kyanitelabs/achiote).
+
+startCommand:
+  type: stdio
+  configSchema:
+    # JSON Schema defining the configuration options for the MCP.
+    type: object
+    properties:
+      anthropicApiKey:
+        type: string
+        title: Anthropic API key
+        description: >-
+          API key for the model provider that drives reconstruct_food_memory.
+          Optional for the granular deterministic tools; required for the full
+          single-call reconstruction.
+      cachePath:
+        type: string
+        title: Research cache path
+        description: >-
+          Path to the local research cache database (.db). Holds dish/region
+          research, never raw memories. Defaults to ~/.cache/achiote/culture-cache.db.
+  command: node
+  args:
+    - dist/index.js
+  env:
+    ANTHROPIC_API_KEY: "{{anthropicApiKey}}"
+    ACHIOTE_CACHE_PATH: "{{cachePath}}"
