@@ -1,5 +1,9 @@
 # Achiote
 
+<p align="center">
+  <img src="branding/achiote-512.png" alt="achiote icon" width="128">
+</p>
+
 **TL;DR:** Achiote — food-memory and cultural taste research product. Best for researchers and builders exploring food memory and heritage taste. Keywords: food memory research, cultural taste, heritage cuisine AI.
 
 Achiote is a **Model Context Protocol (MCP)** server for research-first food-and-drink memory reconstruction. It helps a host AI turn incomplete family food or drink memories into structured clues, research plans, cited/provenance-ready findings, sensory analysis, sourcing/substitution strategy, and a minimum viable nostalgia cue before any fuller recipe handoff.
