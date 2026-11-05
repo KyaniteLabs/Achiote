@@ -7,10 +7,11 @@ description: "Reconstruct nostalgic dishes in one call. Reverse engineer the sen
 
 Prefer these when running inside Hermes (this skill is registered as `achiote:achiote`):
 
-- Tool `achiote_reconstruct` — one-shot reconstruct (wraps `achiote ask`).
+- Tool `achiote_reconstruct` — one-shot reconstruct (wraps `achiote ask`); pass `user_location` for local swaps. Returns a bounded summary + `reconstruction_id`.
+- Tool `achiote_get_reconstruction` — page the full answer / receipt / sources by `reconstruction_id`.
 - Tool `achiote_cite_check` — cite-or-die gate before presenting a cue/recipe.
-- Tools `achiote_save_dish` / `achiote_list_dishes` — family dishes in `<HERMES_HOME>/plugin-data/achiote/`.
-- Slash `/achiote ask "…"` — same reconstruct path; gateway-safe (no purge/serve).
+- Tools `achiote_save_dish` / `achiote_list_dishes` — family dishes in `<HERMES_HOME>/plugin-data/achiote/`. Pass the `reconstruction_id` to save.
+- Slash `/achiote ask "…" [--location <city>]` — same reconstruct path; gateway-safe (no purge/serve). `/achiote save <title> --id <id>`.
 - Desktop **Nostalgia** pane — cue + citations + local swaps + provenance graph.
 
 Do **not** invent citations. If evidence is thin, say so and ask a gentle family follow-up.

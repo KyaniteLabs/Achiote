@@ -1,7 +1,7 @@
 name: achiote
 version: "0.1.0"
 manifest_version: 2
-description: "Achiote for Hermes: turn a half-remembered family dish into a researched, cited minimum-viable nostalgia cue and local-ingredient recipe. Adds pre_llm_call fragment detection, cite-or-die guardrails, /achiote, reconstruct tools, saved-dish memory under plugin-data, and a Desktop nostalgia pane with a provenance graph. Disclosure — shells out to `npx -y achiote@0.2.2 ask` (downloads from npm on first run; needs Node >=22); optional model API keys (e.g. ANTHROPIC_API_KEY) are read through Hermes secret scope and passed only for reconstruct; research cache and saved dishes live under <HERMES_HOME>/plugin-data/achiote/; child env is scrubbed (no full os.environ). Heritage-locale / DialectOS is NOT bundled. Photo→memory and /achiote cook are Monday stretch stubs only."
+description: "Achiote for Hermes: turn a half-remembered family dish into a researched, cited minimum-viable nostalgia cue and local-ingredient recipe. Adds pre_llm_call fragment detection, cite-or-die guardrails, /achiote, reconstruct tools, saved-dish memory under plugin-data, and a Desktop nostalgia pane with a provenance graph. Disclosure — shells out to `npx -y achiote@0.2.2 ask` (downloads from npm on first run; needs Node >=22); optional model API keys (e.g. ANTHROPIC_API_KEY) are read through Hermes secret scope and passed only for reconstruct; research cache and saved dishes live under <HERMES_HOME>/plugin-data/achiote/; child env is scrubbed (no full os.environ) and runs from a plugin-owned cwd so no inherited .env is loaded. Heritage-locale / DialectOS is NOT bundled. Photo→memory and /achiote cook are Monday stretch stubs only."
 author: "Kyanite Labs"
 license: BUSL-1.1
 homepage: https://github.com/KyaniteLabs/Achiote/tree/master/plugins/achiote-hermes
@@ -10,6 +10,7 @@ requires_hermes: ">=0.21.6"
 requires_env: []
 provides_tools:
   - achiote_reconstruct
+  - achiote_get_reconstruction
   - achiote_save_dish
   - achiote_list_dishes
   - achiote_cite_check
@@ -31,7 +32,7 @@ config_schema:
   cite_or_die:
     type: bool
     default: true
-    description: "Inject cite-or-die guardrails and block tool calls that claim a nostalgia cue without citation/local-sub evidence when detectable."
+    description: "Inject cite-or-die guardrails and block outbound/emit tool calls that carry a nostalgia cue without concrete source + local-sub evidence. Research/read tools are never blocked."
   timeout_seconds:
     type: int
     default: 180
