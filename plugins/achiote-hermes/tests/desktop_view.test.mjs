@@ -22,7 +22,8 @@ const { paneScope, queryKeys, selectPaneView, sourceRow } = mod
 function cache() {
   const m = new Map()
   return {
-    ok(key, data) { m.set(JSON.stringify(key), { status: 'success', isError: false, data }) },
+    // Accepted responses carry the paneScope createScopedFetch stamped them with (key[1]).
+    ok(key, data) { m.set(JSON.stringify(key), { status: 'success', isError: false, data: { ...data, paneScope: key[1] } }) },
     fail(key) {
       const prev = m.get(JSON.stringify(key)) || {}
       m.set(JSON.stringify(key), { ...prev, status: 'error', isError: true })
@@ -46,7 +47,7 @@ const A_LAST = {
 
 function render(c, scope) {
   const k = queryKeys(scope)
-  return selectPaneView({ scope, lastQ: { ...c.get(k.last), scope }, dishesQ: { ...c.get(k.dishes), scope } })
+  return selectPaneView({ scope, lastQ: c.get(k.last), dishesQ: c.get(k.dishes) })
 }
 
 test('A success -> B disabled -> C success never shows A data under B or C', () => {
@@ -88,8 +89,8 @@ test('error wins over retained data in the same scope (offline message not hidde
   assert.equal(v.answer, '')
 })
 
-test('data tagged with a foreign scope is ignored', () => {
-  const v = selectPaneView({ scope: 'local::bob', lastQ: { status: 'success', data: A_LAST, scope: 'local::alice' }, dishesQ: null })
+test('data stamped for a foreign scope is ignored', () => {
+  const v = selectPaneView({ scope: 'local::bob', lastQ: { status: 'success', data: { ...A_LAST, paneScope: 'local::alice' } }, dishesQ: null })
   assert.equal(v.answer, '')
 })
 

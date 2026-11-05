@@ -38,11 +38,57 @@ export function queryKeys(scope) {
   return { last: [ID, scope, 'last'], dishes: [ID, scope, 'dishes'] }
 }
 
-/** Pure view-model. Data is shown ONLY when the query succeeded for the CURRENT scope; an error
- *  always wins over any retained data (no stale answer hiding the offline message). */
+export class StaleScopeError extends Error {
+  constructor(expected, actual) {
+    super(`achiote: response for profile scope ${actual} rejected under ${expected}`)
+    this.name = 'StaleScopeError'
+  }
+}
+
+/** Host route = the (connection, profile) ambient ctx.rest currently targets, plus an epoch that bumps
+ *  on every switch. Hermes moves the REST profile and THEN invalidates active queries, so an observer
+ *  still holding the previous scope's queryFn can run against the new route (Kai pass-2 #2). */
+export function createRouteTracker(state) {
+  let epoch = 0
+  const read = () => paneScope(state.connectionId && state.connectionId.get(), state.profile && state.profile.get())
+  const unsubs = [state.connectionId, state.profile]
+    .filter((a) => a && typeof a.listen === 'function')
+    .map((a) => a.listen(() => { epoch += 1 }))
+  return {
+    read: () => ({ scope: read(), epoch }),
+    dispose: () => unsubs.forEach((u) => u())
+  }
+}
+
+/** ctx.rest cannot be pinned to a profile, so every fetch is bound to the scope it was created for:
+ *  rejected if the host route differs before OR after the request, or moved during it (epoch), and the
+ *  backend's own `scope` (hash of that profile's plugin-data dir) must be present and owned by this
+ *  pane scope — a backend scope first seen for one profile is never accepted for another. Accepted
+ *  data is stamped with `paneScope`, which selectPaneView checks. */
+export function createScopedFetch(rest, readRoute, pins = new Map()) {
+  return async function fetchScoped(scope, path) {
+    const before = readRoute()
+    if (before.scope !== scope) throw new StaleScopeError(scope, before.scope)
+    const data = await rest(path)
+    const after = readRoute()
+    if (after.scope !== scope || after.epoch !== before.epoch) throw new StaleScopeError(scope, after.scope)
+    const owner = data && typeof data === 'object' ? data.scope : undefined
+    if (typeof owner !== 'string' || !owner) throw new StaleScopeError(scope, 'unknown (response has no scope)')
+    const pinned = pins.get(scope)
+    if (pinned !== undefined && pinned !== owner) throw new StaleScopeError(scope, `backend ${owner}`)
+    for (const [other, ownerOfOther] of pins) {
+      if (other !== scope && ownerOfOther === owner) throw new StaleScopeError(scope, other)
+    }
+    pins.set(scope, owner)
+    return { ...data, paneScope: scope }
+  }
+}
+
+/** Pure view-model. Data is shown ONLY when the response itself was accepted for the CURRENT scope
+ *  (data.paneScope, stamped by createScopedFetch); an error always wins over any retained data. */
 export function selectPaneView({ scope, lastQ, dishesQ }) {
   const usable = (q) =>
-    !!q && !q.isError && q.status !== 'error' && q.data && q.scope === scope
+    !!q && !q.isError && q.status !== 'error' && !!q.data && q.data.paneScope === scope
   const offline = !!(lastQ && (lastQ.isError || lastQ.status === 'error'))
   const last = usable(lastQ) && lastQ.data.ok !== false ? lastQ.data : {}
   const prov = last.provenance || {}
@@ -134,30 +180,24 @@ function ContextList({ context }) {
   })
 }
 
-function createPane(rest) {
+function createPane(fetchScoped) {
   return function Pane() {
     const [tab, setTab] = useState('cue')
     const scope = paneScope(useValue(host.state.connectionId), useValue(host.state.profile))
     const keys = queryKeys(scope)
     const lastQ = useQuery({
       queryKey: keys.last,
-      queryFn: () => rest('/last'),
+      queryFn: () => fetchScoped(scope, '/last'),
       refetchInterval: 8000,
       retry: false
     })
     const dishesQ = useQuery({
       queryKey: keys.dishes,
-      queryFn: () => rest('/dishes'),
+      queryFn: () => fetchScoped(scope, '/dishes'),
       refetchInterval: 15000,
       retry: false
     })
-    // The key already carries the scope, so these query states belong to THIS profile/connection.
-    // Tagging them keeps selectPaneView honest if a caller ever passes a retained/foreign state.
-    const view = selectPaneView({
-      scope,
-      lastQ: { ...lastQ, scope },
-      dishesQ: { ...dishesQ, scope }
-    })
+    const view = selectPaneView({ scope, lastQ, dishesQ })
 
     return jsxs('div', {
       className: 'achiote-pane',
@@ -301,7 +341,9 @@ export default {
   id: ID,
   name: 'Achiote',
   register(ctx) {
-    const Pane = createPane((path, opts) => ctx.rest(path, opts))
+    const route = createRouteTracker(host.state)
+    if (typeof ctx.onDispose === 'function') ctx.onDispose(route.dispose)
+    const Pane = createPane(createScopedFetch((path, opts) => ctx.rest(path, opts), route.read))
     ctx.register({
       id: 'pane',
       area: 'panes',

@@ -97,7 +97,26 @@ _LOCAL_SUB_TEXT_RE = re.compile(
     r"(?:find|buy|get|look for|source)\b[^.\n]{0,60}\b(?:at|in|near)\b|grocer\w*|market|store)",
     re.I,
 )
-_SOURCING_FACT_RE = re.compile(r"^(?:Sourcing guide|Static regional availability matched|Starting points)\s*:", re.I)
+_SOURCING_FACT_RE = re.compile(
+    r"^(?:Sourcing guide|Static regional availability matched|Starting points|sourcing store/corridor|"
+    r"local sourcing search lead)\s*:", re.I)
+_DOI_FULL_RE = re.compile(r"10\.\d{4,9}/[^\s\"<>]+", re.I)
+# "X -> Y" / "X => Y" / "X → Y": an explicit substitution pair (both sides non-empty).
+_SUB_PAIR_TEXT_RE = re.compile(r"\S.*?\s*(?:->|=>|→)\s*\S")
+# Explicit absence: placeholder tokens, or a short "no sources / not provided"-style statement.
+_ABSENT_TOKEN_RE = re.compile(r"^\W*(?:none|nil|null|n/?a|unknown|unk|tbd|todo|missing|empty|nothing|-+|\?+)\W*$", re.I)
+_ABSENT_PHRASE_RE = re.compile(
+    r"\b(?:not (?:provided|available|applicable|found|known|specified|given|sourced|cited)|"
+    r"none (?:found|available|provided|given)|"
+    r"no (?:\w+ ){0,2}(?:sources?|citations?|references?|evidence|substitut\w*|swaps?|alternatives?|"
+    r"results?|data|records?|leads?|stores?))\b",
+    re.I,
+)
+_ABSENT_MAX_WORDS = 8
+# Explicit substitution / sourcing record shapes.
+_SUB_FROM_KEYS = ("original", "ingredient", "item", "from", "replace", "instead_of", "insteadOf")
+_SUB_TO_KEYS = ("substitute", "replacement", "to", "with", "swap", "alternative", "use")
+_SOURCING_KEYS = ("store", "market", "shop", "where", "vendor", "retailer", "location", "corridor")
 
 # Keys whose values are never evidence: generated labels, metadata, or what the user themselves said.
 _NON_EVIDENCE_KEYS = {
@@ -344,6 +363,71 @@ def _clean(value: Any) -> str:
     return re.sub(r"\s+", " ", value).strip()
 
 
+def _is_absent(text: str) -> bool:
+    """True for explicit no-evidence values ("unknown", "No sources were found.", "not provided")."""
+    t = _clean(text)
+    if not t or _ABSENT_TOKEN_RE.match(t):
+        return True
+    if _SUB_PAIR_TEXT_RE.search(t):  # "X -> Y" is absent when either side is
+        left, _, right = re.split(r"(->|=>|→)", t, maxsplit=1)
+        return _is_absent(left) or _is_absent(right)
+    return len(t.split()) <= _ABSENT_MAX_WORDS and bool(_ABSENT_PHRASE_RE.search(t))
+
+
+def _normalize_doi(value: Any) -> Optional[str]:
+    """One DOI validator for every path: bare, ``doi:`` or ``https://doi.org/`` forms; else None."""
+    text = _clean(value)
+    if not text:
+        return None
+    text = re.sub(r"^(?:https?://(?:dx\.)?doi\.org/|doi:\s*)", "", text, flags=re.I).rstrip(".,;")
+    return text if _DOI_FULL_RE.fullmatch(text) else None
+
+
+def _string_list(value: Any) -> Optional[List[str]]:
+    """A typed evidence collection: list of non-empty strings. Wrong type → None (never iterated)."""
+    if not isinstance(value, list):
+        return None
+    return [t for t in (_clean(v) for v in value if isinstance(v, str)) if t]
+
+
+def _is_sub_text(text: str) -> bool:
+    t = _clean(text)
+    if not t or _is_absent(t):
+        return False
+    if _SUB_PAIR_TEXT_RE.search(t):
+        return True
+    return len(t.split()) >= 4 and bool(_LOCAL_SUB_TEXT_RE.search(t))
+
+
+def _first_present(rec: Dict[str, Any], keys: Tuple[str, ...]) -> str:
+    for k in keys:
+        v = _clean(rec.get(k))
+        if v and not _is_absent(v):
+            return v
+    return ""
+
+
+def _sub_from_record(item: Any, origin: str) -> Optional[Dict[str, Any]]:
+    """An ACTUAL substitution/sourcing record: an explicit pair, an item+store record, or a sentence."""
+    if isinstance(item, str):
+        return {"type": "substitution", "text": _clean(item), "origin": origin} if _is_sub_text(item) else None
+    if not isinstance(item, dict):
+        return None
+    orig = _first_present(item, _SUB_FROM_KEYS)
+    repl = _first_present(item, _SUB_TO_KEYS)
+    if orig and repl:
+        return {"type": "substitution", "original": orig, "substitute": repl,
+                "text": f"{orig} -> {repl}", "origin": origin}
+    where = _first_present(item, _SOURCING_KEYS)
+    if orig and where:
+        return {"type": "sourcing", "ingredient": orig, "where": where, "text": f"{orig} at {where}", "origin": origin}
+    # Free-form record: only a real substitution/sourcing sentence among its VALUES counts.
+    for _, text in _iter_value_strings(item):
+        if _is_sub_text(text):
+            return {"type": "substitution", "text": text, "origin": origin}
+    return None
+
+
 def _receipt_of(payload: Dict[str, Any]) -> Dict[str, Any]:
     for cand in (payload.get("receipt"), (payload.get("result") or {}).get("receipt") if isinstance(payload.get("result"), dict) else None):
         if isinstance(cand, dict):
@@ -370,6 +454,8 @@ def _iter_value_strings(obj: Any, key: str = "") -> Iterator[Tuple[str, str]]:
 def _source_from_record(rec: Any, origin: str) -> Optional[Dict[str, Any]]:
     if isinstance(rec, str):
         text = _clean(rec)
+        if _is_absent(text):
+            return None
         doi = _DOI_RE.search(text)
         url = _URL_RE.search(text)
         isbn = _ISBN_RE.search(text)
@@ -381,13 +467,12 @@ def _source_from_record(rec: Any, origin: str) -> Optional[Dict[str, Any]]:
             return {"type": "isbn", "isbn": isbn.group(1), "text": text, "origin": origin}
         return None
     if isinstance(rec, dict):
-        doi = _clean(rec.get("doi"))
+        doi = _normalize_doi(rec.get("doi"))
         url = _clean(rec.get("url") or rec.get("href") or rec.get("link"))
         isbn = _clean(rec.get("isbn"))
         title = _clean(rec.get("title") or rec.get("citation") or rec.get("name"))
-        if doi and _DOI_RE.search(doi if doi.startswith("10.") else doi.split("doi.org/")[-1]):
-            d = doi.split("doi.org/")[-1].removeprefix("doi:").strip()
-            return {"type": "doi", "doi": d, "url": f"https://doi.org/{d}", "text": title or d, "origin": origin}
+        if doi:
+            return {"type": "doi", "doi": doi, "url": f"https://doi.org/{doi}", "text": title or doi, "origin": origin}
         if url and _URL_RE.match(url):
             return {"type": "url", "url": url, "text": title or url, "origin": origin}
         if isbn and re.search(r"\d{9,}", isbn.replace("-", "").replace(" ", "")):
@@ -408,31 +493,40 @@ def extract_evidence(payload: Any) -> Dict[str, Any]:
     if not isinstance(payload, dict):
         payload = {"text": payload if isinstance(payload, str) else ""}
 
+    malformed: List[str] = []
     receipt = _receipt_of(payload)
     share = receipt.get("shareCard") if isinstance(receipt.get("shareCard"), dict) else {}
-    doi = _clean(share.get("doi"))
-    if doi:
-        sources.append({
-            "type": "doi",
-            "doi": doi,
-            "url": f"https://doi.org/{doi}",
-            "text": _clean(share.get("citation")) or doi,
-            "fact": _clean(share.get("fact")),
-            "origin": "receipt.shareCard",
-        })
+    if share.get("doi") not in (None, ""):
+        doi = _normalize_doi(share.get("doi"))
+        if doi:
+            sources.append({
+                "type": "doi",
+                "doi": doi,
+                "url": f"https://doi.org/{doi}",
+                "text": _clean(share.get("citation")) or doi,
+                "fact": _clean(share.get("fact")),
+                "origin": "receipt.shareCard",
+            })
+        else:
+            malformed.append("receipt.shareCard.doi is not a valid DOI")
     evidence = receipt.get("evidence") if isinstance(receipt.get("evidence"), dict) else {}
-    for fact in evidence.get("researched") or []:
-        text = _clean(fact)
-        if not text:
+    researched = _string_list(evidence.get("researched")) if "researched" in evidence else []
+    if researched is None:
+        malformed.append("receipt.evidence.researched must be a list of strings")
+        researched = []
+    for text in researched:
+        if _is_absent(text):
             continue
         if _SOURCING_FACT_RE.match(text):
             local_subs.append({"type": "sourcing", "text": text, "origin": "receipt.evidence.researched"})
+        elif re.match(r"^substitute\s*:\s*\S.*->\s*\S", text, re.I):
+            local_subs.append({"type": "substitution", "text": text, "origin": "receipt.evidence.researched"})
         else:
             rec = _source_from_record(text, "receipt.evidence.researched") or {
                 "type": "researched", "text": text, "origin": "receipt.evidence.researched"}
             sources.append(rec)
     for bucket in ("userSaid", "inferred", "unknown", "ruledOut"):
-        vals = [_clean(v) for v in (evidence.get(bucket) or []) if _clean(v)]
+        vals = _string_list(evidence.get(bucket))
         if vals:
             context[bucket] = vals
 
@@ -448,19 +542,24 @@ def extract_evidence(payload: Any) -> Dict[str, Any]:
                 if k in _NON_EVIDENCE_KEYS:
                     continue
                 if lk in ("citations", "sources", "references", "ledger", "citedmechanisms"):
-                    for item in (v if isinstance(v, list) else [v]):
+                    if not isinstance(v, list):
+                        if v not in (None, "", {}):
+                            malformed.append(f"payload.{k} must be a list of source records")
+                        continue
+                    for item in v:
                         rec = _source_from_record(item, f"payload.{k}")
                         if rec:
                             sources.append(rec)
                 elif lk in ("substitutions", "substitutes", "local_subs", "localsubs", "local_swaps",
                             "localswaps", "swaps", "sourcing", "substitutelogic"):
-                    for item in (v if isinstance(v, list) else [v]):
-                        if isinstance(item, dict):
-                            text = "; ".join(t for _, t in _iter_value_strings(item))
-                        else:
-                            text = _clean(item)
-                        if text and len(text.split()) >= 2:
-                            local_subs.append({"type": "substitution", "text": text, "origin": f"payload.{k}"})
+                    if not isinstance(v, list):
+                        if v not in (None, "", {}):
+                            malformed.append(f"payload.{k} must be a list of substitution/sourcing records")
+                        continue
+                    for item in v:
+                        rec = _sub_from_record(item, f"payload.{k}")
+                        if rec:
+                            local_subs.append(rec)
                 else:
                     walk(v)
         elif isinstance(obj, list):
@@ -484,7 +583,7 @@ def extract_evidence(payload: Any) -> Dict[str, Any]:
                 sources.append({"type": "url", "url": u, "text": u, "origin": f"text.{key or 'value'}"})
         for sentence in re.split(r"(?<=[.!?])\s+|\n+", text):
             s = sentence.strip()
-            if len(s.split()) >= 4 and _LOCAL_SUB_TEXT_RE.search(s):
+            if len(s.split()) >= 4 and _LOCAL_SUB_TEXT_RE.search(s) and not _is_absent(s):
                 local_subs.append({"type": "text", "text": s, "origin": f"text.{key or 'value'}"})
 
     def dedupe(items: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
@@ -497,7 +596,8 @@ def extract_evidence(payload: Any) -> Dict[str, Any]:
             out.append(it)
         return out
 
-    return {"sources": dedupe(sources), "local_subs": dedupe(local_subs), "context": context}
+    return {"sources": dedupe(sources), "local_subs": dedupe(local_subs), "context": context,
+            "malformed": malformed}
 
 
 def cite_check(payload: Any) -> Dict[str, Any]:
@@ -513,6 +613,7 @@ def cite_check(payload: Any) -> Dict[str, Any]:
         reasons.append("missing citation/source/provenance evidence")
     if not has_sub:
         reasons.append("missing local-substitution / accessibility evidence")
+    reasons.extend(f"malformed evidence: {m}" for m in ev["malformed"])
     ok = has_cite and has_sub
     return {
         "ok": ok,
@@ -657,10 +758,28 @@ def session_last(session_id: str) -> Optional[Dict[str, Any]]:
     return load_reconstruction(str(ptr.get("reconstruction_id") or ""), session_id)
 
 
+def _saved_reconstruction_ids() -> set:
+    """Reconstruction IDs referenced by a saved dish. Call under _locked()."""
+    dishes = _load_json(_dishes_path(), [])
+    if not isinstance(dishes, list):
+        return set()
+    out = set()
+    for d in dishes:
+        snap = d.get("reconstruction") if isinstance(d, dict) else None
+        rid = snap.get("reconstruction_id") if isinstance(snap, dict) else None
+        if isinstance(rid, str) and _reconstruction_path(rid) is not None:
+            out.add(rid)
+    return out
+
+
 def _prune_reconstructions() -> None:
+    """Rolling cache of the latest MAX_RECONSTRUCTIONS UNSAVED results. A result referenced by a saved
+    dish is pinned (its full answer/receipt is the dish's only complete record). Call under _locked()."""
     folder = _data_dir() / "reconstructions"
+    pinned = _saved_reconstruction_ids()
     try:
-        files = sorted(folder.glob("*.json"), key=lambda p: p.stat().st_mtime, reverse=True)
+        files = sorted((p for p in folder.glob("*.json") if p.stem not in pinned),
+                       key=lambda p: p.stat().st_mtime, reverse=True)
     except OSError:
         return
     for stale in files[MAX_RECONSTRUCTIONS:]:
@@ -725,6 +844,12 @@ def save_dish(title: str, memory: str = "", notes: str = "", envelope: Optional[
         "saved_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
     }
     with _locked():  # full read-modify-write under one process-safe lock — no lost updates
+        rid = (entry["reconstruction"] or {}).get("reconstruction_id")
+        path = _reconstruction_path(rid) if isinstance(rid, str) else None
+        if path is not None and not path.is_file():
+            # Pruned by another process between load and save: restore the complete result we hold,
+            # so the saved dish never points at a missing answer/receipt.
+            _save_json(path, envelope)
         dishes = _load_json(_dishes_path(), [])
         if not isinstance(dishes, list):
             dishes = []

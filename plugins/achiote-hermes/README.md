@@ -41,7 +41,7 @@ Settings under `plugins.entries.achiote.settings`:
 - Shells out to `npx -y achiote@0.2.2` (downloads from npm on first run).
 - Child environment is **scrubbed** (no full `os.environ`, no inherited `NODE_OPTIONS`); optional API keys are read through Hermes secret scope when available.
 - The child runs from a plugin-owned working directory (`plugin-data/achiote/run/`), so the CLI's `process.loadEnvFile()` cannot pull a workspace/profile `.env` back in; the plugin refuses to run if a `.env` appears there.
-- Writes research cache, per-reconstruction envelopes (last 50), session pointers, and saved dishes under `<HERMES_HOME>/plugin-data/achiote/` (profile-separate; writes are locked + atomic).
+- Writes research cache, per-reconstruction envelopes (last 50 unsaved; a saved dish keeps its full answer + receipt), session pointers, and saved dishes under `<HERMES_HOME>/plugin-data/achiote/` (profile-separate; writes are locked + atomic).
 - Does **not** persist raw food memories into the Achiote culture cache by product design (see upstream `docs/PRIVACY-RETENTION.md`).
 - Network: npm download on first run; optional Serper/model provider calls when keys are configured inside Achiote.
 - License of upstream Achiote is **BUSL-1.1**; this plugin wrap inherits that product license.
@@ -69,7 +69,7 @@ Place a **2:1** banner at `docs/banner.png` and pane screenshots under `docs/` b
 
 ```bash
 python3 -m pytest plugins/achiote-hermes/tests -q
-node --test plugins/achiote-hermes/tests/desktop_view.test.mjs
+node --test plugins/achiote-hermes/tests/desktop_view.test.mjs plugins/achiote-hermes/tests/desktop_scope.test.mjs
 ```
 
 The MCP server + skill for Claude/Cursor stay at the repo root; this directory is the Hermes-native wrap.
