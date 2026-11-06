@@ -1,0 +1,9 @@
+name: achiote
+version: "0.1.0"
+description: "Research-first food memories, citation-gated nostalgia cues and provenance."
+author: KyaniteLabs
+requires_hermes: ">=0.23.0"
+requires_env: []
+provides_tools: [achiote_collect, achiote_publish]
+provides_hooks: [pre_llm_call]
+provides_middleware: []
