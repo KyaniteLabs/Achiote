@@ -151,8 +151,14 @@ def test_fragment_injects_research_brief_and_guardrails(plugin):
     assert "achiote_reconstruct" in ctx["context"]
 
 
-def test_plain_turn_gets_guardrails_but_no_brief(plugin):
-    ctx = _pre_llm(plugin, "fix the failing pytest in tools/registry.py")
+def test_plain_turn_injects_nothing(plugin):
+    # Real execution showed the food guardrail was appended to EVERY turn ("fix the failing pytest…"),
+    # which polluted unrelated context and contradicted README's fragment-triggered contract.
+    assert _pre_llm(plugin, "fix the failing pytest in tools/registry.py") is None
+
+
+def test_nostalgia_claim_turn_gets_guardrails_without_brief(plugin):
+    ctx = _pre_llm(plugin, "is this heritage taste claim properly cited?")
     assert "cite-or-die" in ctx["context"]
     assert "research brief" not in ctx["context"]
 
@@ -165,6 +171,20 @@ def test_fragment_injection_can_be_disabled(plugin):
 
 def test_no_injection_when_both_switches_are_off(plugin):
     assert _pre_llm(plugin, FRAGMENT, inject_on_fragment=False, cite_or_die=False) is None
+
+
+# ---- cite-or-die: refusals are not substitution evidence --------------------------------------
+
+def test_refusal_sentence_is_not_local_substitution_evidence(plugin):
+    # Live no-key run: the only "local sub" the engine produced was "Local sourcing: use ordinary
+    # grocery or pantry items near Austin TX; do not buy the exact suspected dish for this first test."
+    # That is a refusal, not a swap, and must not satisfy cite-or-die's local-sub leg.
+    refusal = "Local sourcing: use ordinary grocery or pantry items near Austin TX; do not buy the exact suspected dish for this first test."
+    c = plugin.cite_check({"answer": refusal})
+    assert c["has_local_sub"] is False
+    # A real instruction still counts.
+    real = "Instead of banana leaves, use parchment and foil from the grocery store."
+    assert plugin.cite_check({"answer": real})["has_local_sub"] is True
 
 
 # ---- saved-dish ledger ------------------------------------------------------------------------

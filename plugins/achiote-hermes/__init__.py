@@ -103,6 +103,8 @@ _SOURCING_FACT_RE = re.compile(
 _DOI_FULL_RE = re.compile(r"10\.\d{4,9}/[^\s\"<>]+", re.I)
 # "X -> Y" / "X => Y" / "X → Y": an explicit substitution pair (both sides non-empty).
 _SUB_PAIR_TEXT_RE = re.compile(r"\S.*?\s*(?:->|=>|→)\s*\S")
+# An explicit refusal/negation is not substitution evidence ("do not buy the exact dish", "don't substitute").
+_NEGATED_SUB_RE = re.compile(r"\b(?:do not|don'?t|never)\s+(?:buy|purchase|substitute|swap|replace)\b", re.I)
 # Explicit absence: placeholder tokens, or a short "no sources / not provided"-style statement.
 _ABSENT_TOKEN_RE = re.compile(r"^\W*(?:none|nil|null|n/?a|unknown|unk|tbd|todo|missing|empty|nothing|-+|\?+)\W*$", re.I)
 _ABSENT_PHRASE_RE = re.compile(
@@ -425,8 +427,10 @@ def _is_sub_text(text: str) -> bool:
     t = _clean(text)
     if not t or _is_absent(t):
         return False
-    if _SUB_PAIR_TEXT_RE.search(t):
+    if _SUB_PAIR_TEXT_RE.search(t):  # an explicit X -> Y beats any surrounding "don't" wording
         return True
+    if _NEGATED_SUB_RE.search(t):
+        return False
     return len(t.split()) >= 4 and bool(_LOCAL_SUB_TEXT_RE.search(t))
 
 
@@ -614,7 +618,7 @@ def extract_evidence(payload: Any) -> Dict[str, Any]:
                 sources.append({"type": "url", "url": u, "text": u, "origin": f"text.{key or 'value'}"})
         for sentence in re.split(r"(?<=[.!?])\s+|\n+", text):
             s = sentence.strip()
-            if len(s.split()) >= 4 and _LOCAL_SUB_TEXT_RE.search(s) and not _is_absent(s):
+            if _is_sub_text(s):
                 local_subs.append({"type": "text", "text": s, "origin": f"text.{key or 'value'}"})
 
     def dedupe(items: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
@@ -990,11 +994,22 @@ def _on_pre_llm(
     platform: str = "",
     **_: Any,
 ) -> Optional[Dict[str, str]]:
+    """Inject the brief/guardrail only on food-memory turns.
+
+    A per-turn hook that appended food-policy text to EVERY message polluted unrelated turns
+    (and contradicted the README's "detects food-memory fragments and injects…"). The guardrail
+    rides along when the message is a fragment or already talks about a nostalgia cue; other
+    turns get ``None``. Enforcement itself stays on ``pre_tool_call``, which always gates
+    outbound/emit tools regardless of what the user typed.
+    """
     parts: List[str] = []
     try:
-        if _cfg("cite_or_die"):
+        msg = user_message or ""
+        fragment = looks_like_fragment(msg)
+        claim = bool(_NOSTALGIA_CLAIM_RE.search(msg))
+        if _cfg("cite_or_die") and (fragment or claim):
             parts.append(_CITE_CONTEXT)
-        if _cfg("inject_on_fragment") and looks_like_fragment(user_message or ""):
+        if _cfg("inject_on_fragment") and fragment:
             parts.append(_FRAGMENT_CONTEXT)
     except Exception:
         logger.debug("achiote: pre_llm_call failed", exc_info=True)
