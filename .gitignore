@@ -1,5 +1,8 @@
 node_modules/
 dist/
+# The Hermes plugin ships a hand-written dashboard bundle (no build step); keep it reviewable in-tree.
+!plugins/achiote-hermes/dashboard/dist/
+!plugins/achiote-hermes/dashboard/dist/**
 coverage/
 artifacts/
 *.db

@@ -1,10 +1,10 @@
 name: achiote
 version: "0.1.0"
 manifest_version: 2
-description: "Achiote for Hermes: turn a half-remembered family dish into a researched, cited minimum-viable nostalgia cue and local-ingredient recipe. Adds pre_llm_call fragment detection, cite-or-die guardrails, /achiote, reconstruct tools, saved-dish memory under plugin-data, and a Desktop nostalgia pane with a provenance graph. Disclosure — shells out to `npx -y achiote@0.2.2 ask` (downloads from npm on first run; needs Node >=22); optional model API keys (e.g. ANTHROPIC_API_KEY) are read through Hermes secret scope and passed only for reconstruct; research cache and saved dishes live under <HERMES_HOME>/plugin-data/achiote/; child env is scrubbed (no full os.environ) and runs from a plugin-owned cwd so no inherited .env is loaded. Heritage-locale / DialectOS is NOT bundled. Photo→memory and /achiote cook are Monday stretch stubs only."
+description: "Achiote for Hermes: turn a half-remembered family dish into a researched, cited minimum-viable nostalgia cue and local-ingredient recipe. Adds pre_llm_call fragment detection, cite-or-die guardrails, /achiote, reconstruct tools, saved-dish memory under plugin-data, a Desktop nostalgia pane with a provenance graph, and a matching dashboard tab. Disclosure — shells out to `npx -y achiote@0.2.2 ask` (downloads from npm on first run; needs Node >=22); optional model API keys (e.g. ANTHROPIC_API_KEY) are read through Hermes secret scope and passed only for reconstruct; research cache and saved dishes live under <HERMES_HOME>/plugin-data/achiote/; the child gets a minimal allowlisted environment (never the full process environment) and runs from a plugin-owned cwd so no inherited .env is loaded. Heritage-locale / DialectOS is NOT bundled. Photo→memory and /achiote cook are Monday stretch stubs only."
 author: "Kyanite Labs"
 license: BUSL-1.1
-homepage: https://github.com/KyaniteLabs/Achiote/tree/master/plugins/achiote-hermes
+homepage: https://github.com/KyaniteLabs/Achiote
 tags: [food-memory, nostalgia, provenance, citations, recipes, desktop]
 requires_hermes: ">=0.21.6"
 requires_env: []

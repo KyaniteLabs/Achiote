@@ -300,6 +300,22 @@ def _bounded_text(text: str, limit: int) -> str:
     return text if len(text) <= limit else text[: max(0, limit - 1)] + "…"
 
 
+def _cli_hint(stderr: str) -> str:
+    """Actionable one-liner for the npx/npm failure modes users actually hit.
+
+    The raw npm tail is kept in diagnostics; this is what the person (and the model) reads first.
+    """
+    low = (stderr or "").lower()
+    if any(tok in low for tok in ("enotcached", "econnrefused", "eai_again", "enotfound",
+                                  "etimedout", "network", "could not resolve host", "registry")):
+        return (
+            "could not download achiote@0.2.2 from npm (offline or registry blocked). "
+            "Run `npx -y achiote@0.2.2 ask --help` once with network access, install Node >=22, "
+            "or set plugins.entries.achiote.settings.achiote_command to a local achiote binary."
+        )
+    return ""
+
+
 def run_achiote(args: List[str]) -> Dict[str, Any]:
     cmd = shlex.split(str(_cfg("achiote_command"))) + args
     try:
@@ -316,9 +332,24 @@ def run_achiote(args: List[str]) -> Dict[str, Any]:
             cwd=str(cwd),
         )
     except FileNotFoundError as exc:
-        return {"ok": False, "error": f"achiote not runnable: {exc}"}
+        binary = cmd[0] if cmd else "achiote"
+        return {
+            "ok": False,
+            "error": (
+                f"achiote CLI not found ({binary!r}). Install Node >=22 with npx, or set "
+                "plugins.entries.achiote.settings.achiote_command to a local achiote binary."
+            ),
+            "diagnostics": {"exit_code": None, "error_message": str(exc), "stderr_tail": None, "status": None},
+        }
     except subprocess.TimeoutExpired:
-        return {"ok": False, "error": "achiote timed out"}
+        return {
+            "ok": False,
+            "error": (
+                f"achiote timed out after {int(_cfg('timeout_seconds'))}s — the first npx run downloads "
+                "the package; pre-install it or raise plugins.entries.achiote.settings.timeout_seconds."
+            ),
+            "diagnostics": {"exit_code": None, "error_message": "timeout", "stderr_tail": None, "status": None},
+        }
     out = (proc.stdout or "").strip()
     err = (proc.stderr or "").strip()
     data: Optional[Dict[str, Any]] = None
@@ -340,11 +371,11 @@ def run_achiote(args: List[str]) -> Dict[str, Any]:
             "stderr_tail": err[-800:] or None,
             "status": data.get("status") if isinstance(data, dict) else None,
         }
-        return {
-            "ok": False,
-            "error": message or (err[-400:] if err else f"achiote exited {proc.returncode}"),
-            "diagnostics": diag,
-        }
+        if message:
+            friendly = message
+        else:
+            friendly = _cli_hint(err) or (err.splitlines()[0][:300] if err else f"achiote exited {proc.returncode}")
+        return {"ok": False, "error": friendly, "diagnostics": diag}
     if data is not None:
         return {"ok": True, "data": data}
     return {"ok": True, "data": {"answer": out}, "stderr": err[-400:]}

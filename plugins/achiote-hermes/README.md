@@ -12,6 +12,7 @@ Turn a half-remembered family dish into a researched, **cited** minimum-viable n
 | `achiote_cite_check` | Cite-or-die gate: needs a concrete source value (DOI/URL/ISBN or engine-researched fact) **and** a concrete local-substitution value. Field names / labels never count |
 | `achiote_save_dish` / `achiote_list_dishes` | Family dishes under `<HERMES_HOME>/plugin-data/achiote/`; save attaches the given `reconstruction_id` or **this session's** last reconstruction only |
 | Desktop **Nostalgia** pane | Cue + citations + local swaps + provenance graph + saved dishes |
+| Dashboard **Nostalgia** tab | Same pane over `dashboard/plugin_api.py` (`/api/plugins/achiote/last|dishes|provenance`) |
 | Skill `achiote:achiote` | Bundled workflow skill |
 
 **Not in this plugin:** heritage-locale / Spanish-only packs (that lives in DialectOS). Photo→memory is Monday go/no-go only.
@@ -69,7 +70,7 @@ Place a **2:1** banner at `docs/banner.png` and pane screenshots under `docs/` b
 
 ```bash
 python3 -m pytest plugins/achiote-hermes/tests -q
-node --test plugins/achiote-hermes/tests/desktop_view.test.mjs plugins/achiote-hermes/tests/desktop_scope.test.mjs
+node --test plugins/achiote-hermes/tests/*.test.mjs
 ```
 
 The MCP server + skill for Claude/Cursor stay at the repo root; this directory is the Hermes-native wrap.

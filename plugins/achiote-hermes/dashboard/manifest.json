@@ -1,4 +1,14 @@
 {
   "name": "achiote",
+  "label": "Nostalgia",
+  "description": "Achiote food-memory pane: the latest cited nostalgia cue, its source-to-claim provenance graph, local swaps, and saved family dishes.",
+  "icon": "Sparkles",
+  "version": "0.1.0",
+  "tab": {
+    "path": "/achiote",
+    "position": "after:skills"
+  },
+  "slots": [],
+  "entry": "dist/index.js",
   "api": "plugin_api.py"
 }
