@@ -264,6 +264,12 @@ def _scrubbed_env() -> Dict[str, str]:
     env["ACHIOTE_CACHE_PATH"] = str(Path(data) / "culture-cache.db")
     env["ACHIOTE_PLUGIN_DATA"] = data
     # Secrets only via Hermes secret scope — never copy API keys from os.environ.
+    #
+    # ``get_secret`` is NOT proof of provenance: with no profile scope bound and multiplexing
+    # inactive it falls through to ``os.environ`` (see agent/secret_scope.get_secret), which would
+    # hand the child exactly the ambient key this function promises to strip. A value is therefore
+    # passed only when the scope supplies something distinct from the ambient process env; if the
+    # two agree, the secret came from ``os.environ`` and is dropped.
     try:
         from agent.secret_scope import get_secret
 
@@ -279,8 +285,11 @@ def _scrubbed_env() -> Dict[str, str]:
                 val = (get_secret(name) or "").strip()
             except Exception:
                 val = ""
-            if val:
-                env[name] = val
+            if not val:
+                continue
+            if val == (os.environ.get(name) or "").strip():
+                continue  # ambient process env, not a scoped secret — never forwarded
+            env[name] = val
     except Exception:
         pass
     return env

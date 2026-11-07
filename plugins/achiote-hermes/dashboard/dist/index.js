@@ -16,21 +16,21 @@
   var API = "/api/plugins/achiote";
 
   var CSS = [
-    ".achiote-pane{display:flex;flex-direction:column;gap:10px;padding:16px;font-size:13px;max-width:1100px}",
+    ".achiote-pane{display:flex;flex-direction:column;gap:10px;padding:16px;font-size:13px;max-width:1100px;font-family:var(--font-sans)}",
     ".achiote-title{font-size:16px;font-weight:600}",
-    ".achiote-muted{opacity:.65;font-size:12px}",
-    ".achiote-card{border:1px solid rgba(127,127,127,.25);border-radius:8px;padding:12px}",
+    ".achiote-muted{color:var(--color-muted-foreground);font-size:12px}",
+    ".achiote-card{border:1px solid var(--color-border);border-radius:var(--radius);padding:12px;background:var(--color-card);color:var(--color-card-foreground)}",
     ".achiote-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}",
-    ".achiote-chip{font-size:11px;padding:2px 8px;border-radius:999px;border:1px solid rgba(127,127,127,.35)}",
-    ".achiote-chip[data-ok=true]{border-color:#16a34a;color:#16a34a}",
-    ".achiote-chip[data-ok=false]{border-color:#d97706;color:#d97706}",
+    ".achiote-chip{font-size:11px;padding:2px 8px;border-radius:999px;border:1px solid var(--color-border);color:var(--color-muted-foreground)}",
+    ".achiote-chip[data-ok=true]{border-color:var(--color-success);color:var(--color-success)}",
+    ".achiote-chip[data-ok=false]{border-color:var(--color-warning);color:var(--color-warning)}",
     ".achiote-graph{display:grid;gap:6px}",
-    ".achiote-node{padding:6px 8px;border-left:3px solid #6366f1;background:rgba(127,127,127,.08);border-radius:4px;word-break:break-word}",
-    ".achiote-node[data-kind=memory]{border-left-color:#a855f7}",
-    ".achiote-node[data-kind=local_sub]{border-left-color:#16a34a}",
-    ".achiote-edge{font-size:11px;opacity:.65;padding-left:10px}",
+    ".achiote-node{padding:6px 8px;border-left:3px solid var(--color-muted-foreground);background:var(--color-muted);border-radius:var(--radius);word-break:break-word}",
+    ".achiote-node[data-kind=memory]{border-left-color:var(--color-warning)}",
+    ".achiote-node[data-kind=local_sub]{border-left-color:var(--color-success)}",
+    ".achiote-edge{font-size:11px;color:var(--color-muted-foreground);padding-left:10px}",
     ".achiote-list{display:flex;flex-direction:column;gap:6px;margin:6px 0 0;padding:0;list-style:none}",
-    ".achiote-list li{padding:6px 8px;border-radius:6px;background:rgba(127,127,127,.07);word-break:break-word}",
+    ".achiote-list li{padding:6px 8px;border-radius:var(--radius);background:var(--color-muted);word-break:break-word}",
     ".achiote-pre{white-space:pre-wrap;word-break:break-word;margin-top:6px}"
   ].join("\n");
 
@@ -64,9 +64,15 @@
     return "";
   }
 
+  /** Truncate for display, never mid-word without a visible ellipsis. */
+  function clip(text, n) {
+    var s = String(text == null ? "" : text);
+    return s.length <= n ? s : s.slice(0, n - 1).replace(/\s+\S*$/, "") + "…";
+  }
+
   function sourceLabel(s, i) {
     var text = (s && (s.text || s.citation || s.doi || s.url)) || "source";
-    return String(text).slice(0, 160) + " · " + String((s && s.type) || "record") + " #" + (i + 1);
+    return clip(text, 160) + " · " + String((s && s.type) || "record") + " #" + (i + 1);
   }
 
   function SourceList(props) {
@@ -162,7 +168,7 @@
         h("span", { className: "achiote-chip", "data-ok": String(v.citeOk) },
           v.offline ? "no reconstruction yet" : v.citeOk ? "cite-or-die ✓" : "cite-or-die ✗"),
         h("span", { className: "achiote-chip" },
-          v.memory ? "memory: " + v.memory.slice(0, 60) : "run /achiote ask or achiote_reconstruct")
+          v.memory ? "memory: " + clip(v.memory, 60) : "run /achiote ask or achiote_reconstruct")
       ),
       h(
         "div",
@@ -195,7 +201,7 @@
           ? h("ul", { className: "achiote-list" }, v.dishes.map(function (d, i) {
               return h("li", { key: String(d.id || i) },
                 h("strong", null, String(d.title || "untitled")),
-                h("div", { className: "achiote-muted" }, String(d.memory || "").slice(0, 120)));
+                h("div", { className: "achiote-muted" }, clip(d.memory || "", 120)));
             }))
           : h("div", { className: "achiote-muted" }, "None saved — /achiote save <title> --id <id>")
       )
