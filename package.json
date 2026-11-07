@@ -43,15 +43,15 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@types/better-sqlite3": "^7.6.13",
+    "@types/better-sqlite3": "^9.6.0",
     "@types/node": "^26.0.0",
     "@types/stripe": "^8.0.417",
     "@vitejs/plugin-react": "^6.0.2",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
-    "typescript": "^6.0.3",
+    "typescript": "^7.0.2",
     "vite": "^8.0.16",
-    "vitest": "^4.1.8"
+    "vitest": "^5.1.0"
   },
   "license": "BUSL-1.1",
   "types": "dist/index.d.ts",
