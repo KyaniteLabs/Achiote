@@ -57,9 +57,41 @@
     };
   }
 
+  /** Crossref registered DOI prefix: 10.<4-9 digits>/<no whitespace>. */
+  var DOI_RE = /^10\.\d{4,9}\/\S+$/;
+
+  /** Normalise a DOI to one that actually resolves, or "" when it cannot be trusted.
+   *
+   * Citation prose leaves artefacts on identifiers: a "doi:" prefix, a wrapped
+   * https://dx.doi.org/ URL, and trailing punctuation from the sentence around it.
+   * A cite-or-die pane must never emit a link that 404s, so a candidate that fails the
+   * registered DOI shape returns "" and the caller shows text instead of a dead href.
+   * Parentheses are legal inside DOIs, so ")" is stripped only when it is unbalanced. */
+  function normaliseDoi(raw) {
+    if (typeof raw !== "string") return "";
+    var d = raw.trim()
+      .replace(/^(https?:\/\/(dx\.)?doi\.org\/)/i, "")
+      .replace(/^doi:\s*/i, "")
+      .replace(/^[<"'\s]+/, "")
+      .replace(/[\s>"']+$/, "");
+    // Strip sentence and wrapping punctuation BEFORE validating, since \S+ would happily
+    // accept a trailing ")" or "." as part of the identifier.
+    for (;;) {
+      var tail = d.slice(-1);
+      if (tail === ")") {
+        if ((d.match(/\)/g) || []).length > (d.match(/\(/g) || []).length) { d = d.slice(0, -1); continue; }
+        break;
+      }
+      if (tail === "." || tail === "," || tail === ";") { d = d.slice(0, -1); continue; }
+      break;
+    }
+    return DOI_RE.test(d) ? d : "";
+  }
+
   function sourceHref(s) {
     if (!s || typeof s !== "object") return "";
-    if (typeof s.doi === "string" && s.doi) return "https://doi.org/" + s.doi;
+    var doi = normaliseDoi(s.doi);
+    if (doi) return "https://doi.org/" + doi;
     if (typeof s.url === "string" && /^https?:\/\//.test(s.url)) return s.url;
     return "";
   }
