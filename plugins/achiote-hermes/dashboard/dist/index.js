@@ -67,7 +67,7 @@
   /** Truncate for display, never mid-word without a visible ellipsis. */
   function clip(text, n) {
     var s = String(text == null ? "" : text);
-    return s.length <= n ? s : s.slice(0, n - 1).replace(/\s+\S*$/, "") + "…";
+    if (s.length <= n) return s; var cut = s.slice(0, n - 1); var c = s.charAt(n - 1); if (/\s/.test(c)) return cut + "…"; var i = cut.lastIndexOf(" "); return (i > 0 ? cut.slice(0, i) : cut) + "…";
   }
 
   function sourceLabel(s, i) {
@@ -191,7 +191,7 @@
         "div",
         { className: "achiote-card" },
         h("div", { className: "achiote-muted" }, "Provenance graph (source → claim)"),
-        h(Graph, { nodes: v.nodes, edges: v.edges, empty: v.offline ? "No graph yet." : "No graph yet." })
+        h(Graph, { nodes: v.nodes, edges: v.edges, empty: "No graph yet." })
       ),
       h(
         "div",

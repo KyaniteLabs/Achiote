@@ -112,6 +112,33 @@ def test_3_errored_true_with_exit_0_and_nonzero_without_json(plugin):
 
 # ---- 4. controlled cwd; no dotenv / NODE_OPTIONS bypass ------------------------------------
 
+def _fake_secret_scope(monkeypatch, mapping=None, multiplex=False):
+    """Install a fake ``agent.secret_scope`` that models the REAL provenance API.
+
+    The real module's ``get_secret`` falls through to ``os.environ`` when no scope is bound and
+    multiplexing is inactive. Faking only ``get_secret`` therefore hides the leak this suite
+    exists to catch — every test here must stub the scope itself.
+    """
+    scope_mod = types.ModuleType("agent.secret_scope")
+    mapping = mapping or {}
+    scope_mod.current_secret_scope = lambda: (mapping or None)
+    scope_mod.is_multiplex_active = lambda: multiplex
+
+    def get_secret(name, default=None):
+        if mapping and name in mapping:
+            return mapping[name]
+        if multiplex:
+            return default
+        return os.environ.get(name, default)  # the real fall-through
+
+    scope_mod.get_secret = get_secret
+    agent = types.ModuleType("agent")
+    agent.secret_scope = scope_mod
+    monkeypatch.setitem(sys.modules, "agent", agent)
+    monkeypatch.setitem(sys.modules, "agent.secret_scope", scope_mod)
+    return scope_mod
+
+
 def test_4_child_runs_in_controlled_cwd_with_scrubbed_env(plugin, tmp_path, monkeypatch):
     work = tmp_path / "workspace"
     work.mkdir()
@@ -119,6 +146,7 @@ def test_4_child_runs_in_controlled_cwd_with_scrubbed_env(plugin, tmp_path, monk
     monkeypatch.chdir(work)
     monkeypatch.setenv("OPENAI_API_KEY", "parent-env-leak")
     monkeypatch.setenv("NODE_OPTIONS", "--env-file=/tmp/x.env")
+    _fake_secret_scope(monkeypatch, mapping=None, multiplex=False)  # no scope -> nothing must flow
     plugin.set_mode(stdout=producer_result())
     assert plugin.reconstruct("m")["ok"]
     call = plugin.calls()[-1]
@@ -128,17 +156,38 @@ def test_4_child_runs_in_controlled_cwd_with_scrubbed_env(plugin, tmp_path, monk
 
 
 def test_4_secret_scope_values_still_flow(plugin, monkeypatch):
-    scope = types.ModuleType("agent.secret_scope")
-    scope.get_secret = lambda name: "scoped-key" if name == "ANTHROPIC_API_KEY" else ""
-    agent = types.ModuleType("agent")
-    agent.secret_scope = scope
-    monkeypatch.setitem(sys.modules, "agent", agent)
-    monkeypatch.setitem(sys.modules, "agent.secret_scope", scope)
+    _fake_secret_scope(monkeypatch, mapping={"ANTHROPIC_API_KEY": "scoped-key"})
+    monkeypatch.setenv("OPENAI_API_KEY", "ambient-only")
     plugin.set_mode(stdout=producer_result())
     plugin.reconstruct("m")
     env = plugin.calls()[-1]["env"]
     assert env["ANTHROPIC_API_KEY"] == "scoped-key"
     assert "OPENAI_API_KEY" not in env
+
+
+def test_4_scoped_secret_equal_to_ambient_is_still_forwarded(plugin, monkeypatch):
+    """Equality is not provenance: a scope legitimately holding the same key as the shell
+    must keep its credential, or the child 401s."""
+    monkeypatch.setenv("OPENAI_API_KEY", "same-value-both-sides")
+    _fake_secret_scope(monkeypatch, mapping={"OPENAI_API_KEY": "same-value-both-sides"})
+    plugin.set_mode(stdout=producer_result())
+    assert plugin.reconstruct("m")["ok"]
+    env = plugin.calls()[-1]["env"]
+    assert env["OPENAI_API_KEY"] == "same-value-both-sides"
+
+
+def test_4_routing_config_falls_back_to_ambient(plugin, monkeypatch):
+    """Endpoints/models are not credentials. Dropping them with the keys would send a scoped
+    key to the provider's default endpoint instead of ours."""
+    monkeypatch.setenv("OPENAI_BASE_URL", "https://gateway.internal/v1")
+    monkeypatch.setenv("OPENAI_MODEL", "org-model")
+    _fake_secret_scope(monkeypatch, mapping={"OPENAI_API_KEY": "scoped-key"})
+    plugin.set_mode(stdout=producer_result())
+    assert plugin.reconstruct("m")["ok"]
+    env = plugin.calls()[-1]["env"]
+    assert env["OPENAI_BASE_URL"] == "https://gateway.internal/v1"
+    assert env["OPENAI_MODEL"] == "org-model"
+    assert env["OPENAI_API_KEY"] == "scoped-key"
 
 
 def test_4_refuses_if_dotenv_planted_in_run_dir(plugin):

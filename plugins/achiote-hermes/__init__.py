@@ -265,33 +265,54 @@ def _scrubbed_env() -> Dict[str, str]:
     env["ACHIOTE_PLUGIN_DATA"] = data
     # Secrets only via Hermes secret scope — never copy API keys from os.environ.
     #
-    # ``get_secret`` is NOT proof of provenance: with no profile scope bound and multiplexing
-    # inactive it falls through to ``os.environ`` (see agent/secret_scope.get_secret), which would
-    # hand the child exactly the ambient key this function promises to strip. A value is therefore
-    # passed only when the scope supplies something distinct from the ambient process env; if the
-    # two agree, the secret came from ``os.environ`` and is dropped.
+    # Provenance is resolved from the scope itself, never inferred from the value. Two traps to
+    # avoid, both found in review:
+    #   * ``get_secret`` is NOT proof of provenance — with no profile scope bound and multiplexing
+    #     inactive it falls through to ``os.environ``, so calling it unconditionally hands the child
+    #     the exact ambient key this function promises to strip.
+    #   * Dropping a value merely because it *equals* the ambient one is wrong in the other
+    #     direction: a profile scope legitimately holding the same key as the shell/systemd env
+    #     would lose its credential and 401. Equality is not provenance.
     try:
-        from agent.secret_scope import get_secret
-
-        for name in (
-            "ANTHROPIC_API_KEY",
-            "OPENAI_API_KEY",
-            "OPENAI_BASE_URL",
-            "OPENAI_MODEL",
-            "ACHIOTE_ASK_PROVIDER",
-            "SERPER_API_KEY",
-        ):
-            try:
-                val = (get_secret(name) or "").strip()
-            except Exception:
-                val = ""
-            if not val:
-                continue
-            if val == (os.environ.get(name) or "").strip():
-                continue  # ambient process env, not a scoped secret — never forwarded
-            env[name] = val
+        from agent import secret_scope as _secret_scope
     except Exception:
-        pass
+        _secret_scope = None
+
+    scope = None
+    if _secret_scope is not None:
+        try:
+            scope = _secret_scope.current_secret_scope()
+        except Exception:
+            scope = None
+
+    def _scoped_secret(name: str) -> str:
+        """A secret that a real profile secret scope supplies, or "" if none does."""
+        if _secret_scope is None:
+            return ""
+        if scope is not None:
+            return (scope.get(name) or "").strip()
+        # No contextvar scope. ``get_secret`` is only safe to ask when it cannot fall through to
+        # os.environ — i.e. under multiplexing, where it reads the launch-body scope or raises.
+        try:
+            if _secret_scope.is_multiplex_active():
+                return (_secret_scope.get_secret(name) or "").strip()
+        except Exception:
+            return ""
+        return ""
+
+    # Credentials: scope-only, never the ambient process env.
+    for name in ("ANTHROPIC_API_KEY", "OPENAI_API_KEY", "SERPER_API_KEY"):
+        val = _scoped_secret(name)
+        if val:
+            env[name] = val
+
+    # Routing config is not a credential. Prefer the scope, but fall back to the ambient env so a
+    # deployment that keeps endpoints/models in the process env still routes correctly — dropping
+    # these alongside the keys would send a scoped key to the provider's default endpoint.
+    for name in ("OPENAI_BASE_URL", "OPENAI_MODEL", "ACHIOTE_ASK_PROVIDER"):
+        val = _scoped_secret(name) or (os.environ.get(name) or "").strip()
+        if val:
+            env[name] = val
     return env
 
 
