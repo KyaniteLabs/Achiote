@@ -1,8 +1,8 @@
-# Achiote
-
 <p align="center">
-  <img src="branding/achiote-512.png" alt="achiote icon" width="128">
+  <img src="branding/achiote-hero.webp" alt="Achiote — food-memory and cultural taste research MCP server" width="100%">
 </p>
+
+# Achiote
 
 **TL;DR:** Achiote — food-memory and cultural taste research product. Best for researchers and builders exploring food memory and heritage taste. Keywords: food memory research, cultural taste, heritage cuisine AI.
 
