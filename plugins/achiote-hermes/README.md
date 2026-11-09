@@ -61,9 +61,21 @@ Place a **2:1** banner at `docs/banner.png` and pane screenshots under `docs/` b
 
 ## Demo (<90s)
 
+Offline path (no Hermes gateway, no model, no network):
+
+```bash
+python3 plugins/achiote-hermes/demo_90s.py
+```
+
+It runs fragment → cite-or-die fail → cited cue → provenance graph (source → claim) → save in one session → reopen the full answer in a later session, and exits non-zero if that takes 90 seconds or more.
+
+Live path, once the plugin is enabled on a Hermes profile:
+
 1. `/achiote ask "pass-teh-lay my Puerto Rican grandma steamed in banana leaves, maybe pork"`
 2. Open Desktop **Nostalgia** pane → provenance graph + cue.
 3. Show cite-or-die fail (strip sources) then pass after `achiote_cite_check`.
+
+Catalog PR text for Simon is `docs/CATALOG-PR.md`. It is a draft. Do not submit it.
 
 ## Tests
 
