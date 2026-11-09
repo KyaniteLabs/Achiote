@@ -60,11 +60,20 @@ export function createRouteTracker(state) {
   }
 }
 
+/** Connection half of `connection::profile`. A backend scope is a hash of an absolute directory,
+ *  so two machines with the same layout share it. Reverse ownership is per connection. */
+function connectionOf(scope) {
+  const text = String(scope || '')
+  const split = text.indexOf('::')
+  return split < 0 ? text : text.slice(0, split)
+}
+
 /** ctx.rest cannot be pinned to a profile, so every fetch is bound to the scope it was created for:
  *  rejected if the host route differs before OR after the request, or moved during it (epoch), and the
  *  backend's own `scope` (hash of that profile's plugin-data dir) must be present and owned by this
- *  pane scope — a backend scope first seen for one profile is never accepted for another. Accepted
- *  data is stamped with `paneScope`, which selectPaneView checks. */
+ *  pane scope on the same connection — a backend scope first seen for one profile is never accepted
+ *  for another profile of that connection. A different connection may return the same path hash.
+ *  Accepted data is stamped with `paneScope`, which selectPaneView checks. */
 export function createScopedFetch(rest, readRoute, pins = new Map()) {
   return async function fetchScoped(scope, path) {
     const before = readRoute()
@@ -77,7 +86,9 @@ export function createScopedFetch(rest, readRoute, pins = new Map()) {
     const pinned = pins.get(scope)
     if (pinned !== undefined && pinned !== owner) throw new StaleScopeError(scope, `backend ${owner}`)
     for (const [other, ownerOfOther] of pins) {
-      if (other !== scope && ownerOfOther === owner) throw new StaleScopeError(scope, other)
+      if (other !== scope && connectionOf(other) === connectionOf(scope) && ownerOfOther === owner) {
+        throw new StaleScopeError(scope, other)
+      }
     }
     pins.set(scope, owner)
     return { ...data, paneScope: scope }

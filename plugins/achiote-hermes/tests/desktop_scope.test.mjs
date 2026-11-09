@@ -182,6 +182,25 @@ test('response ownership: a backend scope seen for one profile is never accepted
   await assert.rejects(() => missing('local::carol', '/last'), /scope/i)
 })
 
+test('two connections with the same plugin-data path hash both succeed', async () => {
+  const mod = await load()
+  const pins = new Map()
+  let route = 'server-a::default'
+  let epoch = 0
+  const fetchScoped = mod.createScopedFetch(
+    async () => ({ ok: true, scope: '8561204dd3cf0de9', memory: route }),
+    () => ({ scope: route, epoch }),
+    pins
+  )
+  const a = await fetchScoped('server-a::default', '/last')
+  assert.equal(a.paneScope, 'server-a::default')
+  route = 'server-b::default'
+  epoch += 1
+  const b = await fetchScoped('server-b::default', '/last')
+  assert.equal(b.paneScope, 'server-b::default')
+  assert.equal(b.memory, 'server-b::default')
+})
+
 test('view ignores data whose paneScope is not the current scope (query-state tags do not count)', async () => {
   const mod = await load()
   const v = mod.selectPaneView({

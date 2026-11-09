@@ -100,6 +100,7 @@ _LOCAL_SUB_TEXT_RE = re.compile(
 _SOURCING_FACT_RE = re.compile(
     r"^(?:Sourcing guide|Static regional availability matched|Starting points|sourcing store/corridor|"
     r"local sourcing search lead)\s*:", re.I)
+_SUBSTITUTE_LABEL_RE = re.compile(r"^substitute\s*:\s*", re.I)
 _DOI_FULL_RE = re.compile(r"10\.\d{4,9}/[^\s\"<>]+", re.I)
 # "X -> Y" / "X => Y" / "X → Y": an explicit substitution pair (both sides non-empty).
 _SUB_PAIR_TEXT_RE = re.compile(r"\S.*?\s*(?:->|=>|→)\s*\S")
@@ -426,9 +427,22 @@ def _clean(value: Any) -> str:
     return re.sub(r"\s+", " ", value).strip()
 
 
+def _strip_known_labels(text: str) -> str:
+    """Drop a producer label so absence is judged on the value, not the label.
+
+    ``Sourcing guide:`` and ``Substitute: unknown -> foil`` name a slot. The slot
+    is evidence only when the value after the label is present.
+    """
+    t = _clean(text)
+    without_sourcing = _SOURCING_FACT_RE.sub("", t, count=1)
+    if without_sourcing != t:
+        return _clean(without_sourcing)
+    return _clean(_SUBSTITUTE_LABEL_RE.sub("", t, count=1))
+
+
 def _is_absent(text: str) -> bool:
     """True for explicit no-evidence values ("unknown", "No sources were found.", "not provided")."""
-    t = _clean(text)
+    t = _strip_known_labels(text)
     if not t or _ABSENT_TOKEN_RE.match(t):
         return True
     if _SUB_PAIR_TEXT_RE.search(t):  # "X -> Y" is absent when either side is
@@ -807,11 +821,22 @@ def _owner_matches(record: Dict[str, Any], session_id: str) -> bool:
     return owner == _session_key(session_id)
 
 
-def load_reconstruction(rid: str, session_id: str = "") -> Optional[Dict[str, Any]]:
+def load_reconstruction(rid: str, session_id: str = "", *, saved_ok: bool = False) -> Optional[Dict[str, Any]]:
+    """Load one reconstruction.
+
+    Unsaved results stay on the session that created them. A recipe that was
+    deliberately saved to the profile-shared dish list can be reopened from a
+    later session (``saved_ok=True``). Implicit last-result pointers never use
+    that path.
+    """
     rec = _load_json(_reconstruction_path(rid), None)
-    if not isinstance(rec, dict) or not _owner_matches(rec, session_id):
+    if not isinstance(rec, dict):
         return None
-    return rec
+    if _owner_matches(rec, session_id):
+        return rec
+    if saved_ok and rid in _saved_reconstruction_ids():
+        return rec
+    return None
 
 
 def session_last(session_id: str) -> Optional[Dict[str, Any]]:
@@ -964,7 +989,7 @@ def list_dishes(limit: int = 20) -> Dict[str, Any]:
 
 
 def get_reconstruction_view(rid: str, section: str = "summary", offset: int = 0, session_id: str = "") -> Dict[str, Any]:
-    env = load_reconstruction(rid, session_id) if rid else session_last(session_id)
+    env = load_reconstruction(rid, session_id, saved_ok=True) if rid else session_last(session_id)
     if env is None:
         return {"ok": False, "error": "reconstruction not found for this session; pass reconstruction_id"}
     section = (section or "summary").lower()
@@ -1183,7 +1208,7 @@ RECONSTRUCT_SCHEMA = {
 
 GET_SCHEMA = {
     "name": "achiote_get_reconstruction",
-    "description": "Read a stored Achiote reconstruction by reconstruction_id (defaults to this session's last). section=summary|answer|receipt|sources; page long sections with offset.",
+    "description": "Read a stored Achiote reconstruction. With no id, returns this session's last result. An explicit reconstruction_id reads this session's unsaved result, or any recipe saved to the profile (achiote_list_dishes). section=summary|answer|receipt|sources; page long sections with offset.",
     "parameters": {
         "type": "object",
         "properties": {
@@ -1277,7 +1302,7 @@ def _tool_list(args: Dict[str, Any], **_: Any) -> str:
 def _tool_cite(args: Dict[str, Any], session_id: str = "", **_: Any) -> str:
     rid = str(args.get("reconstruction_id") or "")
     if rid:
-        env = load_reconstruction(rid, session_id or "")
+        env = load_reconstruction(rid, session_id or "", saved_ok=True)
         if env is None:
             return _dumps({"ok": False, "error": "reconstruction not found for this session"})
         return _dumps(cite_check({"result": env.get("result") or {}}))
