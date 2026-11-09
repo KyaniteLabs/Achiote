@@ -12,7 +12,7 @@ Use the HOST's approved search and extraction tools. No plugin browser, scraper,
 Call `achiote_publish` with `case` (object):
 - `memory`, `location`: nonempty strings.
 - `sources`: objects `{id, title, url, excerpt}`; HTTPS URL and genuine host-extracted excerpt, not fabricated text.
-- `claims`: objects `{id, text, citations: [{source_id, quote}]}`. Quote must occur verbatim in that source's excerpt. Only state what that quote supports. The gate checks coverage, NOT semantic entailment, source trust, URL reachability or authenticity. Human/host review still required.
+- `claims`: objects `{id, text, citations: [{source_id, quote}]}`. Quote must occur in that source's excerpt (case and whitespace-insensitive, on word boundaries) and be at least 4 words and 20 characters. Only state what that quote supports. The gate checks coverage, NOT semantic entailment, source trust, URL reachability or authenticity. Human/host review still required.
 - `cue`: `{text, claim_ids}`. A small, cheap, accessible sensory test, with quantities. Label as a proposed adaptation, never as researched historical fact.
 - `recipe`: nonempty array of `{text, claim_ids}`. Include accessible ingredients, quantities and actionable ordered steps. All steps need supporting mechanism claim IDs; quantities/timings are proposed adaptations unless independently sourced.
 - `swaps`: nonempty array of `{text, claim_ids}`. Locally plausible grocery/pantry substitutes with sensory mechanism and tradeoff, not live stock assertions.

@@ -30,8 +30,13 @@ mismatch. That expected metadata mismatch is not a claim of general compatibilit
 
 ## Exposure, scope, rollback
 
-Only CI installation and its documentation change. Existing read-only job permissions,
-pinned actions, runtime pin, plugin code, unit assertions and validator remain intact.
+This branch is not CI-only. Relative to `master` it also adds the `hermes-plugin/`
+plugin (tools, a `pre_llm_call` hook, a dashboard API, a Desktop pane, a skill and tests)
+together with its workflow; the CI-specific commits only change CI installation and this
+documentation. Whether that plugin lands, or is superseded by the separate `achiote`
+plugin under `plugins/achiote-hermes/` in open PRs #277/#278, is an open owner decision.
+Read-only job permissions, pinned actions, the runtime pin, unit assertions and the
+validator remain intact.
 Dependencies still download from their upstream sources; no binaries are committed.
 No host deployment, credentials, service operation, or package/catalog publication is performed.
 Rollback is a normal revert of the CI correction (which restores the known resolver

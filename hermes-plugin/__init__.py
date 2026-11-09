@@ -4,11 +4,14 @@ Registration is inert. Host research supplies evidence; this plugin never browse
 """
 import json
 import re
+import unicodedata
 from contextlib import closing
 from pathlib import Path
 from urllib.parse import urlsplit
 
 LIMIT = 64000
+MIN_QUOTE_WORDS = 4
+MIN_QUOTE_CHARS = 20
 NOTICE = ('Citation coverage is structural, not independent fact verification. '
           'Sources and excerpts are supplied by the host. Adaptations are proposals, '
           'not claims of authenticity or live shop inventory. Check allergies and food safety.')
@@ -18,6 +21,19 @@ def text(value, label, cap=2000):
     if not isinstance(value, str) or not value.strip() or len(value) > cap:
         raise ValueError(f'{label}: nonempty text required (max {cap})')
     return value.strip()
+
+
+def normalize(value):
+    """NFKC, casefold and collapse all whitespace so quote matching is consistent."""
+    return ' '.join(unicodedata.normalize('NFKC', value).casefold().split())
+
+
+def quote_in_excerpt(quote, excerpt):
+    """Fail closed: a meaningful quote must occur in the excerpt on word boundaries."""
+    needle = normalize(quote)
+    if len(needle) < MIN_QUOTE_CHARS or len(re.findall(r'\w+', needle)) < MIN_QUOTE_WORDS:
+        return False
+    return re.search(r'(?<!\w)' + re.escape(needle) + r'(?!\w)', normalize(excerpt)) is not None
 
 
 def identity(value):
@@ -70,8 +86,11 @@ def build_case(raw):
         for ref in refs:
             sid = ref.get('source_id')
             quote = text(ref.get('quote'), 'citation quote')
-            if sid not in sources or quote not in sources[sid]['excerpt']:
-                raise ValueError(f'cite-or-die: {cid} quote missing from declared source excerpt')
+            if not isinstance(sid, str) or sid not in sources:
+                raise ValueError(f'cite-or-die: {cid} cites an undeclared source')
+            if not quote_in_excerpt(quote, sources[sid]['excerpt']):
+                raise ValueError(f'cite-or-die: {cid} quote is trivial (need at least {MIN_QUOTE_WORDS} words and '
+                                 f'{MIN_QUOTE_CHARS} characters) or missing from declared source excerpt')
             clean_refs.append({'source_id': sid, 'quote': quote})
             edges.append({'from': 'claim:' + cid, 'to': 'source:' + sid, 'kind': 'cites'})
         claims[cid] = {'id': cid, 'text': statement, 'citations': clean_refs}
