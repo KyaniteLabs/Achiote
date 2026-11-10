@@ -5,6 +5,7 @@ import {
   containsConcreteFoodCue,
   containsOverconfidentIdentityClaim,
   containsStalledFallbackText,
+  sanitizeRecipeStyleCueLanguage,
 } from '../src/lib/ask-guardrails.js';
 import { inferSafetyConstraints } from '../src/lib/ask-memory-correction.js';
 
@@ -161,5 +162,50 @@ describe('ask guardrails', () => {
     expect(response).toContain('spoonable like porridge');
     expect(response).toContain('local name or sound-alike');
     expect(response).not.toContain('What I heard:');
+  });
+});
+
+describe('recipe measurement sanitization keeps ingredient quantities readable', () => {
+  const auditReply = 'For a first tiny check you fully control, make it at home from pantry basics: soak two cups of plain white rice overnight, blend with four cups water, a cinnamon stick or one teaspoon of ground cinnamon, and two tablespoons of sugar.';
+
+  it('rewrites ingredient quantities as neutral amounts instead of taste-action copy', () => {
+    const sanitized = sanitizeRecipeStyleCueLanguage(auditReply);
+
+    expect(sanitized).toContain('soak a small amount of plain white rice overnight');
+    expect(sanitized).toContain('blend with a small amount of water');
+    expect(sanitized).toContain('a small amount of ground cinnamon');
+    expect(sanitized).toContain('a small amount of sugar');
+    expect(sanitized).not.toMatch(/\btiny\s+sip\b/i);
+  });
+
+  it('never turns a measurement into a sip or bite of an ingredient', () => {
+    const phrases = [
+      'two cups water',
+      'one teaspoon ground cinnamon',
+      'two tablespoons of sugar',
+      'one cup of plain white rice',
+      'half cup broth',
+      'one-cup water',
+      'a glass of water',
+      '6 oz potato',
+    ];
+
+    for (const phrase of phrases) {
+      const sanitized = sanitizeRecipeStyleCueLanguage(`Add ${phrase} now.`);
+      expect(sanitized).not.toMatch(/\btiny\s+sip\b/i);
+      expect(sanitized).toMatch(/a small amount of/);
+    }
+  });
+
+  it('preserves genuine taste-action cue language', () => {
+    expect(sanitizeRecipeStyleCueLanguage('Start with a tiny sip or bite of toasted chile paste.'))
+      .toBe('Start with a tiny sip or bite of toasted chile paste.');
+  });
+
+  it('collapses the duplicated article left by a half-cup rewrite', () => {
+    const sanitized = sanitizeRecipeStyleCueLanguage('Use a half-cup water infusion.');
+
+    expect(sanitized).toBe('Use a small amount of water infusion.');
+    expect(sanitized).not.toMatch(/\ba\s+a\b/i);
   });
 });
