@@ -260,6 +260,49 @@ export function hasSensorySignal(userMessage: string, collectedMemory: unknown):
   return /\b(?:sweet|sour|salty|bitter|spicy|hot|cold|warm|icy|ice|iced|thin|thinner|watery|lightly sweet|barely sweet|crispy|crunchy|crumbly|grainy|powdery|chewy|creamy|sticky|aroma|smell|texture|color|mouth|tongue|sip|drink|bebida|agua|arroz|rice|canela|cinnamon|hielo|vainilla|vanilla|lime|barley|cebada|sesame|coconut|peanut|dill|garlic|onion|sauce|gravy|relish)\b/i.test(userMessage);
 }
 
+// ── Correction anchor ─────────────────────────────────────────────────────
+
+const SENSORY_DESCRIPTOR_WORDS = new Set([
+  'white', 'black', 'pink', 'red', 'orange', 'yellow', 'green', 'blue', 'purple', 'brown', 'golden', 'clear',
+  'dark', 'light', 'pale', 'bright', 'cold', 'hot', 'warm', 'iced', 'icy', 'chilled', 'frozen',
+  'sweet', 'sour', 'salty', 'bitter', 'spicy', 'savory', 'creamy', 'milky', 'thick', 'thin', 'watery',
+  'fizzy', 'foamy', 'foam', 'crunchy', 'crispy', 'soft', 'chewy', 'grainy', 'powdery', 'sticky', 'smooth',
+  'silky', 'chalky', 'drink', 'beverage', 'liquid', 'thing', 'stuff', 'something', 'color', 'colour',
+  'taste', 'texture', 'smell', 'aroma',
+]);
+
+/** A "name" made only of color/temperature/texture words is a sensory detail, not a dish name. */
+export function isSensoryDescriptorName(name: string): boolean {
+  const words = name.trim().toLowerCase().split(/[^\p{L}\p{N}]+/u).filter(Boolean);
+  if (words.length === 0) return true;
+  return words.every((word) => SENSORY_DESCRIPTOR_WORDS.has(word));
+}
+
+const CORRECTION_CUE_PATTERN = /\b(?:sounds?\s+(?:close|like|similar|about\s+right|right)|but\s+I\s+remember(?:ed)?|actually|correction|wait,?\s+no|remembered\s+(?:it\s+)?wrong|not\s+quite)\b/i;
+const REMEMBERED_CLAUSE_PATTERN = /\bI\s+remember(?:ed)?\s+(?:that\s+)?(.{3,90}?)(?=[.!?;\n]|$)/i;
+
+/**
+ * Recover the sensory detail a user says they remember on a correction turn.
+ * The memory extractor can drop or mislabel that detail, so the user's own
+ * message is used as the highest-trust anchor for the next test.
+ */
+export function extractCorrectionSensoryAnchor(userMessage: string): string | undefined {
+  const message = (userMessage ?? '').trim();
+  if (!message || !CORRECTION_CUE_PATTERN.test(message)) return undefined;
+  const remembered = message.match(REMEMBERED_CLAUSE_PATTERN)?.[1] ?? '';
+  const clause = remembered
+    .replace(/\b(?:it|this|that|they)\s+(?:was|were|is|are|had|has|have)\b/gi, ' ')
+    .replace(/\bthere\s+(?:was|were|is|are)\b/gi, ' ')
+    .split(/[,;]/)[0]
+    .replace(/\s{2,}/g, ' ')
+    .trim()
+    .replace(/[.!?]+$/, '');
+  if (!clause || /\b(?:not|no|never|without)\b|n['’]t\b/i.test(clause)) return undefined;
+  const anchor = clause.split(/\s+/).filter(Boolean).slice(0, 6).join(' ');
+  if (anchor.length < 3 || isSensoryDescriptorName(anchor)) return undefined;
+  return anchor;
+}
+
 // ── Minimum-cue formatting ───────────────────────────────────────────────
 
 export function formatMinimumCueFallback(cue: MinimumViableNostalgiaCue, userLocation?: string): string {
@@ -413,7 +456,7 @@ export function buildResearchGroundedForcedCueResponse(toolPayloads: Record<stri
   const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
   const groundedBody = formatGroundedMinimumCueFallback(cue, toolPayloads, memory?.userLocation, userMessage);
   const body = ensureCueQualityLanguage(groundedBody, toolPayloads, new Set(['generate_minimum_viable_nostalgia']));
-  const lead = buildResearchGroundedLead(toolPayloads);
+  const lead = buildResearchGroundedLead(toolPayloads, userMessage);
   const substitutionLines = summarizeSubstitutionResults(toolPayloads, inferSafetyConstraints(userMessage ?? '').length > 0);
   const sourcingLines = summarizeSourcingResults(toolPayloads);
   const substitutionSection = substitutionLines.length > 0
@@ -425,23 +468,31 @@ export function buildResearchGroundedForcedCueResponse(toolPayloads: Record<stri
   return appendGroundedCitation(sanitizeMinimumCueFallbackBlock([lead, body, substitutionSection, sourcingSection].filter(Boolean).join('\n\n')), userMessage, cue);
 }
 
-function buildResearchGroundedLead(toolPayloads: Record<string, unknown>): string {
+function buildResearchGroundedLead(toolPayloads: Record<string, unknown>, userMessage?: string): string {
   const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
   const extracted = memory?.extractedClues;
-  const names = extracted?.possibleDishNames?.filter(Boolean).slice(0, 2) ?? [];
+  const correctionAnchor = userMessage ? extractCorrectionSensoryAnchor(userMessage) : undefined;
+  // A bare color/temperature/texture word ("white") is a sensory detail, not a name.
+  // Presenting it as a sound-alike name tells the user we misheard them.
+  const names = extracted?.possibleDishNames?.filter((name) => Boolean(name) && !isSensoryDescriptorName(name)).slice(0, 2) ?? [];
   const region = extracted?.culturalOrRegionalHints?.find(Boolean);
-  const candidates = groundedCarrierCandidates(toolPayloads);
+  const candidates = groundedCarrierCandidates(toolPayloads, userMessage);
   const resolved = toolPayloads.resolve_dish_name as { canonicalName?: string; confidence?: string; region?: string } | undefined;
   const unresolvedName = names.length > 0
     ? `I would keep "${names[0]}" as an unresolved sound-alike, not a confirmed name.`
-    : 'I would keep the exact name unresolved for now.';
+    : '';
+  const correctionLine = correctionAnchor
+    ? `You corrected the memory: ${correctionAnchor}. That sensory detail stays the anchor.`
+    : '';
   const regionLine = region ? `The usable anchor is ${region}.` : '';
-  const researchLine = candidates.length > 0
-    ? `The source-backed first test should focus on ${joinHuman(candidates.slice(0, 2))}.`
-    : resolved?.canonicalName
-      ? `The resolver found "${resolved.canonicalName}" at ${resolved.confidence ?? 'unknown'} confidence.`
-      : '';
-  return [unresolvedName, regionLine, researchLine].filter(Boolean).join(' ');
+  const researchLine = correctionAnchor
+    ? 'The first test should start from that corrected detail before chasing a name.'
+    : candidates.length > 0
+      ? `The source-backed first test should focus on ${joinHuman(candidates.slice(0, 2))}.`
+      : resolved?.canonicalName
+        ? `The resolver found "${resolved.canonicalName}" at ${resolved.confidence ?? 'unknown'} confidence.`
+        : '';
+  return [correctionLine, unresolvedName, regionLine, researchLine].filter(Boolean).join(' ');
 }
 
 function formatGroundedMinimumCueFallback(
@@ -450,9 +501,10 @@ function formatGroundedMinimumCueFallback(
   userLocation?: string,
   userMessage?: string,
 ): string {
-  const candidates = groundedCarrierCandidates(toolPayloads);
+  const candidates = groundedCarrierCandidates(toolPayloads, userMessage);
   if (candidates.length === 0) return formatMinimumCueFallback(cue, userLocation);
 
+  const correctionAnchor = userMessage ? extractCorrectionSensoryAnchor(userMessage) : undefined;
   const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
   const extracted = memory?.extractedClues;
   const methods = extracted?.cookingMethods?.filter(Boolean).slice(0, 2) ?? [];
@@ -467,12 +519,20 @@ function formatGroundedMinimumCueFallback(
   const localLine = userLocation
     ? `Use ordinary grocery or pantry items near ${userLocation}; do not buy the exact suspected dish for this first test.`
     : 'Use ordinary grocery or pantry items first; do not buy the exact suspected dish for this first test.';
+  // A cue for a drink is a sip, not a bite: starch/browned-fat coverage advice belongs to food cues.
+  const drinkCue = cue.format === 'sip' || /\b(?:beverage|drink|sip)\b/i.test(cue.title);
+  const firstTestLine = correctionAnchor
+    ? `First-pass verification bite: check ${correctionAnchor}${drinkCue ? ' in the drink' : ''} first.${ruledOutPhrase}`
+    : `First-pass verification bite: test ${joinHuman(candidates.slice(0, 2))} as the carrier${methodPhrase}.${sensoryPhrase}${ruledOutPhrase}`;
+  const keepLine = drinkCue
+    ? 'Keep it to one sip. The point is to check aroma, texture, temperature, and sweet/salt balance before chasing the exact drink.'
+    : 'Keep it to one or two bites. The point is to check texture, aroma release, browning, and sweet/salt balance before chasing the exact family recipe.';
 
   return [
     cue.title,
     '',
-    `First-pass verification bite: test ${joinHuman(candidates.slice(0, 2))} as the carrier${methodPhrase}.${sensoryPhrase}${ruledOutPhrase}`,
-    'Keep it to one or two bites. The point is to check texture, aroma release, browning, and sweet/salt balance before chasing the exact family recipe.',
+    firstTestLine,
+    keepLine,
     localLine,
     '',
     `Why this is minimum: ${compactMinimumCueWhy(cue.whyThisIsMinimum)}`,
@@ -480,10 +540,20 @@ function formatGroundedMinimumCueFallback(
   ].filter(Boolean).join('\n');
 }
 
-function groundedCarrierCandidates(toolPayloads: Record<string, unknown>): string[] {
+function groundedCarrierCandidates(toolPayloads: Record<string, unknown>, userMessage?: string): string[] {
   const memory = toolPayloads.collect_food_memory as CollectedFoodMemory | undefined;
   const searched = toolPayloads.search_web as { results?: Array<{ title?: string; snippet?: string }> } | undefined;
   const cue = toolPayloads.generate_minimum_viable_nostalgia as MinimumViableNostalgiaCue | undefined;
+  const ruledOut = new Set((memory?.extractedClues?.ruledOutIngredients ?? []).map((item) => item.toLowerCase()));
+  const allowed = (candidate: string) => {
+    if (ruledOut.has('potato') || ruledOut.has('potatoes')) return !/\bpotato/i.test(candidate);
+    return true;
+  };
+  // The user's latest correction is the highest-trust evidence: keep that sensory
+  // detail instead of selecting a carrier from older search hits or memory noise.
+  const correctionAnchor = userMessage ? extractCorrectionSensoryAnchor(userMessage) : undefined;
+  if (correctionAnchor) return allowed(correctionAnchor) ? [correctionAnchor] : [];
+
   const text = [
     JSON.stringify(memory?.extractedClues ?? {}),
     ...(searched?.results ?? []).flatMap((result) => [result.title, result.snippet]),
@@ -496,11 +566,7 @@ function groundedCarrierCandidates(toolPayloads: Record<string, unknown>): strin
   if (/\b(?:corn|maize|masa)\b/i.test(text) && candidates.length === 0) candidates.push('corn or masa starch');
   if (/\b(?:rice|arroz)\b/i.test(text) && candidates.length === 0) candidates.push('rice');
 
-  const ruledOut = new Set((memory?.extractedClues?.ruledOutIngredients ?? []).map((item) => item.toLowerCase()));
-  return [...new Set(candidates)].filter((candidate) => {
-    if (ruledOut.has('potato') || ruledOut.has('potatoes')) return !/\bpotato/i.test(candidate);
-    return true;
-  });
+  return [...new Set(candidates)].filter(allowed);
 }
 
 function joinHuman(values: string[]): string {
@@ -557,6 +623,9 @@ export function ensureComposedCueCoverage(text: string, toolPayloads: Record<str
   const cue = toolPayloads.generate_minimum_viable_nostalgia as MinimumViableNostalgiaCue | undefined;
   const roles = new Set(cue?.components?.map((component) => component.role) ?? []);
   if (!roles.has('starch') || !roles.has('protein')) return text;
+  // A drink is tested with a sip: starch + browned fat/protein contrast is a food-cue
+  // rule, and appending it to a cold-drink answer switches the advice to another dish.
+  if (cue?.format === 'sip' || /\b(?:beverage|drink|sip)\b/i.test(cue?.title ?? '')) return text;
 
   const cueStart = text.search(/\b(?:try|test|bite|take|mix|boil|pan[-\s]?sear|sear|fry|crisp|taste)\b/i);
   const cueText = cueStart >= 0 ? text.slice(cueStart) : text;
