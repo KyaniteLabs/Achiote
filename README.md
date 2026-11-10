@@ -139,6 +139,16 @@ After building, add the stdio server to your MCP settings:
 
 If installed as a package, the CLI binary is `achiote`.
 
+### Hermes
+
+`plugins/achiote/` is a portable plugin package (MCP server + skill) for Hermes:
+
+```bash
+hermes plugins install KyaniteLabs/Achiote --subdir plugins/achiote
+```
+
+See [docs/HERMES_PLUGIN.md](docs/HERMES_PLUGIN.md) for the release and catalog pipeline.
+
 ## HTTP server
 
 An optional HTTP server provides a web UI and AI agent endpoint:
