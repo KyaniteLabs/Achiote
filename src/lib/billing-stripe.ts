@@ -1,6 +1,7 @@
 import Stripe from 'stripe';
 import type { Tier } from './auth.js';
-import type { BillingDb } from './billing-db.js';
+import type { BillingDb, BillingSubscription } from './billing-db.js';
+import { isEntitledSubscriptionStatus } from './billing-states.js';
 
 export interface BillingConfig {
   secretKey: string;
@@ -160,48 +161,57 @@ export class BillingStripe {
     if (!customerId) return;
 
     // Idempotency: skip if this session was already processed
-    const existingSession = billingDb.getCheckoutSession(session.id);
-    if (existingSession?.status === 'completed') return;
+    if (billingDb.isCheckoutSessionCompleted(session.id)) return;
 
     const rawTier = session.metadata?.tier;
     const mode = (session.metadata?.mode as 'subscription' | 'payment') || 'subscription';
 
-    // Fetch customer email
+    // Network reads happen first; every DB write then runs in ONE transaction
+    // that re-checks completion. Two overlapping deliveries of the same event
+    // both pass the check above while awaiting Stripe, but only the first to
+    // reach the transaction fulfills — the second sees `completed` and stops.
     const customer = await this.stripe.customers.retrieve(customerId);
     const email = !customer.deleted ? customer.email ?? null : null;
-    billingDb.upsertCustomer(customerId, email);
 
-    if (mode === 'subscription') {
-      const tier = this.tierFromMetadata(rawTier);
-      // For subscriptions, the subscription ID is in the session
-      const subscriptionId = typeof session.subscription === 'string' ? session.subscription : null;
-      if (subscriptionId) {
-        const subscription = await this.stripe.subscriptions.retrieve(subscriptionId);
-        // Stripe SDK v22 removed current_period_end from Subscription types, but the API still returns it.
-        const currentPeriodEnd = (subscription as unknown as { current_period_end?: number }).current_period_end;
-        billingDb.upsertSubscription({
-          stripeSubscriptionId: subscriptionId,
-          stripeCustomerId: customerId,
-          tier,
-          status: subscription.status,
-          currentPeriodEnd: typeof currentPeriodEnd === 'number' ? currentPeriodEnd * 1000 : null,
-          createdAt: new Date(subscription.created * 1000).toISOString(),
-          updatedAt: new Date().toISOString(),
-        });
+    let subscriptionRow: BillingSubscription | null = null;
+    const tier = this.tierFromMetadata(rawTier);
+    const subscriptionId = typeof session.subscription === 'string' ? session.subscription : null;
+    if (mode === 'subscription' && subscriptionId) {
+      const subscription = await this.stripe.subscriptions.retrieve(subscriptionId);
+      // Stripe SDK v22 removed current_period_end from Subscription types, but the API still returns it.
+      const currentPeriodEnd = (subscription as unknown as { current_period_end?: number }).current_period_end;
+      subscriptionRow = {
+        stripeSubscriptionId: subscriptionId,
+        stripeCustomerId: customerId,
+        tier,
+        status: subscription.status,
+        currentPeriodEnd: typeof currentPeriodEnd === 'number' ? currentPeriodEnd * 1000 : null,
+        createdAt: new Date(subscription.created * 1000).toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+    }
 
-        // Generate API key
+    billingDb.runInTransaction(() => {
+      if (billingDb.isCheckoutSessionCompleted(session.id)) return;
+      billingDb.upsertCustomer(customerId, email);
+
+      if (mode === 'subscription') {
+        // For subscriptions, the subscription ID is in the session
+        if (!subscriptionRow || !subscriptionId) return;
+        billingDb.upsertSubscription(subscriptionRow);
         const { key, keyId } = billingDb.generateAndStoreApiKey(tier, `Billing: ${tier}`, customerId, subscriptionId);
-        billingDb.completeCheckoutSession(session.id, customerId, keyId, key, tier);
+        billingDb.completeCheckoutSession(session.id, customerId, keyId, key, tier, mode);
+        return;
       }
-    } else {
+
       const offer = this.paymentOfferFromMetadata(rawTier);
       const credits = PAYMENT_OFFER_CREDITS[offer];
       billingDb.addCredits(customerId, credits.mcp, credits.web);
 
       // One-time packs remain free-tier keys backed by purchased web credits.
       const { key, keyId } = billingDb.generateAndStoreApiKey('free', PAYMENT_OFFER_KEY_NAMES[offer], customerId);
-      billingDb.completeCheckoutSession(session.id, customerId, keyId, key, 'free');
-    }
+      billingDb.completeCheckoutSession(session.id, customerId, keyId, key, 'free', mode);
+    });
   }
 
   private async handleSubscriptionUpdated(subscription: Stripe.Subscription, billingDb: BillingDb): Promise<void> {
@@ -225,7 +235,7 @@ export class BillingStripe {
     });
 
     // Update associated API key tier
-    if (subscription.status === 'active' || subscription.status === 'trialing') {
+    if (isEntitledSubscriptionStatus(subscription.status)) {
       const keys = billingDb.listKeysForCustomer(customerId);
       const subKey = keys.find((k) => k.stripeSubscriptionId === subscription.id);
       if (subKey && subKey.tier !== tier) {
