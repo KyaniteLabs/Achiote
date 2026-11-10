@@ -267,13 +267,16 @@ export function getStringArray(value: unknown, key: string): string[] {
 
 // ── Sanitization ───────────────────────────────────────────────────────────
 
+// Rewrites recipe-style measurements into approximate, non-recipe copy. Ingredient
+// quantities must degrade to a neutral amount ("two cups of rice" -> "a small amount
+// of rice"); they must never become taste-action copy ("a tiny sip or bite of rice").
 export function sanitizeRecipeStyleCueLanguage(text: string): string {
   return text
     .replace(/(?:[¼½¾⅓⅔⅛⅜⅝⅞]|\b\d+\/\d+)\s*(?:tsp|tbsp|teaspoons?|tablespoons?|cups?|ounces?|oz|pounds?|lbs?|grams?|g|ml|milliliters?|liters?|quarts?|gallons?|sticks?|cloves?|heads?|bunches?)\b/gi, 'a small amount of')
-    .replace(/\b(?:one|half)[-\s]?cup\b/gi, 'tiny sip')
+    .replace(/\b(?:one|half)[-\s]?cup\b/gi, 'a small amount of')
     .replace(/\bfull\s+recipe\b/gi, 'full dish')
     .replace(/\b\d+(?:\s*[-\u2013]\s*\d+)?(?:\s*\/\s*\d+)?\s*(?:tsp|tbsp|teaspoons?|tablespoons?|cups?|ounces?|oz|pounds?|lbs?|grams?|g|ml|milliliters?|liters?|quarts?|gallons?|sticks?|cloves?|heads?|bunches?)\b/gi, 'a small amount of')
-    .replace(/\b(?:a|an|half|quarter|one|two|three|four|five|six|seven|eight|nine|ten)\s+(?:(?:small|large|tiny)\s+)?(?:of\s+|a\s+)?(?:tsp|tbsp|teaspoons?|tablespoons?|cups?|glass(?:es)?|bowls?|spoonfuls?|ounces?|oz|pounds?|lbs?|grams?|milliliters?|liters?|quarts?|gallons?|sticks?|cloves?|heads?|bunches?)\b/gi, 'a tiny sip or bite')
+    .replace(/\b(?:a|an|half|quarter|one|two|three|four|five|six|seven|eight|nine|ten)\s+(?:(?:small|large|tiny)\s+)?(?:of\s+|a\s+)?(?:tsp|tbsp|teaspoons?|tablespoons?|cups?|glass(?:es)?|bowls?|spoonfuls?|ounces?|oz|pounds?|lbs?|grams?|milliliters?|liters?|quarts?|gallons?|sticks?|cloves?|heads?|bunches?)\b/gi, 'a small amount of')
     .replace(/\b\d+(?:\s*[-\u2013]\s*\d+)?\s*(?:mins?|minutes?|hrs?|hours?)\b/gi, 'briefly')
     .replace(/\b\d{2,4}\s*°?\s*[FC]\b/gi, 'gentle heat')
     .replace(/\b(?:gentle\s+simmer|rolling\s+boil)\b/gi, 'gentle heat')
@@ -281,6 +284,7 @@ export function sanitizeRecipeStyleCueLanguage(text: string): string {
     .replace(/\b(?:serves?|servings?|serving)\s*:?\s*\d+\b/gi, 'a tiny test portion')
     .replace(/\bexact\s+recipe\s+(?:follows|below|is)\b\.?/gi, 'This is not a full recipe.')
     .replace(/\ba small amount of\s+of\b/gi, 'a small amount of')
+    .replace(/\b(?:a|an)\s+a\s+small amount of\b/gi, 'a small amount of')
     .replace(/\babout\s+briefly\b/gi, 'briefly')
     .replace(/\bfor\s+briefly\b/gi, 'briefly')
     .replace(/\s{2,}/g, ' ')
