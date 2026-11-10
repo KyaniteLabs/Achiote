@@ -10,6 +10,7 @@
 import { randomInt } from 'node:crypto';
 import type { Tier } from './auth.js';
 import type { BillingDb, CryptoOrderRecord } from './billing-db.js';
+import { CRYPTO_SUBSCRIPTION_STATUS, type CryptoOrderStatus } from './billing-states.js';
 import { PAYMENT_OFFER_CREDITS, PAYMENT_OFFER_KEY_NAMES, type CheckoutPaymentOffer } from './billing-stripe.js';
 
 export const SOL_DECIMALS = 9;
@@ -566,23 +567,27 @@ export class CryptoCheckout {
     }
     if (!ref) throw new CryptoOrderError(500, 'Could not allocate an order reference');
 
-    this.billingDb.createCryptoOrder({
-      ref,
-      tier: params.tier,
-      mode: params.mode,
-      asset: params.asset,
-      amountUnits: amountUnits.toString(),
-      usdCents,
-      address: this.config.solAddress,
-      createdAt,
-      expiresAt,
+    // Order row + its pending checkout session are written together: a crash
+    // between them must not leave a payable order with no session to complete.
+    this.billingDb.runInTransaction(() => {
+      this.billingDb.createCryptoOrder({
+        ref,
+        tier: params.tier,
+        mode: params.mode,
+        asset: params.asset,
+        amountUnits: amountUnits.toString(),
+        usdCents,
+        address: this.config.solAddress,
+        createdAt,
+        expiresAt,
+      });
+      // The pending checkout session lets billing-success.html poll /billing/session for the key.
+      if (params.mode === 'subscription') {
+        this.billingDb.createCheckoutSession(cryptoSessionId(ref), params.mode, undefined, params.tier as Tier);
+      } else {
+        this.billingDb.createCheckoutSession(cryptoSessionId(ref), params.mode);
+      }
     });
-    // The pending checkout session lets billing-success.html poll /billing/session for the key.
-    if (params.mode === 'subscription') {
-      this.billingDb.createCheckoutSession(cryptoSessionId(ref), params.mode, undefined, params.tier as Tier);
-    } else {
-      this.billingDb.createCheckoutSession(cryptoSessionId(ref), params.mode);
-    }
 
     const decimals = params.asset === 'sol' ? SOL_DECIMALS : USDC_DECIMALS;
     const amount = formatUiAmount(amountUnits, decimals);
@@ -595,7 +600,7 @@ export class CryptoCheckout {
     return { ref, asset: params.asset, address: this.config.solAddress, amount, uri, expiresAtMs };
   }
 
-  async getOrderStatus(ref: string): Promise<{ status: 'pending' | 'paid' | 'expired'; sessionId: string }> {
+  async getOrderStatus(ref: string): Promise<{ status: CryptoOrderStatus; sessionId: string }> {
     const expired = this.billingDb.expireStaleCryptoOrders(new Date(this.now()).toISOString());
     if (expired > 0) this.log(`[crypto] expired ${expired} stale order(s)`);
     const order = this.billingDb.getCryptoOrder(ref);
@@ -795,7 +800,7 @@ export class CryptoCheckout {
   private fulfill(order: CryptoOrderRecord): void {
     const sessionId = cryptoSessionId(order.ref);
     const customerId = `crypto:${order.ref}`;
-    if (this.billingDb.getCheckoutSession(sessionId)?.status === 'completed') return;
+    if (this.billingDb.isCheckoutSessionCompleted(sessionId)) return;
 
     this.billingDb.upsertCustomer(customerId, null);
 
@@ -807,13 +812,13 @@ export class CryptoCheckout {
         stripeSubscriptionId: subscriptionId,
         stripeCustomerId: customerId,
         tier,
-        status: 'active',
+        status: CRYPTO_SUBSCRIPTION_STATUS,
         currentPeriodEnd: nowMs + CRYPTO_SUB_PERIOD_MS,
         createdAt: new Date(nowMs).toISOString(),
         updatedAt: new Date(nowMs).toISOString(),
       });
       const { key, keyId } = this.billingDb.generateAndStoreApiKey(tier, `Crypto: ${tier}`, customerId, subscriptionId);
-      this.billingDb.completeCheckoutSession(sessionId, customerId, keyId, key, tier);
+      this.billingDb.completeCheckoutSession(sessionId, customerId, keyId, key, tier, order.mode);
       return;
     }
 
@@ -821,7 +826,7 @@ export class CryptoCheckout {
     const credits = PAYMENT_OFFER_CREDITS[offer];
     this.billingDb.addCredits(customerId, credits.mcp, credits.web);
     const { key, keyId } = this.billingDb.generateAndStoreApiKey('free', PAYMENT_OFFER_KEY_NAMES[offer], customerId);
-    this.billingDb.completeCheckoutSession(sessionId, customerId, keyId, key, 'free');
+    this.billingDb.completeCheckoutSession(sessionId, customerId, keyId, key, 'free', order.mode);
   }
 
   private tierFromOrder(value: string): Tier {

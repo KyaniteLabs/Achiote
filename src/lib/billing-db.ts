@@ -4,6 +4,21 @@ import os from 'node:os';
 import path from 'node:path';
 import Database from 'better-sqlite3';
 import type { Tier } from './auth.js';
+import {
+  CANCELED_SUBSCRIPTION_STATUS,
+  CHECKOUT_SESSION_INITIAL,
+  CRYPTO_ORDER_INITIAL,
+  CheckoutSessionStatus,
+  CryptoOrderStatus,
+  ENTITLED_SUBSCRIPTION_STATUSES,
+  IllegalTransitionError,
+  assertCheckoutSessionTransition,
+  assertCryptoOrderTransition,
+  checkoutKeyPhase,
+  parseCheckoutSessionStatus,
+  parseCryptoOrderStatus,
+  sqlStatusList,
+} from './billing-states.js';
 
 export interface BillingCustomer {
   stripeCustomerId: string;
@@ -45,7 +60,7 @@ export interface CheckoutSessionRecord {
   keyPlaintext: string | null;
   tier: Tier | null;
   mode: 'subscription' | 'payment';
-  status: 'pending' | 'completed';
+  status: CheckoutSessionStatus;
   createdAt: string;
 }
 
@@ -57,7 +72,7 @@ export interface CryptoOrderRecord {
   amountUnits: string;
   usdCents: number;
   address: string;
-  status: 'pending' | 'paid' | 'expired';
+  status: CryptoOrderStatus;
   signature: string | null;
   createdAt: string;
   expiresAt: string;
@@ -123,7 +138,7 @@ type CryptoOrderRow = {
   amount_units: string;
   usd_cents: number;
   address: string;
-  status: 'pending' | 'paid' | 'expired';
+  status: string;
   signature: string | null;
   created_at: string;
   expires_at: string;
@@ -138,7 +153,7 @@ function cryptoOrderRowToRecord(row: CryptoOrderRow): CryptoOrderRecord {
     amountUnits: row.amount_units,
     usdCents: row.usd_cents,
     address: row.address,
-    status: row.status,
+    status: parseCryptoOrderStatus(row.status),
     signature: row.signature,
     createdAt: row.created_at,
     expiresAt: row.expires_at,
@@ -330,7 +345,7 @@ export class BillingDb {
   getActiveSubscriptionForCustomer(stripeCustomerId: string): BillingSubscription | null {
     const row = this.db
       .prepare(
-        "SELECT * FROM billing_subscriptions WHERE stripe_customer_id = ? AND status IN ('active', 'trialing') ORDER BY created_at DESC LIMIT 1"
+        `SELECT * FROM billing_subscriptions WHERE stripe_customer_id = ? AND status IN (${sqlStatusList(ENTITLED_SUBSCRIPTION_STATUSES)}) ORDER BY created_at DESC LIMIT 1`
       )
       .get(stripeCustomerId) as
       | {
@@ -357,8 +372,8 @@ export class BillingDb {
 
   cancelSubscription(stripeSubscriptionId: string): void {
     this.db.prepare(
-      `UPDATE billing_subscriptions SET status = 'canceled', updated_at = datetime('now') WHERE stripe_subscription_id = ?`
-    ).run(stripeSubscriptionId);
+      `UPDATE billing_subscriptions SET status = ?, updated_at = datetime('now') WHERE stripe_subscription_id = ?`
+    ).run(CANCELED_SUBSCRIPTION_STATUS, stripeSubscriptionId);
     this.db.prepare(
       `UPDATE billing_api_keys SET tier = 'free' WHERE stripe_subscription_id = ?`
     ).run(stripeSubscriptionId);
@@ -506,23 +521,56 @@ export class BillingDb {
   ): void {
     this.db.prepare(
       `INSERT INTO checkout_sessions (stripe_session_id, stripe_customer_id, tier, mode, status)
-       VALUES (?, ?, ?, ?, 'pending')`
-    ).run(stripeSessionId, stripeCustomerId ?? null, tier ?? null, mode);
+       VALUES (?, ?, ?, ?, ?)`
+    ).run(stripeSessionId, stripeCustomerId ?? null, tier ?? null, mode, CHECKOUT_SESSION_INITIAL);
   }
 
+  /**
+   * The one `pending -> completed` transition (see billing-states.ts). Refuses
+   * with IllegalTransitionError when the session is already completed — a
+   * second completion would overwrite key_id and re-arm a consumed key. When
+   * no row exists (purged, or never written) the completion is still recorded
+   * so the caller's idempotency check sees it; that path needs `mode`.
+   */
   completeCheckoutSession(
     stripeSessionId: string,
     stripeCustomerId: string,
     keyId: string,
     keyPlaintext: string,
-    tier: Tier
+    tier: Tier,
+    mode?: 'subscription' | 'payment'
   ): void {
     const encrypted = encryptKey(keyPlaintext);
-    this.db.prepare(
-      `UPDATE checkout_sessions
-       SET stripe_customer_id = ?, key_id = ?, key_plaintext = ?, tier = ?, status = 'completed'
-       WHERE stripe_session_id = ?`
-    ).run(stripeCustomerId, keyId, encrypted, tier, stripeSessionId);
+    this.db.transaction(() => {
+      const current = this.getCheckoutSessionStatus(stripeSessionId);
+      assertCheckoutSessionTransition(current, CheckoutSessionStatus.Completed);
+      if (current === null) {
+        if (!mode) throw new IllegalTransitionError('checkout session', null, CheckoutSessionStatus.Completed);
+        this.db.prepare(
+          `INSERT INTO checkout_sessions (stripe_session_id, stripe_customer_id, key_id, key_plaintext, tier, mode, status)
+           VALUES (?, ?, ?, ?, ?, ?, ?)`
+        ).run(stripeSessionId, stripeCustomerId, keyId, encrypted, tier, mode, CheckoutSessionStatus.Completed);
+        return;
+      }
+      const result = this.db.prepare(
+        `UPDATE checkout_sessions
+         SET stripe_customer_id = ?, key_id = ?, key_plaintext = ?, tier = ?, status = ?
+         WHERE stripe_session_id = ? AND status = ?`
+      ).run(stripeCustomerId, keyId, encrypted, tier, CheckoutSessionStatus.Completed, stripeSessionId, current);
+      if (result.changes === 0) throw new IllegalTransitionError('checkout session', current, CheckoutSessionStatus.Completed);
+    })();
+  }
+
+  /** Whether the session has reached its terminal `completed` state (the fulfillment idempotency check). */
+  isCheckoutSessionCompleted(stripeSessionId: string): boolean {
+    return this.getCheckoutSessionStatus(stripeSessionId) === CheckoutSessionStatus.Completed;
+  }
+
+  private getCheckoutSessionStatus(stripeSessionId: string): CheckoutSessionStatus | null {
+    const row = this.db.prepare('SELECT status FROM checkout_sessions WHERE stripe_session_id = ?').get(stripeSessionId) as
+      | { status: string }
+      | undefined;
+    return row ? parseCheckoutSessionStatus(row.status) : null;
   }
 
   getCheckoutSession(stripeSessionId: string): CheckoutSessionRecord | null {
@@ -534,7 +582,7 @@ export class BillingDb {
           key_plaintext: string | null;
           tier: Tier | null;
           mode: 'subscription' | 'payment';
-          status: 'pending' | 'completed';
+          status: string;
           created_at: string;
         }
       | undefined;
@@ -546,14 +594,15 @@ export class BillingDb {
       keyPlaintext: row.key_plaintext,
       tier: row.tier,
       mode: row.mode,
-      status: row.status,
+      status: parseCheckoutSessionStatus(row.status),
       createdAt: row.created_at,
     };
   }
 
   consumeCheckoutSessionApiKey(stripeSessionId: string): CheckoutSessionRecord | null {
     const session = this.getCheckoutSession(stripeSessionId);
-    if (!session || session.status !== 'completed' || !session.keyPlaintext) return session;
+    // Only key_ready -> key_claimed consumes; awaiting_payment / key_claimed are returned as-is.
+    if (!session || checkoutKeyPhase(session) !== 'key_ready' || !session.keyPlaintext) return session;
     const decrypted = decryptKey(session.keyPlaintext);
     if (!decrypted) return null;
     this.db
@@ -566,14 +615,14 @@ export class BillingDb {
     const pendingCutoff = new Date(Date.now() - CHECKOUT_SESSION_TTL_MS).toISOString();
     const completedCutoff = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString(); // 90 days
     const pendingResult = this.db.prepare(
-      `DELETE FROM checkout_sessions WHERE created_at < ? AND status = 'pending'`
-    ).run(pendingCutoff);
+      `DELETE FROM checkout_sessions WHERE created_at < ? AND status = ?`
+    ).run(pendingCutoff, CheckoutSessionStatus.Pending);
     this.db.prepare(
       `UPDATE checkout_sessions SET key_plaintext = NULL WHERE created_at < ? AND key_plaintext IS NOT NULL`
     ).run(pendingCutoff);
     const completedResult = this.db.prepare(
-      `DELETE FROM checkout_sessions WHERE created_at < ? AND status = 'completed'`
-    ).run(completedCutoff);
+      `DELETE FROM checkout_sessions WHERE created_at < ? AND status = ?`
+    ).run(completedCutoff, CheckoutSessionStatus.Completed);
     return pendingResult.changes + completedResult.changes;
   }
 
@@ -592,7 +641,7 @@ export class BillingDb {
   }): void {
     this.db.prepare(
       `INSERT INTO crypto_orders (ref, tier, mode, asset, amount_units, usd_cents, address, status, created_at, expires_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, 'pending', ?, ?)`
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
     ).run(
       order.ref,
       order.tier,
@@ -601,6 +650,7 @@ export class BillingDb {
       order.amountUnits,
       order.usdCents,
       order.address,
+      CRYPTO_ORDER_INITIAL,
       order.createdAt,
       order.expiresAt
     );
@@ -613,8 +663,8 @@ export class BillingDb {
 
   listPendingCryptoOrders(): CryptoOrderRecord[] {
     const rows = this.db
-      .prepare("SELECT * FROM crypto_orders WHERE status = 'pending' ORDER BY created_at ASC, ref ASC")
-      .all() as CryptoOrderRow[];
+      .prepare('SELECT * FROM crypto_orders WHERE status = ? ORDER BY created_at ASC, ref ASC')
+      .all(CryptoOrderStatus.Pending) as CryptoOrderRow[];
     return rows.map(cryptoOrderRowToRecord);
   }
 
@@ -627,14 +677,15 @@ export class BillingDb {
    * NOT EXISTS guard lands on the constraint and also returns false.
    */
   markCryptoOrderPaid(ref: string, signature: string): boolean {
+    assertCryptoOrderTransition(CryptoOrderStatus.Pending, CryptoOrderStatus.Paid);
     try {
       const result = this.db
         .prepare(
-          `UPDATE crypto_orders SET status = 'paid', signature = ?
-           WHERE ref = ? AND status = 'pending'
+          `UPDATE crypto_orders SET status = ?, signature = ?
+           WHERE ref = ? AND status = ?
              AND NOT EXISTS (SELECT 1 FROM crypto_orders WHERE signature = ?)`
         )
-        .run(signature, ref, signature);
+        .run(CryptoOrderStatus.Paid, signature, ref, CryptoOrderStatus.Pending, signature);
       return result.changes > 0;
     } catch (err) {
       if (err instanceof Error && /UNIQUE constraint/i.test(err.message)) return false;
@@ -654,17 +705,19 @@ export class BillingDb {
         // here to keep the dependency direction one-way).
         `SELECT o.* FROM crypto_orders o
          LEFT JOIN checkout_sessions s ON s.stripe_session_id = 'crypto:' || o.ref
-         WHERE o.status = 'paid' AND (s.status IS NULL OR s.status <> 'completed')
+         WHERE o.status = ? AND (s.status IS NULL OR s.status <> ?)
          ORDER BY o.created_at ASC, o.ref ASC`
       )
-      .all() as CryptoOrderRow[];
+      .all(CryptoOrderStatus.Paid, CheckoutSessionStatus.Completed) as CryptoOrderRow[];
     return rows.map(cryptoOrderRowToRecord);
   }
 
+  /** The batch `pending -> expired` transition for orders past their expiry. */
   expireStaleCryptoOrders(nowIso: string): number {
+    assertCryptoOrderTransition(CryptoOrderStatus.Pending, CryptoOrderStatus.Expired);
     const result = this.db
-      .prepare("UPDATE crypto_orders SET status = 'expired' WHERE status = 'pending' AND expires_at < ?")
-      .run(nowIso);
+      .prepare('UPDATE crypto_orders SET status = ? WHERE status = ? AND expires_at < ?')
+      .run(CryptoOrderStatus.Expired, CryptoOrderStatus.Pending, nowIso);
     return result.changes;
   }
 
