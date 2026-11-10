@@ -216,4 +216,64 @@ describe('ask response builder', () => {
     expect(response).toMatch(/griddled/i);
     expect(response).not.toMatch(/starch, bread, potato, rice, bean/i);
   });
+
+  it('keeps the corrected sensory anchor when a cold-drink memory is corrected to pink fruit', () => {
+    const correction = 'That sounds close, but I remember pink fruit chunks. Please correct the memory record and show the source links and a receipt I can share with my family.';
+    const response = buildResearchGroundedForcedCueResponse({
+      collect_food_memory: {
+        extractedClues: {
+          possibleDishNames: ['white'],
+          culturalOrRegionalHints: ['Mexican'],
+          rememberedIngredients: ['cinnamon'],
+          ruledOutIngredients: [],
+          cookingMethods: [],
+          sensoryClues: [],
+          occasions: [],
+        },
+      },
+      search_web: {
+        results: [
+          {
+            title: 'Atole de masa',
+            snippet: 'Atole is a traditional Mexican drink made from corn masa and served warm.',
+          },
+        ],
+      },
+      generate_minimum_viable_nostalgia: {
+        ...cue,
+        title: 'Minimum viable beverage-memory cue',
+        format: 'sip',
+        ingredients: [
+          {
+            item: 'a tiny sip of an ordinary rice-based drink',
+            amount: 'tiny sip',
+            purpose: 'tests body and aroma before chasing the exact drink',
+          },
+        ],
+        components: [
+          {
+            role: 'starch',
+            criticalElement: 'rice starch body',
+            flavorProfile: 'chalky-sweet',
+            localTestWith: 'cooked rice',
+            substitutionReason: 'carrier',
+            confidence: 'Medium',
+          },
+          {
+            role: 'protein',
+            criticalElement: 'browned fat',
+            flavorProfile: 'nutty',
+            localTestWith: 'toasted seeds',
+            substitutionReason: 'fat contrast',
+            confidence: 'Low',
+          },
+        ],
+      },
+    }, correction);
+
+    expect(response).toMatch(/pink fruit/i);
+    expect(response).not.toMatch(/unresolved sound-alike/i);
+    expect(response).not.toMatch(/corn or masa/i);
+    expect(response).not.toMatch(/browned fat\/protein/i);
+  });
 });
