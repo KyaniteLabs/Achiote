@@ -1,0 +1,21 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "achiote",
+  "version": "0.2.2",
+  "description": "Recreate a remembered dish with ingredients available where you are. Food-memory reconstruction via MCP: sensory cues, substitutions, and a first test recipe.",
+  "author": {
+    "name": "Kyanite Labs",
+    "url": "https://github.com/KyaniteLabs"
+  },
+  "homepage": "https://achiote.kyanitelabs.tech/",
+  "repository": "https://github.com/KyaniteLabs/Achiote/tree/master/plugins/achiote",
+  "license": "BUSL-1.1",
+  "keywords": [
+    "food",
+    "recipes",
+    "nostalgia",
+    "culinary",
+    "food-memory",
+    "mcp"
+  ]
+}

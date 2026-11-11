@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import fs from 'node:fs';
+import { driftedFiles } from './hermes-plugin.mjs';
 
 const checks = [
   {
@@ -33,6 +34,13 @@ for (const check of checks) {
 if (!fs.existsSync('.gitignore') || !fs.readFileSync('.gitignore', 'utf8').includes('.claude/')) {
   failures++;
   console.error('Forbidden pattern guard missing: .claude/ must stay ignored');
+}
+
+// plugins/achiote/ holds generated copies (see docs/HERMES_PLUGIN.md); they must match their sources.
+const driftedPluginFiles = driftedFiles();
+if (driftedPluginFiles.length > 0) {
+  failures++;
+  console.error(`Hermes plugin out of sync: ${driftedPluginFiles.join(', ')}. Run: node scripts/hermes-plugin.mjs sync`);
 }
 
 if (failures > 0) process.exit(1);
