@@ -278,29 +278,77 @@ export function isSensoryDescriptorName(name: string): boolean {
   return words.every((word) => SENSORY_DESCRIPTOR_WORDS.has(word));
 }
 
+/** Staple/role words: a remembered ingredient made of these does not outrank a researched carrier. */
+const CARRIER_KEYWORD_PATTERN = /\b(?:starch|carrier|rice|arroz|corn|maize|masa|masarepa|arepa|cornmeal|plantain|pl[aá]tano|yuca|cassava|potato|bread|tortilla|pasta|noodle|quinoa|oat|barley|dough|flour)\b/i;
+
 const CORRECTION_CUE_PATTERN = /\b(?:sounds?\s+(?:close|like|similar|about\s+right|right)|but\s+I\s+remember(?:ed)?|actually|correction|wait,?\s+no|remembered\s+(?:it\s+)?wrong|not\s+quite)\b/i;
 const REMEMBERED_CLAUSE_PATTERN = /\bI\s+remember(?:ed)?\s+(?:that\s+)?(.{3,90}?)(?=[.!?;\n]|$)/i;
+// "It was pink fruit", "it had pink fruit chunks", "there was pink fruit".
+const STATED_DETAIL_CLAUSE_PATTERN = /\b(?:it|this|that|they|there)\s+(?:was|were|is|are|had|has|have)\s+(.{3,90}?)(?=[.!?;\n]|$)/i;
+// "Correction: pink fruit chunks."
+const CORRECTION_COLON_CLAUSE_PATTERN = /\bcorrection\s*:\s*(.{3,90}?)(?=[.!?;\n]|$)/i;
+// "Actually, pink fruit chunks." — the cue itself is not the detail.
+const ACTUALLY_CLAUSE_PATTERN = /\bactually\b[\s,;:—–-]+(.{3,90}?)(?=[.!?;\n]|$)/i;
+
+// A clause that opens with a pronoun, determiner or auxiliary ("it wrong",
+// "can you show the receipt") is a sentence fragment, not a sensory detail.
+const ANCHOR_REJECTED_HEADS = new Set([
+  'it', 'this', 'that', 'they', 'them', 'these', 'those', 'there', 'here',
+  'i', 'me', 'we', 'us', 'you', 'he', 'she', 'him', 'her',
+  'the', 'a', 'an', 'and', 'or', 'but', 'of', 'about', 'for', 'to', 'in', 'on',
+  'at', 'by', 'with', 'from', 'into', 'over', 'after', 'before', 'as', 'if',
+  'nothing', 'something', 'anything', 'everything', 'none', 'nobody', 'somebody', 'anybody', 'everybody',
+  'can', 'could', 'would', 'should', 'will', 'shall', 'may', 'might', 'must',
+  'do', 'does', 'did', 'is', 'are', 'am', 'was', 'were', 'be', 'been', 'being',
+  'had', 'has', 'have', 'please', 'thanks', 'thank', 'ok', 'okay', 'yes', 'no',
+]);
+
+function sanitizeCorrectionAnchorClause(raw: string): string | undefined {
+  const normalized = raw
+    .replace(/\b(?:it|this|that|they|there)\s+(?:was|were|is|are|had|has|have)\b/gi, ' ')
+    .replace(/\s{2,}/g, ' ')
+    .trim()
+    .replace(/[.!?]+$/, '');
+  for (const fragment of normalized.split(/[,;]|—|–/)) {
+    const cleaned = fragment.replace(/\s{2,}/g, ' ').trim();
+    if (!cleaned) continue;
+    const words = cleaned.split(/\s+/).filter(Boolean);
+    while (words.length > 1 && /^(?:the|a|an)$/i.test(words[0])) words.shift();
+    const head = words[0].toLowerCase().replace(/[’]/g, "'").replace(/[^\p{L}\p{N}'-]+/gu, '');
+    const contractedJunk = /^(?:i|it|that|this|they|there|we|you|he|she)(?:'m|'s|'re|'ve|'ll|'d)$/.test(head) || /n't$/.test(head);
+    if (!head || contractedJunk || ANCHOR_REJECTED_HEADS.has(head)) continue;
+    if (/\b(?:not|no|never|without|nothing|none|nobody)\b|n['’]t\b/i.test(cleaned)) continue;
+    // What is left must read as a detail phrase, not a clause ("color was pink").
+    if (/\b(?:was|were|is|are|am|had|has|have|been|being)\b/i.test(cleaned)) continue;
+    const anchor = words.slice(0, 6).join(' ');
+    if (anchor.length < 3 || isSensoryDescriptorName(anchor)) continue;
+    return anchor;
+  }
+  return undefined;
+}
 
 /**
  * Recover the sensory detail a user says they remember on a correction turn.
  * The memory extractor can drop or mislabel that detail, so the user's own
- * message is used as the highest-trust anchor for the next test.
+ * message is used as the highest-trust anchor for the next test. Several
+ * phrasings express the same correction, so the explicit forms are tried in
+ * order and fragments that are not a detail ("it wrong") are dropped.
  */
 export function extractCorrectionSensoryAnchor(userMessage: string): string | undefined {
   const message = (userMessage ?? '').trim();
   if (!message || !CORRECTION_CUE_PATTERN.test(message)) return undefined;
-  const remembered = message.match(REMEMBERED_CLAUSE_PATTERN)?.[1] ?? '';
-  const clause = remembered
-    .replace(/\b(?:it|this|that|they)\s+(?:was|were|is|are|had|has|have)\b/gi, ' ')
-    .replace(/\bthere\s+(?:was|were|is|are)\b/gi, ' ')
-    .split(/[,;]/)[0]
-    .replace(/\s{2,}/g, ' ')
-    .trim()
-    .replace(/[.!?]+$/, '');
-  if (!clause || /\b(?:not|no|never|without)\b|n['’]t\b/i.test(clause)) return undefined;
-  const anchor = clause.split(/\s+/).filter(Boolean).slice(0, 6).join(' ');
-  if (anchor.length < 3 || isSensoryDescriptorName(anchor)) return undefined;
-  return anchor;
+  const clauses = [
+    message.match(CORRECTION_COLON_CLAUSE_PATTERN)?.[1],
+    message.match(REMEMBERED_CLAUSE_PATTERN)?.[1],
+    message.match(STATED_DETAIL_CLAUSE_PATTERN)?.[1],
+    message.match(ACTUALLY_CLAUSE_PATTERN)?.[1],
+  ];
+  for (const clause of clauses) {
+    if (!clause) continue;
+    const anchor = sanitizeCorrectionAnchorClause(clause);
+    if (anchor) return anchor;
+  }
+  return undefined;
 }
 
 // ── Minimum-cue formatting ───────────────────────────────────────────────
@@ -553,6 +601,21 @@ function groundedCarrierCandidates(toolPayloads: Record<string, unknown>, userMe
   // detail instead of selecting a carrier from older search hits or memory noise.
   const correctionAnchor = userMessage ? extractCorrectionSensoryAnchor(userMessage) : undefined;
   if (correctionAnchor) return allowed(correctionAnchor) ? [correctionAnchor] : [];
+
+  // A remembered detail that carries a sensory descriptor ("pink fruit chunks")
+  // is the user's own correction carried into later turns: the memory layer keeps
+  // it, and a follow-up question must not replace it with a different carrier
+  // suggested by older search hits. Bare ingredient names ("queso") and carrier
+  // staples ("white rice") are left to the researched carrier logic below.
+  const rememberedAnchor = (memory?.extractedClues?.rememberedIngredients ?? [])
+    .filter((item): item is string => typeof item === 'string')
+    .map((item) => item.trim())
+    .find((item) => item.length >= 3
+      && item.length <= 60
+      && !isSensoryDescriptorName(item)
+      && !CARRIER_KEYWORD_PATTERN.test(item)
+      && item.split(/[^\p{L}\p{N}]+/u).some((word) => SENSORY_DESCRIPTOR_WORDS.has(word.toLowerCase())));
+  if (rememberedAnchor && allowed(rememberedAnchor)) return [rememberedAnchor];
 
   const text = [
     JSON.stringify(memory?.extractedClues ?? {}),

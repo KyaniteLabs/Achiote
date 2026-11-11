@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   buildMinimumCueCompletedResponse,
   buildResearchGroundedForcedCueResponse,
+  extractCorrectionSensoryAnchor,
   extractSubstitutionTargets,
   summarizeSourcingResults,
   summarizeSubstitutionResults,
@@ -275,5 +276,73 @@ describe('ask response builder', () => {
     expect(response).not.toMatch(/unresolved sound-alike/i);
     expect(response).not.toMatch(/corn or masa/i);
     expect(response).not.toMatch(/browned fat\/protein/i);
+    expect(response).toMatch(/Keep it to one sip/i);
+  });
+
+  it.each([
+    ['actually', 'Actually it was pink fruit, not white.', 'pink fruit'],
+    ['wait-no', 'Wait, no \u2014 it had pink fruit chunks.', 'pink fruit chunks'],
+    ['correction-colon', 'Correction: pink fruit chunks.', 'pink fruit chunks'],
+    ['remembered-wrong', 'I remembered it wrong; it had pink fruit chunks.', 'pink fruit chunks'],
+    ['remembered-clause', 'That sounds close, but I remember pink fruit chunks and it was cold.', 'pink fruit chunks and cold'],
+    ['ruled-out-first', 'Correction: not white \u2014 pink fruit chunks.', 'pink fruit chunks'],
+  ])('extracts the corrected sensory detail from the %s correction form', (_form, message, expected) => {
+    expect(extractCorrectionSensoryAnchor(message)).toBe(expected);
+  });
+
+  it('returns a grammatical anchor for the self-correction form instead of the words after "remembered"', () => {
+    const anchor = extractCorrectionSensoryAnchor('I remembered it wrong; it had pink fruit chunks.');
+
+    expect(anchor).toBe('pink fruit chunks');
+    expect(anchor).not.toMatch(/^(?:it|that|this|they|there|i|we|you|can|could|would|should|is|are|was|were|had|has|have)\b/i);
+  });
+
+  it('rejects correction cues that carry no sensory detail', () => {
+    expect(extractCorrectionSensoryAnchor('It sounds close, but I remember nothing about it.')).toBeUndefined();
+    expect(extractCorrectionSensoryAnchor('Actually, can you show the receipt again?')).toBeUndefined();
+    expect(extractCorrectionSensoryAnchor('Can you show the source links?')).toBeUndefined();
+  });
+
+  it('keeps the remembered correction as the carrier on the follow-up turn', () => {
+    const response = buildResearchGroundedForcedCueResponse({
+      collect_food_memory: {
+        userLocation: 'Des Moines',
+        extractedClues: {
+          possibleDishNames: ['white'],
+          culturalOrRegionalHints: ['Mexican'],
+          rememberedIngredients: ['pink fruit chunks'],
+          ruledOutIngredients: [],
+          cookingMethods: [],
+          sensoryClues: ['cold'],
+          occasions: [],
+        },
+      },
+      search_web: {
+        results: [
+          {
+            title: 'Atole de masa',
+            snippet: 'Atole is a traditional Mexican drink made from corn masa and served warm.',
+          },
+        ],
+      },
+      generate_minimum_viable_nostalgia: {
+        ...cue,
+        title: 'Minimum viable beverage-memory cue',
+        format: 'sip',
+        ingredients: [
+          {
+            item: 'a tiny sip of an ordinary rice-based drink',
+            amount: 'tiny sip',
+            purpose: 'tests body and aroma before chasing the exact drink',
+          },
+        ],
+        components: [],
+      },
+    }, 'Thanks. Can you show the source links and a receipt I can share?');
+
+    expect(response).toMatch(/pink fruit chunks/i);
+    expect(response).toMatch(/first-pass verification bite: test pink fruit chunks as the carrier/i);
+    expect(response).not.toMatch(/corn or masa/i);
+    expect(response).toMatch(/Keep it to one sip/i);
   });
 });
