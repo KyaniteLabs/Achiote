@@ -41,8 +41,10 @@ Updates arrive only when the pinned version changes in a reviewed commit.
 - **`search_web`** calls `google.serper.dev` only when `SERPER_API_KEY` is set.
   Set `ACHIOTE_DISABLE_SEARCH_WEB=true` to turn it off.
 - **Local cache:** dish and region research (never raw memories) is cached in SQLite at
-  `$ACHIOTE_CACHE_PATH`, else `$XDG_CACHE_HOME/achiote/culture-cache.db`, else
-  `~/.cache/achiote/culture-cache.db`. `achiote purge` deletes it.
+  `$ACHIOTE_CACHE_PATH`, else `$PLUGIN_DATA/culture-cache.db` (the per-plugin data
+  folder Hermes provides), else `$XDG_CACHE_HOME/achiote/culture-cache.db`, else
+  `~/.cache/achiote/culture-cache.db`. If the chosen folder is not writable it falls
+  back to `~/.cache/achiote/` and logs a warning to stderr. `achiote purge` deletes it.
 - Achiote sends no telemetry from the MCP server.
 
 ## Files in this folder
