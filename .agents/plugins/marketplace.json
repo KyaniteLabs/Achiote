@@ -1,0 +1,20 @@
+{
+  "name": "kyanitelabs-achiote",
+  "interface": {
+    "displayName": "Kyanite Labs (achiote)"
+  },
+  "plugins": [
+    {
+      "name": "achiote",
+      "source": {
+        "source": "local",
+        "path": "./plugins/achiote"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}
