@@ -6,5 +6,8 @@
     "name": "Kyanite Labs",
     "url": "https://github.com/KyaniteLabs"
   },
-  "license": "BUSL-1.1"
+  "homepage": "https://achiote.kyanitelabs.tech/",
+  "repository": "https://github.com/KyaniteLabs/Achiote",
+  "license": "BUSL-1.1",
+  "displayName": "Achiote"
 }
