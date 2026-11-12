@@ -54,9 +54,16 @@ export function expectedFiles() {
       achiote: { type: 'stdio', command: 'npx', args: ['-y', `achiote@${version}`] },
     },
   };
+  // Claude Code reads .claude-plugin/plugin.json and .mcp.json; derive both from
+  // the portable manifests above so the hosts can never drift apart.
+  const { $schema: _pluginSchema, keywords: _keywords, ...claudeShared } = pluginJson;
+  const claudePluginJson = { ...claudeShared, displayName: 'Achiote', repository: REPO_URL };
+  const { $schema: _mcpSchema, ...claudeMcpJson } = mcpJson;
   return {
     'plugin.json': Buffer.from(`${JSON.stringify(pluginJson, null, 2)}\n`),
     'mcp.json': Buffer.from(`${JSON.stringify(mcpJson, null, 2)}\n`),
+    '.claude-plugin/plugin.json': Buffer.from(`${JSON.stringify(claudePluginJson, null, 2)}\n`),
+    '.mcp.json': Buffer.from(`${JSON.stringify(claudeMcpJson, null, 2)}\n`),
     'skills/achiote/SKILL.md': fs.readFileSync(path.join(ROOT, 'skill', 'SKILL.md')),
     'icon.png': fs.readFileSync(path.join(ROOT, 'branding', 'achiote-512.png')),
     'banner.png': fs.readFileSync(path.join(ROOT, 'branding', 'achiote-banner.png')),

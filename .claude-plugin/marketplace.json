@@ -1,0 +1,16 @@
+{
+  "name": "kyanitelabs-achiote",
+  "description": "Kyanite Labs plugins from the achiote repository.",
+  "owner": {
+    "name": "Kyanite Labs",
+    "url": "https://github.com/KyaniteLabs"
+  },
+  "plugins": [
+    {
+      "name": "achiote",
+      "source": "./plugins/achiote",
+      "description": "Recreate a remembered dish with ingredients available where you are. Food-memory reconstruction via MCP: sensory cues, substitutions, and a first test recipe.",
+      "version": "0.2.2"
+    }
+  ]
+}
