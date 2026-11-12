@@ -35,9 +35,25 @@ Updates arrive only when the pinned version changes in a reviewed commit.
 
 - **Without any key**, the granular deterministic tools work fully offline after
   the first download.
-- **`reconstruct_food_memory`** (the single-call path) calls a model provider. Set
-  `ANTHROPIC_API_KEY`, or point it at a local OpenAI-compatible server. The memory
+- **`reconstruct_food_memory`** (the single-call path) calls a model provider. Give the
+  server `ANTHROPIC_API_KEY`, or point it at a local OpenAI-compatible server. The memory
   text you send goes to the provider you configure.
+
+  Hermes starts the server with a filtered environment and does not forward your shell's
+  or `~/.hermes/.env`'s API keys to it, so exporting the key is not enough. Add the key
+  to a `mcp_servers` entry in `config.yaml`. An entry with the same name replaces the
+  package's own, so repeat the launcher:
+
+  ```yaml
+  mcp_servers:
+    achiote:
+      command: npx
+      args: ["-y", "achiote@0.2.2"]   # keep in step with plugin.json
+      env:
+        ANTHROPIC_API_KEY: "<your key>"
+  ```
+
+  Without a key, the granular tools still work offline.
 - **`search_web`** calls `google.serper.dev` only when `SERPER_API_KEY` is set.
   Set `ACHIOTE_DISABLE_SEARCH_WEB=true` to turn it off.
 - **Local cache:** dish and region research (never raw memories) is cached in SQLite at
