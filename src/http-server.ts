@@ -655,6 +655,24 @@ const server = createServer(async (req, res) => {
     return;
   }
 
+  // OpenAI plugin submission: domain verification. The token is issued in the
+  // OpenAI platform submission flow and supplied via env; the route stays 404
+  // until it is set, so nothing is exposed by default.
+  if (pathname === '/.well-known/openai-apps-challenge') {
+    const challengeToken = process.env.OPENAI_APPS_CHALLENGE_TOKEN?.trim();
+    if (!challengeToken) {
+      sendJson(res, 404, { error: 'Not found' });
+      return;
+    }
+    if (req.method !== 'GET' && req.method !== 'HEAD') {
+      sendMethodNotAllowed(res, ['GET', 'HEAD']);
+      return;
+    }
+    res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store' });
+    res.end(req.method === 'HEAD' ? undefined : challengeToken);
+    return;
+  }
+
   if ((pathname === '/health' || pathname === '/ready') && req.method !== 'GET' && req.method !== 'HEAD') {
     sendMethodNotAllowed(res, ['GET', 'HEAD']);
     return;
