@@ -1,4 +1,5 @@
-try { process.loadEnvFile(); } catch { /* no .env file present */ }
+import { loadPackageEnv } from './lib/load-env.js';
+loadPackageEnv();
 
 import { createHash, randomUUID, timingSafeEqual } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
