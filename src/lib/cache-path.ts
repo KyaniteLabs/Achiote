@@ -29,7 +29,7 @@ export function defaultCachePath(): string {
   }
 
   // Plugin hosts (Hermes) hand the server a per-plugin data directory in PLUGIN_DATA; keep the cache
-  // there so uninstalling the plugin removes it. Ignore a relative or traversing value.
+  // there, next to the plugin's other state. Ignore a relative or traversing value.
   const pluginData = process.env.PLUGIN_DATA?.trim();
   if (pluginData && path.isAbsolute(pluginData) && !pluginData.split(/[/\\]/).some((seg) => seg === '..')) {
     return path.join(pluginData, 'culture-cache.db');

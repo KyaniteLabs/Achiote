@@ -60,7 +60,9 @@ Updates arrive only when the pinned version changes in a reviewed commit.
   `$ACHIOTE_CACHE_PATH`, else `$PLUGIN_DATA/culture-cache.db` (the per-plugin data
   folder Hermes provides), else `$XDG_CACHE_HOME/achiote/culture-cache.db`, else
   `~/.cache/achiote/culture-cache.db`. If the chosen folder is not writable it falls
-  back to `~/.cache/achiote/` and logs a warning to stderr. `achiote purge` deletes it.
+  back to `~/.cache/achiote/` and logs a warning to stderr. `achiote purge` deletes the
+  cache its own environment points at, so run it with the same `PLUGIN_DATA` or
+  `ACHIOTE_CACHE_PATH` the server had.
 - Achiote sends no telemetry from the MCP server.
 
 ## Files in this folder
