@@ -34,7 +34,7 @@ export function createAchioteServer(options: AchioteServerOptions = {}): McpServ
         description: tool.mcp.description,
         inputSchema: tool.mcp.inputSchema,
         outputSchema: tool.mcp.outputSchema,
-        annotations: readOnlyAnnotations,
+        annotations: tool.name === 'search_web' ? { ...readOnlyAnnotations, openWorldHint: true } : readOnlyAnnotations,
       },
       async (input: unknown) => {
         try {
