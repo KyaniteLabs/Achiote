@@ -87,10 +87,11 @@ Business Source License 1.1. See [LICENSE](LICENSE).
 
 ## Install
 
-Claude Code (2.1.275 or later):
+Claude Code:
 
 ```
-/plugin install achiote --marketplace KyaniteLabs/achiote
+/plugin marketplace add KyaniteLabs/achiote
+/plugin install achiote@kyanitelabs-achiote
 ```
 
 Codex:
