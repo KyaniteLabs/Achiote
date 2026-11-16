@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "achiote": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "achiote@0.2.2"
+      ]
+    }
+  }
+}
