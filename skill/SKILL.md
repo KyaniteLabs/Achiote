@@ -179,7 +179,7 @@ status: "first_test_ready"
 toolsRun: [
   "collect_food_memory",
   "plan_dish_research",
-  "generate_sensory_substitution_analysis",
+  "find_sensory_substitutes",
   "generate_minimum_viable_nostalgia"
 ]
 
@@ -261,7 +261,7 @@ The manual sequence (identical to what the engine does internally):
    Output: dish hypotheses, search queries, facts to verify
 
 3. CLARIFY (optional) → Ask only if memory is sparse
-   Tool: generate_clarification_questions
+   Tool: generate_family_followup_questions
    Input: collected memory with sufficiency score
    Decision: if sufficiency >= 0.6 AND region is present AND sensory clues >= 2, skip this. Otherwise, ask 0-3 questions.
 
@@ -290,12 +290,13 @@ The manual sequence (identical to what the engine does internally):
    Output: cheapest, easiest sensory trigger to test first (aroma, bite, sip, condiment, ritual)
 
 9. SOURCING / SUBSTITUTION (if needed)
-   Tool: generate_sensory_substitution_analysis
+   Tool: find_sensory_substitutes
+   Tool: source_ingredients
    Input: dossier + constraints (allergies, regional availability, budget)
-   Output: sourcing guidance and substitution reasoning
+   Output: compound-matched substitutes, then static regional sourcing hints
 
 10. RECIPE HANDOFF (only if user wants full dish)
-   Tool: generate_recipe_structure
+   Tool: generate_recipe
    Input: dossier + sensory analysis
    Output: recipe in structured form (ingredients table, steps, notes)
    You (the host): Write warm prose around the structured recipe.

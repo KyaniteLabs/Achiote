@@ -4,6 +4,9 @@ import { createServer } from 'node:http';
 import { createServer as createNetServer } from 'node:net';
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 const jsonOnly = process.argv.includes('--json');
 const listJsonOnly = process.argv.includes('--list-json');
@@ -31,7 +34,7 @@ function log(line = '') {
 }
 
 function ensureBuilt() {
-  if (fs.existsSync(path.resolve('dist/http-server.js'))) return;
+  if (fs.existsSync(path.join(packageRoot, 'dist/http-server.js'))) return;
   log('dist/http-server.js is missing; building local server before offline torture run.');
   const result = spawnSync('npm', ['run', 'build'], { stdio: jsonOnly ? 'pipe' : 'inherit' });
   if (result.status !== 0) {
@@ -149,7 +152,7 @@ function commonMemory(text, location = 'United States') {
 }
 
 async function spawnAchiote(port, fakeBaseUrl, env = {}) {
-  const child = spawn(process.execPath, [path.resolve('dist/http-server.js')], {
+  const child = spawn(process.execPath, [path.join(packageRoot, 'dist/http-server.js')], {
     env: {
       ...process.env,
       PORT: String(port),

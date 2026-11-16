@@ -52,6 +52,9 @@ export const PACKAGE_SURFACE = {
     'scripts/torture-smoke.mjs',
     'scripts/viability-transcript-smoke.mjs',
     'scripts/reference-seed-operator.mjs',
+    'src/data/reference-pantry-fixtures.json',
+    'src/data/fault-patterns.json',
+    'src/data/food-science-references.json',
   ],
   forbiddenPackagePathPatterns: [
     // Canonical-only landing assets were excluded from this mirror by PR #252.

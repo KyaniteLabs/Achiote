@@ -2,6 +2,7 @@
 
 import fs from 'node:fs';
 import { resolve } from 'node:path';
+import { repoInput } from './lib/repo-input.mjs';
 import { ResearchCache } from '../dist/lib/research-cache.js';
 import { applyReferencePantryAppend, auditReferencePantryPopulation } from '../dist/lib/reference-pantry-population.js';
 import { bundledGlobalReferenceSeeds } from '../dist/lib/reference-seed-planner.js';
@@ -41,7 +42,8 @@ function parseArgs(argv) {
 }
 
 function readJson(filePath) {
-  return JSON.parse(fs.readFileSync(resolve(filePath), 'utf8'));
+  const absolute = filePath.startsWith('src/') ? repoInput(filePath) : resolve(filePath);
+  return JSON.parse(fs.readFileSync(absolute, 'utf8'));
 }
 
 function emptyQualityReport() {
@@ -70,7 +72,8 @@ function writeApprovedFixtures(fixturePath, cachePath) {
 }
 
 function writeJson(relativePath, value) {
-  fs.writeFileSync(resolve(relativePath), `${JSON.stringify(value, null, 2)}\n`);
+  const absolute = relativePath.startsWith('src/') ? repoInput(relativePath) : resolve(relativePath);
+  fs.writeFileSync(absolute, `${JSON.stringify(value, null, 2)}\n`);
 }
 
 function applyAppendPlan(appendPath, write) {

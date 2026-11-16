@@ -4,6 +4,7 @@ import { createServer as createNetServer } from 'node:net';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { writeQaRunManifest } from './lib/qa-artifact-pipeline.mjs';
 
 const DEFAULT_MODEL = 'qwen3.5-0.8b';
@@ -11,7 +12,7 @@ const DEFAULT_BASE_URL = 'http://100.66.225.85:1234/v1';
 const args = new Set(process.argv.slice(2));
 const listJsonOnly = args.has('--list-json');
 
-const root = process.cwd();
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const serverPath = path.join(root, 'dist', 'http-server.js');
 const baseUrl = (process.env.LOCAL_CANARY_BASE_URL
   || process.env.LOCAL_INFERENCE_BASE_URL

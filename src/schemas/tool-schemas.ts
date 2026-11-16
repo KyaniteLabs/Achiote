@@ -391,6 +391,10 @@ export const webSearchOutputSchema = z.object({
       snippet: z.string(),
     }),
   ),
+  // Present when search is disabled, unconfigured, or the provider call fails.
+  // Optional so a successful Serper response ({ query, results }) still validates.
+  note: z.string().optional(),
+  error: z.string().optional(),
 });
 
 export const planToolWorkflowOutputSchema = z.object({

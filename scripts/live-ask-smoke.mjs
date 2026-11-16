@@ -3,6 +3,7 @@ import { spawn } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const isOpenAICompatible = ['openai', 'openai-compatible', 'lmstudio', 'lm-studio'].includes(process.env.ACHIOTE_ASK_PROVIDER?.trim().toLowerCase() ?? '')
   || Boolean(process.env.OPENAI_BASE_URL?.trim() || process.env.LMSTUDIO_BASE_URL?.trim() || process.env.LM_STUDIO_BASE_URL?.trim());
@@ -26,7 +27,7 @@ if (!hasProviderCredential) {
   process.exit(1);
 }
 
-const root = process.cwd();
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const tmpRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'achiote-live-ask-'));
 const port = 42000 + Math.floor(Math.random() * 10000);
 const serverPath = path.join(root, 'dist', 'http-server.js');

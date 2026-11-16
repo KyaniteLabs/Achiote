@@ -41,6 +41,8 @@ describe('package distribution metadata', () => {
       'skill/',
       'scripts/',
       '!scripts/weak-cloud-overnight.mjs',
+      'src/data/',
+      '!src/data/inference-burden-inventory.json',
       'server.json',
       'docs/ARCHITECTURE.md',
       'docs/AI_SEARCH_SUBMISSION_RUNBOOK.md',
@@ -90,6 +92,7 @@ describe('package distribution metadata', () => {
       'docs/landing/support.html',
       'docs/landing/terms.html',
       'README.md',
+      'SECURITY.md',
       'LICENSE',
     ]);
   });

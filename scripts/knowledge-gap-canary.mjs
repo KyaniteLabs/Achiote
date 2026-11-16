@@ -2,6 +2,7 @@
 
 import fs from 'node:fs';
 import { dirname, resolve } from 'node:path';
+import { repoInput } from './lib/repo-input.mjs';
 import {
   analyzeKnowledgeGaps,
   buildTaxonomyRemediationQueue,
@@ -101,7 +102,8 @@ try {
 }
 
 function readJson(filePath) {
-  return JSON.parse(fs.readFileSync(resolve(filePath), 'utf8'));
+  const absolute = filePath.startsWith('src/') ? repoInput(filePath) : resolve(filePath);
+  return JSON.parse(fs.readFileSync(absolute, 'utf8'));
 }
 
 function unique(values) {

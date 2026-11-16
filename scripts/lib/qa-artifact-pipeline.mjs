@@ -1,6 +1,7 @@
 import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 export const QA_ARTIFACT_MANIFEST_FILE = 'run-manifest.json';
 
@@ -47,7 +48,7 @@ export function latestPriorQaManifest(root = process.cwd(), artifactDir) {
 
 export function buildQaRunManifest(input = {}) {
   const generatedAt = input.generatedAt ?? new Date().toISOString();
-  const root = input.root ?? process.cwd();
+  const root = input.root ?? path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
   const artifactDir = input.artifactDir ? path.resolve(input.artifactDir) : '';
   const promptBank = input.promptBank ?? {};
   const referenceFingerprint = input.referenceFingerprint
