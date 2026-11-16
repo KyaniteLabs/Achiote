@@ -636,6 +636,30 @@ const scenarios = [
     },
   },
   {
+    id: 'cold_drink_ingredient_quantities',
+    message: 'I remember a white cold drink in Mexico, cinnamon on top, no dairy. I have a severe nut allergy. Can you help identify it without asking me to taste nuts?',
+    respond: ({ requestCount }) => {
+      const turns = [
+        toolsResponse([toolCall('call_1', 'collect_food_memory', commonMemory('Cold rice-cinnamon drink like horchata but thinner.'))]),
+        toolsResponse([toolCall('call_2', 'plan_dish_research', {})]),
+        toolsResponse([toolCall('call_3', 'build_reconstruction_dossier', {})]),
+        toolsResponse([toolCall('call_4', 'generate_minimum_viable_nostalgia', {})]),
+        textResponse('For a first tiny check you fully control, make it at home from pantry basics: soak two cups of plain white rice overnight, blend with four cups water, a cinnamon stick or one teaspoon of ground cinnamon, and two tablespoons of sugar.'),
+      ];
+      return turns[requestCount - 1] ?? textResponse('done');
+    },
+    assert: (result) => {
+      const findings = [];
+      const text = responseText(result);
+      expectNoErrors(result, findings);
+      expectDone(result, findings);
+      if (/\btiny\s+sip(?:\s+or\s+bite)?\s+(?:of\s+)?(?:plain white rice|water|ground cinnamon|sugar)\b/i.test(text)) findings.push('ingredient quantity was rewritten as taste-action copy');
+      if (!/a small amount of plain white rice/.test(text)) findings.push('ingredient quantity did not degrade to a neutral amount');
+      if (donePayload(result)?.guarded !== 'recipe_measurement_sanitized') findings.push(`recipe sanitizer guard did not fire: ${JSON.stringify(donePayload(result))}`);
+      return findings;
+    },
+  },
+  {
     id: 'weak_model_tool_name_typo_recovery',
     message: 'Cold rice-cinnamon drink like horchata but thinner. Give me a tiny sip cue.',
     respond: ({ requestCount }) => {

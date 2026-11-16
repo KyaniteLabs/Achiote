@@ -1,4 +1,5 @@
-try { process.loadEnvFile(); } catch { /* no .env file present */ }
+import { loadPackageEnv } from './lib/load-env.js';
+loadPackageEnv();
 
 import { parseArgs } from 'node:util';
 import { Transform } from 'node:stream';

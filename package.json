@@ -1,7 +1,7 @@
 {
   "name": "achiote",
   "version": "0.2.2",
-  "description": "Nostalgic food memory reconstruction MCP server — recreates childhood dishes using ingredients available where you are",
+  "description": "Nostalgic food memory reconstruction MCP server \u2014 recreates childhood dishes using ingredients available where you are",
   "main": "dist/index.js",
   "type": "module",
   "scripts": {
@@ -23,6 +23,9 @@
     "keygen": "node scripts/generate-api-key.mjs",
     "docker:smoke": "node scripts/docker-smoke.mjs",
     "lint": "node scripts/static-checks.mjs",
+    "hermes:sync": "node scripts/hermes-plugin.mjs sync",
+    "hermes:catalog-entry": "node scripts/hermes-plugin.mjs catalog-entry",
+    "brand:build": "node scripts/build-brand-assets.mjs",
     "coverage:guard": "node scripts/coverage-threshold.mjs",
     "reference:coverage": "node scripts/reference-coverage-audit.mjs --fail",
     "live:ask": "node scripts/live-ask-smoke.mjs",

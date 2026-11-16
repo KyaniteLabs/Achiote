@@ -1,8 +1,8 @@
-# Achiote
-
 <p align="center">
-  <img src="branding/achiote-512.png" alt="achiote icon" width="128">
+  <img src="branding/achiote-hero.webp" alt="Achiote — food-memory and cultural taste research MCP server" width="100%">
 </p>
+
+# Achiote
 
 **TL;DR:** Achiote — food-memory and cultural taste research product. Best for researchers and builders exploring food memory and heritage taste. Keywords: food memory research, cultural taste, heritage cuisine AI.
 
@@ -138,6 +138,16 @@ After building, add the stdio server to your MCP settings:
 ```
 
 If installed as a package, the CLI binary is `achiote`.
+
+### Hermes
+
+`plugins/achiote/` is a portable plugin package (MCP server + skill) for Hermes:
+
+```bash
+hermes plugins install KyaniteLabs/Achiote --subdir plugins/achiote
+```
+
+See [docs/HERMES_PLUGIN.md](docs/HERMES_PLUGIN.md) for the release and catalog pipeline.
 
 ## HTTP server
 

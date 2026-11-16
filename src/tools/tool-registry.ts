@@ -408,6 +408,8 @@ export const defaultToolExecutionContext: AchioteToolExecutionContext = {
   dishFamiliesData,
 };
 
+const SEARCH_WEB_TIMEOUT_MS = 10_000;
+
 export const toolRegistry = [
   createTool({
     name: 'plan_tool_workflow',
@@ -900,6 +902,9 @@ export const toolRegistry = [
     execute: async (raw) => {
       const query = text(asInput(raw).query);
       const apiKey = process.env.SERPER_API_KEY?.trim();
+      if (process.env.ACHIOTE_DISABLE_SEARCH_WEB === 'true') {
+        return output({ query, results: [], note: 'Web search is disabled (ACHIOTE_DISABLE_SEARCH_WEB=true). Use prior evidence or ask a targeted follow-up question.' });
+      }
       if (!apiKey) {
         return output({ query, results: [], note: 'Host web search is not configured for this run. Use prior evidence or ask a targeted follow-up question.' });
       }
@@ -908,6 +913,7 @@ export const toolRegistry = [
           method: 'POST',
           headers: { 'X-API-KEY': apiKey, 'Content-Type': 'application/json' },
           body: JSON.stringify({ q: query }),
+          signal: AbortSignal.timeout(SEARCH_WEB_TIMEOUT_MS),
         });
         if (!response.ok) {
           const body = await response.text();

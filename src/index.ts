@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
-try { process.loadEnvFile(); } catch { /* no .env file present */ }
+import { loadPackageEnv } from './lib/load-env.js';
+loadPackageEnv();
 
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
