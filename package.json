@@ -19,7 +19,8 @@
     "land": "node scripts/forgejo-land.mjs",
     "pack:check": "npm run check && npm run validate:citations && npm run package:smoke && npm pack --dry-run",
     "package:smoke": "node scripts/package-smoke.mjs",
-    "prepack": "npm run build",
+    "prepack": "npm run build && node scripts/publish-package-scripts.mjs apply",
+    "postpack": "node scripts/publish-package-scripts.mjs restore",
     "keygen": "node scripts/generate-api-key.mjs",
     "docker:smoke": "node scripts/docker-smoke.mjs",
     "lint": "node scripts/static-checks.mjs",
@@ -73,6 +74,8 @@
     "skill/",
     "scripts/",
     "!scripts/weak-cloud-overnight.mjs",
+    "src/data/",
+    "!src/data/inference-burden-inventory.json",
     "server.json",
     "docs/ARCHITECTURE.md",
     "docs/AI_SEARCH_SUBMISSION_RUNBOOK.md",
@@ -122,6 +125,7 @@
     "docs/landing/support.html",
     "docs/landing/terms.html",
     "README.md",
+    "SECURITY.md",
     "LICENSE"
   ],
   "engines": {

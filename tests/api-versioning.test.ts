@@ -181,12 +181,14 @@ describe('API versioning and auth', () => {
     expect(spec.openapi).toBe('3.1.0');
     expect(spec.paths?.['/v1/ask']).toBeDefined();
     expect(spec.paths?.['/health']).toBeDefined();
+    expect(spec.paths?.['/mcp']).toBeDefined();
+    expect(Object.keys(spec.paths ?? {})).toHaveLength(19);
 
     const yaml = await fetch(`http://127.0.0.1:${port}/openapi.yaml`);
     expect(yaml.status).toBe(200);
     expect(yaml.headers.get('content-type')).toContain('yaml');
     const yamlText = await yaml.text();
-    expect(yamlText).toContain('openapi: 3.1.0');
+    expect(yamlText).toContain('openapi: "3.1.0"');
     expect(yamlText).toContain('/v1/ask');
   }, 30_000);
 });

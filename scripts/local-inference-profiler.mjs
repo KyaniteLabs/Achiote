@@ -2,6 +2,7 @@
 import { spawn } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { QA_ARTIFACT_MANIFEST_FILE, writeQaRunManifest } from './lib/qa-artifact-pipeline.mjs';
 import {
   buildLmStudioLoadPayload,
@@ -428,10 +429,11 @@ function anthropicBaseUrl(targetBaseUrl) {
 }
 
 function runLocalCanary(options) {
+  const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
   return new Promise((resolve, reject) => {
     const summaryPath = path.join(options.outputDir, `${slug(options.model)}-${options.profileName}-canary-summary.json`);
-    const child = spawn(process.execPath, ['scripts/local-canary-qa.mjs'], {
-      cwd: process.cwd(),
+    const child = spawn(process.execPath, [path.join(packageRoot, 'scripts/local-canary-qa.mjs')], {
+      cwd: packageRoot,
       env: {
         ...process.env,
         LOCAL_CANARY_BASE_URL: options.baseUrl,

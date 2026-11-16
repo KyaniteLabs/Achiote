@@ -10,6 +10,7 @@ artifacts/
 .env
 .env.*
 !.env.example
+.package.json.prepack-backup
 .omx/
 .omc/
 .worktrees/

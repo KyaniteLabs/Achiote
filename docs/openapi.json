@@ -11,13 +11,18 @@
     { "url": "http://localhost:3000", "description": "Local" }
   ],
   "tags": [
-    { "name": "reconstruction", "description": "Food-memory reconstruction" },
-    { "name": "system", "description": "Health and readiness" }
+    { "name": "ask", "description": "Food and drink memory reconstruction." },
+    { "name": "system", "description": "Health and readiness." },
+    { "name": "mcp", "description": "Hosted MCP session." },
+    { "name": "voice", "description": "Local speech transcription and synthesis." },
+    { "name": "billing", "description": "Checkout, crypto orders, and issued API keys." },
+    { "name": "telemetry", "description": "First-party analytics." },
+    { "name": "docs", "description": "This specification." }
   ],
   "paths": {
     "/v1/ask": {
       "post": {
-        "tags": ["reconstruction"],
+        "tags": ["ask"],
         "operationId": "askV1",
         "summary": "Reconstruct a food memory (streaming)",
         "description": "Runs the full reconstruction workflow and returns a text/event-stream of progress, tool calls, the synthesized answer (text events), an optional Memory Receipt (receipt event), and a terminal done event. Authenticate with an API key (Authorization: Bearer or x-api-key) for programmatic use, or x-demo-password for the anonymous demo when enabled.",
@@ -53,7 +58,7 @@
     },
     "/ask": {
       "post": {
-        "tags": ["reconstruction"],
+        "tags": ["ask"],
         "operationId": "askLegacy",
         "summary": "Reconstruct a food memory (legacy alias of /v1/ask)",
         "description": "Identical behavior to POST /v1/ask. Retained for the live site and existing clients.",
@@ -99,6 +104,252 @@
               "application/json": { "schema": { "$ref": "#/components/schemas/HealthResponse" } }
             }
           }
+        }
+      }
+    },
+    "/ready": {
+      "get": {
+        "tags": ["system"],
+        "operationId": "ready",
+        "summary": "Readiness",
+        "description": "Same body as /health. Returns 503 when a readiness check failed (status degraded).",
+        "responses": {
+          "200": { "description": "All readiness checks passed.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/HealthResponse" } } } },
+          "503": { "$ref": "#/components/responses/ServiceUnavailable" }
+        }
+      }
+    },
+    "/.well-known/openai-apps-challenge": {
+      "get": {
+        "tags": ["system"],
+        "operationId": "openaiAppsChallenge",
+        "summary": "OpenAI apps domain-verification token",
+        "description": "Returns the OPENAI_APPS_CHALLENGE_TOKEN as text/plain. 404 when the token is unset.",
+        "responses": {
+          "200": { "description": "The challenge token.", "content": { "text/plain": { "schema": { "type": "string" } } } },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/mcp": {
+      "post": {
+        "tags": ["mcp"],
+        "operationId": "mcpPost",
+        "summary": "Open or continue a hosted MCP session",
+        "description": "Streamable HTTP MCP transport. A new session returns Mcp-Session-Id; later calls send that header back. Protocol errors use a JSON-RPC error body.",
+        "parameters": [
+          { "name": "Mcp-Session-Id", "in": "header", "required": false, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "JSON-RPC response, or an SSE stream when the client accepts text/event-stream." },
+          "400": { "description": "Malformed session or JSON-RPC request." }
+        }
+      },
+      "get": {
+        "tags": ["mcp"],
+        "operationId": "mcpGet",
+        "summary": "Listen on an existing MCP session",
+        "parameters": [
+          { "name": "Mcp-Session-Id", "in": "header", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "SSE stream for the session." },
+          "400": { "description": "Missing or unknown Mcp-Session-Id." }
+        }
+      },
+      "delete": {
+        "tags": ["mcp"],
+        "operationId": "mcpDelete",
+        "summary": "Close an MCP session",
+        "parameters": [
+          { "name": "Mcp-Session-Id", "in": "header", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "Session closed." },
+          "400": { "description": "Missing or unknown Mcp-Session-Id." }
+        }
+      }
+    },
+    "/voice/status": {
+      "get": {
+        "tags": ["voice"],
+        "operationId": "voiceStatus",
+        "summary": "Local speech readiness",
+        "responses": {
+          "200": { "description": "Speech subsystem status.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SpeechStatus" } } } }
+        }
+      }
+    },
+    "/voice/transcribe": {
+      "post": {
+        "tags": ["voice"],
+        "operationId": "voiceTranscribe",
+        "summary": "Transcribe a short audio clip",
+        "security": [{ "bearerAuth": [] }, { "apiKeyAuth": [] }, { "demoPassword": [] }],
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SpeechTranscribeRequest" } } } },
+        "responses": {
+          "200": { "description": "Transcript.", "content": { "application/json": { "schema": { "type": "object", "properties": { "text": { "type": "string" } } } } } },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "503": { "$ref": "#/components/responses/ServiceUnavailable" }
+        }
+      }
+    },
+    "/voice/synthesize": {
+      "post": {
+        "tags": ["voice"],
+        "operationId": "voiceSynthesize",
+        "summary": "Synthesize speech from text",
+        "security": [{ "bearerAuth": [] }, { "apiKeyAuth": [] }, { "demoPassword": [] }],
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SpeechSynthesizeRequest" } } } },
+        "responses": {
+          "200": { "description": "Synthesized audio.", "content": { "application/json": { "schema": { "type": "object", "properties": { "audioBase64": { "type": "string" }, "mediaType": { "type": "string" } } } } } },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "503": { "$ref": "#/components/responses/ServiceUnavailable" }
+        }
+      }
+    },
+    "/events": {
+      "get": {
+        "tags": ["telemetry"],
+        "operationId": "eventsSummary",
+        "summary": "Recent telemetry summary",
+        "description": "Returns { disabled: true } unless ACHIOTE_EVENTS_ADMIN_TOKEN is set and sent as a bearer token.",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": { "description": "Summary, or { disabled: true }." },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      },
+      "post": {
+        "tags": ["telemetry"],
+        "operationId": "eventsCapture",
+        "summary": "Capture a first-party telemetry event",
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TelemetryEvent" } } } },
+        "responses": {
+          "202": { "description": "Accepted." },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "413": { "$ref": "#/components/responses/PayloadTooLarge" }
+        }
+      }
+    },
+    "/openapi.json": {
+      "get": {
+        "tags": ["docs"],
+        "operationId": "openapiJson",
+        "summary": "This specification, as JSON",
+        "responses": { "200": { "description": "The OpenAPI document.", "content": { "application/json": { "schema": { "type": "object" } } } } }
+      }
+    },
+    "/openapi.yaml": {
+      "get": {
+        "tags": ["docs"],
+        "operationId": "openapiYaml",
+        "summary": "This specification, as YAML",
+        "responses": { "200": { "description": "The OpenAPI document.", "content": { "application/yaml": { "schema": { "type": "string" } } } } }
+      }
+    },
+    "/billing/checkout": {
+      "post": {
+        "tags": ["billing"],
+        "operationId": "billingCheckout",
+        "summary": "Start a Stripe subscription checkout",
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CheckoutRequest" } } } },
+        "responses": {
+          "200": { "description": "Stripe Checkout URL.", "content": { "application/json": { "schema": { "type": "object", "required": ["url"], "properties": { "url": { "type": "string" } } } } } },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "503": { "$ref": "#/components/responses/ServiceUnavailable" }
+        }
+      }
+    },
+    "/billing/crypto-order": {
+      "post": {
+        "tags": ["billing"],
+        "operationId": "billingCryptoOrder",
+        "summary": "Create a Solana Pay order",
+        "description": "tier personal or family is a subscription; memory-pack or family-sprint is a one-time payment. asset defaults to USDC.",
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CryptoOrderRequest" } } } },
+        "responses": {
+          "200": { "description": "Pending order.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CryptoOrder" } } } },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "503": { "$ref": "#/components/responses/ServiceUnavailable" }
+        }
+      }
+    },
+    "/billing/crypto-status": {
+      "get": {
+        "tags": ["billing"],
+        "operationId": "billingCryptoStatus",
+        "summary": "Poll a crypto order",
+        "parameters": [
+          { "name": "ref", "in": "query", "required": true, "schema": { "type": "string", "pattern": "^[23456789ABCDEFGHJKLMNPQRSTUVWXYZ]{8}$" } }
+        ],
+        "responses": {
+          "200": { "description": "Order status. sessionId is present only when status is paid.", "content": { "application/json": { "schema": { "type": "object", "properties": { "status": { "type": "string" }, "sessionId": { "type": "string" } } } } } },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "503": { "$ref": "#/components/responses/ServiceUnavailable" }
+        }
+      }
+    },
+    "/billing/portal": {
+      "post": {
+        "tags": ["billing"],
+        "operationId": "billingPortal",
+        "summary": "Open the Stripe customer portal",
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/PortalRequest" } } } },
+        "responses": {
+          "200": { "description": "Portal URL.", "content": { "application/json": { "schema": { "type": "object", "required": ["url"], "properties": { "url": { "type": "string" } } } } } },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "503": { "$ref": "#/components/responses/ServiceUnavailable" }
+        }
+      }
+    },
+    "/billing/webhook": {
+      "post": {
+        "tags": ["billing"],
+        "operationId": "billingWebhook",
+        "summary": "Stripe webhook",
+        "description": "Requires a valid Stripe-Signature header. Not a public API.",
+        "parameters": [
+          { "name": "Stripe-Signature", "in": "header", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "Event accepted.", "content": { "application/json": { "schema": { "type": "object", "properties": { "received": { "type": "boolean" } } } } } },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "503": { "$ref": "#/components/responses/ServiceUnavailable" }
+        }
+      }
+    },
+    "/billing/session": {
+      "get": {
+        "tags": ["billing"],
+        "operationId": "billingSession",
+        "summary": "Redeem a checkout session for its API key",
+        "description": "The key is returned once. Stripe sessions also require the checkout email.",
+        "parameters": [
+          { "name": "session_id", "in": "query", "required": true, "schema": { "type": "string" } },
+          { "name": "email", "in": "query", "required": false, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "Completed session and its one-time API key." },
+          "202": { "description": "Payment still pending." },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "503": { "$ref": "#/components/responses/ServiceUnavailable" }
+        }
+      }
+    },
+    "/billing/success": {
+      "get": {
+        "tags": ["billing"],
+        "operationId": "billingSuccess",
+        "summary": "Post-checkout page",
+        "responses": {
+          "200": { "description": "The billing success page.", "content": { "text/html": { "schema": { "type": "string" } } } },
+          "404": { "$ref": "#/components/responses/NotFound" }
         }
       }
     }
@@ -189,8 +440,98 @@
           "version": { "type": "string" },
           "authEnabled": { "type": "boolean" },
           "billingEnabled": { "type": "boolean" },
+          "cryptoEnabled": { "type": "boolean" },
+          "readiness": { "$ref": "#/components/schemas/Readiness" },
           "uptime": { "type": "number" },
           "provider": { "type": "object" }
+        }
+      },
+      "Readiness": {
+        "type": "object",
+        "required": ["ready", "status", "checks"],
+        "properties": {
+          "ready": { "type": "boolean" },
+          "status": { "type": "string", "enum": ["ok", "degraded"] },
+          "checks": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["name", "ok", "message"],
+              "properties": {
+                "name": { "type": "string" },
+                "ok": { "type": "boolean" },
+                "message": { "type": "string" }
+              }
+            }
+          }
+        }
+      },
+      "SpeechStatus": {
+        "type": "object",
+        "required": ["enabled", "stt", "tts"],
+        "properties": {
+          "enabled": { "type": "boolean" },
+          "stt": { "type": "object", "required": ["ready"], "properties": { "ready": { "type": "boolean" }, "command": { "type": "string" } } },
+          "tts": { "type": "object", "required": ["ready"], "properties": { "ready": { "type": "boolean" }, "command": { "type": "string" } } }
+        }
+      },
+      "SpeechTranscribeRequest": {
+        "type": "object",
+        "required": ["audioBase64", "mediaType"],
+        "properties": {
+          "audioBase64": { "type": "string" },
+          "mediaType": { "type": "string", "description": "audio/wav, audio/mpeg, audio/webm, audio/ogg, or audio/mp4." },
+          "language": { "type": "string" }
+        }
+      },
+      "SpeechSynthesizeRequest": {
+        "type": "object",
+        "required": ["text"],
+        "properties": {
+          "text": { "type": "string" },
+          "voice": { "type": "string" },
+          "language": { "type": "string" }
+        }
+      },
+      "CheckoutRequest": {
+        "type": "object",
+        "required": ["tier"],
+        "properties": {
+          "tier": { "type": "string", "enum": ["personal", "family"] },
+          "mode": { "type": "string", "enum": ["subscription"] }
+        }
+      },
+      "CryptoOrderRequest": {
+        "type": "object",
+        "required": ["tier"],
+        "properties": {
+          "tier": { "type": "string", "enum": ["personal", "family", "memory-pack", "family-sprint"] },
+          "asset": { "type": "string", "enum": ["USDC", "SOL"] }
+        }
+      },
+      "CryptoOrder": {
+        "type": "object",
+        "required": ["ref", "asset", "address", "amount", "uri", "expiresAtMs"],
+        "properties": {
+          "ref": { "type": "string" },
+          "asset": { "type": "string" },
+          "address": { "type": "string" },
+          "amount": { "type": "string" },
+          "uri": { "type": "string" },
+          "expiresAtMs": { "type": "number" }
+        }
+      },
+      "PortalRequest": {
+        "type": "object",
+        "required": ["keyId"],
+        "properties": { "keyId": { "type": "string" } }
+      },
+      "TelemetryEvent": {
+        "type": "object",
+        "required": ["event"],
+        "properties": {
+          "event": { "type": "string", "maxLength": 64, "pattern": "^[a-z0-9_:-]+$" },
+          "properties": { "type": "object", "additionalProperties": { "type": "string", "maxLength": 120 } }
         }
       },
       "Error": {
@@ -217,6 +558,22 @@
       },
       "RateLimited": {
         "description": "Rate limit exceeded; upgrade the plan for more reconstructions.",
+        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } }
+      },
+      "ServiceUnavailable": {
+        "description": "A required subsystem (billing, crypto, or speech) is not configured, or readiness checks failed.",
+        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } }
+      },
+      "NotFound": {
+        "description": "The requested resource does not exist.",
+        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } }
+      },
+      "Forbidden": {
+        "description": "The caller is not allowed to read this resource.",
+        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } }
+      },
+      "MethodNotAllowed": {
+        "description": "The HTTP method is not implemented for this path.",
         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } }
       }
     }

@@ -4,10 +4,10 @@
  * from dish-families.json with reference pantry fixtures.
  */
 import fs from 'node:fs';
-import { resolve } from 'node:path';
+import { repoInput } from './lib/repo-input.mjs';
 
-const dishFamilies = JSON.parse(fs.readFileSync(resolve('src/data/dish-families.json'), 'utf8'));
-const existingFixtures = JSON.parse(fs.readFileSync(resolve('src/data/reference-pantry-fixtures.json'), 'utf8'));
+const dishFamilies = JSON.parse(fs.readFileSync(repoInput('src/data/dish-families.json'), 'utf8'));
+const existingFixtures = JSON.parse(fs.readFileSync(repoInput('src/data/reference-pantry-fixtures.json'), 'utf8'));
 
 // Build alias-to-canonical map like workflow-planner does
 function normalizeKnowledgeText(value) {

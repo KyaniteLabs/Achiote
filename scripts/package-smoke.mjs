@@ -110,7 +110,7 @@ function assertPackagedHelperScripts(installDir, tempRoot) {
   const dockerSmokePath = path.join(packageRoot, 'scripts', 'docker-smoke.mjs');
   const liveAskPath = path.join(packageRoot, 'scripts', 'live-ask-smoke.mjs');
   const referenceSeedOperatorPath = path.join(packageRoot, 'scripts', 'reference-seed-operator.mjs');
-  const bundledFixtureCount = JSON.parse(fs.readFileSync(path.join(repoRoot, 'src', 'data', 'reference-pantry-fixtures.json'), 'utf8')).fixtures.length;
+  const bundledFixtureCount = JSON.parse(fs.readFileSync(path.join(packageRoot, 'src', 'data', 'reference-pantry-fixtures.json'), 'utf8')).fixtures.length;
   if (!fs.existsSync(keygenPath)) throw new Error(`Packaged keygen helper missing at ${keygenPath}`);
   if (!fs.existsSync(dockerSmokePath)) throw new Error(`Packaged docker smoke helper missing at ${dockerSmokePath}`);
   if (!fs.existsSync(liveAskPath)) throw new Error(`Packaged live ask smoke helper missing at ${liveAskPath}`);
@@ -236,6 +236,10 @@ async function assertPackagedCliListsTools(installDir, tempRoot, expectedTools) 
       throw new Error(
         `Packaged CLI returned unexpected tools.\nExpected: ${expectedTools.join(', ')}\nReceived: ${toolNames.join(', ')}`,
       );
+    }
+    const search = tools.find((tool) => tool.name === 'search_web');
+    if (search?.annotations?.openWorldHint !== true) {
+      throw new Error(`Packaged search_web must advertise openWorldHint: true, got ${JSON.stringify(search?.annotations ?? null)}`);
     }
   } catch (error) {
     const stderr = stderrChunks.join('').trim();

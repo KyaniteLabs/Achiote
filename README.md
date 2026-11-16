@@ -59,7 +59,7 @@ Open the HTML files directly in a browser for static review; the full route beha
 
 ## What It Does Today
 
-Achiote is a research-first food-and-drink memory reconstruction server. It provides 19 MCP tools that let a host AI chat client run the workflow from a fragment to a minimum viable nostalgia cue, with optional sourcing/substitution and recipe handoff if the user wants more:
+Achiote is a research-first food-and-drink memory reconstruction server. It provides 19 MCP tools: 18 granular tools in `toolRegistry`, plus the single-call `reconstruct_food_memory` engine. Those are one surface counted two ways — 18 steps, or one call that runs them — not two products. A host AI chat client uses them to run the workflow from a fragment to a minimum viable nostalgia cue, with optional sourcing/substitution and recipe handoff if the user wants more:
 
 | Stage | Tool | Implemented behavior |
 |------|------|----------------------|

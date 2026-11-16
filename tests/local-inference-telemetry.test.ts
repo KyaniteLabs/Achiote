@@ -125,7 +125,7 @@ describe('local inference load profiles', () => {
     const profilerScript = fs.readFileSync('scripts/local-inference-profiler.mjs', 'utf8');
     const runLocalCanaryBody = profilerScript.match(/function runLocalCanary\(options\) \{([\s\S]*?)\n\}\n\nfunction extractReasoningTrace/)?.[1] ?? '';
 
-    expect(runLocalCanaryBody).toContain("['scripts/local-canary-qa.mjs']");
+    expect(runLocalCanaryBody).toContain("'scripts/local-canary-qa.mjs'");
     expect(runLocalCanaryBody).not.toContain('--list-json');
     expect(runLocalCanaryBody).toContain('LOCAL_CANARY_ARTIFACT_DIR');
   });
