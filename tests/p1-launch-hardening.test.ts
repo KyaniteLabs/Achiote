@@ -10,7 +10,7 @@ describe('P1 launch hardening guardrails', () => {
     expect(releaseJob).toContain('node-version: 22');
     expect(releaseJob).toMatch(/^\s+run: npm run check$/m);
     expect(releaseJob).toMatch(/^\s+run: npm run validate:citations$/m);
-    expect(releaseJob).toContain('npm audit --audit-level=moderate');
+    expect(releaseJob).toContain('npm run audit:gate');
     expect(releaseJob).toContain('npm run package:smoke');
     expect(releaseJob).toContain('npm pack --dry-run');
   });
@@ -27,7 +27,7 @@ describe('P1 launch hardening guardrails', () => {
     const compatibilityJob = ci.slice(ci.indexOf('compatibility-gate:'));
     expect(compatibilityJob).not.toContain('npm run package:smoke');
     expect(compatibilityJob).not.toContain('npm pack --dry-run');
-    expect(compatibilityJob).not.toContain('npm audit --audit-level=moderate');
+    expect(compatibilityJob).not.toContain('npm run audit:gate');
   });
 
   it('fails citation validation when the landing page has no DOI citations', () => {

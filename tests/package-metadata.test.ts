@@ -116,6 +116,7 @@ describe('package distribution metadata', () => {
     expect(pkg.scripts['reference:seeds']).toBe('npm run build && node scripts/reference-seed-operator.mjs');
     expect(pkg.scripts['pack:check']).toBe('npm run check && npm run validate:citations && npm run package:smoke && npm pack --dry-run');
     expect(pkg.scripts['package:smoke']).toBe('node scripts/package-smoke.mjs');
+    expect(pkg.scripts['audit:gate']).toBe('node scripts/audit-gate.mjs');
   });
 
   it('keeps private quality-signal telemetry inside the shipped server build', () => {

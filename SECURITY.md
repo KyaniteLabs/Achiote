@@ -98,15 +98,17 @@ server {
 - **Dev-only exposure.** The chain exists only in test/build tooling. Runtime dependencies (`@anthropic-ai/sdk`, `@modelcontextprotocol/sdk`, `better-sqlite3`, `stripe`, `zod`) and the published tarball do not include picomatch or vite.
 - **No fix exists to adopt.** `picomatch@4.0.7` is the latest published version and is itself `last_affected`; the fix (micromatch/picomatch#194) has not been released. `vite@8` and `vitest@5` (current latest) still depend on picomatch directly, so no forward bump clears the finding.
 - **Downgrade evaluated and rejected.** The last picomatch-free generation (`vite@6.2.7` + `vitest@3.1.1` + `@vitejs/plugin-react@5.2.0`) clears this chain but re-introduces worse, already-fixed advisories: `tinypool` ≤ 2.1.1 (2 critical, prototype-pollution-to-RCE), `vite` ≤ 6.4.3 (multiple `server.fs` bypass / path-traversal / arbitrary-file-read GHSAs), and `@vitest/mocker` ≤ 4.1.11 (moderate). Measured 2026-11-18: that tree audits to 2 critical + 1 high + 1 moderate — strictly worse than 6 dev-only highs.
+- **CI posture.** `npm run audit:gate` is the release gate. It runs `npm audit` over the full tree and over the production tree (`--omit=dev`) and applies a strict policy: a production advisory at moderate or worse always fails; a dev-only advisory at moderate or worse also fails **unless** it is listed in `ACCEPTED_DEV_ADVISORIES` in `scripts/lib/audit-gate.mjs` with a written reason and a review-by date. Dev advisories are therefore not waived wholesale — a new one breaks the build instead of scrolling past as a warning, and every advisory found is printed so accepted and below-threshold findings stay visible.
+- **Review by 2027-02-16.** The accepted entry expires on that date: after it passes, the gate fails until the advisory is re-evaluated and the entry is updated or removed.
 - **Risk rationale.** The ReDoS requires crafted extglob patterns reaching picomatch. In this repository the glob patterns fed to vite/vitest are repo-controlled constants (e.g. `tests/**/*.test.ts` in `vitest.config.ts`), not attacker input.
-- **Exit condition.** When a fixed picomatch (> 4.0.7) is published, bump/override it (or the transitive owners), verify `npm audit` is clean, and delete this section.
+- **Exit condition.** When a fixed picomatch (> 4.0.7) is published, bump/override it (or the transitive owners), verify `npm run audit:gate` is clean, delete this section, and remove the entry from `ACCEPTED_DEV_ADVISORIES`. The gate also reports any accepted advisory that npm no longer lists, so a stale entry is visible.
 
 ## Maintainer checklist
 
 - Keep GitHub secret scanning/push protection and code scanning enabled when available.
 - Require CI before merging to the default branch.
 - Run `npm run check` before releases.
-- Run `npm run package:smoke`, `npm audit --audit-level=moderate`, and `npm pack --dry-run` before publishing.
+- Run `npm run package:smoke`, `npm run audit:gate`, and `npm pack --dry-run` before publishing.
 - Run `npm run docker:smoke` for Docker/runtime changes.
 - Perform browser/screenshot review for landing UI changes.
 - Rotate `ACHIOTE_KEY_ENCRYPTION_KEY` periodically; rotation requires re-encrypting stored checkout sessions.
