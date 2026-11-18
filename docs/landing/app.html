@@ -211,6 +211,10 @@
     .composer-copy { width: min(820px, calc(100% - 40px)); margin: 0 auto var(--s5); }
     .app-note { margin: var(--s2) 0 0; font-size: 0.78rem; color: var(--text-2); text-align: center; }
     .app-safety { max-width: 64ch; margin: var(--s2) auto 0; font-size: 0.74rem; line-height: 1.5; color: var(--text-2); text-align: center; }
+    .consent-row { margin: var(--s2) auto 0; display: flex; justify-content: center; }
+    .consent-toggle { display: inline-flex; gap: 8px; align-items: baseline; font-size: 0.74rem; line-height: 1.5; color: var(--text-2); cursor: pointer; max-width: 64ch; text-align: left; }
+    .consent-toggle input { flex: none; margin: 0; }
+    .consent-toggle a { color: inherit; }
     .footer-safety { margin: var(--s3) 0 0; max-width: 720px; font-size: 0.78rem; line-height: 1.5; color: var(--text-2); }
 
 
@@ -277,6 +281,12 @@
     <div class="composer-copy">
       <p class="app-note">Free · no signup · your words stay your words</p>
       <p class="app-safety">Not medical, allergy, or nutritional advice. Achiote cannot guarantee any food is safe for you. Check ingredients yourself, ask a qualified professional about allergies or dietary needs, and taste at your own risk.</p>
+      <div class="consent-row">
+        <label class="consent-toggle" for="consent-analytics">
+          <input type="checkbox" id="consent-analytics">
+          <span>Optional, anonymous usage analytics — off by default. Turn it on if you'd like to help improve Achiote; you can switch it off any time. <a href="/privacy#data-memory-controls">What we collect</a>.</span>
+        </label>
+      </div>
     </div>
   </main>
 
@@ -289,6 +299,7 @@
     </div>
   </footer>
 
+  <script src="analytics.js?v=2" defer></script>
   <script src="site-telemetry.js?v=1" defer></script>
   <script src="research-app.js?v=13" defer></script>
   <script src="reveal.js" defer></script>
