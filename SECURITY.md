@@ -88,6 +88,19 @@ server {
 }
 ```
 
+## Known accepted advisories (dev toolchain)
+
+**picomatch ReDoS — [GHSA-fc5q-39xc-vjpf](https://github.com/advisories/GHSA-fc5q-39xc-vjpf) / CVE-2026-112366 (HIGH), accepted 2026-11-18.**
+
+`npm audit --audit-level=moderate` reports 6 high findings, all one chain:
+`picomatch` (all versions ≤ 4.0.7) → `tinyglobby`/`fdir` → `vite` / `vitest` → `@vitejs/plugin-react`.
+
+- **Dev-only exposure.** The chain exists only in test/build tooling. Runtime dependencies (`@anthropic-ai/sdk`, `@modelcontextprotocol/sdk`, `better-sqlite3`, `stripe`, `zod`) and the published tarball do not include picomatch or vite.
+- **No fix exists to adopt.** `picomatch@4.0.7` is the latest published version and is itself `last_affected`; the fix (micromatch/picomatch#194) has not been released. `vite@8` and `vitest@5` (current latest) still depend on picomatch directly, so no forward bump clears the finding.
+- **Downgrade evaluated and rejected.** The last picomatch-free generation (`vite@6.2.7` + `vitest@3.1.1` + `@vitejs/plugin-react@5.2.0`) clears this chain but re-introduces worse, already-fixed advisories: `tinypool` ≤ 2.1.1 (2 critical, prototype-pollution-to-RCE), `vite` ≤ 6.4.3 (multiple `server.fs` bypass / path-traversal / arbitrary-file-read GHSAs), and `@vitest/mocker` ≤ 4.1.11 (moderate). Measured 2026-11-18: that tree audits to 2 critical + 1 high + 1 moderate — strictly worse than 6 dev-only highs.
+- **Risk rationale.** The ReDoS requires crafted extglob patterns reaching picomatch. In this repository the glob patterns fed to vite/vitest are repo-controlled constants (e.g. `tests/**/*.test.ts` in `vitest.config.ts`), not attacker input.
+- **Exit condition.** When a fixed picomatch (> 4.0.7) is published, bump/override it (or the transitive owners), verify `npm audit` is clean, and delete this section.
+
 ## Maintainer checklist
 
 - Keep GitHub secret scanning/push protection and code scanning enabled when available.
