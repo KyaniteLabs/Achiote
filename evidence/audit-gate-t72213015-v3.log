@@ -1,0 +1,7 @@
+
+> achiote@0.2.2 audit:gate
+> node scripts/audit-gate.mjs
+
+Audit gate: 0 accepted dev advisory(ies), 0 below threshold, 0 blocking.
+stale accepted advisory: GHSA-fc5q-39xc-vjpf is no longer reported by npm audit; remove it from the accepted list.
+Audit gate passed.

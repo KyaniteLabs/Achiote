@@ -10,6 +10,19 @@ import {
 
 const PICOMATCH_URL = 'https://github.com/advisories/GHSA-fc5q-39xc-vjpf';
 
+// The default accepted list is empty (the picomatch advisory was withdrawn
+// upstream on 2026-11-18 and its entry removed). These tests exercise the
+// acceptance mechanism with the entry exactly as it was while it was live.
+function picomatchAcceptance() {
+  return {
+    id: 'GHSA-fc5q-39xc-vjpf',
+    package: 'picomatch',
+    severity: 'high',
+    reviewBy: '2027-02-16',
+    reason: 'No fixed picomatch release exists; see SECURITY.md.',
+  };
+}
+
 function auditReport(vulnerabilities: Record<string, unknown>) {
   return { vulnerabilities };
 }
@@ -62,6 +75,7 @@ describe('dependency audit gate policy', () => {
     const result = evaluateAudit({
       allAudit: auditReport({ picomatch: picomatchChain().picomatch }),
       prodAudit: auditReport({ picomatch: picomatchChain().picomatch }),
+      accepted: [picomatchAcceptance()],
       now: new Date('2026-11-18T00:00:00Z'),
     });
 
@@ -74,6 +88,7 @@ describe('dependency audit gate policy', () => {
     const result = evaluateAudit({
       allAudit: auditReport(picomatchChain()),
       prodAudit: auditReport({}),
+      accepted: [picomatchAcceptance()],
       now: new Date('2026-11-18T00:00:00Z'),
     });
 
@@ -100,13 +115,98 @@ describe('dependency audit gate policy', () => {
     const result = evaluateAudit({
       allAudit: auditReport(picomatchChain()),
       prodAudit: auditReport({}),
-      accepted: [{ ...ACCEPTED_DEV_ADVISORIES[0], reviewBy: '2026-11-01' }],
+      accepted: [{ ...picomatchAcceptance(), reviewBy: '2026-11-01' }],
       now: new Date('2026-11-18T00:00:00Z'),
     });
 
     expect(result.blocked).toHaveLength(1);
     expect(result.blocked[0].reason).toContain('review-by date');
     expect(result.accepted).toHaveLength(0);
+  });
+
+  it('blocks an accepted advisory that is re-rated above the accepted severity ceiling', () => {
+    // The acceptance is written against severity 'high'. If the advisory is
+    // re-rated 'critical' (this one was modified 2026-11-17, so a re-rate is
+    // live), the written rationale no longer describes the risk.
+    const result = evaluateAudit({
+      allAudit: auditReport({
+        picomatch: {
+          severity: 'critical',
+          via: [{ source: 1106944, url: PICOMATCH_URL, severity: 'critical', title: 'ReDoS through repeated extglobs', range: '<=4.0.7' }],
+        },
+      }),
+      prodAudit: auditReport({}),
+      accepted: [picomatchAcceptance()],
+      now: new Date('2026-11-18T00:00:00Z'),
+    });
+
+    expect(result.accepted).toHaveLength(0);
+    expect(result.blocked).toHaveLength(1);
+    expect(result.blocked[0]).toMatchObject({ id: 'GHSA-fc5q-39xc-vjpf', scope: 'development' });
+    expect(result.blocked[0].reason).toContain('accepted ceiling');
+  });
+
+  it('blocks a dev advisory whose severity is missing or unrecognized instead of treating it as below-threshold', () => {
+    const missing = evaluateAudit({
+      allAudit: auditReport({
+        quiet: { via: [{ source: 7, url: 'https://github.com/advisories/GHSA-dddd-eeee-ffff', title: 'severity omitted' }] },
+      }),
+      prodAudit: auditReport({}),
+      now: new Date('2026-11-18T00:00:00Z'),
+    });
+    expect(missing.belowThreshold).toHaveLength(0);
+    expect(missing.accepted).toHaveLength(0);
+    expect(missing.blocked).toHaveLength(1);
+    expect(missing.blocked[0]).toMatchObject({ id: 'GHSA-dddd-eeee-ffff', scope: 'development' });
+    expect(missing.blocked[0].reason).toContain('failing closed');
+
+    // A severity label outside the known vocabulary is just as unrankable.
+    const unrecognized = evaluateAudit({
+      allAudit: auditReport({
+        odd: { severity: 'severe', via: [{ source: 8, url: 'https://github.com/advisories/GHSA-cccc-dddd-eeee', severity: 'severe', title: 'nonstandard label' }] },
+      }),
+      prodAudit: auditReport({}),
+      now: new Date('2026-11-18T00:00:00Z'),
+    });
+    expect(unrecognized.belowThreshold).toHaveLength(0);
+    expect(unrecognized.blocked).toHaveLength(1);
+    expect(unrecognized.blocked[0].reason).toContain('failing closed');
+  });
+
+  it('blocks a production advisory whose severity is missing or unrecognized', () => {
+    const vulnerabilities = {
+      quiet: { via: [{ source: 7, url: 'https://github.com/advisories/GHSA-dddd-eeee-ffff', title: 'severity omitted' }] },
+    };
+    const result = evaluateAudit({
+      allAudit: auditReport(vulnerabilities),
+      prodAudit: auditReport(vulnerabilities),
+      now: new Date('2026-11-18T00:00:00Z'),
+    });
+
+    expect(result.belowThreshold).toHaveLength(0);
+    expect(result.blocked).toHaveLength(1);
+    expect(result.blocked[0]).toMatchObject({ id: 'GHSA-dddd-eeee-ffff', scope: 'production' });
+    expect(result.blocked[0].reason).toContain('failing closed');
+  });
+
+  it('keeps an advisory unrecognized when any sighting of it lacks a severity', () => {
+    // The same advisory seen from two packages: one sighting says 'low', the
+    // other carries no severity. The merge must not let the 'low' sighting
+    // mask the unknown one — the advisory stays unrankable and blocks.
+    const url = 'https://github.com/advisories/GHSA-eeee-ffff-gggg';
+    const result = evaluateAudit({
+      allAudit: auditReport({
+        pkga: { severity: 'low', via: [{ source: 1, url, severity: 'low', title: 'sighted low' }] },
+        pkgb: { via: [{ source: 1, url, title: 'severity missing here' }] },
+      }),
+      prodAudit: auditReport({}),
+      now: new Date('2026-11-18T00:00:00Z'),
+    });
+
+    expect(result.belowThreshold).toHaveLength(0);
+    expect(result.blocked).toHaveLength(1);
+    expect(result.blocked[0]).toMatchObject({ id: 'GHSA-eeee-ffff-gggg', scope: 'development' });
+    expect(result.blocked[0].reason).toContain('failing closed');
   });
 
   it('does not block advisories below the moderate threshold', () => {
@@ -129,17 +229,23 @@ describe('dependency audit gate policy', () => {
     const result = evaluateAudit({
       allAudit: auditReport({}),
       prodAudit: auditReport({}),
+      accepted: [picomatchAcceptance()],
       now: new Date('2026-11-18T00:00:00Z'),
     });
 
     expect(result.staleAcceptances).toContain('GHSA-fc5q-39xc-vjpf');
   });
 
-  it('keeps the accepted list limited to the documented advisory with a reason and review date', () => {
-    expect(ACCEPTED_DEV_ADVISORIES.map((entry) => entry.id)).toEqual(['GHSA-fc5q-39xc-vjpf']);
+  it('ships with no accepted advisories; any entry must carry a reason, review date, and rankable severity', () => {
+    // Empty is the measured state: the one entry (picomatch GHSA-fc5q-39xc-vjpf)
+    // was withdrawn upstream on 2026-11-18 and removed. An empty list means any
+    // advisory npm reports fails closed until a written acceptance exists.
+    expect(ACCEPTED_DEV_ADVISORIES).toEqual([]);
     for (const entry of ACCEPTED_DEV_ADVISORIES) {
+      expect(entry.id).toMatch(/^GHSA-/i);
       expect(entry.reason).toBeTruthy();
       expect(Number.isNaN(Date.parse(`${entry.reviewBy}T23:59:59Z`))).toBe(false);
+      expect(severityRank(entry.severity)).toBeGreaterThanOrEqual(0);
     }
   });
 

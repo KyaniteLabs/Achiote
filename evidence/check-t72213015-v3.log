@@ -1,0 +1,120 @@
+
+> achiote@0.2.2 check
+> npm run typecheck && npm run lint && npm run coverage:guard && npm run reference:coverage && npm run build && npm test
+
+
+> achiote@0.2.2 typecheck
+> tsc --noEmit
+
+
+> achiote@0.2.2 lint
+> node scripts/static-checks.mjs
+
+Static checks passed
+
+> achiote@0.2.2 coverage:guard
+> node scripts/coverage-threshold.mjs
+
+Coverage guard passed: 878 tests across required launch surfaces
+
+> achiote@0.2.2 reference:coverage
+> node scripts/reference-coverage-audit.mjs --fail
+
+{
+  "ok": true,
+  "generatedAt": "2026-11-19T01:09:46.645Z",
+  "thresholds": {
+    "cultureAreaFamilyMappings": 8,
+    "foodFormTaggedMappings": 1,
+    "mechanismTaggedMappings": 1,
+    "ingredientLongTermTarget": 200
+  },
+  "counts": {
+    "dishFamilies": 55,
+    "ingredients": 83,
+    "foodScienceMechanismRecords": 101,
+    "regionalMetroRecords": 15,
+    "cultureAreas": {
+      "arctic_subarctic": 8,
+      "borderland_trade_routes": 8,
+      "caribbean": 19,
+      "central_africa": 8,
+      "central_america": 29,
+      "central_asia": 12,
+      "diaspora_global": 46,
+      "east_africa": 10,
+      "east_asia": 31,
+      "europe": 41,
+      "indigenous_first_peoples": 8,
+      "middle_east_west_asia": 28,
+      "north_africa": 24,
+      "north_america": 16,
+      "oceania_pacific": 9,
+      "south_america": 25,
+      "south_asia": 27,
+      "southeast_asia": 24,
+      "southern_africa": 11,
+      "west_africa": 18
+    },
+    "foodForms": {
+      "beverage": 22,
+      "bread_flatbread": 22,
+      "breakfast": 2,
+      "ceremonial_holiday": 25,
+      "confectionery": 28,
+      "dessert": 26,
+      "dumpling_pocket": 23,
+      "grain_rice_noodle": 29,
+      "pantry_single_ingredient": 10,
+      "pickle_ferment": 24,
+      "protein_centered": 39,
+      "sauce_condiment": 28,
+      "sick_day_comfort": 20,
+      "snack_street_food": 25,
+      "soup_broth": 32,
+      "stew_braise": 26,
+      "vegetable_fungi": 28
+    },
+    "mechanisms": {
+      "alkaline_processing": 1,
+      "aroma": 137,
+      "browning": 58,
+      "fat_mouthfeel": 43,
+      "fermentation_acid": 36,
+      "sauce_balance": 66,
+      "serving_ritual": 93,
+      "smoke": 7,
+      "starch_texture": 52,
+      "sugar_crystal": 31,
+      "temperature": 48,
+      "texture_contrast": 48
+    }
+  },
+  "issues": [],
+  "warnings": [
+    {
+      "path": "ingredients.ingredients",
+      "message": "long-term target is at least 200 ingredients; current committed count is 83"
+    }
+  ]
+}
+
+> achiote@0.2.2 build
+> tsc
+
+
+> achiote@0.2.2 test
+> vitest run
+
+
+ RUN  v5.1.0 /tmp/achiote-t72213015
+
+
+ Test Files  101 passed (101)
+      Tests  1015 passed (1015)
+   Start at  17:09:48
+   Duration  195.89s (tests 85%, import 14%, transform 1%)
+
+    Isolate  101 workers spawned · ~147ms startup each (spawn + environment, per file)
+             at least ~14.70s faster with isolate: false — reuses workers across files instead of one per file
+

@@ -6,9 +6,16 @@
  *  1. Production dependencies (the ones this package ships) block on any
  *     moderate-or-worse advisory. There is no accepted list for production.
  *  2. Dev-toolchain advisories block too, unless they are listed in
- *     ACCEPTED_DEV_ADVISORIES with a written reason and a review-by date.
- *     That keeps new dev advisories from slipping through as warnings, while
- *     allowing the one advisory that has no upstream fix.
+ *     ACCEPTED_DEV_ADVISORIES with a written reason, a review-by date, and a
+ *     declared severity ceiling: an acceptance only covers the severity it
+ *     was written for, so an advisory re-rated above that ceiling blocks
+ *     until the acceptance is re-evaluated. That keeps new dev advisories
+ *     from slipping through as warnings, while allowing the one advisory
+ *     that has no upstream fix.
+ *
+ * Both rules fail closed on severity: an advisory whose severity is missing
+ * or unrecognized cannot be ranked, so it is treated as blocking rather than
+ * below-threshold — in either scope.
  *
  * Every accepted advisory must also be documented in SECURITY.md, and its
  * review-by date forces a revisit instead of a permanent silent exception.
@@ -19,19 +26,19 @@ export const DEFAULT_BLOCKING_SEVERITY = 'moderate';
 
 /**
  * Accepted dev-dependency advisories. Adding an entry is a deliberate,
- * reviewed decision: name the advisory, say why it cannot be fixed today, and
- * set a review-by date so the exception is re-examined on a schedule.
+ * reviewed decision: name the advisory, say why it cannot be fixed today,
+ * declare the severity ceiling the acceptance covers, and set a review-by
+ * date so the exception is re-examined on a schedule. An advisory re-rated
+ * above the declared ceiling blocks until the acceptance is re-evaluated.
+ *
+ * Currently empty: GHSA-fc5q-39xc-vjpf (picomatch ReDoS) was withdrawn
+ * upstream on 2026-11-18 (OSV `withdrawn`), npm audit stopped reporting it,
+ * and the entry was removed via the gate's stale-acceptance path. If that
+ * advisory — or any successor — returns, the gate fails closed until a
+ * fresh acceptance is written. SECURITY.md records the 2026-11-18
+ * evaluation and the closure.
  */
-export const ACCEPTED_DEV_ADVISORIES = [
-  {
-    id: 'GHSA-fc5q-39xc-vjpf',
-    package: 'picomatch',
-    severity: 'high',
-    reviewBy: '2027-02-16',
-    reason:
-      'No fixed picomatch release exists: 4.0.7 is the latest published version and is itself the advisory’s last_affected range (micromatch/picomatch#194 is unreleased). vite@8 and vitest@5 depend on picomatch directly, so no forward bump clears it, and the last picomatch-free vite/vitest generation re-introduces 2 critical + 1 high + 1 moderate advisories. See SECURITY.md.',
-  },
-];
+export const ACCEPTED_DEV_ADVISORIES = [];
 
 export function severityRank(severity) {
   const index = SEVERITY_ORDER.indexOf(String(severity ?? '').toLowerCase());
@@ -115,7 +122,12 @@ export function advisoryMap(vulnerabilities) {
         continue;
       }
       current.packages.add(name);
-      if (severityRank(item.severity) > severityRank(current.severity)) {
+      if ([severityRank(current.severity), severityRank(item.severity)].some((rank) => rank < 0)) {
+        // One sighting without a recognizable severity means the advisory's
+        // true severity is unknown. Keep it unknown so the policy blocks
+        // instead of trusting whichever severity happened to be seen first.
+        current.severity = '';
+      } else if (severityRank(item.severity) > severityRank(current.severity)) {
         current.severity = item.severity;
         current.title = item.title;
         current.url = item.url;
@@ -127,6 +139,10 @@ export function advisoryMap(vulnerabilities) {
 
 function packageList(advisory) {
   return [...(advisory.packages ?? [])].sort();
+}
+
+function unknownSeverityReason(severity) {
+  return `advisory severity is missing or unrecognized (${severity || 'none reported'}); failing closed`;
 }
 
 /**
@@ -181,7 +197,12 @@ export function evaluateAudit({
   // Rule 1: production dependencies always block.
   for (const [id, advisory] of prod) {
     const record = { id, severity: advisory.severity, title: advisory.title, packages: packageList(advisory) };
-    if (severityRank(advisory.severity) < threshold) {
+    const rank = severityRank(advisory.severity);
+    if (rank < 0) {
+      blocked.push({ ...record, scope: 'production', reason: unknownSeverityReason(advisory.severity) });
+      continue;
+    }
+    if (rank < threshold) {
       belowThreshold.push({ ...record, scope: 'production' });
       continue;
     }
@@ -192,13 +213,29 @@ export function evaluateAudit({
   for (const [id, advisory] of all) {
     if (prod.has(id)) continue;
     const record = { id, severity: advisory.severity, title: advisory.title, packages: packageList(advisory) };
-    if (severityRank(advisory.severity) < threshold) {
+    const rank = severityRank(advisory.severity);
+    if (rank < 0) {
+      blocked.push({ ...record, scope: 'development', reason: unknownSeverityReason(advisory.severity) });
+      continue;
+    }
+    if (rank < threshold) {
       belowThreshold.push({ ...record, scope: 'development' });
       continue;
     }
     const entry = accepted.find((item) => String(item.id ?? '').toLowerCase() === String(id ?? '').toLowerCase());
     if (!entry) {
       blocked.push({ ...record, scope: 'development', reason: 'dev-dependency advisory is not listed in the accepted-advisory list' });
+      continue;
+    }
+    // The acceptance is written against a declared severity. If the live
+    // advisory is re-rated worse than that ceiling, the written rationale no
+    // longer describes the risk, so the gate blocks until it is re-evaluated.
+    if (rank > severityRank(entry.severity)) {
+      blocked.push({
+        ...record,
+        scope: 'development',
+        reason: `advisory severity '${advisory.severity}' is worse than the accepted ceiling '${entry.severity ?? 'none'}' for ${entry.id}; re-evaluate the acceptance`,
+      });
       continue;
     }
     const expiry = Date.parse(`${entry.reviewBy}T23:59:59Z`);

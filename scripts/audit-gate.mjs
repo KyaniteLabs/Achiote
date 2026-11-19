@@ -8,7 +8,10 @@
  *   - A production dependency advisory at moderate or worse fails the gate.
  *   - A dev-dependency advisory at moderate or worse fails the gate unless it
  *     is listed in ACCEPTED_DEV_ADVISORIES with a written reason and a
- *     review-by date that has not passed.
+ *     review-by date that has not passed — and only up to the severity the
+ *     acceptance declares; a worse re-rating fails.
+ *   - An advisory whose severity is missing or unrecognized fails the gate in
+ *     either scope; it is never counted as below-threshold.
  *
  * Every advisory found is printed, so accepted and below-threshold findings
  * stay visible instead of disappearing behind the exit code.

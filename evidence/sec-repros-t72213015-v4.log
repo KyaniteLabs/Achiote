@@ -1,0 +1,3 @@
+SEC-300-1 repro: {"blocked":1,"accepted":0} | advisory severity 'critical' is worse than the accepted ceiling 'high' for GHSA-fc5q-39xc-vjpf; re-evaluate the acceptance
+SEC-300-2 dev repro: {"blocked":1,"belowThreshold":0}
+SEC-300-2 prod repro: {"blocked":1,"belowThreshold":0}

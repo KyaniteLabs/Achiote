@@ -1,0 +1,10 @@
+
+> achiote@0.2.2 package:smoke
+> node scripts/package-smoke.mjs
+
+Packing achiote into /tmp/achiote-package-smoke/run-ARl6nj
+Installing achiote-0.2.2.tgz into /tmp/achiote-package-smoke/run-ARl6nj/install
+Checking packaged CLI MCP tools/list response
+Checking packaged helper scripts
+Checking packaged HTTP server health, trust, and 25 product app assets
+Package smoke passed: installed tarball CLI listed 19 MCP tools and HTTP smoke responded.
