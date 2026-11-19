@@ -14,6 +14,7 @@
     "check": "npm run typecheck && npm run lint && npm run coverage:guard && npm run reference:coverage && npm run build && npm test",
     "check:compat": "npm run typecheck && npm run build && npm test",
     "validate:citations": "node scripts/validate-citations.mjs --tolerant",
+    "audit:gate": "node scripts/audit-gate.mjs",
     "verify:dois": "node scripts/verify-dois.mjs --fail",
     "diagnose": "node scripts/diagnose.mjs",
     "land": "node scripts/forgejo-land.mjs",

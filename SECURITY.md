@@ -88,12 +88,24 @@ server {
 }
 ```
 
+## Dependency-audit gate and accepted advisories (dev toolchain)
+
+`npm run audit:gate` is the release gate. It runs `npm audit` over the full tree and over the production tree (`--omit=dev`) and applies a strict policy: a production advisory at moderate or worse always fails; a dev-only advisory at moderate or worse also fails **unless** it is listed in `ACCEPTED_DEV_ADVISORIES` in `scripts/lib/audit-gate.mjs` with a written reason, a review-by date, and a declared severity ceiling. Dev advisories are therefore not waived wholesale — a new one breaks the build instead of scrolling past as a warning. Every advisory found is printed so accepted and below-threshold findings stay visible; an advisory re-rated above its accepted ceiling blocks until the acceptance is re-evaluated; an advisory whose severity is missing or unrecognized blocks in either scope rather than counting as below-threshold; and accepted advisories that npm no longer lists are reported as stale so their entries get removed.
+
+**No advisories are currently accepted.** The list has held exactly one entry; the history below records why it existed and how it closed.
+
+- **picomatch ReDoS — [GHSA-fc5q-39xc-vjpf](https://github.com/advisories/GHSA-fc5q-39xc-vjpf) / CVE-2026-112366 (HIGH), accepted 2026-11-18, closed 2026-11-18.** At the time, `npm audit --audit-level=moderate` reported 6 high findings, all one chain: `picomatch` (all versions ≤ 4.0.7) → `tinyglobby`/`fdir` → `vite` / `vitest` → `@vitejs/plugin-react`.
+  - **Dev-only exposure.** The chain existed only in test/build tooling. Runtime dependencies (`@anthropic-ai/sdk`, `@modelcontextprotocol/sdk`, `better-sqlite3`, `stripe`, `zod`) and the published tarball did not include picomatch or vite.
+  - **No fix existed to adopt.** `picomatch@4.0.7` was the latest published version and itself `last_affected` (the fix, micromatch/picomatch#194, was unreleased); `vite@8` and `vitest@5` depended on picomatch directly, so no forward bump cleared the finding. The last picomatch-free generation (`vite@6.2.7` + `vitest@3.1.1` + `@vitejs/plugin-react@5.2.0`) was measured 2026-11-18 and rejected as strictly worse: 2 critical + 1 high + 1 moderate (`tinypool` ≤ 2.1.1 prototype-pollution-to-RCE, `vite` ≤ 6.4.3 `server.fs`-bypass / path-traversal / arbitrary-file-read GHSAs, `@vitest/mocker` ≤ 4.1.11).
+  - **Risk rationale while accepted.** The ReDoS required crafted extglob patterns reaching picomatch; in this repository the glob patterns fed to vite/vitest were repo-controlled constants (e.g. `tests/**/*.test.ts` in `vitest.config.ts`), not attacker input.
+  - **Closure.** The GHSA was **withdrawn upstream on 2026-11-18** (OSV record `withdrawn: 2026-11-18T15:38:56Z`, `modified: 2026-11-18T15:56:12Z`); `npm audit --audit-level=moderate` then exited 0 with no findings while picomatch remained at 4.0.7 — the advisory was withdrawn, not fixed. Per the gate's stale-acceptance path the entry was removed. **If this advisory or a successor returns, the gate fails closed until a fresh acceptance is written**; do not re-add an entry without re-evaluating severity, exposure, and fix availability against the live advisory data.
+
 ## Maintainer checklist
 
 - Keep GitHub secret scanning/push protection and code scanning enabled when available.
 - Require CI before merging to the default branch.
 - Run `npm run check` before releases.
-- Run `npm run package:smoke`, `npm audit --audit-level=moderate`, and `npm pack --dry-run` before publishing.
+- Run `npm run package:smoke`, `npm run audit:gate`, and `npm pack --dry-run` before publishing.
 - Run `npm run docker:smoke` for Docker/runtime changes.
 - Perform browser/screenshot review for landing UI changes.
 - Rotate `ACHIOTE_KEY_ENCRYPTION_KEY` periodically; rotation requires re-encrypting stored checkout sessions.

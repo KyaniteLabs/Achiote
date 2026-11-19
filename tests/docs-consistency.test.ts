@@ -7,7 +7,7 @@ describe('release documentation consistency', () => {
 
     expect(template).toContain('`npm run check`');
     expect(template).toContain('`npm run package:smoke`');
-    expect(template).toContain('`npm audit --audit-level=moderate`');
+    expect(template).toContain('`npm run audit:gate`');
     expect(template).toContain('`npm pack --dry-run`');
     expect(template).toContain('`npm run docker:smoke` when Docker/runtime changes');
     expect(template).toContain('Browser/screenshot review when landing UI changes');

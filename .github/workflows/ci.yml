@@ -104,9 +104,12 @@ jobs:
         if: ${{ github.event_name != 'pull_request' || steps.product-scope.outputs.product_changed != 'false' }}
         run: npm run validate:citations
 
-      - name: Audit production dependency vulnerabilities
+      # Production advisories always fail this gate. Dev-toolchain advisories fail too unless
+      # they are on the accepted list with a written reason and a live review-by date, so a new
+      # dev advisory cannot slip through as a warning. See SECURITY.md.
+      - name: Audit dependency vulnerabilities
         if: ${{ github.event_name != 'pull_request' || steps.product-scope.outputs.product_changed != 'false' }}
-        run: npm audit --audit-level=moderate
+        run: npm run audit:gate
 
       - name: Smoke packaged CLI
         if: ${{ github.event_name != 'pull_request' || steps.product-scope.outputs.product_changed != 'false' }}
