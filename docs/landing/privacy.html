@@ -31,6 +31,7 @@
 
     <h2>Telemetry and logs</h2>
     <p>We collect privacy-preserving events such as page opened, pricing viewed, onboarding prompt selected, ask started, ask succeeded, ask failed, checkout started, checkout failed, and feedback category. Analytics may include privacy-preserving event dimensions such as route, tier, checkout mode, prompt source, and error category. We do not intentionally store full food-memory prompts in analytics events. Server logs may include operational metadata such as endpoint, status, provider/tool state, timestamps, and error class.</p>
+    <p>When product analytics are enabled, we may use PostHog as an analytics processor for the same privacy-preserving page and product events. It is configured conservatively: no session recordings, anonymous-only profiles unless you sign in, and it honors your browser's Do Not Track setting. We do not send food-memory prompts, recipes, or credentials to it.</p>
 
     <h2 id="data-memory-controls">Data & memory controls</h2>
     <p>Achiote's default path is ephemeral request processing: you can describe a dish or drink, get a Memory Receipt, and leave every optional data toggle off. Achiote still works if every optional toggle is off.</p>
