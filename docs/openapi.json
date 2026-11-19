@@ -136,13 +136,13 @@
         "tags": ["mcp"],
         "operationId": "mcpPost",
         "summary": "Open or continue a hosted MCP session",
-        "description": "Streamable HTTP MCP transport. A new session returns Mcp-Session-Id; later calls send that header back. Protocol errors use a JSON-RPC error body.",
+        "description": "Streamable HTTP MCP transport. A new session returns Mcp-Session-Id; later calls send that header back. Protocol errors use a JSON-RPC error body. The first request on a new session must be an initialize request: any other JSON-RPC method (for example tools/list) sent before initialize is rejected with JSON-RPC error code -32000, message \"Bad Request: initialize first\".",
         "parameters": [
           { "name": "Mcp-Session-Id", "in": "header", "required": false, "schema": { "type": "string" } }
         ],
         "responses": {
           "200": { "description": "JSON-RPC response, or an SSE stream when the client accepts text/event-stream." },
-          "400": { "description": "Malformed session or JSON-RPC request." }
+          "400": { "description": "Malformed session or JSON-RPC request, or a call made before initialize (JSON-RPC error -32000, \"Bad Request: initialize first\")." }
         }
       },
       "get": {
@@ -215,11 +215,11 @@
         "tags": ["telemetry"],
         "operationId": "eventsSummary",
         "summary": "Recent telemetry summary",
-        "description": "Returns { disabled: true } unless ACHIOTE_EVENTS_ADMIN_TOKEN is set and sent as a bearer token.",
+        "description": "Admin-gated telemetry summary. Without admin access this returns 404 { error: \"Not found\" } by design — the route is hidden, not challenged. Set ACHIOTE_EVENTS_ADMIN_TOKEN and send it as a bearer token to read the summary.",
         "security": [{ "bearerAuth": [] }],
         "responses": {
-          "200": { "description": "Summary, or { disabled: true }." },
-          "401": { "$ref": "#/components/responses/Unauthorized" }
+          "200": { "description": "Telemetry counters, breakdowns and quality report (admin only)." },
+          "404": { "description": "No admin access: ACHIOTE_EVENTS_ADMIN_TOKEN is unset or the bearer token does not match (hidden by design, not a 401 challenge)." }
         }
       },
       "post": {
