@@ -60,6 +60,14 @@ if (!packaged) {
   }
 }
 
+// Backticked snake_case identifiers in skill/SKILL.md that are payload fields or
+// status values, not tool names. Every other backticked identifier must be a
+// registered tool, so an invented or renamed tool name fails the build.
+const NON_TOOL_SKILL_IDS = new Set([
+  'answer', 'data', 'receipt', 'status', // response payload fields
+  'first_test_ready', 'needs_more_clues', 'recipe_handoff_ready', // reconstruction status values
+]);
+
 const phantomTools = skillToolNamesMissingFromRegistry();
 if (phantomTools.length > 0) {
   failures++;
@@ -86,10 +94,21 @@ function skillToolNamesMissingFromRegistry() {
   const registry = registryToolNames();
   if (!registry) return ['<tool registry unavailable>'];
   const skill = fs.readFileSync(skillPath, 'utf8');
-  const mentioned = new Set();
-  for (const match of skill.matchAll(/^\s*Tool:\s*([a-z][a-z0-9_]*)/gm)) mentioned.add(match[1]);
+  // Structural mentions: manual-sequence "Tool:" lines and toolsRun arrays.
+  const structural = new Set();
+  for (const match of skill.matchAll(/^\s*Tool:\s*([a-z][a-z0-9_]*)/gm)) structural.add(match[1]);
   for (const block of skill.matchAll(/toolsRun:\s*\[([\s\S]*?)\]/g)) {
-    for (const name of block[1].matchAll(/"([a-z][a-z0-9_]*)"/g)) mentioned.add(name[1]);
+    for (const name of block[1].matchAll(/"([a-z][a-z0-9_]*)"/g)) structural.add(name[1]);
   }
-  return [...mentioned].filter((name) => !registry.has(name)).sort();
+  // Prose mentions: every backticked snake_case identifier is a tool call the
+  // host may copy verbatim, so it must exist unless explicitly allowlisted.
+  const backticked = new Set([...skill.matchAll(/`([a-z][a-z0-9_]*)`/g)].map((match) => match[1]));
+  const missing = new Set([
+    ...[...structural].filter((name) => !registry.has(name)),
+    ...[...backticked].filter((name) => !registry.has(name) && !NON_TOOL_SKILL_IDS.has(name)),
+  ]);
+  for (const name of NON_TOOL_SKILL_IDS) {
+    if (registry.has(name)) missing.add(`<stale non-tool allowlist entry: ${name}>`);
+  }
+  return [...missing].sort();
 }
