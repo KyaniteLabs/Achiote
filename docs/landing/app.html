@@ -10,6 +10,11 @@
   <meta property="og:description" content="A food-memory researcher that investigates, in conversation, instead of guessing." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://achiote.kyanitelabs.tech/app" />
+  <meta property="og:image" content="https://achiote.kyanitelabs.tech/og-image.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Achiote: reconstruct a food memory" />
+  <meta name="twitter:description" content="A food-memory researcher that investigates, in conversation, instead of guessing." />
+  <meta name="twitter:image" content="https://achiote.kyanitelabs.tech/og-image.jpg" />
   <link rel="icon" href="proof/favicon.svg" />
   <link rel="preload" href="proof/fonts/junction-bold.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="proof/images/bg-texture.jpg?v=2" as="image">
@@ -211,6 +216,10 @@
     .composer-copy { width: min(820px, calc(100% - 40px)); margin: 0 auto var(--s5); }
     .app-note { margin: var(--s2) 0 0; font-size: 0.78rem; color: var(--text-2); text-align: center; }
     .app-safety { max-width: 64ch; margin: var(--s2) auto 0; font-size: 0.74rem; line-height: 1.5; color: var(--text-2); text-align: center; }
+    .consent-row { margin: var(--s2) auto 0; display: flex; justify-content: center; }
+    .consent-toggle { display: inline-flex; gap: 8px; align-items: baseline; font-size: 0.74rem; line-height: 1.5; color: var(--text-2); cursor: pointer; max-width: 64ch; text-align: left; }
+    .consent-toggle input { flex: none; margin: 0; }
+    .consent-toggle a { color: inherit; }
     .footer-safety { margin: var(--s3) 0 0; max-width: 720px; font-size: 0.78rem; line-height: 1.5; color: var(--text-2); }
 
 
@@ -231,7 +240,7 @@
       <a class="brand" href="/"><span class="dot" aria-hidden="true"></span>Achiote</a>
       <nav class="nav-links" aria-label="Primary">
         <a href="/">Home</a>
-        <a href="week6.html">The proof</a>
+        <a href="how-it-works.html">How it works</a>
         <a href="meaning.html">Meaning</a>
         <a href="/ai-search">AI search</a>
         <a class="btn btn-primary" href="#start">Start <span class="arrow" aria-hidden="true">&rarr;</span></a>
@@ -267,7 +276,7 @@
           <button class="icon-btn" id="mic-btn" type="button" hidden aria-label="Speak your memory (transcribes to text)" aria-pressed="false">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3"></rect><path d="M5 11a7 7 0 0 0 14 0"></path><line x1="12" y1="18" x2="12" y2="22"></line></svg>
           </button>
-          <textarea id="composer-input" rows="1" placeholder="Describe the dish you remember… a sound, a smell, a place, a person."></textarea>
+          <textarea id="composer-input" rows="1" aria-label="Describe the dish you remember" placeholder="Describe the dish you remember… a sound, a smell, a place, a person."></textarea>
           <button id="send-btn" type="button" aria-label="Send">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
           </button>
@@ -277,6 +286,12 @@
     <div class="composer-copy">
       <p class="app-note">Free · no signup · your words stay your words</p>
       <p class="app-safety">Not medical, allergy, or nutritional advice. Achiote cannot guarantee any food is safe for you. Check ingredients yourself, ask a qualified professional about allergies or dietary needs, and taste at your own risk.</p>
+      <div class="consent-row">
+        <label class="consent-toggle" for="consent-analytics">
+          <input type="checkbox" id="consent-analytics">
+          <span>Optional, anonymous usage analytics — off by default. Turn it on if you'd like to help improve Achiote; you can switch it off any time. <a href="/privacy#data-memory-controls">What we collect</a>.</span>
+        </label>
+      </div>
     </div>
   </main>
 
@@ -289,6 +304,7 @@
     </div>
   </footer>
 
+  <script src="analytics.js?v=2" defer></script>
   <script src="site-telemetry.js?v=1" defer></script>
   <script src="research-app.js?v=13" defer></script>
   <script src="reveal.js" defer></script>

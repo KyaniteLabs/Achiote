@@ -31,6 +31,7 @@
 
     <h2>Telemetry and logs</h2>
     <p>We collect privacy-preserving events such as page opened, pricing viewed, onboarding prompt selected, ask started, ask succeeded, ask failed, checkout started, checkout failed, and feedback category. Analytics may include privacy-preserving event dimensions such as route, tier, checkout mode, prompt source, and error category. We do not intentionally store full food-memory prompts in analytics events. Server logs may include operational metadata such as endpoint, status, provider/tool state, timestamps, and error class.</p>
+    <p>When product analytics are enabled, we may use PostHog as an analytics processor for the same privacy-preserving page and product events. It is configured conservatively: no session recordings, anonymous-only profiles unless you sign in, and it honors your browser's Do Not Track setting. We do not send food-memory prompts, recipes, or credentials to it.</p>
 
     <h2 id="data-memory-controls">Data & memory controls</h2>
     <p>Achiote's default path is ephemeral request processing: you can describe a dish or drink, get a Memory Receipt, and leave every optional data toggle off. Achiote still works if every optional toggle is off.</p>
@@ -66,7 +67,7 @@
     <p>Kyanite Labs is the data controller for Achiote-hosted services. When you use Stripe for payments, Stripe acts as an independent data controller for payment data under its own privacy policy. AI inference may run locally on your device or via GLM z.ai as a data processor. When cloud inference is used, food-memory prompts are sent to the inference provider for processing and are not used for model training under the provider's API terms.</p>
 
     <h2>International transfers</h2>
-    <p>Your data may be processed in the United States. If you are outside the US, your data will be transferred to and processed in the US. By using Achiote, you consent to this transfer. We rely on Standard Contractual Clauses or equivalent safeguards where required.</p>
+    <p>Your data may be processed in the United States, where our hosting, payments, and analytics providers operate. When cloud inference is used, your prompts are also processed by our inference provider, GLM via Z.ai, whose processing generally takes place in Singapore. If you are outside the US or Singapore, your data will be transferred to and processed in those countries as described in this policy. By using Achiote, you consent to these transfers. We rely on Standard Contractual Clauses or equivalent safeguards where required.</p>
 
     <h2>Security</h2>
     <p>Use HTTPS, keep API keys private, and do not paste secrets into food-memory prompts. If you believe you found a vulnerability, follow the process in <a href="/support">Support</a> or the repository security policy.</p>
