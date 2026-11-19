@@ -18,7 +18,7 @@ of them with `achiote purge --yes`.
 | Store | Default path | What it holds | Personal memory text? |
 | --- | --- | --- | --- |
 | Research cache | `~/.cache/achiote/culture-cache.db` (`ACHIOTE_CACHE_PATH`) | Dish/region research records keyed by `(dish_family, region)`: canonical names, regions, ingredients, techniques, source URLs. Sourced from research, not from you. | No |
-| Billing database | `~/.cache/achiote/billing.db` (`ACHIOTE_BILLING_DB`) | Stripe customer/subscription ids, hashed API keys (never plaintext), tier, credit counters. Only created when billing is configured on a server. | No |
+| Billing database | `~/.cache/achiote/billing.db` (`ACHIOTE_BILLING_DB`) | Stripe customer/subscription ids, customer email (copied from the Stripe customer record on checkout), hashed API keys (never plaintext), tier, credit counters, and a transient checkout-key column that only ever holds AES-256-GCM ciphertext (lifecycle under "Retention windows"). Also crypto-checkout order refs. Only created when billing is configured on a server. | No |
 | Rate-limit database | none by default (`ACHIOTE_RATE_LIMIT_DB`) | A SHA-256-keyed counter per scope. In-memory unless you point it at a file. | No |
 
 Evidence, for auditors:
@@ -27,8 +27,11 @@ Evidence, for auditors:
   serialized research record about a dish, not a user message: `src/lib/research-cache.ts:18-26`,
   `storeResearchRecord` at `src/lib/research-cache.ts:43-45`. The cache key is a dish family and region,
   never the raw memory.
-- Billing columns are Stripe ids, hashed keys, tiers, and credits: `src/lib/billing-db.ts` schema block
-  (around `:115-166`). No memory text.
+- Billing columns are Stripe ids, customer email (billing-stripe.ts copies `customer.email` via
+  `upsertCustomer` when completing checkout), hashed keys, tiers, credits, crypto-order refs, and a
+  checkout-key column written only as AES-256-GCM ciphertext — `completeCheckoutSession` encrypts the key
+  and refuses to write without `ACHIOTE_KEY_ENCRYPTION_KEY` (`encryptKey`,
+  `src/lib/billing-db.ts:105-113`; schema block around `:174-244`). No memory text.
 - Rate-limit rows are `(key, count, period_start)` where `key` is a hash: `src/lib/rate-limit.ts:46-52`.
 
 ## What is not stored
@@ -69,8 +72,11 @@ The request can carry a consent object: `analytics`, `qualitySignals`, `savedMem
 - **Raw memories: zero.** Not retained past the single request.
 - **Research cache:** retained until deleted. There is no TTL; entries are about dishes, not people, and a
   512 KB per-entry cap applies (`src/lib/research-cache.ts`). Delete with `achiote purge`.
-- **Billing database:** retained for the life of the billing relationship, managed by the operator. Delete
-  with `achiote purge` (or remove the file).
+- **Billing database:** retained for the life of the billing relationship, managed by the operator
+  (this includes the customer email copied from Stripe). Checkout keys are transient: the ciphertext is
+  returned and nulled on first claim, pending checkout rows are purged after 24 hours, and completed rows
+  are deleted after 90 days (`purgeExpiredCheckoutSessions`, `src/lib/billing-db.ts`). Delete with
+  `achiote purge` (or remove the file).
 - **Rate-limit database:** ephemeral by default (in-memory). If file-backed, counters roll over by period.
 
 ## How to delete your data
