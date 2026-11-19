@@ -693,7 +693,7 @@ const server = createServer(async (req, res) => {
     });
     sendJson(res, pathname === '/ready' && !readiness.ready ? 503 : 200, {
       status: pathname === '/health' ? 'ok' : readiness.status,
-      version: '0.2.2',
+      version: '0.2.3',
       authEnabled: AUTH_ENABLED,
       billingEnabled: Boolean(billingConfig),
       cryptoEnabled: Boolean(cryptoCheckout),
