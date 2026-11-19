@@ -48,7 +48,7 @@ Updates arrive only when the pinned version changes in a reviewed commit.
   mcp_servers:
     achiote:
       command: npx
-      args: ["-y", "achiote@0.2.2"]   # keep in step with plugin.json
+      args: ["-y", "achiote@0.2.3"]   # keep in step with plugin.json
       env:
         ANTHROPIC_API_KEY: "<your key>"
   ```

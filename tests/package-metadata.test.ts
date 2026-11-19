@@ -92,6 +92,7 @@ describe('package distribution metadata', () => {
       'docs/landing/support.html',
       'docs/landing/terms.html',
       'README.md',
+      'CHANGELOG.md',
       'SECURITY.md',
       'LICENSE',
     ]);
