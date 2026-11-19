@@ -1,6 +1,0 @@
-
-> achiote@0.2.2 audit:gate
-> node scripts/audit-gate.mjs
-
-Audit gate: 0 accepted dev advisory(ies), 0 below threshold, 0 blocking.
-Audit gate passed.
