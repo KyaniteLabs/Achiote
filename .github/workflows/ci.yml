@@ -15,7 +15,7 @@ concurrency:
 jobs:
   release-gate:
     name: Node 22 release gate
-    runs-on: blacksmith-2vcpu-ubuntu-2404
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
       - name: Checkout
@@ -39,7 +39,7 @@ jobs:
           import subprocess
           import tempfile
           
-          SAFE_PATHS = frozenset(('CLAUDE.md', 'docs/agent-law/empower-orchestrator.md', '.github/workflows/agent-law.yml', '.github/workflows/blacksmith-probe.yml'))
+          SAFE_PATHS = frozenset(('CLAUDE.md', 'docs/agent-law/empower-orchestrator.md', '.github/workflows/agent-law.yml'))
           product_changed = True
           try:
               base = os.environ.get('PR_BASE_SHA', '')
@@ -67,14 +67,14 @@ jobs:
                   raise ValueError('incomplete diff records')
               records = records[:-1]
               # Disabling rename detection exposes both old/new paths as delete/add.
-              # Only ordinary modifications of the four reviewed existing files may skip.
+              # Only ordinary modifications of the three reviewed existing files may skip.
               product_changed = any(records[i] != b'M' or records[i + 1].decode('utf-8') not in SAFE_PATHS for i in range(0, len(records), 2))
           except (OSError, ValueError, UnicodeError, subprocess.SubprocessError):
               product_changed = True
           
           with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as output:
               output.write('product_changed=' + ('true' if product_changed else 'false') + '\n')
-          print('Full product checks selected.' if product_changed else 'Only reviewed law/probe inputs changed; product checks are not executed.')
+          print('Full product checks selected.' if product_changed else 'Only reviewed agent-law inputs changed; product checks are not executed.')
           PY
           then
             echo 'product_changed=true' >> "$GITHUB_OUTPUT"
@@ -83,7 +83,7 @@ jobs:
 
       - name: Record reviewed scope
         if: ${{ github.event_name == 'pull_request' && steps.product-scope.outputs.product_changed == 'false' }}
-        run: echo 'Only reviewed law/probe inputs changed; product checks were not executed.'
+        run: echo 'Only reviewed agent-law inputs changed; product checks were not executed.'
 
       - name: Setup Node
         if: ${{ github.event_name != 'pull_request' || steps.product-scope.outputs.product_changed != 'false' }}
@@ -119,9 +119,13 @@ jobs:
         if: ${{ github.event_name != 'pull_request' || steps.product-scope.outputs.product_changed != 'false' }}
         run: npm pack --dry-run
 
+  # Required on PRs only. On master the squash-merged tree was already tested by both
+  # gates on its PR; the Node 22 release gate alone re-runs there as the post-merge canary
+  # (base may have moved, since required checks are not strict) and keeps the audit fresh.
   compatibility-gate:
     name: Node 24 compatibility gate
-    runs-on: blacksmith-2vcpu-ubuntu-2404
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
       - name: Checkout
@@ -145,7 +149,7 @@ jobs:
           import subprocess
           import tempfile
           
-          SAFE_PATHS = frozenset(('CLAUDE.md', 'docs/agent-law/empower-orchestrator.md', '.github/workflows/agent-law.yml', '.github/workflows/blacksmith-probe.yml'))
+          SAFE_PATHS = frozenset(('CLAUDE.md', 'docs/agent-law/empower-orchestrator.md', '.github/workflows/agent-law.yml'))
           product_changed = True
           try:
               base = os.environ.get('PR_BASE_SHA', '')
@@ -173,14 +177,14 @@ jobs:
                   raise ValueError('incomplete diff records')
               records = records[:-1]
               # Disabling rename detection exposes both old/new paths as delete/add.
-              # Only ordinary modifications of the four reviewed existing files may skip.
+              # Only ordinary modifications of the three reviewed existing files may skip.
               product_changed = any(records[i] != b'M' or records[i + 1].decode('utf-8') not in SAFE_PATHS for i in range(0, len(records), 2))
           except (OSError, ValueError, UnicodeError, subprocess.SubprocessError):
               product_changed = True
           
           with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as output:
               output.write('product_changed=' + ('true' if product_changed else 'false') + '\n')
-          print('Full product checks selected.' if product_changed else 'Only reviewed law/probe inputs changed; product checks are not executed.')
+          print('Full product checks selected.' if product_changed else 'Only reviewed agent-law inputs changed; product checks are not executed.')
           PY
           then
             echo 'product_changed=true' >> "$GITHUB_OUTPUT"
@@ -189,7 +193,7 @@ jobs:
 
       - name: Record reviewed scope
         if: ${{ github.event_name == 'pull_request' && steps.product-scope.outputs.product_changed == 'false' }}
-        run: echo 'Only reviewed law/probe inputs changed; product checks were not executed.'
+        run: echo 'Only reviewed agent-law inputs changed; product checks were not executed.'
 
       - name: Setup Node
         if: ${{ github.event_name != 'pull_request' || steps.product-scope.outputs.product_changed != 'false' }}
