@@ -21,7 +21,7 @@ concurrency:
 jobs:
   agent-law:
     name: agent-law
-    runs-on: ubuntu-24.04
+    runs-on: blacksmith-2vcpu-ubuntu-2404
     timeout-minutes: 5
     steps:
       - name: Checkout
