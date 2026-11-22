@@ -15,7 +15,7 @@ concurrency:
 jobs:
   release-gate:
     name: Node 22 release gate
-    runs-on: blacksmith-2vcpu-ubuntu-2404
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
       - name: Checkout
@@ -121,7 +121,7 @@ jobs:
 
   compatibility-gate:
     name: Node 24 compatibility gate
-    runs-on: blacksmith-2vcpu-ubuntu-2404
+    runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
       - name: Checkout
