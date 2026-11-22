@@ -1,0 +1,22 @@
+name: Blacksmith Probe
+
+on:
+  workflow_dispatch:
+  # Only when the probe itself changes; otherwise run it by hand.
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - '.github/workflows/blacksmith-probe.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  probe:
+    uses: KyaniteLabs/.github/.github/workflows/blacksmith-probe.yml@c8c6d2670780cee864a6993fec223b191b70e3ee
+    with:
+      probe_label: complementary-runner-probe
