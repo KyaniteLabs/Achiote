@@ -4,6 +4,9 @@ on:
   workflow_dispatch:
   pull_request:
     types: [opened, synchronize, reopened]
+    # Only when the probe itself changes, as in kinocut; otherwise run it by hand.
+    paths:
+      - '.github/workflows/blacksmith-probe.yml'
 
 permissions:
   contents: read
