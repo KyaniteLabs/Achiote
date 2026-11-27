@@ -200,6 +200,10 @@
     }
     .icon-btn:hover { color: var(--text-0); border-color: var(--text-0); }
     .icon-btn svg { width: 20px; height: 20px; }
+    /* `hidden` must beat .icon-btn's display. Without this the mic paints while speech-to-text is
+       unavailable and takes a click that silently does nothing (research-app.js keeps it hidden
+       until /voice/status reports stt.ready). */
+    #mic-btn[hidden] { display: none; }
     #mic-btn.recording { background: var(--achiote); color: var(--text-0); border-color: var(--gold); animation: pulse 1.3s infinite; }
     @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(216,71,42,0.4); } 50% { box-shadow: 0 0 0 7px rgba(216,71,42,0); } }
     @media (prefers-reduced-motion: reduce) { #mic-btn.recording { animation: none; } }
