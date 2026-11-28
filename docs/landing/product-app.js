@@ -60,10 +60,68 @@
     return summary.length > 2000 ? `${summary.slice(0, 2000)}…` : summary;
   }
 
+  // 2026-11-07 audit, ledger row 1: /app showed internal ids where product copy belongs. The
+  // progress trace read "Calling build_reconstruction_dossier" and the Memory Receipt showed
+  // its raw status token (first_test_ready, which the receipt style uppercases to
+  // FIRST_TEST_READY). The helpers below turn ids into readable copy for display only. The
+  // ids stay intact in the SSE stream and in the receipt JSON: those are the contract.
+  const TOOL_LABELS = {
+    plan_tool_workflow: 'Planning the next steps',
+    collect_food_memory: 'Reading your memory',
+    resolve_dish_name: 'Correcting the likely name',
+    plan_dish_research: 'Planning the research',
+    build_research_record: 'Researching sources',
+    validate_research_record: 'Checking the research',
+    extract_research_findings: 'Researching sources',
+    build_reconstruction_dossier: 'Separating evidence from inference',
+    generate_minimum_viable_nostalgia: 'Building your first taste',
+    find_sensory_substitutes: 'Finding closer sensory substitutes',
+    source_ingredients: 'Checking where to find ingredients',
+    discover_regional_similars: 'Looking for related dishes',
+    analyze_nostalgic_dish: 'Weighing the evidence',
+    generate_family_followup_questions: 'Writing questions for your family',
+    generate_recipe: 'Drafting the recipe',
+    validate_recipe_output: 'Checking the recipe',
+    build_memory_receipt: 'Writing your Memory Receipt',
+    search_web: 'Researching sources',
+    reconstruct_food_memory: 'Reconstructing the memory',
+  };
+
+  const RECEIPT_STATUS_LABELS = {
+    first_test_ready: 'Ready for a first tiny taste test',
+    needs_more_clues: 'Needs a few more clues',
+    recipe_handoff_ready: 'Ready for the full recipe',
+  };
+
+  function ownLabel(table, key) {
+    return typeof key === 'string' && Object.prototype.hasOwnProperty.call(table, key) ? table[key] : '';
+  }
+
+  // Readable label for a tool id. Unknown or provider-invented ids return '' so the caller
+  // falls back to generic copy; a raw id is never rendered.
+  function toolLabel(name) {
+    return ownLabel(TOOL_LABELS, name);
+  }
+
+  // Progress-trace line for a tool_call / tool_result event.
+  function toolTraceLine(eventType, name) {
+    const label = toolLabel(name);
+    if (eventType === 'tool_result') return label ? `${label} · done` : 'Step finished';
+    return label || 'Working';
+  }
+
+  // Readable label for a Memory Receipt status token. Unknown values return ''.
+  function receiptStatusLabel(status) {
+    return ownLabel(RECEIPT_STATUS_LABELS, status);
+  }
+
   global.AchioteProductApp = {
     parseSseChunk,
     explainHttpStatus,
     appendChatTurn,
     summarizeReceiptForHistory,
+    toolLabel,
+    toolTraceLine,
+    receiptStatusLabel,
   };
 })(typeof window === 'undefined' ? globalThis : window);

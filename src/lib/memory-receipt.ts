@@ -1,4 +1,4 @@
-import type { CollectedFoodMemory, DishResearchPlan, MemoryReceipt, MinimumViableNostalgiaCue } from './types.js';
+import type { CollectedFoodMemory, DishResearchPlan, MemoryReceipt, MemoryReceiptStatus, MinimumViableNostalgiaCue } from './types.js';
 import { inferSafetyConstraints } from './ask-memory-correction.js';
 import { filterMemoryResearchFacts, isLowQualityMemoryResearchText } from './research-evidence-filter.js';
 import { buildShareCard } from './share-card.js';
@@ -221,6 +221,19 @@ export function buildMemoryReceipt(input: {
   };
 }
 
+// 2026-11-07 audit, ledger row 1: the status token is internal. The receipt's display text
+// says it in words; `status` itself keeps the enum, because structured data is the contract.
+const MEMORY_RECEIPT_STATUS_LABELS: Record<MemoryReceiptStatus, string> = {
+  first_test_ready: 'Ready for a first tiny taste test',
+  needs_more_clues: 'Needs a few more clues',
+  recipe_handoff_ready: 'Ready for the full recipe',
+};
+
+/** Readable product copy for a receipt status token. Display only; never written into `status`. */
+export function memoryReceiptStatusLabel(status: string | undefined): string {
+  return (status && MEMORY_RECEIPT_STATUS_LABELS[status as MemoryReceiptStatus]) || 'Status not recorded';
+}
+
 export function formatMemoryReceiptMarkdown(receipt: MemoryReceipt): string {
   const list = (items: string[]) => items.length
     ? items.map((item) => `- ${item}`).join('\n')
@@ -230,7 +243,7 @@ export function formatMemoryReceiptMarkdown(receipt: MemoryReceipt): string {
     '# Achiote Memory Receipt',
     '',
     `Created: ${receipt.createdAt}`,
-    `Status: ${receipt.status}`,
+    `Status: ${memoryReceiptStatusLabel(receipt.status)}`,
     '',
     '## User-Said Evidence',
     list(receipt.evidence.userSaid),

@@ -76,7 +76,7 @@ The high-traffic surfaces are split into named contracts so future work does not
 | Ask response builder | `src/lib/ask-response-builder.ts` | Response assembly and templating: minimum-cue formatting, substitution basis responses, evidence preambles, cue quality language enforcement, and local-cue language injection. |
 | Ask memory correction | `src/lib/ask-memory-correction.ts` | Memory correction pipeline: safety constraint inference, grounded search query building, stale memory sanitization, negated term stripping. |
 | Telemetry collector | `src/lib/telemetry-collector.ts` | Privacy-preserving telemetry: event sanitization, per-key rate limiting, and breakdown serialization. |
-| Product app | `docs/landing/product-app.js` | Holds browser primitives for SSE parsing, actionable HTTP error copy, and chat-history append semantics used by `app.js`. |
+| Product app | `docs/landing/product-app.js` | Holds browser primitives for SSE parsing, actionable HTTP error copy, chat-history append semantics used by `app.js`, and the display labels that keep tool ids and receipt status tokens out of product copy. |
 | Package surface | `scripts/lib/package-surface.mjs` | Defines required runtime entrypoints, product app assets, public docs, helper scripts, and forbidden packaged artifacts. |
 
 These modules are not optional wrappers around dead code. They are the places future agents should extend first when changing the relevant behavior. Guardrail tests should assert the owning module instead of duplicating the old monolith expectations.
@@ -112,6 +112,8 @@ Speech is an optional HTTP-mode input/output layer, not part of the MCP reasonin
 - `parseSseChunk()` keeps streamed `/ask` events from silently dropping partial chunks.
 - `explainHttpStatus()` maps 401/429/413/415 and generic HTTP failures to actionable user-facing text.
 - `appendChatTurn()` appends user/assistant turns and bounds local chat history.
+- `toolLabel()` / `toolTraceLine()` turn tool ids into readable progress copy. `app.html` loads this file before `research-app.js`, which renders them in the live trace; an unknown id gets generic words, never the raw id.
+- `receiptStatusLabel()` turns a Memory Receipt status token into readable copy for the receipt header in `/app` and the `/receipt` share page. The token itself stays in the receipt data.
 
 Public launch routes are intentionally static and dependency-free: `/pricing`, `/about`, `/roadmap`, `/changelog`, `/status`, `/blog`, and `/receipt`. Package smoke starts the installed tarball HTTP server and verifies those routes plus the product assets. The receipt renderer reads shared receipt data from the URL fragment so the server never receives the receipt payload as part of route handling.
 

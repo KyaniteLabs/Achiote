@@ -30,9 +30,13 @@ if (receipt && root) {
   const firstTest = receipt.firstTinyTasteTest
     ? `<p><strong>${escapeHtml(receipt.firstTinyTasteTest.title)}</strong><br>${escapeHtml(receipt.firstTinyTasteTest.cue)}<br><span class="empty">${escapeHtml(receipt.firstTinyTasteTest.estimatedTime)}</span></p>`
     : '<p class="empty">Not ready yet. Answer the family questions first.</p>';
+  // 2026-11-07 audit, ledger row 1: the receipt's status token is internal. Show readable
+  // copy and keep the token itself only in the receipt data.
+  const statusCopy = (window.AchioteProductApp && typeof window.AchioteProductApp.receiptStatusLabel === 'function'
+    && window.AchioteProductApp.receiptStatusLabel(receipt.status)) || 'Not recorded';
   root.className = '';
   root.innerHTML = [
-    section('Status', `<p>${escapeHtml(receipt.status || 'unknown')}</p><p class="empty">${escapeHtml(receipt.createdAt || '')}</p>`),
+    section('Status', `<p>${escapeHtml(statusCopy)}</p><p class="empty">${escapeHtml(receipt.createdAt || '')}</p>`),
     '<div class="grid">',
     section('User-said', list(receipt.evidence?.userSaid)),
     section('Inferred', list(receipt.evidence?.inferred)),
