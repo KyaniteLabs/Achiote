@@ -5,7 +5,7 @@
       "command": "npx",
       "args": [
         "-y",
-        "achiote@0.2.2"
+        "achiote@0.2.3"
       ]
     }
   }

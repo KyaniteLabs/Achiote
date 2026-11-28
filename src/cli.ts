@@ -9,7 +9,7 @@ import { createAchioteServer } from './server.js';
 import { runAskCommand } from './cli-ask.js';
 import { runPurgeCommand } from './cli-purge.js';
 
-const VERSION = '0.2.2';
+const VERSION = '0.2.3';
 
 const HELP_TEXT = `achiote — nostalgic food-memory reconstruction
 
