@@ -93,7 +93,9 @@
 * { box-sizing: border-box; }
 
 html {
-  min-width: 320px;
+  /* No min-width: a floor here is wider than the layout box once the vertical scrollbar
+     takes its 15 px at a 320 CSS px viewport (305 px left), which is a horizontal scroll
+     (WCAG 1.4.10 reflow). The layout below reflows to the box it is given. */
   background: var(--bg-0);
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;

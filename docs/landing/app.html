@@ -193,6 +193,10 @@
       min-height: 30px; max-height: 168px; padding: 9px 0;
     }
     #composer-input::placeholder { color: #876d50; opacity: 1; }
+    /* The field carries its own focus indicator: the wrapper ring above is on .composer-bar,
+       not on the focused element. Achiote red clears 3:1 on the cream bar (gold is 2:1 there).
+       No transition, so it is present on the frame focus arrives. */
+    #composer-input:focus-visible { outline: 2px solid var(--achiote); outline-offset: 2px; border-radius: var(--r-xs); }
     .icon-btn {
       flex: 0 0 auto; width: 44px; height: 44px; display: inline-grid; place-items: center;
       border-radius: var(--r-btn); cursor: pointer; border: 1px solid var(--line-strong);
