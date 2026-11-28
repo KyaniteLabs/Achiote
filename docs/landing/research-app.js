@@ -136,6 +136,19 @@
       window.AchioteTelemetry.track(event, props || {});
     }
   }
+  // 2026-11-07 audit, ledger row 1: tool ids and status tokens are internal, not product
+  // copy. The shared helpers in product-app.js turn them into readable words. If that script
+  // is somehow absent, fall back to generic words; a raw id is never rendered either way.
+  function toolTraceLine(type, name) {
+    var app = window.AchioteProductApp;
+    if (app && typeof app.toolTraceLine === 'function') return app.toolTraceLine(type, name);
+    return type === 'tool_result' ? 'Step finished' : 'Working';
+  }
+  function receiptStatusLabel(status) {
+    var app = window.AchioteProductApp;
+    if (app && typeof app.receiptStatusLabel === 'function') return app.receiptStatusLabel(status) || '';
+    return '';
+  }
 
   /* --------------------------- chat messages ------------------------- */
   function addUser(text) {
@@ -193,8 +206,7 @@
     item.className = 'trace-item ' + type;
     var label;
     if (type === 'status') label = phaseLabel(d);
-    else if (type === 'tool_call') label = 'Calling ' + (d.name || 'tool');
-    else if (type === 'tool_result') label = 'Finished ' + (d.name || 'tool');
+    else if (type === 'tool_call' || type === 'tool_result') label = toolTraceLine(type, d.name);
     else label = 'Note: ' + (d.message || d.error || 'issue');
     item.textContent = label;
     list.appendChild(item);
@@ -231,7 +243,7 @@
     }
     var html = '<div class="receipt-paper" role="group" aria-label="Memory Receipt">';
     html += '<h3>Memory Receipt</h3>';
-    html += '<p class="r-meta">' + esc(r.status ? String(r.status) : 'Generated from your memory') + '</p>';
+    html += '<p class="r-meta">' + esc(receiptStatusLabel(r.status) || 'Generated from your memory') + '</p>';
     // The receipt is the final answer. Lead with the identification + why, then a
     // clearly separated "first taste". Split the synthesized summary at the bite marker
     // so neither becomes one giant block.

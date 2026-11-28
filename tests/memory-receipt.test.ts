@@ -1,7 +1,32 @@
 import { describe, expect, it } from 'vitest';
-import { buildMemoryReceipt, formatMemoryReceiptMarkdown } from '../src/lib/memory-receipt.js';
+import { buildMemoryReceipt, formatMemoryReceiptMarkdown, memoryReceiptStatusLabel } from '../src/lib/memory-receipt.js';
+import type { MemoryReceipt } from '../src/lib/types.js';
 
 describe('memory receipt', () => {
+  it('writes readable status copy into the receipt text and keeps the token only in the data', () => {
+    // 2026-11-07 audit, ledger row 1: the status token is internal. The markdown is display
+    // text for whoever reads the tool's output, so it says the status in words; `status`
+    // itself stays the enum because structured data is the contract.
+    const receipt: MemoryReceipt = {
+      title: 'Achiote Memory Receipt',
+      createdAt: '2026-04-27T12:00:00.000Z',
+      status: 'first_test_ready',
+      evidence: { userSaid: ['a cake my mom made'], ruledOut: [], inferred: [], researched: [], unknown: [] },
+      hypotheses: [],
+      nextBestQuestions: [],
+      firstTinyTasteTest: { title: 'Toast the coconut', cue: 'Toast coconut, then fold it in.', estimatedTime: '5 minutes' },
+      assistantSummary: 'Likely a coconut cake.',
+    };
+
+    const markdown = formatMemoryReceiptMarkdown(receipt);
+    expect(markdown).toContain('Status: Ready for a first tiny taste test');
+    expect(markdown).not.toContain('first_test_ready');
+    expect(receipt.status).toBe('first_test_ready');
+    expect(memoryReceiptStatusLabel('needs_more_clues')).toBe('Needs a few more clues');
+    expect(memoryReceiptStatusLabel(undefined)).toBe('Status not recorded');
+    expect(memoryReceiptStatusLabel('not_a_status')).toBe('Status not recorded');
+  });
+
   it('renders a portable evidence-bounded receipt', () => {
     const receipt = buildMemoryReceipt({
       memory: {

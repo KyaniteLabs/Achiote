@@ -11,8 +11,62 @@ function loadProductApp() {
     explainHttpStatus(status: number, detail: string): string;
     appendChatTurn(history: unknown[], userMessage: string, assistantText: string, maxEntries: number): unknown[];
     summarizeReceiptForHistory(receipt: unknown): string;
+    toolLabel(name: unknown): string;
+    toolTraceLine(eventType: string, name: unknown): string;
+    receiptStatusLabel(status: unknown): string;
   } }).AchioteProductApp;
 }
+
+// Same extraction as registryToolNames() in scripts/static-checks.mjs: the registry's `name:`
+// fields plus the single-call reconstruction tool.
+function registeredToolNames(): string[] {
+  const source = fs.readFileSync('src/tools/tool-registry.ts', 'utf8');
+  return [...new Set([
+    ...[...source.matchAll(/name:\s*'([a-z][a-z0-9_]*)'/g)].map((match) => match[1]!),
+    'reconstruct_food_memory',
+  ])];
+}
+
+describe('ProductApp display labels (2026-11-07 audit, ledger row 1)', () => {
+  it('gives every registered tool readable progress copy, so no tool id reaches the trace', () => {
+    const app = loadProductApp();
+    const names = registeredToolNames();
+    expect(names.length).toBeGreaterThan(10);
+    for (const name of names) {
+      // Words only: a capitalised phrase with spaces, never the snake_case id or an acronym.
+      const label = app.toolLabel(name);
+      expect(label, name).toMatch(/^[A-Z]/);
+      expect(label, name).toMatch(/\s/);
+      expect(label, name).not.toMatch(/_|\b[A-Z]{2,}\b/);
+      expect(app.toolTraceLine('tool_call', name), name).toBe(label);
+      expect(app.toolTraceLine('tool_result', name), name).toBe(`${label} · done`);
+    }
+    expect(app.toolTraceLine('tool_call', 'build_reconstruction_dossier')).toBe('Separating evidence from inference');
+    expect(app.toolTraceLine('tool_result', 'build_reconstruction_dossier')).toBe('Separating evidence from inference · done');
+  });
+
+  it('never renders an unknown or provider-invented tool id', () => {
+    const app = loadProductApp();
+    const unknown: unknown[] = [
+      'get_weather', 'build_reconstruction_dossier_v2', 'Constructor', 'constructor', '__proto__',
+      'toString', 'hasOwnProperty', '', undefined, null, 7, { name: 'search_web' }, ['search_web'],
+    ];
+    for (const name of unknown) {
+      expect(app.toolLabel(name), String(name)).toBe('');
+      expect(app.toolTraceLine('tool_call', name), String(name)).toBe('Working');
+      expect(app.toolTraceLine('tool_result', name), String(name)).toBe('Step finished');
+    }
+  });
+
+  it('labels receipt status tokens in words and rejects anything that is not one', () => {
+    const app = loadProductApp();
+    expect(app.receiptStatusLabel('first_test_ready')).toBe('Ready for a first tiny taste test');
+    expect(app.receiptStatusLabel('needs_more_clues')).toBe('Needs a few more clues');
+    expect(app.receiptStatusLabel('recipe_handoff_ready')).toBe('Ready for the full recipe');
+    const notTokens: unknown[] = ['FIRST_TEST_READY', 'First_Test_Ready', 'first_test_ready ', 'constructor', '__proto__', '', undefined, null, 1];
+    for (const value of notTokens) expect(app.receiptStatusLabel(value), String(value)).toBe('');
+  });
+});
 
 describe('ProductApp browser helpers', () => {
   it('parses SSE chunks across partial event boundaries', () => {
